@@ -1,0 +1,69 @@
+cups-lpd(8)           Easy Software Products          cups-lpd(8)
+
+
+
+NAME
+       cups-lpd - receive print jobs and report printer status to
+       lpd clients
+
+SYNOPSIS
+       cups-lpd [ -o option=value ]
+
+DESCRIPTION
+       cups-lpd is the CUPS Line  Printer  Daemon  ("LPD")  mini-
+       server  that  supports  legacy client systems that use the
+       LPD protocol.  cups-lpd does not act as a standalone  net­
+       work  daemon  but  instead  operates  using  the  Internet
+       "super-server" inetd(8). Add the  following  line  to  the
+       inetd.conf file to enable the cups-lpd daemon:
+
+           printer stream tcp nowait lp /usr/lib/cups/daemon/cups-lpd cups-lpd
+
+       If  you are using the newer xinetd(8) daemon, add the fol­
+       lowing lines to the xinetd.conf file:
+
+           service printer
+           {
+               socket_type = stream
+               protocol = tcp
+               wait = no
+               user = lp
+               server = /usr/lib/cups/daemon/cups-lpd
+           }
+
+OPTIONS
+       The -o option to cups-lpd inserts options  for  all  print
+       queues.  Most often this is used to disable the "l" filter
+       so that remote print  jobs  are  filtered  as  needed  for
+       printing:
+
+           printer stream tcp nowait lp /usr/lib/cups/daemon/cups-lpd cups-lpd         -o document-format=application/octet-stream
+
+       The  example shown resets the document format to be appli­
+       cation/octet-stream, which forces  auto-detection  of  the
+       print file type.
+
+COMPATIBILITY
+       cups-lpd  does not enforce the restricted source port num­
+       ber specified in RFC 1179, as using restricted ports  does
+       not  prevent  determined users from submitting print jobs.
+       While this behavior is different  than  standard  Berkeley
+       LPD  implementations,  it  should not affect normal client
+       operations.
+
+       The output of the status requests follows RFC  2569,  Map­
+       ping  between LPD and IPP Protocols. Since many LPD imple­
+       mentations  stray  from  this  definition,  remote  status
+       reporting to LPD clients may be unreliable.
+
+SEE ALSO
+       inetd(8),  xinetd(8), CUPS Software Administrators Manual,
+       http://localhost:631/documentation.html
+
+COPYRIGHT
+       Copyright 1993-2002 by Easy Software Products, All  Rights
+       Reserved.
+
+
+
+13 February 2001   Common UNIX Printing System        cups-lpd(8)

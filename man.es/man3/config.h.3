@@ -1,0 +1,501 @@
+config.h(3)                                           config.h(3)
+
+
+
+NAME
+       config.h -
+
+SYNOPSIS
+   Defines
+       #define HAVE_ALLOCA   1
+       #define HAVE_ALLOCA_H   1
+       #define HAVE_FNMATCH   1
+       #define HAVE_GETMNTENT   1
+       #define HAVE_MMAP   1
+       #define HAVE_VPRINTF   1
+       #define STDC_HEADERS   1
+       #define TIME_WITH_SYS_TIME   1
+       #define HAVE_HERRNO   1
+       #define HAVE_S_ISLNK   1
+       #define HAVE_S_IFSOCK   1
+       #define HAVE_S_ISSOCK   1
+       #define HAVE_LCHOWN   1
+       #define HAVE_GZSEEK   1
+       #define HAVE_BZ2_1_0   1
+       #define MKDIR_P   '/bin/mkdir -p'
+       #define LOCALEDIR   '/usr/share/locale'
+       #define RPMCONFIGDIR   '/usr/lib/rpm'
+       #define SYSCONFIGDIR   '/etc/rpm'
+       #define FINDPROVIDES   '/usr/lib/rpm/find-provides'
+       #define FINDREQUIRES   '/usr/lib/rpm/find-requires'
+       #define LIBRPMALIAS_FILENAME
+           '/usr/lib/rpm/rpmpopt-4.0.3'
+       #define LIBRPMRC_FILENAME   '/usr/lib/rpm/rpmrc'
+       #define MACROFILES
+           '/usr/lib/rpm/macros:/usr/lib/rpm/%{_target_platform}/macros:/etc/rpm/macros:/etc/rpm/macros.specspo:/etc/rpm/macros.db1:/etc/rpm/%{_target_platform}/macros:~/.rpmmacros'
+       #define STATFS_IN_SYS_STATVFS   1
+       #define STATFS_HAS_F_BAVAIL   1
+       #define USE_DB3   1
+       #define USE_DB1   1
+       #define HAVE_DB3_DB_H   1
+       #define HAVE___ARGZ_COUNT   1
+       #define HAVE___ARGZ_NEXT   1
+       #define HAVE___ARGZ_STRINGIFY   1
+       #define HAVE_BASENAME   1
+       #define HAVE_DCGETTEXT   1
+       #define HAVE_FEOF_UNLOCKED   1
+       #define HAVE_FGETS_UNLOCKED   1
+       #define HAVE_FTOK   1
+       #define HAVE_GETCWD   1
+       #define HAVE_GETEGID   1
+       #define HAVE_GETEUID   1
+       #define HAVE_GETGID   1
+       #define HAVE_GETPAGESIZE   1
+       #define HAVE_GETUID   1
+       #define HAVE_GETWD   1
+       #define HAVE_GLOB   1
+       #define HAVE_INET_ATON   1
+       #define HAVE_MEMPCPY   1
+       #define HAVE_MTRACE   1
+       #define HAVE_MUNMAP   1
+       #define HAVE_PERSONALITY   1
+       #define HAVE_PUTENV   1
+       #define HAVE_REALPATH   1
+       #define HAVE_REGCOMP   1
+       #define HAVE_SETENV   1
+       #define HAVE_SETLOCALE   1
+       #define HAVE_SNPRINTF   1
+       #define HAVE_STPCPY   1
+       #define HAVE_STPNCPY   1
+       #define HAVE_STRCASECMP   1
+       #define HAVE_STRCHR   1
+       #define HAVE_STRCSPN   1
+       #define HAVE_STRDUP   1
+       #define HAVE_STRERROR   1
+       #define HAVE_STRSPN   1
+       #define HAVE_STRSTR   1
+       #define HAVE_STRTOL   1
+       #define HAVE_STRTOUL   1
+       #define HAVE_TSEARCH   1
+       #define HAVE_VSNPRINTF   1
+       #define HAVE_ARGZ_H   1
+       #define HAVE_BZLIB_H   1
+       #define HAVE_DB3_DB_H   1
+       #define HAVE_DIRENT_H   1
+       #define HAVE_DLFCN_H   1
+       #define HAVE_ERR_H   1
+       #define HAVE_FCNTL_H   1
+       #define HAVE_FLOAT_H   1
+       #define HAVE_GETOPT_H   1
+       #define HAVE_GLOB_H   1
+       #define HAVE_GRP_H   1
+       #define HAVE_LIBIO_H   1
+       #define HAVE_LIMITS_H   1
+       #define HAVE_LOCALE_H   1
+       #define HAVE_MALLOC_H   1
+       #define HAVE_MCHECK_H   1
+       #define HAVE_MEMORY_H   1
+       #define HAVE_MNTENT_H   1
+       #define HAVE_NETDB_H   1
+       #define HAVE_NETINET_IN_SYSTM_H   1
+       #define HAVE_NL_TYPES_H   1
+       #define HAVE_PWD_H   1
+       #define HAVE_STDDEF_H   1
+       #define HAVE_STDLIB_H   1
+       #define HAVE_STRING_H   1
+       #define HAVE_SYS_IPC_H   1
+       #define HAVE_SYS_MMAN_H   1
+       #define HAVE_SYS_MOUNT_H   1
+       #define HAVE_SYS_PARAM_H   1
+       #define HAVE_SYS_RESOURCE_H   1
+       #define HAVE_SYS_SELECT_H   1
+       #define HAVE_SYS_SOCKET_H   1
+       #define HAVE_SYS_TYPES_H   1
+       #define HAVE_SYS_UTSNAME_H   1
+       #define HAVE_SYS_WAIT_H   1
+       #define HAVE_SYSLOG_H   1
+       #define HAVE_UNISTD_H   1
+       #define HAVE_UTIME_H   1
+       #define HAVE_ZLIB_H   1
+       #define PACKAGE   'rpm'
+       #define VERSION   '4.0.3'
+       #define PROTOTYPES   1
+       #define HAVE_ICONV   1
+       #define ICONV_CONST
+       #define HAVE_LANGINFO_CODESET   1
+       #define HAVE_LC_MESSAGES   1
+       #define ENABLE_NLS   1
+       #define HAVE_GETTEXT   1
+
+DEFINE DOCUMENTATION
+   #define ENABLE_NLS   1
+       Definition at line 487 of file config.h.
+
+   #define FINDPROVIDES   '/usr/lib/rpm/find-provides'
+       Definition at line 147 of file config.h.
+
+   #define FINDREQUIRES   '/usr/lib/rpm/find-requires'
+       Definition at line 150 of file config.h.
+
+   #define HAVE___ARGZ_COUNT   1
+       Definition at line 195 of file config.h.
+
+   #define HAVE___ARGZ_NEXT   1
+       Definition at line 198 of file config.h.
+
+   #define HAVE___ARGZ_STRINGIFY   1
+       Definition at line 201 of file config.h.
+
+   #define HAVE_ALLOCA   1
+       Definition at line 22 of file config.h.
+
+   #define HAVE_ALLOCA_H   1
+       Definition at line 25 of file config.h.
+
+   #define HAVE_ARGZ_H   1
+       Definition at line 318 of file config.h.
+
+   #define HAVE_BASENAME   1
+       Definition at line 204 of file config.h.
+
+   #define HAVE_BZ2_1_0   1
+       Definition at line 131 of file config.h.
+
+   #define HAVE_BZLIB_H   1
+       Definition at line 321 of file config.h.
+
+   #define HAVE_DB3_DB_H   1
+       Definition at line 324 of file config.h.
+
+   #define HAVE_DB3_DB_H   1
+       Definition at line 324 of file config.h.
+
+   #define HAVE_DCGETTEXT   1
+       Definition at line 207 of file config.h.
+
+   #define HAVE_DIRENT_H   1
+       Definition at line 327 of file config.h.
+
+   #define HAVE_DLFCN_H   1
+       Definition at line 330 of file config.h.
+
+   #define HAVE_ERR_H   1
+       Definition at line 333 of file config.h.
+
+   #define HAVE_FCNTL_H   1
+       Definition at line 336 of file config.h.
+
+   #define HAVE_FEOF_UNLOCKED   1
+       Definition at line 210 of file config.h.
+
+   #define HAVE_FGETS_UNLOCKED   1
+       Definition at line 213 of file config.h.
+
+   #define HAVE_FLOAT_H   1
+       Definition at line 339 of file config.h.
+
+   #define HAVE_FNMATCH   1
+       Definition at line 31 of file config.h.
+
+   #define HAVE_FTOK   1
+       Definition at line 216 of file config.h.
+
+   #define HAVE_GETCWD   1
+       Definition at line 219 of file config.h.
+
+   #define HAVE_GETEGID   1
+       Definition at line 222 of file config.h.
+
+   #define HAVE_GETEUID   1
+       Definition at line 225 of file config.h.
+
+   #define HAVE_GETGID   1
+       Definition at line 228 of file config.h.
+
+   #define HAVE_GETMNTENT   1
+       Definition at line 34 of file config.h.
+
+   #define HAVE_GETOPT_H   1
+       Definition at line 342 of file config.h.
+
+   #define HAVE_GETPAGESIZE   1
+       Definition at line 231 of file config.h.
+
+   #define HAVE_GETTEXT   1
+       Definition at line 490 of file config.h.
+
+   #define HAVE_GETUID   1
+       Definition at line 237 of file config.h.
+
+   #define HAVE_GETWD   1
+       Definition at line 240 of file config.h.
+
+   #define HAVE_GLOB   1
+       Definition at line 243 of file config.h.
+
+   #define HAVE_GLOB_H   1
+       Definition at line 345 of file config.h.
+
+   #define HAVE_GRP_H   1
+       Definition at line 348 of file config.h.
+
+   #define HAVE_GZSEEK   1
+       Definition at line 125 of file config.h.
+
+   #define HAVE_HERRNO   1
+       Definition at line 92 of file config.h.
+
+   #define HAVE_ICONV   1
+       Definition at line 474 of file config.h.
+
+   #define HAVE_INET_ATON   1
+       Definition at line 246 of file config.h.
+
+   #define HAVE_LANGINFO_CODESET   1
+       Definition at line 480 of file config.h.
+
+   #define HAVE_LC_MESSAGES   1
+       Definition at line 483 of file config.h.
+
+   #define HAVE_LCHOWN   1
+       Definition at line 116 of file config.h.
+
+   #define HAVE_LIBIO_H   1
+       Definition at line 351 of file config.h.
+
+   #define HAVE_LIMITS_H   1
+       Definition at line 354 of file config.h.
+
+   #define HAVE_LOCALE_H   1
+       Definition at line 357 of file config.h.
+
+   #define HAVE_MALLOC_H   1
+       Definition at line 363 of file config.h.
+
+   #define HAVE_MCHECK_H   1
+       Definition at line 366 of file config.h.
+
+   #define HAVE_MEMORY_H   1
+       Definition at line 369 of file config.h.
+
+   #define HAVE_MEMPCPY   1
+       Definition at line 249 of file config.h.
+
+   #define HAVE_MMAP   1
+       Definition at line 37 of file config.h.
+
+   #define HAVE_MNTENT_H   1
+       Definition at line 372 of file config.h.
+
+   #define HAVE_MTRACE   1
+       Definition at line 252 of file config.h.
+
+   #define HAVE_MUNMAP   1
+       Definition at line 255 of file config.h.
+
+   #define HAVE_NETDB_H   1
+       Definition at line 378 of file config.h.
+
+   #define HAVE_NETINET_IN_SYSTM_H   1
+       Definition at line 381 of file config.h.
+
+   #define HAVE_NL_TYPES_H   1
+       Definition at line 384 of file config.h.
+
+   #define HAVE_PERSONALITY   1
+       Definition at line 258 of file config.h.
+
+   #define HAVE_PUTENV   1
+       Definition at line 261 of file config.h.
+
+   #define HAVE_PWD_H   1
+       Definition at line 387 of file config.h.
+
+   #define HAVE_REALPATH   1
+       Definition at line 264 of file config.h.
+
+   #define HAVE_REGCOMP   1
+       Definition at line 267 of file config.h.
+
+   #define HAVE_S_IFSOCK   1
+       Definition at line 98 of file config.h.
+
+   #define HAVE_S_ISLNK   1
+       Definition at line 95 of file config.h.
+
+   #define HAVE_S_ISSOCK   1
+       Definition at line 101 of file config.h.
+
+   #define HAVE_SETENV   1
+       Definition at line 270 of file config.h.
+
+   #define HAVE_SETLOCALE   1
+       Definition at line 273 of file config.h.
+
+   #define HAVE_SNPRINTF   1
+       Definition at line 276 of file config.h.
+
+   #define HAVE_STDDEF_H   1
+       Definition at line 390 of file config.h.
+
+   #define HAVE_STDLIB_H   1
+       Definition at line 393 of file config.h.
+
+   #define HAVE_STPCPY   1
+       Definition at line 279 of file config.h.
+
+   #define HAVE_STPNCPY   1
+       Definition at line 282 of file config.h.
+
+   #define HAVE_STRCASECMP   1
+       Definition at line 285 of file config.h.
+
+   #define HAVE_STRCHR   1
+       Definition at line 288 of file config.h.
+
+   #define HAVE_STRCSPN   1
+       Definition at line 291 of file config.h.
+
+   #define HAVE_STRDUP   1
+       Definition at line 294 of file config.h.
+
+   #define HAVE_STRERROR   1
+       Definition at line 297 of file config.h.
+
+   #define HAVE_STRING_H   1
+       Definition at line 396 of file config.h.
+
+   #define HAVE_STRSPN   1
+       Definition at line 300 of file config.h.
+
+   #define HAVE_STRSTR   1
+       Definition at line 303 of file config.h.
+
+   #define HAVE_STRTOL   1
+       Definition at line 306 of file config.h.
+
+   #define HAVE_STRTOUL   1
+       Definition at line 309 of file config.h.
+
+   #define HAVE_SYS_IPC_H   1
+       Definition at line 402 of file config.h.
+
+   #define HAVE_SYS_MMAN_H   1
+       Definition at line 405 of file config.h.
+
+   #define HAVE_SYS_MOUNT_H   1
+       Definition at line 414 of file config.h.
+
+   #define HAVE_SYS_PARAM_H   1
+       Definition at line 420 of file config.h.
+
+   #define HAVE_SYS_RESOURCE_H   1
+       Definition at line 423 of file config.h.
+
+   #define HAVE_SYS_SELECT_H   1
+       Definition at line 426 of file config.h.
+
+   #define HAVE_SYS_SOCKET_H   1
+       Definition at line 429 of file config.h.
+
+   #define HAVE_SYS_TYPES_H   1
+       Definition at line 438 of file config.h.
+
+   #define HAVE_SYS_UTSNAME_H   1
+       Definition at line 441 of file config.h.
+
+   #define HAVE_SYS_WAIT_H   1
+       Definition at line 447 of file config.h.
+
+   #define HAVE_SYSLOG_H   1
+       Definition at line 450 of file config.h.
+
+   #define HAVE_TSEARCH   1
+       Definition at line 312 of file config.h.
+
+   #define HAVE_UNISTD_H   1
+       Definition at line 453 of file config.h.
+
+   #define HAVE_UTIME_H   1
+       Definition at line 456 of file config.h.
+
+   #define HAVE_VPRINTF   1
+       Definition at line 40 of file config.h.
+
+   #define HAVE_VSNPRINTF   1
+       Definition at line 315 of file config.h.
+
+   #define HAVE_ZLIB_H   1
+       Definition at line 459 of file config.h.
+
+   #define ICONV_CONST
+       Definition at line 477 of file config.h.
+
+   #define LIBRPMALIAS_FILENAME   '/usr/lib/rpm/rpmpopt-4.0.3'
+       Definition at line 153 of file config.h.
+
+       Referenced by main.
+
+   #define LIBRPMRC_FILENAME   '/usr/lib/rpm/rpmrc'
+       Definition at line 156 of file config.h.
+
+   #define LOCALEDIR   '/usr/share/locale'
+       Definition at line 138 of file config.h.
+
+       Referenced by main.
+
+   #define MACROFILES
+       '/usr/lib/rpm/macros:/usr/lib/rpm/%{_target_platform}/macros:/etc/rpm/macros:/etc/rpm/macros.specspo:/etc/rpm/macros.db1:/etc/rpm/%{_target_platform}/macros:~/.rpmmacros'
+       Definition at line 159 of file config.h.
+
+   #define MKDIR_P   '/bin/mkdir -p'
+       Definition at line 135 of file config.h.
+
+       Referenced by doSetupMacro, and parseForSimple.
+
+   #define PACKAGE   'rpm'
+       Definition at line 465 of file config.h.
+
+       Referenced by main.
+
+   #define PROTOTYPES   1
+       Definition at line 471 of file config.h.
+
+   #define RPMCONFIGDIR   '/usr/lib/rpm'
+       Definition at line 141 of file config.h.
+
+       Referenced by main.
+
+   #define STATFS_HAS_F_BAVAIL   1
+       Definition at line 174 of file config.h.
+
+   #define STATFS_IN_SYS_STATVFS   1
+       Definition at line 162 of file config.h.
+
+   #define STDC_HEADERS   1
+       Definition at line 83 of file config.h.
+
+   #define SYSCONFIGDIR   '/etc/rpm'
+       Definition at line 144 of file config.h.
+
+   #define TIME_WITH_SYS_TIME   1
+       Definition at line 86 of file config.h.
+
+   #define USE_DB1   1
+       Definition at line 186 of file config.h.
+
+   #define USE_DB3   1
+       Definition at line 183 of file config.h.
+
+   #define VERSION   '4.0.3'
+       Definition at line 468 of file config.h.
+
+       Referenced by packageBinaries, and packageSources.
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002                config.h(3)

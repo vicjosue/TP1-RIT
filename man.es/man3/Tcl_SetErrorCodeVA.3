@@ -1,0 +1,210 @@
+Tcl_AddErrorInfo(3)   Tcl Library Procedures  Tcl_AddErrorInfo(3)
+
+
+
+_________________________________________________________________
+
+NAME
+       Tcl_AddObjErrorInfo,   Tcl_AddErrorInfo,  Tcl_SetObjError­
+       Code, Tcl_SetErrorCode,  Tcl_SetErrorCodeVA,  Tcl_PosixEr­
+       ror, Tcl_LogCommandInfo - record information about errors
+
+SYNOPSIS
+       #include <tcl.h>
+
+       Tcl_AddObjErrorInfo(interp, message, length)
+
+       Tcl_AddErrorInfo(interp, message)
+
+       Tcl_SetObjErrorCode(interp, errorObjPtr)
+
+       Tcl_SetErrorCode(interp, element, element, ... (char *) NULL)
+
+       Tcl_SetErrorCodeVA(interp, argList)
+
+       char *
+       Tcl_PosixError(interp)
+
+       void
+       Tcl_LogCommandInfo(interp, script, command, commandLength)
+
+ARGUMENTS
+       Tcl_Interp   *interp    (in)      Interpreter  in which to
+                                         record information.
+
+       char         *message   (in)      For Tcl_AddObjErrorInfo,
+                                         this points to the first
+                                         byte  of  an  array   of
+                                         bytes    containing    a
+                                         string to record in  the
+                                         errorInfo      variable.
+                                         This byte array may con­
+                                         tain embedded null bytes
+                                         unless length  is  nega­
+                                         tive.  For Tcl_AddError­
+                                         Info, this is a  conven­
+                                         tional   C   string   to
+                                         record in the  errorInfo
+                                         variable.
+
+       int          length     (in)      The  number  of bytes to
+                                         copy from  message  when
+                                         setting   the  errorInfo
+                                         variable.  If  negative,
+                                         all   bytes  up  to  the
+                                         first  null   byte   are
+                                         used.
+
+       Tcl_Obj      *errorObjPtr(in)     This  variable errorCode
+                                         will  be  set  to   this
+                                         value.
+
+       char         *element   (in)      String  to record as one
+                                         element   of   errorCode
+                                         variable.   Last element
+                                         argument must be NULL.
+
+       va_list      argList    (in)      An argument  list  which
+                                         must   have   been  ini­
+                                         tialised           using
+                                         TCL_VARARGS_START,   and
+                                         cleared using va_end.
+
+       char         *script    (in)      Pointer to first charac­
+                                         ter in script containing
+                                         command (must be <= com­
+                                         mand)
+
+       char         *command   (in)      Pointer to first charac­
+                                         ter in command that gen­
+                                         erated the error
+
+       int          commandLength(in)    Number  of bytes in com­
+                                         mand; -1 means  use  all
+                                         bytes  up  to first NULL
+                                         byte
+_________________________________________________________________
+
+
+DESCRIPTION
+       These procedures are used to  manipulate  two  Tcl  global
+       variables  that  hold information about errors.  The vari­
+       able errorInfo holds a stack trace of the operations  that
+       were  in  progress when an error occurred, and is intended
+       to be human-readable.  The variable errorCode holds a list
+       of  items  that  are intended to be machine-readable.  The
+       first item in errorCode identifies the class of error that
+       occurred  (e.g.  POSIX  means an error occurred in a POSIX
+       system call) and additional  elements  in  errorCode  hold
+       additional pieces of information that depend on the class.
+       See the Tcl overview manual entry for details on the vari­
+       ous formats for errorCode.
+
+       The  errorInfo  variable is gradually built up as an error
+       unwinds through the nested operations.  Each time an error
+       code  is  returned  to  Tcl_EvalObjEx  (or Tcl_Eval, which
+       calls Tcl_EvalObjEx) it calls the procedure  Tcl_AddObjEr­
+       rorInfo to add additional text to errorInfo describing the
+       command that was being executed when the  error  occurred.
+       By  the time the error has been passed all the way back to
+       the application, it will contain a complete trace  of  the
+       activity in progress when the error occurred.
+
+       It  is  sometimes  useful to add additional information to
+       errorInfo beyond what can  be  supplied  automatically  by
+       Tcl_EvalObjEx.   Tcl_AddObjErrorInfo  may be used for this
+       purpose: its message  and  length  arguments  describe  an
+       additional  string to be appended to errorInfo.  For exam­
+       ple,  the  source  command  calls  Tcl_AddObjErrorInfo  to
+       record  the  name of the file being processed and the line
+       number on which the error occurred;  for  Tcl  procedures,
+       the  procedure  name  and line number within the procedure
+       are recorded, and so on.  The best time to call Tcl_AddOb­
+       jErrorInfo   is  just  after  Tcl_EvalObjEx  has  returned
+       TCL_ERROR.  In calling Tcl_AddObjErrorInfo, you  may  find
+       it  useful  to  use the errorLine field of the interpreter
+       (see the Tcl_Interp manual entry for details).
+
+       Tcl_AddErrorInfo resembles Tcl_AddObjErrorInfo but differs
+       in  initializing  errorInfo  from  the string value of the
+       interpreter's result if the error is just starting  to  be
+       logged.  It does not use the result as a Tcl object so any
+       embedded  null  characters  in  the  result   will   cause
+       information  to  be  lost.  It also takes a conventional C
+       string in message instead of Tcl_AddObjErrorInfo's counted
+       string.
+
+       The  procedure  Tcl_SetObjErrorCode  is  used  to  set the
+       errorCode variable. errorObjPtr  contains  a  list  object
+       built  up  by  the caller. errorCode is set to this value.
+       Tcl_SetObjErrorCode  is  typically  invoked  just   before
+       returning  an  error  in an object command. If an error is
+       returned without calling Tcl_SetObjErrorCode or Tcl_SetEr­
+       rorCode  the  Tcl interpreter automatically sets errorCode
+       to NONE.
+
+       The procedure Tcl_SetErrorCode is also  used  to  set  the
+       errorCode  variable. However, it takes one or more strings
+       to record instead of an object. Otherwise, it  is  similar
+       to Tcl_SetObjErrorCode in behavior.
+
+       Tcl_SetErrorCodeVA  is the same as Tcl_SetErrorCode except
+       that instead of taking a variable number of  arguments  it
+       takes an argument list.
+
+       Tcl_PosixError  sets the errorCode variable after an error
+       in a POSIX kernel call.  It reads the value of the errno C
+       variable  and  calls  Tcl_SetErrorCode to set errorCode in
+       the POSIX format.  The caller must previously have  called
+       Tcl_SetErrno to set errno; this is necessary on some plat­
+       forms (e.g. Windows) where Tcl is linked into an  applica­
+       tion  as  a  shared library, or when the error occurs in a
+       dynamically loaded extension. See  the  manual  entry  for
+       Tcl_SetErrno for more information.
+
+       Tcl_PosixError returns a human-readable diagnostic message
+       for the error (this is the same value that will appear  as
+       the  third element in errorCode).  It may be convenient to
+       include this string as part of the error message  returned
+       to the application in the interpreter's result.
+
+       Tcl_LogCommandInfo  is invoked after an error occurs in an
+       interpreter.  It adds information about the  command  that
+       was being executed when the error occured to the errorInfo
+       variable, and the line number  stored  internally  in  the
+       interpreter  is set.  On the first call to Tcl_LogCommand­
+       Info or Tcl_AddObjErrorInfo since an error  occurred,  the
+       old information in errorInfo is deleted.
+
+       It  is  important  to  call  the procedures described here
+       rather than setting errorInfo or errorCode  directly  with
+       Tcl_ObjSetVar2.   The  reason  for  this  is  that the Tcl
+       interpreter keeps information about whether  these  proce­
+       dures  have  been  called.   For  example,  the first time
+       Tcl_AddObjErrorInfo is called for an error, it clears  the
+       existing  value of errorInfo and adds the error message in
+       the interpreter's result to the variable before  appending
+       message; in subsequent calls, it just appends the new mes­
+       sage.  When Tcl_SetErrorCode is called,  it  sets  a  flag
+       indicating  that  errorCode  has been set; this allows the
+       Tcl interpreter to set errorCode to NONE if it receives an
+       error return when Tcl_SetErrorCode hasn't been called.
+
+       If  the procedure Tcl_ResetResult is called, it clears all
+       of the state associated with errorInfo and errorCode  (but
+       it  doesn't  actually  modify the variables).  If an error
+       had occurred, this will clear the error state to  make  it
+       appear as if no error had occurred after all.
+
+
+SEE ALSO
+       Tcl_DecrRefCount,  Tcl_IncrRefCount, Tcl_Interp, Tcl_Rese­
+       tResult, Tcl_SetErrno
+
+
+KEYWORDS
+       error, object, object result, stack, trace, variable
+
+
+
+Tcl                            8.0            Tcl_AddErrorInfo(3)

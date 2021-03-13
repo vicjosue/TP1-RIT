@@ -1,0 +1,42 @@
+LWP-DOWNLOAD(1)User Contributed Perl DocumentationLWP-DOWNLOAD(1)
+
+
+
+NNAAMMEE
+       lwp-download - fetch large files from the net
+
+SSYYNNOOPPSSIISS
+        lwp-download [-a] <url> [<local file>]
+
+
+DDEESSCCRRIIPPTTIIOONN
+       The lwp-download program will down load the document spec­
+       ified by the URL given as the first command line argument
+       to a local file.  The local filename used to save the doc­
+       ument is guessed from the URL unless specified as the sec­
+       ond command line argument.
+
+       The lwp-download program is implemented using the libwww-
+       perl library.  It is better suited to down load big files
+       than the lwp-request program because it does not store the
+       file in memory.  Another benefit is that it will keep you
+       updated about its progress and that you don't have much
+       options to worry about.
+
+       Use the "-a" option to save the file in text (ascii) mode.
+       Might make a difference on dosish systems.
+
+EEXXAAMMPPLLEE
+       Fetch the newest and greatest perl version:
+
+        $ lwp-download http://www.perl.com/CPAN/src/latest.tar.gz
+        Saving to 'latest.tar.gz'...
+        1.47 MB received in 22 seconds (68.7 KB/sec)
+
+
+AAUUTTHHOORR
+       Gisle Aas <gisle@aas.no>
+
+
+
+2002-02-21               libwww-perl-5.63         LWP-DOWNLOAD(1)

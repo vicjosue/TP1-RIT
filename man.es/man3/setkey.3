@@ -1,0 +1,39 @@
+ENCRYPT(3)          Linux Programmer's Manual          ENCRYPT(3)
+
+
+
+NAME
+       encrypt - Encrypt 64 bits messages
+
+SYNOPSIS
+       #define _XOPEN_SOURCE
+
+       #include <unistd.h>
+
+       void encrypt(char block[64], int edflag);
+       void setkey(const char *key);
+
+DESCRIPTION
+       These  functions encrypt and decrypt 64 bit messages.  The
+       setkey() function sets the key used by encrypt(). The  key
+       parameter used here is an array of bytes, having each byte
+       the numerical  value  1  or  0.  The  key[n]  byte,  where
+       n=8*q-1, is ignored consisting the key used of 56 bits.
+
+       The setkey() function modifies the passed buffer, encoding
+       if edflag is 0, and decoding if 1 is being passed.
+
+       These functions are not reentrant.
+
+RETURN VALUE
+       These functions do not return any value.
+
+CONFORMING TO
+       SVID, SUSv2
+
+SEE ALSO
+       crypt(3)
+
+
+
+GNU                         2000-07-22                 ENCRYPT(3)

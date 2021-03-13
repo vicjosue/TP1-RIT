@@ -1,0 +1,80 @@
+FileListRec_s(3)                                 FileListRec_s(3)
+
+
+
+NAME
+       FileListRec_s -
+
+SYNOPSIS
+   Data Fields
+       stat fl_st
+       const char * diskURL
+       const char * fileURL
+       const char * uname
+       const char * gname
+       int flags
+       specdFlags specdFlags
+       int verifyFlags
+       const char * langs
+
+FIELD DOCUMENTATION
+   const char* FileListRec_s::diskURL
+       Definition at line 68 of file files.c.
+
+       Referenced by addFile, freeFileList, genCpioListAndHeader,
+       and processSourceFiles.
+
+   const char* FileListRec_s::fileURL
+       Definition at line 69 of file files.c.
+
+       Referenced by addFile, genCpioListAndHeader, and
+       processSourceFiles.
+
+   struct stat FileListRec_s::fl_st
+       Definition at line 57 of file files.c.
+
+       Referenced by addFile, and processSourceFiles.
+
+   int FileListRec_s::flags
+       Definition at line 72 of file files.c.
+
+       Referenced by addFile, checkHardLinks,
+       genCpioListAndHeader, and processSourceFiles.
+
+   const char* FileListRec_s::gname
+       Definition at line 71 of file files.c.
+
+       Referenced by addFile, genCpioListAndHeader, and
+       processSourceFiles.
+
+   const char* FileListRec_s::langs
+       Definition at line 75 of file files.c.
+
+       Referenced by addFile, checkHardLinks,
+       genCpioListAndHeader, and processSourceFiles.
+
+   specdFlags FileListRec_s::specdFlags
+       Definition at line 73 of file files.c.
+
+       Referenced by addFile, and genCpioListAndHeader.
+
+   const char* FileListRec_s::uname
+       Definition at line 70 of file files.c.
+
+       Referenced by addFile, genCpioListAndHeader, and
+       processSourceFiles.
+
+   int FileListRec_s::verifyFlags
+       Definition at line 74 of file files.c.
+
+       Referenced by addFile, genCpioListAndHeader, and
+       processSourceFiles.
+
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002           FileListRec_s(3)

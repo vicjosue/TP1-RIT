@@ -1,0 +1,91 @@
+DROPUSER(1)       PostgreSQL Client Applications      DROPUSER(1)
+
+
+
+NAME
+       dropuser - remove a PostgreSQL user account
+
+SYNOPSIS
+       dropuser [ options... ] [ username ]
+
+   INPUTS
+       -h, --host host
+              Specifies the host name of the machine on which the
+              server is running. If host begins with a slash,  it
+              is  used  as  the  directory  for  the  Unix domain
+              socket.
+
+       -p, --port port
+              Specifies the Internet TCP/IP port  or  local  Unix
+              domain socket file extension on which the server is
+              listening for connections.
+
+       -e, --echo
+              Echo the queries that createdb generates and  sends
+              to the server.
+
+       -q, --quiet
+              Do not display a response.
+
+       -i, --interactive
+              Prompt  for  confirmation  before actually removing
+              the user.
+
+       username
+              Specifies the name of the  PostgreSQL  user  to  be
+              removed.   This  name  must exist in the PostgreSQL
+              installation.  You will be prompted for a  name  if
+              none is specified on the command line.
+
+
+       The  options  -h,  -p,  and -e, are passed on literally to
+       psql(1). The psql options -U and -W are available as well,
+       but they can be confusing in this context.
+
+   OUTPUTS
+       DROP USER
+              All is well.
+
+       dropuser: deletion of user "username" failed
+              Something went wrong. The user was not removed.
+
+       If  there is an error condition, the backend error message
+       will be  displayed.   See  DROP  USER  [drop_user(7)]  and
+       psql(1) for possibilities.
+
+DESCRIPTION
+       dropuser  removes  an  existing  PostgreSQL  user  and the
+       databases which that user owned.  Only users with usesuper
+       set in the pg_shadow table can destroy PostgreSQL users.
+
+       dropuser  is a shell script wrapper around the SQL command
+       DROP USER [drop_user(7)] via  the  PostgreSQL  interactive
+       terminal  psql(1).  Thus,  there  is nothing special about
+       removing users via this or other methods. This means  that
+       the  psql  must be found by the script and that a database
+       server is running at the targeted host. Also, any  default
+       settings  and  environment variables available to psql and
+       the libpq front-end library do apply.
+
+USAGE
+       To remove user joe from the default database server:
+
+       $ dropuser joe
+       DROP USER
+
+
+
+       To remove user joe using the postmaster on host eden, port
+       5000,  with  verification  and  a  peek  at the underlying
+       query:
+
+       $ dropuser -p 5000 -h eden -i -e joe
+       User "joe" and any owned databases will be permanently deleted.
+       Are you sure? (y/n) y
+       DROP USER "joe"
+       DROP USER
+
+
+
+
+Application                 2000-11-11                DROPUSER(1)

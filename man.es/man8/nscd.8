@@ -1,0 +1,47 @@
+nscd(8)                                                   nscd(8)
+
+
+
+NAME
+       /usr/sbin/nscd - name service cache daemon
+
+DESCRIPTION
+       Nscd is a daemon that provides a cache for the most common
+       name service requests.  The  default  configuration  file,
+       /etc/nscd.conf,  determines the behavior of the cache dae­
+       mon. See nscd.conf(5).
+
+       Nscd provides cacheing for the  passwd(5),  group(5),  and
+       hosts(5)  databases through standard libc interfaces, such
+       as  getpwnam(3),  getpwuid(3),  getgrnam(3),  getgrgid(3),
+       gethostbyname(3),  and  others.  Each cache has a separate
+       TTL (time-to-live)  for  its  data;  modifying  the  local
+       database  (/etc/passwd,  and so forth) causes the cache to
+       become invalidated within fifteen seconds. Note  that  the
+       shadow file is specifically not cached.  getspnam(3) calls
+       remain uncached as a result.
+
+
+OPTIONS
+       --help will give you a list with all options and what they
+              do.
+
+
+NOTES
+       Nscd doesn't know anything about the underlaying protocols
+       for a  service.  This  also  means,  that  if  you  change
+       /etc/resolv.conf  for  DNS  queries, nscd will continue to
+       use the old one if you have configured  /etc/nsswitch.conf
+       to  use  DNS for host lookups. In such a case, you need to
+       restart nscd.
+
+
+SEE ALSO
+       nscd.conf(5), nsswitch.conf(5)
+
+AUTHOR
+       nscd was written by Thorsten Kukuk and Ulrich Drepper.
+
+
+
+GNU C Library                1999-10                      nscd(8)

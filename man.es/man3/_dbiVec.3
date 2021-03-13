@@ -1,0 +1,64 @@
+_dbiVec(3)                                             _dbiVec(3)
+
+
+
+NAME
+       _dbiVec -
+
+SYNOPSIS
+       #include <rpmdb.h>
+
+
+   Data Fields
+       int dbv_major
+       int dbv_minor
+       int dbv_patch
+       int(* open )(rpmdb rpmdb, int rpmtag, dbiIndex *dbip)
+       int(* close )(dbiIndex dbi, unsigned int flags)
+       int(* sync )(dbiIndex dbi, unsigned int flags)
+       int(* copen )(dbiIndex dbi, void **dbcp, unsigned int
+           flags)
+       int(* cclose )(dbiIndex dbi, void *dbcursor, unsigned int
+           flags)
+       int(* cdel )(dbiIndex dbi, void *dbcursor, const void
+           *keyp, size_t keylen, unsigned int flags)
+       int(* cget )(dbiIndex dbi, void *dbcursor, void **keypp,
+           size_t *keylenp, void **datapp, size_t *datalenp,
+           unsigned int flags)
+       int(* cput )(dbiIndex dbi, void *dbcursor, const void
+           *keyp, size_t keylen, const void *datap, size_t
+           datalen, unsigned int flags)
+       int(* ccount )(dbiIndex dbi, void *dbcursor, unsigned int
+           *countp, unsigned int flags)
+       int(* byteswapped )(dbiIndex dbi)
+       int(* stat )(dbiIndex dbi, unsigned int flags)
+
+DETAILED DESCRIPTION
+       Private methods for accessing an index database.
+
+       Definition at line 67 of file rpmdb.h.
+
+FIELD DOCUMENTATION
+   int _dbiVec::dbv_major
+       Berkeley db version major
+
+       Definition at line 68 of file rpmdb.h.
+
+   int _dbiVec::dbv_minor
+       Berkeley db version minor
+
+       Definition at line 69 of file rpmdb.h.
+
+   int _dbiVec::dbv_patch
+       Berkeley db version patch
+
+       Definition at line 70 of file rpmdb.h.
+
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002                 _dbiVec(3)

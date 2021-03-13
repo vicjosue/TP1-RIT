@@ -1,0 +1,85 @@
+backend(1)            Easy Software Products           backend(1)
+
+
+
+NAME
+       backend - cups backend transmission interfaces
+
+SYNOPSIS
+       backend job user title num-copies options [ filename ]
+
+DESCRIPTION
+       The  CUPS backend interface provides a standard method for
+       sending document files to different physical interfaces.
+
+       Backends must be capable of reading from a filename on the
+       command-line or from the standard input, copying the stan­
+       dard input to a temporary file if required by the physical
+       interface.
+
+       The command name (argv[0]) is set to the device URI of the
+       destination printer.
+
+ENVIRONMENT VARIABLES
+       The following environment variables  are  defined  by  the
+       CUPS server when executing the backend:
+
+       CHARSET
+            The default text character set (typically us-ascii or
+            iso-8859-1).
+
+       CONTENT_TYPE
+            The MIME type associated with the file (e.g. applica­
+            tion/postscript).
+
+       CUPS_DATADIR
+            The directory where data files can be found.
+
+       CUPS_SERVERROOT
+            The root directory of the server.
+
+       DEVICE_URI
+            The  device-uri  associated with the printer; this is
+            provided for shell scripts which may not be  able  to
+            get the passed argv[0] string.
+
+       LANG
+            The default language locale (typically C or en).
+
+       PATH
+            The  standard  execution  path  for external programs
+            that may be run by the backend.
+
+       PPD
+            The full pathname of the PostScript Printer  Descrip­
+            tion (PPD) file for this printer.
+
+       PRINTER
+            The name of the printer.
+
+       RIP_CACHE
+            The  recommended  amount  of memory to use for Raster
+            Image Processors (RIPs).
+
+       SOFTWARE
+            The name and version number of the server  (typically
+            CUPS/1.1).
+
+       TZ
+            The timezone of the server.
+
+       USER
+            The user executing the backend (typically lp).
+
+SEE ALSO
+       cupsd(8),  filter(1)  CUPS  Interface  Design Description,
+       CUPS Software Administrators Manual,  CUPS  Software  Pro­
+       grammers Manual, http://localhost:631/documentation.html
+
+COPYRIGHT
+       Copyright  1993-2002 by Easy Software Products, All Rights
+       Reserved.
+
+
+
+22 June 2000       Common UNIX Printing System         backend(1)

@@ -1,0 +1,71 @@
+tableType_s(3)                                     tableType_s(3)
+
+
+
+NAME
+       tableType_s -
+
+SYNOPSIS
+   Data Fields
+       const char *const key
+       const int hasCanon
+       const int hasTranslate
+       machEquivTable_s equiv
+       machCache_s cache
+       defaultEntry defaults
+       canonEntry canons
+       int defaultsLength
+       int canonsLength
+
+FIELD DOCUMENTATION
+   struct machCache_s tableType_s::cache
+       Definition at line 85 of file rpmrc.c.
+
+       Referenced by rpmFreeRpmrc.
+
+   canonEntry tableType_s::canons
+       Definition at line 87 of file rpmrc.c.
+
+       Referenced by rpmFreeRpmrc.
+
+   int tableType_s::canonsLength
+       Definition at line 89 of file rpmrc.c.
+
+       Referenced by rpmFreeRpmrc.
+
+   defaultEntry tableType_s::defaults
+       Definition at line 86 of file rpmrc.c.
+
+       Referenced by rpmFreeRpmrc.
+
+   int tableType_s::defaultsLength
+       Definition at line 88 of file rpmrc.c.
+
+       Referenced by rpmFreeRpmrc.
+
+   struct machEquivTable_s tableType_s::equiv
+       Definition at line 84 of file rpmrc.c.
+
+       Referenced by rpmFreeRpmrc.
+
+   const int tableType_s::hasCanon
+       Definition at line 82 of file rpmrc.c.
+
+       Referenced by doReadRC.
+
+   const int tableType_s::hasTranslate
+       Definition at line 83 of file rpmrc.c.
+
+       Referenced by doReadRC.
+
+   const char* const tableType_s::key
+       Definition at line 81 of file rpmrc.c.
+
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002             tableType_s(3)

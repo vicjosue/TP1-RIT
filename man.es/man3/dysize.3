@@ -1,0 +1,37 @@
+DYSIZE(3)           Linux Programmer's Manual           DYSIZE(3)
+
+
+
+NAME
+       dysize - get number of days for a given year
+
+SYNOPSIS
+       #define _BSD_SOURCE   /* or: #define _SVID_SOURCE */
+       #include <time.h>
+
+       int dysize(int year);
+
+
+DESCRIPTION
+       The  function  returns 365 for a normal year and 366 for a
+       leap year.  The calculation for leap year is based on:
+
+       (year) %4 == 0 && ((year) %100 != 0 || (year) %400 == 0)
+
+       The formula is defined in the  macro  __isleap(year)  also
+       found in <time.h>.
+
+CONFORMING TO
+       This function occurs in SunOS 4.x.
+
+NOTES
+       This  is  a  compatibility function only.  Don't use it in
+       new programs.  The SCO version  of  this  function  had  a
+       year-2000 problem.
+
+SEE ALSO
+       strftime(3), time(3)
+
+
+
+GNU                     November 12, 2001               DYSIZE(3)

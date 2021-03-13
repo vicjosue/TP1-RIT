@@ -1,0 +1,40 @@
+rpmvarValue(3)                                     rpmvarValue(3)
+
+
+
+NAME
+       rpmvarValue -
+
+SYNOPSIS
+   Data Fields
+       const char * value
+       const char * arch
+       rpmvarValue * next
+
+FIELD DOCUMENTATION
+   const char* rpmvarValue::arch
+       Definition at line 51 of file rpmrc.c.
+
+       Referenced by freeRpmVar, rpmFreeRpmrc, rpmGetVarArch, and
+       rpmSetVarArch.
+
+   struct rpmvarValue* rpmvarValue::next
+       Definition at line 52 of file rpmrc.c.
+
+       Referenced by freeRpmVar, rpmFreeRpmrc, rpmGetVarArch, and
+       rpmSetVarArch.
+
+   const char* rpmvarValue::value
+       Definition at line 49 of file rpmrc.c.
+
+       Referenced by freeRpmVar, rpmFreeRpmrc, rpmGetVarArch,
+       rpmSetVar, and rpmSetVarArch.
+
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002             rpmvarValue(3)

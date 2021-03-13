@@ -1,0 +1,56 @@
+Tcl_Alloc(3)          Tcl Library Procedures         Tcl_Alloc(3)
+
+
+
+_________________________________________________________________
+
+NAME
+       Tcl_Alloc,  Tcl_Free,  Tcl_Realloc - allocate or free heap
+       memory
+
+SYNOPSIS
+       #include <tcl.h>
+
+       char *
+       Tcl_Alloc(size)
+
+       Tcl_Free(ptr)
+
+       char *
+       Tcl_Realloc(ptr, size)
+
+ARGUMENTS
+       int    size    (in)      Size in bytes of the memory block
+                                to allocate.
+
+       char   *ptr    (in)      Pointer  to  memory block to free
+                                or realloc.
+_________________________________________________________________
+
+
+DESCRIPTION
+       These procedures provide a platform and compiler  indepen­
+       dent  interface for memory allocation.  Programs that need
+       to transfer ownership of memory  blocks  between  Tcl  and
+       other  modules  should  use these routines rather than the
+       native malloc() and free() routines provided by the C run-
+       time library.
+
+       Tcl_Alloc  returns  a  pointer to a block of at least size
+       bytes suitably aligned for any use.
+
+       Tcl_Free makes the space referred to by ptr available  for
+       further allocation.
+
+       Tcl_Realloc  changes  the  size of the block pointed to by
+       ptr to size bytes and returns a pointer to the new  block.
+       The contents will be unchanged up to the lesser of the new
+       and old sizes.  The returned  location  may  be  different
+       from ptr.
+
+KEYWORDS
+       alloc, allocation, free, malloc, memory, realloc
+
+
+
+Tcl                            7.5                   Tcl_Alloc(3)

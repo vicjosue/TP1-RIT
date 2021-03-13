@@ -1,0 +1,107 @@
+RMMOD(8)               Linux Module Support              RMMOD(8)
+
+
+
+NAME
+       rmmod - unload loadable modules
+
+SYNOPSIS
+       rmmod [ -aehrsvV ] module ...
+
+DESCRIPTION
+       rmmod unloads loadable modules from the running kernel.
+
+       rmmod  tries  to  unload a set of modules from the kernel,
+       with the restriction that they are not  in  use  and  that
+       they are not referred to by other modules.
+
+       If  more than one module is named on the command line, the
+       modules will be removed in the given order. This  supports
+       unloading of stacked modules.
+
+       With  the  option '-r' a recursive removal of modules will
+       be attempted.  This means that if a top module in a  stack
+       is named on the command line, all modules that are used by
+       this module will be removed as well, if possible.
+
+
+   OPTIONS
+       -a --all
+              Do  autoclean:  tag  unused  modules  as   "to   be
+              cleaned",  and  also remove already tagged modules.
+              Modules stay  tagged  if  they  stay  unused  since
+              previous   autoclean.    These   two  passes  avoid
+              removing transiently unused modules.
+
+       -e --persist
+              Save persistent data for the named modules, without
+              unloading  any  modules.   If  no  module names are
+              specified then data is saved for all  modules  that
+              have  persistent  data.  Data is only saved if both
+              the kernel and modutils support persistent data and
+              /proc/ksyms contains an entry
+              __insmod_modulename_Ppersistent_filename
+
+       -h --help
+              Print the help text.
+
+       -r --stacks
+              Remove a module stack.
+
+       -s --syslog
+              Output  everything  to  syslog(3)  instead  of  the
+              terminal.
+
+       -v --verbose
+              Be verbose.
+
+       -V --version
+              Print the version of modutils.
+
+PERSISTENT DATA
+       If a module contains persistent data  (see  insmod(8)  and
+       modules.conf(5))  then  removing  the module always writes
+       the persistent data to the filename  in  the  __insmod  _P
+       symbol  entry.   You  can also save the persistent data at
+       any time by rmmod -e, this will not unload any modules.
+
+       When the  persistent  data  is  written  to  file,  it  is
+       preceded by a generated comment line,
+       #% kernel_version timestamp
+       Generated  comment  lines  start  with '#%', all generated
+       comments  are  stripped  from  the  existing  file,  other
+       comments are preserved.  The saved data values are written
+       to the file, preserving the existing order of comments and
+       assignments.  New values are added at the end of the file.
+       If the file contains values  that  do  not  exist  in  the
+       module then these values are preserved but are preceded by
+       a generated comment warning that they are not being  used.
+       The  latter  operation  allows  a  user  to switch between
+       kernels without losing persistent data and without getting
+       any error messages.
+
+       Note: Comments are only supported when the first non-space
+       character on a line is '#'.  Any non-blank lines  that  do
+       not  start with '#' are module options, one per line.  The
+       option lines have leading spaces removed, the remainder of
+       the  line  is passed to insmod as an option, including any
+       trailing characters.
+
+SEE ALSO
+       insmod(8), lsmod(8), ksyms(8), modprobe(8)
+
+HISTORY
+       Module support was first conceived by Anonymous
+       Initial Linux version by Bas Laarhoven <bas@vimec.nl>
+       Version 0.99.14 by Jon Tombs <jon@gtex02.us.es>
+       Extended by Bjorn Ekwall <bj0rn@blox.se>
+       Updated for 2.1.17 by Richard Henderson <rth@tamu.edu>
+       Updated for 2.2.2 by by Bjorn Ekwall <bj0rn@blox.se>
+       Updated  for   modutils   2.3.20   by   by   Keith   Owens
+       <kaos@ocs.com.au>
+       Persistent  data  for  modutils  2.3.22  by by Keith Owens
+       <kaos@ocs.com.au>
+
+
+
+Linux                   November 12, 2000                RMMOD(8)

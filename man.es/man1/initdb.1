@@ -1,0 +1,122 @@
+INITDB(1)         PostgreSQL Server Applications        INITDB(1)
+
+
+
+NAME
+       initdb - create a new PostgreSQL database cluster
+
+SYNOPSIS
+       initdb   --pgdata  | -D directory [ --username  | -U user­
+       name ] [ --pwprompt | -W ] [ --encoding  | -E encoding ] [
+       -L directory ] [ --noclean | -n ] [ --debug | -d ]
+
+DESCRIPTION
+       initdb  creates  a  new  PostgreSQL  database  cluster (or
+       database system). A database cluster is  a  collection  of
+       databases that are managed by a single server instance.
+
+       Creating a database system consists of creating the direc­
+       tories in which the database data  will  live,  generating
+       the shared catalog tables (tables that belong to the whole
+       cluster rather than to any particular database), and  cre­
+       ating  the  template1  database.  When  you  create  a new
+       database, everything in the template1 database is  copied.
+       It  contains  catalog tables filled in for things like the
+       built-in types.
+
+       initdb must be run as the user that will  own  the  server
+       process,  because  the  server needs to have access to the
+       files and directories  that  initdb  creates.   Since  the
+       server  may not be run as root, you must not run initdb as
+       root either. (It will in fact refuse to do so.)
+
+       Although initdb will attempt to create the specified  data
+       directory,  often it won't have permission to do so, since
+       the parent of the desired data directory is often a  root-
+       owned  directory. To set up an arrangement like this, cre­
+       ate an empty data directory as root,  then  use  chown  to
+       hand over ownership of that directory to the database user
+       account, then su to become the database user, and  finally
+       run initdb as the database user.
+
+   OPTIONS
+       --pgdata=directory
+
+       -D directory
+              This  option  specifies  the  directory  where  the
+              database system should be stored. This is the  only
+              information  required  by initdb, but you can avoid
+              writing it by setting the PGDATA environment  vari­
+              able,  which  can  be convenient since the database
+              server (postmaster) can find the database directory
+              later by the same variable.
+
+       --username=username
+
+       -U username
+              Selects  the  user  name of the database superuser.
+              This defaults to the name  of  the  effective  user
+              running initdb. It is really not important what the
+              superuser's name is, but one might choose  to  keep
+              the  customary name ``postgres'', even if the oper­
+              ating system user's name is different.
+
+       --pwprompt
+
+       -W     Makes initdb prompt for  a  password  to  give  the
+              database  superuser.  If  you  don't  plan on using
+              password authentication,  this  is  not  important.
+              Otherwise you won't be able to use password authen­
+              tication until you have a password set up.
+
+       --encoding=encoding
+
+       -E encoding
+              Selects the encoding of the template database. This
+              will  also  be the default encoding of any database
+              you create later, unless you override it there.  To
+              use  the encoding feature, you must have enabled it
+              at build time, at which time you  also  select  the
+              default for this option.
+
+
+       Other, less commonly used, parameters are also available:
+
+       -L directory
+              Specifies  where initdb should find its input files
+              to initialize the database system. This is normally
+              not  necessary.  You  will  be  told if you need to
+              specify their location explicitly.
+
+       --noclean
+
+       -n     By default, when initdb determines  that  an  error
+              prevented  it from completely creating the database
+              system, it removes any files it  may  have  created
+              before  discovering  that  it can't finish the job.
+              This option inhibits tidying-up and is thus  useful
+              for debugging.
+
+       --debug
+
+       -d     Print  debugging  output from the bootstrap backend
+              and a few other messages of lesser interest for the
+              general  public.  The bootstrap backend is the pro­
+              gram initdb uses to create the catalog tables. This
+              option  generates  a tremendous amount of extremely
+              boring output.
+
+
+ENVIRONMENT
+       PGDATA Specifies the directory where the  database  system
+              is  to  be  stored;  may be overridden using the -D
+              option.
+
+SEE ALSO
+       postgres(1),  postmaster(1),  PostgreSQL   Administrator's
+       Guide
+
+
+
+
+Application                 2000-12-25                  INITDB(1)

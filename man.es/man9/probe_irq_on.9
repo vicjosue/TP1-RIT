@@ -1,0 +1,93 @@
+PROBE_IRQ_ON(9)       Linux Kernel Functions      PROBE_IRQ_ON(9)
+
+
+
+NAME
+       probe_irq_on, probe_irq_off - safe probing for IRQs
+
+SYNOPSIS
+       #include <linux/interrupt.h>
+
+       unsigned long probe_irq_on(void)
+       int probe_irq_off(unsigned long irqs);
+
+DESCRIPTION
+   Usage
+       probe_irq_on()  turns  on  IRQ  detection.  It operates by
+       enabling all interrupts  which  have  no  handlers,  while
+       keeping  the handlers for those interrupts NULL.  The ker­
+       nel's generic  interrupt  handling  routine  will  disable
+       these   IRQs  when  an  interrupt  is  received  on  them.
+       probe_irq_on() adds each of these IRQ numbers to a  vector
+       which  it  will  return.  It waits approximately 100ms for
+       any spurious interrupts that may occur,  and  masks  these
+       from  its  vector;  it  then  returns  this  vector to its
+       caller.
+
+       probe_irq_off() tests an internal  list  of  enabled  IRQs
+       against  its  irqs  parameter,  which  should be the value
+       returned by the last probe_irq_on().  This function  basi­
+       cally  detects which IRQs have been switched off, and thus
+       which ones have received interrupts.
+
+   Example
+       This explanation may seem a bit confusing, so here  is  an
+       example  of  code the mythical FUBAR 2000 driver could use
+       to probe for IRQs:
+
+              unsigned long irqs;
+              int irq;
+
+              irqs = probe_irq_on();
+
+              outb(FB2K_GIVE_ME_AN_INTERRUPT_OR_GIVE_ME_DEATH,
+                   FB2K_CONTROL_PORT);
+                /* the interrupt could take a while to occur */
+              udelay(1000);
+
+              irq = probe_irq_off(irqs);
+
+              if (irq == 0) {
+                   printk("fb2k: could not detect IRQ.\n");
+                   printk("fb2k: Installation failed.\n");
+              } else if (irq == -1) {
+                   printk("fb2k: multiple IRQs detected.\n");
+                   printk("fb2k: Installation failed.\n");
+              } else {
+                   fb2k_dev->irq = irq;
+                   printk("fb2k: using probed IRQ %d.\n", irq);
+              }
+
+RETURN VALUE
+       probe_irq_on() returns a  bitmap  of  all  unhandled  IRQs
+       (except  those  which  are receiving spurious interrupts).
+       This value should only be used as a parameter to the  next
+       call to probe_irq_off().
+
+       probe_irq_off() returns the IRQ number of whichever unhan­
+       dled interrupt has occurred since the last probe_irq_on().
+       If  no interrupts have occurred on any of the marked IRQs,
+       0 is returned; if interrupts have occurred  on  more  than
+       one of these IRQs, -1 is returned.
+
+AVAILABILITY
+       Linux  1.2+.   These  functions are not available on m68k-
+       based machines.
+
+SEE ALSO
+       request_irq(9)
+
+       arch/*/kernel/irq.c
+
+AUTHOR
+       Neil Moore <amethyst@maxwell.ml.org>
+
+BUGS
+       As mentioned above, these functions are not  available  on
+       m68k-based machines.
+
+       This manpage is way too confusing.
+
+
+
+Linux DDI 2.1.47       1997/08/14 07:53:32        PROBE_IRQ_ON(9)

@@ -1,0 +1,92 @@
+DIGEST_CTX_s(3)                                   DIGEST_CTX_s(3)
+
+
+
+NAME
+       DIGEST_CTX_s - MD5/SHA1 digest private data.
+
+SYNOPSIS
+   Data Fields
+       rpmDigestFlags flags
+       uint32 digestlen
+       uint32 datalen
+       void(* transform )(DIGEST_CTX)
+       int doByteReverse
+       uint32 bits [2]
+       uint32 digest [8]
+       byte in [64]
+
+DETAILED DESCRIPTION
+       MD5/SHA1 digest private data.
+
+       Definition at line 19 of file digest.c.
+
+FIELD DOCUMENTATION
+   uint32 DIGEST_CTX_s::bits[2]
+       No. bits of plain text.
+
+       Definition at line 25 of file digest.c.
+
+       Referenced by rpmDigestFinal, rpmDigestInit, and
+       rpmDigestUpdate.
+
+   uint32 DIGEST_CTX_s::datalen
+       No. bytes in block of plaintext data.
+
+       Definition at line 22 of file digest.c.
+
+       Referenced by rpmDigestFinal, rpmDigestInit, and
+       rpmDigestUpdate.
+
+   uint32 DIGEST_CTX_s::digest[8]
+       Message digest.
+
+       Definition at line 26 of file digest.c.
+
+       Referenced by MD5Transform, rpmDigestFinal, rpmDigestInit,
+       and SHA1Transform.
+
+   uint32 DIGEST_CTX_s::digestlen
+       No. bytes of digest.
+
+       Definition at line 21 of file digest.c.
+
+       Referenced by rpmDigestFinal, and rpmDigestInit.
+
+   int DIGEST_CTX_s::doByteReverse
+       Swap bytes in uint32?
+
+       Definition at line 24 of file digest.c.
+
+       Referenced by rpmDigestFinal, rpmDigestInit, and
+       rpmDigestUpdate.
+
+   rpmDigestFlags DIGEST_CTX_s::flags
+       Bit(s) to control digest operation.
+
+       Definition at line 20 of file digest.c.
+
+       Referenced by rpmDigestFinal, and rpmDigestInit.
+
+   byte DIGEST_CTX_s::in[64]
+       Next block of plain text.
+
+       Definition at line 27 of file digest.c.
+
+       Referenced by MD5Transform, rpmDigestFinal,
+       rpmDigestUpdate, and SHA1Transform.
+
+   void(* DIGEST_CTX_s::transform)(DIGEST_CTX)
+       Digest transform.
+
+       Referenced by rpmDigestFinal, rpmDigestInit, and
+       rpmDigestUpdate.
+
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002            DIGEST_CTX_s(3)

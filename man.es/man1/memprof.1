@@ -1,0 +1,32 @@
+MEMPROF(1)                                             MEMPROF(1)
+
+
+
+NAME
+       memprof - memory profiler and leak detector.
+
+SYNOPSIS
+       memprof  [ --follow-fork ]  [ --follow-exec ]  [ program ]
+       [ -- program options  ...]
+
+
+DESCRIPTION
+       memprof is a tool for profiling memory usage and detecting
+       memory  leaks. It can be used with existing binaries with­
+       out need for recompilation.
+
+OPTIONS
+       --follow-fork
+              Create new windows for forked processes.
+
+       --follow-exec
+              Retain windows for processes after exec().
+
+AUTHOR
+       This manual page was written by Christian Marillat <maril­
+       lat@debian.org>  for  the Debian GNU/Linux system (but may
+       be used by others).
+
+
+
+                         09 octobre 2001               MEMPROF(1)

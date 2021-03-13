@@ -1,0 +1,39 @@
+pcibios_strerror(9)      BIOS32 Functions     pcibios_strerror(9)
+
+
+
+NAME
+       pcibios_strerror - Convert BIOS32 return codes to strings
+
+SYNOPSIS
+       #include <linux/bios32.h>
+
+       const char* pcibios_strerror(int error);
+
+DESCRIPTION
+       The  pcibios_strerror function converts a PCI BIOS32 error
+       number into a human readable  error  message.  The  bios32
+       error codes are defined by the PCI standard.
+
+RETURN VALUE
+       The return value is a pointer to the error message.
+
+SEE ALSO
+       /usr/include/linux/bios32.h,
+       /usr/src/linux/arch/*/kernel/bios32.c
+
+       PCI Local Bus -- PCI BIOS SPECIFICATION
+
+AVAILABILITY
+       Linux 1.0?
+
+AUTHOR
+       Kirk Petersen (kirk@speakeasy.org)
+
+BUGS
+       The result may or may not be overwritten by  a  subsequent
+       call to this function. it is best to assume it does.
+
+
+
+Linux DDI                 August 5, 1997      pcibios_strerror(9)

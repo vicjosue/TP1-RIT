@@ -1,0 +1,53 @@
+GNOME(1)                                                 GNOME(1)
+
+
+
+gnome-wm  -  Launches  the  user  selected window manager for the
+GNOME session
+
+SYNOPSIS
+       gnome-wm [--default-wm windowmanager] [--sm-client-id id]
+
+DESCRIPTION
+       The gnome-wm script invokes the user selected window  man­
+       ager.  If the user has not chosen a window manager it will
+       try to launch a GNOME compliant window manager.
+
+       The user can overwrite the selection of a  window  manager
+       by  setting the WINDOW_MANAGER environment variable.  If a
+       --default-wm option is given the script uses  that  window
+       manager in case WINDOW_MANAGER is not set.  If gnome-wm is
+       given as the argument to --default-wm then it is the  same
+       as if no default was given.
+
+       The  script  takes  the --sm-client-id argument and trans­
+       lates the id to an appropriate option depending  on  which
+       window manager was selected.
+
+
+
+ENVIRONMENT
+       The  gnome-wm program uses the value of the WINDOW_MANAGER
+       environment variable to let the user override the  config­
+       ured window manager.
+
+FILES
+       The  program stores the current selection of a window man­
+       ager in the ~/.gnome/default.wm file, this  file  has  the
+       following format:
+
+       [Default]
+       WM=path-to-wm
+
+SEE ALSO
+       gnome-session(1),default.session(5)
+
+BUGS
+       If  you  find  bugs in the gnome-wm program, please report
+       these using bug-buddy or  the  gnome-bug  script  included
+       with the GNOME libraries distribution.
+
+
+
+
+                            GNOME 1.0                    GNOME(1)

@@ -1,0 +1,45 @@
+DSA_dup_DH(3)                OpenSSL                DSA_dup_DH(3)
+
+
+
+NNAAMMEE
+       DSA_dup_DH - create a DH structure out of DSA structure
+
+SSYYNNOOPPSSIISS
+        #include <openssl/dsa.h>
+
+        DH * DSA_dup_DH(DSA *r);
+
+
+DDEESSCCRRIIPPTTIIOONN
+       DSA_dup_DH() duplicates DSA parameters/keys as DH
+       parameters/keys. q is lost during that conversion, but the
+       resulting DH parameters contain its length.
+
+RREETTUURRNN VVAALLUUEE
+       DSA_dup_DH() returns the new DDHH structure, and NULL on
+       error. The error codes can be obtained by
+       ERR_get_error(3).
+
+NNOOTTEE
+       Be careful to avoid small subgroup attacks when using
+       this.
+
+SSEEEE AALLSSOO
+       dh(3), dsa(3), err(3)
+
+HHIISSTTOORRYY
+       DSA_dup_DH() was added in OpenSSL 0.9.4.
+
+
+
+
+
+
+
+
+
+
+
+
+24/Feb/2000                   0.9.6c                DSA_dup_DH(3)

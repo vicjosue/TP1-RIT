@@ -1,0 +1,61 @@
+_value(3)                                               _value(3)
+
+
+
+NAME
+       _value - Encapsulation of a 'value'.
+
+SYNOPSIS
+   Public Types
+       enum { VALUE_TYPE_INTEGER, VALUE_TYPE_STRING }
+
+   Data Fields
+       enum _value:: { ... }  type
+       union {
+          const char * s
+          int i
+       } data
+
+
+DETAILED DESCRIPTION
+       Encapsulation of a 'value'.
+
+       Definition at line 33 of file expression.c.
+
+MEMBER ENUMERATION DOCUMENTATION
+   anonymous enum
+       Enumeration values:
+
+       VALUE_TYPE_INTEGER
+
+       VALUE_TYPE_STRING
+
+
+       Definition at line 34 of file expression.c.
+
+FIELD DOCUMENTATION
+   union { ... }   _value::data
+       Referenced by doAddSubtract, doLogical, doMultiplyDivide,
+       doPrimary, doRelational, parseExpressionBoolean,
+       parseExpressionString, valueFree, valueMakeInteger, and
+       valueMakeString.
+
+   int _value::i
+       Definition at line 37 of file expression.c.
+
+   const char* _value::s
+       Definition at line 36 of file expression.c.
+
+   enum { ... }   _value::type
+       Referenced by parseExpressionBoolean,
+       parseExpressionString, valueFree, valueMakeInteger, and
+       valueMakeString.
+
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002                  _value(3)

@@ -1,0 +1,71 @@
+Tcl_SaveResult(3)     Tcl Library Procedures    Tcl_SaveResult(3)
+
+
+
+_________________________________________________________________
+
+NAME
+       Tcl_SaveResult,   Tcl_RestoreResult,  Tcl_DiscardResult  -
+       save and restore an interpreter's result
+
+SYNOPSIS
+       #include <tcl.h>
+
+       Tcl_SaveResult(interp, statePtr)
+
+       Tcl_RestoreResult(interp, statePtr)
+
+       Tcl_DiscardResult(statePtr)
+
+ARGUMENTS
+       Tcl_Interp        *interp    (in)      Interpreter     for
+                                              which  state should
+                                              be saved.
+
+       Tcl_SavedResult   *statePtr  (in)      Pointer to location
+                                              where   interpreter
+                                              result  should   be
+                                              saved  or restored.
+_________________________________________________________________
+
+
+DESCRIPTION
+       These routines allows a C procedure to take a snapshot  of
+       the  current interpreter result so that it can be restored
+       after a call to Tcl_Eval or some other routine that  modi­
+       fies  the interpreter result.  These routines are passed a
+       pointer to a structure that is used to store enough infor­
+       mation  to  restore  the  interpreter  result state.  This
+       structure can be allocated on the  stack  of  the  calling
+       procedure.   These  routines  do not save the state of any
+       error information in the interpreter (e.g.  the  errorCode
+       or errorInfo variables).
+
+       Tcl_SaveResult  moves  the  string  and  object results of
+       interp  into   the   location   specified   by   statePtr.
+       Tcl_SaveResult clears the result for interp and leaves the
+       result in its normal empty initialized state.
+
+       Tcl_RestoreResult moves the string and object results from
+       statePtr  back  into interp.  Any result or error that was
+       already in the interpreter will be cleared.  The  statePtr
+       is left in an uninitialized state and cannot be used until
+       another call to Tcl_SaveResult.
+
+       Tcl_DiscardResult releases  the  saved  interpreter  state
+       stored  at  statePtr.   The  state structure is left in an
+       uninitialized state and cannot be used until another  call
+       to Tcl_SaveResult.
+
+       Once  Tcl_SaveResult  is  called  to  save the interpreter
+       result, either Tcl_RestoreResult or Tcl_DiscardResult must
+       be  called to properly clean up the memory associated with
+       the saved state.
+
+
+KEYWORDS
+       result, state, interp
+
+
+
+Tcl                            8.1              Tcl_SaveResult(3)

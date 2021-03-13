@@ -1,0 +1,62 @@
+sleep_on(9)              Kernel Functions             sleep_on(9)
+
+
+
+NAME
+       sleep_on - synchronization using a condition variable
+
+SYNOPSIS
+       #include <linux/sched.h>
+
+       void sleep_on(struct wait_queue**condition)
+
+DESCRIPTION
+       The  sleep_on  function provides a means for synchronizing
+       between processes and with interrupt handlers. The  condi­
+       tion  parameter  is  a  pointer to a pointer to the opaque
+       wait_queue type.  Initialize  the  condition  variable  to
+       zero,  then pass a pointer to it to the sleep_on function.
+       The basic idea is as follows:
+
+       struct wait_queue*con = 0;
+            [...]
+       sleep_on(&con);
+
+       While a process is sleeping, it is fully interruptible, no
+       matter  what the cpu state when entering the function. The
+       cpu state is restored on being awakened.
+
+       If a null(0) is passed to  sleep_on,  it  returns  immedi­
+       ately, without sleeping. This is a no-op.
+
+RETURN VALUE
+       The  sleep_on  function only returns when explicitly awak­
+       ened.
+
+AVAILABILITY
+       Linux 1+
+
+SEE ALSO
+       wake_up(9)
+
+       /usr/src/linux/kernel/sched.c
+
+AUTHOR
+       Stephen Williams <steve@icarus.com>
+
+BUGS
+       A call to sleep_on(0) seems like  an  interesting  way  to
+       test for and momentarily allow interrupts, but that is not
+       what happens.
+
+       The sleep_on function cannot be called by  interrupt  han­
+       dlers.
+
+       The  function  is not atomic with the condition tests that
+       the driver writer might include, so the code executing the
+       sleep_on function is protected from interrupts. Failure to
+       do so generally leads to race conditions.
+
+
+
+Linux DDI                    $Date:$                  sleep_on(9)

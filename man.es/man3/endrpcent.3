@@ -1,0 +1,75 @@
+GETRPCENT(3)                                         GETRPCENT(3)
+
+
+
+NAME
+       getrpcent, getrpcbyname, getrpcbynumber - get RPC entry
+
+SYNOPSIS
+       #include <netdb.h>
+
+       struct rpcent *getrpcent()
+
+       struct rpcent *getrpcbyname(name)
+       char *name;
+
+       struct rpcent *getrpcbynumber(number)
+       int number;
+
+       setrpcent (stayopen)
+       int stayopen;
+
+       endrpcent ()
+
+DESCRIPTION
+       getrpcent(),  getrpcbyname(),  and  getrpcbynumber()  each
+       return a pointer to an object with the following structure
+       containing the broken-out fields of a line in the rpc pro­
+       gram number data base, /etc/rpc.
+
+              struct    rpcent {
+                   char *r_name;  /* name of server for this rpc program */
+                   char **r_aliases;   /* alias list */
+                   long r_number; /* rpc program number */
+              };
+
+       The members of this structure are:
+              r_name              The name of the server for this
+                                  rpc program.
+              r_aliases           A   zero   terminated  list  of
+                                  alternate  names  for  the  rpc
+                                  program.
+              r_number            The rpc program number for this
+                                  service.
+
+       getrpcent() reads the next line of the file,  opening  the
+       file if necessary.
+
+       getrpcent()  opens  and rewinds the file.  If the stayopen
+       flag is non-zero, the net data base  will  not  be  closed
+       after  each call to getrpcent() (either directly, or indi­
+       rectly through one of the other "getrpc" calls).
+
+       endrpcent closes the file.
+
+       getrpcbyname() and  getrpcbynumber()  sequentially  search
+       from  the  beginning of the file until a matching rpc pro­
+       gram name or program number is found, or until end-of-file
+       is encountered.
+
+FILES
+       /etc/rpc
+
+SEE ALSO
+       rpc(5), rpcinfo(8), ypserv(8)
+
+DIAGNOSTICS
+       A NULL pointer is returned on EOF or error.
+
+BUGS
+       All  information  is contained in a static area so it must
+       be copied if it is to be saved.
+
+
+
+                            1987-12-14               GETRPCENT(3)

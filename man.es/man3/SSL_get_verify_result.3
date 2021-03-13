@@ -1,0 +1,64 @@
+SSL_get_verify_result(3)     OpenSSL     SSL_get_verify_result(3)
+
+
+
+NNAAMMEE
+       SSL_get_verify_result - get result of peer certificate
+       verification
+
+SSYYNNOOPPSSIISS
+        #include <openssl/ssl.h>
+
+        long SSL_get_verify_result(SSL *ssl);
+
+
+DDEESSCCRRIIPPTTIIOONN
+       SSL_get_verify_result() returns the result of the
+       verification of the X509 certificate presented by the
+       peer, if any.
+
+NNOOTTEESS
+       SSL_get_verify_result() can only return one error code
+       while the verification of a certificate can fail because
+       of many reasons at the same time. Only the last
+       verification error that occurred during the processing is
+       available from SSL_get_verify_result().
+
+       The verification result is part of the established session
+       and is restored when a session is reused.
+
+BBUUGGSS
+       If no peer certificate was presented, the returned result
+       code is X509_V_OK. This is because no verification error
+       occurred, it does however not indicate success.
+       SSL_get_verify_result() is only useful in connection with
+       SSL_get_peer_certificate(3).
+
+RREETTUURRNN VVAALLUUEESS
+       The following return values can currently occur:
+
+       X509_V_OK
+           The verification succeeded or no peer certificate was
+           presented.
+
+       Any other value
+           Documented in verify(1).
+
+SSEEEE AALLSSOO
+       ssl(3), SSL_set_verify_result(3),
+       SSL_get_peer_certificate(3), verify(1)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+15/Feb/2001                   0.9.6c     SSL_get_verify_result(3)

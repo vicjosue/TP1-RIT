@@ -1,0 +1,42 @@
+BN_copy(3)                   OpenSSL                   BN_copy(3)
+
+
+
+NNAAMMEE
+       BN_copy, BN_dup - copy BIGNUMs
+
+SSYYNNOOPPSSIISS
+        #include <openssl/bn.h>
+
+        BIGNUM *BN_copy(BIGNUM *to, const BIGNUM *from);
+
+        BIGNUM *BN_dup(const BIGNUM *from);
+
+
+DDEESSCCRRIIPPTTIIOONN
+       BN_copy() copies ffrroomm to ttoo. BN_dup() creates a new BBIIGGNNUUMM
+       containing the value ffrroomm.
+
+RREETTUURRNN VVAALLUUEESS
+       BN_copy() returns ttoo on success, NULL on error. BN_dup()
+       returns the new BBIIGGNNUUMM, and NULL on error. The error codes
+       can be obtained by ERR_get_error(3).
+
+SSEEEE AALLSSOO
+       bn(3), err(3)
+
+HHIISSTTOORRYY
+       BN_copy() and BN_dup() are available in all versions of
+       SSLeay and OpenSSL.
+
+
+
+
+
+
+
+
+
+
+
+26/Jan/2000                   0.9.6c                   BN_copy(3)

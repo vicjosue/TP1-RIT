@@ -1,0 +1,80 @@
+STRTOUL(3)          Linux Programmer's Manual          STRTOUL(3)
+
+
+
+NAME
+       strtoul,  strtoull  - convert a string to an unsigned long
+       integer.
+
+SYNOPSIS
+       #include <stdlib.h>
+
+       unsigned long int
+       strtoul(const char *nptr, char **endptr, int base);
+
+       unsigned long long int
+       strtoull(const char *nptr, char **endptr, int base);
+
+DESCRIPTION
+       The strtoul() function converts the initial  part  of  the
+       string in nptr to an unsigned long integer value according
+       to the given base, which must be between 2 and  36  inclu­
+       sive, or be the special value 0.
+
+       The  string  must  begin with an arbitrary amount of white
+       space (as determined by isspace(3)) followed by  a  single
+       optional  `+'  or  `-'  sign.   If base is zero or 16, the
+       string may then include a `0x' prefix, and the number will
+       be  read in base 16; otherwise, a zero base is taken as 10
+       (decimal) unless the next character is `0', in which  case
+       it is taken as 8 (octal).
+
+       The  remainder  of  the string is converted to an unsigned
+       long int value in the  obvious  manner,  stopping  at  the
+       first  character  which  is not a valid digit in the given
+       base.  (In bases above 10, the letter `A' in either  upper
+       or  lower  case  represents  10, `B' represents 11, and so
+       forth, with `Z' representing 35.)
+
+       If endptr is not NULL, strtoul() stores the address of the
+       first invalid character in *endptr.  If there were no dig­
+       its at all, strtoul() stores the original value of nptr in
+       *endptr  (and  returns 0).  In particular, if *nptr is not
+       `\0' but **endptr is `\0' on return, the entire string  is
+       valid.
+
+       The  strtoull()  function  works  just  like the strtoul()
+       function but returns an unsigned long long integer  value.
+
+RETURN VALUE
+       The  strtoul()  function  returns either the result of the
+       conversion or, if there was  a  leading  minus  sign,  the
+       negation of the result of the conversion, unless the orig­
+       inal (non-negated) value would  overflow;  in  the  latter
+       case,  strtoul()  returns  ULONG_MAX  and  sets the global
+       variable errno to ERANGE.  Precisely the  same  holds  for
+       strtoull() (with ULLONG_MAX instead of ULONG_MAX).
+
+ERRORS
+       ERANGE The resulting value was out of range.
+
+       EINVAL (not in C99) The given base contains an unsupported
+              value.
+
+       The implementation may also set errno to EINVAL in case no
+       conversion was performed (no digits seen, and 0 returned).
+
+NOTE
+       In locales other than the "C" locale, also  other  strings
+       may be accepted.
+
+CONFORMING TO
+       strtoul()  conforms to SVID 3, BSD 4.3, ISO 9899 (C99) and
+       POSIX, and strtoull() to ISO 9899 (C99) and POSIX-2001.
+
+SEE ALSO
+       atof(3), atoi(3), atol(3), strtod(3), strtol(3)
+
+
+
+GNU                         2002-02-22                 STRTOUL(3)

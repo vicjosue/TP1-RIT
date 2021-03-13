@@ -1,0 +1,127 @@
+BADBLOCKS(8)                                         BADBLOCKS(8)
+
+
+
+NAME
+       badblocks - search a device for bad blocks
+
+SYNOPSIS
+       badblocks [ -svwnf ] [ -b block-size ] [ -c blocks_at_once
+       ] [ -i input_file ] [ -o output_file ] [ -p  num_passes  ]
+       device [ last-block ] [ start-block ]
+
+DESCRIPTION
+       badblocks  is  used  to  search for bad blocks on a device
+       (usually a disk partition).  device is  the  special  file
+       corresponding  to  the device (e.g /dev/hdc1).  last-block
+       is the last block to be checked; if it is  not  specified,
+       the last block on the device is used as a default.  start-
+       block is an optional  parameter  specifying  the  starting
+       block  number  for  the  test, which allows the testing to
+       start in the middle of the disk.  If it is  not  specified
+       the first block on the disk is used as a default.
+
+       Important  note: If the output of badblocks is going to be
+       fed to the e2fsck or mke2fs programs, it is important that
+       the block size is properly specified, since the block num­
+       bers which are generated is very dependent  on  the  block
+       size in use.   For this reason, it is strongly recommended
+       that users not run badblocks directly, but rather use  the
+       -c option of the e2fsck and mke2fs programs.
+
+OPTIONS
+       -b block-size
+              Specify the size of blocks in bytes.
+
+       -c number of blocks
+              is the number of blocks which are tested at a time.
+              The default is 16.   Increasing  this  number  will
+              increase  the efficiency of badblocks but also will
+              increase its memory usage.  Badblocks needs  memory
+              proportional  to  the  number  of  blocks tested at
+              once, in read-only mode, proportional to twice that
+              number  in  read-write  mode,  and  proportional to
+              three times that number  in  non-destructive  read-
+              write mode.  If you set the number-of-blocks param­
+              eter to too  high  a  value,  badblocks  will  exit
+              almost  immediately  with  an  out-of-memory  error
+              "while allocating buffers".  If you set it too low,
+              however,  for  a  non-destructive-write-mode  test,
+              then it's possble for  questionable  blocks  on  an
+              unreliable  hard  drive to be hidden by the effects
+              of the hard disk track buffer.
+
+       -f     Normally, badblocks will refuse to do a  read/write
+              or  a  non-destructive  test  on  a device which is
+              mounted, since this can cause the system to  poten­
+              tially  crash.   This  can be overriden using the -
+              flag, but this should not be done under normal cir­
+              cumstances.   The  only time when this option might
+              be safe is if the /etc/mtab file is incorrect,  and
+              the device really isn't mounted.
+
+       -i input_file
+              Read  a  list of already existing known bad blocks.
+              Badblocks will skip testing these blocks since they
+              are known to be bad.  If input_file is specified as
+              "-", the list will be read from the standard input.
+              Blocks listed in this list will be omitted from the
+              list of new bad blocks  produced  on  the  standard
+              output  or  in  the  output file.  The -b option of
+              dumpe2fs(8) can be used to  retrieve  the  list  of
+              blocks currently marked bad on an existing filesys­
+              tem, in a format suitable for use with this option.
+
+       -o output_file
+              Write the list of bad blocks to the specified file.
+              Without this option, badblocks displays the list on
+              its  standard  output.   The format of this file is
+              suitable for use by the -l option in  e2fsck(8)  or
+              mke2fs(8).
+
+       -p num_passes
+              Repeat  scanning  the  disk  until there are no new
+              blocks discovered in num_passes  consecutive  scans
+              of  the disk.  Default is 0, meaning badblocks will
+              exit after the first pass.
+
+       -n     Use non-destructive read-write  mode.   By  default
+              only  a  non-destructive  read-only  test  is done.
+              This option  must  not  be  combined  with  the  -w
+              option, as they are mutually exclusive.
+
+       -s     Show  the  progress  of the scan by writing out the
+              block numbers as they are checked.
+
+       -v     Verbose mode.
+
+       -w     Use write-mode test. With  this  option,  badblocks
+              scans  for  bad  blocks  by  writing  some patterns
+              (0xaa, 0x55, 0xff, 0x00)  on  every  block  of  the
+              device,  reading every block and comparing the con­
+              tents.  This option may not be combined with the -n
+              option, as they are mutually exclusive.
+
+WARNING
+       Never  use the -w option on an device containing an exist­
+       ing file system.  This option erases data!  If you want to
+       do  write-mode testing on an existing file system, use the
+       -n option instead.  It is slower,  but  it  will  preserve
+       your data.
+
+AUTHOR
+       badblocks  was written by Remy Card <Remy.Card@linux.org>.
+       Current maintainer is Theodore Ts'o  <tytso@alum.mit.edu>.
+       Non-destructive read/write test implemented by David Beat­
+       tie <dbeattie@softhome.net>.
+
+AVAILABILITY
+       badblocks is part of the e2fsprogs package and  is  avail­
+       able from http://e2fsprogs.sourceforge.net.
+
+SEE ALSO
+       e2fsck(8), mke2fs(8)
+
+
+
+E2fsprogs version 1.26    February 2002              BADBLOCKS(8)

@@ -1,0 +1,73 @@
+MINCORE(2)          Linux Programmer's Manual          MINCORE(2)
+
+
+
+NAME
+       mincore - get information on whether pages are in core
+
+SYNOPSIS
+       #include <unistd.h>
+       #include <sys/mman.h>
+
+       int  mincore(void  *start,  size_t  length,  unsigned char
+       *vec);
+
+DESCRIPTION
+       The mincore function requests a  vector  describing  which
+       pages  of  a file are in core and can be read without disk
+       access. The kernel will supply data for length bytes  fol­
+       lowing  the start address. On return, the kernel will have
+       filled vec with bytes, of which the least significant  bit
+       indicates if a page is core resident.
+
+       For  mincore  to  return successfully, start must lie on a
+       page boundary. It is the caller's responsibility to  round
+       up to the nearest page. The length parameter need not be a
+       multiple of the page size. The vector vec  must  be  large
+       enough  to contain length/PAGE_SIZE bytes.  One may obtain
+       the page size from getpagesize(2).
+
+
+RETURN VALUE
+       On  success,  mincore  returns  zero.   On  error,  -1  is
+       returned, and errno is set appropriately.
+
+ERRORS
+       EAGAIN kernel is temporarily out of resources
+
+       EINVAL is  not  a multiple of the page size, or has a non-
+              positive value
+
+       EFAULT vec points to an invalid address
+
+       ENOMEM address to address + length contained unmapped mem­
+              ory, or memory not part of a file.
+
+
+BUGS
+       mincore  should return a bit vector and not a byte vector.
+       As of Linux 2.4.5, it is not possible to gain  information
+       on  the  core residency of pages which are not backed by a
+       file.  In  other  words,  calling  mincore  on  an  region
+       returned  by  an  anonymous mmap(2) does not work and sets
+       errno to ENOMEM. Unless pages are locked  in  memory,  the
+       contents  of  vec  may  be  stale  by  the time they reach
+       userspace.
+
+
+CONFORMING TO
+       mincore does not appear to be part of POSIX or the  Single
+       Unix Specification.
+
+HISTORY
+       The mincore() function first appeared in 4.4BSD.
+
+AVAILABILITY
+       Since Linux 2.3.99pre1 and glibc 2.2.
+
+SEE ALSO
+       getpagesize(2), mmap(2)
+
+
+
+Linux 2.4.5                 2001-06-03                 MINCORE(2)

@@ -1,0 +1,401 @@
+MPAGE(Local)                                         MPAGE(Local)
+
+
+
+NAME
+       mpage  -  print  multiple  pages  per  sheet on PostScript
+       printer
+
+
+SYNOPSIS
+       mpage       [-1248aAcEfHloOrRStUvxX]        [-b papersize]
+       [-B[num[lrtb]*]  [-C  [encoding]]  [-da|p] [-D dateformat]
+       [-F fontname]   [-h header]   [-j first[-last][%interval]]
+       [-L lines]  [-m[num[lrtb]*]  [-M[num[lrtb]*]  [-p[prprog]]
+       [-P[printer]]   [-s tabstop]   [-W width]    [-z printcmd]
+       [-Z printcmd_args] [file...]]
+
+
+
+
+
+DESCRIPTION
+       mpage  reads  plain text files or PostScript documents and
+       prints them on a PostScript printer with the text  reduced
+       in  size  so  that  several  pages  appear on one sheet of
+       paper.  This is useful for viewing large  printouts  on  a
+       small  amount of paper.  It uses ISO 8859.1 to print 8-bit
+       characters.
+
+
+       The following options are recognized (note that  arguments
+       to  options  may  be  separated from the option by spaces,
+       except for -B, -m, -M, -p and -P):
+
+
+       -1     Print 1 normal page per sheet (included for  symme­
+              try).
+
+
+       -2     Print 2 normal pages per sheet.
+
+
+       -4     Print 4 normal pages per sheet (default).
+
+
+       -8     Print 8 normal pages per sheet.
+
+
+       -a     Toggle  layout  of  the  pages on the sheet so that
+              successively numbered pages run down the sheet,  as
+              opposed to left to right.  (default updown) .
+
+
+       -A     This  option is deprecated, see -b.  Prepare output
+              for European  A4  sized  paper.   For  default  see
+              'mpage -x'.
+
+
+       -bpapertype
+              Prepare  output for selected paper type.  Papersize
+              can be A3 for European A3, A4 for European A4, Let­
+              ter  for  US Letter or Legal for Legal sized paper.
+              For default see 'mpage -x'.  To  see  the  list  of
+              currently  available  types,  just  give the 'mpage
+              -bl' or 'mpage  -b?'  command  (Note:  mpage  exits
+              after finding such option use.)
+
+
+       -B[<num>[lrtb]*]
+              Setup  a box around a particular part of your page.
+              Specify text box margins and line  thickness.   The
+              default  is  0  columns  (lines)  for both left and
+              right (top and bottom) margins and  0  line  thick­
+              ness.  Specifying -B solely toggles printing of the
+              box.  l, r, t or b set the left, right, top or bot­
+              tom  margin  respectively to <num> columns (lines).
+              Not specifying any of the sides, will set the  line
+              thickness  when  <num>  is  given.  For example -B1
+              sets the line thickness to 1.  Sides with  negative
+              margins will not print.
+
+
+       -c     Toggle concatenation off pages from different files
+              on single sheets (default off).
+
+
+       -C[encodingfile]
+              Specify the  character  encoding  file.   The  file
+              should   be   in   the   mpage   library  directory
+              (/usr/local/lib/mpage).   Mpage  has  an   internal
+              default  encoding  based on Latin-1 or IBM codepage
+              850.  Depending on compile time option this  encod­
+              ing  definition  is  on  or not.  Not specifying an
+              encodingfile will toggle the usage of the  internal
+              encoding.
+
+
+       -da|p  Force  input to be taken as ascii (a) or postscript
+              (p) text.  This way you can print  your  postscript
+              code  as  text, or print postscript code that mpage
+              does not recognise. When using -dp, make sure  that
+              the the postscript code contains %Page page separa­
+              tors or else things will probably look odd.
+
+
+       -Ddateformat
+              Set the date format as in strftime(3) to be used in
+              date/time representations (e.g. in headers).
+
+
+       -E     Print  2  normal  pages  per  sheet.  However, this
+              option will print every second and  third  page  of
+              every  set  of four pages.  This option will ignore
+              -a and -l.
+
+
+       -f     Toggles  folding  lines  longer  than  page   width
+              (default off) .
+
+
+       -Ffontname
+              Specify font.  (default Courier).
+
+
+       -hheader
+              This  is used only when the -p or -H switch is used
+              and is passed as the "-h header" option to pr(1) or
+              as the header for -H.
+
+
+       -H     Create  header line for each logical page separated
+              from page text by a horizontal line. Unless  -h  is
+              given,  the header consist of last file changetime,
+              filename and page number, all in bold and  slightly
+              larger  font.   This  option  only  applies to non-
+              postscript files.
+
+
+       -Iindent
+              Indent text by indent characters.
+
+
+       -jfirst[-last][%interval]
+              Print just the selected sheets, specified  by  num­
+              ber,  starting at 1.  Here last defaults to the end
+              of data, interval to 1.  Thus  -j1-10  selects  the
+              first  10 sheets, while -j 1%2 prints just the odd-
+              numbered sheets and -j 2%2  prints  just  the  even
+              ones.
+
+              You can do double-sided printing, in two passes, as
+              follows.  If you use 3-hole punched paper,  put  it
+              in  the  printer such that the holes will appear at
+              the top of the page -- on the right as you pull out
+              the  printer  tray,  in  our  Laser  writer II NTX.
+              Print the odd-numbered sheets with
+
+                   mpage ... -j 1%2 ...
+
+              Note the number of pages it  reports.   (Only  half
+              this  many  will really be printed).  When printing
+              finishes, if mpage reported an odd number of pages,
+              remove  the  last  one  from the stack, since there
+              will be no even-numbered sheet to match  it.   Then
+              arrange  the  stack  of  paper  for printing on the
+              other side.  (If it's punched, the holes  will  now
+              be  on  the  left.)  On our II NTX, the paper comes
+              out blank-side up; replace it  in  the  tray  still
+              blank-side  up  but rotated 180 degrees.  For other
+              printers, you figure it out.  Now print  the  even-
+              numbered sheets in reverse order with
+
+                   mpage ... -r -j 2%2 ...
+
+              hoping  no  one else reaches the printer before you
+              do.
+
+
+       -k     When mapge finds a %%TRailer or %%PSTrailer in  the
+              postscript  input  file it normally assumes this is
+              the end of the postscript file  and  stops  reading
+              the  input  file. But when the PS file includes EPS
+              files, %%Trailers might  be  anywhere.  Using  this
+              option ignores the %%TRailer and %%PSTRailer lines.
+
+       -l     Toggle printing landscape or portrait mode.   Land­
+              scape  pages  are  55  lines long by 132 characters
+              wide by default.  Portrait pages are 66 lines  long
+              by  80  characters  wide by default.  (default por­
+              trait.)
+
+
+       -Llines
+              Adjust the page reduction parameters so that  lines
+              lines  will  fit  in  the  space of one page.  This
+              overrides the  default  values  normally  supplied.
+              (See -l.)  If used in conjunction with -p then this
+              value is passed to the pr(1) as well.   As  a  side
+              effect  this changes the font size as well (as will
+              the -W option.) So while  there  is  an  option  to
+              change  font family, there is no explicit option to
+              change font size!
+
+
+       -m[<num>[lrtb]*]
+              Specify sheet margin.  The  default  margin  is  20
+              points.   Only specifying -m sets left margin to 40
+              points.  l, r, t or b set left, right, top or  bot­
+              tom margin respectively to <num> points.  Not spec­
+              ifying any of the sides will  set  all  sides  when
+              <num>  is  given.  <num> defaults to 40 points. For
+              example  -m10  sets  all  margins  to  10   points.
+              -ml50tb  sets left margin to default 40 and top and
+              bottom margin to 50 points.  -m50l25bt30r set  bot­
+              tom  and  top  margin  to 25, left margin to 50 and
+              right margin to 30 points.  Margins can have  nega­
+              tive   numbers.    Very  large  values  have  funny
+              effects.  This is left as an exercise to the  user.
+
+
+       -M[<num>[lrtb]*]
+              Specify  logical  page  margins. For syntax, see -m
+              option.  Defaults are 4 for -M solely,  and  8  for
+              <num>.   Margins  can  be negative.  This way large
+              white borders in your (postscript) documents can be
+              reduced.   Very  large  values  have funny effects.
+              This is left as an exercise to the user.
+
+
+       -o     Toggle printing of  outlines  around  each  reduced
+              page (default on).
+
+
+       -O     Print  2  normal  pages  per  sheet.  However, this
+              option will print every first  and  forth  page  of
+              every  set  of four pages.  This option will ignore
+              -a and -l.
+
+
+       -p[prprog]
+              Pipe input through prprog command (including speci­
+              fied options) before printing (assumes the input is
+              a text file).  When no  command  is  specified,  it
+              defaults to pr(1).
+
+
+       -P[printer]
+              Specify  the printer to which the PostScript output
+              will be sent (e.g.lpr -Pprinter). Using -P with  no
+              printer  specified  will send the PostScript to the
+              default printer queue (e.g. lpr).  Using  -P-  will
+              return output to stdout, useful in combination with
+              MPAGE environment variable. Without -P output  will
+              be send to standard output.
+
+
+       -r     Reverse printing.  The last sheet is printed first.
+              The way of arranging reduced pages  on  the  sheets
+              doesn't change.
+
+
+       -R     Switch  to  left to right mode, starting first page
+              on left bottom corner.  This might  be  useful  for
+              landscape  postscript files.  (Note: using -l after
+              -R undoes -R,  and  switches  to  normal  landscape
+              mode.
+
+
+       -stabstop
+              Set  tabstop  width (default 8 characters).  Should
+              by >= 2.
+
+
+       -S     Accept  non-square  page  reduction.   By  default,
+              pages  are  shrunk equally in X and Y, even if this
+              wastes some space on the sheet.  With  -S,  reduced
+              pages are larger but slightly distorted. (only used
+              when printing postscript files.)
+
+
+       -t     Toggle printing on both sides of the  paper.   This
+              will  toggle  duplex mode of the printer.  Use this
+              option only if your printer is capable of  printing
+              in duplex mode.  (default off).
+
+
+       -T     Toggle  tumble  of every second pages when printing
+              in duplex mode.   Use  this  option  only  if  your
+              printer  is  capable of printing in duplex mode and
+              together with -t.
+
+
+       -U     This option is deprecated, see -b.  Prepare  output
+              for  US Letter sized paper.  For default see 'mpage
+              -x'.
+
+
+       -v     Toggle printing a count of  the  number  of  sheets
+              produced for printing (default off.)
+
+
+       -Wwidth
+              Adjust the page reduction parameters so that a line
+              with width characters long will fit in the space of
+              one  page.   This overrides the default values nor­
+              mally supplied.  (See -l.)  If used in  conjunction
+              with  -p  then  this value is passed to the s pr(1)
+              program as well.  See also the  -L option  on  font
+              sizes.
+
+
+       -x     Force  usage  display,  which  also  shows  current
+              defaults.
+
+
+       -X [header]
+              Print  header  centered  on  each   physical   page
+              (sheet).  If no header is given, the default is the
+              current filename (note -c) on the left and the page
+              number on the right.
+
+
+       -zprintcommand
+              Specify  command to use to send output to.  Default
+              is lpr (1) for BSD style spooler, lp (1)  for  SYSV
+              style   spooler.   You  can  specify  command  line
+              options, but note -Z.  For example -zlp for  system
+              V Unix.
+
+
+       -Zprintprog_queuename_arg
+              Specify  what  option  to use for the "-z printcom­
+              mand" to specify a printqueue.   For  example  -zlp
+              -Z-d  for  system  V  Unix.   Default is -P for BSD
+              style spooler, -d for SYSV style spooler.
+
+
+
+
+ENVIRONMENT
+       mpage examines the  PRINTER  (or  LPDEST  for  SYSV  style
+       spooler)  environment  variable  to  override  its default
+       printer.
+
+
+       The MPAGE_LIB environment variable can be used to  control
+       where the character encoding files (-C) can be found.
+
+
+       mpage  also  examines  the  MPAGE environment variable for
+       default option settings.  Any  option  or  combination  of
+       options  can  be  specified in the MPAGE environment vari­
+       able.  For example, if MPAGE is set to the string:
+
+              -2oPqms -L60
+
+       it would (in the absence of other command line  arguments)
+       print 2 pages per sheet, 60 lines per page, with outlines,
+       on the printer named qms  (overriding  the  PRINTER/LPDEST
+       environment  variable,  if it exists.)  In the environment
+       variable, white space is used as an option delimiter,  and
+       no quoting is recognized.
+
+
+       Any  command  line  options will override both the PRINTER
+       and MPAGE environment variables.
+
+
+FILES
+       /usr/tmp/mpageXXXXXX
+       /usr/local/lib/mpage
+
+
+BUGS
+       Suffers under the burden of far too many  switches.   (But
+       you wanted the choices!)
+
+       NULL  characters  in  a  postscript  input file will cause
+       mpage to crash!
+
+       Many others, w're sure.
+
+       Mpage is year 2000 compliant, as long  as  the  underlying
+       operating system is!!!
+
+
+VERSION
+       Version 2.5.1 pre, Released March 1998.
+       Location:
+
+              http://www.mesa.nl/pub/mpage
+              ftp://ftp.mesa.nl/pub/mpage
+
+AUTHORS
+       Marcel Mol <marcel@mesa.nl> (current maintainer).
+
+       Mark P. Hahn (Original author)
+
+
+
+                             98/03/15                MPAGE(Local)

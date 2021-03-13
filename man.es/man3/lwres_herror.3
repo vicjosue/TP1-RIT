@@ -1,0 +1,50 @@
+LWRES_HSTRERROR(3)                             LWRES_HSTRERROR(3)
+
+
+
+NAME
+       lwres_herror, lwres_hstrerror - lightweight resolver error
+       message generation
+
+SYNOPSIS
+       #include <lwres/netdb.h>
+
+       void lwres_herror(const char *s);
+
+       const char * lwres_hstrerror(int err);
+
+DESCRIPTION
+       lwres_herror() prints the string s on stderr  followed  by
+       the  string  generated  by lwres_hstrerror() for the error
+       code stored in the global variable lwres_h_errno.
+
+       lwres_hstrerror() returns an appropriate  string  for  the
+       error code gievn by err. The values of the error codes and
+       messages are as follows:
+
+       NETDB_SUCCESS
+              Resolver Error 0 (no error)
+
+       HOST_NOT_FOUND
+              Unknown host
+
+       TRY_AGAIN
+              Host name lookup failure
+
+       NO_RECOVERY
+              Unknown server error
+
+       NO_DATA
+              No address associated with name
+
+RETURN VALUES
+       The  string  Unknown  resolver  error   is   returned   by
+       lwres_hstrerror() when the value of lwres_h_errno is not a
+       valid error code.
+
+SEE ALSO
+       herror(3), lwres_hstrerror(3).
+
+
+
+BIND9                      Jun 30, 2000        LWRES_HSTRERROR(3)

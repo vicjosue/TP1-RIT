@@ -1,0 +1,171 @@
+tixBalloon(n)         Tix Built-In Commands         tixBalloon(n)
+
+
+
+_________________________________________________________________
+
+NAME
+       tixBalloon - Create and manipulate tixBalloon widgets
+
+SYNOPSIS
+       tixBalloon pathName ?options?
+
+SUPER-CLASS
+       The  tixBalloon  class  is derived from the TixShell class
+       and inherits all the commands, options and  subwidgets  of
+       its super-class.
+
+STANDARD OPTIONS
+       The  Balloon widget supports all the standard options of a
+       frame widget.  See the options(n) manual entry for details
+       on the standard options.
+
+WIDGET-SPECIFIC OPTIONS
+       Command-Line Name:-initwait
+       Database Name:  initWait
+       Database Class: InitWait
+
+              In  milliseconds.  Specifies  how  long the balloon
+              should wait before popping up in a widget.
+
+       Command-Line Name:-state
+       Database Name:  state
+       Database Class: State
+
+              Specifies the which help message  to  display  when
+              the  mouse  pointer enters a widget associated with
+              this balloon. Valid options are both: display  both
+              the  balloon  message  and  the status bar message,
+              balloon: display only the balloon message,  status:
+              display  only the status bar message and none: dis­
+              play no messages.
+
+       Command-Line Name:-statusbar
+       Database Name:  statusBar
+       Database Class: statusBar
+
+              Specifies the widget to use as the  status  bar  of
+              this  balloon.  This  widget  must  have  a "-text"
+              option. Usually a label widget is used.
+
+SUBWIDGETS
+       Name:           label
+       Class:          Label
+
+              The label widget that shows the little arrow bitmap
+              in the pop-up balloon window.
+
+       Name:           message
+       Class:          Label
+
+              The  message widget that shows the descriptive mes­
+              sage in the the pop-up balloon window.
+_________________________________________________________________
+
+DESCRIPTION
+       The tixBalloon command creates a new window (given by  the
+       pathName  argument)  and  makes  it into a Balloon widget.
+       Additional options, described above, may be  specified  on
+       the  command  line  or in the option database to configure
+       aspects of the Balloon  widget  such  as  its  cursor  and
+       relief.
+
+       The  Balloon widget can be used to show popped-up messages
+       that describe the functions of the widgets in an  applica­
+       tion.  A  Balloon  widget can be bound to a number of wid­
+       gets. When the user moves the cursor inside  a  widget  to
+       which a Balloon widget has been bound, a small pop-up win­
+       dow with a  descriptive  message  will  be  shown  on  the
+       screen.
+
+WIDGET COMMANDS
+       The  tixBalloon  command  creates  a new Tcl command whose
+       name is the same as the path name of the Balloon  widget's
+       window.  This command may be used to invoke various opera­
+       tions on the widget. It has the following general form:
+                     pathName option ?arg arg ...?
+       PathName is the name of the command, which is the same  as
+       the Balloon widget's path name. Option and the args deter­
+       mine the exact behavior of the command. The following com­
+       mands are possible for Balloon widgets:
+
+       pathName bind widget ?option value ... ?
+              Binds  the  Balloon  widget to the widget. The mes­
+              sages to be shown can be passed as extra  arguments
+              to  this  command  in  option value pairs. Possible
+              options: -balloonmsg specifies the string  to  show
+              on  the pop-up balloon window; -statusmsg specifies
+              the string to show on the status bar;  -msg  speci­
+              fies  a  string  to show on both the balloon window
+              and the stats bar window.  When used together,  the
+              -msg  option  has a lower precedence than the -bal­
+              loonmsg and -statusmsg options.
+
+              The bind command can also be  used  to  change  the
+              messages after the initial bindings were set. Exam­
+              ple:
+
+         button .b
+         tixBalloon .bal
+
+         # Add balloon binding
+         .bal bind .b -msg "This is a button"
+
+         ...
+
+         # Change the balloon binding
+         .bal bind .b -msg "This is a useful button"
+
+       pathName cget option
+              Returns the  current  value  of  the  configuration
+              option  given by option. Option may have any of the
+              values accepted by the tixBalloon command.
+
+       pathName configure ?option? ?value option value ...?
+              Query or modify the configuration  options  of  the
+              widget.   If no option is specified, returns a list
+              describing all of the available options  for  path­
+              Name  (see  Tk_ConfigureInfo for information on the
+              format of this list).  If option is specified  with
+              no  value, then the command returns a list describ­
+              ing the one named option (this list will be identi­
+              cal  to  the  corresponding  sublist  of  the value
+              returned if no option is  specified).   If  one  or
+              more  option-value  pairs  are  specified, then the
+              command modifies the given widget option(s) to have
+              the  given  value(s);  in  this  case  the  command
+              returns an empty string.  Option may  have  any  of
+              the values accepted by the tixBalloon command.
+
+       pathName unbind widget
+              Cancels the Balloon widget's binding with widget.
+
+       pathName subwidget  name ?args?
+              When no options are given, this command returns the
+              pathname of the subwidget of the specified name.
+
+              When options are given, the widget command  of  the
+              specified  subwidget  will  be  called  with  these
+              options.
+
+BINDINGS
+       After a widget has be bound to a Balloon widget, when  the
+       user moves the cursor into this widget, the Balloon widget
+       is activated: if the -balloonmsg option of this widget  is
+       set,  the balloon window pops up; if the -statusmsg option
+       of this widget is set, the message will  be  displayed  in
+       the status bar widget.
+
+       When the user moves the cursor out of the widget, the Bal­
+       loon widget is de-activated: the balloon window  is  with­
+       drawn and the status-bar message removed.
+
+KEYWORDS
+       Tix(n)
+
+
+
+
+
+
+Tix                            4.0                  tixBalloon(n)

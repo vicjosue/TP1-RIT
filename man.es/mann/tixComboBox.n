@@ -1,0 +1,414 @@
+tixComboBox(n)        Tix Built-In Commands        tixComboBox(n)
+
+
+
+_________________________________________________________________
+
+NAME
+       tixComboBox - Create and manipulate tixComboBox widgets
+
+SYNOPSIS
+       tixComboBox pathName ?options?
+
+SUPER-CLASS
+       The  TixComboBox  class is derived from the TixLabelWidget
+       class and inherits all the commands, options  and  subwid­
+       gets of its super-class.
+
+STANDARD OPTIONS
+       TixComboBox  supports  all the standard options of a frame
+       widget.  See the options(n) manual entry  for  details  on
+       the standard options.
+
+
+WIDGET-SPECIFIC OPTIONS
+       Command-Line Name:-anchor
+       Database Name:  anchor
+       Database Class: Anchor
+
+              Specifies how the string inside the entry subwidget
+              should be aligned.  Only the values "w" or "e"  are
+              allowed.  When set the "w", the entry is aligned to
+              its beginning. When set to "e", it  is  aligned  to
+              its end.
+
+       Command-Line Name:-arrowbitmap
+       Database Name:  arrowBitmap
+       Database Class: ArrowBitmap
+
+              Specifies the bitmap to be used in the arrow button
+              beside the entry widget. The default is an downward
+              arrow        bitmap        in        the       file
+              $tix_library/bitmaps/cbxarrow
+
+       Command-Line Name:-browsecmd
+       Database Name:  browseCmd
+       Database Class: BrowseCmd
+
+              Specifies the command to be called  when  the  user
+              browses  through  the  listbox. This command can be
+              used to provide  instant  feedback  when  the  user
+              examines  items  in the listbox before committing a
+              choice.
+
+       Command-Line Name:-command
+       Database Name:  command
+       Database Class: Command
+
+              Specifies the command to be called  when  the  Com­
+              boBox is invoked or when the -value of the ComboBox
+              is changed.
+
+       Command-Line Name:-crossbitmap
+       Database Name:  crossBitmap
+       Database Class: CrossBitmap
+
+              Specifies the bitmap to  be  used  in  the  "cross"
+              button to the left of the entry widget. The default
+              is a bitmap in the file $tix_library/bitmaps/cross
+
+       Command-Line Name:-disablecallback
+       Database Name:  disableCallback
+       Database Class: DisableCallback
+
+              A boolean value indicating whether callbacks should
+              be  disabled.  When  set  to  true, the TCL command
+              specified by the -command option  is  not  executed
+              when the -value of the ComboBox.  changes.
+
+       Command-Line Name:-disabledforeground
+       Database Name:  disabledforeground
+       Database Class: DisabledForeground
+
+              Specifies  the foreground color to be used when the
+              ComboBox is disabled.
+
+       Command-Line Name:-dropdown
+       Database Name:  dropdown
+       Database Class: Dropdown
+
+              A Boolean value specifying the style  of  the  Com­
+              boBox. When set to "true", the listbox is only dis­
+              played  temporarily  when  the  arrow   button   is
+              pressed. When set to "false", the listbox is always
+              displayed.
+
+       Command-Line Name:-editable
+       Database Name:  editable
+       Database Class: Editable
+
+              Specifies whether the user is allowed to type  into
+              the entry subwidget of the ComboBox.
+
+       Command-Line Name:-fancy
+       Database Name:  fancy
+       Database Class: Fancy
+
+              A  Boolean  value  specifying whether the cross and
+              tick button subwidgets should be shown.
+
+       Command-Line Name:-grab
+       Database Name:  grab
+       Database Class: Grab
+
+              Specifies the  pointer  grabbing  policy  when  the
+              listbox   is  popped  up.   Only  values  "global",
+              "local" or "none" are allowed.  By  default  global
+              grab is used. However, when you are developing your
+              application, you may want to use only  local  grab­
+              bing so that in the event of errors, your X display
+              won't be locked up.
+
+       Name:           historyLimit
+       Class:          historyLimit
+       Switch:         -historylimit
+       Alias:          -histlimit
+
+              Specifies how many  previous  user  inputs  can  be
+              stored in the history list.
+
+       Command-Line Name:-history
+       Database Name:  history
+       Database Class: History
+
+              A  Boolean  value  specifying whether previous user
+              inputs should be stored in the history list.
+
+       Command-Line Name:-label
+       Database Name:  label
+       Database Class: Label
+
+              Specifies the string to display  as  the  label  of
+              this ComboBox widget.
+
+       Command-Line Name:-labelside
+       Database Name:  labelSide
+       Database Class: LabelSide
+
+              Specifies where the label should be displayed rela­
+              tive to the entry  subwidget.  Valid  options  are:
+              top, left, right, bottom, none or acrosstop.
+
+       Command-Line Name:-listcmd
+       Database Name:  listCmd
+       Database Class: listCmd
+
+              Specifies  a  TCL  command  to be called every time
+              when the listbox pops up. This option allows you to
+              fill  up  the  listbox  on-demand.  This  option is
+              ignored when the listbox is  not  in  the  dropdown
+              style.
+
+       Command-Line Name:-listwidth
+       Database Name:  listWidth
+       Database Class: listWidth
+
+              If set, this option controls the width of the list­
+              box subwidget when it is popped up. The  option  is
+              ignored  when  the  listbox  is not in the dropdown
+              style.
+
+       Command-Line Name:-prunehistory
+       Database Name:  prunehistory
+       Database Class: PruneHistory
+
+              Specifies whether duplicated previous  user  inputs
+              should  be  pruned  from the the history list. Only
+              Boolean values are allowed.
+
+       Command-Line Name:-selection
+       Database Name:  selection
+       Database Class: Selection
+
+              Contains the selection in the ComboBox (the  string
+              displayed in the entry subwidget). Depending on the
+              -selectmode, the selection of  a  ComboBox  may  be
+              different than its -value.
+
+       Command-Line Name:-selection
+       Database Name:  selection
+       Database Class: Selection
+
+              This  option  stores  the temporary selection. When
+              the user types in a text string  inside  the  entry
+              widget,  that  string  is considered as a temporary
+              input and is stored inside the  -selection  option.
+              The  -value  option  is  updated only when the user
+              presses the return key.
+
+       Command-Line Name:-selectmode
+       Database Name:  selectMode
+       Database Class: SelectMode
+
+              Specifies the how  the  combobox  responds  to  the
+              mouse  button  events in the listbox subwidget; can
+              eithet be  "browse"  or  "immediate".  The  default
+              -selectmode  is  "browse". See the BINDINGS section
+              below.
+
+       Command-Line Name:-state
+       Database Name:  state
+       Database Class: State
+
+              Specifies the whether the  ComboBox  is  normal  or
+              disabled.   Only the values "normal" and "disabled"
+              are recognized.
+
+       Command-Line Name:-tickbitmap
+       Database Name:  tickBitmap
+       Database Class: tickBitmap
+
+              Specifies the bitmap to be used in the "tick"  but­
+              ton to the left of the entry widget. The default is
+              a bitmap in the file $tix_library/bitmaps/tick
+
+       Command-Line Name:-validatecmd
+       Database Name:  validateCmd
+       Database Class: ValidateCmd
+
+              Specifies a TCL  command  to  be  called  when  the
+              -value  of  the  ComboBox  is about to change. This
+              command is called with one  parameter  --  the  new
+              -value entered by the user. This command is to val­
+              idate this new value by returning a value it  deems
+              valid.
+
+       Command-Line Name:-value
+       Database Name:  value
+       Database Class: Value
+
+              Specifies  the  string to be displayed in the entry
+              subwidget  of  the  ComboBox.  When  queried,   the
+              returned  value  is  the last value selected by the
+              user. When the -value option is changed as a result
+              of  the  config -value widget command, the TCL com­
+              mand specified by the -command option is called.
+
+       Command-Line Name:-variable
+       Database Name:  variable
+       Database Class: Variable
+
+              Specifies the global variable in which the value of
+              the  ComboBox  should  be  stored. The value of the
+              ComboBox will be automatically  updated  when  this
+              variable is changed.
+
+SUBWIDGETS
+       Name:           arrow
+       Class:          Button
+
+              The down arrow button.
+
+       Name:           cross
+       Class:          Button
+
+              The  cross  button.  Available  only when -fancy is
+              set.
+
+       Name:           entry
+       Class:          Entry
+
+              The entry that shows the value of this  tixControl.
+
+       Name:           label
+       Class:          Label
+
+              The label subwidget.
+
+       Name:           listbox
+       Class:          Listbox
+
+              The listbox that holds all the list entries.
+
+       Name:           slistbox
+       Class:          TixScrolledListBox
+
+              The  scrolled-listbox that provides the scrollbars.
+
+       Name:           tick
+       Class:          Button
+
+              The tick button. Available only when -fancy is set.
+_________________________________________________________________
+
+DESCRIPTION
+       The tixComboBox command creates a new window (given by the
+       pathName argument) and makes it into a tixComboBox widget.
+       Additional  options,  described above, may be specified on
+       the command line or in the option  database  to  configure
+       aspects of the ComboBox such as its cursor and relief.
+
+       The  Tix  ComboBox widget is similar to the combo box con­
+       trol in MS Windows. The user can select a choice by either
+       typing in the entry subwdget or selecting from the listbox
+       subwidget.
+
+WIDGET COMMANDS
+       The tixComboBox command creates a new  Tcl  command  whose
+       name  is  the same as the path name of the ComboBox's win­
+       dow.  This command may be used to  invoke  various  opera­
+       tions on the widget. It has the following general form:
+                     pathName option ?arg arg ...?
+       PathName  is the name of the command, which is the same as
+       the ComboBox widget's  path  name.  Option  and  the  args
+       determine  the exact behavior of the command.  The follow­
+       ing commands are possible for ComboBox widgets:
+
+       pathName addhistory string
+              Add the string to the beinning of the listbox.
+
+       pathName appendhistory string
+              Append the string to the end of the listbox.
+
+       pathName cget option
+              Returns the  current  value  of  the  configuration
+              option given by option.  Option may have any of the
+              values accepted by the tixComboBox command.
+
+       pathName configure ?option? ?value option value ...?
+              Query or modify the configuration  options  of  the
+              widget.   If no option is specified, returns a list
+              describing all of the available options  for  path­
+              Name  (see  Tk_ConfigureInfo for information on the
+              format of this list).  If option is specified  with
+              no  value, then the command returns a list describ­
+              ing the one named option (this list will be identi­
+              cal  to  the  corresponding  sublist  of  the value
+              returned if no option is  specified).   If  one  or
+              more  option-value  pairs  are  specified, then the
+              command modifies the given widget option(s) to have
+              the  given  value(s);  in  this  case  the  command
+              returns an empty string.  Option may  have  any  of
+              the values accepted by the tixComboBox command.
+
+       pathName flash index string
+              Flashes  the ComboBox. flash is usually called by a
+              -command procedure to acknowledge to the user  that
+              he has selected a value for the ComboBox.
+
+       pathName insert index string
+              Insert  the   string into the listbox at the speci­
+              fied index.  index must be a valid listbox index.
+
+       pathName pick index
+              Set the (index)th item in the  listbox  to  be  the
+              current  value  of  the  ComboBox. As a result, the
+              value of the ComboBox is changed and the  TCL  com­
+              mand  sepcified  by  the  -command  option  will be
+              called.
+
+       pathName subwidget  name ?args?
+              When no options are given, returns the pathname  of
+              the subwidget of the specified name.
+
+              When  options  are given, the widget command of the
+              specified  subwidget  will  be  called  with  these
+              options.
+
+
+BINDINGS
+       [1]    If  the  -selectmode  is "immediate", when the user
+              enters a keystroke, clicks on an item or drags  the
+              mouse  pointer  in  the  listbox, the -value of the
+              ComboBox will be immediately set to this  item  and
+              the -command procedure will be called.
+
+       [2]    If  the  -selectmode  is  "browse",  when  the user
+              enters a keystroke, clicks on an item or drags  the
+              mouse pointer in the listbox, the -selection of the
+              ComboBox will be immediately set to the new content
+              of  the entry subwidget; also the -browsecmd proce­
+              dure will be called.  The  -value  option  will  be
+              changed  only  when  the  user invokes the ComboBox
+              (see [3] below). If the user presses  the  <Escape>
+              key at any time, any new -selection will be ignored
+              and the text inside the  entry  subwidget  will  be
+              restored to the current -value of the ComboBox.
+
+       [3]    If  the  -dropdown  option  is  true,  the user can
+              invoke the ComboBox by  releasing  the  left  mouse
+              button over the desired item in the listbox. If the
+              -dropdown option is false, the user can invoke  the
+              ComboBox  by  double-clicking over the desired item
+              in the listbox. In both cases, the  user  can  also
+              invoke  the  listbox  by  pressing  the <Return> or
+              <Tab> key inside the entry subwidget, or  switching
+              the  input  focus to another widget inside the same
+              toplevel widget
+
+
+BUGS
+       Starting from Tix vetsion 4.0, the default -value  of  the
+       ComboBox  is the empty string. If you want the ComboBox to
+       show a string by default, you must  configure  its  -value
+       option explicitly.
+
+
+KEYWORDS
+       Tix(n), ComboBox(n), listbox(n)
+
+
+
+
+
+Tix                            4.0                 tixComboBox(n)

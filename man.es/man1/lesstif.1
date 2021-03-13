@@ -1,0 +1,158 @@
+LessTif(1x)              LessTif Manuals              LessTif(1x)
+
+
+
+NAME
+       LessTif
+
+
+
+SYNOPSIS
+       LessTif is a free replacement for OSF/Motif®.
+
+       As with Motif®, LessTif consists of a widget set, a window
+       manager, and a UIL implementation (libMrm and the UIL com­
+       piler).   In  LessTif,  our  main area of attention is the
+       widget set.  We also have a working  window  manager  mwm;
+       but UIL is not under very active development.
+
+       LessTif is licensed under the LGPL, the Library Gnu Public
+       License.  The license itself accompanies  LessTif  in  the
+       file  COPYING.LIB.   More information can be obtained from
+       the Free Software Foundation.
+
+
+
+DEBUGGING
+       For more info on Debugging check out our documentation  in
+       HTML format.
+
+
+
+ENVIRONMENT VARIABLES
+       DEBUG_SOURCES
+              Colon-separated list of files from which debug out­
+              put is generated. Special values "all"/"none"  have
+              obvious meaning.  To block entries from a list, add
+              a "-" prefix.
+
+
+       DEBUG_FILE
+              If this variable exists, then  the  file  is  being
+              used  for  output.  If "%p" is part of the value of
+              DEBUG_FILE, then it is replaced by the current pro­
+              cess id.
+
+
+       DEBUG_PRINT_WIDGETID
+              If  this  variable exists, then all widgets printed
+              with XdbDebug() etc. will also print  their  widget
+              ID.   If the variable doesn't exist, then they only
+              print their name for identification.
+
+
+       DEBUG_REDIRECT_XMWARNING
+              If this variable exists any output of  _XmWarning()
+              and equivalent functions is sent to the file speci­
+              fied by DEBUG_FILE
+
+
+       DEBUG_SIGNAL
+              Specifies the name of the signal  which  should  be
+              used  to switch the built-in LessTif debugging sys­
+              tem.  Valid values depend on the  system  on  which
+              LessTif  was compiled and is running and are a sub­
+              set of:
+
+              SIGUNUSED, SIGUSR1, SIGUSR2, SIGUSR3, SIGBREAK
+
+
+       DEBUG_TOGGLE
+              Specifies the initial status of the built-in  Less­
+              Tif  debugging  system.   Valid values are 'on' and
+              'off'
+
+
+INTERFACES
+       The following interfaces exist to Set,  Toggle  and  Query
+       the current status of the debugging subsystem:
+
+       void _LtDebugSet (Boolean flag);
+
+       void _LtDebugToggle (void);
+
+       Boolean _LtDebugQueryState (void);
+
+
+
+
+SOURCE CODE
+       The  major  part  of  the source code which implements the
+       debugging system of LessTif resides in /lib/Xm/DebugUtil.c
+       Using the preprocessor define LESSTIF_PRODUCTION the rele­
+       vant code sections are en-/disabled during the build  pro­
+       cess.
+
+
+
+SEE ALSO
+       Clients:
+              mwm(1) uil(1) xmbind(1)
+
+       Tools:
+              ltversion(1)
+
+       Other Widget Sets:
+              xbae(1) xlt(1)
+
+       Motif Widgets:
+
+              XmFileSelectionBox(3)  XmArrowButton(3) XmArrowBut­
+              tonGadget(3) XmBulletinBoard(3)  XmCascadeButton(3)
+              XmCascadeButtonGCacheObj(3)     XmCascadeButtonGad­
+              get(3)  XmComboBox(3)   XmCommand(3)   XmDesktop(3)
+              XmDialogShell(3)  XmDialogShellExt(3)  XmDisplay(3)
+              XmDragContext(3)  XmDragIcon(3)  XmDragOverShell(3)
+              XmDrawingArea(3)   XmDrawnButton(3)  XmDropSiteMan­
+              ager(3)   XmDropTransfer(3)   XmFileSelectionBox(3)
+              XmForm(3)   XmFrame(3)  XmGadget(3)  XmGrabShell(3)
+              XmIconGCacheObj(3) XmIconGadget(3) XmLabel(3) XmLa­
+              belGCacheObj(3)  XmLabelGadget(3) XmList(3) XmMain­
+              Window(3)  XmManager(3)  XmMenuShell(3)  XmMessage­
+              Box(3)   XmNotebook(3)   XmPanedWindow(3)  XmPrimi­
+              tive(3)  XmProtocol(3)  XmPushButton(3)  XmPushBut­
+              tonGCacheObj(3)   XmPushButtonGadget(3)   XmRowCol­
+              umn(3) XmSash(3) XmScale(3)  XmScreen(3)  XmScroll­
+              Bar(3) XmScrolledWindow(3) XmSelectionBox(3) XmSep­
+              arator(3)  XmSeparatorGCacheObj(3)  XmSeparatorGad­
+              get(3)  XmSpinBox(3)  XmTearOffButton(3)  XmText(3)
+              XmTextField(3)  XmToggleButton(3)  XmToggleButtonG­
+              CacheObj(3)    XmToggleButtonGadget(3)    XmVendor­
+              ShellExt(3) XmWorld(3)
+
+       Xt Widgets:
+
+              ApplicationShell(3) Composite(3) Core(3)  Object(3)
+              OverrideShell(3)  Shell(3)  TopLevelShell(3)  Tran­
+              sientShell(3) WmShell(3) Rect(3) UnNamedObj(3) Con­
+              straint(3) VendorShell(3)
+
+       File Formats:
+
+              mwmrc(5)
+
+       Utility Functions:
+
+              XmClipboard(3) LessTifInternals(3)
+
+       Internet Resources:
+
+              The LessTif home page: http://www.lesstif.org
+              The  Free  Software  Foundation  (FSF)  home  page:
+              http://www.gnu.org
+              The OpenGroup (owners of OSF/Motif® and the X  Win­
+              dow System) home page: http://www.opengroup.org
+
+
+
+LessTif Project           November 2001               LessTif(1x)

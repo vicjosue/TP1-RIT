@@ -1,0 +1,44 @@
+ppmtomap(1)                                           ppmtomap(1)
+
+
+
+NAME
+       ppmtomap - extract all colors from a portable pixmap
+
+SYNOPSIS
+       ppmtomap [-sort] [-square] [ppmfile]
+
+DESCRIPTION
+       Reads  a  portable  pixmap  as input.  Produces a portable
+       pixmap as output, representing a color map  of  the  input
+       file.  All  N  different  colors  found  are put in an Nx1
+       portable pixmap.  This color map file can  be  used  as  a
+       mapfile for ppmquant or ppmtogif.
+
+OPTIONS
+       -sort  Produces  a portable pixmap with the colors in some
+              sorted order.
+
+       -square
+              Produces a  (more  or  less)  square  output  file,
+              instead of putting all colors on the top row.
+
+       All flags can be abbreviated to their shortest unique pre­
+       fix.
+
+WARNING
+       If you want to use the output file as a mapfile  for  ppm­
+       togif, you first have to do a ppmquant 256, since ppmtomap
+       is not limited to 256 colors (but to 65536).
+
+SEE ALSO
+       ppmtogif(1), ppmquant(1), ppm(5)
+
+AUTHOR
+       Marcel Wijkstra (wijkstra@fwi.uva.nl).
+
+       Copyright (C) 1989 by Jef Poskanzer.
+
+
+
+                          11 August 1993              ppmtomap(1)

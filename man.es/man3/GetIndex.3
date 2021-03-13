@@ -1,0 +1,124 @@
+Tcl_GetIndexFromObj(3)Tcl Library ProceduresTcl_GetIndexFromObj(3)
+
+
+
+_________________________________________________________________
+
+NAME
+       Tcl_GetIndexFromObj,  Tcl_GetIndexFromObjStruct  -  lookup
+       string in table of keywords
+
+SYNOPSIS
+       #include <tcl.h>
+
+       int
+       Tcl_GetIndexFromObj(interp, objPtr, tablePtr, msg, flags,
+       indexPtr)
+
+       int                                                        |
+       Tcl_GetIndexFromObjStruct(interp, objPtr, tablePtr, offset,|
+       msg, flags, indexPtr)                                      |
+
+ARGUMENTS
+       Tcl_Interp   *interp      (in)      Interpreter to use for
+                                           error   reporting;  if
+                                           NULL, then no  message
+                                           is provided on errors.
+
+       Tcl_Obj      *objPtr      (in/out)  The  string  value  of
+                                           this object is used to
+                                           search         through
+                                           tablePtr.   The inter­
+                                           nal representation  is
+                                           modified  to  hold the
+                                           index of the  matching
+                                           table entry.
+
+       char         **tablePtr   (in)      An  array of null-ter­
+                                           minated strings.   The
+                                           end  of  the  array is
+                                           marked   by   a   NULL
+                                           string pointer.        |
+
+       int          off­                                          |
+       set       (in)                             |               |
+                                           The offset to  add  to |
+                                           tablePtr to get to the |
+                                           next  string  in   the |
+                                           list.  The  end of the |
+                                           array is marked  by  a |
+                                           NULL string pointer.
+
+       char         *msg         (in)      Null-terminated string
+                                           describing   what   is
+                                           being  looked up, such
+                                           as    option.     This
+                                           string  is included in
+                                           error messages.
+
+       int          flags        (in)      OR-ed  combination  of
+                                           bits  providing  addi­
+                                           tional information for
+                                           operation.   The  only
+                                           bit that is  currently
+                                           defined  is TCL_EXACT.
+
+       int          *indexPtr    (out)     The   index   of   the
+                                           string   in   tablePtr
+                                           that matches the value
+                                           of  objPtr is returned
+                                           here.
+_________________________________________________________________
+
+
+DESCRIPTION
+       This procedure provides an efficient way  for  looking  up
+       keywords,  switch  names, option names, and similar things
+       where the value of an object must be one of  a  predefined
+       set  of  values.   ObjPtr  is compared against each of the
+       strings in tablePtr to find a match.  A  match  occurs  if
+       objPtr's  string  value is identical to one of the strings
+       in tablePtr, or if it is a unique abbreviation for exactly
+       one  of the strings in tablePtr and the TCL_EXACT flag was
+       not specified; in either case the index  of  the  matching
+       entry is stored at *indexPtr and TCL_OK is returned.
+
+       If  there  is no matching entry, TCL_ERROR is returned and
+       an error message is left  in  interp's  result  if  interp
+       isn't NULL.  Msg is included in the error message to indi­
+       cate what was being looked up.  For  example,  if  msg  is
+       option  the error message will have a form like bad option
+       "firt": must be first, second, or third.
+
+       If Tcl_GetIndexFromObj completes successfully it  modifies
+       the  internal representation of objPtr to hold the address
+       of the table and the index  of  the  matching  entry.   If
+       Tcl_GetIndexFromObj  is invoked again with the same objPtr
+       and tablePtr arguments (e.g. during a  reinvocation  of  a
+       Tcl  command),  it  returns the matching index immediately
+       without  having  to  redo  the  lookup  operation.   Note:
+       Tcl_GetIndexFromObj  assumes  that the entries in tablePtr
+       are static: they must not change between invocations.   If
+       the  value of objPtr is the empty string, Tcl_GetIndexFro­
+       mObj will treat it as  a  non-matching  value  and  return
+       TCL_ERROR.                                                 |
+
+       Tcl_GetIndexFromObjStruct works just like Tcl_GetIndexFro­ |
+       mObj, except that instead of treating tablePtr as an array |
+       of  string pointers, it treats it as the first in a series |
+       of string ptrs that are spaced apart by offset bytes. This |
+       is particularly useful when processing things like Tk_Con­ |
+       figurationSpec, whose string keys are in the same place in |
+       each of several array elements.
+
+
+SEE ALSO
+       Tcl_WrongNumArgs
+
+
+KEYWORDS
+       index, object, table lookup
+
+
+
+Tcl                            8.1         Tcl_GetIndexFromObj(3)

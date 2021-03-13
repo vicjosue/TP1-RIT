@@ -1,0 +1,98 @@
+EVP_SignInit(3)              OpenSSL              EVP_SignInit(3)
+
+
+
+NNAAMMEE
+       EVP_SignInit, EVP_SignUpdate, EVP_SignFinal - EVP signing
+       functions
+
+SSYYNNOOPPSSIISS
+        #include <openssl/evp.h>
+
+        void EVP_SignInit(EVP_MD_CTX *ctx, const EVP_MD *type);
+        void EVP_SignUpdate(EVP_MD_CTX *ctx, const void *d, unsigned int cnt);
+        int EVP_SignFinal(EVP_MD_CTX *ctx,unsigned char *sig,unsigned int *s, EVP_PKEY *pkey);
+
+        int EVP_PKEY_size(EVP_PKEY *pkey);
+
+
+DDEESSCCRRIIPPTTIIOONN
+       The EVP signature routines are a high level interface to
+       digital signatures.
+
+       EVP_SignInit() initializes a signing context ccttxx to using
+       digest ttyyppee: this will typically be supplied by a function
+       such as EVP_sha1().
+
+       EVP_SignUpdate() hashes ccnntt bytes of data at dd into the
+       signature context ccttxx. This function can be called several
+       times on the same ccttxx to include additional data.
+
+       EVP_SignFinal() signs the data in ccttxx using the private
+       key ppkkeeyy and places the signature in ssiigg. If the ss
+       parameter is not NULL then the number of bytes of data
+       written (i.e. the length of the signature) will be written
+       to the integer at ss, at most EVP_PKEY_size(pkey) bytes
+       will be written.  After calling EVP_SignFinal() no
+       additional calls to EVP_SignUpdate() can be made, but
+       EVP_SignInit() can be called to initialize a new signature
+       operation.
+
+       EVP_PKEY_size() returns the maximum size of a signature in
+       bytes. The actual signature returned by EVP_SignFinal()
+       may be smaller.
+
+RREETTUURRNN VVAALLUUEESS
+       EVP_SignInit() and EVP_SignUpdate() do not return values.
+
+       EVP_SignFinal() returns 1 for success and 0 for failure.
+
+       EVP_PKEY_size() returns the maximum size of a signature in
+       bytes.
+
+       The error codes can be obtained by ERR_get_error(3).
+
+NNOOTTEESS
+       The EEVVPP interface to digital signatures should almost
+       always be used in preference to the low level interfaces.
+       This is because the code then becomes transparent to the
+       algorithm used and much more flexible.
+
+       Due to the link between message digests and public key
+       algorithms the correct digest algorithm must be used with
+       the correct public key type. A list of algorithms and
+       associated public key algorithms appears in
+       EVP_DigestInit(3).
+
+       When signing with DSA private keys the random number
+       generator must be seeded or the operation will fail. The
+       random number generator does not need to be seeded for RSA
+       signatures.
+
+BBUUGGSS
+       Several of the functions do not return values: maybe they
+       should. Although the internal digest operations will never
+       fail some future hardware based operations might.
+
+SSEEEE AALLSSOO
+       EVP_VerifyInit(3), EVP_DigestInit(3), err(3), evp(3),
+       hmac(3), md2(3), md5(3), mdc2(3), ripemd(3), sha(3),
+       digest(1)
+
+HHIISSTTOORRYY
+       EVP_SignInit(), EVP_SignUpdate() and EVP_SignFinal() are
+       available in all versions of SSLeay and OpenSSL.
+
+
+
+
+
+
+
+
+
+
+
+
+
+19/Sep/2000                   0.9.6c              EVP_SignInit(3)

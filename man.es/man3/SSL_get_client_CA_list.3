@@ -1,0 +1,58 @@
+SSL_get_client_CA_list(3)    OpenSSL    SSL_get_client_CA_list(3)
+
+
+
+NNAAMMEE
+       SSL_get_client_CA_list, SSL_CTX_get_client_CA_list - get
+       list of client CAs
+
+SSYYNNOOPPSSIISS
+        #include <openssl/ssl.h>
+
+        STACK_OF(X509_NAME) *SSL_get_client_CA_list(SSL *s);
+        STACK_OF(X509_NAME) *SSL_CTX_get_client_CA_list(SSL_CTX *ctx);
+
+
+DDEESSCCRRIIPPTTIIOONN
+       SSL_CTX_get_client_CA_list() returns the list of client
+       CAs explicitly set for ccttxx using
+       SSL_CTX_set_client_CA_list(3).
+
+       SSL_get_client_CA_list() returns the list of client CAs
+       explicitly set for ssssll using SSL_set_client_CA_list() or
+       ssssll's SSL_CTX object with SSL_CTX_set_client_CA_list(3),
+       when in server mode. In client mode,
+       SSL_get_client_CA_list returns the list of client CAs sent
+       from the server, if any.
+
+RREETTUURRNN VVAALLUUEESS
+       SSL_CTX_set_client_CA_list() and SSL_set_client_CA_list()
+       do not return diagnostic information.
+
+       SSL_CTX_add_client_CA() and SSL_add_client_CA() have the
+       following return values:
+
+       STACK_OF(X509_NAMES)
+           List of CA names explicitly set (for ccttxx or in server
+           mode) or send by the server (client mode).
+
+       NULL
+           No client CA list was explicitly set (for ccttxx or in
+           server mode) or the server did not send a list of CAs
+           (client mode).
+
+SSEEEE AALLSSOO
+       ssl(3), SSL_CTX_set_client_CA_list(3)
+
+
+
+
+
+
+
+
+
+
+
+
+15/Feb/2001                   0.9.6c    SSL_get_client_CA_list(3)

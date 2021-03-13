@@ -1,0 +1,91 @@
+SSL_CTX_set_cert_verify_callbaOcpSkeS(nL3S_)SCLTX_set_cert_verify_callback(3)
+
+
+
+NNAAMMEE
+       SSL_CTX_set_cert_verify_callback - set peer certificate
+       verification procedure
+
+SSYYNNOOPPSSIISS
+        #include <openssl/ssl.h>
+
+        void SSL_CTX_set_cert_verify_callback(SSL_CTX *ctx, int (*callback)(),
+                                              char *arg);
+        int (*callback)();
+
+
+DDEESSCCRRIIPPTTIIOONN
+       SSL_CTX_set_cert_verify_callback() sets the verification
+       callback function for ccttxx. SSL objects, that are created
+       from ccttxx inherit the setting valid at the time, SSL_new(3)
+       is called. aarrgg is currently ignored.
+
+NNOOTTEESS
+       Whenever a certificate is verified during a SSL/TLS
+       handshake, a verification function is called. If the
+       application does not explicitly specify a verification
+       callback function, the built-in verification function is
+       used.  If a verification callback ccaallllbbaacckk is specified
+       via SSL_CTX_set_cert_verify_callback(), the supplied
+       callback function is called instead. By setting ccaallllbbaacckk
+       to NULL, the default behaviour is restored.
+
+       When the verification must be performed, ccaallllbbaacckk will be
+       called with the argument callback(X509_STORE_CTX
+       *x509_store_ctx). The arguments aarrgg that can be specified
+       when setting ccaallllbbaacckk are currently ignored.
+
+       ccaallllbbaacckk should return 1 to indicate verification success
+       and 0 to indicate verification failure. If SSL_VERIFY_PEER
+       is set and ccaallllbbaacckk returns 0, the handshake will fail. As
+       the verification procedure may allow to continue the
+       connection in case of failure (by always returning 1) the
+       verification result must be set in any case using the
+       eerrrroorr member of xx550099_ssttoorree_ccttxx, so that the calling
+       application will be informed about the detailed result of
+       the verification procedure!
+
+       Within xx550099_ssttoorree_ccttxx, ccaallllbbaacckk has access to the
+       vveerriiffyy_ccaallllbbaacckk function set using SSL_CTX_set_verify(3).
+
+WWAARRNNIINNGGSS
+       Do not mix the verification callback described in this
+       function with the vveerriiffyy_ccaallllbbaacckk function called during
+       the verification process. The latter is set using the
+       SSL_CTX_set_verify(3) family of functions.
+
+       Providing a complete verification procedure including
+       certificate purpose settings etc is a complex task. The
+       built-in procedure is quite powerful and in most cases it
+       should be sufficient to modify its behaviour using the
+       vveerriiffyy_ccaallllbbaacckk function.
+
+BBUUGGSS
+       It is possible to specify arguments to be passed to the
+       verification callback.  Currently they are however not
+       passed but ignored.
+
+       The ccaallllbbaacckk function is not specified via a prototype, so
+       that no type checking takes place.
+
+RREETTUURRNN VVAALLUUEESS
+       SSL_CTX_set_cert_verify_callback() does not provide
+       diagnostic information.
+
+SSEEEE AALLSSOO
+       ssl(3), SSL_CTX_set_verify(3), SSL_get_verify_result(3),
+       SSL_CTX_load_verify_locations(3)
+
+
+
+
+
+
+
+
+
+
+
+
+
+23/Aug/2001                   0S.S9L._6CcTX_set_cert_verify_callback(3)

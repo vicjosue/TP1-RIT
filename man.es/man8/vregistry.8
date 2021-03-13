@@ -1,0 +1,83 @@
+VREGISTRY(8)                                         VREGISTRY(8)
+
+
+
+NAME
+       vregistry - get/set virtual variables
+
+SYNOPSIS
+       vregistry [ UI options ] options ...
+
+DESCRIPTION
+       vregistry  is  a small Linuxconf module manipulating vari­
+       ables in the virtual registry. Linuxconf handles  directly
+       system  configuration file, but provides a generic mean to
+       set or retrieve information out of those files. Configura­
+       tion  files  are  mapped  as  a  set  of  variables easily
+       accessed.
+
+       The virtual registry is also available within  modules  so
+       they  can  inpsect other modules information. As such, the
+       vregistry is a rather simple module.
+
+
+VARIABLES
+       A variable name has the following format:
+
+       system.key[.record-id]
+
+
+
+OPTIONS
+       --list
+              presents all known variables in alphabetic  orders.
+              Variables  ending  with  .*   refer  to an array of
+              records. You must replace the .* by some record ID.
+
+              The  virtual  registry  is  tied  to Linuxconf user
+              interface toolkit. In fact each variable is  linked
+              to  a field of one dialog. As such, it inherits the
+              same ability to parse, update and validate  inputs.
+
+              The  --list  option  presents  all  variable with a
+              small  description.  The   description   is   taken
+              directly  in corresponding dialog. So if a variable
+              seems confusing,  check  the  corresponding  dialog
+              interactively  and  you  will  have a better under­
+              standing of its purpose.
+
+
+       --get variable [ variable ... ]
+              retrieves the value of one  or  several  variables.
+              The  values  are presented one value per line using
+              the format
+
+              variable=value
+
+
+       --getvalue variable [ variable ... ]
+              retrieves the value of one  or  several  variables.
+              Unlike  the  --get option, only the value are print
+              out, without the variable name. This is more conve­
+              nient  when  you want to reuse the value in a shell
+              script, using back quote.
+
+
+       --set variable value [ variable value ... ]
+              sets variables. Several variables may be  specified
+              at  once. This is often needed. For example, if you
+              set some variables for a new configuration,  Linux­
+              conf may refuse to produce an incomplete configura­
+              tion file. By specifying several variable, you  can
+              set  all  the  relevant  parts of the configuration
+              before it is checked and saved.
+
+SEE ALSO
+       linuxconf (8)
+
+
+
+
+
+
+        Linuxconf virtual registry command line interfVaRcEeGISTRY(8)

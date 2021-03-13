@@ -1,0 +1,127 @@
+LWRES_GETIPNODE(3)                             LWRES_GETIPNODE(3)
+
+
+
+NAME
+       lwres_getipnodebyname,  lwres_getipnodebyaddr, lwres_free­
+       hostent - lightweight resolver nodename / address transla­
+       tion API
+
+SYNOPSIS
+       #include <lwres/netdb.h>
+
+       struct hostent * lwres_getipnodebyname(const char *name,
+       int af, int flags, int *error_num);
+
+       struct hostent * lwres_getipnodebyaddr(const void *src,
+       size_t len, int af, int *error_num);
+
+       void lwres_freehostent(struct hostent *he);
+
+DESCRIPTION
+       These  functions perform thread safe, protocol independent
+       nodename-to-address and address-to-nodename translation as
+       defined in RFC2553.
+
+       They use a struct hostent which is defined in namedb.h:
+
+       struct  hostent {
+               char    *h_name;        /* official name of host */
+               char    **h_aliases;    /* alias list */
+               int     h_addrtype;     /* host address type */
+               int     h_length;       /* length of address */
+               char    **h_addr_list;  /* list of addresses from name server */
+       };
+       #define h_addr  h_addr_list[0]  /* address, for backward compatibility */
+
+
+       The members of this structure are:
+
+       h_name The official (canonical) name of the host.
+
+       h_aliases
+              A  NULL-terminated  array of alternate names (nick­
+              names) for the host.
+
+       h_addrtype
+              The  type  of  address  being  returned  -  usually
+              PF_INET or PF_INET6.
+
+       h_length
+              The length of the address in bytes.
+
+       h_addr_list
+              A  NULL  terminated  array of network addresses for
+              the host.  Host addresses are returned  in  network
+              byte order.
+
+       lwres_getipnodebyname()  looks  up  addresses  of protocol
+       family af for the hostname name.  The flags parameter con­
+       tains  ORed  flag  bits  to specify the types of addresses
+       that are searched for, and the types of addresses that are
+       returned.  The flag bits are:
+
+       AI_V4MAPPED
+              This  is  used  with  an af of AF_INET6, and causes
+              IPv4 addresses to be returned as  IPv4-mapped  IPv6
+              addresses.
+
+       AI_ALL This is used with an af of AF_INET6, and causes all
+              known addresses (IPv6 and IPv4) to be returned.  If
+              AI_V4MAPPED  is  also  set,  the IPv4 addresses are
+              return as mapped IPv6 addresses.
+
+       AI_ADDRCONFIG
+              Only return an IPv6 or IPv4 address if here  is  an
+              active  network interface of that type. This is not
+              currently implemented in  the  BIND  9  lightweight
+              resolver, and the flag is ignored.
+
+       AI_DEFAULT
+              This default sets the AI_V4MAPPED and AI_ADDRCONFIG
+              flag bits.
+
+       lwres_getipnodebyaddr()  performs  a  reverse  lookup   of
+       address  src which is len bytes long.  af denotes the pro­
+       tocol family, typically PF_INET or PF_INET6.
+
+       lwres_freehostent() releases  all  the  memory  associated
+       with  the struct hostent pointer he.  Any memory allocated
+       for the h_name, h_addr_list and h_aliases is freed, as  is
+       the memory for the hostent structure itself.
+
+RETURN VALUES
+       If    an   error   occurs,   lwres_getipnodebyname()   and
+       lwres_getipnodebyaddr() set *error_num  to  an  approriate
+       error  code  and the function returns a NULL pointer.  The
+       error  codes   and   their   meanings   are   defined   in
+       <lwres/netdb.h>:
+
+       HOST_NOT_FOUND
+              No such host is known.
+
+       NO_ADDRESS
+              The  server recognised the request and the name but
+              no address is available. Another type of request to
+              the  name  server  for  the  domain might return an
+              answer.
+
+       TRY_AGAIN
+              A temporary and possibly transient error  occurred,
+              such  as  a  failure  of  a  server to respond. The
+              request may succeed if retried.
+
+       NO_RECOVERY
+              An unexpected failure occurred,  and  retrying  the
+              request is pointless.
+
+       lwres_hstrerror(3)  translates  these error codes to suit­
+       able error messages.
+
+SEE ALSO
+       RFC2553,   lwres(3),   lwres_gethostent(3),   lwres_getad­
+       drinfo(3), lwres_getnameinfo(3), lwres_hstrerror(3).
+
+
+
+BIND9                      Jun 30, 2000        LWRES_GETIPNODE(3)

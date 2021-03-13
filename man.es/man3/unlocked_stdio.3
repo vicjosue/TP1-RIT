@@ -1,0 +1,68 @@
+UNLOCKED_STDIO(3)   Linux Programmer's Manual   UNLOCKED_STDIO(3)
+
+
+
+NAME
+       *_unlocked - non-locking stdio functions
+
+SYNOPSIS
+       #include <stdio.h>
+
+       int getc_unlocked(FILE *stream);
+       int getchar_unlocked(void);
+       int putc_unlocked(int c, FILE *stream);
+       int putchar_unlocked(int c);
+
+       #define _BSD_SOURCE /* or _SVID_SOURCE or _GNU_SOURCE */
+       #include <stdio.h>
+
+       void clearerr_unlocked(FILE *stream);
+       int feof_unlocked(FILE *stream);
+       int ferror_unlocked(FILE *stream);
+       int fileno_unlocked(FILE *stream);
+       int fflush_unlocked(FILE *stream);
+       int fgetc_unlocked(FILE *stream);
+       int fputc_unlocked(int c, FILE *stream);
+       size_t fread_unlocked(void *ptr, size_t size, size_t n,
+         FILE *stream);
+       size_t fwrite_unlocked(const void *ptr, size_t size, size_t n,
+         FILE *stream);
+
+       #define _GNU_SOURCE
+       #include <stdio.h>
+
+       char *fgets_unlocked(char *s, int n, FILE *stream);
+       int fputs_unlocked(const char *s, FILE *stream);
+
+       #define _GNU_SOURCE
+       #include <wchar.h>
+
+       wint_t getwc_unlocked(FILE *stream);
+       wint_t getwchar_unlocked(void);
+       wint_t fgetwc_unlocked(FILE *stream);
+       wint_t fputwc_unlocked(wchar_t wc, FILE *stream);
+       wint_t putwc_unlocked(wchar_t wc, FILE *stream);
+       wint_t putwchar_unlocked(wchar_t wc);
+       wchar_t *fgetws_unlocked(wchar_t *ws, int n, FILE *stream);
+       int fputws_unlocked(const wchar_t *ws, FILE *stream);
+
+DESCRIPTION
+       Each  of  these  functions  has  the same behaviour as its
+       counterpart without the `_unlocked'  suffix,  except  that
+       they do not use locking (they do not set locks themselves,
+       and do not test for the presence of locks set  by  others)
+       and hence are thread-unsafe.  See flockfile(3).
+
+CONFORMING TO
+       The  four  functions  getc_unlocked(), getchar_unlocked(),
+       putc_unlocked(), putchar_unlocked() are in  POSIX.1.   The
+       nonstandard *_unlocked() variants occur on a few Unix sys­
+       tems, and are available  in  recent  glibc.   They  should
+       probably not be used.
+
+SEE ALSO
+       flockfile(3)
+
+
+
+                            2001-10-18          UNLOCKED_STDIO(3)

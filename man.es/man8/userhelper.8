@@ -1,0 +1,146 @@
+USERHELPER(8)                                       USERHELPER(8)
+
+
+
+NAME
+       userhelper - A helper interface to pam.
+
+SYNOPSIS
+       userhelper   [ -t ]   [ -d  in,out,err ]  [ -w prog args ]
+       [ -c ] [ -f full-name ] [ -o office ]  [ -p office-phone ]
+       [ -h home-phone ] [ -s shell ] [ username ]
+
+
+DESCRIPTION
+       NOTE this program is NOT intended to be run interactively.
+       If you want to change this information on the command line
+       use passwd(1), chfn(1), or chsh(1).
+
+       This program provides a basic interface to change a user's
+       password, gecos information, and shell.  The main  differ­
+       nce  between  this program and its traditional equivilents
+       is that prompts come out on standard out to make  it  easy
+       for a GUI program to interface it as a child process.
+
+       The output is in the form of:
+
+       <number> <string>
+
+       Where  the number is the type of prompt returned from pam­
+       lib, and the string is the prompt to give the user.
+
+       The prompt numbers are as follows:
+
+       1      Prompt with visible input.
+
+       2      Prompt with invisible input.
+
+       3      Informational message.
+
+       4      Error message.
+
+       5      Count of messages sent in this block so far.
+
+       6      The name of the service being used.
+
+       7      Whether or not the command will be executed as  the
+              user if authentication fails.
+
+       8      The name of the user being authenticated.
+
+
+OPTIONS
+       -d     A  comma-separated  list of three descriptors which
+              need to  be  reattached  to  the  standard  handles
+              before  the command is executed; only used with -w.
+
+       -t     Text mode authentication instead  of  the  numbered
+              message types just described; only used with -w.
+
+       -w     Specify  a  program name and arguments to be passed
+              through.  userhelper  will  look  up  in  the  file
+              /etc/security/console.apps/programname the username
+              to authenticate stored as USER=value (value is nor­
+              mally  "root"  or  the  magic  token "<user>" which
+              indicates to authenticate the current user) and the
+              program  to run stored as PROGRAM=value (value must
+              be an absolute path or it  will  be  ignored).   If
+              USER  is  not  specified, the current user is used,
+              and if PROGRAM is not specified,  userhelper  looks
+              for  programname  in  /sbin  and /usr/sbin/.  user­
+              helper will then authenticate the user via pam  and
+              then  run  the  named  program.  If SESSION=true is
+              specified, then userhelper establishes a  pam  ses­
+              sion and forks and execs, then waits around for the
+              child to  exit;  otherwise,  it  simply  execs  the
+              child.  userhelper is normally called from console­
+              helper via a symlink.  If FALLBACK=true  is  speci­
+              fied,  the  program will run as user if authentica­
+              tion fails.  Authentication will be  retried  twice
+              (three  times  total)  unless  something other than
+              RETRY=2 is specified.
+
+       -c     Change the current user's password.  Note that this
+              option  cannot  be  used  with  any  of  the  other
+              options.  This is due  to  the  limitation  in  the
+              interface to pamlib.
+
+       -f     Specify a new Full Name.
+
+       -o     Specify a new Office.
+
+       -p     Specify a new Office Phone.
+
+       -h     Specify a new Home Phone.
+
+       -s     Specify a new shell.
+
+EXIT STATUS
+       A  non-zero exit status indicates an error occured.  Those
+       errors are:
+
+       1      The authentication passwords was incorrect.
+
+       2      One or more of the GECOS fields is  invalid.   This
+              occurs when there is a colon supplied in one of the
+              fields.
+
+       3      Password resetting error.
+
+       4      Some system files are locked.
+
+       5      User unknown.
+
+       6      Insufficent rights.
+
+       7      Invalid call to this program.
+
+       8      The shell provided is not  valid  (i.e.,  does  not
+              exist in /etc/shells).
+
+       9      Ran out of memory.
+
+       10     Could not find the program.
+
+       11     exec failed even though program exists.
+
+       255    Unknown error.
+
+FILES
+       /etc/passwd              The  gecos  and shell information
+                                is stored in this file.
+
+       /etc/shells              This file is checked  to  see  if
+                                the  new shell supplied is valid.
+
+SEE ALSO
+       userpasswd(1),  userinfo(1),  consolehelper(8),   chfn(1),
+       chsh(1), passwd(5)
+
+AUTHOR
+       Otto Hammersmith <otto@redhat.com>
+       Michael K. Johnson <johnsonm@redhat.com>
+
+
+
+Red Hat, Inc.             23 August 2000            USERHELPER(8)

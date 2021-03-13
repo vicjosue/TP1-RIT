@@ -1,0 +1,83 @@
+SAFE_MYSQLD    (1)          mysql.com          SAFE_MYSQLD    (1)
+
+
+
+NAME
+       safe_mysqld - start the mysqld daemon on Unix.
+
+SYNOPSIS
+       safe_mysqld      [--basedir=path]     [--core-file-size=#]
+       [--defaults-extra-file=path]        [--defaults-file=path]
+       [--open-files=#]     [--datadir=path]     [--err-log=path]
+       [--ledir=path]        [--log=path]         [--no-defaults]
+       [--open-files=#]        [--pid-file=path]       [--port=#]
+       [--socket=path] [--timezone=#] [--user=#]
+
+DESCRIPTION
+       safe_mysqld adds some safety features such  as  restarting
+       the  server  when  an  error  occurs  and logging run-time
+       information to a log file.
+
+       --basedir=path
+
+       --core-file-size=#
+
+       --defaults-extra-file=path
+
+       --defaults-file=path
+
+       --open-files=#
+              Size of the core file mysqld should be able to cre­
+              ate. Passed to ulimit -c.
+
+       --datadir=path
+
+       --err-log=path
+
+       --ledir=path
+              Path to mysqld
+
+       --log=path
+
+       --no-defaults
+
+       --open-files=#
+              Number  of  files  mysqld  should  be able to open.
+              Passed to ulimit -n.
+
+       --pid-file=path
+
+       --port=#
+
+       --socket=path
+
+       --timezone=#
+              Set the timezone (the TZ) variable to the value  of
+              this parameter.
+
+       --user=#
+
+NOTE
+       Note  that  all options on the command line to safe_mysqld
+       are passed to mysqld. If you wants to use any  options  in
+       safe_mysqld  that mysqld doesn't support, you must specify
+       these in the option file.
+
+SEE ALSO
+       isamchk (1), isamlog (1), mysqlaccess (1), mysqladmin (1),
+       mysqlbug  (1),  mysqld  (1), mysqldump (1), mysqlshow (1),
+       msql2mysql (1), perror (1), replace (1), safe_mysqld  (1),
+       which1 (1), zap (1),
+
+AUTHOR
+       Ver  1.0,  distribution  3.23.29a Michael (Monty) Widenius
+       (monty@tcx.se), TCX  Datakonsult  AB  (http://www.tcx.se).
+       This  software  comes with no warranty.  Manual page by L.
+       (Kill-9)  Pedersen  (kill-9@kill-9.dk),  Mercurmedia  Data
+       Model  Architect  / system developer (http://www.mercurme­
+       dia.com)
+
+
+
+
+safe_mysqld (mysql)      19 December 2000      SAFE_MYSQLD    (1)

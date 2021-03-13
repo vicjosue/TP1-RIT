@@ -1,0 +1,116 @@
+tixFileSelectDialog(n)Tix Built-In CommandstixFileSelectDialog(n)
+
+
+
+_________________________________________________________________
+
+NAME
+       tixFileSelectDialog - Create and manipulate tixFileSelect­
+       Dialog widgets
+
+SYNOPSIS
+       tixFileSelectDialog pathName ?options?
+
+SUPER-CLASS
+       The TixFileSelectDialog class does not have a super-class.
+
+STANDARD OPTIONS
+       TixFileSelectDialog supports all the standard options of a
+       frame widget. See the options(n) manual entry for  details
+       on the standard options.
+
+WIDGET-SPECIFIC OPTIONS
+       Command-Line Name:-command
+       Database Name:  command
+       Database Class: Command
+
+              Specifies  the  command  to be called when the user
+              chooses on a filename  (usually  by  selecting  the
+              filename  and  clicking  on the "OK" button").  The
+              command is called with one argument,  the  complete
+              pathname of the file.
+
+SUBWIDGETS
+       Name:           btns
+       Class:          TixStdButtonBox
+
+              The StdButtonBox subwidget at the bottom of FileSe­
+              lectDialog. It contains the "OK", "Filter, "Cancel"
+              and "Help" buttons.
+
+       Name:           fsbox
+       Class:          TixFileSelectBox
+
+              The FileSelectBox subwidget at the top of the File­
+              SelectDialog.
+_________________________________________________________________
+
+DESCRIPTION
+       The  tixFileSelectDialog  command  creates  a  new  window
+       (given by the pathName argument) and makes it into a File­
+       SelectDialog widget. Additional options, described  above,
+       may  be  specified  on  the  command line or in the option
+       database to configure aspects of the FileSelectDialog such
+       as its cursor and relief.
+
+       The  FileSelectDialog widget provides an convenient method
+       for the user to select files. The FileSelectBox is similar
+       to the standard Motif(TM) file-selection box.
+
+WIDGET COMMANDS
+       The  tixFileSelectDialog command creates a new Tcl command
+       whose name is the same as the path name of the FileSelect­
+       Dialog's  window. This command may be used to invoke vari­
+       ous operations on the widget. It has the following general
+       form:
+                     pathName option ?arg arg ...?
+       PathName  is the name of the command, which is the same as
+       the FileSelectDialog widget's path name.  Option  and  the
+       args determine the exact behavior of the command. The fol­
+       lowing commands are possible for FileSelectDialog widgets:
+
+       pathName cget option
+              Returns  the  current  value  of  the configuration
+              option given by option. Option may have any of  the
+              values accepted by the tixFileSelectDialog command.
+
+       pathName configure ?option? ?value option value ...?
+              Query or modify the configuration  options  of  the
+              widget.   If no option is specified, returns a list
+              describing all of the available options  for  path­
+              Name  (see  Tk_ConfigureInfo for information on the
+              format of this list).  If option is specified  with
+              no  value, then the command returns a list describ­
+              ing the one named option (this list will be identi­
+              cal  to  the  corresponding  sublist  of  the value
+              returned if no option is  specified).   If  one  or
+              more  option-value  pairs  are  specified, then the
+              command modifies the given widget option(s) to have
+              the  given  value(s);  in  this  case  the  command
+              returns an empty string.  Option may  have  any  of
+              the values accepted by the tixFileSelectDialog com­
+              mand.
+
+       pathName popdown
+              Withdraws the FileSelectDialog from the screen.
+
+       pathName popup
+              Pops up the FileSelectDialog on the screen.
+
+       pathName subwidget name ?args?
+              When no options are given, this command returns the
+              pathname of the subwidget of the specified name.
+
+              When  options  are given, the widget command of the
+              specified  subwidget  will  be  called  with  these
+              options.
+
+KEYWORDS
+       Tix(n)
+
+
+
+
+
+
+Tix                            4.0         tixFileSelectDialog(n)

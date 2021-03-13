@@ -1,0 +1,34 @@
+IPCHAINS-RESTORE(8)                           IPCHAINS-RESTORE(8)
+
+
+
+NAME
+       ipchains-restore - restore IP firewall chains from stdin
+
+SYNOPSIS
+       ipchains-restore [ -f ] [ -v ]
+
+DESCRIPTION
+       ipchains-restore restores firewall chains from stdin.
+
+OPTIONS
+       The options that are recognized by ipchains-restore are:
+
+       -f     clear chains without asking
+
+       -v     print out every rule
+
+       -p     create  every referred-to chain which doesn't exist
+              (useful if you've used ipchains-save to save a sin­
+              gle chain).
+
+SEE ALSO
+       ipchains(8)
+
+AUTHOR
+       Paul ``Rusty'' Russell <ipchains@rustcorp.com>
+
+
+
+
+                         February 8, 1998     IPCHAINS-RESTORE(8)

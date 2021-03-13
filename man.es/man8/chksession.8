@@ -1,0 +1,88 @@
+CHKSESSION(8)              MandrakeSoft             CHKSESSION(8)
+
+
+
+NAME
+       chksession - Add/remove sessions from display managers
+
+SYNOPSIS
+       chksession [OPTION]...
+
+DESCRIPTION
+       chksession  allows system root to manage the sessions list
+       provided by both gdm and kdm display managers. It modifies
+       respective  configuration files to add or remove available
+       sessions like kde, gnome, icewm...
+
+       -F, --first
+              Print only first available entry of config file.
+
+       -f=FILE, --file=FILE
+              Specify an alternate config  file,  different  from
+              /etc/X11/window-manager
+
+       -g, --gdm
+              Update  window-managers list for gdm sessions using
+              default config file or FILE specified by -f option.
+
+       -h, --help
+              Print a short help.
+
+       -k, --kdm
+              Update  window-managers list for kdm sessions using
+              default config file or FILE specified by -f option.
+
+       -l, --list
+              List window-managers available in config file.
+
+       -r=ENTRY, --remove=ENTRY
+              Print  to  stdout the list of window-managers as in
+              config file, where ENTRY has been removed.
+
+       -t, --test
+              Enter test mode.
+
+       -x=ENTRY, --xsession=ENTRY
+              Print to stdout the script  used  to  launch  ENTRY
+              window-manager.
+
+CONFIG FILE STRUCTURE
+       This  file describes each window manager that will be made
+       available through display managers.  Each  entry  in  this
+       file is separate4d by a --@@-- line.
+
+       NAME= is the name of the session as displayed into display
+       manager's list.
+
+       ICON= icon file (.xpm or .png) used for this session.
+
+       DESC= short description of the session.
+
+       EXEC= test string to check wether the session manager  has
+       been installed or not.
+
+       SCRIPT:  shell  script  used  to  run  the  window-manager
+       choosed by the user.
+
+FILES
+       etc/X11/window-manager
+              default config file, listing most known window-man­
+              agers.  It is the base used by chksession to update
+              config files of both gdm and kdm display  managers.
+
+REPORTING BUGS
+       Report bugs to http://www.mandrakeexpert.com/.
+
+SEE ALSO
+       xdm(1)
+
+COPYRIGHT
+       Copyright © 1999 MandrakeSoft.
+       This  is  a  GPL free software; see the source for copying
+       conditions.  There is  NO  warranty;  not  even  for  MER­
+       CHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+
+
+
+mandrake_desk                Dec 1999               CHKSESSION(8)

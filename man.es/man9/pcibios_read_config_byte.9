@@ -1,0 +1,37 @@
+pcibios_read_config_byte(9B)IOS32 Functiopncsibios_read_config_byte(9)
+
+
+
+NAME
+       pcibios_read_config_byte  - read one byte of data from the
+       configuration space of the PCI bus
+
+SYNOPSIS
+       #include <linux/bios32.h>
+
+       int pcibios_read_config_byte (unsigned char bus,  unsigned
+       char   device_fn,unsigned  char  where,  unsigned  char  *
+       value);
+
+DESCRIPTION
+       The pcibios_read_config_byte function reads one byte  from
+       the  configuration  space  of the PCI bus.  The bus can be
+       specified with the bus parameters.  The device_fn paramter
+       determines  which ? to use.  where is set to the ?.  After
+       the call is made, value points to the value that was read.
+
+RETURN VALUE
+       The return value is taken from the PCI controller in a way
+       that I'm not quite sure of.
+
+       If the PCI system  is  unavailable,  PCIBIOS_FUNC_NOT_SUP­
+       PORTED is returned.
+
+AVAILABILITY
+       Linux 1.0?
+
+AUTHOR
+       Kirk Petersen (kirk@speakeasy.org)
+
+BUGS
+Linux DDI                 August 5, 199p7cibios_read_config_byte(9)

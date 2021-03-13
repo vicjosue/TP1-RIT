@@ -1,0 +1,208 @@
+plugger(7)                                             plugger(7)
+
+
+
+NAME
+       plugger - a streaming multimedia plugin for UNIX netscape
+       pluggerrc - configure file for plugger
+
+
+DESCRIPTION
+       Plugger is a  Netscape plugin which can show many types of
+       multimedia inside your Netscape. To accomplish this, Plug­
+       ger  uses  external  programs such as xanim, mtv, timidity
+       and tracker.
+
+       For up-to-date information on  Plugger,  see  the  plugger
+       home page: http://fredrik.hubbe.net/plugger.html
+
+
+
+CONFIGURE FILE
+       You  can  configure plugger by changing the file pluggerrc
+       which can be located in any of the following directories:
+
+            $HOME/.netscape/
+            $HOME/.opera/
+            $MOZILLA_HOME/
+            $OPERA_HOME/
+            /usr/local/netscape/pluggerrc
+            /etc/pluggerrc
+            /usr//etc/pluggerrc
+            /usr/local/etc/pluggerrc
+
+
+       The format of pluggerrc is very simple. The general layout
+       is  to  have  one or more lines describing mime-types fol­
+       lowed by one or more lines  describing  commands  used  to
+       handle  those  mime-types. Lines beginning with # are con­
+       sidered comments and are ignored. Here is a  simple  exam­
+       ple:
+
+            video/mpeg; mpeg; Mpeg video
+            video/quicktime; qt; Mpeg video
+                 : xanim +W$window -Zr +q +Ze +f $file
+
+            audio/mpeg2: mp2: MPEG audio
+            audio/x-mpeg2: mp2: MPEG audio
+            audio/mpeg3: mp3: MPEG audio
+            audio/x-mpeg3: mp3: MPEG audio
+            audio/mpeg: mpa,abs,mpega: MPEG audio
+            audio/x-mpeg: mpa,abs,mpega: MPEG audio
+                 stream, preload: mpg123 -q -b 128 -
+                 many: splay -t 200 $file
+                 many: amp -b 200 -q $file
+
+
+       Each line describing a mime type has three fields:
+
+             mime type ; extensions ; description
+
+
+       mime type
+              The mime type is the standardized name for the con­
+              tent type you want Plugger to handle. This must  be
+              the  same type as the web server claims the file to
+              be, or Plugger will not  be  used  for  that  file,
+              regardless of the extension.
+
+       extensions
+              This  is  a comma separated list of extensions that
+              should be  associated  with  this  particular  mime
+              type.  The  extensions  are  only  used  when a web
+              server does not report what type of file it is,  or
+              when loading files directly from disk.
+
+       description
+              This is the description that shows up in about:plu­
+              gins and in the application preferences section  in
+              Netscape.
+
+
+              Lines  that describe what command to use for a mime
+              type must begin with  a  whitespace  and  have  two
+              fields:
+
+                    flags : command
+
+
+       flags  This is a comma-separated list of flags which tells
+              plugger how to handle this particular  application.
+              See below for further details.
+
+       command
+              This  is  a  command  which is sent to /bin/sh when
+              handling this mime type.
+
+
+
+FINDING THE RIGHT COMMAND
+       When Plugger is called from netscape, it looks through the
+       configuration file and tries to find a matching mime type.
+       For an application to be chosen it has to fulfill  certain
+       criteria,  it  has  to  exist, and it must match the flags
+       given to plugger.
+
+       When it does, it tries to figure out which command to use.
+       If  the input is streamable, it looks through all the com­
+       mands for that particular mime type to see if it can  find
+       an application that has the stream flag. If it cannot find
+       a streaming application it downloads the  file  and  tries
+       again.  Note that Plugger will check the first word of the
+       command and search your $PATH for that  command.  If  that
+       command  is  not found Plugger will go to the next line in
+       your pluggerrc.
+
+
+FLAGS
+       repeat This indicates that the command  uses  the  $repeat
+              variable.  If  this  flag is set, Plugger will only
+              start the application once.
+
+       loop   This indicates that the application loops  forever.
+              If  the <EMBED> tag used to start Plugger indicated
+              that the file should not loop forever, the  command
+              on this line will not be used.
+
+       stream This  indicates  that  this  command takes input on
+              stdin.  Plugger will attempt to stream data  as  it
+              is being downloaded and send it to the application.
+              Note that streaming applications can also  be  used
+              to  play  files  and  data which is already in your
+              netscape cache.
+
+       preload
+              This flag is only meaningful in when used  together
+              with the stream flag. It tells plugger to preload a
+              buffer with 40000 bytes of data before starting  to
+              play the file. If the buffer runs out, Plugger will
+              stop sending data  to  the  application  until  the
+              buffer  is full again. This is usually a good thing
+              for streaming sound.
+
+       many   This indicates that the application can accept sev­
+              eral  files  on the command line. Using this option
+              can reduce clicks, choppiness and machine load, but
+              it is never required.
+
+       ignore_errors
+              This  options tells Plugger to ignore the exit sta­
+              tus of the application.
+
+       exits  This option  tells  Plugger  that  the  application
+              exits,  but  should  not  be restarted. This can be
+              used with applications  which  automatically  forks
+              into the background.
+
+       nokill This  will  tell  plugger  not  to  try to kill the
+              application when leaving the page. This is normally
+              used  for  programs which start in their own window
+              and can play multiple files, such as xmms.
+
+       swallow ( name )
+              This is the only option that takes an  argument  so
+              far. It will tell plugger that the application will
+              open a window with the specified name and that this
+              window will then be moved to inside your browser.
+
+
+VARIABLES
+       Plugger  gives some variables to /bin/sh when starting the
+       application, these variables are:
+
+
+       $repeat
+              This variable contains  how  many  times  the  file
+              should  be  played.   Applications  which  use this
+              variable should also set the repeat flag.
+
+       $window
+              This is the X window Netscape has given the plugin.
+              This can be used with applications such as xanim to
+              display graphics inside the netscape window.
+
+       $file  This is the file to play. This variable is not  set
+              if  the  application  uses  the stream flag. It may
+              also be more than one file  if  you  use  the  many
+              flag.
+
+       $mimetype
+              This variable contains the mime type of $file.
+
+
+BUGS
+       You  have to remove ~/.netscape/plugin-list after changing
+       the configuration, or  nothing  will  happen.  This  is  a
+       netscape bug, not a Plugger bug.
+
+       Netscape  3.x  will not play anything for <EMBED> tags for
+       which height or width are zero. This  too  is  a  Netscape
+       bug.
+
+
+AUTHOR
+       Fredrik Hübinette, hubbe@hubbe.net
+
+
+
+                                                       plugger(7)

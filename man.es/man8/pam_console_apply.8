@@ -1,0 +1,47 @@
+pam_console_appy(8)System Administrator's Manualpam_console_appy(8)
+
+
+
+NAME
+       pam_console_apply - set or revoke permissions for users at
+       the system console
+
+SYNOPSIS
+       pam_console_apply [-r]
+
+DESCRIPTION
+       pam_console_apply sets or resets permissions on devices in
+       the same manner as pam_console.
+       If  /var/run/console.lock  exists,  pam_console_apply will
+       grant permissions to the user listed therein.  If the lock
+       file does not exist, permissions are reset to those listed
+       in /etc/security/console.perms, which should be configured
+       to set permissions on devices so that root owns them.
+
+ARGUMENTS
+       -r     Signals  pam_console_apply  to  reset  permissions.
+              The default is to set permissions so that the  user
+              listed  in  /var/run/console.lock has access to the
+              devices, and to reset permissions if no  such  file
+              exists.
+
+FILES
+       /var/run/console.lock
+       /etc/security/console.perms
+
+SEE ALSO
+       pam_console(8)
+       console.perms(5)
+
+BUGS
+       Let's  hope  not,  but if you find any, please report them
+       via  the  "Bug   Track"   link   at   http://bugzilla.red­
+       hat.com/bugzilla/
+
+AUTHOR
+       Nalin Dahyabhai <nalin@redhat.com>, using code shamelessly
+       stolen from parts of pam_console.
+
+
+
+Red Hat                      2001/3/6         pam_console_appy(8)

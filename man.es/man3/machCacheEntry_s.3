@@ -1,0 +1,45 @@
+machCacheEntry_s(3)                           machCacheEntry_s(3)
+
+
+
+NAME
+       machCacheEntry_s -
+
+SYNOPSIS
+   Data Fields
+       const char * name
+       int count
+       cptr_t * equivs
+       int visited
+
+FIELD DOCUMENTATION
+   int machCacheEntry_s::count
+       Definition at line 28 of file rpmrc.c.
+
+       Referenced by machCacheEntryVisit, machCompatCacheAdd, and
+       rpmFreeRpmrc.
+
+   cptr_t* machCacheEntry_s::equivs
+       Definition at line 29 of file rpmrc.c.
+
+       Referenced by machCacheEntryVisit, machCompatCacheAdd, and
+       rpmFreeRpmrc.
+
+   const char* machCacheEntry_s::name
+       Definition at line 27 of file rpmrc.c.
+
+       Referenced by machCompatCacheAdd, and rpmFreeRpmrc.
+
+   int machCacheEntry_s::visited
+       Definition at line 30 of file rpmrc.c.
+
+       Referenced by machCacheEntryVisit, and machCompatCacheAdd.
+
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002        machCacheEntry_s(3)

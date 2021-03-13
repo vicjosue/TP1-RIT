@@ -1,0 +1,126 @@
+forward(1)                                             forward(1)
+
+
+
+NAME
+       forward  -  arbitrary  socket  forwarding over a secure or
+       compressed channel
+
+SYNOPSIS
+       forward
+       [-h, --help]
+       [-v, --verbose]
+       [-V, --version]
+       [-p, --password password]
+       [--netrc]
+       [--no-netrc]
+       [--secure]
+       [-z, --gzip]
+       [-K, --key-size bits]
+       [user@]machine1[:port1]
+       machine2:port2
+       listen_port
+
+
+DESCRIPTION
+       forward listens on port listen_port on your local machine.
+       When  it  receives  a  connection,  it  forwards  this  to
+       machine1 where a secure-mcserv(1) daemon is assumed to  be
+       running.  The secure-mcserv daemon then makes a connection
+       to machine2 on port port2. All traffic is  then  forwarded
+       transparently between listen_port and port2 of machine2.
+
+       The  --secure and --gzip options can be used to effect the
+       connection between listen_port of the  local  machine  and
+       port2 of machine2. In this way forward can be used to cre­
+       ate secure or compressed versions of any service.
+
+
+OPTIONS
+       All options are analogous to those of mirrordir. See  mir­
+       rordir(1)  for  more  info.  --debug just prevents forward
+       from forking into the background as a daemon.
+
+
+EXAMPLES
+       I havn't tested this, but they seem logical.  Tell  me  if
+       I've made a typo somewhere.
+
+       Consider  a print server A on some LAN. The LAN has a mas­
+       querading server B giving that LAN internet access. B  can
+       see both the internet and A. At some other site John has a
+       machine D using a masquerading server C to give  that  LAN
+       internet  access. B and C can see each other only over the
+       open internet. He would like to run lpr on D and  have  it
+       automatically print out at A. He would also like the chan­
+       nel between B and C to be compressed and encrypted  (using
+       a 1024 bit key exchange).
+
+       The procedure is as follows (515 is the printer port):
+           A# lpd &
+           B# secure-mcserv -d -p 12345
+       add an entry to ~/.netrc for the password of john on B, then
+           C# forward john@B:12345 A:515 515 --secure -K 1024 -z
+       add an entry to /etc/printcap, defining a printer x on C, then
+           D# lpr -Px mydocument
+
+       Consider Jill who doesn't like colleague John printing out
+       screen dumps of her X session. She would like to create  a
+       secure  X session between her X server A and her mainframe
+       B.
+
+       The procedure is as follows (6010 corresponds to display 10.0):
+           A# X &
+           A# secure-mcserv -d -p 12345
+       add an entry to ~/.netrc for the password of jill on A, then
+           B# forward jill@A:12345 A:6000 6010 --secure -K 1024
+           B# export DISPLAY=localhost:10.0
+           B# fvwm &
+
+
+LIST OF TESTED SERVICES
+       Telnet logins, X sessions, printer  (lpr)  services,  http
+       and  pop3  connections have been tested and work. Ftp con­
+       nections do not forward because of the way ftp tries to do
+       wierd  binding  things with sockets (?). Please tell about
+       what else worked, although most everything should work.
+
+
+BUGS
+       See also the BUGS section of mirrordir(1).
+
+       Out of bounds (MSG_OOB of recv(2)  and  send(2))  data  is
+       never  encrypted  or  compressed. It is sent unmodified in
+       the plain text.  If anyone thinks this is a security risk,
+       please tell me about it and I'll come up with something.
+
+       Screen resizing (detection?) under rlogin(1) does not seem
+       to work, although it works under telnet(1). This must have
+       something  to  do with OOB data not being sent properly. I
+       don't feel like debugging rlogin,  rlogind,  forward,  and
+       secure-mcserv  simultaneously to find the problem. If any­
+       one wants to try this please go ahead.
+
+FILES
+       ~/.netrc
+              List of machines and corresponding passwords.
+
+STANDARDS
+       mirrordir is an invention  of  its  author  and  does  not
+       belong to any operating system standard.
+
+AVAILABILITY
+       The  latest  version of the program can be found at either
+       ftp://metalab.unc.edu/pub/Linux/system/backup,          or
+       ftp://lava.obsidian.co.za/pub/linux/mirrordir.
+
+AUTHOR
+       Paul Sheer  <psheer@obsidian.co.za>  <psheer@icon.co.za>
+
+SEE ALSO
+       mirrordir(1), pslogin(1), ssh(1)
+
+
+
+
+Linux                    1999 February 14              forward(1)

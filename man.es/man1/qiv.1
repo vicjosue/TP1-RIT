@@ -1,0 +1,236 @@
+qiv(1)                       X Tools                       qiv(1)
+
+
+
+NAME
+       qiv  - a fast gdk/imlib image viewer for X.  Version: 1.7,
+       released  on  05.07.2001  by  Adam   Kopacz   /   kLoGraFX
+       http://www.klografx.net/qiv/ - adam.k@klografx.de
+
+SYNOPSIS
+       qiv [options] file ...
+
+DESCRIPTION
+       qiv  is  an  image  viewer  developed with gdk/imlib. As a
+       result, qiv is faster than traditional image viewers  such
+       as xv or xli.
+
+OPTIONS
+       -h, --help
+              Print out a brief help message.
+
+       --display disp
+              Open qiv window on display disp.
+
+       -e, --center
+              Disable window centering.
+
+       -w x, --width x
+              Dissable window with fixed width x.
+
+       -x, --root file
+              Set  file  as  the current desktop background (cen­
+              tered) and exit.
+
+       -y, --root_t file
+              Set file as the current desktop background  (tiled)
+              and exit.
+
+       -z, --root_s file
+              Set   file   as   the  current  desktop  background
+              (stretched) and exit.
+
+       -m, --maxpect
+              Expand image(s) to fit screen size while preserving
+              aspect ratio.
+
+       -t, --scale_down
+              Shrink  image(s)  which are larger than screen size
+              to fit.
+
+       -b, --brightness x
+              Set brightness to x (-32..32).
+
+       -c, --contrast x
+              Set contrast to x (-32..32).
+
+       -g, --gamma x
+              Set gamma to x (-32..32).
+
+       -n, --no_filter
+              Disable filtering of images by extension.
+
+       -i, --no_statusbar
+              Disable statusbar in fullscreen_mode.
+
+       -p, --transparency
+              Enable transparency for transparent images.
+
+       -a, --do_grab
+              Grab the pointer in windowed mode.
+
+       -v, --version
+              Print version information.
+
+       -o, --bg_color x
+              Set root background color to named color  x  or  24
+              bit hex RGB triple in the format #RRGGBB.
+
+       -s, --slide
+              Start slideshow immediately.
+
+       -r, --random
+              Randomize slideshow.
+
+       -S, --shuffle
+              Shuffle  images  (random  order  with next/previous
+              functionality).
+
+       -d, --delay x
+              Set slideshow delay to x seconds.
+
+       -u, --recursive directory
+              Recursively find all files in a given directory
+
+       -f, --fullscreen
+              Use fullscreen window on start-up.
+
+       -I, --ignore_path_sort
+              Sort all the image files by  just  their  filename,
+              ignoring the path.
+
+       -M, --merged_case_sort
+              Sort all the image files in merged-case order (AaB­
+              bCc...).
+
+       -N, --numeric_sort
+              A "smart" numeric sort that attempts to sort  file­
+              names  with  numbers  in  a  logical  manner.   For
+              instance:  2.jpg  sorts  before  10.jpg;   1foo.jpg
+              through  10foo.jpg  sorts  after  1bar.jpg  through
+              15bar.jpg (because "foo" comes  after  "bar");  and
+              baz0001.jpg   through   baz0010.jpg   sorts   after
+              baz01.jpg through  baz99.jpg  (because  the  longer
+              group  of  zero-padded  digits  indicates that they
+              shouldn't be intermingled).
+
+EXAMPLES
+       qiv -atsd2 *.jpg
+       qiv --maxpect --root image.png
+       qiv --maxpect --slide --random --delay=2 *
+       qiv --maxpect --scale_down --slide --delay=2 `find / *`
+       qiv --bg_color 0000FF --root image.png
+       qiv --bg_color blue --root image.png
+
+KEYS
+       space/PgDn/left mouse/wheel down        next picture
+       backspace/PgUp/right mouse/wheel up     previous picture
+       q/ESC/middle mouse                      exit
+
+       0-9                Run 'qiv-command <key> <current-img>'
+       ?                  show keys (only in fullscreen-mode)
+       d/D/del            move picture to .qiv-trash
+       u                  undelete the previously trashed image
+       +/=                zoom in (10%)
+       -                  zoom out (10%)
+       f                  fullscreen mode on/off
+       m                  scale to screen size on/off
+       t                  scale down on/off
+       s                  slide show on/off
+       r                  random order on/off
+       b                  - brightness
+       B                  + brightness
+       c                  - contrast
+       C                  + contrast
+       g                  - gamma
+       G                  + gamma
+       arrow keys         move image (in fullscreen mode)
+       h                  flip horizontal
+       v                  flip vertical
+       k                  rotate right
+       l                  rotate left
+       jtx<return>        jump to image number x
+       jfx<return>        jump forward x images
+       jbx<return>        jump backward x images
+       enter/return       reset zoom and color settings
+       i                  statusbar on/off
+       x                  center image on background
+       y                  tile image on background
+       z                  stretch image on background
+
+MOUSE CONTROLS
+       Button 1   next picture
+       Button 2   quit
+       Button 3   previous picture
+       Wheel Up   next picture
+       Wheel Dn   previous picture
+
+DELETING
+       qiv doesn't actually delete files. It creates a  directory
+       named ".qiv-trash" and moves the images to that directory.
+       qiv maintains the directory structure  of  your  "deleted"
+       images.   You  can also undelete the most recently trashed
+       images in reverse order, which moves each file  back  into
+       its  original  directory.   There  is  a limit to how many
+       deletions can be undone, but it  should  be  pretty  large
+       (currently 1024 items).
+
+IMWHEEL SUPPORT
+       With  XFree86  3.3.2+  server,  using the wheel is seen as
+       button 4 and 5 pressed. You only have to use  "IMPS/2"  or
+       "Intellimouse" for protocol and add "ZAxisMapping    4 5 "
+       in the "Pointer" section of XF86Config. If imwheel (a pro­
+       gram  used  to  emulate key pressed when wheel is used for
+       program not supporting wheel),  the  following  two  lines
+       must be add to imwheel config file :
+
+       "qiv"
+       @Exclude
+
+XSCREENSAVER SUPPORT
+       To  use  qiv with xscreensaver, either type "make install-
+       xscreensaver" or add the following to your ~/.Xresources:
+
+       xscreensaver.programs: \
+          /usr/bin/qiv -srfid 5 your_pix/\* \n\
+          /usr/bin/qiv -srfid 5 your_other_pix/\* \n\
+
+AUTHORS
+       Adam Kopacz / kLoGraFX <adam.k@klografx.de>
+       Darren Smith           <darren.smith@juno.com>
+       Pavel Andreev          <paxvel@vumsoft.cz>
+       Decklin Foster         <decklin@red-bean.com>
+
+OTHER
+       Frederic Crozat        <fcrozat@mail.dotcom.fr>
+       John Knottenbelt       <jak97@doc.ic.ac.uk>
+       Holger Mueller         <hmueller@hrzpub.tu-darmstadt.de>
+       Rutger Nijlunsing      <rutger@null.net>
+       Scott Sams             <sbsams@eos.ncsu.edu>
+       Serge Winitzki         <winitzki@geocities.com>
+       Danny                  <dannys@mail.com>
+       Tomas Ogren            <stric@ing.umu.se>
+       Erik Jacobsen          <erik@openix.com>
+       Alfred Weyers          <alfred@otto.gia.RWTH-Aachen.DE>
+       Daniel                 <danad157@student.liu.se>
+       Henning Kulander       <hennikul@ifi.uio.no>
+       Ask Bjoern Hansen      <ask@valueclick.com>
+       Adrian Lopez           <adrian2@caribe.net>
+       Y Furuhashi            <y_furuhashi@ot.olympus.co.jp>
+       Wayne Davison          <wayned@users.sourceforge.net>
+
+MISC
+       qiv homepage: http://www.klografx.net/qiv/
+
+       Mail bug, reports and comments to Adam Kopacz <adam.k@klo­
+       grafx.de>
+
+       Sending a SIGUSR1 to qiv will cause the program to flip to
+       next picture.  SIGUSR2 will move to previous.
+
+       This program is covered by the GNU GPL; see the file COPY­
+       ING for details.
+
+
+
+qiv version 1.7            05 Jul 2001                     qiv(1)

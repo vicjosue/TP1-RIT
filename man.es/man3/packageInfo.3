@@ -1,0 +1,47 @@
+packageInfo(3)                                     packageInfo(3)
+
+
+
+NAME
+       packageInfo -
+
+SYNOPSIS
+       #include <upgrade.h>
+
+
+   Data Fields
+       Header h
+       char selected
+       char * name
+       void * data
+
+FIELD DOCUMENTATION
+   void* packageInfo::data
+       Definition at line 12 of file upgrade.h.
+
+       Referenced by findUpgradeSet.
+
+   Header packageInfo::h
+       Definition at line 9 of file upgrade.h.
+
+       Referenced by findUpgradeSet.
+
+   char* packageInfo::name
+       Definition at line 11 of file upgrade.h.
+
+       Referenced by addLostFiles, findUpgradeSet, and pkgSort.
+
+   char packageInfo::selected
+       Definition at line 10 of file upgrade.h.
+
+       Referenced by findPackagesWithObsoletes, and
+       findUpgradeSet.
+
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002             packageInfo(3)

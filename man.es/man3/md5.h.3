@@ -1,0 +1,209 @@
+lib/md5.h(3)                                         lib/md5.h(3)
+
+
+
+NAME
+       lib/md5.h -
+
+SYNOPSIS
+       #include <sys/types.h>
+
+   Data Structures
+       struct MD5Context
+           MD5 private data.
+
+   Typedefs
+       typedef unsigned int uint32
+       typedef MD5Context MD5_CTX
+
+   Functions
+       void rpmMD5Init (struct MD5Context *ctx, int brokenEndian)
+           Initialize MD5 hash.
+       void rpmMD5Update (struct MD5Context *ctx, unsigned char
+           const *buf, unsigned len)
+           Update context to reflect the concatenation of another
+           buffer full.
+       void rpmMD5Final (unsigned char digest[16], struct
+           MD5Context *ctx)
+           Return MD5 digest, and reset context.
+       void rpmMD5Transform (uint32 buf[4], uint32 const in[16])
+           The core of the MD5 algorithm.
+       int mdfile (const char *fn, unsigned char *digest)
+           Return MD5 sum of file as ASCII string.
+       int mdbinfile (const char *fn, unsigned char *bindigest)
+           Return MD5 sum of file as binary data.
+       int mdfileBroken (const char *fn, unsigned char *digest)
+           Return (broken!) MD5 sum of file as ASCII string.
+       int mdbinfileBroken (const char *fn, unsigned char
+           *bindigest)
+           Return (broken!) MD5 sum of file as binary data.
+
+DETAILED DESCRIPTION
+       Todo:
+            Eliminate, use rpmio version instead.
+
+
+       Definition in file md5.h.
+
+TYPEDEF DOCUMENTATION
+   typedef struct MD5Context MD5_CTX
+       Definition at line 27 of file md5.h.
+
+   typedef unsigned int uint32
+       Definition at line 11 of file md5.h.
+
+       Referenced by rpmMD5Init.
+
+FUNCTION DOCUMENTATION
+   int mdbinfile (const char * fn, unsigned char * bindigest)
+       Return MD5 sum of file as binary data.
+
+       Parameters:
+
+       fn     file name
+
+       Return values:
+
+       bindigest
+              MD5 digest
+
+       Returns:
+           0 on success, 1 on error
+
+       Definition at line 112 of file md5sum.c.
+
+   int mdbinfileBroken (const char * fn, unsigned char *
+       bindigest)
+       Return (broken!) MD5 sum of file as binary data.
+
+       Deprecated:
+           Here for compatibility with old (broken) versions of
+           RPM.
+
+       Parameters:
+
+       fn     file name
+
+       Return values:
+
+       bindigest
+              MD5 digest
+
+       Returns:
+           0 on success, 1 on error
+
+       Definition at line 116 of file md5sum.c.
+
+   int mdfile (const char * fn, unsigned char * digest)
+       Return MD5 sum of file as ASCII string.
+
+       Parameters:
+
+       fn     file name
+
+       Return values:
+
+       digest MD5 digest
+
+       Returns:
+           0 on success, 1 on error
+
+       Definition at line 120 of file md5sum.c.
+
+   int mdfileBroken (const char * fn, unsigned char * digest)
+       Return (broken!) MD5 sum of file as ASCII string.
+
+       Deprecated:
+           Here for compatibility with old (broken) versions of
+           RPM.
+
+       Parameters:
+
+       fn     file name
+
+       Return values:
+
+       digest MD5 digest
+
+       Returns:
+           0 on success, 1 on error
+
+       Definition at line 124 of file md5sum.c.
+
+   void rpmMD5Final (unsigned char digest[16], struct MD5Context
+       * ctx)
+       Return MD5 digest, and reset context.
+
+       Return values:
+
+       MD5    digest
+
+       Parameters:
+
+       ctx    MD5 private data
+
+       Definition at line 128 of file md5.c.
+
+       Referenced by domd5.
+
+   void rpmMD5Init (struct MD5Context * ctx, int brokenEndian)
+       Initialize MD5 hash.
+
+       Set bit count to 0 and buffer to mysterious initialization
+       constants.
+
+       Parameters:
+
+       ctx    MD5 private data
+
+       brokenEndian
+              calculate broken MD5 sum?
+
+       Definition at line 52 of file md5.c.
+
+       References uint32.
+
+       Referenced by domd5.
+
+   void rpmMD5Transform (uint32 buf[4], uint32 const in[16])
+       The core of the MD5 algorithm.
+
+       This alters an existing MD5 hash to reflect the addition
+       of 16 longwords of new data.
+
+       Parameters:
+
+       buf    current MD5 variables
+
+       in     next block of data to add
+
+       Definition at line 191 of file md5.c.
+
+       Referenced by rpmMD5Final, and rpmMD5Update.
+
+   void rpmMD5Update (struct MD5Context * ctx, unsigned char
+       const * buf, unsigned len)
+       Update context to reflect the concatenation of another
+       buffer full.
+
+       of bytes.
+
+       Parameters:
+
+       ctx    MD5 private data
+
+       data   next data buffer
+
+       len    no. bytes of data
+
+       Definition at line 77 of file md5.c.
+
+       Referenced by domd5.
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002               lib/md5.h(3)

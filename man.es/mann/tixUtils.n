@@ -1,0 +1,57 @@
+Utils(n)              Tix Built-In Commands              Utils(n)
+
+
+
+_________________________________________________________________
+
+NAME
+       tixUtils - Utility commands in Tix.
+
+SYNOPSIS
+       tixDescendants pathName
+       tixDisableAll pathName
+       tixEnableAll pathName
+       tixPushGrab ?-global? window
+       tixPopGrab
+_________________________________________________________________
+
+
+DESCRIPTION
+       tixDescendants pathName
+              Returns  a  list  of  all the descendant widgets of
+              pathName plus pathName itself.
+
+       tixDisableAll pathName
+              Disables pathName and all its descendants.
+
+       tixEnableAll pathName
+              Enables pathName and all its descendants.
+
+       tixPushGrab ?-global? window
+              The tixPushGrab and tixPopGrab commands allows  you
+              to  perform  "cascade-grabbing".  tixPushGrab calls
+              the grab(n) command on window and saves window on a
+              grabbing stack.
+
+       tixPopGrab
+              tixPopGrab pops the top-most element from the grab­
+              bing stack and release its grab.  If  the  grabbing
+              stack  is  not  empty, then tixPopGrab will execute
+              grab(n) on the  current  top-most  element  in  the
+              grabbing stack.
+
+NOTES
+       Some  Tix  widgets (for example, tixComboBox and tixPaned­
+       Window) grabs the screen on certain occasions  using  tix­
+       PushGrab  and  tixPopGrab.  Therefore, if you need to grab
+       the screen when these widgets are present, you should also
+       call  tixPushGrab  and  tixPopGrab in place of the Tk grab
+       and grab release  commands.  Otherwise,  the  behavior  of
+       these widgets may be undefined.
+
+KEYWORDS
+       Tix(n), grab(n)
+
+
+
+Tix                            4.0                       Utils(n)

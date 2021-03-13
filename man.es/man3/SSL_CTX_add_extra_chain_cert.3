@@ -1,0 +1,46 @@
+SSL_CTX_add_extra_chain_cert(3O)penSSLSL_CTX_add_extra_chain_cert(3)
+
+
+
+NNAAMMEE
+       SSL_CTX_add_extra_chain_cert - add certificate to chain
+
+SSYYNNOOPPSSIISS
+        #include <openssl/ssl.h>
+
+        long SSL_CTX_add_extra_chain_cert(SSL_CTX ctx, X509 *x509)
+
+
+DDEESSCCRRIIPPTTIIOONN
+       SSL_CTX_add_extra_chain_cert() adds the certificate xx550099
+       to the certificate chain presented together with the
+       certificate. Several certificates can be added one after
+       the other.
+
+NNOOTTEESS
+       When constructing the certificate chain, the chain will be
+       formed from these certificates explicitly specified. If no
+       chain is specified, the library will try to complete the
+       chain from the available CA certificates in the trusted CA
+       storage, see SSL_CTX_load_verify_locations(3).
+
+RREETTUURRNN VVAALLUUEESS
+       SSL_CTX_add_extra_chain_cert() returns 1 on success. Check
+       out the error stack to find out the reason for failure
+       otherwise.
+
+SSEEEE AALLSSOO
+       ssl(3), SSL_CTX_use_certificate(3),
+       SSL_CTX_load_verify_locations(3)
+
+
+
+
+
+
+
+
+
+
+
+28/Jan/2001                   0.9.6ScSL_CTX_add_extra_chain_cert(3)

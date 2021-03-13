@@ -1,0 +1,220 @@
+build/parsePrep.c(3)                         build/parsePrep.c(3)
+
+
+
+NAME
+       build/parsePrep.c - Parse prep section from spec file.
+
+SYNOPSIS
+       #include 'system.h'
+       #include <rpmio_internal.h>
+       #include <rpmbuild.h>
+       #include 'debug.h'
+
+   Functions
+       int checkOwners (const char *urlfn)
+           Check that file owner and group are known.
+       char * doPatch (Spec spec, int c, int strip, const char
+           *db, int reverse, int removeEmpties)
+           Expand patchN macro into prep scriptlet.
+       const char * doUntar (Spec spec, int c, int quietly)
+           Expand setup macro into prep scriptlet.
+       int doSetupMacro (Spec spec, char *line)
+           Parse setup macro.
+       int doPatchMacro (Spec spec, char *line)
+           Parse patch line.
+       int parsePrep (Spec spec)
+
+   Variables
+       int leaveDirs
+       int skipDefaultAction
+       int createDir
+       int quietly
+       const char * dirName = NULL
+       poptOption optionsTable []
+
+DETAILED DESCRIPTION
+       Parse prep section from spec file.
+
+
+
+       Definition in file parsePrep.c.
+
+FUNCTION DOCUMENTATION
+   int checkOwners (const char * urlfn) [static]
+       Check that file owner and group are known.
+
+       Parameters:
+
+       urlfn  file url
+
+       Returns:
+           0 on success
+
+       Definition at line 34 of file parsePrep.c.
+
+       References _, errno, getGname, getUname, Lstat, and
+       strerror.
+
+       Referenced by doPatch, and doUntar.
+
+   char* doPatch (Spec spec, int c, int strip, const char * db,
+       int reverse, int removeEmpties) [static]
+       Expand patchN macro into prep scriptlet.
+
+       Parameters:
+
+       spec   build info
+
+       c      patch index
+
+       strip  patch level (i.e. patch -p argument)
+
+       db     saved file suffix (i.e. patch --suffix argument)
+
+       reverse
+              include -R?
+
+       removeEmpties
+              include -E?
+
+       Returns:
+           expanded patch macro (NULL on error)
+
+       Definition at line 62 of file parsePrep.c.
+
+       References _, _free, checkOwners, COMPRESSED_BZIP2,
+       COMPRESSED_NOT, Source::flags, isCompressed, Source::next,
+       Source::num, RPMBUILD_ISPATCH, rpmCompressedMagic,
+       rpmGetPath, Source::source, URL_IS_DASH, URL_IS_FTP,
+       URL_IS_HTTP, URL_IS_PATH, URL_IS_UNKNOWN, urlPath, and
+       urltype.
+
+       Referenced by doPatchMacro.
+
+   int doPatchMacro (Spec spec, char * line) [static]
+       Parse patch line.
+
+       Parameters:
+
+       spec   build info
+
+       line   current line from spec file
+
+       Returns:
+           0 on success
+
+       Definition at line 416 of file parsePrep.c.
+
+       References _, appendLineStringBuf, doPatch, and parseNum.
+
+       Referenced by parsePrep.
+
+   int doSetupMacro (Spec spec, char * line) [static]
+       Parse setup macro.
+
+       Todo:
+           FIXME: Option -q broken when not immediately after
+           setup.
+
+       Parameters:
+
+       spec   build info
+
+       line   current line from spec file
+
+       Returns:
+           0 on success
+
+       Definition at line 264 of file parsePrep.c.
+
+       References _, _free, addMacro, appendLineStringBuf,
+       appendStringBuf, createDir, dirName, doUntar,
+       freeStringBuf, headerNVR, leaveDirs, MKDIR_P,
+       newStringBuf, optionsTable, parseNum, poptBadOption,
+       poptFreeContext, poptGetContext, poptGetNextOpt,
+       poptGetOptArg, poptParseArgvString, poptStrerror, quietly,
+       RMIL_SPEC, rpmExpand, rpmGenPath, skipDefaultAction,
+       urlPath, and xstrdup.
+
+       Referenced by parsePrep.
+
+   const char* doUntar (Spec spec, int c, int quietly) [static]
+       Expand setup macro into prep scriptlet.
+
+       Parameters:
+
+       spec   build info
+
+       c      source index
+
+       quietly
+              should -vv be omitted from tar?
+
+       Returns:
+           expanded setup macro (NULL on error)
+
+       Definition at line 150 of file parsePrep.c.
+
+       References _, _free, checkOwners, COMPRESSED_BZIP2,
+       COMPRESSED_NOT, COMPRESSED_OTHER, COMPRESSED_ZIP, errno,
+       Source::flags, ftpStrerror, Source::fullSource,
+       isCompressed, Lstat, Source::next, Source::num, quietly,
+       RPMBUILD_ISSOURCE, rpmCompressedMagic, rpmGetPath,
+       RPMTAG_NOSOURCE, Source::source, stpcpy, URL_IS_DASH,
+       URL_IS_FTP, URL_IS_HTTP, URL_IS_PATH, URL_IS_UNKNOWN,
+       urlGetFile, urlPath, and urltype.
+
+       Referenced by doSetupMacro.
+
+VARIABLE DOCUMENTATION
+   int createDir [static]
+       Definition at line 16 of file parsePrep.c.
+
+       Referenced by doSetupMacro.
+
+   const char* dirName = NULL [static]
+       Definition at line 17 of file parsePrep.c.
+
+       Referenced by doSetupMacro.
+
+   int leaveDirs [static]
+       Definition at line 15 of file parsePrep.c.
+
+       Referenced by doSetupMacro.
+
+   struct poptOption optionsTable[] [static]
+       Initial value:
+
+        {
+                   { NULL, 'a', POPT_ARG_STRING, NULL, 'a',    NULL, NULL},
+                   { NULL, 'b', POPT_ARG_STRING, NULL, 'b',    NULL, NULL},
+                   { NULL, 'c', 0, &createDir, 0,              NULL, NULL},
+                   { NULL, 'D', 0, &leaveDirs, 0,              NULL, NULL},
+                   { NULL, 'n', POPT_ARG_STRING, &dirName, 0,  NULL, NULL},
+                   { NULL, 'T', 0, &skipDefaultAction, 0,      NULL, NULL},
+                   { NULL, 'q', 0, &quietly, 0,                NULL, NULL},
+                   { 0, 0, 0, 0, 0,    NULL, NULL}
+           }
+
+       Definition at line 18 of file parsePrep.c.
+
+       Referenced by doSetupMacro.
+
+   int quietly [static]
+       Definition at line 16 of file parsePrep.c.
+
+       Referenced by doSetupMacro, and doUntar.
+
+   int skipDefaultAction [static]
+       Definition at line 15 of file parsePrep.c.
+
+       Referenced by doSetupMacro.
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002       build/parsePrep.c(3)

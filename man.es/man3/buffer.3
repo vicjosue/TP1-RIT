@@ -1,0 +1,88 @@
+buffer(3)                    OpenSSL                    buffer(3)
+
+
+
+NNAAMMEE
+       BUF_MEM_new, BUF_MEM_free, BUF_MEM_grow, BUF_strdup -
+       simple character arrays structure
+
+SSYYNNOOPPSSIISS
+        #include <openssl/buffer.h>
+
+        BUF_MEM *BUF_MEM_new(void);
+
+        void   BUF_MEM_free(BUF_MEM *a);
+
+        int    BUF_MEM_grow(BUF_MEM *str, int len);
+
+        char * BUF_strdup(const char *str);
+
+
+DDEESSCCRRIIPPTTIIOONN
+       The buffer library handles simple character arrays.
+       Buffers are used for various purposes in the library, most
+       notably memory BIOs.
+
+       The library uses the BUF_MEM structure defined in
+       buffer.h:
+
+        typedef struct buf_mem_st
+        {
+               int length;     /* current number of bytes */
+               char *data;
+               int max;        /* size of buffer */
+        } BUF_MEM;
+
+       lleennggtthh is the current size of the buffer in bytes, mmaaxx is
+       the amount of memory allocated to the buffer. There are
+       three functions which handle these and one "miscellaneous"
+       function.
+
+       BUF_MEM_new() allocates a new buffer of zero size.
+
+       BUF_MEM_free() frees up an already existing buffer. The
+       data is zeroed before freeing up in case the buffer
+       contains sensitive data.
+
+       BUF_MEM_grow() changes the size of an already existing
+       buffer to lleenn. Any data already in the buffer is preserved
+       if it increases in size.
+
+       BUF_strdup() copies a null terminated string into a block
+       of allocated memory and returns a pointer to the allocated
+       block.  Unlike the standard C library strdup() this
+       function uses OPENSSL_malloc() and so should be used in
+       preference to the standard library strdup() because it can
+       be used for memory leak checking or replacing the malloc()
+       function.
+
+       The memory allocated from BUF_strdup() should be freed up
+       using the OPENSSL_free() function.
+
+RREETTUURRNN VVAALLUUEESS
+       BUF_MEM_new() returns the buffer or NULL on error.
+
+       BUF_MEM_free() has no return value.
+
+       BUF_MEM_grow() returns zero on error or the new size (i.e.
+       lleenn).
+
+SSEEEE AALLSSOO
+       bio(3)
+
+HHIISSTTOORRYY
+       BUF_MEM_new(), BUF_MEM_free() and BUF_MEM_grow() are
+       available in all versions of SSLeay and OpenSSL.
+       BUF_strdup() was added in SSLeay 0.8.
+
+
+
+
+
+
+
+
+
+
+
+19/Sep/2000                   0.9.6c                    buffer(3)

@@ -1,0 +1,528 @@
+import  -  capture some or all of an X server screen and save the
+image to a file.
+
+import [ options ... ] file
+
+Import reads an image from any visible window on an X server  and
+outputs it as an image file. You can capture a single window, the
+entire screen, or any rectangular portion  of  the  screen.   Use
+display  for redisplay, printing, editing, formatting, archiving,
+image processing, etc. of the captured image.
+
+The target window can be specified by id, name, or may be select­
+ed  by  clicking  the mouse in the desired window. If you press a
+button and then drag, a rectangle will  form  which  expands  and
+contracts  as  the mouse moves. To save the portion of the screen
+defined by the rectangle, just release the button.  The  keyboard
+bell  is  rung  once  at  the beginning of the screen capture and
+twice when it completes.
+
+To select an X window with the mouse and save it in the MIFF  im­
+age format to a file titled window.miff, use:
+
+    import window.miff
+
+To  select an X window and save it in the Encapsulated Postscript
+format to include in another document, use:
+
+    import figure.eps
+
+To capture the entire X server screen in the JPEG image format in
+a file titled root.jpeg, use:
+
+    import -window root root.jpeg
+
+Options are processed in command line order. Any option you spec­
+ify on the command line remains in effect until it is  explicitly
+changed by specifying the option again with a different effect.
+
+Import  options  can  appear on the command line or in your X re­
+sources file. See X(1). Options on  the  command  line  supersede
+values  specified  in  your X resources file.  surround the image
+with a border of color
+
+See X(1) for details about the geometry specification.
+
+the border color megabytes of memory available to the pixel cache
+
+Image  pixels  are  stored in memory until 80 megabytes of memory
+have been consumed. Subsequent pixel  operations  are  cached  on
+disk.  Operations  to memory are significantly faster but if your
+computer does not have a sufficient amount of free memory you may
+want to adjust this threshold value.
+
+preferred number of colors in the image
+
+The  actual  number  of colors in the image may be less than your
+request, but never more. Note, this is a color reduction  option.
+Images  with  less  unique colors than specified with this option
+will have any duplicate or unused colors removed. Refer to  quan­
+tize for more details.
+
+
+Note,  options  -dither,  -colorspace,  and -treedepth affect the
+color reduction algorithm.
+
+the type of colorspace
+
+Choices are: GRAY,  OHTA,  RGB,  Transparent,  XYZ,  YCbCr,  YIQ,
+YPbPr, YUV, or CMYK.
+
+
+Color  reduction, by default, takes place in the RGB color space.
+Empirical evidence suggests that distances in color  spaces  such
+as  YUV  or  YIQ  correspond to perceptual color differences more
+closely than do distances in RGB space.  These color  spaces  may
+give better results when color reducing an image.  Refer to quan­
+tize for more details.
+
+
+The Transparent color space behaves uniquely in that it preserves
+the matte channel of the image if it exists.
+
+
+The  -colors or -monochrome option is required for this option to
+take effect.
+
+annotate an image with a comment
+
+Use this option to assign a specific comment to  the  image.  You
+can include the image filename, type, width, height, or other im­
+age attribute by embedding special format characters:
+
+
+     %b   file size
+     %c   comment
+     %d   directory
+     %e   filename extention
+     %f   filename
+     %h   height
+     %i   input filename
+     %k   number of unique colors
+     %l   label
+     %m   magick
+     %n   number of scenes
+     %o   output filename
+     %p   page number
+     %q   quantum depth
+     %s   scene number
+     %t   top of filename
+     %u   unique temporary filename
+     %w   width
+     %x   x resolution
+     %y   y resolution
+     \n   newline
+     \r   carriage return
+
+For example,
+
+
+     -comment "%m:%f %wx%h"
+
+produces an image comment of MIFF:bird.miff 512x480 for an  image
+titled bird.miff and whose width is 512 and height is 480.
+
+
+If  the first character of string is @, the image comment is read
+from a file titled by the remaining characters in the string.
+
+preferred size and location of the cropped image
+
+See X(1) for details about the geometry specification.
+
+
+The width and height give the size of the image that remains  af­
+ter  cropping,  and the offsets give the location of the top left
+corner of the cropped image with respect to the  original  image.
+To specify the amount to be removed, use -shave instead.
+
+
+To  specify  a  percentage width or height to be removed instead,
+append %. For example to crop the image by ten percent (five per­
+cent on each side of the image), use -crop 10%.
+
+
+Use  cropping to apply image processing options to, or display, a
+particular area of an image.
+
+
+Omit the x and y offset to generate one or more  subimages  of  a
+uniform size.
+
+
+Use cropping to crop a particular area of an image. Use -crop 0x0
+to trim edges that are the background color. Add an x and y  off­
+set to leave a portion of the trimmed edges with the image.
+
+enable debug printout display the next image after pausing
+
+This  option is useful for regulating the animation of GIF images
+within Netscape. Delay/100 seconds must expire before the display
+of  the  next image. The default is no delay between each showing
+of the image sequence. The maximum delay is 65535.
+
+
+You can specify a delay range (e.g. -delay 10-500) which sets the
+minimum and maximum delay.
+
+vertical and horizontal resolution in pixels of the image
+
+This option specifies an image density when decoding a PostScript
+or Portable Document page. The default is 72 dots per inch in the
+horizontal and vertical direction. This option is used in concert
+with -page.
+
+depth of the image
+
+This is the number of bits in a pixel. The only acceptable values
+are  8 or 16.  Use this option to specify the depth of raw images
+whose depth is unknown such as GRAY, RGB, or CMYK, or  to  change
+the depth of any image after it has been read.
+
+obtain  image  by descending window hierarchy reduce the speckles
+within an image specifies the X server to  contact  GIF  disposal
+method
+
+Here are the valid methods:
+
+
+     0     No disposal specified.
+     1     Do not dispose between frames.
+     2     Overwrite frame with background color from header.
+     3      Overwrite with previous frame.  apply Floyd/Steinberg
+error diffusion to the image
+
+The basic strategy of dithering is to trade intensity  resolution
+for  spatial  resolution  by averaging the intensities of several
+neighboring pixels.  Images which suffer from  severe  contouring
+when reducing colors can be improved with this option.
+
+
+The  -colors or -monochrome option is required for this option to
+take effect.
+
+
+Use +dither to render Postscript without text or  graphic  alias­
+ing.
+
+<width>x<height>+<outer  bevel  width>+<inner  bevel width>" sur­
+round the image with an ornamental border
+
+See X(1) for details about the geometry specification.
+
+
+The color of the border is specified with the -mattecolor command
+line option.
+
+preferred size and location of the Image window.
+
+See  X(1)  for  details  about the geometry specification. By de­
+fault, the window size is the image size and the location is cho­
+sen by you when it is mapped.
+
+
+By default, the width and height are maximum values. That is, the
+image is expanded or contracted to fit the width and height value
+while maintaining the aspect ratio of the image. Append an excla­
+mation point to the geometry to force the image size  to  exactly
+the  size  you  specify. For example, if you specify 640x480! the
+image width is set to 640 pixels and height to 480. If  only  one
+factor  is specified, both the width and height assume the value.
+
+
+To specify a percentage width or height instead,  append  %.  The
+image  size  is multiplied by the width and height percentages to
+obtain the final image dimensions. To increase the size of an im­
+age, use a value greater than 100 (e.g. 125%). To decrease an im­
+age's size, use a percentage less than 100.
+
+
+Use @ to specify the maximum area in pixels of an image.
+
+
+Use > to change the dimensions of the image only if its size  ex­
+ceeds the geometry specification. < resizes the image only if its
+dimensions is less than the geometry specification. For  example,
+if  you specify '640x480>' and the image size is 512x512, the im­
+age size does not change. However, if the image is 1024x1024,  it
+is resized to 640x480.
+
+
+Use  < to change the dimensions of the image only if its size ex­
+ceeds the geometry specification. > resizes the image only if its
+dimensions  is less than the geometry specification. For example,
+if you specify 640x480> and the image size is 512x512, the  image
+size  does  not change. However, if the image is 1024x1024, it is
+resized to 640x480.
+
+
+There are 72 pixels per inch in PostScript coordinates.
+
+print usage instructions the type of interlacing scheme
+
+Choices are: None, Line, Plane,  or  Partition.  The  default  is
+None.
+
+
+This option is used to specify the type of interlacing scheme for
+raw image formats such as RGB or YUV. None means do not interlace
+(RGBRGBRGBRGBRGBRGB...),    Line    uses   scanline   interlacing
+(RRR...GGG...BBB...RRR...GGG...BBB...), and Plane uses plane  in­
+terlacing (RRRRRR...GGGGGG...BBBBBB...).  Partition is like plane
+except the different planes are saved to individual  files  (e.g.
+image.R, image.G, and image.B).
+
+
+Use  Line,  or  Plane to create an interlaced PNG or  GIF or pro­
+gressive JPEG image.
+
+assign a label to an image
+
+Use this option to assign a specific label to the image.  Option­
+ally  you can include the image filename, type, width, height, or
+other image attribute by embedding special format character.  See
+-comment for details.
+
+
+For example,
+
+
+     -label "%m:%f %wx%h"
+
+produces  an  image  label of MIFF:bird.miff 512x480 for an image
+titled bird.miff and whose width is 512 and height is 480.
+
+
+If the first character of string is @, the image  label  is  read
+from a file titled by the remaining characters in the string.
+
+
+When converting to PostScript, use this option to specify a head­
+er string to print above the image. Specify the label  font  with
+-font.
+
+transform  the  image to black and white replace every pixel with
+its complementary color
+
+The red, green, and blue intensities of  an  image  are  negated.
+White  becomes  black,  yellow becomes blue, etc.  Use +negate to
+only negate the grayscale pixels of the image.
+
+size and location of an image canvas
+
+Use this option to specify the dimensions of the PostScript  page
+in  dots  per  inch  or  a TEXT page in pixels. The choices for a
+Postscript page are:
+
+
+     11x17         792  1224
+     Ledger       1224   792
+     Legal         612  1008
+     Letter        612   792
+     LetterSmall   612   792
+     ArchE        2592  3456
+     ArchD        1728  2592
+     ArchC        1296  1728
+     ArchB         864  1296
+     ArchA         648   864
+     A0           2380  3368
+     A1           1684  2380
+     A2           1190  1684
+     A3            842  1190
+     A4            595   842
+     A4Small       595   842
+     A5            421   595
+     A6            297   421
+     A7            210   297
+     A8            148   210
+     A9            105   148
+     A10            74   105
+     B0           2836  4008
+     B1           2004  2836
+     B2           1418  2004
+     B3           1002  1418
+     B4            709  1002
+     B5            501   709
+     C0           2600  3677
+     C1           1837  2600
+     C2           1298  1837
+     C3            918  1298
+     C4            649   918
+     C5            459   649
+     C6            323   459
+     Flsa          612   936
+     Flse          612   936
+     HalfLetter    396   612
+
+For convenience you can specify the page size by media (e.g.  A4,
+Ledger, etc.). Otherwise, -page behaves much like -geometry (e.g.
+-page letter+43+43>).
+
+
+To position a GIF image, use  -page{+-}<x  offset>{+-}<y  offset>
+(e.g. -page +100+200).
+
+
+For a Postscript page, the image is sized as in -geometry and po­
+sitioned relative to the lower left hand corner of  the  page  by
+{+-}<xoffset>{+-}<y  offset>. Use -page 612x792>, for example, to
+center the image within the page. If the image size  exceeds  the
+Postscript page, it is reduced to fit the page.
+
+
+The default page dimensions for a TEXT image is 612x792.
+
+
+This option is used in concert with -density.
+
+efficiently  determine  image  characteristics  pointsize  of the
+Postscript, OPTION1, or TrueType font  JPEG/MIFF/PNG  compression
+level
+
+For  the  JPEG  image format, quality is 0 (worst) to 100 (best).
+The default quality is 75.
+
+
+Quality for the MIFF and PNG image format sets the amount of  im­
+age  compression  (quality  / 10) and filter-type (quality % 10).
+Compression quality values range from 0 (worst) to 100 (best). If
+filter-type  is  4 or less, the specified filter-type is used for
+all scanlines:
+
+
+     0: none
+     1: sub
+     2: up
+     3: average
+     4: Paeth
+
+If filter-type is 5, adaptive filtering is used when  quality  is
+greater  than  50 and the image does not have a color map, other­
+wise no filtering is used.
+
+
+If filter-type is 6 or more, adaptive filtering with minimum-sum-
+of-absolute-values is used.
+
+
+The  default  is  quality is 75. Which means nearly the best com­
+pression with adaptive filtering.
+
+
+For further information, see the PNG specification.
+
+apply Paeth image rotation to the image
+
+Use > to rotate the image only if its width exceeds  the  height.
+<  rotates  the  image only if its width is less than the height.
+For example, if you specify -90> and the image size  is  480x640,
+the  image is not rotated by the specified angle. However, if the
+image is 640x480, it is rotated by -90 degrees.
+
+
+Empty triangles left over from rotating the image are filled with
+the color defined as background (class backgroundColor). See X(1)
+for details.
+
+number of screen snapshots
+
+Use this option to grab more than one image  from  the  X  server
+screen  to  create  an animation sequence.  specify the screen to
+capture
+
+This option indicates that the GetImage request  used  to  obtain
+the image should be done on the root window, rather than directly
+on the specified window.  In this way, you can obtain  pieces  of
+other  windows that overlap the specified window, and more impor­
+tantly, you can capture menus or other popups that  are  indepen­
+dent  windows but appear over the specified window.  select some­
+thing in import operate silently width and height of the image
+
+Use this option to specify the width and  height  of  raw  images
+whose dimensions are unknown such as GRAY, RGB, or CMYK. In addi­
+tion to width and height, use -size with an offset  to  skip  any
+header information in the image or tell the number of colors in a
+MAP image file, (e.g. -size 640x512+256).
+
+
+For Photo CD images, choose from these sizes:
+
+     192x128
+     384x256
+     768x512
+     1536x1024
+     3072x2048
+
+Finally, use this option to choose a particular resolution  layer
+of a JBIG or JPEG image (e.g. -size 1024x768).
+
+make  this  color transparent within the image print detailed in­
+formation about the image
+
+This information is printed: image scene number; image name;  im­
+age size; the image class (DirectClass or PseudoClass); the total
+number of unique colors; and the number of seconds  to  read  and
+transform  the image.  Refer to miff for a description of the im­
+age class.
+
+
+If -colors is also specified, the total unique colors in the  im­
+age  and color reduction error values are printed. Refer to quan­
+tize for a description of these values.
+
+Copyright (C) 2002 ImageMagick Studio, a non-profit  organization
+dedicated  to making software imaging solutions freely available.
+
+Permission is hereby granted, free of charge, to any  person  ob­
+taining  a  copy  of  this  software and associated documentation
+files ("ImageMagick"), to deal in  ImageMagick  without  restric­
+tion, including without limitation the rights to use, copy, modi­
+fy, merge, publish, distribute, sublicense, and/or sell copies of
+ImageMagick,  and  to  permit  persons to whom the ImageMagick is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission  notice  shall  be
+included in all copies or substantial portions of ImageMagick.
+
+The  software  is provided "as is", without warranty of any kind,
+express or implied, including but not limited to  the  warranties
+of  merchantability,  fitness for a particular purpose and nonin­
+fringement.  In no event shall ImageMagick Studio be  liable  for
+any  claim,  damages  or other liability, whether in an action of
+contract, tort or otherwise, arising from, out of or  in  connec­
+tion  with  ImageMagick or the use or other dealings in ImageMag­
+ick.
+
+Except as contained in this notice, the name of  the  ImageMagick
+Studio  shall  not be used in advertising or otherwise to promote
+the sale, use or other  dealings  in  ImageMagick  without  prior
+written authorization from the ImageMagick Studio.
+
+John Cristy, ImageMagick Studio LLC
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

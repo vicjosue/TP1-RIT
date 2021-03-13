@@ -1,0 +1,82 @@
+PG_CONFIG(1)      PostgreSQL Client Applications     PG_CONFIG(1)
+
+
+
+NAME
+       pg_config  - retrieve information about the installed ver­
+       sion of PostgreSQL
+
+SYNOPSIS
+       pg_config { --bindir | --includedir |  --includedir-server
+       | --libdir | --pkglibdir | --configure | --version }...
+
+DESCRIPTION
+       The  pg_config  utility prints configuration parameters of
+       the currently  installed  version  of  PostgreSQL.  It  is
+       intended,  for  example,  to  be used by software packages
+       that want to interface to PostgreSQL to facilitate finding
+       the required header files and libraries.
+
+OPTIONS
+       To  use  pg_config,  supply  one  or more of the following
+       options:
+
+       --bindir
+              Print the location of user executables.  Use  this,
+              for example, to find the psql program. This is nor­
+              mally also the location where the pg_config program
+              resides.
+
+       --includedir
+              Print the location of C and C++ header files of the
+              client interfaces.
+
+       --includedir-server
+              Print the location of C and C++  header  files  for
+              server programming.
+
+       --libdir
+              Print the location of object code libraries.
+
+       --pkglibdir
+              Print the location of dynamically loadable modules,
+              or where the server would search for  them.  (Other
+              architecture-dependent   data  files  may  also  be
+              installed in this directory.)
+
+       --configure
+              Print the options that were given to the  configure
+              script when PostgreSQL was configured for building.
+              This can be used to reproduce the identical config­
+              uration,  or to find out with what options a binary
+              package was built. (Note however that binary  pack­
+              ages often contain vendor-specific custom patches.)
+
+       --version
+              Print the version of PostgreSQL and exit.
+
+       If more than one option (except for --version)  is  given,
+       the  information  is  printed  in that order, one item per
+       line.
+
+NOTES
+       The option --includedir-server is new in  PostgreSQL  7.2.
+       In prior releases, the server include files were installed
+       in the same location as the client headers, which could be
+       queried with the --includedir. To make your package handle
+       both cases, try the newer option first and test  the  exit
+       status to see whether it succeeded.
+
+       In  releases prior to PostgreSQL 7.1, before the pg_config
+       came to be, a method for finding the equivalent configura­
+       tion information did not exist.
+
+HISTORY
+       The pg_config utility first appeared in PostgreSQL 7.1.
+
+SEE ALSO
+       PostgreSQL Programmer's Guide
+
+
+
+Application                 2000-11-11               PG_CONFIG(1)

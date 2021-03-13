@@ -1,0 +1,42 @@
+PDFOPT(1)               Ghostscript Tools               PDFOPT(1)
+
+
+
+NAME
+       pdfopt - Ghostscript PDF Optimizer
+
+SYNOPSIS
+       pdfopt [ options ] input.pdf output.pdf
+
+DESCRIPTION
+       pdfopt  uses  gs(1) to convert the Adobe Portable Document
+       Format (PDF) file "input.pdf"  to  a  so-called  optimized
+       form  in  "output.pdf".  Optimization puts the elements of
+       the file into a more linear order and adds  "hint"  point­
+       ers,  allowing  Adobe's  Acrobat(TM)  products  to display
+       individual pages of the file more quickly  when  accessing
+       the file through a network.
+
+       Note:  input.pdf  and output.pdf must not be the same.  If
+       they are, the file will  probably  be  destroyed.   pdfopt
+       currently does not check for this.
+
+FILES
+       Run "gs -h" to find the location of Ghostscript documenta­
+       tion on your system, from which you can get more  details.
+
+SEE ALSO
+       "Linearized   PDF"   in   Adobe's  PDF  reference  manual,
+       http://partners.adobe.com/asn/developer/acrosdk/DOCS/pdf­
+       spec.pdf
+
+VERSION
+       This  document  was  last  revised for Ghostscript version
+       6.53.
+
+AUTHOR
+       L. Peter Deutsch <ghost@aladdin.com>
+
+
+
+6.53                     5 February 2002                PDFOPT(1)

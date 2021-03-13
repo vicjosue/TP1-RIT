@@ -1,0 +1,35 @@
+RQUOTAD(8)                                             RQUOTAD(8)
+
+
+
+NAME
+       rquotad, rpc.rquotad - remote quota server
+
+SYNOPSIS
+       rpc.rquotad
+
+DESCRIPTION
+       rquotad  is  an  rpc(3N) server which returns quotas for a
+       user of a local filesystem which is mounted  by  a  remote
+       machine over the NFS.  It also allows setting of quotas on
+       NFS mounted filesystem. The results are used  by  quota(1)
+       to  display  user  quotas  for  remote  filesystems and by
+       edquota(8) to set quotas on remote filesystems.  The rquo­
+       tad  daemon is normally started at boot time from the sys­
+       tem startup scripts.
+
+FILES
+       aquota.user or aquota.group
+                           quota  file  at  the  filesystem  root
+                           (version 2 quota, non-XFS filesystems)
+       quota.user or quota.group
+                           quota  file  at  the  filesystem  root
+                           (version 1 quota, non-XFS filesystems)
+       /etc/mtab           default filesystems
+
+SEE ALSO
+       quota(1), rpc(3N), nfs(5), services(5), inetd(8)
+
+
+
+                                                       RQUOTAD(8)

@@ -1,0 +1,60 @@
+SEQ(1)                         FSF                         SEQ(1)
+
+
+
+NAME
+       seq - print a sequence of numbers
+
+SYNOPSIS
+       seq [OPTION]... LAST
+       seq [OPTION]... FIRST LAST
+       seq [OPTION]... FIRST INCREMENT LAST
+
+DESCRIPTION
+       Print numbers from FIRST to LAST, in steps of INCREMENT.
+
+       -f, --format FORMAT
+              use printf(3) style FORMAT (default: %g)
+
+       -s, --separator STRING
+              use STRING to separate numbers (default: \n)
+
+       -w, --equal-width
+              equalize width by padding with leading zeroes
+
+       --help display this help and exit
+
+       --version
+              output version information and exit
+
+       If  FIRST  or  INCREMENT  is  omitted,  it  defaults to 1.
+       FIRST, INCREMENT, and LAST  are  interpreted  as  floating
+       point  values.   INCREMENT  should be positive if FIRST is
+       smaller than LAST, and negative  otherwise.   When  given,
+       the  FORMAT  argument  must  contain  exactly  one  of the
+       printf-style, floating point output formats %e, %f, %g
+
+AUTHOR
+       Written by Ulrich Drepper.
+
+REPORTING BUGS
+       Report bugs to <bug-sh-utils@gnu.org>.
+
+COPYRIGHT
+       Copyright © 2000 Free Software Foundation, Inc.
+       This is free software; see the source for  copying  condi­
+       tions.  There is NO warranty; not even for MERCHANTABILITY
+       or FITNESS FOR A PARTICULAR PURPOSE.
+
+SEE ALSO
+       The full documentation for seq is maintained as a  Texinfo
+       manual.   If  the  info  and  seq  programs  are  properly
+       installed at your site, the command
+
+              info seq
+
+       should give you access to the complete manual.
+
+
+
+GNU sh-utils 2.0.11         March 2002                     SEQ(1)

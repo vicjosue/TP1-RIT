@@ -1,0 +1,36 @@
+SKB_QUEUE_LEN(9)       Networking Functions      SKB_QUEUE_LEN(9)
+
+
+
+NAME
+       skb_queue_len - determine the length of an sk_buff_head
+
+SYNOPSIS
+       #include <linux/skbuff.h>
+
+       __u32 skb_queue_len(struct sk_buff_head *list);
+
+DESCRIPTION
+       The   skb_queue_len  function  determines  the  number  of
+       sk_buffs assigned to an sk_buff_head.
+
+RETURN VALUE
+       skb_queue_len  returns  the  number  of  sk_buff  elements
+       attached  to  an  sk_buff_head.   If  the  sk_buff_head is
+       empty, then 0 is returned.
+
+AVAILABILITY
+       Linux 1.0+
+
+SEE ALSO
+       intro(9), skb_queue_head_init(9), skb_queue_head(9),
+       skb_queue_tail(9), skb_insert(9)
+
+       /usr/src/linux/net/core/datagram.c
+
+AUTHOR
+       Cyrus Durgin <cider@speakeasy.org>
+
+
+
+Linux DDI               November 24, 1997        SKB_QUEUE_LEN(9)

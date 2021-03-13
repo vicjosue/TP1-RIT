@@ -1,0 +1,46 @@
+skel(9)                    VM Functions                   skel(9)
+
+
+
+NAME
+       MAP_NR - get memory map index for page in kernel memory
+
+SYNOPSIS
+       #include <linux/mm.h>
+
+       #define MAP_NR(page)
+
+
+DESCRIPTION
+       This macro maps the page of kernel memory to an index into
+       the mem_map array. The input  page  is  kernel-space  page
+       addresses    such    as   those   that   come   from   the
+       get_free_page(9)      function.       The       expression
+       mem_map[MAP_NR(page)] returns a pointer to a mem_map_t for
+       the page in question.
+
+       Device drivers need access to the page structure if it  is
+       implimenting  some  special  kind  of memory segment, i.e.
+       cache for a virtual frame buffer.
+
+RETURN VALUE
+       Returns an index into the mem_map array.
+
+AVAILABILITY
+       Linux 2.0+
+
+SEE ALSO
+       get_free_pages(9)
+
+       /usr/include/asm/page.h
+
+AUTHOR
+       Stephen Williams <steve@icarus.com>
+
+BUGS
+       There is no check that the page you are passing really  is
+       a valid page address.
+
+
+
+Linux DDI                    $Date:$                      skel(9)

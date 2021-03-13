@@ -1,0 +1,41 @@
+IPTABLES-RESTORE(8)                           IPTABLES-RESTORE(8)
+
+
+
+NAME
+       iptables-restore - Restore IP Tables
+
+SYNOPSIS
+       iptables-restore [-c] [-n]
+
+DESCRIPTION
+       iptables-restore  is  used  to restore IP Tables from data
+       specified on STDIN. Use I/O redirection provided  by  your
+       shell to read from a file
+
+       -c, --counters
+              restore the values of all packet and byte counters
+
+       -n, --noflush
+
+       don't  flush  the  previous  contents of the table. If not
+       specified,
+              iptables-restore  flushes  (deletes)  all  previous
+              contents of the respective IP Table.
+
+BUGS
+       None known as of iptables-1.2.1 release
+
+AUTHOR
+       Harald Welte <laforge@gnumonks.org>
+
+SEE ALSO
+       iptables-restore(8), iptables(8)
+
+       The iptables-HOWTO, which details more iptables usage, the
+       NAT-HOWTO,  which  details NAT, and the netfilter-hacking-
+       HOWTO which details the internals.
+
+
+
+                           Jan 04, 2001       IPTABLES-RESTORE(8)

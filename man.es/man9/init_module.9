@@ -1,0 +1,60 @@
+init_module(9)           Kernel Functions          init_module(9)
+
+
+
+NAME
+       init_module, cleanup_module - module load and unload
+       functions
+
+SYNOPSIS
+       #include <linux/module.h>
+       #include <linux/modversions.h>
+
+       int init_module(void);
+       void cleanup_module(void);
+
+
+DESCRIPTION
+       These functions are not  part  of  the  kernel  but  entry
+       points  into  loadable modules. These are the only symbols
+       that must be externally defined in order to load a  module
+       into a running kernel.
+
+       When  a  module  is  loaded  into  a  running  kernel, the
+       init_module(9) function within that object file is  called
+       to  set up the module. The implementation of that function
+       initializes local features and uses functions such as reg­
+       ister_chrdev(9)  to  attach  itself to the kernel. It then
+       returns zero(0) if it succeeds. If there is a  problem  or
+       the  module  decides  that it cannot be loaded, it returns
+       instead an error  code  (i.e.   -ENODEV)  and  the  kernel
+       releases the module again.
+
+       Once loaded, the cleanup_module(9) function of a module is
+       used by the kernel to remove the module again. The  module
+       detaches itself from the kernel and returns.
+
+RETURN VALUE
+       The  init_module(9)  function  returns 0 on success, or an
+       error code <0 if the module cannot be initialized.
+
+AVAILABILITY
+       Linux 1.0+
+
+SEE ALSO
+       MOD_INC_USE_COUNT(9), insmod(1)
+
+       Also list some source files for the kernel that  implement
+       the functions of the page.
+
+AUTHOR
+       Stephen Williams <steve@icarus.com>
+
+BUGS
+       It  is entirely up to the driver to be sure it is detached
+       from the kernel when unloaded. If a module makes an  error
+       in this regard, bad things may happen.
+
+
+
+Linux DDI                    $Date:$               init_module(9)

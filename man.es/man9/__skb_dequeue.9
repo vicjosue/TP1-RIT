@@ -1,0 +1,57 @@
+SKB_DEQUEUE(9)         Networking Functions        SKB_DEQUEUE(9)
+
+
+
+NAME
+       __skb_dequeue, skb_dequeue - remove an sk_buff from the
+       head of a list
+
+SYNOPSIS
+       #include <linux/skbuff.h>
+
+       struct sk_buff *__skb_dequeue(struct sk_buff_head *list);
+
+       struct sk_buff *skb_dequeue(struct sk_buff_head *list);
+
+DESCRIPTION
+       The skb_dequeue function removes the head  element  of  an
+       sk_buff_head.   It  decrements  the list qlen pointer, and
+       cleanly detaches the head from the queue.   This  function
+       should  be  used instead of performing this task manually,
+       as it provides a clean, standardized way  of  manipulating
+       an  sk_buff_head,  and  provides  interrupt disabling (see
+       NOTES below.)
+
+RETURN VALUE
+       Returns a pointer to the head element of list, or NULL  if
+       list is empty.
+
+NOTES
+       It  is  important  to note the difference between not only
+       __skb_dequeue and skb_dequeue, but all  the  __skb_  func­
+       tions  and  their  skb_  counterparts.   Essentially,  the
+       __skb_ functions are non-atomic, and should only  be  used
+       with  interrupts  disabled.   As  a  convenience, the skb_
+       functions are provided, which perform interrupt disable  /
+       enable  wrapper  functionality  in  addition to performing
+       their specific tasks.
+
+AVAILABILITY
+       Linux 1.0+
+
+SEE ALSO
+       intro(9), skb_unlink(9), skb_insert(9), skb_queue_head(9),
+       skb_queue_tail(9)
+
+       /usr/src/linux/net/netlink.c
+       /usr/src/linux/net/ax25/af_ax25.c
+       /usr/src/linux/net/core/datagram.c
+       /usr/src/linux/net/ipv4/ipmr.c
+       /usr/src/linux/net/ipv4/tcp.c
+
+AUTHOR
+       Cyrus Durgin <cider@speakeasy.org>
+
+
+
+Linux DDI               November 24, 1997          SKB_DEQUEUE(9)

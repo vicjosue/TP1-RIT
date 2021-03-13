@@ -1,0 +1,58 @@
+APM(1)              Linux Programmer's Manual              APM(1)
+
+
+
+NAME
+       apm - query Advanced Power Management (APM) BIOS
+
+SYNOPSIS
+       apm [ -vVmsS ]
+
+DESCRIPTION
+       apm  reads  /proc/apm  and presents the output in a human-
+       readable format.  Since primarily battery status  informa­
+       tion  is  provided, this command is most useful on laptops
+       with a compliant APM BIOS.  apm also allows the machine to
+       be put into standby or suspend mode.
+
+OPTIONS
+       -V, --version
+              Print the apm program version and exit immediately.
+
+       -v, --verbose
+              Print information about the APM  BIOS  version  and
+              Linux APM driver version.
+
+       -m, --minutes
+              Print  total  minutes remaining instead of using an
+              hh:mm format.
+
+       -s, --suspend
+              Put the machine into suspend mode if possible.
+
+       -S, --standby
+              Put the machine into standby mode if possible.
+
+
+       BUGS   This program requires a post-1.3.57  kernel.   This
+              program  will  not  work with older kernels or with
+              the APM patches, since the format for /proc/apm has
+              changed radically.
+
+FILES
+       /proc/apm
+       linux/drivers/char/apm_bios.c
+
+AUTHOR
+       This  program  was written by Rik Faith (faith@cs.unc.edu)
+       and may be freely distributed under the terms of  the  GNU
+       General  Public  License.  There is ABSOLUTELY NO WARRANTY
+       for this program.  The current maintainer  is  Avery  Pen­
+       narun (apenwarr@worldvisions.ca).
+
+SEE ALSO
+       xapm(1), apmd(8)
+
+
+
+                           10 Jan 1996                     APM(1)

@@ -1,0 +1,122 @@
+MYSQL(1)                                                 MYSQL(1)
+
+
+
+NAME
+       mysql  -  text-based  client for mysqld, a SQL-based rela­
+       tional database daemon
+
+SYNOPSIS
+       mysql [-B|--batch] [-#|--debug= logfile] [-T|--debug-info]
+       [-e|--exec=  command] [-f|--force] [-?|--help] [-h|--host=
+       hostname] [-n|--unbuffered]  [-p[pwd]]  [--password=[pwd]]
+       [-P|--port=  pnum]  [-q|--quick]  [-r|--raw] [-s|--silent]
+       [-S|--socket=  snum]  [-u|--user=  uname]   [-v|--verbose]
+       [-V|--version] [-w|--wait]
+
+DESCRIPTION
+       The mysql program provides a curses-based interface to the
+       SQL-based database server daemon, mysqld(1).  Full  fuller
+       documentation,  refer to the HTML documents installed with
+       the package.
+
+OPTIONS
+       -B|--batch
+              Print results with a tab as separator, each row  on
+              a new line.
+
+       -#|--debug=logfile
+              Employ the specified debug log.
+
+       -T|--debug-info
+              Print debug information upon exiting.
+
+       -e | --exec=command
+              Execute  the specified command and quit (--batch is
+              implicit).
+
+       -f|--force
+              Continue even if the face of a SQL error.
+
+       -?|--help
+              Display a help message and exit.
+
+       -h|--host=hostname
+              Connect to the specified host.
+
+       -n|--unbuffered
+              Flush the buffer after each query.
+
+       -p|--password[=pwd]
+              Employ the specified password  when  connecting  to
+              the  database  server.   If  a password is not sup­
+              plied, it will be requested interactively.
+
+       -P|--port=pnum
+              Employ the specified port number for connecting  to
+              the database server.
+
+       -q|--quick
+              Do not cache the result; print it row by row.  This
+              may slow down the server  if  the  output  is  sus­
+              pended.
+
+       -r|--raw
+              Write   fields   without  conversion.   (used  with
+              --batch).
+
+       -s|--silent
+              Silent mode: reduce the amount of output.
+
+       -S|--socket=snum
+              Employ the specified socket file for connecting  to
+              the database server.
+
+       -u|--user=uname
+              Employ  the  specified  user name for logging in to
+              the server.
+
+       -v|--verbose
+              Verbose mode: write  more  Specifying  this  option
+              twice produces a tabular output format.
+
+       -V|--version
+              Print the mysql version number and exit.
+
+       -w|--wait
+              Wait and retry if the database server connection is
+              down.
+
+FILES
+       /depot/bin/mysql      executable
+
+       /depot/bin/mysqld     executable
+
+       /depot/bin/safe_mysqld
+                             executable shell script for starting
+                             mysqld safely
+
+       /site/var/mysql/data  location of database files
+
+EXAMPLE
+       You can also read a backup dump file back into MySQL with:
+
+       mysql  database < backup-file.sql
+
+SEE ALSO
+       isamchk (1), isamlog (1), mysqlaccess (1), mysqladmin (1),
+       mysqlbug  (1),  mysqld  (1), mysqldump (1), mysqlshow (1),
+       msql2mysql (1), perror (1), replace (1), safe_mysqld  (1),
+       which1 (1), zap (1),
+
+AUTHOR
+       Ver  6.3,  distribution  3.20.20  Michael (Monty) Widenius
+       (monty@tcx.se), TCX  Datakonsult  AB  (http://www.tcx.se).
+       This  software  comes with no warranty.  Manual page by R.
+       P. C. Rodgers, Lister Hill National Center for  Biomedical
+       Communication,   U.S.   National   Library   of   Medicine
+       (rodgers@nlm.nih.gov).
+
+
+
+                           13 June 1997                  MYSQL(1)

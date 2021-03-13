@@ -1,0 +1,41 @@
+fsinfo(3)                                               fsinfo(3)
+
+
+
+NAME
+       fsinfo -
+
+SYNOPSIS
+   Data Fields
+       const char * mntPoint
+       dev_t dev
+       int rdonly
+
+FIELD DOCUMENTATION
+   dev_t fsinfo::dev
+       devno for mount point.
+
+       Definition at line 14 of file fs.c.
+
+       Referenced by rpmGetFilesystemUsage.
+
+   const char* fsinfo::mntPoint
+       path to mount point.
+
+       Definition at line 13 of file fs.c.
+
+       Referenced by freeFilesystems, and getFilesystemList.
+
+   int fsinfo::rdonly
+       is mount point read only?
+
+       Definition at line 15 of file fs.c.
+
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002                  fsinfo(3)

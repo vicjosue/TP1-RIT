@@ -1,0 +1,867 @@
+lib/depends.c(3)                                 lib/depends.c(3)
+
+
+
+NAME
+       lib/depends.c -
+
+SYNOPSIS
+       #include 'system.h'
+       #include <rpmlib.h>
+       #include 'depends.h'
+       #include 'rpmdb.h'
+       #include 'debug.h'
+
+   Data Structures
+       struct badDeps_s
+       struct orderListIndex
+
+   Defines
+       #define DEPENDENCY_WHITEOUT
+
+   Typedefs
+       typedef int(* dbrecMatch_t )(Header h, const char
+           *reqName, const char *reqEVR, int reqFlags)
+
+   Functions
+       int headerNVR (Header h, const char **np, const char **vp,
+           const char **rp)
+       char * printDepend (const char *depend, const char *key,
+           const char *keyEVR, int keyFlags)
+           Return formatted dependency string.
+       void alFreeIndex (availableList al)
+           Destroy available item index.
+       void alCreate (availableList al)
+           Initialize available packckages, items, and
+           directories list.
+       void alFree (availableList al)
+           Free available packages, items, and directories
+           members.
+       int dirInfoCompare (const void *one, const void *two)
+           Compare two directory info entries by name
+           (qsort/bsearch).
+       availablePackage * alAddPackage (availableList al, Header
+           h, const void *key, FD_t fd, rpmRelocation *relocs)
+           Add package to available list.
+       int indexcmp (const void *one, const void *two)
+           Compare two available index entries by name
+           (qsort/bsearch).
+       void alMakeIndex (availableList al)
+           Generate index for available list.
+       void parseEVR (char *evr, const char **ep, const char
+           **vp, const char **rp)
+           Split EVR into epoch, version, and release components.
+       int rpmRangesOverlap (const char *AName, const char *AEVR,
+           int AFlags, const char *BName, const char *BEVR, int
+           BFlags)
+       int rangeMatchesDepFlags (Header h, const char *reqName,
+           const char *reqEVR, int reqFlags)
+       int headerMatchesDepFlags (Header h, const char *reqName,
+           const char *reqEVR, int reqFlags)
+       rpmTransactionSet rpmtransCreateSet (rpmdb rpmdb, const
+           char *rootDir)
+       int intcmp (const void *a, const void *b)
+           Compare removed package instances (qsort/bsearch).
+       int removePackage (rpmTransactionSet ts, int dboffset, int
+           depends)
+           Add removed package instance to ordered transaction
+           set.
+       int rpmtransAddPackage (rpmTransactionSet ts, Header h,
+           FD_t fd, const void *key, int upgrade, rpmRelocation
+           *relocs)
+       void rpmtransAvailablePackage (rpmTransactionSet ts,
+           Header h, const void *key)
+       int rpmtransRemovePackage (rpmTransactionSet ts, int
+           dboffset)
+       rpmTransactionSet rpmtransFree (rpmTransactionSet ts)
+       rpmDependencyConflict rpmdepFreeConflicts
+           (rpmDependencyConflict conflicts, int numConflicts)
+       availablePackage ** alAllFileSatisfiesDepend (const
+           availableList al, const char *keyType, const char
+           *fileName)
+           Check added package file lists for package(s) that
+           provide a file.
+       availablePackage ** alAllSatisfiesDepend (const
+           availableList al, const char *keyType, const char
+           *keyDepend, const char *keyName, const char *keyEVR,
+           int keyFlags)
+           Check added package file lists for package(s) that
+           have a provide.
+       availablePackage * alSatisfiesDepend (const availableList
+           al, const char *keyType, const char *keyDepend, const
+           char *keyName, const char *keyEVR, int keyFlags)
+           Check added package file lists for first package that
+           has a provide.
+       int unsatisfiedDepend (rpmTransactionSet ts, const char
+           *keyType, const char *keyDepend, const char *keyName,
+           const char *keyEVR, int keyFlags, struct
+           availablePackage ***suggestion)
+           Check key for an unsatisfied dependency.
+       int checkPackageDeps (rpmTransactionSet ts, problemsSet
+           psp, Header h, const char *keyName, uint_32 multiLib)
+           Check header requires/conflicts against against
+           installed+added packages.
+       int checkPackageSet (rpmTransactionSet ts, problemsSet
+           psp, const char *key, rpmdbMatchIterator mi)
+           Check dependency against installed packages.
+       int checkDependentPackages (rpmTransactionSet ts,
+           problemsSet psp, const char *key)
+           Erasing: check name/provides/filename key against
+           requiredby matches.
+       int checkDependentConflicts (rpmTransactionSet ts,
+           problemsSet psp, const char *key)
+           Adding: check name/provides key against conflicts
+           matches.
+       int ignoreDep (const struct availablePackage *p, const
+           struct availablePackage *q)
+       void markLoop (struct tsortInfo *tsi, struct
+           availablePackage *q)
+           Recursively mark all nodes with their predecessors.
+       const char *const identifyDepend (int_32 f)
+       const char * zapRelation (struct availablePackage *q,
+           struct availablePackage *p, int zap, int *nzaps)
+           Find (and eliminate co-requisites) 'q <- p' relation
+           in dependency loop.
+       int addRelation (const rpmTransactionSet ts, struct
+           availablePackage *p, unsigned char *selected, int j)
+           Record next 'q <- p' relation (i.e.
+       int orderListIndexCmp (const void *one, const void *two)
+           Compare ordered list entries by index (qsort/bsearch).
+       void addQ (struct availablePackage *p, struct
+           availablePackage **qp, struct availablePackage **rp)
+           Add element to list sorting by initial successor
+           count.
+       int rpmdepOrder (rpmTransactionSet ts)
+       int rpmdbCloseDBI (rpmdb db, int rpmtag)
+           Close a single database index.
+       int rpmdepCheck (rpmTransactionSet ts,
+           rpmDependencyConflict *conflicts, int *numConflicts)
+
+   Variables
+       int _depends_debug = 0
+       int _cacheDependsRC = 1
+       const char * rpmNAME = PACKAGE
+       const char * rpmEVR = VERSION
+       int rpmFLAGS = RPMSENSE_EQUAL
+       badDeps_s badDeps []
+
+DETAILED DESCRIPTION
+       Definition in file depends.c.
+
+DEFINE DOCUMENTATION
+   #define DEPENDENCY_WHITEOUT
+       Definition at line 1617 of file depends.c.
+
+TYPEDEF DOCUMENTATION
+   typedef int(* dbrecMatch_t)(Header h, const char *reqName,
+       const char * reqEVR, int reqFlags)
+       Definition at line 605 of file depends.c.
+
+FUNCTION DOCUMENTATION
+   void addQ (struct availablePackage * p, struct
+       availablePackage ** qp, struct availablePackage ** rp)
+       [static]
+       Add element to list sorting by initial successor count.
+
+       Parameters:
+
+       p      new element
+
+       Return values:
+
+       qp     address of first element
+
+       rp     address of last element
+
+       Definition at line 1844 of file depends.c.
+
+       References availablePackage::tsi, and tsortInfo::tsi_qcnt.
+
+       Referenced by rpmdepOrder.
+
+   int addRelation (const rpmTransactionSet ts, struct
+       availablePackage * p, unsigned char * selected, int j)
+       [inline, static]
+       Record next 'q <- p' relation (i.e.
+
+
+       Parameters:
+
+       ts     transaction set
+
+       p      predecessor (i.e. package that 'Requires: q')
+
+       selected
+              boolean package selected array
+
+       j      relation index
+
+       Returns:
+           0 always
+
+       Definition at line 1776 of file depends.c.
+
+       References alSatisfiesDepend, availablePackage::depth,
+       ignoreDep, availablePackage::tsi, tsortInfo::tsi_next,
+       tsortInfo::tsi_qcnt, tsortInfo::tsi_reqx, and xmalloc.
+
+       Referenced by rpmdepOrder.
+
+   struct availablePackage* alAddPackage (availableList al,
+       Header h, const void * key, FD_t fd, rpmRelocation *
+       relocs) [static]
+       Add package to available list.
+
+       Parameters:
+
+       al     available list
+
+       h      package header
+
+       key    package private data
+
+       fd     package file handle
+
+       relocs package file relocations
+
+       Returns:
+           available package pointer
+
+       Definition at line 240 of file depends.c.
+
+       References alFreeIndex, alloca,
+       availablePackage::baseNames, availablePackage::depth,
+       dirInfoCompare, dirInfo_s::dirName, dirInfo_s::dirNameLen,
+       availablePackage::epoch, availablePackage::fd, fdLink,
+       availablePackage::filesCount, availablePackage::h,
+       headerLink, headerNVR, HFD_t, HGE_t, int_32,
+       availablePackage::key, availablePackage::multiLib,
+       availablePackage::name, rpmRelocation_s::newPath,
+       availablePackage::npreds, rpmRelocation_s::oldPath,
+       availablePackage::provideFlags,
+       availablePackage::provides,
+       availablePackage::providesCount,
+       availablePackage::providesEVR, availablePackage::release,
+       availablePackage::relocs, availablePackage::requireFlags,
+       availablePackage::requires,
+       availablePackage::requiresCount,
+       availablePackage::requiresEVR, RPMTAG_BASENAMES,
+       RPMTAG_DIRINDEXES, RPMTAG_DIRNAMES, RPMTAG_EPOCH,
+       RPMTAG_FILEFLAGS, RPMTAG_MULTILIBS, RPMTAG_PROVIDEFLAGS,
+       RPMTAG_PROVIDENAME, RPMTAG_PROVIDEVERSION,
+       RPMTAG_REQUIREFLAGS, RPMTAG_REQUIRENAME,
+       RPMTAG_REQUIREVERSION, rpmTagType, rpmVersionCompare,
+       availablePackage::tsi, uint_32, availablePackage::version,
+       xmalloc, xrealloc, and xstrdup.
+
+       Referenced by rpmtransAddPackage, and
+       rpmtransAvailablePackage.
+
+   struct availablePackage** alAllFileSatisfiesDepend (const
+       availableList al, const char * keyType, const char *
+       fileName) [static]
+       Check added package file lists for package(s) that provide
+       a file.
+
+       Parameters:
+
+       al     available list
+
+       keyType
+              type of dependency
+
+       fileName
+              file name to search for
+
+       Returns:
+           available package pointer
+
+       Definition at line 962 of file depends.c.
+
+       References _, _free, dirInfoCompare, dirInfo_s::dirName,
+       dirInfo_s::dirNameLen, isFileMULTILIB,
+       availablePackage::multiLib, xrealloc, and xstrdup.
+
+       Referenced by alAllSatisfiesDepend.
+
+   struct availablePackage** alAllSatisfiesDepend (const
+       availableList al, const char * keyType, const char *
+       keyDepend, const char * keyName, const char * keyEVR, int
+       keyFlags) [static]
+       Check added package file lists for package(s) that have a
+       provide.
+
+       Parameters:
+
+       al     available list
+
+       keyType
+              type of dependency
+
+       keyDepend
+              dependency string representation
+
+       keyName
+              dependency name string
+
+       keyEVR dependency [epoch:]version[-release] string
+
+       keyFlags
+              dependency logical range qualifiers
+
+       Returns:
+           available package pointer
+
+       Definition at line 1077 of file depends.c.
+
+       References _, alAllFileSatisfiesDepend,
+       availableIndexEntry::entry, availableIndexEntry::entryIx,
+       availableIndexEntry::entryLen, indexcmp,
+       availableIndexEntry::package,
+       availablePackage::provideFlags,
+       availablePackage::provides, availablePackage::providesEVR,
+       rpmRangesOverlap, availableIndexEntry::type, and xrealloc.
+
+       Referenced by alSatisfiesDepend, and unsatisfiedDepend.
+
+   void alCreate (availableList al) [static]
+       Initialize available packckages, items, and directories
+       list.
+
+       Parameters:
+
+       al     available list
+
+       Definition at line 143 of file depends.c.
+
+       References xcalloc.
+
+       Referenced by rpmtransCreateSet.
+
+   void alFree (availableList al) [static]
+       Free available packages, items, and directories members.
+
+       Parameters:
+
+       al     available list
+
+       Definition at line 161 of file depends.c.
+
+       References _free, alFreeIndex,
+       availablePackage::baseNames, availablePackage::fd, fdFree,
+       availablePackage::h, headerFree, HFD_t,
+       availablePackage::provides, availablePackage::providesEVR,
+       availablePackage::relocs, availablePackage::requires,
+       availablePackage::requiresEVR, availablePackage::tsi, and
+       tsortInfo::tsi_next.
+
+       Referenced by rpmtransFree.
+
+   void alFreeIndex (availableList al) [static]
+       Destroy available item index.
+
+       Parameters:
+
+       al     available list
+
+       Definition at line 130 of file depends.c.
+
+       References _free.
+
+       Referenced by alAddPackage, and alFree.
+
+   void alMakeIndex (availableList al) [static]
+       Generate index for available list.
+
+       Parameters:
+
+       al     available list
+
+       Definition at line 443 of file depends.c.
+
+       References availableIndexEntry::entry,
+       availableIndexEntry::entryIx,
+       availableIndexEntry::entryLen, availableIndex::index,
+       indexcmp, isDependsMULTILIB, availablePackage::multiLib,
+       availableIndexEntry::package,
+       availablePackage::provideFlags,
+       availablePackage::provides,
+       availablePackage::providesCount, availableIndex::size,
+       availableIndexEntry::type, and xcalloc.
+
+       Referenced by rpmdepCheck, and rpmdepOrder.
+
+   struct availablePackage* alSatisfiesDepend (const
+       availableList al, const char * keyType, const char *
+       keyDepend, const char * keyName, const char * keyEVR, int
+       keyFlags) [inline, static]
+       Check added package file lists for first package that has
+       a provide.
+
+       Todo:
+           Eliminate.
+
+       Parameters:
+
+       al     available list
+
+       keyType
+              type of dependency
+
+       keyDepend
+              dependency string representation
+
+       keyName
+              dependency name string
+
+       keyEVR dependency [epoch:]version[-release] string
+
+       keyFlags
+              dependency logical range qualifiers
+
+       Returns:
+           available package pointer
+
+       Definition at line 1158 of file depends.c.
+
+       References _free, and alAllSatisfiesDepend.
+
+       Referenced by addRelation, and unsatisfiedDepend.
+
+   int checkDependentConflicts (rpmTransactionSet ts, problemsSet
+       psp, const char * key) [static]
+       Adding: check name/provides key against conflicts matches.
+
+       Parameters:
+
+       ts     transaction set
+
+       psp    dependency problems
+
+       key    conflicts name
+
+       Returns:
+           0 no problems found
+
+       Definition at line 1598 of file depends.c.
+
+       References checkPackageSet, rpmdbInitIterator, and
+       RPMTAG_CONFLICTNAME.
+
+       Referenced by rpmdepCheck.
+
+   int checkDependentPackages (rpmTransactionSet ts, problemsSet
+       psp, const char * key) [static]
+       Erasing: check name/provides/filename key against
+       requiredby matches.
+
+       Parameters:
+
+       ts     transaction set
+
+       psp    dependency problems
+
+       key    requires name
+
+       Returns:
+           0 no problems found
+
+       Definition at line 1582 of file depends.c.
+
+       References checkPackageSet, rpmdbInitIterator, and
+       RPMTAG_REQUIRENAME.
+
+       Referenced by rpmdepCheck.
+
+   int checkPackageDeps (rpmTransactionSet ts, problemsSet psp,
+       Header h, const char * keyName, uint_32 multiLib) [static]
+       Check header requires/conflicts against against
+       installed+added packages.
+
+       Parameters:
+
+       ts     transaction set
+
+       psp    dependency problems
+
+       h      header to check
+
+       keyName
+              dependency name
+
+       multiLib
+              skip multilib colored dependencies?
+
+       Returns:
+           0 no problems found
+
+       Definition at line 1370 of file depends.c.
+
+       References _, _free, rpmDependencyConflict_s::byHeader,
+       rpmDependencyConflict_s::byName,
+       rpmDependencyConflict_s::byRelease,
+       rpmDependencyConflict_s::byVersion, headerLink, headerNVR,
+       HFD_t, HGE_t, int_32, isDependsMULTILIB,
+       availablePackage::key,
+       rpmDependencyConflict_s::needsFlags,
+       rpmDependencyConflict_s::needsName,
+       rpmDependencyConflict_s::needsVersion, printDepend,
+       RPM_STRING_ARRAY_TYPE, RPMTAG_CONFLICTFLAGS,
+       RPMTAG_CONFLICTNAME, RPMTAG_CONFLICTVERSION,
+       RPMTAG_REQUIREFLAGS, RPMTAG_REQUIRENAME,
+       RPMTAG_REQUIREVERSION, rpmTagType,
+       rpmDependencyConflict_s::sense,
+       rpmDependencyConflict_s::suggestedPackages, uint_32,
+       unsatisfiedDepend, xmalloc, xrealloc, and xstrdup.
+
+       Referenced by checkPackageSet, and rpmdepCheck.
+
+   int checkPackageSet (rpmTransactionSet ts, problemsSet psp,
+       const char * key, rpmdbMatchIterator mi) [static]
+       Check dependency against installed packages.
+
+       Adding: check name/provides key against each conflict
+       match, Erasing: check name/provides/filename key against
+       each requiredby match.
+
+       Parameters:
+
+       ts     transaction set
+
+       psp    dependency problems
+
+       key    dependency name
+
+       mi     rpm database iterator
+
+       Returns:
+           0 no problems found
+
+       Definition at line 1555 of file depends.c.
+
+       References checkPackageDeps, rpmdbFreeIterator,
+       rpmdbNextIterator, and rpmdbPruneIterator.
+
+       Referenced by checkDependentConflicts, and
+       checkDependentPackages.
+
+   int dirInfoCompare (const void * one, const void * two)
+       [static]
+       Compare two directory info entries by name
+       (qsort/bsearch).
+
+       Parameters:
+
+       one    1st directory info
+
+       two    2nd directory info
+
+       Returns:
+           result of comparison
+
+       Definition at line 217 of file depends.c.
+
+       References dirInfo_s::dirName, and dirInfo_s::dirNameLen.
+
+       Referenced by alAddPackage, and alAllFileSatisfiesDepend.
+
+   const char* const identifyDepend (int_32 f) [inline, static]
+       Definition at line 1686 of file depends.c.
+
+       References _notpre, int_32, isLegacyPreReq,
+       RPMSENSE_FIND_REQUIRES, RPMSENSE_SCRIPT_POST,
+       RPMSENSE_SCRIPT_POSTUN, RPMSENSE_SCRIPT_PRE,
+       RPMSENSE_SCRIPT_PREUN, and RPMSENSE_SCRIPT_VERIFY.
+
+       Referenced by zapRelation.
+
+   int ignoreDep (const struct availablePackage * p, const struct
+       availablePackage * q) [static]
+       Definition at line 1649 of file depends.c.
+
+       References badDeps, badDeps_s::pname, and
+       badDeps_s::qname.
+
+       Referenced by addRelation.
+
+   int indexcmp (const void * one, const void * two) [static]
+       Compare two available index entries by name
+       (qsort/bsearch).
+
+       Parameters:
+
+       one    1st available index entry
+
+       two    2nd available index entry
+
+       Returns:
+           result of comparison
+
+       Definition at line 427 of file depends.c.
+
+       References availableIndexEntry::entry, and
+       availableIndexEntry::entryLen.
+
+       Referenced by alAllSatisfiesDepend, and alMakeIndex.
+
+   int intcmp (const void * a, const void * b) [static]
+       Compare removed package instances (qsort/bsearch).
+
+       Parameters:
+
+       a      1st instance address
+
+       b      2nd instance address
+
+       Returns:
+           result of comparison
+
+       Definition at line 747 of file depends.c.
+
+       Referenced by removePackage.
+
+   void markLoop (struct tsortInfo * tsi, struct availablePackage
+       * q) [static]
+       Recursively mark all nodes with their predecessors.
+
+       Parameters:
+
+       tsi    successor chain
+
+       q      predecessor
+
+       Definition at line 1669 of file depends.c.
+
+       References availablePackage::tsi, tsortInfo::tsi_next, and
+       tsortInfo::tsi_pkg.
+
+       Referenced by rpmdepOrder.
+
+   int orderListIndexCmp (const void * one, const void * two)
+       [static]
+       Compare ordered list entries by index (qsort/bsearch).
+
+       Parameters:
+
+       a      1st ordered list entry
+
+       b      2nd ordered list entry
+
+       Returns:
+           result of comparison
+
+       Definition at line 1831 of file depends.c.
+
+       Referenced by rpmdepOrder.
+
+   void parseEVR (char * evr, const char ** ep, const char ** vp,
+       const char ** rp) [static]
+       Split EVR into epoch, version, and release components.
+
+       Parameters:
+
+       evr    [epoch:]version[-release] string
+
+       Return values:
+
+       ep     pointer to epoch
+
+       vp     pointer to version
+
+       rp     pointer to release
+
+       Definition at line 488 of file depends.c.
+
+       References xisdigit.
+
+       Referenced by rpmRangesOverlap.
+
+   char* printDepend (const char * depend, const char * key,
+       const char * keyEVR, int keyFlags) [static]
+       Return formatted dependency string.
+
+       Parameters:
+
+       depend type of dependency ('R' == Requires, 'C' ==
+              Conflcts)
+
+       key    dependency name string
+
+       keyEVR dependency [epoch:]version[-release] string
+
+       keyFlags
+              dependency logical range qualifiers
+
+       Returns:
+           formatted dependency (malloc'ed)
+
+       Definition at line 61 of file depends.c.
+
+       References RPMSENSE_EQUAL, RPMSENSE_GREATER,
+       RPMSENSE_LESS, RPMSENSE_SENSEMASK, and xmalloc.
+
+       Referenced by checkPackageDeps, rpmRangesOverlap, and
+       zapRelation.
+
+   int rangeMatchesDepFlags (Header h, const char * reqName,
+       const char * reqEVR, int reqFlags) [static]
+       Definition at line 608 of file depends.c.
+
+       References HFD_t, HGE_t, int_32, rpmRangesOverlap,
+       RPMSENSE_SENSEMASK, RPMTAG_PROVIDEFLAGS,
+       RPMTAG_PROVIDENAME, RPMTAG_PROVIDEVERSION, and rpmTagType.
+
+       Referenced by unsatisfiedDepend.
+
+   int removePackage (rpmTransactionSet ts, int dboffset, int
+       depends) [static]
+       Add removed package instance to ordered transaction set.
+
+       Parameters:
+
+       ts     transaction set
+
+       dboffset
+              rpm database instance
+
+       depends
+              installed package of pair (or -1 on erase)
+
+       Returns:
+           0 on success
+
+       Definition at line 762 of file depends.c.
+
+       References intcmp, and xrealloc.
+
+       Referenced by rpmtransAddPackage, and
+       rpmtransRemovePackage.
+
+   int rpmdbCloseDBI (rpmdb db, int rpmtag) [static]
+       Close a single database index.
+
+       Parameters:
+
+       db     rpm database
+
+       rpmtag rpm tag
+
+       Returns:
+           0 on success
+
+       Definition at line 2153 of file depends.c.
+
+       References dbiClose.
+
+       Referenced by rpmdepCheck.
+
+   int unsatisfiedDepend (rpmTransactionSet ts, const char *
+       keyType, const char * keyDepend, const char * keyName,
+       const char * keyEVR, int keyFlags, struct availablePackage
+       *** suggestion) [static]
+       Check key for an unsatisfied dependency.
+
+       Todo:
+           Eliminate rpmrc provides.
+
+       Parameters:
+
+       al     available list
+
+       keyType
+              type of dependency
+
+       keyDepend
+              dependency string representation
+
+       keyName
+              dependency name string
+
+       keyEVR dependency [epoch:]version[-release] string
+
+       keyFlags
+              dependency logical range qualifiers
+
+       Return values:
+
+       suggestion
+              possible package(s) to resolve dependency
+
+       Returns:
+           0 if satisfied, 1 if not satisfied, 2 if error
+
+       Definition at line 1187 of file depends.c.
+
+       References _, _cacheDependsRC, alAllSatisfiesDepend,
+       alSatisfiesDepend, DBC, DBI_WRITECURSOR, dbiCclose,
+       dbiCopen, dbiGet, dbiOpen, dbiPut, rangeMatchesDepFlags,
+       rpmCheckRpmlibProvides, rpmdbFreeIterator, RPMDBI_DEPENDS,
+       rpmdbInitIterator, rpmdbNextIterator, rpmdbPruneIterator,
+       rpmGetVar, RPMSENSE_SENSEMASK, RPMTAG_BASENAMES,
+       RPMTAG_NAME, RPMTAG_PROVIDENAME, RPMVAR_PROVIDES, and
+       xisspace.
+
+       Referenced by checkPackageDeps.
+
+   const char* zapRelation (struct availablePackage * q, struct
+       availablePackage * p, int zap, int * nzaps) [static]
+       Find (and eliminate co-requisites) 'q <- p' relation in
+       dependency loop.
+
+       Search all successors of q for instance of p. Format the
+       specific relation, (e.g. p contains 'Requires: q'). Unlink
+       and free co-requisite (i.e. pure Requires: dependencies)
+       successor node(s).
+
+       Parameters:
+
+       q      sucessor (i.e. package required by p)
+
+       p      predecessor (i.e. package that 'Requires: q')
+
+       zap    max. no. of co-requisites to remove (-1 is all)?
+
+       Return values:
+
+       nzaps  address of no. of relations removed
+
+       Returns:
+           (possibly NULL) formatted 'q <- p' releation
+           (malloc'ed)
+
+       Definition at line 1718 of file depends.c.
+
+       References _, _free, identifyDepend, printDepend,
+       RPMSENSE_PREREQ, tsortInfo::tsi_next, and
+       tsortInfo::tsi_reqx.
+
+       Referenced by rpmdepOrder.
+
+VARIABLE DOCUMENTATION
+   int _cacheDependsRC = 1 [static]
+       Definition at line 28 of file depends.c.
+
+       Referenced by unsatisfiedDepend.
+
+   int _depends_debug = 0 [static]
+       Definition at line 6 of file depends.c.
+
+   struct badDeps_s  badDeps[] [static]
+       Referenced by ignoreDep.
+
+   const char* rpmEVR = VERSION
+       Definition at line 525 of file depends.c.
+
+   int rpmFLAGS = RPMSENSE_EQUAL
+       Definition at line 526 of file depends.c.
+
+   const char* rpmNAME = PACKAGE
+       Definition at line 524 of file depends.c.
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002           lib/depends.c(3)

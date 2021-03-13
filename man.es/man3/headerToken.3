@@ -1,0 +1,90 @@
+headerToken(3)                                     headerToken(3)
+
+
+
+NAME
+       headerToken -
+
+SYNOPSIS
+       #include <header_internal.h>
+
+
+   Data Fields
+       HV_s hv
+       void * blob
+       indexEntry index
+       int indexUsed
+       int indexAlloced
+       int flags
+       int nrefs
+
+DETAILED DESCRIPTION
+       The Header data structure.
+
+       Definition at line 54 of file header_internal.h.
+
+FIELD DOCUMENTATION
+   void* headerToken::blob
+       Header region blob.
+
+       Definition at line 56 of file header_internal.h.
+
+       Referenced by headerFree, headerLoad, and headerNew.
+
+   int headerToken::flags
+       Definition at line 60 of file header_internal.h.
+
+       Referenced by headerAddEntry, headerAllocated,
+       headerCopyLoad, headerFree, headerLoad, headerNew,
+       headerRead, headerReload, headerSizeof, and headerSort.
+
+   struct HV_s headerToken::hv
+       Header public methods.
+
+       Definition at line 55 of file header_internal.h.
+
+       Referenced by headerLoad, and headerNew.
+
+   indexEntry headerToken::index
+       Array of tags.
+
+       Definition at line 57 of file header_internal.h.
+
+       Referenced by headerAddEntry, headerDump, headerFree,
+       headerLoad, headerModifyEntry, headerNew,
+       headerNextIterator, headerReload, headerRemoveEntry,
+       headerSizeof, headerSort, and headerUnsort.
+
+   int headerToken::indexAlloced
+       Allocated size of tag array.
+
+       Definition at line 59 of file header_internal.h.
+
+       Referenced by headerAddEntry, headerLoad, and headerNew.
+
+   int headerToken::indexUsed
+       Current size of tag array.
+
+       Definition at line 58 of file header_internal.h.
+
+       Referenced by headerAddEntry, headerDump, headerFree,
+       headerLoad, headerNew, headerNextIterator,
+       headerRemoveEntry, headerSizeof, headerSort, and
+       headerUnsort.
+
+   int headerToken::nrefs
+       Reference count.
+
+       Definition at line 64 of file header_internal.h.
+
+       Referenced by headerFree, headerLink, headerLoad, and
+       headerNew.
+
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002             headerToken(3)

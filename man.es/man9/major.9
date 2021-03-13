@@ -1,0 +1,55 @@
+MAJOR(9)                 Kernel Functions                MAJOR(9)
+
+
+
+NAME
+       MAJOR, MINOR, MKDEV - macros to manipulate device
+       major/minor numbers
+
+SYNOPSIS
+       #include <linux/fs.h>
+
+       #define MAJOR(dev)
+       #define MINOR(dev)
+       #define MKDEV(major, minor)
+
+
+DESCRIPTION
+       The MAJOR and MINOR macros extract from a  device  id  (of
+       type  dev_t)  the major and minor numbers respectively. It
+       is the  combined  device  number  that  is  found  in  the
+       struct~file structure.
+
+       The  MKDEV  macro  assembles a device number from the sup­
+       plied major and minor numbers.
+
+RETURN VALUE
+       Describe the return values.  Enumerate  all  the  distinct
+       values and all the ranges.
+
+AVAILABILITY
+       Linux 0.0+
+
+       In  later  kernels (Linux 2.1 and later) there is movement
+       towards using 64bit device numbers. Although it is  gener­
+       ally a good idea to not presume to know how device numbers
+       are constructed, it is during this  period  of  transition
+       fundamentally  important that you ONLY use these functions
+       to manipulate device numbers.
+
+SEE ALSO
+       mknod(1)
+
+       Also list some source files for the kernel that  implement
+       the functions of the page.
+
+AUTHOR
+       Stephen Williams <steve@icarus.com>
+
+BUGS
+       These  are macros, so parameters may be evaluated multiple
+       times.
+
+
+
+Linux DDI                    $Date:$                     MAJOR(9)

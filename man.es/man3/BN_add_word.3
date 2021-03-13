@@ -1,0 +1,69 @@
+BN_add_word(3)               OpenSSL               BN_add_word(3)
+
+
+
+NNAAMMEE
+       BN_add_word, BN_sub_word, BN_mul_word, BN_div_word,
+       BN_mod_word - arithmetic functions on BIGNUMs with
+       integers
+
+SSYYNNOOPPSSIISS
+        #include <openssl/bn.h>
+
+        int BN_add_word(BIGNUM *a, BN_ULONG w);
+
+        int BN_sub_word(BIGNUM *a, BN_ULONG w);
+
+        int BN_mul_word(BIGNUM *a, BN_ULONG w);
+
+        BN_ULONG BN_div_word(BIGNUM *a, BN_ULONG w);
+
+        BN_ULONG BN_mod_word(const BIGNUM *a, BN_ULONG w);
+
+
+DDEESSCCRRIIPPTTIIOONN
+       These functions perform arithmetic operations on BIGNUMs
+       with unsigned integers. They are much more efficient than
+       the normal BIGNUM arithmetic operations.
+
+       BN_add_word() adds ww to aa (a+=w).
+
+       BN_sub_word() subtracts ww from aa (a-=w).
+
+       BN_mul_word() multiplies aa and ww (a*=b).
+
+       BN_div_word() divides aa by ww (a/=w) and returns the
+       remainder.
+
+       BN_mod_word() returns the remainder of aa divided by ww
+       (a%m).
+
+       For BN_div_word() and BN_mod_word(), ww must not be 0.
+
+RREETTUURRNN VVAALLUUEESS
+       BN_add_word(), BN_sub_word() and BN_mul_word() return 1
+       for success, 0 on error. The error codes can be obtained
+       by ERR_get_error(3).
+
+       BN_mod_word() and BN_div_word() return aa%ww.
+
+SSEEEE AALLSSOO
+       bn(3), err(3), BN_add(3)
+
+HHIISSTTOORRYY
+       BN_add_word() and BN_mod_word() are available in all
+       versions of SSLeay and OpenSSL. BN_div_word() was added in
+       SSLeay 0.8, and BN_sub_word() and BN_mul_word() in SSLeay
+       0.9.0.
+
+
+
+
+
+
+
+
+
+
+
+24/Feb/2000                   0.9.6c               BN_add_word(3)

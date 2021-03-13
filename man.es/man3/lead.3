@@ -1,0 +1,59 @@
+LEAD.(3)                                                 LEAD.(3)
+
+
+
+NAME
+       LEAD. -
+
+   Files
+       file rpmlead.c
+       file rpmlead.h
+           Routines to read and write an rpm lead structure for a
+           a package.
+
+
+       file rpmlib.h
+
+   Functions
+       int writeLead (FD_t fd, struct rpmlead *lead)
+       int readLead (FD_t fd, struct rpmlead *lead)
+
+FUNCTION DOCUMENTATION
+   int readLead (FD_t fd, struct rpmlead * lead)
+       Read lead from file handle.
+
+       Parameters:
+
+       fd     file handle
+
+       Return values:
+
+       lead   data address
+
+       Returns:
+           0 on success, 1 on error
+
+       Definition at line 45 of file rpmlead.c.
+
+       Referenced by main, readPackageHeaders, rpmCheckSig, and
+       rpmReSign.
+
+   int writeLead (FD_t fd, struct rpmlead * lead)
+       Write lead to file handle.
+
+       Parameters:
+
+       fd     file handle
+
+       lead   data address
+
+       Returns:
+           0 on success, 1 on error
+
+       Definition at line 22 of file rpmlead.c.
+
+       Referenced by main, rpmReSign, and writeRPM.
+
+
+
+rpm                        13 Mar 2002                   LEAD.(3)

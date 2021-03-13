@@ -1,0 +1,65 @@
+_dbiIndexItem(3)                                 _dbiIndexItem(3)
+
+
+
+NAME
+       _dbiIndexItem -
+
+SYNOPSIS
+       #include <rpmdb.h>
+
+
+   Data Fields
+       unsigned int hdrNum
+       unsigned int tagNum
+       unsigned int fpNum
+       unsigned int dbNum
+
+DETAILED DESCRIPTION
+       A single item from an index database (i.e. the 'data
+       returned'). Note: In rpm-3.0.4 and earlier, this structure
+       was passed by value, and was identical to the 'data saved'
+       structure below.
+
+       Definition at line 27 of file rpmdb.h.
+
+FIELD DOCUMENTATION
+   unsigned int _dbiIndexItem::dbNum
+       database index
+
+       Definition at line 31 of file rpmdb.h.
+
+       Referenced by dbiSearch.
+
+   unsigned int _dbiIndexItem::fpNum
+       finger print index
+
+       Definition at line 30 of file rpmdb.h.
+
+       Referenced by dbiSearch, rpmdbFindFpList, and
+       rpmdbGrowIterator.
+
+   unsigned int _dbiIndexItem::hdrNum
+       header instance in db
+
+       Definition at line 28 of file rpmdb.h.
+
+       Referenced by dbiIndexNewItem, dbiIndexRecordOffset,
+       dbiSearch, rpmdbFindByFile, and rpmdbFindFpList.
+
+   unsigned int _dbiIndexItem::tagNum
+       tag index in header
+
+       Definition at line 29 of file rpmdb.h.
+
+       Referenced by dbiIndexNewItem, dbiIndexRecordFileNumber,
+       dbiSearch, rpmdbAdd, rpmdbFindByFile, and rpmdbFindFpList.
+
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002           _dbiIndexItem(3)

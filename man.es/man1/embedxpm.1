@@ -1,0 +1,55 @@
+EMBEDXPM(1)    User Contributed Perl Documentation    EMBEDXPM(1)
+
+
+
+NNAAMMEE
+       embedxpm - embed xpm pictures into perl source
+
+SSYYNNOOPPSSIISS
+        embedxpm picture.xpm perl_source picture_name
+
+
+DDEESSCCRRIIPPTTIIOONN
+       embedxpm can be used to embed xpm pictures directly into a
+       perl program. To do this, your program source has to con­
+       tain some markers (in the form of comments) that describe
+       the position where the picture should be inserted.  To
+       only insert the xpm data, use this form:
+
+        #%XPM:<name of xpm>%
+        <your xpm data goes here>
+        #%XPM%<what to attach to the end of the data>
+
+       Here is an example (taken from the Gimp/PDB program):
+
+        C<# create the logo pixmap for the given widget
+        sub create_logo($) {
+           new Gtk::Pixmap(Gtk::Gdk::Pixmap->create_from_xpm_d(
+              $_[0]->window,
+              $_[0]->style->black,
+              #%XPM:logo%
+              'xpm data', 'xpm data...',...
+              #%XPM%
+           ))
+        }>
+
+       To insert the xpm with the name example.xpm into this
+       source you would have to use the following commandline:
+
+        embedxpm example.xpm source.pl logo
+
+       WARNING: embedxpm happily overwrites your source, without
+       leaving a backup-copy around(!). If anything goes wrong
+       (for example when you left out the end comment) your
+       source may be lost, so better make a backup before. I am
+       not responsible for your data-loss!
+
+SSWWIITTCCHHEESS
+       None ;)
+
+AAUUTTHHOORR
+       Marc Lehmann <pcg@goof.com>
+
+
+
+2000-12-20                 perl v5.6.1                EMBEDXPM(1)

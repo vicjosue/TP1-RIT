@@ -1,0 +1,85 @@
+build/names.c(3)                                 build/names.c(3)
+
+
+
+NAME
+       build/names.c - Simple user/group name/id cache (plus
+       hostname and buildtime).
+
+SYNOPSIS
+       #include 'system.h'
+       #include 'rpmbuild.h'
+       #include 'debug.h'
+
+   Typedefs
+       typedef const char * ugstr_t
+
+   Functions
+       void freeNames (void)
+       const char * getUname (uid_t uid)
+       const char * getUnameS (const char *uname)
+       uid_t getUidS (const char *uname)
+       const char * getGname (gid_t gid)
+       const char * getGnameS (const char *gname)
+       gid_t getGidS (const char *gname)
+       int_32 *const getBuildTime (void)
+       const char *const buildHost (void)
+
+   Variables
+       uid_t uids [1024]
+       ugstr_t unames [1024]
+       int uid_used = 0
+       gid_t gids [1024]
+       ugstr_t gnames [1024]
+       int gid_used = 0
+
+DETAILED DESCRIPTION
+       Simple user/group name/id cache (plus hostname and
+       buildtime).
+
+
+
+       Definition in file names.c.
+
+TYPEDEF DOCUMENTATION
+   typedef const char* ugstr_t
+       Definition at line 12 of file names.c.
+
+VARIABLE DOCUMENTATION
+   int gid_used = 0 [static]
+       Definition at line 20 of file names.c.
+
+       Referenced by freeNames, getGidS, getGname, and getGnameS.
+
+   gid_t gids[1024] [static]
+       Definition at line 18 of file names.c.
+
+       Referenced by getGidS, getGname, and getGnameS.
+
+   ugstr_t gnames[1024] [static]
+       Definition at line 19 of file names.c.
+
+       Referenced by freeNames, getGidS, getGname, and getGnameS.
+
+   int uid_used = 0 [static]
+       Definition at line 16 of file names.c.
+
+       Referenced by freeNames, getUidS, getUname, and getUnameS.
+
+   uid_t uids[1024] [static]
+       Definition at line 14 of file names.c.
+
+       Referenced by getUidS, getUname, and getUnameS.
+
+   ugstr_t unames[1024] [static]
+       Definition at line 15 of file names.c.
+
+       Referenced by freeNames, getUidS, getUname, and getUnameS.
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002           build/names.c(3)

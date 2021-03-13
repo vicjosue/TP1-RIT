@@ -1,0 +1,34 @@
+build/reqprov.c(3)                             build/reqprov.c(3)
+
+
+
+NAME
+       build/reqprov.c - Add dependency tags to package
+       header(s).
+
+SYNOPSIS
+       #include 'system.h'
+       #include 'rpmbuild.h'
+       #include 'debug.h'
+
+   Functions
+       int addReqProv (Spec spec, Header h, rpmsenseFlags
+           depFlags, const char *depName, const char *depEVR, int
+           index)
+       int rpmlibNeedsFeature (Header h, const char *feature,
+           const char *featureEVR)
+
+DETAILED DESCRIPTION
+       Add dependency tags to package header(s).
+
+
+
+       Definition in file reqprov.c.
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002         build/reqprov.c(3)

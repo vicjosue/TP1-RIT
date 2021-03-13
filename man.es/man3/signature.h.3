@@ -1,0 +1,69 @@
+lib/signature.h(3)                             lib/signature.h(3)
+
+
+
+NAME
+       lib/signature.h - Generate and verify signatures.
+
+SYNOPSIS
+       #include <header.h>
+
+   Defines
+       #define RPMLOOKUPSIG_QUERY   0
+       #define RPMLOOKUPSIG_DISABLE   1
+       #define RPMLOOKUPSIG_ENABLE   2
+
+   Typedefs
+       typedef enum sigType_e sigType
+       typedef enum pgpVersion_e pgpVersion
+
+   Enumerations
+       enum sigType_e { RPMSIGTYPE_NONE =  0,
+           RPMSIGTYPE_PGP262_1024 =  1, RPMSIGTYPE_BAD =  2,
+           RPMSIGTYPE_MD5 =  3, RPMSIGTYPE_MD5_PGP =  4,
+           RPMSIGTYPE_HEADERSIG =  5, RPMSIGTYPE_DISABLE =  6 }
+       enum pgpVersion_e { PGP_NOTDETECTED =  -1, PGP_UNKNOWN =
+           0, PGP_2 =  2, PGP_5 =  5 }
+
+   Functions
+       Header rpmNewSignature (void)
+       rpmRC rpmReadSignature (FD_t fd, Header *headerp, sigType
+           sig_type)
+       int rpmWriteSignature (FD_t fd, Header h)
+       int rpmAddSignature (Header h, const char *file, int_32
+           sigTag, const char *passPhrase)
+       int rpmLookupSignatureType (int action)
+       char * rpmGetPassPhrase (const char *prompt, const int
+           sigTag)
+       const char * rpmDetectPGPVersion (pgpVersion *pgpVer)
+
+DETAILED DESCRIPTION
+       Generate and verify signatures.
+
+
+
+       Definition in file signature.h.
+
+DEFINE DOCUMENTATION
+   #define RPMLOOKUPSIG_DISABLE   1
+       Definition at line 79 of file signature.h.
+
+       Referenced by main, and rpmLookupSignatureType.
+
+   #define RPMLOOKUPSIG_ENABLE   2
+       Definition at line 80 of file signature.h.
+
+       Referenced by rpmLookupSignatureType.
+
+   #define RPMLOOKUPSIG_QUERY   0
+       Definition at line 78 of file signature.h.
+
+       Referenced by main, rpmLookupSignatureType, rpmReSign, and
+       writeRPM.
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+

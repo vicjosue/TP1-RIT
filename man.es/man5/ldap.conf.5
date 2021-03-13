@@ -1,0 +1,139 @@
+LDAP.CONF(5)                                         LDAP.CONF(5)
+
+
+
+NAME
+       ldap.conf, .ldaprc - ldap configuration file
+
+SYNOPSIS
+       /etc/openldap/ldap.conf
+
+DESCRIPTION
+       The  ldap.conf  configuration  file is used to set system-
+       wide defaults to be applied when running ldap clients.  If
+       the   environment  variable  LDAPNOINIT  is  defined,  all
+       defaulting is disabled.
+
+       Each user may  specify  an  optional  configuration  file,
+       .ldaprc,  in  his/her home directory which will be used to
+       override the system-wide defaults file.
+
+       Additional configuration files can be specified using  the
+       LDAPCONF  and  LDAPRC environment variables.  LDAPCONF may
+       be set the path of a configuration file.  This path can be
+       absolute  or  relative  to current working directory.  The
+       LDAPRC, if defined, should be a basename of a file in  the
+       current working directory or in the user's home directory.
+
+       Environmental variables may also be used  to  augment  the
+       file  based  defaults.   The  name of the option is the as
+       listed but with a prefix of LDAP.  For example, to  define
+       BASE  via the environment, define the variable LDAPBASE to
+       desired value.
+
+       Some options are user-only.  Such options are  ignored  if
+       present  in the ldap.conf (or file specified by LDAPCONF).
+
+OPTIONS
+       The different configuration options are:
+
+       BASE <base>
+                 Used to specify the default base DN to use  when
+                 performing  ldap  operations.   The base must be
+                 specified as a Distinguished Name in  LDAP  for­
+                 mat.
+
+       BINDDN <dn>
+                 Used  to specify the default bind DN to use when
+                 performing ldap operations.  The bind DN must be
+                 specified  as  a Distinguished Name in LDAP for­
+                 mat.  This is a user-only option.
+
+       HOST <name[:port] ...>
+                 Used to specify the name(s) of an LDAP server(s)
+                 to  which  ldap library should connect to.  Each
+                 server's name can be specified as a domain-style
+                 name  or an IP address and optionally followed a
+                 ':' and the port number the ldap server is  lis­
+                 tening on.  A space separated listed of host may
+                 be provided.
+
+       PORT <port>
+                 Used to specify the port used with connecting to
+                 LDAP servers(s).  The port may be specified as a
+                 number.
+
+       SASL_SECPROPS <properties>
+                 Used to specify Cyrus SASL security  properties.
+                 The  none  flag  (without any other properities)
+                 causes the flag properites  defaults  ("noanony­
+                 mous,noplain")  to be cleared.  The noplain flag
+                 disables mechanisms susceptible to  simple  pas­
+                 sive attacks.  The noactive flag disables mecha­
+                 nisms susceptible to active attacks.  The nodict
+                 flag  disables mechanisms susceptible to passive
+                 dictionary attacks.  The  noanonyous  flag  dis­
+                 ables  mechanisms which support anonymous login.
+                 The  forwardsec  flag  require  forward  secrecy
+                 between  sessions.   The passcred require mecha­
+                 nisms which pass client credentials  (and  allow
+                 mechanisms which can pass credentials to do so).
+                 The minssf=<factor> property specifies the mini­
+                 mum  acceptable  security  strength factor as an
+                 integer approximate to effective key length used
+                 for encryption.  0 (zero) implies no protection,
+                 1 implies integrity protection only,  56  allows
+                 DES or other weak ciphers, 112 allows triple DES
+                 and other strong ciphers, 128 allows RC4,  Blow­
+                 fish  and  other  modern  strong  ciphers.   The
+                 default  is  0.   The  maxssf=<factor>  property
+                 specifies   the   maximum   acceptable  security
+                 strength  factor  as  an  integer  (see   minssf
+                 description).   The  default  is  INT_MAX.   The
+                 maxbufsize=<factor> property specifies the maxi­
+                 mum  security layer receive buffer size allowed.
+                 0 disables  security  layers.   The  default  is
+                 65536.
+
+       SIZELIMIT <integer>
+                 Used  to  specify  a size limit to use when per­
+                 forming searches.  The number should be an  non-
+                 negative  integer.  SIZELIMIT of zero (0) speci­
+                 fies unlimited search size.
+
+       TIMELIMIT <integer>
+                 Used to specify a time limit to  use  when  per­
+                 forming  searches.  The number should be an non-
+                 negative integer.  TIMELIMIT of zero (0)  speci­
+                 fies unlimited search time to be used.
+
+       DEREF <never|searching|finding|always>
+                 Specify   how  aliases  dereferencing  is  done.
+                 DEREF should be set to  one  of  never,  always,
+                 search,  or  find  to  specify  that aliases are
+                 never dereferenced, always dereferenced,  deref­
+                 erenced  when  searching,  or  dereferenced only
+                 when locating the base object  for  the  search.
+                 The default is to never dereference aliases.
+
+FILES
+       /etc/openldap/ldap.conf
+
+       $HOME/.ldaprc
+
+       $CWD/.ldaprc
+
+SEE ALSO
+       ldap(3)
+
+AUTHOR
+       Kurt Zeilenga, The OpenLDAP Project
+
+ACKNOWLEDGEMENTS
+       OpenLDAP  is developed and maintained by The OpenLDAP Pro­
+       ject (http://www.openldap.org/).  OpenLDAP is derived from
+       University of Michigan LDAP 3.3 Release.
+
+
+
+OpenLDAP 2.0.21-Release   20 August 2000             LDAP.CONF(5)

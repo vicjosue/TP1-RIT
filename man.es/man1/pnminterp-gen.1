@@ -1,0 +1,32 @@
+pnminterp-gen(1)                                 pnminterp-gen(1)
+
+
+
+NAME
+       pnminterp-gen  -  use  pnminterp  and pnmscale to scale by
+       non-integer values
+
+SYNOPSIS
+       pnminterp-gen N [pnmfile]
+
+DESCRIPTION
+       Pnminterp-gen is a shell script which  uses  pnminterp(1),
+       pnmfile(1),  and  pnmscale(1)  to  smoothly scale up a PNM
+       file by any ratio; it's like a  more  general  version  of
+       pnminterp (hence the name). But other than the `any ratio'
+       bit, it's much the same as pnminterp. :-)
+
+BUGS
+       Uses awk just to make some simple floating-point  calcula­
+       tions,  which  is probably overkill. But using dc makes my
+       head hurt.
+
+SEE ALSO
+       pnminterp(1), pnmscale(1)
+
+AUTHOR
+       Russell Marks (russell.marks@ntlworld.com).
+
+
+
+                          10 April 2000          pnminterp-gen(1)

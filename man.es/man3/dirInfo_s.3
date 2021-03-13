@@ -1,0 +1,57 @@
+dirInfo_s(3)                                         dirInfo_s(3)
+
+
+
+NAME
+       dirInfo_s -
+
+SYNOPSIS
+       #include <depends.h>
+
+
+   Data Fields
+       const char * dirName
+       int dirNameLen
+       fileIndexEntry * files
+       int numFiles
+
+DETAILED DESCRIPTION
+       A directory to be installed/removed.
+
+       Definition at line 88 of file depends.h.
+
+FIELD DOCUMENTATION
+   const char* dirInfo_s::dirName
+       Directory path (+ trailing '/').
+
+       Definition at line 89 of file depends.h.
+
+       Referenced by alAddPackage, alAllFileSatisfiesDepend, and
+       dirInfoCompare.
+
+   int dirInfo_s::dirNameLen
+       No. bytes in directory path.
+
+       Definition at line 90 of file depends.h.
+
+       Referenced by alAddPackage, alAllFileSatisfiesDepend, and
+       dirInfoCompare.
+
+   struct fileIndexEntry* dirInfo_s::files
+       Array of files in directory.
+
+       Definition at line 91 of file depends.h.
+
+   int dirInfo_s::numFiles
+       No. files in directory.
+
+       Definition at line 92 of file depends.h.
+
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002               dirInfo_s(3)

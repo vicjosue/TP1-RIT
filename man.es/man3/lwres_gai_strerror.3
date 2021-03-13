@@ -1,0 +1,64 @@
+LWRES_GAI_STRERROR(3)                       LWRES_GAI_STRERROR(3)
+
+
+
+NAME
+       gai_strerror - print suitable error string
+
+SYNOPSIS
+       #include <lwres/netdb.h>
+
+       char * gai_strerror(int ecode);
+
+DESCRIPTION
+       lwres_gai_strerror()  returns an error message correspond­
+       ing to an error code returned by getaddrinfo().  The  fol­
+       lowing  error  codes  and  their  meaning  are  defined in
+       include/lwres/netdb.h.
+
+       EAI_ADDRFAMILY
+              address family for hostname not supported
+
+       EAI_AGAIN
+              temporary failure in name resolution
+
+       EAI_BADFLAGS
+              invalid value for ai_flags
+
+       EAI_FAIL
+              non-recoverable failure in name resolution
+
+       EAI_FAMILY
+              ai_family not supported
+
+       EAI_MEMORY
+              memory allocation failure
+
+       EAI_NODATA
+              no address associated with hostname
+
+       EAI_NONAME
+              hostname or servname not provided, or not known
+
+       EAI_SERVICE
+              servname not supported for ai_socktype
+
+       EAI_SOCKTYPE
+              ai_socktype not supported
+
+       EAI_SYSTEM
+              system error returned in errno
+
+       The message invalid error code is returned if ecode is out
+       of range.
+
+       ai_flags,  ai_family  and  ai_socktype are elements of the
+       struct addrinfo used by lwres_getaddrinfo().
+
+SEE ALSO
+       strerror(3),     lwres_getaddrinfo(3),     getaddrinfo(3),
+       RFC2133.
+
+
+
+BIND9                      Jun 30, 2000     LWRES_GAI_STRERROR(3)

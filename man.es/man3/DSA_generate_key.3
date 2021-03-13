@@ -1,0 +1,42 @@
+DSA_generate_key(3)          OpenSSL          DSA_generate_key(3)
+
+
+
+NNAAMMEE
+       DSA_generate_key - generate DSA key pair
+
+SSYYNNOOPPSSIISS
+        #include <openssl/dsa.h>
+
+        int DSA_generate_key(DSA *a);
+
+
+DDEESSCCRRIIPPTTIIOONN
+       DSA_generate_key() expects aa to contain DSA parameters. It
+       generates a new key pair and stores it in aa-->>ppuubb_kkeeyy and
+       aa-->>pprriivv_kkeeyy.
+
+       The PRNG must be seeded prior to calling
+       DSA_generate_key().
+
+RREETTUURRNN VVAALLUUEE
+       DSA_generate_key() returns 1 on success, 0 otherwise.  The
+       error codes can be obtained by ERR_get_error(3).
+
+SSEEEE AALLSSOO
+       dsa(3), err(3), rand(3), DSA_generate_parameters(3)
+
+HHIISSTTOORRYY
+       DSA_generate_key() is available since SSLeay 0.8.
+
+
+
+
+
+
+
+
+
+
+
+24/Feb/2000                   0.9.6c          DSA_generate_key(3)

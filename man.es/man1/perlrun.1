@@ -1,0 +1,891 @@
+PERLRUN(1)       Perl Programmers Reference Guide      PERLRUN(1)
+
+
+
+NNAAMMEE
+       perlrun - how to execute the Perl interpreter
+
+SSYYNNOOPPSSIISS
+       ppeerrll [ --CCssTTuuUUWWXX ]      [ --hhvv ] [ --VV[:configvar] ]
+            [ --ccww ] [ --dd[:debugger] ] [ --DD[number/list] ]
+            [ --ppnnaa ] [ --FFpattern ] [ --ll[octal] ] [ --00[octal] ]
+            [ --IIdir ] [ --mm[--]module ] [ --MM[--]'module...' ]
+            [ --PP ]      [ --SS ]      [ --xx[dir] ]      [ --ii[exten­
+       sion] ]      [ --ee 'command' ] [ ---- ] [ program­
+       file ] [ argument ]...
+
+DDEESSCCRRIIPPTTIIOONN
+       The normal way to run a Perl program is by making it
+       directly executable, or else by passing the name of the
+       source file as an argument on the command line.  (An
+       interactive Perl environment is also possible--see the
+       perldebug manpage for details on how to do that.)  Upon
+       startup, Perl looks for your program in one of the follow­
+       ing places:
+
+       1.  Specified line by line via --ee switches on the command
+           line.
+
+       2.  Contained in the file specified by the first filename
+           on the command line.  (Note that systems supporting
+           the #! notation invoke interpreters this way. See the
+           Location of Perl entry elsewhere in this document.)
+
+       3.  Passed in implicitly via standard input.  This works
+           only if there are no filename arguments--to pass argu­
+           ments to a STDIN-read program you must explicitly
+           specify a "-" for the program name.
+
+       With methods 2 and 3, Perl starts parsing the input file
+       from the beginning, unless you've specified a --xx switch,
+       in which case it scans for the first line starting with #!
+       and containing the word "perl", and starts there instead.
+       This is useful for running a program embedded in a larger
+       message.  (In this case you would indicate the end of the
+       program using the "__END__" token.)
+
+       The #! line is always examined for switches as the line is
+       being parsed.  Thus, if you're on a machine that allows
+       only one argument with the #! line, or worse, doesn't even
+       recognize the #! line, you still can get consistent switch
+       behavior regardless of how Perl was invoked, even if --xx
+       was used to find the beginning of the program.
+
+       Because historically some operating systems silently
+       chopped off kernel interpretation of the #! line after 32
+       characters, some switches may be passed in on the command
+       line, and some may not; you could even get a "-" without
+       its letter, if you're not careful.  You probably want to
+       make sure that all your switches fall either before or
+       after that 32-character boundary.  Most switches don't
+       actually care if they're processed redundantly, but get­
+       ting a "-" instead of a complete switch could cause Perl
+       to try to execute standard input instead of your program.
+       And a partial --II switch could also cause odd results.
+
+       Some switches do care if they are processed twice, for
+       instance combinations of --ll and --00.  Either put all the
+       switches after the 32-character boundary (if applicable),
+       or replace the use of --00digits by "BEGIN{ $/ = "\0digits";
+       }".
+
+       Parsing of the #! switches starts wherever "perl" is men­
+       tioned in the line.  The sequences "-*" and "- " are
+       specifically ignored so that you could, if you were so
+       inclined, say
+
+           #!/bin/sh -- # -*- perl -*- -p
+           eval 'exec perl -wS $0 ${1+"$@"}'
+               if $running_under_some_shell;
+
+       to let Perl see the --pp switch.
+
+       A similar trick involves the eennvv program, if you have it.
+
+           #!/usr/bin/env perl
+
+       The examples above use a relative path to the perl inter­
+       preter, getting whatever version is first in the user's
+       path.  If you want a specific version of Perl, say,
+       perl5.005_57, you should place that directly in the #!
+       line's path.
+
+       If the #! line does not contain the word "perl", the pro­
+       gram named after the #! is executed instead of the Perl
+       interpreter.  This is slightly bizarre, but it helps peo­
+       ple on machines that don't do #!, because they can tell a
+       program that their SHELL is /usr/bin/perl, and Perl will
+       then dispatch the program to the correct interpreter for
+       them.
+
+       After locating your program, Perl compiles the entire pro­
+       gram to an internal form.  If there are any compilation
+       errors, execution of the program is not attempted.  (This
+       is unlike the typical shell script, which might run part-
+       way through before finding a syntax error.)
+
+       If the program is syntactically correct, it is executed.
+       If the program runs off the end without hitting an exit()
+       or die() operator, an implicit "exit(0)" is provided to
+       indicate successful completion.
+
+       ##!! aanndd qquuoottiinngg oonn nnoonn--UUnniixx ssyysstteemmss
+
+       Unix's #! technique can be simulated on other systems:
+
+       OS/2
+           Put
+
+               extproc perl -S -your_switches
+
+           as the first line in "*.cmd" file (--SS due to a bug in
+           cmd.exe's `extproc' handling).
+
+       MS-DOS
+           Create a batch file to run your program, and codify it
+           in "ALTERNATIVE_SHEBANG" (see the dosish.h file in the
+           source distribution for more information).
+
+       Win95/NT
+           The Win95/NT installation, when using the ActiveState
+           installer for Perl, will modify the Registry to asso­
+           ciate the .pl extension with the perl interpreter.  If
+           you install Perl by other means (including building
+           from the sources), you may have to modify the Registry
+           yourself.  Note that this means you can no longer tell
+           the difference between an executable Perl program and
+           a Perl library file.
+
+       Macintosh
+           A Macintosh perl program will have the appropriate
+           Creator and Type, so that double-clicking them will
+           invoke the perl application.
+
+       VMS Put
+
+               $ perl -mysw 'f$env("procedure")' 'p1' 'p2' 'p3' 'p4' 'p5' 'p6' 'p7' 'p8' !
+               $ exit++ + ++$status != 0 and $exit = $status = undef;
+
+           at the top of your program, where --mmyyssww are any com­
+           mand line switches you want to pass to Perl.  You can
+           now invoke the program directly, by saying "perl pro­
+           gram", or as a DCL procedure, by saying "@program" (or
+           implicitly via DCL$PATH by just using the name of the
+           program).
+
+           This incantation is a bit much to remember, but Perl
+           will display it for you if you say "perl "-V:start­
+           perl"".
+
+       Command-interpreters on non-Unix systems have rather dif­
+       ferent ideas on quoting than Unix shells.  You'll need to
+       learn the special characters in your command-interpreter
+       ("*", "\" and """ are common) and how to protect whites­
+       pace and these characters to run one-liners (see --ee
+       below).
+
+       On some systems, you may have to change single-quotes to
+       double ones, which you must not do on Unix or Plan9 sys­
+       tems.  You might also have to change a single % to a %%.
+
+       For example:
+
+           # Unix
+           perl -e 'print "Hello world\n"'
+
+           # MS-DOS, etc.
+           perl -e "print \"Hello world\n\""
+
+           # Macintosh
+           print "Hello world\n"
+            (then Run "Myscript" or Shift-Command-R)
+
+           # VMS
+           perl -e "print ""Hello world\n"""
+
+       The problem is that none of this is reliable: it depends
+       on the command and it is entirely possible neither works.
+       If 44DDOOSS were the command shell, this would probably work
+       better:
+
+           perl -e "print <Ctrl-x>"Hello world\n<Ctrl-x>""
+
+       CCMMDD..EEXXEE in Windows NT slipped a lot of standard Unix func­
+       tionality in when nobody was looking, but just try to find
+       documentation for its quoting rules.
+
+       Under the Macintosh, it depends which environment you are
+       using.  The MacPerl shell, or MPW, is much like Unix
+       shells in its support for several quoting variants, except
+       that it makes free use of the Macintosh's non-ASCII char­
+       acters as control characters.
+
+       There is no general solution to all of this.  It's just a
+       mess.
+
+       LLooccaattiioonn ooff PPeerrll
+
+       It may seem obvious to say, but Perl is useful only when
+       users can easily find it.  When possible, it's good for
+       both /usr/bin/perl and /usr/local/bin/perl to be symlinks
+       to the actual binary.  If that can't be done, system
+       administrators are strongly encouraged to put (symlinks
+       to) perl and its accompanying utilities into a directory
+       typically found along a user's PATH, or in some other
+       obvious and convenient place.
+
+       In this documentation, "#!/usr/bin/perl" on the first line
+       of the program will stand in for whatever method works on
+       your system.  You are advised to use a specific path if
+       you care about a specific version.
+
+           #!/usr/local/bin/perl5.00554
+
+       or if you just want to be running at least version, place
+       a statement like this at the top of your program:
+
+           use 5.005_54;
+
+
+       CCoommmmaanndd SSwwiittcchheess
+
+       As with all standard commands, a single-character switch
+       may be clustered with the following switch, if any.
+
+           #!/usr/bin/perl -spi.orig   # same as -s -p -i.orig
+
+       Switches include:
+
+       --00[digits]
+            specifies the input record separator ("$/") as an
+            octal number.  If there are no digits, the null char­
+            acter is the separator.  Other switches may precede
+            or follow the digits.  For example, if you have a
+            version of ffiinndd which can print filenames terminated
+            by the null character, you can say this:
+
+                find . -name '*.orig' -print0 | perl -n0e unlink
+
+            The special value 00 will cause Perl to slurp files
+            in paragraph mode.  The value 0777 will cause Perl to
+            slurp files whole because there is no legal character
+            with that value.
+
+       --aa   turns on autosplit mode when used with a --nn or --pp.
+            An implicit split command to the @F array is done as
+            the first thing inside the implicit while loop pro­
+            duced by the --nn or --pp.
+
+                perl -ane 'print pop(@F), "\n";'
+
+            is equivalent to
+
+
+
+                while (<>) {
+                    @F = split(' ');
+                    print pop(@F), "\n";
+                }
+
+            An alternate delimiter may be specified using --FF.
+
+       --CC   enables Perl to use the native wide character APIs on
+            the target system.  The magic variable "${^WIDE_SYS­
+            TEM_CALLS}" reflects the state of this switch.  See
+            the section on "${^WIDE_SYSTEM_CALLS}" in the perlvar
+            manpage.
+
+            This feature is currently only implemented on the
+            Win32 platform.
+
+       --cc   causes Perl to check the syntax of the program and
+            then exit without executing it.  Actually, it will
+            execute "BEGIN", "CHECK", and "use" blocks, because
+            these are considered as occurring outside the execu­
+            tion of your program.  "INIT" and "END" blocks, how­
+            ever, will be skipped.
+
+       --dd   runs the program under the Perl debugger.  See the
+            perldebug manpage.
+
+       --dd::foo[=bar,baz]
+            runs the program under the control of a debugging,
+            profiling, or tracing module installed as Devel::foo.
+            E.g., --dd::DDPPrrooff executes the program using the
+            Devel::DProf profiler.  As with the --MM flag, options
+            may be passed to the Devel::foo package where they
+            will be received and interpreted by the
+            Devel::foo::import routine.  The comma-separated list
+            of options must follow a "=" character.  See the
+            perldebug manpage.
+
+       --DDletters
+       --DDnumber
+            sets debugging flags.  To watch how it executes your
+            program, use --DDttllss.  (This works only if debugging is
+            compiled into your Perl.)  Another nice value is --DDxx,
+            which lists your compiled syntax tree.  And --DDrr dis­
+            plays compiled regular expressions. As an alterna­
+            tive, specify a number instead of list of letters
+            (e.g., --DD1144 is equivalent to --DDttllss):
+
+                    1  p  Tokenizing and parsing
+                    2  s  Stack snapshots
+                    4  l  Context (loop) stack processing
+                    8  t  Trace execution
+                   16  o  Method and overloading resolution
+                   32  c  String/numeric conversions
+                   64  P  Print preprocessor command for -P, source file input state
+                  128  m  Memory allocation
+                  256  f  Format processing
+                  512  r  Regular expression parsing and execution
+                 1024  x  Syntax tree dump
+                 2048  u  Tainting checks
+                 4096  L  Memory leaks (needs -DLEAKTEST when compiling Perl)
+                 8192  H  Hash dump -- usurps values()
+                16384  X  Scratchpad allocation
+                32768  D  Cleaning up
+                65536  S  Thread synchronization
+               131072  T  Tokenising
+
+            All these flags require --DDDDEEBBUUGGGGIINNGG when you compile
+            the Perl executable.  See the INSTALL file in the
+            Perl source distribution for how to do this.  This
+            flag is automatically set if you include --gg option
+            when "Configure" asks you about optimizer/debugger
+            flags.
+
+            If you're just trying to get a print out of each line
+            of Perl code as it executes, the way that "sh -x"
+            provides for shell scripts, you can't use Perl's --DD
+            switch.  Instead do this
+
+              # Bourne shell syntax
+              $ PERLDB_OPTS="NonStop=1 AutoTrace=1 frame=2" perl -dS program
+
+              # csh syntax
+              % (setenv PERLDB_OPTS "NonStop=1 AutoTrace=1 frame=2"; perl -dS program)
+
+            See the perldebug manpage for details and variations.
+
+       --ee commandline
+            may be used to enter one line of program.  If --ee is
+            given, Perl will not look for a filename in the argu­
+            ment list.  Multiple --ee commands may be given to
+            build up a multi-line script.  Make sure to use semi­
+            colons where you would in a normal program.
+
+       --FFpattern
+            specifies the pattern to split on if --aa is also in
+            effect.  The pattern may be surrounded by "//", """",
+            or "''", otherwise it will be put in single quotes.
+
+       --hh   prints a summary of the options.
+
+       --ii[extension]
+            specifies that files processed by the "<>" construct
+            are to be edited in-place.  It does this by renaming
+            the input file, opening the output file by the origi­
+            nal name, and selecting that output file as the
+            default for print() statements.  The extension, if
+            supplied, is used to modify the name of the old file
+            to make a backup copy, following these rules:
+
+            If no extension is supplied, no backup is made and
+            the current file is overwritten.
+
+            If the extension doesn't contain a "*", then it is
+            appended to the end of the current filename as a suf­
+            fix.  If the extension does contain one or more "*"
+            characters, then each "*" is replaced with the cur­
+            rent filename.  In Perl terms, you could think of
+            this as:
+
+                ($backup = $extension) =~ s/\*/$file_name/g;
+
+            This allows you to add a prefix to the backup file,
+            instead of (or in addition to) a suffix:
+
+                $ perl -pi 'orig_*' -e 's/bar/baz/' fileA   # backup to 'orig_fileA'
+
+            Or even to place backup copies of the original files
+            into another directory (provided the directory
+            already exists):
+
+                $ perl -pi 'old/*.orig' -e 's/bar/baz/' fileA # backup to 'old/fileA.orig'
+
+            These sets of one-liners are equivalent:
+
+                $ perl -pi -e 's/bar/baz/' fileA            # overwrite current file
+                $ perl -pi '*' -e 's/bar/baz/' fileA        # overwrite current file
+
+                $ perl -pi '.orig' -e 's/bar/baz/' fileA    # backup to 'fileA.orig'
+                $ perl -pi '*.orig' -e 's/bar/baz/' fileA   # backup to 'fileA.orig'
+
+            From the shell, saying
+
+                $ perl -p -i.orig -e "s/foo/bar/; ... "
+
+            is the same as using the program:
+
+                #!/usr/bin/perl -pi.orig
+                s/foo/bar/;
+
+            which is equivalent to
+
+                #!/usr/bin/perl
+                $extension = '.orig';
+                LINE: while (<>) {
+                    if ($ARGV ne $oldargv) {
+                        if ($extension !~ /\*/) {
+                            $backup = $ARGV . $extension;
+                        }
+                        else {
+                            ($backup = $extension) =~ s/\*/$ARGV/g;
+                        }
+                        rename($ARGV, $backup);
+                        open(ARGVOUT, ">$ARGV");
+                        select(ARGVOUT);
+                        $oldargv = $ARGV;
+                    }
+                    s/foo/bar/;
+                }
+                continue {
+                    print;  # this prints to original filename
+                }
+                select(STDOUT);
+
+            except that the --ii form doesn't need to compare $ARGV
+            to $oldargv to know when the filename has changed.
+            It does, however, use ARGVOUT for the selected file­
+            handle.  Note that STDOUT is restored as the default
+            output filehandle after the loop.
+
+            As shown above, Perl creates the backup file whether
+            or not any output is actually changed.  So this is
+            just a fancy way to copy files:
+
+                $ perl -p -i '/some/file/path/*' -e 1 file1 file2 file3...
+            or
+                $ perl -p -i '.orig' -e 1 file1 file2 file3...
+
+            You can use "eof" without parentheses to locate the
+            end of each input file, in case you want to append to
+            each file, or reset line numbering (see example in
+            the eof entry in the perlfunc manpage).
+
+            If, for a given file, Perl is unable to create the
+            backup file as specified in the extension then it
+            will skip that file and continue on with the next one
+            (if it exists).
+
+            For a discussion of issues surrounding file
+            permissions and --ii, see the Why does Perl let me
+            delete read-only files? Why does -i clobber protected
+            files? Isn't this a bug in Perl? entry in the perl­
+            faq5 manpage.
+
+            You cannot use --ii to create directories or to strip
+            extensions from files.
+
+            Perl does not expand "~" in filenames, which is good,
+            since some folks use it for their backup files:
+
+                $ perl -pi~ -e 's/foo/bar/' file1 file2 file3...
+
+            Finally, the --ii switch does not impede execution when
+            no files are given on the command line.  In this
+            case, no backup is made (the original file cannot, of
+            course, be determined) and processing proceeds from
+            STDIN to STDOUT as might be expected.
+
+       --IIdirectory
+            Directories specified by --II are prepended to the
+            search path for modules ("@INC"), and also tells the
+            C preprocessor where to search for include files.
+            The C preprocessor is invoked with --PP; by default it
+            searches /usr/include and /usr/lib/perl.
+
+       --ll[octnum]
+            enables automatic line-ending processing.  It has two
+            separate effects.  First, it automatically chomps
+            "$/" (the input record separator) when used with --nn
+            or --pp.  Second, it assigns "$\" (the output record
+            separator) to have the value of octnum so that any
+            print statements will have that separator added back
+            on.  If octnum is omitted, sets "$\" to the current
+            value of "$/".  For instance, to trim lines to 80
+            columns:
+
+                perl -lpe 'substr($_, 80) = ""'
+
+            Note that the assignment "$\ = $/" is done when the
+            switch is processed, so the input record separator
+            can be different than the output record separator if
+            the --ll switch is followed by a --00 switch:
+
+                gnufind / -print0 | perl -ln0e 'print "found $_" if -p'
+
+            This sets "$\" to newline and then sets "$/" to the
+            null character.
+
+       --mm[--]module
+       --MM[--]module
+       --MM[--]'module ...'
+       --[[mmMM]][--]module=arg[,arg]...
+            --mmmodule executes "use" module "();" before executing
+            your program.
+
+            --MMmodule executes "use" module ";" before executing
+            your program.  You can use quotes to add extra code
+            after the module name, e.g., "'-Mmodule qw(foo
+            bar)'".
+
+            If the first character after the --MM or --mm is a dash
+            ("-") then the 'use' is replaced with 'no'.
+
+            A little builtin syntactic sugar means you can also
+            say --mmmmoodduullee==ffoooo,,bbaarr or --MMmmoodduullee==ffoooo,,bbaarr as a
+            shortcut for "'-Mmodule qw(foo bar)'".  This avoids
+            the need to use quotes when importing symbols.  The
+            actual code generated by --MMmmoodduullee==ffoooo,,bbaarr is "use
+            module split(/,/,q{foo,bar})".  Note that the "="
+            form removes the distinction between --mm and --MM.
+
+       --nn   causes Perl to assume the following loop around your
+            program, which makes it iterate over filename argu­
+            ments somewhat like sseedd --nn or aawwkk:
+
+              LINE:
+                while (<>) {
+                    ...             # your program goes here
+                }
+
+            Note that the lines are not printed by default.  See
+            --pp to have lines printed.  If a file named by an
+            argument cannot be opened for some reason, Perl warns
+            you about it and moves on to the next file.
+
+            Here is an efficient way to delete all files older
+            than a week:
+
+                find . -mtime +7 -print | perl -nle unlink
+
+            This is faster than using the --eexxeecc switch of ffiinndd
+            because you don't have to start a process on every
+            filename found.  It does suffer from the bug of mis­
+            handling newlines in pathnames, which you can fix if
+            you
+
+            "BEGIN" and "END" blocks may be used to capture con­
+            trol before or after the implicit program loop, just
+            as in aawwkk.
+
+       --pp   causes Perl to assume the following loop around your
+            program, which makes it iterate over filename argu­
+            ments somewhat like sseedd:
+
+              LINE:
+                while (<>) {
+                    ...             # your program goes here
+                } continue {
+                    print or die "-p destination: $!\n";
+                }
+
+            If a file named by an argument cannot be opened for
+            some reason, Perl warns you about it, and moves on to
+            the next file.  Note that the lines are printed auto­
+            matically.  An error occurring during printing is
+            treated as fatal.  To suppress printing use the --nn
+            switch.  A --pp overrides a --nn switch.
+
+            "BEGIN" and "END" blocks may be used to capture con­
+            trol before or after the implicit loop, just as in
+            aawwkk.
+
+       --PP   causes your program to be run through the C prepro­
+            cessor before compilation by Perl.  Because both com­
+            ments and ccpppp directives begin with the # character,
+            you should avoid starting comments with any words
+            recognized by the C preprocessor such as ""if"",
+            ""else"", or ""define"".  Also, in some platforms the
+            C preprocessor knows too much: it knows about the C++
+            -style until-end-of-line comments starting with
+            ""//"".  This will cause problems with common Perl
+            constructs like
+
+                s/foo//;
+
+            because after -P this will became illegal code
+
+                s/foo
+
+            The workaround is to use some other quoting separator
+            than ""/"", like for example ""!"":
+
+                s!foo!!;
+
+
+       --ss   enables rudimentary switch parsing for switches on
+            the command line after the program name but before
+            any filename arguments (or before an argument of ----).
+            This means you can have switches with two leading
+            dashes (----hheellpp).  Any switch found there is removed
+            from @ARGV and sets the corresponding variable in the
+            Perl program.  The following program prints "1" if
+            the program is invoked with a --xxyyzz switch, and "abc"
+            if it is invoked with --xxyyzz==aabbcc.
+
+                #!/usr/bin/perl -s
+                if ($xyz) { print "$xyz\n" }
+
+            Do note that ----hheellpp creates the variable ${-help},
+            which is not compliant with "strict refs".
+
+       --SS   makes Perl use the PATH environment variable to
+            search for the program (unless the name of the pro­
+            gram contains directory separators).
+
+            On some platforms, this also makes Perl append suf­
+            fixes to the filename while searching for it.  For
+            example, on Win32 platforms, the ".bat" and ".cmd"
+            suffixes are appended if a lookup for the original
+            name fails, and if the name does not already end in
+            one of those suffixes.  If your Perl was compiled
+            with DEBUGGING turned on, using the -Dp switch to
+            Perl shows how the search progresses.
+
+            Typically this is used to emulate #! startup on plat­
+            forms that don't support #!.  This example works on
+            many platforms that have a shell compatible with
+            Bourne shell:
+
+                #!/usr/bin/perl
+                eval 'exec /usr/bin/perl -wS $0 ${1+"$@"}'
+                        if $running_under_some_shell;
+
+            The system ignores the first line and feeds the pro­
+            gram to /bin/sh, which proceeds to try to execute the
+            Perl program as a shell script.  The shell executes
+            the second line as a normal shell command, and thus
+            starts up the Perl interpreter.  On some systems $0
+            doesn't always contain the full pathname, so the --SS
+            tells Perl to search for the program if necessary.
+            After Perl locates the program, it parses the lines
+            and ignores them because the variable $run­
+            ning_under_some_shell is never true.  If the program
+            will be interpreted by csh, you will need to replace
+            "${1+"$@"}" with "$*", even though that doesn't
+            understand embedded spaces (and such) in the argument
+            list.  To start up sh rather than csh, some systems
+            may have to replace the #! line with a line contain­
+            ing just a colon, which will be politely ignored by
+            Perl.  Other systems can't control that, and need a
+            totally devious construct that will work under any of
+            ccsshh, sshh, or Perl, such as the following:
+
+                    eval '(exit $?0)' && eval 'exec perl -wS $0 ${1+"$@"}'
+                    & eval 'exec /usr/bin/perl -wS $0 $argv:q'
+                            if $running_under_some_shell;
+
+            If the filename supplied contains directory separa­
+            tors (i.e., is an absolute or relative pathname), and
+            if that file is not found, platforms that append file
+            extensions will do so and try to look for the file
+            with those extensions added, one by one.
+
+            On DOS-like platforms, if the program does not con­
+            tain directory separators, it will first be searched
+            for in the current directory before being searched
+            for on the PATH.  On Unix platforms, the program will
+            be searched for strictly on the PATH.
+
+       --TT   forces "taint" checks to be turned on so you can test
+            them.  Ordinarily these checks are done only when
+            running setuid or setgid.  It's a good idea to turn
+            them on explicitly for programs that run on behalf of
+            someone else whom you might not necessarily trust,
+            such as CGI programs or any internet servers you
+            might write in Perl.  See the perlsec manpage for
+            details.  For security reasons, this option must be
+            seen by Perl quite early; usually this means it must
+            appear early on the command line or in the #! line
+            for systems which support that construct.
+
+       --uu   This obsolete switch causes Perl to dump core after
+            compiling your program.  You can then in theory take
+            this core dump and turn it into an executable file by
+            using the uunndduummpp program (not supplied).  This speeds
+            startup at the expense of some disk space (which you
+            can minimize by stripping the executable).  (Still, a
+            "hello world" executable comes out to about 200K on
+            my machine.)  If you want to execute a portion of
+            your program before dumping, use the dump() operator
+            instead.  Note: availability of uunndduummpp is platform
+            specific and may not be available for a specific port
+            of Perl.
+
+            This switch has been superseded in favor of the new
+            Perl code generator backends to the compiler.  See
+            the B manpage and the B::Bytecode manpage for
+            details.
+
+       --UU   allows Perl to do unsafe operations.  Currently the
+            only "unsafe" operations are the unlinking of direc­
+            tories while running as superuser, and running setuid
+            programs with fatal taint checks turned into warn­
+            ings.  Note that the --ww switch (or the "$^W" vari­
+            able) must be used along with this option to actually
+            generate the taint-check warnings.
+
+       --vv   prints the version and patchlevel of your perl exe­
+            cutable.
+
+       --VV   prints summary of the major perl configuration values
+            and the current values of @INC.
+
+
+       --VV::name
+            Prints to STDOUT the value of the named configuration
+            variable.  For example,
+
+                $ perl -V:man.dir
+
+            will provide strong clues about what your MANPATH
+            variable should be set to in order to access the Perl
+            documentation.
+
+       --ww   prints warnings about dubious constructs, such as
+            variable names that are mentioned only once and
+            scalar variables that are used before being set,
+            redefined subroutines, references to undefined file­
+            handles or filehandles opened read-only that you are
+            attempting to write on, values used as a number that
+            doesn't look like numbers, using an array as though
+            it were a scalar, if your subroutines recurse more
+            than 100 deep, and innumerable other things.
+
+            This switch really just enables the internal "^$W"
+            variable.  You can disable or promote into fatal
+            errors specific warnings using "__WARN__" hooks, as
+            described in the perlvar manpage and the warn entry
+            in the perlfunc manpage.  See also the perldiag man­
+            page and the perltrap manpage.  A new, fine-grained
+            warning facility is also available if you want to
+            manipulate entire classes of warnings; see the warn­
+            ings manpage or the perllexwarn manpage.
+
+       --WW   Enables all warnings regardless of "no warnings" or
+            "$^W".  See the perllexwarn manpage.
+
+       --XX   Disables all warnings regardless of "use warnings" or
+            "$^W".  See the perllexwarn manpage.
+
+       --xx directory
+            tells Perl that the program is embedded in a larger
+            chunk of unrelated ASCII text, such as in a mail mes­
+            sage.  Leading garbage will be discarded until the
+            first line that starts with #! and contains the
+            string "perl".  Any meaningful switches on that line
+            will be applied.  If a directory name is specified,
+            Perl will switch to that directory before running the
+            program.  The --xx switch controls only the disposal of
+            leading garbage.  The program must be terminated with
+            "__END__" if there is trailing garbage to be ignored
+            (the program can process any or all of the trailing
+            garbage via the DATA filehandle if desired).
+
+EENNVVIIRROONNMMEENNTT
+       HOME        Used if chdir has no argument.
+
+       LOGDIR      Used if chdir has no argument and HOME is not
+                   set.
+
+       PATH        Used in executing subprocesses, and in finding
+                   the program if --SS is used.
+
+       PERL5LIB    A colon-separated list of directories in which
+                   to look for Perl library files before looking
+                   in the standard library and the current direc­
+                   tory.  Any architecture-specific directories
+                   under the specified locations are automati­
+                   cally included if they exist.  If PERL5LIB is
+                   not defined, PERLLIB is used.
+
+                   When running taint checks (either because the
+                   program was running setuid or setgid, or the
+                   --TT switch was used), neither variable is used.
+                   The program should instead say:
+
+                       use lib "/my/directory";
+
+
+       PERL5OPT    Command-line options (switches).  Switches in
+                   this variable are taken as if they were on
+                   every Perl command line.  Only the --[[DDIIMMUUddmmww]]
+                   switches are allowed.  When running taint
+                   checks (because the program was running setuid
+                   or setgid, or the --TT switch was used), this
+                   variable is ignored.  If PERL5OPT begins with
+                   --TT, tainting will be enabled, and any subse­
+                   quent options ignored.
+
+       PERLLIB     A colon-separated list of directories in which
+                   to look for Perl library files before looking
+                   in the standard library and the current direc­
+                   tory.  If PERL5LIB is defined, PERLLIB is not
+                   used.
+
+       PERL5DB     The command used to load the debugger code.
+                   The default is:
+
+                           BEGIN { require 'perl5db.pl' }
+
+
+       PERL5SHELL (specific to the Win32 port)
+                   May be set to an alternative shell that perl
+                   must use internally for executing "backtick"
+                   commands or system().  Default is "cmd.exe
+                   /x/c" on WindowsNT and "command.com /c" on
+                   Windows95.  The value is considered to be
+                   space-separated.  Precede any character that
+                   needs to be protected (like a space or back­
+                   slash) with a backslash.
+
+                   Note that Perl doesn't use COMSPEC for this
+                   purpose because COMSPEC has a high degree of
+                   variability among users, leading to portabil­
+                   ity concerns.  Besides, perl can use a shell
+                   that may not be fit for interactive use, and
+                   setting COMSPEC to such a shell may interfere
+                   with the proper functioning of other programs
+                   (which usually look in COMSPEC to find a shell
+                   fit for interactive use).
+
+       PERL_DEBUG_MSTATS
+                   Relevant only if perl is compiled with the
+                   malloc included with the perl distribution
+                   (that is, if "perl -V:d_mymalloc" is
+                   'define').  If set, this causes memory statis­
+                   tics to be dumped after execution.  If set to
+                   an integer greater than one, also causes mem­
+                   ory statistics to be dumped after compilation.
+
+       PERL_DESTRUCT_LEVEL
+                   Relevant only if your perl executable was
+                   built with --DDDDEEBBUUGGGGIINNGG, this controls the
+                   behavior of global destruction of objects and
+                   other references.
+
+       PERL_ROOT (specific to the VMS port)
+                   A translation concealed rooted logical name
+                   that contains perl and the logical device for
+                   the @INC path on VMS only.  Other logical
+                   names that affect perl on VMS include PERLSHR,
+                   PERL_ENV_TABLES, and SYS$TIMEZONE_DIFFERENTIAL
+                   but are optional and discussed further in the
+                   perlvms manpage and in README.vms in the Perl
+                   source distribution.
+
+       SYS$LOGIN (specific to the VMS port)
+                   Used if chdir has no argument and HOME and
+                   LOGDIR are not set.
+
+       Perl also has environment variables that control how Perl
+       handles data specific to particular natural languages.
+       See the perllocale manpage.
+
+       Apart from these, Perl uses no other environment vari­
+       ables, except to make them available to the program being
+       executed, and to child processes.  However, programs run­
+       ning setuid would do well to execute the following lines
+       before doing anything else, just to keep people honest:
+
+           $ENV{PATH}  = '/bin:/usr/bin';    # or whatever you need
+           $ENV{SHELL} = '/bin/sh' if exists $ENV{SHELL};
+           delete @ENV{qw(IFS CDPATH ENV BASH_ENV)};
+
+
+
+
+2001-03-18                 perl v5.6.1                 PERLRUN(1)

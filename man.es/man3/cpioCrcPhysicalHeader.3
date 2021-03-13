@@ -1,0 +1,83 @@
+cpioCrcPhysicalHeader(3)                 cpioCrcPhysicalHeader(3)
+
+
+
+NAME
+       cpioCrcPhysicalHeader -
+
+SYNOPSIS
+       #include <cpio.h>
+
+
+   Data Fields
+       char magic [6]
+       char inode [8]
+       char mode [8]
+       char uid [8]
+       char gid [8]
+       char nlink [8]
+       char mtime [8]
+       char filesize [8]
+       char devMajor [8]
+       char devMinor [8]
+       char rdevMajor [8]
+       char rdevMinor [8]
+       char namesize [8]
+       char checksum [8]
+
+DETAILED DESCRIPTION
+       Cpio archive header information.
+
+       Definition at line 80 of file cpio.h.
+
+FIELD DOCUMENTATION
+   char cpioCrcPhysicalHeader::checksum[8]
+       Definition at line 94 of file cpio.h.
+
+   char cpioCrcPhysicalHeader::devMajor[8]
+       Definition at line 89 of file cpio.h.
+
+   char cpioCrcPhysicalHeader::devMinor[8]
+       Definition at line 90 of file cpio.h.
+
+   char cpioCrcPhysicalHeader::filesize[8]
+       Definition at line 88 of file cpio.h.
+
+   char cpioCrcPhysicalHeader::gid[8]
+       Definition at line 85 of file cpio.h.
+
+   char cpioCrcPhysicalHeader::inode[8]
+       Definition at line 82 of file cpio.h.
+
+   char cpioCrcPhysicalHeader::magic[6]
+       Definition at line 81 of file cpio.h.
+
+   char cpioCrcPhysicalHeader::mode[8]
+       Definition at line 83 of file cpio.h.
+
+   char cpioCrcPhysicalHeader::mtime[8]
+       Definition at line 87 of file cpio.h.
+
+   char cpioCrcPhysicalHeader::namesize[8]
+       Definition at line 93 of file cpio.h.
+
+   char cpioCrcPhysicalHeader::nlink[8]
+       Definition at line 86 of file cpio.h.
+
+   char cpioCrcPhysicalHeader::rdevMajor[8]
+       Definition at line 91 of file cpio.h.
+
+   char cpioCrcPhysicalHeader::rdevMinor[8]
+       Definition at line 92 of file cpio.h.
+
+   char cpioCrcPhysicalHeader::uid[8]
+       Definition at line 84 of file cpio.h.
+
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002   cpioCrcPhysicalHeader(3)

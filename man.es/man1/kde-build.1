@@ -1,0 +1,96 @@
+KDE-BUILD(1)          K Desktop Environment          KDE-BUILD(1)
+
+
+
+NNAAMMEE
+       kde-build - Updates and recompiles a tree of KDE CVS
+       modules
+
+SSYYNNOOPPSSIISS
+               kde-build
+
+
+DDEESSCCRRIIPPTTIIOONN
+       kde-build has been designed to keep a local copy of
+       several KDE CVS modules up to date and recompile them.
+       Those modules have to be saved in a common directory, e.g.
+       something like
+
+           ~/F<kde-src>/
+             |
+             +-> F<kdelibs>/
+             |
+             +-> F<kdebase>/
+             |
+             \-> F<kdenetwork>/
+
+       In this case, the KDE source directory would be ~/kde-
+       src/. The script will take care of compiling them in the
+       correct order, checks for dependencies and resolves them
+       as far as possible.
+
+       Please not that, prior to first invokation of the script,
+       the configuration file 'kde-buildrc' has to be modified to
+       reflect the local environment, such as paths etc.
+
+RREETTUURRNN VVAALLUUEE
+       The following error codes are returned by the script.
+
+       0 - No error seems to have occured.
+
+       1 - The script could not change into the directory of a
+       module.
+
+       2 - The script could not open the file 'Makefile.in' of a
+       module.
+
+       3 - The configuration of a module failed.
+
+       4 - The compilation of a module failed.
+
+       5 - The installation of a module failed.
+
+       6 - An invalid source directory was specified.
+
+       7 - An invalid Qt directory was specified.
+
+       8 - An invalid CVS client was specified.
+
+       9 - No cvsup server was specified.
+
+       10 - The temporary CVSUP configuration file couldn't be
+       created.
+
+       11 - The configuration file kde-buildrc couldn't be
+       loaded.
+
+EEXXAAMMPPLLEESS
+               cd ~/scripts/
+               vi ./kde-buildrc
+               ./kde-build
+
+
+BBUUGGSS
+       Lots, mostly that the script wasn't written with
+       portability in mind and therefore won't run very nice on
+       platforms other than Linux.
+
+TTOODDOO
+       Add a DIAGNOSIS section to this man page.
+
+AAUUTTHHOORR
+       Frerich Raabe <raabe@kde.org>
+
+
+
+
+
+
+
+
+
+
+
+
+
+4/Oct/2000             perl 5.005, patch 03          KDE-BUILD(1)

@@ -1,0 +1,45 @@
+BN_num_bytes(3)              OpenSSL              BN_num_bytes(3)
+
+
+
+NNAAMMEE
+       BN_num_bits, BN_num_bytes, BN_num_bits_word - get BIGNUM
+       size
+
+SSYYNNOOPPSSIISS
+        #include <openssl/bn.h>
+
+        int BN_num_bytes(const BIGNUM *a);
+
+        int BN_num_bits(const BIGNUM *a);
+
+        int BN_num_bits_word(BN_ULONG w);
+
+
+DDEESSCCRRIIPPTTIIOONN
+       These functions return the size of a BBIIGGNNUUMM in bytes or
+       bits, and the size of an unsigned integer in bits.
+
+       BN_num_bytes() is a macro.
+
+RREETTUURRNN VVAALLUUEESS
+       The size.
+
+SSEEEE AALLSSOO
+       bn(3)
+
+HHIISSTTOORRYY
+       BN_num_bytes(), BN_num_bits() and BN_num_bits_word() are
+       available in all versions of SSLeay and OpenSSL.
+
+
+
+
+
+
+
+
+
+
+
+24/Feb/2000                   0.9.6c              BN_num_bytes(3)

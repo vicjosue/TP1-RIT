@@ -1,0 +1,71 @@
+lpoptions(1)          Easy Software Products         lpoptions(1)
+
+
+
+NAME
+       lpoptions - display or set printer options and defaults
+
+SYNOPSIS
+       lpoptions   [   -h   server  ]  -d  dest[/instance]  [  -o
+       option=value ] ... [ -o option=value ]
+       lpoptions [ -h server ] [ -p dest[/instance] ] -l
+       lpoptions [ -h server ] [  -o  option=value  ]  ...  [  -o
+       option=value ] -p dest[/instance] ] -r option ]
+       lpoptions [ -h server ] -x dest[/instance]
+
+DESCRIPTION
+       lpoptions  displays  or sets printer options and defaults.
+       lpoptions shows the default printer options when run  with
+       no arguments. Other options include:
+
+       -d dest[/instance]
+            Sets the default printer to dest. If instance is sup­
+            plied then that particular  instance  is  used.  This
+            option  overrides  the system default printer for the
+            current user.
+
+       -h server
+            Specifies the CUPS server to communicate with.
+
+       -l
+            Lists the printer specific options and their  current
+            settings.
+
+       -o option=value
+            Specifies a new option for the named destination.
+
+       -p dest[/instance]
+            Sets  the destination and instance, if specified, for
+            any options that follow.  If the named instance  does
+            not exist then it is created.
+
+       -r option
+            Removes  the  specified option for the named destina­
+            tion.
+
+       -x dest[/instance]
+            Removes the options for  the  named  destination  and
+            instance,  if  specified.  If the named instance does
+            not exist then this does nothing.
+
+       If no options are specified using the -o option  then  the
+       current  options for the named printer are reported on the
+       standard output.
+
+       Options set with the lpoptions command  are  used  by  the
+       lp(1) and lpr(1) commands when submitting jobs.
+
+COMPATIBILITY
+       The lpoptions command is unique to CUPS.
+
+SEE ALSO
+       cancel(1),    lp(1),    CUPS    Software   Users   Manual,
+       http://localhost:631/documentation.html
+
+COPYRIGHT
+       Copyright 1993-2002 by Easy Software Products, All  Rights
+       Reserved.
+
+
+
+5 September 2000   Common UNIX Printing System       lpoptions(1)

@@ -1,0 +1,66 @@
+SMBSTATUS(1)                                         SMBSTATUS(1)
+
+
+
+NAME
+       smbstatus - report on current Samba connections
+
+SYNOPSIS
+       smbstatus  [  -P ]  [ -b ]  [ -d ]  [ -L ]  [ -p ]  [ -S ]
+       [ -s <configuration file> ]  [ -u <username> ]
+
+DESCRIPTION
+       This tool is part of the  Sambasuite.
+
+       smbstatus is a very simple program  to  list  the  current
+       Samba connections.
+
+OPTIONS
+       -P     If  samba  has  been  compiled  with  the profiling
+              option, print only the contents  of  the  profiling
+              shared memory area.
+
+       -b     gives brief output.
+
+       -d     gives verbose output.
+
+       -L     causes smbstatus to only list locks.
+
+       -p     print a list of  smbd(8)processes and exit.  Useful
+              for scripting.
+
+       -S     causes smbstatus to only list shares.
+
+       -s <configuration file>
+              The default configuration file name  is  determined
+              at  compile  time.  The file specified contains the
+              configuration details required by the  server.  See
+              smb.conf(5) for more information.
+
+       -u <username>
+              selects information relevant to username only.
+
+VERSION
+       This  man  page  is  correct  for version 2.2 of the Samba
+       suite.
+
+SEE ALSO
+       smbd(8)and smb.conf(5).
+
+AUTHOR
+       The original Samba software  and  related  utilities  were
+       created  by Andrew Tridgell. Samba is now developed by the
+       Samba Team as an Open Source project similar  to  the  way
+       the Linux kernel is developed.
+
+       The  original  Samba  man pages were written by Karl Auer.
+       The  man  page  sources  were  converted  to  YODL  format
+       (another  excellent  piece of Open Source software, avail­
+       able          at           ftp://ftp.icce.rug.nl/pub/unix/
+       <URL:ftp://ftp.icce.rug.nl/pub/unix/>) and updated for the
+       Samba 2.0 release by Jeremy  Allison.  The  conversion  to
+       DocBook for Samba 2.2 was done by Gerald Carter
+
+
+
+                         06 December 2001            SMBSTATUS(1)

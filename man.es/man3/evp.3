@@ -1,0 +1,41 @@
+evp(3)                       OpenSSL                       evp(3)
+
+
+
+NNAAMMEE
+       evp - high-level cryptographic functions
+
+SSYYNNOOPPSSIISS
+        #include <openssl/evp.h>
+
+
+DDEESSCCRRIIPPTTIIOONN
+       The EVP library provides a high-level interface to
+       cryptographic functions.
+
+       EEVVPP_SSeeaall... and EEVVPP_OOppeenn... provide public key encryption
+       and decryption to implement digital "envelopes".
+
+       The EEVVPP_SSiiggnn... and EEVVPP_VVeerriiffyy... functions implement
+       digital signatures.
+
+       Symmetric encryption is available with the EEVVPP_EEnnccrryypptt...
+       functions.  The EEVVPP_DDiiggeesstt... functions provide message
+       digests.
+
+       Algorithms are loaded with OpenSSL_add_all_algorithms(3).
+
+SSEEEE AALLSSOO
+       EVP_DigestInit(3), EVP_EncryptInit(3), EVP_OpenInit(3),
+       EVP_SealInit(3), EVP_SignInit(3), EVP_VerifyInit(3),
+       OpenSSL_add_all_algorithms(3)
+
+
+
+
+
+
+
+
+
+10/Oct/2000                   0.9.6c                       evp(3)

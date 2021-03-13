@@ -1,0 +1,1054 @@
+RPMBUILD.(3)                                         RPMBUILD.(3)
+
+
+
+NAME
+       RPMBUILD. -
+
+   Files
+       file build.c
+           Top-level build dispatcher.
+
+
+       file buildio.h
+           Routines to read and write packages.
+
+
+       file expression.c
+           Simple logical expression parser.
+
+
+       file files.c
+           The post-build, pre-packaging file tree walk to
+           assemble the package manifest.
+
+
+       file misc.c
+       file myftw.c
+           Modified ftw() -- uses Lstat() instead of stat().
+
+
+       file myftw.h
+           Portable ftw(3) using lstat() instead of stat().
+
+
+       file names.c
+           Simple user/group name/id cache (plus hostname and
+           buildtime).
+
+
+       file pack.c
+           Assemble components of an RPM package.
+
+
+       file parseBuildInstallClean.c
+           Parse build/install/clean section from spec file.
+
+
+       file parseChangelog.c
+           Parse changelog section from spec file.
+
+
+       file parseDescription.c
+           Parse description section from spec file.
+
+
+       file parseFiles.c
+           Parse files section from spec file.
+
+
+       file parsePreamble.c
+           Parse tags in global section from spec file.
+
+
+       file parsePrep.c
+           Parse prep section from spec file.
+
+
+       file parseReqs.c
+           Parse dependency tag from spec file or from auto-
+           dependency generator.
+
+
+       file parseScript.c
+           Parse install-time script section from spec file.
+
+
+       file parseSpec.c
+           Top level dispatcher for spec file parsing.
+
+
+       file reqprov.c
+           Add dependency tags to package header(s).
+
+
+       file rpmbuild.h
+           This is the *only* module users of librpmbuild should
+           need to include.
+
+
+       file rpmcli.h
+       file rpmspec.h
+           The Spec and Package data structures used during
+           build.
+
+
+       file spec.c
+           Handle spec data structure.
+
+
+
+   Data Structures
+       struct OpenFileInfo
+       struct PackageStruct
+       struct ReadLevelEntry
+       struct Source
+       struct speclines_s
+       struct SpecStruct
+       struct spectag_s
+       struct spectags_s
+       struct TriggerFileEntry
+
+   Typedefs
+       typedef enum rpmBuildFlags_e rpmBuildFlags
+       typedef enum rpmParseState_e rpmParseState
+       typedef SpecStruct * Spec
+       typedef ReadLevelEntry RLE_t
+       typedef OpenFileInfo OFI_t
+       typedef spectag_s * spectag
+       typedef spectags_s * spectags
+       typedef speclines_s * speclines
+       typedef PackageStruct * Package
+
+   Enumerations
+       enum rpmBuildFlags_e { RPMBUILD_NONE =  0, RPMBUILD_PREP =
+           (1 << 0), RPMBUILD_BUILD =  (1 << 1), RPMBUILD_INSTALL
+           =  (1 << 2), RPMBUILD_CLEAN =  (1 << 3),
+           RPMBUILD_FILECHECK =  (1 << 4), RPMBUILD_PACKAGESOURCE
+           =  (1 << 5), RPMBUILD_PACKAGEBINARY =  (1 << 6),
+           RPMBUILD_RMSOURCE =  (1 << 7), RPMBUILD_RMBUILD =  (1
+           << 8), RPMBUILD_STRINGBUF =  (1 << 9), RPMBUILD_RMSPEC
+           =  (1 << 10) }
+       enum rpmParseState_e { PART_NONE =  0, PART_PREAMBLE =  1,
+           PART_PREP =  2, PART_BUILD =  3, PART_INSTALL =  4,
+           PART_CLEAN =  5, PART_FILES =  6, PART_PRE =  7,
+           PART_POST =  8, PART_PREUN =  9, PART_POSTUN =  10,
+           PART_DESCRIPTION =  11, PART_CHANGELOG =  12,
+           PART_TRIGGERIN =  13, PART_TRIGGERUN =  14,
+           PART_VERIFYSCRIPT =  15, PART_BUILDARCHITECTURES =
+           16, PART_TRIGGERPOSTUN =  17, PART_LAST =  18 }
+
+   Functions
+       void freeNames (void)
+       const char * getUname (uid_t uid)
+       const char * getUnameS (const char *uname)
+       uid_t getUidS (const char *uname)
+       const char * getGname (gid_t gid)
+       const char * getGnameS (const char *gname)
+       gid_t getGidS (const char *gname)
+       const char *const buildHost (void)
+       int_32 *const getBuildTime (void)
+       int readLine (Spec spec, int strip)
+       void closeSpec (Spec spec)
+       void handleComments (char *s)
+       rpmParseState isPart (const char *line)
+       int parseNum (const char *line, int *res)
+       void addChangelogEntry (Header h, time_t time, const char
+           *name, const char *text)
+       int parseBuildInstallClean (Spec spec, rpmParseState
+           parsePart)
+       int parseChangelog (Spec spec)
+       int parseDescription (Spec spec)
+       int parseFiles (Spec spec)
+       int parsePreamble (Spec spec, int initialPackage)
+       int parsePrep (Spec spec)
+       int parseRCPOT (Spec spec, Package pkg, const char *field,
+           int tag, int index, rpmsenseFlags flags)
+       int parseScript (Spec spec, int parsePart)
+       int parseExpressionBoolean (Spec spec, const char *expr)
+       char * parseExpressionString (Spec spec, const char *expr)
+       int doScript (Spec spec, int what, const char *name,
+           StringBuf sb, int test)
+       int lookupPackage (Spec spec, const char *name, int flag,
+           Package *pkg)
+       Package newPackage (Spec spec)
+       Package freePackages (Package packages)
+       Package freePackage (Package pkg)
+       int addReqProv (Spec spec, Header h, rpmsenseFlags flag,
+           const char *depName, const char *depEVR, int index)
+       int rpmlibNeedsFeature (Header h, const char *feature,
+           const char *featureEVR)
+       int processBinaryFiles (Spec spec, int installSpecialDoc,
+           int test)
+       void initSourceHeader (Spec spec)
+       int processSourceFiles (Spec spec)
+       int parseSpec (Spec *specp, const char *specFile, const
+           char *rootdir, const char *buildRoot, int recursing,
+           const char *passPhrase, char *cookie, int anyarch, int
+           force)
+       int buildSpec (Spec spec, int what, int test)
+       int packageBinaries (Spec spec)
+       int packageSources (Spec spec)
+       Spec newSpec (void)
+       Spec freeSpec (Spec spec)
+       OpenFileInfo * newOpenFileInfo (void)
+       spectag stashSt (Spec spec, Header h, int tag, const char
+           *lang)
+       int addSource (Spec spec, Package pkg, const char *field,
+           int tag)
+       int parseNoSource (Spec spec, const char *field, int tag)
+
+   Variables
+       int(* parseSpecVec )(Spec *specp, const char *specFile,
+           const char *rootdir, const char *buildRoot, int
+           recursing, const char *passPhrase, char *cookie, int
+           anyarch, int force)
+       Spec(* freeSpecVec )(Spec spec)
+
+TYPEDEF DOCUMENTATION
+   typedef struct OpenFileInfo  OFI_t
+   typedef struct PackageStruct* Package
+       Definition at line 173 of file rpmspec.h.
+
+   typedef struct ReadLevelEntry  RLE_t
+   typedef enum rpmBuildFlags_e  rpmBuildFlags
+       Bit(s) to control buildSpec() operation.
+
+   typedef enum rpmParseState_e  rpmParseState
+       Spec file parser states.
+
+       Referenced by isPart, parseBuildInstallClean, parseSpec,
+       and readLine.
+
+   typedef struct SpecStruct* Spec
+       Definition at line 11 of file rpmspec.h.
+
+   typedef struct speclines_s *  speclines
+   typedef struct spectag_s *  spectag
+   typedef struct spectags_s *  spectags
+ENUMERATION TYPE DOCUMENTATION
+   enum rpmBuildFlags_e
+       Bit(s) to control buildSpec() operation.
+
+       Enumeration values:
+
+       RPMBUILD_NONE
+
+       RPMBUILD_PREP
+              Execute %prep.
+
+       RPMBUILD_BUILD
+              Execute %build.
+
+       RPMBUILD_INSTALL
+              Execute %install.
+
+       RPMBUILD_CLEAN
+              Execute %clean.
+
+       RPMBUILD_FILECHECK
+              Check %files manifest.
+
+       RPMBUILD_PACKAGESOURCE
+              Create source package.
+
+       RPMBUILD_PACKAGEBINARY
+              Create binary package(s).
+
+       RPMBUILD_RMSOURCE
+              Remove source(s) and patch(s).
+
+       RPMBUILD_RMBUILD
+              Remove build sub-tree.
+
+       RPMBUILD_STRINGBUF
+              only for doScript()
+
+       RPMBUILD_RMSPEC
+              Remove spec file.
+
+       Definition at line 22 of file rpmbuild.h.
+
+   enum rpmParseState_e
+       Spec file parser states.
+
+       Enumeration values:
+
+       PART_NONE
+
+       PART_PREAMBLE
+
+       PART_PREP
+
+       PART_BUILD
+
+       PART_INSTALL
+
+       PART_CLEAN
+
+       PART_FILES
+
+       PART_PRE
+
+       PART_POST
+
+       PART_PREUN
+
+       PART_POSTUN
+
+       PART_DESCRIPTION
+
+       PART_CHANGELOG
+
+       PART_TRIGGERIN
+
+       PART_TRIGGERUN
+
+       PART_VERIFYSCRIPT
+
+       PART_BUILDARCHITECTURES
+
+       PART_TRIGGERPOSTUN
+
+       PART_LAST
+
+
+       Definition at line 51 of file rpmbuild.h.
+
+FUNCTION DOCUMENTATION
+   void addChangelogEntry (Header h, time_t time, const char *
+       name, const char * text)
+       Add changelog entry to header.
+
+       Parameters:
+
+       h      header
+
+       time   time of change
+
+       name   person who made the change
+
+       text   description of change
+
+       Definition at line 11 of file parseChangelog.c.
+
+       Referenced by addChangelog, and headerInject.
+
+   int addReqProv (Spec spec, Header h, rpmsenseFlags flag, const
+       char * depName, const char * depEVR, int index)
+       Add dependency to header, filtering duplicates.
+
+       Parameters:
+
+       spec   spec file control structure
+
+       h      header
+
+       depFlags
+              (e.g. Requires: foo < 0:1.2-3, both 'Requires:' and
+              '<')
+
+       depName
+              (e.g. Requires: foo < 0:1.2-3, 'foo')
+
+       depEVR (e.g. Requires: foo < 0:1.2-3, '0:1.2-3')
+
+       index  (0 always)
+
+       Returns:
+           0 always
+
+       Definition at line 11 of file reqprov.c.
+
+       Referenced by parseRCPOT, parseScript, and
+       rpmlibNeedsFeature.
+
+   int addSource (Spec spec, Package pkg, const char * field, int
+       tag)
+       Parameters:
+
+       spec   spec file control structure
+
+       Definition at line 246 of file spec.c.
+
+   const char* const buildHost (void)
+       Return build hostname.
+
+       Returns:
+           build hostname
+
+       Definition at line 172 of file names.c.
+
+   int buildSpec (Spec spec, int what, int test)
+       Build stages state machine driver.
+
+       Parameters:
+
+       spec   spec file control structure
+
+       what   bit(s) to enable stages of build
+
+       test   don't execute scripts or package if testing
+
+       Returns:
+           0 on success
+
+       Definition at line 249 of file build.c.
+
+       References rpmsenseFlags.
+
+       Referenced by buildForTarget, and buildSpec.
+
+   void closeSpec (Spec spec)
+       Stop reading from spec file, freeing resources.
+
+       Parameters:
+
+       spec   spec file control structure
+
+       Definition at line 342 of file parseSpec.c.
+
+       Referenced by freeSpec, and parseSpec.
+
+   int doScript (Spec spec, int what, const char * name,
+       StringBuf sb, int test)
+       Run a build script, assembled from spec file scriptlet
+       section.
+
+       Parameters:
+
+       spec   spec file control structure
+
+       what   type of script
+
+       name   name of scriptlet section
+
+       sb     lines that compose script body
+
+       test   don't execute scripts or package if testing
+
+       Returns:
+           0 on success, RPMERR_SCRIPT on failure
+
+       Definition at line 53 of file build.c.
+
+       Referenced by buildSpec, and processPackageFiles.
+
+   void freeNames (void)
+       Destroy uid/gid caches.
+
+       Definition at line 22 of file names.c.
+
+   Package freePackage (Package pkg)
+       Destroy package control structure.
+
+       Parameters:
+
+       pkg    package control structure
+
+       Returns:
+           NULL
+
+       Definition at line 150 of file spec.c.
+
+   Package freePackages (Package packages)
+       Destroy all packages associated with spec file.
+
+       Parameters:
+
+       packages
+              package control structure chain
+
+       Returns:
+           NULL
+
+       Definition at line 178 of file spec.c.
+
+   Spec freeSpec (Spec spec)
+       Destroy Spec structure.
+
+       Parameters:
+
+       spec   spec file control structure
+
+       Returns:
+           NULL always
+
+       Definition at line 453 of file spec.c.
+
+   int_32* const getBuildTime (void)
+       Return build time stamp.
+
+       Returns:
+           build time stamp
+
+       Definition at line 163 of file names.c.
+
+   gid_t getGidS (const char * gname)
+       Return cached group id.
+
+       Todo:
+           Implement using hash.
+
+       Parameters:
+
+       group  name
+
+       Returns:
+           cached gid
+
+       Definition at line 141 of file names.c.
+
+       Referenced by genCpioListAndHeader.
+
+   const char* getGname (gid_t gid)
+       Return cached group name from group id.
+
+       Todo:
+           Implement using hash.
+
+       Parameters:
+
+       group  id
+
+       Returns:
+           cached group name
+
+       Definition at line 97 of file names.c.
+
+       Referenced by addFile, checkOwners, and
+       processSourceFiles.
+
+   const char* getGnameS (const char * gname)
+       Return cached group name.
+
+       Todo:
+           Implement using hash.
+
+       Parameters:
+
+       group  name
+
+       Returns:
+           cached group name
+
+       Definition at line 119 of file names.c.
+
+       Referenced by addFile.
+
+   uid_t getUidS (const char * uname)
+       Return cached user id.
+
+       Todo:
+           Implement using hash.
+
+       Parameters:
+
+       user   name
+
+       Returns:
+           cached uid
+
+       Definition at line 75 of file names.c.
+
+       Referenced by genCpioListAndHeader.
+
+   const char* getUname (uid_t uid)
+       Return cached user name from user id.
+
+       Todo:
+           Implement using hash.
+
+       Parameters:
+
+       user   id
+
+       Returns:
+           cached user name
+
+       Definition at line 31 of file names.c.
+
+       References RPMBUILD_PACKAGEBINARY, RPMBUILD_PACKAGESOURCE,
+       and RPMBUILD_RMSOURCE.
+
+       Referenced by addFile, checkOwners, headerInject, and
+       processSourceFiles.
+
+   const char* getUnameS (const char * uname)
+       Return cached user name.
+
+       Todo:
+           Implement using hash.
+
+       Parameters:
+
+       user   name
+
+       Returns:
+           cached user name
+
+       Definition at line 53 of file names.c.
+
+       References PART_BUILD, PART_CLEAN, PART_FILES,
+       PART_INSTALL, PART_POST, PART_PRE, PART_PREAMBLE,
+       PART_PREP, and PART_PREUN.
+
+       Referenced by addFile.
+
+   void handleComments (char * s)
+       Truncate comment lines.
+
+       Parameters:
+
+       s      skip white space, truncate line at '#'
+
+       Definition at line 93 of file parseSpec.c.
+
+       Referenced by copyNextLine, and processPackageFiles.
+
+   void initSourceHeader (Spec spec)
+       Create and initialize header for source package.
+
+       Parameters:
+
+       spec   spec file control structure
+
+       Definition at line 1966 of file files.c.
+
+       Referenced by buildForTarget, and processSourceFiles.
+
+   rpmParseState isPart (const char * line)
+       Check line for section separator, return next parser
+       state.
+
+       Parameters:
+
+       line   from spec file
+
+       Returns:
+           next parser state
+
+       Definition at line 51 of file parseSpec.c.
+
+       Referenced by parseBuildInstallClean, parseChangelog,
+       parseDescription, parseFiles, parsePreamble, parsePrep,
+       and parseScript.
+
+   int lookupPackage (Spec spec, const char * name, int flag,
+       Package * pkg)
+       Find sub-package control structure by name.
+
+       Parameters:
+
+       spec   spec file control structure
+
+       name   (sub-)package name
+
+       flag   if PART_SUBNAME, then 1st package name is prepended
+
+       Return values:
+
+       pkg    package control structure
+
+       Returns:
+           0 on success, 1 on failure
+
+       Definition at line 62 of file spec.c.
+
+       References PART_CHANGELOG, PART_DESCRIPTION, PART_POSTUN,
+       and PART_TRIGGERIN.
+
+   struct OpenFileInfo* newOpenFileInfo (void)
+       Definition at line 532 of file spec.c.
+
+       Referenced by forceIncludeFile, and parseSpec.
+
+   Package newPackage (Spec spec)
+       Create and initialize package control structure.
+
+       Parameters:
+
+       spec   spec file control structure
+
+       Returns:
+           package control structure
+
+       Definition at line 103 of file spec.c.
+
+   Spec newSpec (void)
+       Create and initialize Spec structure.
+
+       Returns:
+           spec spec file control structure
+
+       Definition at line 396 of file spec.c.
+
+       Referenced by parseSpec, and readRPM.
+
+   int packageBinaries (Spec spec)
+       Generate binary package(s).
+
+       Parameters:
+
+       spec   spec file control structure
+
+       Returns:
+           0 on success
+
+       Definition at line 665 of file pack.c.
+
+       Referenced by buildSpec.
+
+   int packageSources (Spec spec)
+       Generate source package.
+
+       Parameters:
+
+       spec   spec file control structure
+
+       Returns:
+           0 on success
+
+       Definition at line 760 of file pack.c.
+
+       Referenced by buildSpec.
+
+   int parseBuildInstallClean (Spec spec, rpmParseState
+       parsePart)
+       Parse %build/%install/%clean section(s) of a spec file.
+
+       Parameters:
+
+       spec   spec file control structure
+
+       parsePart
+              current rpmParseState
+
+       Returns:
+           >= 0 next rpmParseState, < 0 on error
+
+       Definition at line 12 of file parseBuildInstallClean.c.
+
+       Referenced by parseSpec.
+
+   int parseChangelog (Spec spec)
+       Parse %changelog section of a spec file.
+
+       Parameters:
+
+       spec   spec file control structure
+
+       Returns:
+           >= 0 next rpmParseState, < 0 on error
+
+       Definition at line 205 of file parseChangelog.c.
+
+       Referenced by parseSpec.
+
+   int parseDescription (Spec spec)
+       Parse %description section of a spec file.
+
+       Parameters:
+
+       spec   spec file control structure
+
+       Returns:
+           >= 0 next rpmParseState, < 0 on error
+
+       Definition at line 25 of file parseDescription.c.
+
+       References RPMBUILD_BUILD, RPMBUILD_CLEAN,
+       RPMBUILD_FILECHECK, RPMBUILD_INSTALL, and RPMBUILD_PREP.
+
+       Referenced by parseSpec.
+
+   int parseExpressionBoolean (Spec spec, const char * expr)
+       Evaluate boolean expression.
+
+       Parameters:
+
+       spec   spec file control structure
+
+       expr   expression to parse
+
+       Returns:
+
+       Definition at line 638 of file expression.c.
+
+       Referenced by readLine.
+
+   char* parseExpressionString (Spec spec, const char * expr)
+       Evaluate string expression.
+
+       Parameters:
+
+       spec   spec file control structure
+
+       expr   expression to parse
+
+       Returns:
+
+       Definition at line 685 of file expression.c.
+
+   int parseFiles (Spec spec)
+       Parse %files section of a spec file.
+
+       Parameters:
+
+       spec   spec file control structure
+
+       Returns:
+           >= 0 next rpmParseState, < 0 on error
+
+       Definition at line 23 of file parseFiles.c.
+
+       References RPMBUILD_NONE.
+
+       Referenced by parseSpec.
+
+   int parseNoSource (Spec spec, const char * field, int tag)
+       Parameters:
+
+       spec   spec file control structure
+
+       Definition at line 202 of file spec.c.
+
+   int parseNum (const char * line, int * res)
+       Parse a number.
+
+       Parameters:
+
+       line   from spec file
+
+       Return values:
+
+       res    pointer to int
+
+       Returns:
+           0 on success, 1 on failure
+
+       Definition at line 9 of file misc.c.
+
+       Referenced by addSource, doPatchMacro, doSetupMacro,
+       handlePreambleTag, and parseNoSource.
+
+   int parsePreamble (Spec spec, int initialPackage)
+       Parse tags from preamble of a spec file.
+
+       Parameters:
+
+       spec   spec file control structure
+
+       initialPackage
+              Returns:
+                  >= 0 next rpmParseState, < 0 on error
+
+       Definition at line 814 of file parsePreamble.c.
+
+       Referenced by parseSpec.
+
+   int parsePrep (Spec spec)
+       Parse %prep section of a spec file.
+
+       Parameters:
+
+       spec   spec file control structure
+
+       Returns:
+           >= 0 next rpmParseState, < 0 on error
+
+       Definition at line 520 of file parsePrep.c.
+
+       Referenced by parseSpec.
+
+   int parseRCPOT (Spec spec, Package pkg, const char * field,
+       int tag, int index, rpmsenseFlags flags)
+       Parse dependency relations from spec file and/or
+       autogenerated output buffer.
+
+       Parameters:
+
+       spec   spec file control structure
+
+       pkg    package control structure
+
+       field  text to parse (e.g. 'foo < 0:1.2-3, bar = 5:6.7')
+
+       tag    tag, identifies type of dependency
+
+       index  (0 always)
+
+       flags  dependency flags already known from context
+
+       Returns:
+           0 on success, RPMERR_BADSPEC on failure
+
+       Definition at line 34 of file parseReqs.c.
+
+       References RPMBUILD_RMBUILD, RPMBUILD_RMSPEC, and
+       RPMBUILD_STRINGBUF.
+
+       Referenced by generateDepends, handlePreambleTag, and
+       parseScript.
+
+   int parseScript (Spec spec, int parsePart)
+       Parse %pre et al scriptlets from a spec file.
+
+       Parameters:
+
+       spec   spec file control structure
+
+       parsePart
+              current rpmParseState
+
+       Returns:
+           >= 0 next rpmParseState, < 0 on error
+
+       Definition at line 66 of file parseScript.c.
+
+       References PART_BUILDARCHITECTURES, PART_LAST,
+       PART_TRIGGERPOSTUN, PART_TRIGGERUN, and PART_VERIFYSCRIPT.
+
+       Referenced by parseSpec.
+
+   int parseSpec (Spec * specp, const char * specFile, const char
+       * rootdir, const char * buildRoot, int recursing, const
+       char * passPhrase, char * cookie, int anyarch, int force)
+       Parse spec file into spec control structure.
+
+       Return values:
+
+       specp  spec file control structure
+
+       Parameters:
+
+       specFile
+
+       rootdir
+
+       buildRoot
+
+       recursing
+              parse is recursive?
+
+       passPhrase
+
+       cookie
+
+       anyarch
+
+       force  Returns:
+
+       Definition at line 360 of file parseSpec.c.
+
+       Referenced by buildForTarget, and parseSpec.
+
+   int processBinaryFiles (Spec spec, int installSpecialDoc, int
+       test)
+       Post-build processing for binary package(s).
+
+       Parameters:
+
+       spec   spec file control structure
+
+       installSpecialDoc
+
+       test   don't execute scripts or package if testing
+
+       Returns:
+           0 on success
+
+       Definition at line 2591 of file files.c.
+
+       Referenced by buildSpec.
+
+   int processSourceFiles (Spec spec)
+       Post-build processing for source package.
+
+       Parameters:
+
+       spec   spec file control structure
+
+       Returns:
+           0 on success
+
+       Definition at line 2025 of file files.c.
+
+       Referenced by buildSpec.
+
+   int readLine (Spec spec, int strip)
+       Read next line from spec file.
+
+       Parameters:
+
+       spec   spec file control structure
+
+       strip  truncate comments?
+
+       Returns:
+           0 on success, 1 on EOF, <0 on error
+
+       Definition at line 169 of file parseSpec.c.
+
+       References rpmParseState.
+
+       Referenced by parseBuildInstallClean, parseChangelog,
+       parseDescription, parseFiles, parsePreamble, parsePrep,
+       and parseScript.
+
+   int rpmlibNeedsFeature (Header h, const char * feature, const
+       char * featureEVR)
+       Add rpmlib feature dependency.
+
+       Parameters:
+
+       h      header
+
+       feature
+              rpm feature name (i.e. 'rpmlib(Foo)' for feature
+              Foo)
+
+       featureEVR
+              rpm feature epoch/version/release
+
+       Returns:
+           0 always
+
+       Definition at line 117 of file reqprov.c.
+
+       References int_32.
+
+       Referenced by genCpioListAndHeader, parseRCPOT,
+       parseScript, and writeRPM.
+
+   spectag stashSt (Spec spec, Header h, int tag, const char *
+       lang)
+       Parameters:
+
+       spec   spec file control structure
+
+       Definition at line 391 of file parsePreamble.c.
+
+       Referenced by handlePreambleTag, and parseDescription.
+
+VARIABLE DOCUMENTATION
+   Spec(* freeSpecVec)(Spec spec) (Spec spec)
+       Todo:
+            Eliminate linkage loop into librpmbuild.a
+
+       Definition at line 198 of file rpmspec.h.
+
+   int(* parseSpecVec)(Spec * specp, const char * specFile, const
+       char * rootdir, const char * buildRoot, int recursing,
+       const char * passPhrase, char * cookie, int anyarch, int
+       force) (Spec * specp, const char * specFile, const char *
+       rootdir, const char * buildRoot, int recursing, const char
+       * passPhrase, char * cookie, int anyarch, int force)
+       Todo:
+            Eliminate linkage loop into librpmbuild.a
+
+       Definition at line 451 of file rpmbuild.h.
+
+
+
+rpm                        13 Mar 2002               RPMBUILD.(3)

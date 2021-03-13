@@ -1,0 +1,388 @@
+PG_DUMP(1)        PostgreSQL Client Applications       PG_DUMP(1)
+
+
+
+NAME
+       pg_dump - extract a PostgreSQL database into a script file
+       or other archive file
+
+SYNOPSIS
+       pg_dump [ -a | -s ] [ -b ] [ -c ] [ -C ] [ -d | -D ] [  -f
+       file ] [ -F format ] [ -i ] [ -n | -N ] [ -o ] [ -O ] [ -R
+       ] [ -S ] [ -t table ] [ -v ] [ -x ] [ -X keyword  ]  [  -Z
+       0...9  ]  [  -h  host ] [ -p port ] [ -U username ] [ -W ]
+       dbname
+
+DESCRIPTION
+       pg_dump is a utility for saving a PostgreSQL database into
+       a  script  or  an  archive  file.  The script files are in
+       plain-text format and contain the SQL commands required to
+       reconstruct  the  database  to  the state it was in at the
+       time it was saved. They can be  used  to  reconstruct  the
+       database  even  on other machines and other architectures,
+       with some modifications even on other RDBMS products. Fur­
+       thermore,  there are alternative archive file formats that
+       are meant to be used with  pg_restore(1)  to  rebuild  the
+       database,  and  they also allow pg_restore to be selective
+       about what is restored, or even to reorder the items prior
+       to  being restored. The archive files are also designed to
+       be portable across architectures.
+
+       pg_dump will save the information necessary to re-generate
+       all user-defined types, functions, tables, indexes, aggre­
+       gates, and operators. In addition, all the data is  copied
+       out  in  text  format  so that it can be readily copied in
+       again, as well as imported into tools for editing.
+
+       pg_dump is useful  for  dumping  out  the  contents  of  a
+       database  to  move  from  one  PostgreSQL  installation to
+       another.
+
+       When used with one of the archive file  formats  and  com­
+       bined  with  pg_restore(1),  pg_dump  provides  a flexible
+       archival and transfer mechanism. pg_dump can  be  used  to
+       backup  an entire database, then pg_restore can be used to
+       examine the archive  and/or  select  which  parts  of  the
+       database  are  to  be  restored.  The most flexible output
+       file format is the ``custom'' format (-Fc). It allows  for
+       selection  and  reordering  of  all archived items, and is
+       compressed by default. The tar format (-Ft)  is  not  com­
+       pressed  and it is not possible to reorder data when load­
+       ing, but it is otherwise quite flexible; moreover, it  can
+       be manipulated with other tools such as tar.
+
+       While  running  pg_dump, one should examine the output for
+       any warnings (printed on standard  error),  especially  in
+       light of the limitations listed below.
+
+       pg_dump  makes  consistent backups even if the database is
+       being used concurrently.  pg_dump  does  not  block  other
+       users accessing the database (readers or writers).
+
+   OPTIONS
+       pg_dump  accepts  the  following  command  line arguments.
+       (Long option forms are only available on some  platforms.)
+
+       dbname Specifies the name of the database to be dumped.
+
+       -a
+
+       --data-only
+              Dump  only  the  data, not the schema (data defini­
+              tions).
+
+              This option is only meaningful for  the  plain-text
+              format.  For the other formats, you may specify the
+              option when you call pg_restore.
+
+       -b
+
+       --blobs
+              Include large objects in dump.
+
+       -c
+
+       --clean
+              Output commands to clean  (drop)  database  objects
+              prior to (the commands for) creating them.
+
+              This  option  is only meaningful for the plain-text
+              format. For the other formats, you may specify  the
+              option when you call pg_restore.
+
+       -C
+
+       --create
+              Begin  the  output  with  a  command  to create the
+              database  itself  and  reconnect  to  the   created
+              database.  (With  a script of this form, it doesn't
+              matter which database you connect to before running
+              the script.)
+
+              This  option  is only meaningful for the plain-text
+              format. For the other formats, you may specify  the
+              option when you call pg_restore.
+
+       -d
+
+       --inserts
+              Dump  data  as  INSERT commands (rather than COPY).
+              This will make restoration very slow, but it  makes
+              the archives more portable to other RDBMS packages.
+
+       -D
+
+       --column-inserts
+
+       --attribute-inserts
+              Dump data as INSERT commands with  explicit  column
+              names (INSERT INTO table (column, ...) VALUES ...).
+              This will make restoration very  slow,  but  it  is
+              necessary  if you desire to rearrange column order­
+              ing.
+
+       -f file
+
+       --file=file
+              Send output to the specified file. If this is omit­
+              ted, the standard output is used.
+
+       -F format
+
+       --format=format
+              Selects  the  format  of the output.  format can be
+              one of the following:
+
+              p      Output  a   plain-text   SQL   script   file
+                     (default)
+
+              t      Output a tar archive suitable for input into
+                     pg_restore. Using this archive format allows
+                     reordering  and/or  exclusion of schema ele­
+                     ments at the time the database is  restored.
+                     It  is  also possible to limit which data is
+                     reloaded at restore time.
+
+              c      Output a custom archive suitable  for  input
+                     into  pg_restore.  This is the most flexible
+                     format in that it allows reordering of  data
+                     load as well as schema elements. This format
+                     is also compressed by default.
+
+
+       -i
+
+       --ignore-version
+              Ignore version mismatch  between  pg_dump  and  the
+              database  server.  Since pg_dump knows a great deal
+              about system catalogs, any given version of pg_dump
+              is  only  intended  to  work with the corresponding
+              release of the database server. Use this option  if
+              you  need  to  override  the  version check (and if
+              pg_dump then fails, don't say you weren't  warned).
+
+       -n
+
+       --no-quotes
+              Suppress  double  quotes  around identifiers unless
+              absolutely necessary.  This may cause trouble load­
+              ing  this  dumped  data if there are reserved words
+              used for identifiers.  This was the default  behav­
+              ior for pg_dump prior to version 6.4.
+
+       -N
+
+       --quotes
+              Include  double quotes around identifiers.  This is
+              the default.
+
+       -o
+
+       --oids Dump object identifiers (OIDs) for every table. Use
+              this  option if your application references the OID
+              columns in some way (e.g., in a  foreign  key  con­
+              straint).   Otherwise,  this  option  should not be
+              used.
+
+       -O
+
+       --no-owner
+              Do not output commands to set the object  ownership
+              to  match the original database. Typically, pg_dump
+              issues (psql-specific) \connect statements  to  set
+              ownership of schema elements. See also under -R and
+              -X use-set-session-authorization. Note that -O does
+              not prevent all reconnections to the database, only
+              the ones that are exclusively  used  for  ownership
+              adjustments.
+
+              This  option  is only meaningful for the plain-text
+              format. For the other formats, you may specify  the
+              option when you call pg_restore.
+
+       -R
+
+       --no-reconnect
+              Prohibit  pg_dump  from  outputting  a  script that
+              would require reconnections to the  database  while
+              being  restored. An average restoration script usu­
+              ally has to reconnect several  times  as  different
+              users   to  set  the  original  ownerships  of  the
+              objects. This option is a rather  blunt  instrument
+              because it makes pg_dump lose this ownership infor­
+              mation, unless  you  use  the  -X  use-set-session-
+              authorization option.
+
+              One   possible   reason  why  reconnections  during
+              restore might not be desired is if  the  access  to
+              the  database  requires  manual  interaction (e.g.,
+              passwords).
+
+              This option is only meaningful for  the  plain-text
+              format.  For the other formats, you may specify the
+              option when you call pg_restore.
+
+       -s
+
+       --schema-only
+              Dump only the schema (data definitions), no data.
+
+       -S username
+
+       --superuser=username
+              The scripts or archives created by pg_dump need  to
+              have  superuser  access  in  certain cases, such as
+              when disabling triggers  or  setting  ownership  of
+              schema  elements.   This  option specifies the user
+              name to use for those cases.
+
+       -t table
+
+       --table=table
+              Dump data for table only.
+
+       -v
+
+       --verbose
+              Specifies verbose mode.
+
+       -x
+
+       --no-privileges
+
+       --no-acl
+              Prevent dumping of access privileges  (grant/revoke
+              commands).
+
+       -X use-set-session-authorization
+
+       --use-set-session-authorization
+              Normally,  if  a (plain-text mode) script generated
+              by pg_dump must alter  the  current  database  user
+              (e.g.,  to  set correct object ownerships), it uses
+              the psql(1) \connect command.  This  command  actu­
+              ally  opens  a  new connection, which might require
+              manual interaction (e.g., passwords).  If  you  use
+              the  -X  use-set-session-authorization option, then
+              pg_dump will instead output SET SESSION  AUTHORIZA­
+              TION  [set_session_authorization(7)] commands. This
+              has the same effect, but it requires that the  user
+              restoring the database from the generated script be
+              a  database  superuser.   This  option  effectively
+              overrides the -R option.
+
+              Since SET SESSION AUTHORIZATION [set_session_autho­
+              rization(7)] is a  standard  SQL  command,  whereas
+              \connect  only  works  in psql(1), this option also
+              enhances the theoretical portability of the  output
+              script.
+
+              This  option  is only meaningful for the plain-text
+              format. For the other formats, you may specify  the
+              option when you call pg_restore.
+
+       -Z 0..9
+
+       --compress=0..9
+              Specify  the  compression  level  to use in archive
+              formats that support  compression  (currently  only
+              the custom archive format supports compression).
+
+
+       pg_dump  also accepts the following command line arguments
+       for connection parameters:
+
+       -h host
+
+       --host=host
+              Specifies the host name of the machine on which the
+              server  is running. If host begins with a slash, it
+              is used  as  the  directory  for  the  Unix  domain
+              socket.
+
+       -p port
+
+       --port=port
+              Specifies  the  Internet  TCP/IP port or local Unix
+              domain socket file extension on which the server is
+              listening for connections. The port number defaults
+              to 5432, or the value  of  the  PGPORT  environment
+              variable (if set).
+
+       -U username
+              Connect as the given user.
+
+       -W     Force  a  password prompt. This should happen auto­
+              matically if the server requires password authenti­
+              cation.
+
+
+DIAGNOSTICS
+       Connection to database 'template1' failed.
+       connectDBStart() -- connect() failed: No such file or directory
+               Is the postmaster running locally
+               and accepting connections on Unix socket '/tmp/.s.PGSQL.5432'?
+
+
+       pg_dump  could not attach to the postmaster process on the
+       specified host and port. If you see this  message,  ensure
+       that the postmaster is running on the proper host and that
+       you have specified the proper port.
+
+              Note: pg_dump  internally  executes  SELECT  state­
+              ments.  If  you have problems running pg_dump, make
+              sure you are able to select  information  from  the
+              database using, for example, psql(1).
+
+
+NOTES
+       pg_dump has a few limitations.
+
+       · When  dumping  a  single table or as plain text, pg_dump
+         does not handle large objects.  Large  objects  must  be
+         dumped in their entirety using one of the binary archive
+         formats.
+
+       · When doing a data only dump, pg_dump  emits  queries  to
+         disable  triggers  on  user  tables before inserting the
+         data and queries to re-enable them after  the  data  has
+         been  inserted. If the restore is stopped in the middle,
+         the system catalogs may be left in the wrong state.
+
+
+EXAMPLES
+       To dump a database:
+
+       $ pg_dump mydb > db.out
+
+
+       To reload this database:
+
+       $ psql -d database -f db.out
+
+
+       To dump a database called mydb that contains large objects
+       to a tar file:
+
+       $ pg_dump -Ft -b mydb > db.tar
+
+
+       To  reload this database (with large objects) to an exist­
+       ing database called newdb:
+
+       $ pg_restore -d newdb db.tar
+
+
+HISTORY
+       The pg_dump utility first appeared in  Postgres95  release
+       0.02. The non-plain-text output formats were introduced in
+       PostgreSQL release 7.1.
+
+SEE ALSO
+       pg_dumpall(1), pg_restore(1), psql(1), PostgreSQL Adminis­
+       trator's Guide
+
+
+
+
+Application                 2001-03-06                 PG_DUMP(1)

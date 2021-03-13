@@ -1,0 +1,86 @@
+MacroBuf_s(3)                                       MacroBuf_s(3)
+
+
+
+NAME
+       MacroBuf_s - Macro expansion state.
+
+SYNOPSIS
+   Data Fields
+       const char * s
+       char * t
+       size_t nb
+       int depth
+       int macro_trace
+       int expand_trace
+       void * spec
+       MacroContext mc
+
+DETAILED DESCRIPTION
+       Macro expansion state.
+
+       Definition at line 64 of file macro.c.
+
+FIELD DOCUMENTATION
+   int MacroBuf_s::depth
+       Current expansion depth.
+
+       Definition at line 68 of file macro.c.
+
+       Referenced by expandMacros.
+
+   int MacroBuf_s::expand_trace
+       Post-print macro expansion?
+
+       Definition at line 70 of file macro.c.
+
+       Referenced by expandMacros.
+
+   int MacroBuf_s::macro_trace
+       Pre-print macro to expand?
+
+       Definition at line 69 of file macro.c.
+
+       Referenced by expandMacros.
+
+   MacroContext MacroBuf_s::mc
+       Definition at line 72 of file macro.c.
+
+       Referenced by expandMacros, and rpmDefineMacro.
+
+   size_t MacroBuf_s::nb
+       No. bytes remaining in expansion buffer.
+
+       Definition at line 67 of file macro.c.
+
+       Referenced by expandMacros.
+
+   const char* MacroBuf_s::s
+       Text to expand.
+
+       Definition at line 65 of file macro.c.
+
+       Referenced by expandMacros.
+
+   void* MacroBuf_s::spec
+       (future) file expansion info?.
+
+       Definition at line 71 of file macro.c.
+
+       Referenced by expandMacros.
+
+   char* MacroBuf_s::t
+       Expansion buffer.
+
+       Definition at line 66 of file macro.c.
+
+       Referenced by expandMacros.
+
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002              MacroBuf_s(3)

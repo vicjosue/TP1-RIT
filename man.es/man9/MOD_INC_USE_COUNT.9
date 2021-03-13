@@ -1,0 +1,49 @@
+MOD_INC_USE_COUNT(9)     Kernel Functions    MOD_INC_USE_COUNT(9)
+
+
+
+NAME
+       MOD_INC_USE_COUNT,  MOD_DEC_USE_COUNT  - Support reference
+       counting of modules
+
+SYNOPSIS
+       #include <linux/module.h>
+
+       #define MOD_INC_USE_COUNT
+       #define MOD_DEC_USE_COUNT
+
+DESCRIPTION
+       These macros support reference counting of modules  during
+       their lifetime. Each time MOD_INC_USE_COUNT(9) is invoked,
+       the kernel increases the number of counted  references  to
+       the  module. The MOD_DEC_USE_COUNT(9) decreases the refer­
+       ence count.
+
+       The reference count is used by the kernel to know  when  a
+       module  is  no  longer in use by the device or application
+       software. A MOD_INC_USE_COUNT(9) is  generally  placed  in
+       the open entry for a driver, and a MOD_DEC_USE_COUNT(9) in
+       the release for the driver, to count the number  of  times
+       the  device  has  been opened, and thus prevent the module
+       being unloaded when in use. The device driver  may  incre­
+       ment  the  use  count  other times, such as when memory is
+       mapped or the  module  must  remain  loaded  for  external
+       events.
+
+       If  the  device driver is not compiled as a module (MODULE
+       is not defined) then the macro reduces to no behavior.
+
+RETURN VALUE
+       These macros take no parameters and return no result.
+
+AVAILABILITY
+       Linux 1.0+
+
+SEE ALSO
+       /usr/include/linux/module.h
+
+AUTHOR
+       Stephen Williams <steve@icarus.com>
+
+BUGS
+Linux DDI                    $Date:$         MOD_INC_USE_COUNT(9)

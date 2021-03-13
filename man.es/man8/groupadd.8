@@ -1,0 +1,56 @@
+GROUPADD(8)                                           GROUPADD(8)
+
+
+
+NAME
+       groupadd - Create a new group
+
+SYNOPSIS
+       groupadd [-g gid [-o]] [-r] [-f] group
+
+DESCRIPTION
+       The groupadd command creates a new group account using the
+       values specified on the command line and the default  val­
+       ues  from  the system.  The new group will be entered into
+       the system files as needed.  The options  which  apply  to
+       the groupadd command are
+
+       -g gid The  numerical value of the group's ID.  This value
+              must be unique, unless the -o option is used.   The
+              value  must be non-negative.  The default is to use
+              the smallest ID value greater than 500 and  greater
+              than  every  other group.  Values between 0 and 499
+              are typically reserved for system accounts.
+
+       -r     This  flag  instructs  groupadd  to  add  a  system
+              account. First available gid lower than 499 will be
+              automatically selected unless -g  option  is  given
+              also on the command line.
+              This is an option added by Red Hat Software.
+
+       -f     This  is  force  flag. This will stop groupadd exit
+              with error when the group about to be added already
+              exists  on  the  system.  If  that is the case, the
+              group won't be altered (or added  again,  for  that
+              matter).
+              This  option also modifies the way -g option works.
+              When you request a gid that it is  not  unique  and
+              you  don't  give  -o option too, the group creation
+              will fall back to the standard behavior  (adding  a
+              group  as neither -g or -o options were specified).
+              This is an option added by Red Hat Software.
+
+FILES
+       /etc/group - group account information
+       /etc/gshadow - secure group account information
+
+SEE ALSO
+       chfn(1),  chsh(1),  useradd(8),  userdel(8),   usermod(8),
+       passwd(1), groupdel(8), groupmod(8)
+
+AUTHOR
+       Julianne Frances Haugh (jfh@austin.ibm.com)
+
+
+
+                                                      GROUPADD(8)

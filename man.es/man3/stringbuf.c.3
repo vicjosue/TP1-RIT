@@ -1,0 +1,109 @@
+lib/stringbuf.c(3)                             lib/stringbuf.c(3)
+
+
+
+NAME
+       lib/stringbuf.c -
+
+SYNOPSIS
+       #include 'system.h'
+       #include 'stringbuf.h'
+       #include 'debug.h'
+
+   Data Structures
+       struct StringBufRec
+
+   Defines
+       #define BUF_CHUNK   1024
+
+   Functions
+       int xisspace (int c)
+           Locale insensitive isspace(3).
+       void * _free (const void *p)
+           Wrapper to free(3), hides const compilation noise,
+           permit NULL, return NULL.
+       StringBuf newStringBuf (void)
+       StringBuf freeStringBuf (StringBuf sb)
+       void truncStringBuf (StringBuf sb)
+       void stripTrailingBlanksStringBuf (StringBuf sb)
+       char * getStringBuf (StringBuf sb)
+       void appendStringBufAux (StringBuf sb, const char *s, int
+           nl)
+
+DETAILED DESCRIPTION
+       Definition in file stringbuf.c.
+
+DEFINE DOCUMENTATION
+   #define BUF_CHUNK   1024
+       Definition at line 10 of file stringbuf.c.
+
+       Referenced by appendStringBufAux, and newStringBuf.
+
+FUNCTION DOCUMENTATION
+   void* _free (const void * p) [inline, static]
+       Wrapper to free(3), hides const compilation noise, permit
+       NULL, return NULL.
+
+       Parameters:
+
+       p      memory to free
+
+       Returns:
+           NULL always
+
+       Definition at line 32 of file stringbuf.c.
+
+   void appendStringBufAux (StringBuf sb, const char * s, int nl)
+       Definition at line 83 of file stringbuf.c.
+
+       References StringBufRec::allocated, StringBufRec::buf,
+       BUF_CHUNK, StringBufRec::free, StringBufRec::tail, and
+       xrealloc.
+
+   StringBuf freeStringBuf (StringBuf sb)
+       Definition at line 50 of file stringbuf.c.
+
+       References _free, and StringBufRec::buf.
+
+   char* getStringBuf (StringBuf sb)
+       Definition at line 78 of file stringbuf.c.
+
+       References StringBufRec::buf.
+
+   StringBuf newStringBuf (void)
+       Definition at line 38 of file stringbuf.c.
+
+       References StringBufRec::allocated, StringBufRec::buf,
+       BUF_CHUNK, StringBufRec::free, StringBufRec::tail,
+       xcalloc, and xmalloc.
+
+       Referenced by addFileToArrayTag, addFileToTag,
+       doSetupMacro, generateDepends, getOutputFrom,
+       parseBuildInstallClean, parseChangelog, parseDescription,
+       parseFiles, parseForSimple, parsePrep, parseScript,
+       processSourceFiles, and rpmReadPackageManifest.
+
+   void stripTrailingBlanksStringBuf (StringBuf sb)
+       Definition at line 66 of file stringbuf.c.
+
+       References StringBufRec::allocated, StringBufRec::free,
+       StringBufRec::tail, and xisspace.
+
+   void truncStringBuf (StringBuf sb)
+       Definition at line 59 of file stringbuf.c.
+
+       References StringBufRec::allocated, StringBufRec::buf,
+       StringBufRec::free, and StringBufRec::tail.
+
+   int xisspace (int c) [inline, static]
+       Locale insensitive isspace(3).
+
+       Definition at line 22 of file stringbuf.c.
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002         lib/stringbuf.c(3)

@@ -1,0 +1,43 @@
+SSL_set_bio(3)               OpenSSL               SSL_set_bio(3)
+
+
+
+NNAAMMEE
+       SSL_set_bio - connect the SSL object with a BIO
+
+SSYYNNOOPPSSIISS
+        #include <openssl/ssl.h>
+
+        void SSL_set_bio(SSL *ssl, BIO *rbio, BIO *wbio);
+
+
+DDEESSCCRRIIPPTTIIOONN
+       SSL_set_bio() connects the BIOs rrbbiioo and wwbbiioo for the read
+       and write operations of the TLS/SSL (encrypted) side of
+       ssssll.
+
+       The SSL engine inherits the behaviour of rrbbiioo and wwbbiioo,
+       respectively.  If a BIO is non-blocking, the ssssll will also
+       have non-blocking behaviour.
+
+       If there was already a BIO connected to ssssll, BIO_free()
+       will be called (for both the reading and writing side, if
+       different).
+
+RREETTUURRNN VVAALLUUEESS
+       SSL_set_bio() cannot fail.
+
+SSEEEE AALLSSOO
+       SSL_get_rbio(3), SSL_connect(3), SSL_accept(3),
+       SSL_shutdown(3), ssl(3), bio(3)
+
+
+
+
+
+
+
+
+
+
+16/Sep/2000                   0.9.6c               SSL_set_bio(3)

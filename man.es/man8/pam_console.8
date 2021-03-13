@@ -1,0 +1,82 @@
+pam_console(8)    System Administrator's Manual    pam_console(8)
+
+
+
+NAME
+       pam_console  - control permissions for users at the system
+       console
+
+SYNOPSIS
+       session optional /lib/security/pam_console.so
+       auth required /lib/security/pam_console.so
+
+DESCRIPTION
+       pam_console.so is designed to give users at  the  physical
+       console  (virtual  terminals  and local xdm-managed X ses­
+       sions by default, but that is  configurable)  capabilities
+       that  they  would  not  otherwise  have, and to take those
+       capabilities away when the are no longer logged in at  the
+       console.  It provides two main kinds of capabilities: file
+       permissions and authentication.
+
+       When a user logs in at the console and no  other  user  is
+       currently  logged  in  at the console, pam_console.so will
+       change permissions and ownership of files as described  in
+       the  file /etc/security/console.perms.  That user may then
+       log in on other terminals that are considered part of  the
+       console, and as long as the user is still logged in at any
+       one of those terminals, that user will own those  devices.
+       When  the  user logs out of the last terminal, the console
+       may be taken by the next user to log in.  Other users  who
+       have  logged  in  at  the console during the time that the
+       first user was logged in will not be  given  ownership  of
+       the  devices  unless  they log in on one of the terminals;
+       having done so on any one terminal, the next user will own
+       those devices until he or she has logged out of every ter­
+       minal that is part of the physical console.  Then the race
+       can  start  for the next user.  In practice, this is not a
+       problem; the physical console is not generally in  use  by
+       many  people  at  the  same  time, and pam_console.so just
+       tries to do the right thing in weird cases.
+
+ARGUMENTS
+       debug  turns on debugging
+
+       allow_nonroot_tty
+              gain console locks and change permissions  even  if
+              the TTY's owner is not root.
+
+       permsfile=filename
+              tells   pam_console.so   to   get  its  permissions
+              database from  a  different  file  than  /etc/secu­
+              rity/console.perms
+
+       fstab=filename
+              tells  pam_console.so  to read the table of config­
+              ured filesystems from a file other than  /etc/fstab
+              when  scanning permsfile.  This file is used to map
+              directories to device names.
+
+FILES
+       /var/run/console.lock
+       /var/run/console/
+       /etc/security/console.apps
+       /etc/security/console.perms
+
+SEE ALSO
+       console.perms(5)
+       console.apps(5)
+       /usr/doc/pam*/html/index.html pam_console_apply(8)
+       /usr/doc/pam*/html/index.html
+
+BUGS
+       Let's hope not, but if you find any,  please  report  them
+       via   the   "Bug   Track"   link  at  http://bugzilla.red­
+       hat.com/bugzilla/
+
+AUTHOR
+       Michael K. Johnson <johnsonm@redhat.com>
+
+
+
+Red Hat                     2000/7/11              pam_console(8)

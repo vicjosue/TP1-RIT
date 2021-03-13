@@ -1,0 +1,29 @@
+DETECTLOADER(8)            MandrakeSoft           DETECTLOADER(8)
+
+
+
+NAME
+       detectloader - Detect what type of loader you have on your
+       disk.
+
+DESCRIPTION
+       detectloader detects the type of the boot loader you  have
+       on  your MBR. It finds the first disk via /proc/partitions
+       and looks via the magic serial what kind  of  boot  loader
+       you have installed.
+
+LIMITATION
+       Supports  only grub, lilo, and yaboot (the boot loaders we
+       use for Linux Mandrake). Patches welcome  for  other  boot
+       loaders.
+
+COPYRIGHT
+       Copyright © 1999/2000/2001 MandrakeSoft.
+
+       This  is  free software; see the source for copying condi­
+       tions.  There is NO warranty; not even for MERCHANTABILITY
+       or FITNESS FOR A PARTICULAR PURPOSE.
+
+
+
+initscripts               Apr 2000-2002           DETECTLOADER(8)

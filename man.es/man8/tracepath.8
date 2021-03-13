@@ -1,0 +1,49 @@
+TRACEPATH(8)        Linux Programmer's Manual        TRACEPATH(8)
+
+
+
+NAME
+       tracepath  -  traces path to <destination> discovering MTU
+       along this path
+
+SYNOPSIS
+       tracepath destination [ port ]
+
+DESCRIPTION
+       It traces path to <destination> discovering MTU along this
+       path.  It uses UDP port <port> or some random port.
+
+       tracepath6 is good replacement for traceroute6
+              and  classic  example  of  application  Linux error
+              queues.  tracepath is worse, because commercial  IP
+              routers  do  not  return enough information in icmp
+              error messages.  Probably,  it  will  change,  when
+              they  will  be updated.  For now it uses Van Jacob­
+              son's trick, sweaping a range of UDP ports to main­
+              tain trace history.  using source address <source>.
+
+WARNING
+       GENERAL NOTE: all these applets, except  for  tracepath[6]
+       should  be excecutabel only with CAP_NET_RAWIO capability.
+       To all that I know, they are safe to  be  used  as  setuid
+       root.
+
+AUTHOR
+       tracepath     was     written    by    Alexey    Kuznetsov
+       <kuznet@ms2.inr.ac.ru>
+
+BUGS
+       If someone will dig out bugs, which were  fixed  after  my
+       versions were cloned: PLEASE, tell me!
+
+AVAILABILITY
+       tracepath  is  part of the iputils-ss990107 package and is
+       available for anonymous ftp  <ftp://ftp.inr.ac.ru/ip-rout­
+       ing/iputils-ss990107.tar.gz>
+
+SEE ALSO
+       ping(8), clockdiff(8), arping(8)
+
+
+
+iputils-ss990107           January 1999              TRACEPATH(8)

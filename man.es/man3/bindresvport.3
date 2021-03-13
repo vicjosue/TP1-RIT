@@ -1,0 +1,28 @@
+BINDRESVPORT(3)                                   BINDRESVPORT(3)
+
+
+
+NAME
+       bindresvport - bind a socket to a privileged IP port
+
+SYNOPSIS
+       #include <sys/types.h>
+       #include <netinet/in.h>
+
+       int bindresvport(sd, sin)
+       int sd;
+       struct sockaddr_in *sin;
+
+DESCRIPTION
+       bindresvport()  is  used  to bind a socket descriptor to a
+       privileged IP port, that is, a port number  in  the  range
+       0-1023.  The routine returns 0 if it is successful, other­
+       wise -1 is returned and errno set to reflect the cause  of
+       the error.
+
+       Only  root  can  bind to a privileged port; this call will
+       fail for any other users.
+
+
+
+                            1987-11-22            BINDRESVPORT(3)

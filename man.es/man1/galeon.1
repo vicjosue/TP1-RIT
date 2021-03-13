@@ -1,0 +1,175 @@
+GALEON(1)                                               GALEON(1)
+
+
+
+NAME
+       Galeon - gecko-based GNOME web browser
+
+SYNOPSIS
+       galeon [OPTION...] [URL...]
+
+DESCRIPTION
+       Galeon  is a GNOME web browser using the Mozilla rendering
+       and networking engines.
+
+OPTIONS
+       Galeon accepts the following options:
+
+       Help options
+
+       -?, --help
+              Show summary of options.
+
+       --usage
+              Display brief usage message.
+
+       GNOME options
+
+       --disable-sound
+              Disable sound server usage
+
+       --enable-sound
+              Enable sound server usage
+
+       --espeaker=HOSTNAME:PORT
+              Host:port on which the sound server to use is  run­
+              ning
+
+       --version
+              Print version number and exit
+
+       GTK options
+
+       --gdk-debug=FLAGS
+              Gdk debugging flags to set
+
+       --gdk-no-debug=FLAGS
+              Gdk debugging flags to unset
+
+       --display=DISPLAY
+              X display to use
+
+       --sync Make X calls synchronous
+
+       --no-xshm
+              Don't use X shared memory extension
+
+       --name=NAME
+              Program name as used by the window manager
+
+       --class=CLASS
+              Program class as used by the window manager
+
+       --gxid_host=HOST
+
+       --gxid_port=PORT
+
+       --xim-preedit=STYLE
+
+       --xim-status=STYLE
+
+       --gtk-debug=FLAGS
+              Gtk+ debugging flags to set
+
+       --gtk-no-debug=FLAGS
+              Gtk+ debugging flags to unset
+
+       --g-fatal-warnings
+              Make all warnings fatal
+
+       --gtk-module=MODULE
+              Load an additional Gtk module
+
+       GNOME GUI options
+
+       --disable-crash-dialog
+
+       Session management options
+
+       --sm-client-id=ID
+              Specify session management ID
+
+       --sm-config-prefix=PREFIX
+              Specify prefix of saved configuration
+
+       --sm-disable
+              Disable connection to session manager
+
+       OAF options
+
+       --oaf-od-ior=IOR
+              Object directory to use when registering servers
+
+       --oaf-ior-fd=FD
+              File descriptor to print IOR on
+
+       --oaf-activate-iid=IID
+              IID to activate
+
+       --oaf-private
+              Prevent registering of server with OAF
+
+       Galeon options
+
+       -n, --new-tab
+              Open a new tab in an existing Galeon window
+
+       -w, --new-window
+              Open a new window in an existing Galeon process
+
+       --noraise
+              Do  not  raise the window when opening a page in an
+              existing Galeon process
+
+       -f, --fullscreen
+              Run galeon in full screen mode
+
+       -x, --existing
+              Attempt to load URL in existing Galeon window
+
+       -p, --panel
+              Open as a panel applet
+
+       -s, --server
+              Don't open any windows; instead act as a server for
+              quick startup of new Galeon instances
+
+       -t, --add-bookmark=URL
+              Add a temp bookmark (don't open any window)
+
+       -g, --geometry=GEOMETRY
+              Create  the initial window with the given geometry.
+              See X(1) for the GEOMETRY format
+
+       -c, --close
+              Close all Galeon windows
+
+       -q, --quit
+              Same as --close, but exits server mode too
+
+AUTHOR
+       Written by Marco Pesenti Gritti, Remco  de  Jong,  Ricardo
+       Fernández  Pascual,  Nate  Case,  Bob  Phan,  Matt Aubury,
+       Joshua Horvath, Yanko Kaneti, Philip Langdale and  Matthew
+       Mueller.
+
+REPORTING BUGS
+       Please report bugs at http://bugzilla.gnome.org.
+
+COPYRIGHT
+       Copyright © 2000-2001 Marco Pesenti Gritti
+       This  is  free software; see the source for copying condi­
+       tions.  There is NO warranty; not even for MERCHANTABILITY
+       or FITNESS FOR A PARTICULAR PURPOSE.
+
+OTHER INFO
+       The   webpage   for  Galeon  is  at  http://galeon.source­
+       forge.net.  Here you can find info about Galeon and  down­
+       load the latest version.
+
+SEE ALSO
+       gtm(1)
+
+
+
+Version 1.0.3              2 July 2001                  GALEON(1)

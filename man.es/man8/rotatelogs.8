@@ -1,0 +1,48 @@
+rotatelogs(8)                                       rotatelogs(8)
+
+
+
+NAME
+       rotatelogs - rotate Apache logs without having to kill the
+       server
+
+SYNOPSIS
+       rotatelogs logfile rotationtime [offset]
+
+
+DESCRIPTION
+       rotatelogs is a simple program for use in conjunction with
+       Apache's  piped  logfile  feature  which  can be used like
+       this:
+
+          TransferLog  "|   rotatelogs   /path/to/logs/access_log
+       86400"
+
+       This creates the files /path/to/logs/access_log.nnnn where
+       nnnn is the system time at which the log nominally  starts
+       (this time will always be a multiple of the rotation time,
+       so you can synchronize cron scripts with it).  At the  end
+       of  each  rotation time (here after 24 hours) a new log is
+       started.
+
+OPTIONS
+       logfile
+              The path plus basename of the logfile.  If  logfile
+              includes  any  Otherwise, the suffix .nnnn is auto­
+              matically added and is the time at which  the  log­
+              file was created.
+
+       rotationtime
+              The rotation time in seconds.
+
+       offset The number of minutes offset from UTC.  If omitted,
+              zero is assumed and UTC is used.  For  example,  to
+              use  local time in the zone UTC -5 hours, specify a
+              value of -300 for this argument.
+
+SEE ALSO
+       httpd(8)
+
+
+
+                            March 2001              rotatelogs(8)

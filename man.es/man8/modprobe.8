@@ -1,0 +1,256 @@
+MODPROBE(8)            Linux Module Support           MODPROBE(8)
+
+
+
+NAME
+       modprobe - high level handling of loadable modules
+
+SYNOPSIS
+       modprobe  [  -adnqv  ] [ -C config ] module [ symbol=value
+       ... ]
+       modprobe [ -adnqv ] [ -C config ] [ -t type ] pattern
+       modprobe -l [ -C config ] [ -t type ] pattern
+       modprobe -c [ -C config ]
+       modprobe -r [ -dnv ] [ -C config ] [ module ...]
+       modprobe -V
+
+OPTIONS
+       -a, --all
+              Load all matching modules instead of stopping after
+              the first successful loading.
+
+       -c, --showconfig
+              Show the currently used configuration.
+
+       -d, --debug
+              Show  information about the internal representation
+              of the stack of modules.
+
+       -k, --autoclean
+              Set 'autoclean' on loaded  modules.   Used  by  the
+              kernel  when  it  calls  on  modprobe  to satisfy a
+              missing feature (supplied as  a  module).   The  -q
+              option  is  implied  by  -k.   These  options  will
+              automatically be sent to insmod.
+
+       -l, --list
+              List matching modules.
+
+       -n, --show
+              Don't actually perform the action, just  show  what
+              would be done.
+
+       -q, --quiet
+              Do  not  complain about insmod failing to install a
+              module.  Continue as  normal,  but  silently,  with
+              other  possibilities  for  modprobe  to test.  This
+              option will automatically be sent to insmod.
+
+       -r, --remove
+              Remove module (stacks) or do  autoclean,  depending
+              on  whether  there are any modules mentioned on the
+              command line.
+
+       -s, --syslog
+              Report via syslog instead of stderr.  This  options
+              will automatically be sent to insmod.
+
+       -t, --type moduletype
+              Only  consider modules of this type.  modprobe will
+              only look at modules whose directory path  includes
+              exactly  "/moduletype/".   moduletype  can  include
+              more than one directory name, e.g.   -t drivers/net
+              would  list  modules  in  xxx/drivers/net/  and its
+              subdirectories.
+
+       -v, --verbose
+              Print all commands as they are executed.
+
+       -V, --version
+              Show the release version of modprobe.
+
+       -C, --config configfile
+              Use the file configfile instead of  (the  optional)
+              /etc/modules.conf  to  specify  the  configuration.
+              The environment variable  MODULECONF  can  also  be
+              used   to   select   (and   override)  a  different
+              configuration     file     from     the     default
+              /etc/modules.conf       (or       /etc/conf.modules
+              (deprecated)).
+
+       Note:  Module names must not contain paths  (no  '/')  nor
+              may  they  contain the trailing '.o'.  For example,
+              slip  is  a  valid  module   name   for   modprobe,
+              /lib/modules/2.2.19/net/slip    and    slip.o   are
+              invalid.  This applies to the command line  and  to
+              entries in the configfile.
+
+DESCRIPTION
+       The  modprobe  and depmod utilities are intended to make a
+       Linux  modular  kernel  more  manageable  for  all  users,
+       administrators and distribution maintainers.
+
+       Modprobe  uses  a "Makefile"-like dependency file, created
+       by depmod, to automatically load  the  relevant  module(s)
+       from  the set of modules available in predefined directory
+       trees.
+
+       Modprobe is used to load a set of modules, either a single
+       module,  a stack of dependent modules, or all modules that
+       are marked with a specified tag.
+
+       Modprobe will automatically load all base  modules  needed
+       in  a  module  stack,  as described by the dependency file
+       modules.dep.  If the  loading  of  one  of  these  modules
+       fails,  the  whole  current stack of modules loaded in the
+       current session will be unloaded automatically.
+
+       Modprobe has two ways of loading  modules.  One  way  (the
+       probe  mode)  will  try  to  load  a  module out of a list
+       (defined by pattern ).  Modprobe stops loading as soon  as
+       one  module  loads  successfully.   This  could be used to
+       autoload one Ethernet driver out of a list.
+       The other way modprobe can be used is to load all  modules
+       from a list.  See EXAMPLES below.
+
+       With  the  option -r, modprobe will automatically unload a
+       stack of modules, similar to the way rmmod -r  does.  Note
+       that   using   just  modprobe  -r  will  clean  up  unused
+       autoloaded modules and also perform  the  pre-  and  post-
+       remove     commands     in    the    configuration    file
+       /etc/modules.conf.
+
+       With the option -l combined with the option -t a list  all
+       available modules of a certain type will be shown.
+
+       Option  -c  will  print  the  currently used configuration
+       (default + configuration file).
+
+CONFIGURATION
+       The behavior of modprobe (and depmod ) can be modified  by
+       the (optional) configuration file /etc/modules.conf
+       For  a  more  detailed  description  of what this file can
+       contain, as well as  the  default  configuration  used  by
+       depmod and modprobe, see modules.conf(5).
+
+       Note  that  the  pre- and post-remove commands will not be
+       executed if a module is "autocleaned"  by  kerneld!   Look
+       for  the  up-coming  support for persistent module storage
+       instead.
+       If you want to use the pre- and post-install features, you
+       will  have  to  turn off autoclean for kerneld and instead
+       put something like the  following  line  in  your  crontab
+       (this  is  used  for kmod systems as well) to do autoclean
+       every 2 minutes:
+        */2 * * * * test -f /proc/modules && /sbin/modprobe -r
+
+STRATEGY
+       The idea is that modprobe will look first in the directory
+       containing modules compiled for the current release of the
+       kernel.  If the module is not found there,  modprobe  will
+       look  in  the directory common to the kernel version (e.g.
+       2.0, 2.2).  If the module is still  found,  modprobe  will
+       look  in  the  directory  containing modules for a default
+       release, and so on.
+
+       When you install a new linux, the modules should be  moved
+       to a directory related to the release (and version) of the
+       kernel you are installing.  Then you should do  a  symlink
+       from this directory to the "default" directory.
+
+       Each  time  you  compile  a  new  kernel, the command make
+       modules_install will create a  new  directory,  but  won't
+       change the "default" link.
+
+       When you get a module unrelated to the kernel distribution
+       you should place it  in  one  of  the  version-independent
+       directories under /lib/modules.
+
+       This  is  the default strategy, which can be overridden in
+       /etc/modules.conf.
+
+EXAMPLES
+       modprobe -t net
+              Load one of the modules  that  are  stored  in  the
+              directory  tagged  "net".   Each  module  are tried
+              until one succeeds.
+
+       modprobe -a -t boot
+              All modules that are stored in  directories  tagged
+              boot will be loaded.
+
+       modprobe slip
+              This  will  attempt to load the module slhc.o if it
+              was not previously loaded, since  the  slip  module
+              needs  the  functionality in the slhc module.  This
+              dependency  will   be   described   in   the   file
+              "modules.dep"  that  was  created  automatically by
+              depmod
+
+       modprobe -r slip
+              will unload the slip module.  It will  also  unload
+              the slhc module automatically, unless it is used by
+              some other module as well (like e.g. ppp).
+
+FILES
+       /etc/modules.conf, (alternatively but deprecated: /etc/conf.modules)
+       /lib/modules/*/modules.dep,
+       /lib/modules/*
+
+SEE ALSO
+       depmod(8), lsmod(8), kerneld(8), ksyms(8), rmmod(8)
+
+SAFE MODE
+       If the effective uid is not equal to  the  real  uid  then
+       modprobe  treats  its  input  with extreme suspicion.  The
+       last parameter is always treated as a module name, even if
+       it starts with '-'.  There can only be one module name and
+       options of the form "variable=value" are  forbidden.   The
+       module  name  is  always  treated  as  a  string,  no meta
+       expansion  is  performed  in  safe  mode.   However   meta
+       expansion  is  still  applied to data read from the config
+       file.
+
+       euid may not be equal to uid when modprobe is invoked from
+       the  kernel, this is true for kernels >= 2.4.0-test11.  In
+       an ideal world modprobe could trust  the  kernel  to  only
+       pass  valid  parameters to modprobe.  However at least one
+       local root exploit has occurred because high level  kernel
+       code  passed unverified parameters direct from the user to
+       modprobe.  So modprobe no longer trusts kernel input.
+
+       modprobe automatically sets safe mode when the environment
+       consists only of these strings
+        HOME=/
+        TERM=linux
+        PATH=/sbin:/usr/sbin:/bin:/usr/bin
+       This detects modprobe execution from the kernel on kernels
+       2.2 though 2.4.0-test11, even if uid  ==  euid,  which  it
+       does on the earlier kernels.
+
+LOGGING COMMANDS
+       If  directory /var/log/ksymoops exists and modprobe is run
+       with an option that could load or a delete a  module  then
+       modprobe  will  log  its  command  and  return  status  in
+       /var/log/ksymoops/`date +%Y%m%d.log`.  There is no  switch
+       to  disable  this automatic logging, if you do not want it
+       to  occur,  do  not  create  /var/log/ksymoops.   If  that
+       directory  exists,  it should be owned by root and be mode
+       644 or 600 and you should run script insmod_ksymoops_clean
+       every day or so.
+
+REQUIRED UTILITIES
+       depmod(8), insmod(8)
+
+NOTES
+       Patterns  supplied  to  modprobe  will  often  need  to be
+       escaped to ensure that  it  is  evaluated  in  the  proper
+       context.
+
+AUTHOR
+       Jacques Gelinas (jack@solucorp.qc.ca)
+       Bjorn Ekwall (bj0rn@blox.se)
+
+
+
+Linux                    August 15, 2001              MODPROBE(8)

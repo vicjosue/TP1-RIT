@@ -1,0 +1,31 @@
+WCSLEN(3)           Linux Programmer's Manual           WCSLEN(3)
+
+
+
+NAME
+       wcslen - determine the length of a wide-character string
+
+SYNOPSIS
+       #include <wchar.h>
+
+       size_t wcslen(const wchar_t *s);
+
+DESCRIPTION
+       The  wcslen  function  is the wide-character equivalent of
+       the strlen function. It determines the length of the wide-
+       character string pointed to by s, not including the termi­
+       nating L'\0' character.
+
+RETURN VALUE
+       The wcslen function returns the number of wide  characters
+       in s.
+
+CONFORMING TO
+       ISO/ANSI C, UNIX98
+
+SEE ALSO
+       strlen(3)
+
+
+
+GNU                         1999-07-25                  WCSLEN(3)

@@ -1,0 +1,165 @@
+SMBSH(1)                                                 SMBSH(1)
+
+
+
+NAME
+       smbsh - Allows access to Windows NT filesystem  using UNIX
+       commands
+
+SYNOPSIS
+       smbsh [ -W workgroup ]  [ -U username ]  [ -P prefix ]   [
+       -R <name resolve order> ]  [ -d <debug level> ]  [ -l log­
+       file ]  [ -L libdir ]
+
+DESCRIPTION
+       This tool is part of the  Sambasuite.
+
+       smbsh allows you to access an  NT  filesystem  using  UNIX
+       commands such as ls,  egrep, and rcp. You must use a shell
+       that is dynamically linked in order for smbsh to work cor­
+       rectly.
+
+OPTIONS
+       -W WORKGROUP
+              Override  the  default  workgroup  specified in the
+              workgroup parameter of the smb.conf file  for  this
+              session.  This  may  be  needed  to connect to some
+              servers.
+
+       -U username[%pass]
+              Sets the SMB username or username and password.  If
+              this  option  is  not  specified,  the user will be
+              prompted for both the username and the password. If
+              %pass  is  not specified, the user will be prompted
+              for the password.
+
+       -P prefix
+              This option allows the user to  set  the  directory
+              prefix  for  SMB  access. The default value if this
+              option is not specified is smb.
+
+       -R <name resolve order>
+              This option is used to determine what  naming  ser­
+              vices and in what order to resolve host names to IP
+              addresses.  The  option  takes  a   space-separated
+              string of different name resolution options.
+
+              The  options  are  :"lmhosts",  "host",  "wins" and
+              "bcast".  They cause names to be resolved  as  fol­
+              lows :
+
+              · lmhosts  :  Lookup  an  IP  address  in the Samba
+                lmhosts file. If the line in lmhosts has no  name
+                type  attached  to  the  NetBIOS  name  (see  the
+                lmhosts(5)  for  details)  then  any  name   type
+                matches for lookup.
+
+              · host : Do a standard host name to IP address res­
+                olution, using the system /etc/hosts, NIS, or DNS
+                lookups.  This method of name resolution is oper­
+                ating system dependent, for instance on  IRIX  or
+                Solaris  this  may be controlled by the /etc/nss­
+                witch.conf file). Note that this method  is  only
+                used  if  the  NetBIOS name type being queried is
+                the 0x20 (server)  name  type,  otherwise  it  is
+                ignored.
+
+              · wins : Query a name with the IP address listed in
+                the wins server parameter. If no WINS server  has
+                been specified this method will be ignored.
+
+              · bcast : Do a broadcast on each of the known local
+                interfaces listed in  the  interfaces  parameter.
+                This is the least reliable of the name resolution
+                methods as it depends on the target host being on
+                a locally connected subnet.
+
+       If  this  parameter is not set then the name resolve order
+       defined in  the  smb.conf  file  parameter  (name  resolve
+       order) will be used.
+
+
+       The  default  order is lmhosts, host, wins, bcast. Without
+       this parameter or any entry  in  the  name  resolve  order
+       parameter  of the smb.conf file, the name resolution meth­
+       ods will be attempted in this order.
+
+
+       -d <debug level>
+              debug level is an integer from 0 to 10.
+
+              The default value if this parameter is  not  speci­
+              fied is zero.
+
+              The  higher  this  value,  the  more detail will be
+              logged about the activities of nmblookup. At  level
+              0,  only  critical errors and serious warnings will
+              be logged.
+
+       -l logfilename
+              If specified causes all debug messages to be  writ­
+              ten  to  the file specified by logfilename . If not
+              specified then all messages will be  written  tost­
+              derr.
+
+       -L libdir
+              This parameter specifies the location of the shared
+              libraries used by smbsh. The default value is spec­
+              ified at compile time.
+
+EXAMPLES
+       To  use  the smbsh command, execute  smbsh from the prompt
+       and enter the username and password that authenticates you
+       to the machine running the Windows NT operating system.
+
+
+            system% smbsh
+            Username: user
+            Password: XXXXXXX
+
+
+
+       Any dynamically linked command you execute from this shell
+       will access the /smb directory using the smb protocol. For
+       example,  the  command  ls  /smb will show a list of work­
+       groups. The command ls /smb/MYGROUP   will  show  all  the
+       machines   in   the  workgroup  MYGROUP.  The  command  ls
+       /smb/MYGROUP/<machine-name> will show the share names  for
+       that  machine.  You  could  then, for example, use the  cd
+       command to change directories, vi to edit files,  and  rcp
+       to copy files.
+
+VERSION
+       This  man  page  is  correct  for version 2.2 of the Samba
+       suite.
+
+BUGS
+       smbsh works by intercepting the standard libc  calls  with
+       the  dynamically loaded versions in  smbwrapper.o. Not all
+       calls have been "wrapped", so some programs may not  func­
+       tion correctly under smbsh .
+
+       Programs  which are not dynamically linked cannot make use
+       of smbsh's functionality. Most versions  of  UNIX  have  a
+       file  command that will describe how a program was linked.
+
+SEE ALSO
+       smbd(8), smb.conf(5)
+
+AUTHOR
+       The original Samba software  and  related  utilities  were
+       created  by Andrew Tridgell. Samba is now developed by the
+       Samba Team as an Open Source project similar  to  the  way
+       the Linux kernel is developed.
+
+       The  original  Samba  man pages were written by Karl Auer.
+       The  man  page  sources  were  converted  to  YODL  format
+       (another  excellent  piece of Open Source software, avail­
+       able          at           ftp://ftp.icce.rug.nl/pub/unix/
+       <URL:ftp://ftp.icce.rug.nl/pub/unix/>) and updated for the
+       Samba 2.0 release by Jeremy  Allison.  The  conversion  to
+       DocBook for Samba 2.2 was done by Gerald Carter
+
+
+
+                         24 January 2002                 SMBSH(1)

@@ -1,0 +1,42 @@
+register_console(9)      Kernel Functions     register_console(9)
+
+
+
+NAME
+       register_console - take on kernel console duties
+
+SYNOPSIS
+       extern void register_console(void(*proc)(const char*))
+
+DESCRIPTION
+       This function registers with the kernel a function to dis­
+       play all the kernel  messages  printed  by  the  printk(9)
+       function.
+
+       This  function is normally called once at boot time by the
+       device driver for the console device, whatever that  turns
+       out  to  be for the machine. The console procedure is only
+       called to print messages that are to be printed, the  fil­
+       tering for log level is done already.
+
+RETURN VALUE
+       None.
+
+AVAILABILITY
+       Linux 1.0+
+
+SEE ALSO
+       printk(9)
+
+       /usr/src/linux/kernel/printk.c
+
+AUTHOR
+       Stephen Williams <steve@icarus.com>
+
+BUGS
+       Only  one console can exist at a time, and there is no way
+       to know if any other device has registered as a console.
+
+
+
+Linux DDI                    $Date:$          register_console(9)

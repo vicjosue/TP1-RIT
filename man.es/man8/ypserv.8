@@ -1,0 +1,125 @@
+YPSERV(8)                Reference Manual               YPSERV(8)
+
+
+
+NAME
+       ypserv - NIS server
+
+SYNOPSIS
+       /usr/sbin/ypserv [ -b ] [ -d [ path ] ] [ -p port ]
+
+
+DESCRIPTION
+       The  Network  Information  Service (NIS) provides a simple
+       network lookup service consisting of  databases  and  pro­
+       cesses.   The databases are gdbm files in a directory tree
+       rooted at /var/yp.
+
+       The  ypserv  daemon  is  typically  activated  at   system
+       startup.   ypserv  runs only on NIS server machines with a
+       complete NIS database. On other  machines  using  the  NIS
+       services,  you have to run ypbind as client or under Linux
+       you could use the libc with NYS support.  ypbind must  run
+       on  every  machine  which has NIS client processes; ypserv
+       may or may not be running on the same node,  but  must  be
+       running  somewhere  on  the  network.  On  startup or when
+       receiving  the  signal  SIGHUP,  ypserv  parses  the  file
+       /etc/ypserv.conf.
+
+
+OPTIONS
+       -d --debug [path]
+              Causes  the  server  to run in debugging mode. Nor­
+              mally, ypserv reports only  errors  (access  viola­
+              tions,  dbm failures) using the syslog(3) facility.
+              In debug  mode,  the  server  does  not  background
+              itself  and  prints extra status messages to stderr
+              for each request that it  revceives.   path  is  an
+              optionally  parameter.  ypserv is using this direc­
+              tory instead of /var/yp
+
+       -b --dns
+              If we don't find the host in  the  hosts  maps,  we
+              query  the  DNS  (Domain  Name Service) service for
+              more host information. This is  done  in  an  extra
+              subprocess.  ypserv ignores the YP_INTERDOMAIN keys
+              for dns lookup.
+
+       -p --port port
+              ypserv will bind itself to this port.   This  makes
+              it  possible to have a router filter packets to the
+              NIS ports, so that access to the  NIS  server  from
+              hosts on the Internet can be restricted.
+
+       -v --version
+              Prints the version number
+
+SECURITY
+       In general, any remote user can issue an RPC to ypserv and
+       retrieve the contents of your NIS maps, if he  knows  your
+       domain  name.  To  prevent such unauthorized transactions,
+       ypserv supports a feature called securenets which  can  be
+       used  to  restrict  access  to  a  given set of hosts.  At
+       startup or when arriving the SIGHUP  Signal,  ypserv  will
+       attempt  to  load  the  securenets information from a file
+       called /var/yp/securenets .  This  file  contains  entries
+       that  consist of a netmask and a network pair separated by
+       white spaces.  Lines starting with ``#'' are considered to
+       be comments.
+
+       A sample securenets file might look like this:
+
+              # allow connections from local host -- necessary
+              host 127.0.0.1
+              # same as 255.255.255.255 127.0.0.1
+              #
+              # allow connections from any host
+              # on the 131.234.223.0 network
+              255.255.255.0   131.234.223.0
+              # allow connections from any host
+              # between 131.234.214.0 and 131.234.215.255
+              255.255.254.0   131.234.214.0
+
+       If ypserv receives a request from an address that fails to
+       match a rule, the request will be ignored  and  a  warning
+       message  will  be  logged.  If the /var/yp/securenets file
+       does not exist, ypserv will  allow  connections  from  any
+       host.
+
+       In  the  /etc/ypserv.conf  you  could  specify some access
+       rules for special maps and  hosts.  But  it  is  not  very
+       secure,  it  makes the life only a little bit harder for a
+       potential hacker. If  a  mapname  doesn't  match  a  rule,
+       ypserv  will  look for the YP_SECURE key in the map. If it
+       exists, ypserv will only  allow  requests  on  a  reserved
+       port.
+
+       For  security  reasons, ypserv will only accept ypproc_xfr
+       requests for updating maps from the same master server  as
+       the  old  one. This means, you have to reinstall the slave
+       servers if you change the master server for a map.
+
+FILES
+       /etc/ypserv.conf /var/yp/securenets
+
+SEE ALSO
+       domainname(1), ypcat(1), ypmatch(1), ypserv.conf(5),  net­
+       group(5),     makedbm(8),    revnetgroup(8),    ypinit(8),
+       yppoll(8),  yppush(8),  ypset(8),  ypwhich(8),   ypxfr(8),
+       rpc.ypxfrd(8)
+
+       The  Network  Information Service (NIS) was formerly known
+       as Sun Yellow Pages (YP).  The functionality  of  the  two
+       remains  the  same;  only  the name has changed.  The name
+       Yellow Pages is a registered trademark in the United King­
+       dom of British Telecommunications plc, and may not be used
+       without permission.
+
+AUTHOR
+       ypserv was written by Peter Eriksson <pen@lysator.liu.se>.
+       Thorsten  Kukuk  <kukuk@suse.de>  added  support  for mas­
+       ter/slave server and is the new Maintainer.
+
+
+
+YP Server                  August 2001                  YPSERV(8)

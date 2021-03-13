@@ -1,0 +1,107 @@
+MYSQLACCESS(1)                                     MYSQLACCESS(1)
+
+
+
+NAME
+       mysqlaccess
+        - Create new users to mysql.
+
+USAGE
+       mysqlaccess [host [user [db]]] OPTIONS
+
+SYNOPSIS
+       mysqlaccess  [-?|--help]  [-v|--version] [-p|--password=#]
+       [-h|--host=#] [-d|--db=#] [-U|--superuser=#]  [-P|--spass­
+       word=#]    [-H|--rhost=#]    [--old_server]   [-b|--brief]
+       [-t|--table] [--relnotes] [--plan]  [--howto]  [--debug=N]
+       [--copy] [--preview] [--commit] [--rollback]
+
+DESCRIPTION
+       -?|--help
+              display this helpscreen and exit
+
+       -v|--version
+              print information on the program `mysqlaccess'
+
+       -u|--user=#
+              username for logging in to the db
+
+       -p|--password=#
+              validate password for user
+
+       -h|--host=#
+              name or IP-number of the host
+
+       -d|--db=#
+              name of the database
+
+       -U|--superuser=#
+              connect as superuser
+
+       -P|--spassword=#
+              password for superuser
+
+       -H|--rhost=#
+              remote MySQL-server to connect to
+
+       --old_server
+              connect  to  old  MySQL-server (before v3.21) which
+              does not yet know how to handle full where clauses.
+
+       -b|--brief
+              single-line tabular report
+
+       -t|--table
+              report in table-format
+
+       --relnotes
+              print release-notes
+
+       --plan print suggestions/ideas for future releases
+
+       --howto
+              some examples of how to run `mysqlaccess'
+
+       --debug=N
+              enter debuglevel N (0..3)
+
+       --copy reload temporary grant-tables from original ones
+
+       --preview
+              show differences in privileges after making changes
+              in (temporary) grant-tables
+
+       --commit
+              copy   grant-rules   from   temporary   tables   to
+              grant-tables  (!don't  forget  to  do an mysqladmin
+              reload)
+
+       --rollback
+              undo the last changes to the grant-tables.
+
+NOTE
+           + At least the user and the db  must  be  given  (even
+       with wildcards)
+           + If no host is given, `localhost' is assumed
+           +  Wilcards  (*,?,%,_)  are allowed for host, user and
+       db, but be sure
+             to escape them from your shell!! (ie type or '*')
+
+SEE ALSO
+       isamchk (1), isamlog (1), mysqlaccess (1), mysqladmin (1),
+       mysqlbug  (1),  mysqld  (1), mysqldump (1), mysqlshow (1),
+       msql2mysql (1), perror (1), replace (1), safe_mysqld  (1),
+       which1 (1), zap (1),
+
+AUTHOR
+       Ver  1.0,  distribution  3.23.29a Michael (Monty) Widenius
+       (monty@tcx.se), TCX  Datakonsult  AB  (http://www.tcx.se).
+       This  software  comes with no warranty.  Manual page by L.
+       (Kill-9)  Pedersen  (kill-9@kill-9.dk),  Mercurmedia  Data
+       Model  Architect  / system developer (http://www.mercurme­
+       dia.com)
+
+
+
+
+                         19 December 2000          MYSQLACCESS(1)

@@ -1,0 +1,658 @@
+lib/header.c(3)                                   lib/header.c(3)
+
+
+
+NAME
+       lib/header.c -
+
+SYNOPSIS
+       #include 'system.h'
+       #include <header_internal.h>
+       #include 'debug.h'
+
+   Data Structures
+       struct headerIteratorS
+           Header tag iterator data structure.
+
+   Defines
+       #define __HEADER_PROTOTYPES__
+       #define PARSER_BEGIN   0
+       #define PARSER_IN_ARRAY   1
+       #define PARSER_IN_EXPR   2
+       #define hdrchkTags(_ntags)   ((_ntags) & 0xffff0000)
+           Sanity check on no.
+       #define hdrchkData(_nbytes)   ((_nbytes) & 0xff000000)
+           Sanity check on data size and/or offset.
+
+   Functions
+       const char *const tagName (int tag)
+           Return name of tag from value.
+       void * _free (const void *p)
+           Wrapper to free(3), hides const compilation noise,
+           permit NULL, return NULL.
+       Header headerNew ()
+       Header headerFree (Header h)
+       Header headerLink (Header h)
+       int indexCmp (const void *avp, const void *bvp)
+       void headerSort (Header h)
+       int offsetCmp (const void *avp, const void *bvp)
+       void headerUnsort (Header h)
+       unsigned int headerSizeof (Header h, enum hMagic magicp)
+       int dataLength (int_32 type, hPTR_t p, int_32 count, int
+           onDisk)
+           Return length of entry data.
+       int regionSwab (indexEntry entry, int il, int dl,
+           entryInfo pe, char *dataStart, int regionid)
+       void * doHeaderUnload (Header h, int *lengthPtr)
+       void * headerUnload (Header h)
+       Header headerReload (Header h, int tag)
+       Header headerCopy (Header h)
+       Header headerLoad (void *uh)
+       Header headerCopyLoad (const void *uh)
+       Header headerRead (FD_t fd, enum hMagic magicp)
+       int headerWrite (FD_t fd, Header h, enum hMagic magicp)
+       indexEntry findEntry (Header h, int_32 tag, int_32 type)
+           Find matching (tag,type) entry in header.
+       int headerIsEntry (Header h, int_32 tag)
+       int copyEntry (const indexEntry entry, hTYP_t type, hPTR_t
+           *p, hCNT_t c, int minMem)
+       int headerMatchLocale (const char *td, const char *l,
+           const char *le)
+           Does locale match entry in header i18n table?
+       char * headerFindI18NString (Header h, indexEntry entry)
+           Return i18n string from header that matches locale.
+       int intGetEntry (Header h, int_32 tag, hTAG_t type, hPTR_t
+           *p, hCNT_t c, int minMem)
+           Retrieve tag data from header.
+       void * headerFreeTag (Header h, const void *data,
+           rpmTagType type)
+       int headerGetEntry (Header h, int_32 tag, hTYP_t type,
+           void **p, hCNT_t c)
+       int headerGetEntryMinMemory (Header h, int_32 tag, hTYP_t
+           type, hPTR_t *p, hCNT_t c)
+       int headerGetRawEntry (Header h, int_32 tag, int_32 *type,
+           hPTR_t *p, int_32 *c)
+       void copyData (int_32 type, void *dstPtr, const void
+           *srcPtr, int_32 c, int dataLength)
+       void * grabData (int_32 type, hPTR_t p, int_32 c, int
+           *lengthPtr)
+           Return (malloc'ed) copy of entry data.
+       int headerAddEntry (Header h, int_32 tag, int_32 type,
+           hPTR_t p, int_32 c)
+       int headerAppendEntry (Header h, int_32 tag, int_32 type,
+           hPTR_t p, int_32 c)
+       int headerAddOrAppendEntry (Header h, int_32 tag, int_32
+           type, hPTR_t p, int_32 c)
+       int headerAddI18NString (Header h, int_32 tag, const char
+           *string, const char *lang)
+       int headerModifyEntry (Header h, int_32 tag, int_32 type,
+           hPTR_t p, int_32 c)
+       int headerRemoveEntry (Header h, int_32 tag)
+       char escapedChar (const char ch)
+       sprintfToken freeFormat (sprintfToken format, int num)
+           Destroy headerSprintf format array.
+       void findTag (char *name, const headerTagTableEntry tags,
+           const headerSprintfExtension extensions,
+           headerTagTableEntry *tagMatch, headerSprintfExtension
+           *extMatch)
+       int parseExpression (sprintfToken token, char *str, const
+           headerTagTableEntry tags, const headerSprintfExtension
+           extensions, char **endPtr, errmsg_t *errmsg)
+       int parseFormat (char *str, const headerTagTableEntry
+           tags, const headerSprintfExtension extensions,
+           sprintfToken *formatPtr, int *numTokensPtr, char
+           **endPtr, int state, errmsg_t *errmsg)
+       int getExtension (Header h, headerTagTagFunction fn,
+           hTYP_t typeptr, hPTR_t *data, hCNT_t countptr,
+           extensionCache ext)
+       char * formatValue (sprintfTag tag, Header h, const
+           headerSprintfExtension extensions, extensionCache
+           extCache, int element)
+       const char * singleSprintf (Header h, sprintfToken token,
+           const headerSprintfExtension extensions,
+           extensionCache extCache, int element)
+       extensionCache allocateExtensionCache (const
+           headerSprintfExtension extensions)
+       extensionCache freeExtensionCache (const
+           headerSprintfExtension extensions, extensionCache
+           cache)
+       char * headerSprintf (Header h, const char *fmt, const
+           struct headerTagTableEntry_s *tabletags, const struct
+           headerSprintfExtension_s *extensions, errmsg_t
+           *errmsg)
+       char * octalFormat (int_32 type, hPTR_t data, char
+           *formatPrefix, int padding, int element)
+       char * hexFormat (int_32 type, hPTR_t data, char
+           *formatPrefix, int padding, int element)
+       char * realDateFormat (int_32 type, hPTR_t data, char
+           *formatPrefix, int padding, int element, const char
+           *strftimeFormat)
+       char * dateFormat (int_32 type, hPTR_t data, char
+           *formatPrefix, int padding, int element)
+       char * dayFormat (int_32 type, hPTR_t data, char
+           *formatPrefix, int padding, int element)
+       char * shescapeFormat (int_32 type, hPTR_t data, char
+           *formatPrefix, int padding, int element)
+       void headerCopyTags (Header headerFrom, Header headerTo,
+           hTAG_t tagstocopy)
+       HeaderIterator headerFreeIterator (HeaderIterator hi)
+       HeaderIterator headerInitIterator (Header h)
+       int headerNextIterator (HeaderIterator hi, hTAG_t tag,
+           hTYP_t type, hPTR_t *p, hCNT_t c)
+
+   Variables
+       unsigned char header_magic [8]
+       size_t headerMaxbytes = (32*1024*1024)
+       int typeSizes []
+       HV_t hdrVec = &hdrVec1
+       const struct headerSprintfExtension_s headerDefaultFormats
+           []
+       HV_s hdrVec1
+
+DETAILED DESCRIPTION
+       Definition in file header.c.
+
+DEFINE DOCUMENTATION
+   #define __HEADER_PROTOTYPES__
+       Definition at line 13 of file header.c.
+
+   #define hdrchkData(_nbytes)   ((_nbytes) & 0xff000000)
+       Sanity check on data size and/or offset.
+
+       This check imposes a limit of 16Mb, more than enough.
+
+       Definition at line 56 of file header.c.
+
+       Referenced by doHeaderUnload, headerCopyLoad, headerLoad,
+       and headerRead.
+
+   #define hdrchkTags(_ntags)   ((_ntags) & 0xffff0000)
+       Sanity check on no.
+
+       of tags. This check imposes a limit of 65K tags, more than
+       enough.
+
+       Definition at line 50 of file header.c.
+
+       Referenced by doHeaderUnload, headerCopyLoad, headerLoad,
+       and headerRead.
+
+   #define PARSER_BEGIN   0
+       Definition at line 31 of file header.c.
+
+       Referenced by headerSprintf.
+
+   #define PARSER_IN_ARRAY   1
+       Definition at line 32 of file header.c.
+
+       Referenced by parseFormat.
+
+   #define PARSER_IN_EXPR   2
+       Definition at line 33 of file header.c.
+
+       Referenced by parseExpression, and parseFormat.
+
+FUNCTION DOCUMENTATION
+   void* _free (const void * p) [inline, static]
+       Wrapper to free(3), hides const compilation noise, permit
+       NULL, return NULL.
+
+       Parameters:
+
+       p      memory to free
+
+       Returns:
+           NULL always
+
+       Definition at line 82 of file header.c.
+
+   extensionCache allocateExtensionCache (const
+       headerSprintfExtension extensions) [static]
+       Definition at line 2508 of file header.c.
+
+       References HEADER_EXT_LAST, HEADER_EXT_MORE,
+       headerSprintfExtension_s::type,
+       headerSprintfExtension_s::u, and xcalloc.
+
+       Referenced by headerSprintf.
+
+   void copyData (int_32 type, void * dstPtr, const void *
+       srcPtr, int_32 c, int dataLength) [static]
+       Definition at line 1417 of file header.c.
+
+       References dataLength, int_32, RPM_I18NSTRING_TYPE, and
+       RPM_STRING_ARRAY_TYPE.
+
+       Referenced by grabData, and headerAppendEntry.
+
+   int dataLength (int_32 type, hPTR_t p, int_32 count, int
+       onDisk) [static]
+       Return length of entry data.
+
+       Parameters:
+
+       type   entry data type
+
+       p      entry data
+
+       count  entry item count
+
+       onDisk data is concatenated strings (with NUL's))?
+
+       Returns:
+           no. bytes in data
+
+       Definition at line 249 of file header.c.
+
+       References _, EXIT_FAILURE, hPTR_t, int_32,
+       RPM_I18NSTRING_TYPE, RPM_STRING_ARRAY_TYPE,
+       RPM_STRING_TYPE, and typeSizes.
+
+       Referenced by copyData, grabData, headerAppendEntry, and
+       regionSwab.
+
+   char* dateFormat (int_32 type, hPTR_t data, char *
+       formatPrefix, int padding, int element) [static]
+       Definition at line 2689 of file header.c.
+
+       References hPTR_t, int_32, and realDateFormat.
+
+   char* dayFormat (int_32 type, hPTR_t data, char *
+       formatPrefix, int padding, int element) [static]
+       Definition at line 2698 of file header.c.
+
+       References hPTR_t, int_32, and realDateFormat.
+
+   char escapedChar (const char ch) [static]
+       Definition at line 1739 of file header.c.
+
+       Referenced by parseFormat.
+
+   indexEntry findEntry (Header h, int_32 tag, int_32 type)
+       [static]
+       Find matching (tag,type) entry in header.
+
+       Parameters:
+
+       h      header
+
+       tag    entry tag
+
+       type   entry type
+
+       Returns:
+           header entry
+
+       Definition at line 1030 of file header.c.
+
+       References HEADERFLAG_SORTED, headerSort, indexCmp,
+       indexEntry::info, int_32, RPM_NULL_TYPE, entryInfo::tag,
+       and entryInfo::type.
+
+   void findTag (char * name, const headerTagTableEntry tags,
+       const headerSprintfExtension extensions,
+       headerTagTableEntry * tagMatch, headerSprintfExtension *
+       extMatch) [static]
+       Definition at line 1794 of file header.c.
+
+       References alloca, HEADER_EXT_LAST, HEADER_EXT_MORE,
+       HEADER_EXT_TAG, headerTagTableEntry_s::name,
+       headerSprintfExtension_s::name, stpcpy,
+       headerSprintfExtension_s::type,
+       headerSprintfExtension_s::u, and xstrcasecmp.
+
+       Referenced by parseExpression, and parseFormat.
+
+   char* formatValue (sprintfTag tag, Header h, const
+       headerSprintfExtension extensions, extensionCache
+       extCache, int element) [static]
+       Definition at line 2251 of file header.c.
+
+       References _, _free, getExtension, HEADER_EXT_FORMAT,
+       HEADER_EXT_LAST, HEADER_EXT_MORE, headerFreeData,
+       headerGetEntry, headerTagFormatFunction, hPTR_t, int_32,
+       int_8, headerSprintfExtension_s::name, RPM_CHAR_TYPE,
+       RPM_INT16_TYPE, RPM_INT32_TYPE, RPM_INT8_TYPE,
+       RPM_STRING_ARRAY_TYPE, RPM_STRING_TYPE, stpcpy,
+       headerSprintfExtension_s::type,
+       headerSprintfExtension_s::u, uint_16, xmalloc, and
+       xstrdup.
+
+       Referenced by singleSprintf.
+
+   extensionCache freeExtensionCache (const
+       headerSprintfExtension extensions, extensionCache cache)
+       [static]
+       Returns:
+           NULL always
+
+       Definition at line 2529 of file header.c.
+
+       References _free, extensionCache::data, HEADER_EXT_LAST,
+       HEADER_EXT_MORE, headerSprintfExtension_s::type, and
+       headerSprintfExtension_s::u.
+
+       Referenced by headerSprintf.
+
+   sprintfToken freeFormat (sprintfToken format, int num)
+       [static]
+       Destroy headerSprintf format array.
+
+       Parameters:
+
+       format sprintf format array
+
+       num    number of elements
+
+       Returns:
+           NULL always
+
+       Definition at line 1760 of file header.c.
+
+       References _free, and sprintfToken::u.
+
+       Referenced by parseExpression, and parseFormat.
+
+   int getExtension (Header h, headerTagTagFunction fn, hTYP_t
+       typeptr, hPTR_t * data, hCNT_t countptr, extensionCache
+       ext) [static]
+       Returns:
+           0 on success, 1 on failure
+
+       Definition at line 2229 of file header.c.
+
+       References hCNT_t, headerTagTagFunction, hPTR_t, and
+       hTYP_t.
+
+       Referenced by formatValue, and singleSprintf.
+
+   void* grabData (int_32 type, hPTR_t p, int_32 c, int *
+       lengthPtr) [static]
+       Return (malloc'ed) copy of entry data.
+
+       Parameters:
+
+       type   entry data type
+
+       p      entry data
+
+       c      entry item count
+
+       Return values:
+
+       lengthPtr
+              no. bytes in returned data
+
+       Returns:
+           (malloc'ed) copy of entry data
+
+       Definition at line 1456 of file header.c.
+
+       References copyData, dataLength, hPTR_t, int_32, and
+       xmalloc.
+
+       Referenced by headerAddEntry, and headerModifyEntry.
+
+   int headerAddEntry (Header h, int_32 tag, int_32 type, hPTR_t
+       p, int_32 c)
+       Definition at line 1470 of file header.c.
+
+       References entryInfo::count, indexEntry::data,
+       headerToken::flags, grabData, HEADERFLAG_SORTED, hPTR_t,
+       headerToken::index, INDEX_MALLOC_SIZE,
+       headerToken::indexAlloced, headerToken::indexUsed,
+       indexEntry::info, int_32, indexEntry::length,
+       entryInfo::offset, entryInfo::tag, entryInfo::type, and
+       xrealloc.
+
+       Referenced by addChangelogEntry, addFileToTag,
+       fillOutMainPackage, genCpioListAndHeader,
+       handlePreambleTag, headerAddI18NString,
+       headerAddOrAppendEntry, headerCopy, headerCopyTags,
+       headerCopyWithConvert, headerInject, headerRegenSigHeader,
+       initSourceHeader, mungeFilelist, packageBinaries,
+       packageSources, parsePreamble, parseScript, parseSpec,
+       readIcon, readPackageHeaders, rhnLoad, rhnUnload,
+       rpmAddSignature, rpmdbAdd, rpmdbRemove, rpmMergeHeaders,
+       rpmReadSignature, and writeRPM.
+
+   int headerAddOrAppendEntry (Header h, int_32 tag, int_32 type,
+       hPTR_t p, int_32 c)
+       Definition at line 1534 of file header.c.
+
+       References findEntry, headerAddEntry, headerAppendEntry,
+       hPTR_t, and int_32.
+
+       Referenced by addFileToArrayTag, addOrAppendListEntry,
+       addReqProv, genCpioListAndHeader, processScriptFiles,
+       processSourceFiles, and providePackageNVR.
+
+   int headerAppendEntry (Header h, int_32 tag, int_32 type,
+       hPTR_t p, int_32 c)
+       Definition at line 1499 of file header.c.
+
+       References copyData, entryInfo::count, indexEntry::data,
+       dataLength, ENTRY_IN_REGION, findEntry, hPTR_t,
+       indexEntry::info, int_32, indexEntry::length,
+       entryInfo::offset, RPM_I18NSTRING_TYPE, RPM_STRING_TYPE,
+       xmalloc, and xrealloc.
+
+       Referenced by addChangelogEntry, and
+       headerAddOrAppendEntry.
+
+   char* headerFindI18NString (Header h, indexEntry entry)
+       [static]
+       Return i18n string from header that matches locale.
+
+       Parameters:
+
+       h      header
+
+       entry  i18n string data
+
+       Returns:
+           matching i18n string (or 1st string if no match)
+
+       Definition at line 1261 of file header.c.
+
+       References entryInfo::count, indexEntry::data, findEntry,
+       getenv, HEADER_I18NTABLE, headerMatchLocale,
+       indexEntry::info, RPM_STRING_ARRAY_TYPE, and table.
+
+       Referenced by intGetEntry.
+
+   int headerGetRawEntry (Header h, int_32 tag, int_32 * type,
+       hPTR_t * p, int_32 * c)
+       Definition at line 1391 of file header.c.
+
+       References copyEntry, findEntry, headerIsEntry, hPTR_t,
+       int_32, and RPM_NULL_TYPE.
+
+   int headerMatchLocale (const char * td, const char * l, const
+       char * le) [static]
+       Does locale match entry in header i18n table?
+
+
+
+        * The range [l,le) contains the next locale to match:
+        *    ll[_CC][.EEEEE][@dddd]
+        * where
+        *    ll        ISO language code (in lowercase).
+        *    CC        (optional) ISO coutnry code (in uppercase).
+        *    EEEEE     (optional) encoding (not really standardized).
+        *    dddd      (optional) dialect.
+        *
+       Parameters:
+
+       td     header i18n table data, NUL terminated
+
+       l      start of locale to match
+
+       le     end of locale to match
+
+       Returns:
+           1 on match, 0 on no match
+
+       Definition at line 1188 of file header.c.
+
+       References alloca.
+
+       Referenced by headerFindI18NString.
+
+   int headerModifyEntry (Header h, int_32 tag, int_32 type,
+       hPTR_t p, int_32 c)
+       Definition at line 1670 of file header.c.
+
+       References _free, entryInfo::count, indexEntry::data,
+       ENTRY_IN_REGION, findEntry, grabData, hPTR_t,
+       headerToken::index, indexEntry::info, int_32,
+       indexEntry::length, entryInfo::offset, entryInfo::tag, and
+       entryInfo::type.
+
+       Referenced by doGetRecord.
+
+   char* hexFormat (int_32 type, hPTR_t data, char *
+       formatPrefix, int padding, int element) [static]
+       Definition at line 2635 of file header.c.
+
+       References _, hPTR_t, int_32, RPM_INT32_TYPE, xmalloc, and
+       xstrdup.
+
+   int indexCmp (const void * avp, const void * bvp) [static]
+       Definition at line 145 of file header.c.
+
+       References indexEntry::info, and entryInfo::tag.
+
+       Referenced by findEntry, and headerSort.
+
+   int intGetEntry (Header h, int_32 tag, hTAG_t type, hPTR_t *
+       p, hCNT_t c, int minMem) [static]
+       Retrieve tag data from header.
+
+       Parameters:
+
+       h      header
+
+       tag    tag to retrieve
+
+       Return values:
+
+       type   address of type (or NULL)
+
+       p      address of data (or NULL)
+
+       c      address of count (or NULL)
+
+       Parameters:
+
+       minMem string pointers reference header memory?
+
+       Returns:
+           1 on success, 0 on not found
+
+       Definition at line 1318 of file header.c.
+
+       References copyEntry, findEntry, hCNT_t,
+       headerFindI18NString, hPTR_t, hTAG_t, indexEntry::info,
+       int_32, RPM_I18NSTRING_TYPE, RPM_NULL_TYPE,
+       RPM_STRING_TYPE, and entryInfo::type.
+
+       Referenced by headerGetEntry, and headerGetEntryMinMemory.
+
+   char* octalFormat (int_32 type, hPTR_t data, char *
+       formatPrefix, int padding, int element) [static]
+       Definition at line 2614 of file header.c.
+
+       References _, hPTR_t, int_32, RPM_INT32_TYPE, xmalloc, and
+       xstrdup.
+
+   int offsetCmp (const void * avp, const void * bvp) [static]
+       Definition at line 163 of file header.c.
+
+       References indexEntry::data, indexEntry::info,
+       entryInfo::offset, and entryInfo::tag.
+
+       Referenced by headerUnsort.
+
+   int parseExpression (sprintfToken token, char * str, const
+       headerTagTableEntry tags, const headerSprintfExtension
+       extensions, char ** endPtr, errmsg_t * errmsg) [static]
+       Definition at line 2103 of file header.c.
+
+       References _, errmsg_t, findTag, freeFormat, parseFormat,
+       PARSER_IN_EXPR, sprintfToken::type,
+       headerSprintfExtension_s::u, sprintfToken::u,
+       headerTagTableEntry_s::val, and xstrdup.
+
+       Referenced by parseFormat.
+
+   int parseFormat (char * str, const headerTagTableEntry tags,
+       const headerSprintfExtension extensions, sprintfToken *
+       formatPtr, int * numTokensPtr, char ** endPtr, int state,
+       errmsg_t * errmsg) [static]
+       Definition at line 1853 of file header.c.
+
+       References _, sprintfToken::array, errmsg_t, escapedChar,
+       findTag, freeFormat, parseExpression, PARSER_IN_ARRAY,
+       PARSER_IN_EXPR, sprintfToken::string, sprintfToken::type,
+       headerSprintfExtension_s::u, sprintfToken::u,
+       headerTagTableEntry_s::val, xcalloc, and xisdigit.
+
+       Referenced by headerSprintf, and parseExpression.
+
+   char* realDateFormat (int_32 type, hPTR_t data, char *
+       formatPrefix, int padding, int element, const char *
+       strftimeFormat) [static]
+       Definition at line 2656 of file header.c.
+
+       References _, hPTR_t, int_32, RPM_INT32_TYPE, xmalloc, and
+       xstrdup.
+
+       Referenced by dateFormat, and dayFormat.
+
+   char* shescapeFormat (int_32 type, hPTR_t data, char *
+       formatPrefix, int padding, int element) [static]
+       Definition at line 2708 of file header.c.
+
+       References alloca, hPTR_t, int_32, RPM_INT32_TYPE, and
+       xmalloc.
+
+   const char* singleSprintf (Header h, sprintfToken token, const
+       headerSprintfExtension extensions, extensionCache
+       extCache, int element) [static]
+       Definition at line 2390 of file header.c.
+
+       References _free, formatValue, getExtension,
+       headerFreeData, headerGetEntry, headerIsEntry,
+       sprintfToken::u, xmalloc, xrealloc, and xstrdup.
+
+       Referenced by headerSprintf.
+
+   const char* const tagName (int tag)
+       Return name of tag from value.
+
+       Parameters:
+
+       tag    tag value
+
+       Returns:
+           name of tag
+
+       Definition at line 10 of file tagName.c.
+
+VARIABLE DOCUMENTATION
+   HV_t hdrVec = &hdrVec1
+       Header methods for rpm headers.
+
+       Definition at line 2865 of file header.c.
+
+   struct HV_s hdrVec1 [static]
+       Definition at line 2831 of file header.c.
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002            lib/header.c(3)

@@ -1,0 +1,129 @@
+tixLabelEntry(n)      Tix Built-In Commands      tixLabelEntry(n)
+
+
+
+_________________________________________________________________
+
+NAME
+       tixLabelEntry  -  Create and manipulate tixLabelEntry wid­
+       gets
+
+SYNOPSIS
+       tixLabelEntry pathName ?options?
+
+SUPER-CLASS
+       The TixLabelEntry class is derived from the TixLabelWidget
+       class  and  inherits all the commands, options and subwid­
+       gets of its super-class.
+
+STANDARD OPTIONS
+       The LabelEntry widget supports all the standard options of
+       a  frame  widget.  See  the  options(n)  manual  entry for
+       details on the standard options.
+
+WIDGET-SPECIFIC OPTIONS
+       Command-Line Name:-disableforeground
+       Database Name:  disableForeground
+       Database Class: DisableForeground
+
+              The foreground color to use for of the  entry  sub­
+              widget when the LabelEntry widget is disabled.
+
+       Command-Line Name:-label
+       Database Name:  label
+       Database Class: Label
+
+              Specifies  the  string  to  display as the label of
+              this LabelEntry widget.
+
+       Command-Line Name:-labelside
+       Database Name:  labelSide
+       Database Class: LabelSide
+
+              Specifies where the label should be displayed rela­
+              tive  to  the  entry  subwidget. Valid options are:
+              top, left, right, bottom, none or acrosstop.
+
+       Command-Line Name:-state
+       Database Name:  state
+       Database Class: State
+
+              Specifies the whether the LabelEntry widget is nor­
+              mal or disabled. Only the values "normal" and "dis­
+              abled" are recognized.
+
+SUBWIDGETS
+       Name:           label
+       Class:          Label
+
+              The label subwidget.
+
+       Name:           entry
+       Class:          Entry
+
+              The entry subwidget.
+_________________________________________________________________
+
+DESCRIPTION
+       The tixLabelEntry command creates a new window  (given  by
+       the pathName argument) and makes it into a LabelEntry wid­
+       get. Additional options, described above, may be specified
+       on the command line or in the option database to configure
+       aspects of the LabelEntry such as its cursor and relief.
+
+       The LabelEntry widget packages an entry widget and a label
+       into  one  mega widget. It can be used be used to simplify
+       the creation of "entry-form" type of  interface.  In  this
+       kind of interface, one must create many entry widgets with
+       label widgets next to them and describe the use of each of
+       the entry widgets.
+
+WIDGET COMMANDS
+       The  tixLabelEntry command creates a new Tcl command whose
+       name is the same as the path name of the LabelEntry's win­
+       dow. This command may be used to invoke various operations
+       on the widget. It has the following general form:
+                     pathName option ?arg arg ...?
+       PathName is the name of the command, which is the same  as
+       the  LabelEntry  widget's  path  name. Option and the args
+       determine the exact behavior of the command. The following
+       commands are possible for LabelEntry widgets:
+
+       pathName cget option
+              Returns  the  current  value  of  the configuration
+              option given by option. Option may have any of  the
+              values accepted by the tixLabelEntry command.
+
+       pathName configure ?option? ?value option value ...?
+              Query  or  modify  the configuration options of the
+              widget.  If no option is specified, returns a  list
+              describing  all  of the available options for path­
+              Name (see Tk_ConfigureInfo for information  on  the
+              format  of this list).  If option is specified with
+              no value, then the command returns a list  describ­
+              ing the one named option (this list will be identi­
+              cal to  the  corresponding  sublist  of  the  value
+              returned  if  no  option  is specified).  If one or
+              more option-value pairs  are  specified,  then  the
+              command modifies the given widget option(s) to have
+              the  given  value(s);  in  this  case  the  command
+              returns  an  empty  string.  Option may have any of
+              the values accepted by the tixLabelEntry command.
+
+       pathName subwidget name ?args?
+              When no options are given, this command returns the
+              pathname of the subwidget of the specified name.
+
+              When  options  are given, the widget command of the
+              specified  subwidget  will  be  called  with  these
+              options.
+
+KEYWORDS
+       Tix(n)
+
+
+
+
+
+
+Tix                            4.0               tixLabelEntry(n)

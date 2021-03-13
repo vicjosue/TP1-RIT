@@ -1,0 +1,64 @@
+fprintCacheEntry_s(3)                       fprintCacheEntry_s(3)
+
+
+
+NAME
+       fprintCacheEntry_s - Finger print cache entry.
+
+SYNOPSIS
+       #include <fprint.h>
+
+
+   Data Fields
+       const char * dirName
+       dev_t dev
+       ino_t ino
+       int isFake
+
+DETAILED DESCRIPTION
+       Finger print cache entry.
+
+       This is really a directory and symlink cache. We don't
+       differentiate between the two. We can prepopulate it,
+       which allows us to easily conduct 'fake' installs of a
+       system w/o actually mounting filesystems.
+
+       Definition at line 18 of file fprint.h.
+
+FIELD DOCUMENTATION
+   dev_t fprintCacheEntry_s::dev
+       stat(2) device number
+
+       Definition at line 20 of file fprint.h.
+
+       Referenced by doLookup, and fpHashFunction.
+
+   const char* fprintCacheEntry_s::dirName
+       path to existing directory
+
+       Definition at line 19 of file fprint.h.
+
+       Referenced by doLookup.
+
+   ino_t fprintCacheEntry_s::ino
+       stat(2) inode number
+
+       Definition at line 21 of file fprint.h.
+
+       Referenced by doLookup, and fpHashFunction.
+
+   int fprintCacheEntry_s::isFake
+       (currently unused)
+
+       Definition at line 22 of file fprint.h.
+
+       Referenced by doLookup, and fpCacheFree.
+
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002      fprintCacheEntry_s(3)

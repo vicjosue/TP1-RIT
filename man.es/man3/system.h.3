@@ -1,0 +1,353 @@
+system.h(3)                                           system.h(3)
+
+
+
+NAME
+       system.h -
+
+SYNOPSIS
+       #include <sys/types.h>
+       #include <sys/stat.h>
+       #include <stdio.h>
+       #include <time.h>
+       #include <strings.h>
+       #include <errno.h>
+       #include <sys/file.h>
+       #include <ctype.h>
+       #include <fcntl.h>
+       #include <limits.h>
+       #include <stdlib.h>
+       #include <string.h>
+       #include 'popt.h'
+
+   Data Structures
+       struct our_mntent
+
+   Defines
+       #define major(dev)   (((dev) >> 8) & 0xff)
+       #define minor(dev)   ((dev) & 0xff)
+       #define makedev(maj, min)   (((maj) << 8) | (min))
+       #define EXIT_FAILURE   1
+       #define SEEK_SET   0
+       #define SEEK_CUR   1
+       #define SEEK_END   2
+       #define F_OK   0
+       #define X_OK   1
+       #define W_OK   2
+       #define R_OK   4
+       #define dirent   direct
+       #define NLENGTH(direct)   ((direct)->d_namlen)
+       #define __progname   program_name
+       #define setprogname(pn)
+       #define setlocale(Category, Locale)
+       #define bindtextdomain(Domain, Directory)
+       #define textdomain(Domain)
+       #define _(Text)   Text
+       #define dgettext(DomainName, Text)   Text
+       #define N_(Text)   Text
+       #define S_IFSOCK   (0xC000)
+       #define S_ISLNK(mode)   ((mode & 0xF000) == S_IFLNK)
+       #define S_ISSOCK(mode)   ((mode & 0xF000) == S_IFSOCK)
+       #define lchown   chown
+       #define our_mntent   struct our_mntent
+       #define GETMNTENT_ONE   1
+       #define GETMNTENT_TWO   0
+       #define MOUNTED   '/etc/mnttab'
+
+   Functions
+       char * memchr ()
+       char * stpcpy (char *dest, const char *src)
+       char * stpncpy (char *dest, const char *src, size_t n)
+       char * getenv (const char *name)
+       char * alloca ()
+       void * xmalloc (size_t size)
+       void * xcalloc (size_t nmemb, size_t size)
+       void * xrealloc (void *ptr, size_t size)
+       char * xstrdup (const char *str)
+       void * vmefail (size_t size)
+       char * realpath (const char *path, char resolved_path[])
+       int setenv (const char *name, const char *value, int
+           replace)
+       void unsetenv (const char *name)
+       our_mntent * getmntent (FILE *filep)
+
+   Variables
+       int errno
+       const char * program_name
+
+DETAILED DESCRIPTION
+       Definition in file system.h.
+
+DEFINE DOCUMENTATION
+   #define _(Text)   Text
+       Definition at line 282 of file system.h.
+
+       Referenced by addCanon, addChangelog, addDefault, addFile,
+       addFileToTagAux, addSource, alAllFileSatisfiesDepend,
+       alAllSatisfiesDepend, argerror, build, buildArgCallback,
+       buildForTarget, buildHost, buildSpec, checkForDuplicates,
+       checkForRequired, checkForValidArchitectures, checkOwners,
+       checkPackageDeps, checkPassPhrase, checkSize, checkSpec,
+       copyFile, copyNextLine, cpio_copy, cpio_doio, cvtdberr,
+       dataLength, db1close, db1open, db3close, db3New, db3open,
+       db_fini, db_init, dbiOpen, dbiSearch, dbiTagsInit,
+       dbiUpdateIndex, depflagsFormat, do_inject, doAddSubtract,
+       doDefine, doGetRecord, doLogical, doMultiplyDivide,
+       doPatch, doPatchMacro, doPrimary, doReadRC, doRelational,
+       doScript, doSetupMacro, doUndefine, doUntar, expandMacro,
+       expandMacros, fadAlloc, fflagsFormat, formatValue,
+       freeArgs, genCpioListAndHeader, generateDepends,
+       getFilesystemList, getGidS, getGname, getGnameS,
+       getMachineInfo, getOutputFrom, getUidS, getUname,
+       getUnameS, grabArgs, handlePreambleTag, headerDump,
+       headerInject, hexFormat, IDTXglob, installArgCallback,
+       isCompressed, isSpecFile, machCompatCacheAdd, main,
+       makeGPGSignature, makePGPSignature, makeTempFile,
+       manageFile, newRpmdb, octalFormat, openDatabase,
+       packageBinaries, parseBuildInstallClean, parseDescription,
+       parseExpression, parseExpressionBoolean,
+       parseExpressionString, parseFiles, parseForAttr,
+       parseForConfig, parseForDev, parseForLang, parseFormat,
+       parseForSimple, parseForVerify, parseNoSource,
+       parsePreamble, parsePrep, parseRCPOT, parseScript,
+       parseSpec, permsFormat, printBanner, printDepProblems,
+       printExpansion, printMacro, printNewSpecfile, printUsage,
+       printVersion, processBinaryFile, processBinaryFiles,
+       processPackageFiles, processScriptFiles,
+       processSourceFiles, queryHeader, rdToken, readIcon,
+       readLead, readLine, readPackageHeaders, readRPM,
+       realDateFormat, rpmAddSignature, rpmCheckSig, rpmdbAdd,
+       rpmdbCountPackages, rpmdbMoveDatabase, rpmdbNextIterator,
+       rpmdbRebuild, rpmdbRemove, rpmdepOrder, rpmDumpMacroTable,
+       rpmErase, rpmGetFilesystemUsage, rpmGetPassPhrase,
+       rpmInstall, rpmInstallSource, rpmProblemString,
+       rpmQueryVerify, rpmRangesOverlap, rpmReadRC,
+       rpmReadSignature, rpmReSign, rpmShowProgress,
+       rpmWriteSignature, showQueryPackage, timeCheck,
+       triggertypeFormat, unsatisfiedDepend, urlFind,
+       urlFreeCache, urlGetFile, urlSplit, verifyGPGSignature,
+       verifyPGPSignature, vmefail, writeRPM, XurlFree, and
+       zapRelation.
+
+   #define __progname   program_name
+       Definition at line 247 of file system.h.
+
+       Referenced by argerror, main, and printUsage.
+
+   #define bindtextdomain(Domain, Directory)
+       Definition at line 279 of file system.h.
+
+       Referenced by main.
+
+   #define dgettext(DomainName, Text)   Text
+       Definition at line 284 of file system.h.
+
+       Referenced by i18nTag.
+
+   #define dirent   direct
+       Definition at line 148 of file system.h.
+
+       Referenced by myftw_dir, Readdir, and Unlink.
+
+   #define EXIT_FAILURE   1
+       Definition at line 123 of file system.h.
+
+       Referenced by argerror, checkSpec, dataLength,
+       execCommand, fadAlloc, getOutputFrom, main,
+       poptGetNextOpt, rpmReSign, and vmefail.
+
+   #define F_OK   0
+       Definition at line 138 of file system.h.
+
+       Referenced by db3open, rpmdbRebuild, and rpmQueryVerify.
+
+   #define GETMNTENT_ONE   1
+       Definition at line 388 of file system.h.
+
+   #define GETMNTENT_TWO   0
+       Definition at line 389 of file system.h.
+
+   #define lchown   chown
+       Definition at line 351 of file system.h.
+
+   #define major(dev)   (((dev) >> 8) & 0xff)
+       Definition at line 67 of file system.h.
+
+       Referenced by rpmGetRpmlibProvides, and
+       rpmReadPackageHeader.
+
+   #define makedev(maj, min)   (((maj) << 8) | (min))
+       Definition at line 69 of file system.h.
+
+   #define minor(dev)   ((dev) & 0xff)
+       Definition at line 68 of file system.h.
+
+       Referenced by rpmGetRpmlibProvides, and
+       rpmReadPackageHeader.
+
+   #define MOUNTED   '/etc/mnttab'
+       Definition at line 402 of file system.h.
+
+       Referenced by getFilesystemList.
+
+   #define N_(Text)   Text
+       Definition at line 287 of file system.h.
+
+   #define NLENGTH(direct)   ((direct)->d_namlen)
+       Definition at line 149 of file system.h.
+
+   #define our_mntent   struct our_mntent
+       Definition at line 386 of file system.h.
+
+   #define R_OK   4
+       Definition at line 141 of file system.h.
+
+   #define S_IFSOCK   (0xC000)
+       Definition at line 305 of file system.h.
+
+       Referenced by vfs_parse_filetype.
+
+   #define S_ISLNK(mode)   ((mode & 0xF000) == S_IFLNK)
+       Definition at line 309 of file system.h.
+
+       Referenced by genCpioListAndHeader, makeTempFile,
+       printFileInfo, rpmPermsString, and vfs_parse_ls_lga.
+
+   #define S_ISSOCK(mode)   ((mode & 0xF000) == S_IFSOCK)
+       Definition at line 313 of file system.h.
+
+       Referenced by rpmPermsString.
+
+   #define SEEK_CUR   1
+       Definition at line 134 of file system.h.
+
+   #define SEEK_END   2
+       Definition at line 135 of file system.h.
+
+       Referenced by fadOpen, and poptReadConfigFile.
+
+   #define SEEK_SET   0
+       Definition at line 133 of file system.h.
+
+       Referenced by db1cput, doGetRecord, readRPM, and writeRPM.
+
+   #define setlocale(Category, Locale)
+       Definition at line 271 of file system.h.
+
+       Referenced by main, tagName, and tagValue.
+
+   #define setprogname(pn)
+       Value:
+
+       { if ((__progname = strrchr(pn, '/')) != NULL) __progname++;     else __progname = pn;                 }
+
+       Definition at line 248 of file system.h.
+
+       Referenced by main.
+
+   #define textdomain(Domain)
+       Definition at line 281 of file system.h.
+
+       Referenced by main.
+
+   #define W_OK   2
+       Definition at line 140 of file system.h.
+
+       Referenced by db3open.
+
+   #define X_OK   1
+       Definition at line 139 of file system.h.
+
+       Referenced by findProgramPath.
+
+FUNCTION DOCUMENTATION
+   char* alloca ()
+       Referenced by alAddPackage, build, buildForTarget,
+       compressFilelist, configLine, dateToTimet, db1basename,
+       db3open, dbiFindByLabel, dbiUpdateIndex, doGetRecord,
+       doLookup, doReadRC, execCommand, expandMacros, expandT,
+       expandU, fadAlloc, findProgramPath, findTag,
+       findUpgradeSet, getTagVal, grabArgs, headerAddI18NString,
+       headerLoad, headerMatchesDepFlags, headerMatchLocale,
+       i18nTag, lookupPackage, main, makeGPGSignature,
+       makePGPSignature, myftw, openDatabase, parseForAttr,
+       parseForConfig, parseForDev, parseForLang, parseForVerify,
+       poptAddAlias, poptGetNextOpt, poptParseArgvString,
+       poptReadConfigFile, poptReadDefaultConfig, printFileInfo,
+       providePackageNVR, rpmdbFindByFile, rpmdbMoveDatabase,
+       rpmdbRemoveDatabase, rpmDefineMacro, rpmdepOrder,
+       rpmDetectPGPVersion, rpmGenPath, rpmGetFilesystemUsage,
+       rpmInitDB, rpmInstall, rpmlibNeedsFeature, rpmMkpath,
+       rpmOpenDB, rpmtransCreateSet, rpmvercmp, setPathDefault,
+       shescapeFormat, showShortOptions, and urlFind.
+
+   char* getenv (const char * name)
+       Referenced by dosetenv, findProgramPath,
+       headerFindI18NString, i18nTag, poptGetContext,
+       poptReadDefaultConfig, rpmInitMacros, and rpmReadRC.
+
+   struct our_mntent* getmntent (FILE * filep)
+       Referenced by getFilesystemList.
+
+   char* memchr ()
+   char* realpath (const char * path, char resolved_path[])
+       Referenced by doLookup, and rpmQueryVerify.
+
+   int setenv (const char * name, const char * value, int
+       replace)
+       Referenced by i18nTag.
+
+   char* stpcpy (char * dest, const char * src)
+       Referenced by checkHardLinks, db1basename, db3open,
+       dbiFindByLabel, doAddSubtract, doBuildFileList, dosetenv,
+       doUntar, findTag, formatValue, genCpioListAndHeader,
+       grabArgs, headerMatchesDepFlags, main, makeGPGSignature,
+       makePGPSignature, prDbiOpenFlags, printNewSpecfile,
+       providePackageNVR, rpmdbRebuild, rpmdepCheck,
+       rpmDetectPGPVersion, rpmExpand, rpmGetPath,
+       rpmHeaderGetEntry, rpmlibNeedsFeature, rpmMkpath,
+       rpmtransCreateSet, showQueryPackage, and urlFind.
+
+   char* stpncpy (char * dest, const char * src, size_t n)
+       Referenced by doLookup.
+
+   void unsetenv (const char * name)
+       Referenced by i18nTag.
+
+   void* vmefail (size_t size)
+       Definition at line 12 of file rpmmalloc.c.
+
+   void* xcalloc (size_t nmemb, size_t size)
+       Definition at line 34 of file rpmmalloc.c.
+
+   void* xmalloc (size_t size)
+       Definition at line 22 of file rpmmalloc.c.
+
+   void* xrealloc (void * ptr, size_t size)
+       Definition at line 45 of file rpmmalloc.c.
+
+   char* xstrdup (const char * str)
+       Definition at line 55 of file rpmmalloc.c.
+
+VARIABLE DOCUMENTATION
+   int errno
+       Definition at line 105 of file system.h.
+
+       Referenced by checkOwners, currentDirectory, db1open,
+       db1sync, dbiOpen, doScript, doUntar, fdstat_exit,
+       getFilesystemList, getOutputFrom, makeTempFile, myftw,
+       myftw_dir, packageBinaries, poptGetNextOpt,
+       poptReadConfigFile, poptStrerror, processSourceFiles,
+       readLead, rpmdbRebuild, rpmGetFilesystemUsage, rpmMkpath,
+       rpmQueryVerify, strerror, and verifyPGPSignature.
+
+   const char* program_name
+       Definition at line 253 of file system.h.
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002                system.h(3)

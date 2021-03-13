@@ -1,0 +1,42 @@
+cli(9)                   Kernel Functions                  cli(9)
+
+
+
+NAME
+       cli, sti - disable/enable interrupts
+
+SYNOPSIS
+       #include <asm/system.h>
+
+       extern void cli()
+       extern void sti()
+
+DESCRIPTION
+       The  cli  function  causes interrupts to be blocked on the
+       host, so that following critical  code  may  run  uninter­
+       rupted. The sti function enables interrupts again.
+
+       Although  it  is  possible to use cli/sti pairs to protect
+       critical code, it is best to use cli with  the  save_flags
+       macro. See save_flags (9).
+
+RETURN VALUE
+       none
+
+AVAILABILITY
+       Linux 1.0+
+
+SEE ALSO
+       save_flags(9)
+
+       include/asm-*/system.h
+
+AUTHOR
+       Stephen Williams (steve@icarus.com)
+
+BUGS
+       The  i386 ancestry of the names can be slightly confusing.
+
+
+
+Linux DDI                    $Date:$                       cli(9)

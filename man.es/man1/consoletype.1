@@ -1,0 +1,31 @@
+CONSOLETYPE(1)                                     CONSOLETYPE(1)
+
+
+
+NAME
+       consoletype - print type of the console connected to stan­
+       dard input
+
+SYNOPSIS
+       consoletype
+
+DESCRIPTION
+       consoletype prints the type of console connected to  stan­
+       dard  input. It prints vt if console is a virtual terminal
+       (/dev/tty* or /dev/console device if not on a serial  con­
+       sole),  serial  if  standard  input  is  a  serial console
+       (/dev/console or /dev/ttyS*) and pty if standard input  is
+       a pseudo terminal.
+
+RETURN VALUE
+       consoletype returns
+
+       0      if on virtual terminal
+
+       1      if on serial console
+
+       2      if on a pseudo terminal.
+
+
+
+RH                         Red Hat, Inc            CONSOLETYPE(1)

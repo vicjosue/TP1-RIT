@@ -1,0 +1,134 @@
+OSX(1)                         osx                         OSX(1)
+
+
+
+NAME
+       osx  - An SGML System Conforming to International Standard
+       ISO 8879 -- Standard Generalized Markup Language
+
+SYNOPSIS
+       osx [-Cehilprvx] [-bencoding] [-ccatalog_file] [-Ddirectory] [-ffile] [-wwarning_type] [-xxml_output_option...] [sysid...]
+
+
+
+DESCRIPTION
+       osx converts SGML to XML. osx  parses  and  validates  the
+       SGML  document contained in sysid and writes an equivalent
+       XML document to the standard output. osx will  warn  about
+       SGML constructs which have no XML equivalent.
+
+
+OPTIONS
+       The following options are available:
+
+
+
+          -bencoding
+
+              Use encoding for output. By default osx uses UTF-8.
+
+
+
+          -cfile
+
+              Use the catalog entry file file.
+
+
+
+          -C   This has the same effect as in onsgmls(1).
+
+
+
+          -Ddirectory
+
+              Search directory  for  files  specified  in  system
+              identifiers.  This  has  the same effect as in ons­
+              gmls(1).
+
+
+
+          -e   Describe open entities in error messages.
+
+
+
+          -ffile
+
+              Redirect errors to file. This is useful mainly with
+              shells that do not support redirection of stderr.
+
+
+
+          -iname
+
+              This has the same effect as in onsgmls(1).
+
+
+
+          -v   Print the version number.
+
+
+
+          -wtype
+
+              Control warnings and errors according to type. This
+              has the same effect as in onsgmls(1).
+
+
+
+          -xxml_output_option
+
+              Control the XML output according to  the  value  of
+              xml_output_option as follows:
+
+              no-nl-in-tag  Don't use newlines inside start-tags.
+              Usually osx uses newlines inside start-tags  so  as
+              to  reduce  the  probability  of  excessively  long
+              lines.
+
+              id Output attribute declarations for ID attributes.
+
+              notation Output declarations for notations.
+
+              ndata  Output  declarations for external data enti­
+              ties. XML requires these to be NDATA. osx will warn
+              about  CDATA  and  SDATA external data entities and
+              output them as NDATA entities.
+
+              cdata Use XML CDATA sections for CDATA marked  sec­
+              tions  and  for elements with a declared content of
+              CDATA.
+
+              comment Output comment declarations. Comment decla­
+              rations in the DTD will not be output.
+
+              lower  Prefer lower case. Names that were subjected
+              to upper-case substitution by SGML will  be  folded
+              to  lower  case.  This  does  not  include reserved
+              names; XML requires these to be in upper-case.
+
+              pi-escape Escape &<> in the contents of  processing
+              instructions  using  the  amp,  lt and gt entities.
+              This allows processing instructions to contain  the
+              string  >?,  but  requires that applications handle
+              the escapes.
+
+              empty Use the  <e/>  syntax  for  element  types  e
+              declared as EMPTY.
+
+              attlis Output an ATTLIST declaration for every ele­
+              ment specifying the type  of  all  attributes.  The
+              default will always be #IMPLIED.
+
+              Multiple -x options are allowed.
+
+
+SEE ALSO
+       onsgmls(1)
+
+
+AUTHORS
+       James Clark, Jane Peers <jane.peers@looksystems.co.uk>.
+
+
+
+OpenJade                   January 2002                    OSX(1)

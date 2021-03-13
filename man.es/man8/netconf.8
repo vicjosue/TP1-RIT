@@ -1,0 +1,60 @@
+NETCONF(8)                                             NETCONF(8)
+
+
+
+NAME
+       netconf - network client and server configuration
+
+SYNOPSIS
+       netconf [ UI options ] options ...
+
+DESCRIPTION
+       netconf is a short-cut to the Linuxconf network configura­
+       tor. It provides numerous command line options.  Many  are
+       used  internally  by  system scripts and are not useful to
+       administrator directly.
+
+
+OPTIONS
+       --bootrc rc_dir_path [ previous_rc_dir_path]
+              walks a system V init script runlevel directory and
+              triggers  the start and stop scripts. It supports a
+              timeout mechanism  allowing  the  administrator  to
+              regain  control  if a script takes too long to pro­
+              ceed.
+
+
+       --connect
+              --dialctl
+              --disconnect
+              --postconnect
+              --predisconnect
+              are short cuts to the dialout module command  line.
+              See dialout (8) for details.
+
+
+       --resetfw
+              is a short cut to the firewall module command line.
+              It turn off the firewall configuration.  Note  that
+              linuxconf --update will turn it on again.
+
+
+       --status
+              is  equivalent  to  linuxconf --status.  See linux­
+              conf(8).  Kept for compatibility  with  older  ver­
+              sion.
+
+
+       --update
+              is  equivalent  to  linuxconf --update.  See linux­
+              conf(8).  Kept for compatibility  with  older  ver­
+              sion.
+
+
+SEE ALSO
+       linuxconf (8) , dialout(8)
+
+
+
+
+                    Network configuration tool         NETCONF(8)

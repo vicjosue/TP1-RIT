@@ -1,0 +1,39 @@
+cupsd(8)              Easy Software Products             cupsd(8)
+
+
+
+NAME
+       cupsd - common unix printing system daemon
+
+SYNOPSIS
+       cupsd [ -c config-file ] [ -f ]
+
+DESCRIPTION
+       cupsd  is  the scheduler for the Common UNIX Printing Sys­
+       tem. It implements a printing system based upon the Inter­
+       net  Printing  Protocol,  version  1.1.  If no options are
+       specified on the command-line then the default  configura­
+       tion file (usually /etc/cups/cupsd.conf) will be used.
+
+       The  -f  option forces cupsd to run in the foreground; the
+       default is to run in the background as a "daemon".
+
+COMPATIBILITY
+       cupsd implements all of the  required  IPP/1.1  attributes
+       and  operations.  It also implements several CUPS-specific
+       administation operations.
+
+SEE ALSO
+       backend(1),  classes.conf(5),  cupsd.conf(5),   filter(1),
+       mime.convs(5),   mime.types(5),   printers.conf(5),   CUPS
+       Implementation of IPP, CUPS Interface Design  Description,
+       CUPS   Software   Administrators   Manual,   http://local­
+       host:631/documentation.html
+
+COPYRIGHT
+       Copyright 1993-2002 by Easy Software Products, All  Rights
+       Reserved.
+
+
+
+19 October 2000    Common UNIX Printing System           cupsd(8)

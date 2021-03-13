@@ -1,0 +1,120 @@
+Tcl_IntObj(3)         Tcl Library Procedures        Tcl_IntObj(3)
+
+
+
+_________________________________________________________________
+
+NAME
+       Tcl_NewIntObj,  Tcl_NewLongObj, Tcl_SetIntObj, Tcl_SetLon­
+       gObj, Tcl_GetIntFromObj, Tcl_GetLongFromObj  -  manipulate
+       Tcl objects as integers
+
+SYNOPSIS
+       #include <tcl.h>
+
+       Tcl_Obj *
+       Tcl_NewIntObj(intValue)
+
+       Tcl_Obj *
+       Tcl_NewLongObj(longValue)
+
+       Tcl_SetIntObj(objPtr, intValue)
+
+       Tcl_SetLongObj(objPtr, longValue)
+
+       int
+       Tcl_GetIntFromObj(interp, objPtr, intPtr)
+
+       int
+       Tcl_GetLongFromObj(interp, objPtr, longPtr)
+
+ARGUMENTS
+       int          intValue  (in)      Integer   value  used  to
+                                        initialize  or   set   an
+                                        integer object.
+
+       long         longValue (in)      Long  integer  value used
+                                        to initialize or  set  an
+                                        integer object.
+
+       Tcl_Obj      *objPtr   (in/out)  For   Tcl_SetIntObj   and
+                                        Tcl_SetLongObj,      this
+                                        points  to  the object to
+                                        be converted  to  integer
+                                        type.  For Tcl_GetIntFro­
+                                        mObj and  Tcl_GetLongFro­
+                                        mObj,  this refers to the
+                                        object from which to  get
+                                        an  integer or long inte­
+                                        ger value; if objPtr does
+                                        not  already  point to an
+                                        integer    object,     an
+                                        attempt  will  be made to
+                                        convert it to one.
+
+       Tcl_Interp   *interp   (in/out)  If an error occurs during
+                                        conversion, an error mes­
+                                        sage  is  left   in   the
+                                        interpreter's      result
+                                        object unless  interp  is
+                                        NULL.
+
+       int          *intPtr   (out)     Points  to place to store
+                                        the     integer     value
+                                        obtained  by  Tcl_GetInt­
+                                        FromObj from objPtr.
+
+       long         *longPtr  (out)     Points to place to  store
+                                        the  long  integer  value
+                                        obtained   by    Tcl_Get­
+                                        LongFromObj  from objPtr.
+_________________________________________________________________
+
+
+DESCRIPTION
+       These procedures are used  to  create,  modify,  and  read
+       integer  Tcl objects from C code.  Tcl_NewIntObj, Tcl_New­
+       LongObj, Tcl_SetIntObj, and Tcl_SetLongObj  create  a  new
+       object  of  integer  type  or modify an existing object to
+       have integer type.  Tcl_NewIntObj  and  Tcl_SetIntObj  set
+       the  object  to  have the integer value given by intValue,
+       while Tcl_NewLongObj and Tcl_SetLongObj set the object  to
+       have   the   long   integer   value  given  by  longValue.
+       Tcl_NewIntObj and Tcl_NewLongObj return  a  pointer  to  a
+       newly  created  object  with  reference count zero.  These
+       procedures set the object's type to be integer and  assign
+       the  integer value to the object's internal representation
+       longValue member.  Tcl_SetIntObj and Tcl_SetLongObj inval­
+       idate  any old string representation and, if the object is
+       not already an integer object, free any old internal  rep­
+       resentation.
+
+       Tcl_GetIntFromObj and Tcl_GetLongFromObj attempt to return
+       an integer value from  the  Tcl  object  objPtr.   If  the
+       object is not already an integer object, they will attempt
+       to convert it to one.  If an error occurs  during  conver­
+       sion,  they return TCL_ERROR and leave an error message in
+       the interpreter's result object  unless  interp  is  NULL.
+       Also,  if  the  long integer held in the object's internal
+       representation longValue member can not be represented  in
+       a  (non-long) integer, Tcl_GetIntFromObj returns TCL_ERROR
+       and leaves an error message in  the  interpreter's  result
+       object  unless interp is NULL.  Otherwise, both procedures
+       return TCL_OK and store the integer or  the  long  integer
+       value  in  the address given by intPtr and longPtr respec­
+       tively.  If the object is not already an  integer  object,
+       the  conversion will free any old internal representation.
+
+
+SEE ALSO
+       Tcl_NewObj, Tcl_DecrRefCount, Tcl_IncrRefCount, Tcl_GetOb­
+       jResult
+
+
+KEYWORDS
+       integer,  integer object, integer type, internal represen­
+       tation, object, object type, string representation
+
+
+
+Tcl                            8.0                  Tcl_IntObj(3)

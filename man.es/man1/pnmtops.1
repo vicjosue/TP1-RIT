@@ -1,0 +1,133 @@
+pnmtops(1)                                             pnmtops(1)
+
+
+
+NAME
+       pnmtops - convert portable anymap to PostScript
+
+SYNOPSIS
+       pnmtops  [-scale s] [-dpi n] [-imagewidth n] [-imageheight
+       n] [-width n] [-height n]  [-equalpixels]  [-turn|-noturn]
+       [-rle|-runlength] [-center|-nocenter] [pnmfile]
+
+DESCRIPTION
+       Reads  a  Netpbm  image  as  input.  Produces Encapsulated
+       PostScript as output.
+
+       If the input file is in color (PPM), pnmtops  generates  a
+       color PostScript file.  Some PostScript interpreters can't
+       handle color PostScript.  If you have  one  of  these  you
+       will need to run your image through ppmtopgm first.
+
+       If  you specify no output dimensioning options, the output
+       image is dimensioned such that  72  pixels  of  the  input
+       image  generate  one inch of output image.  Except if that
+       would exceed the default  page  size  (8.5  inches  by  11
+       inches), the output image is shrunk enough to fit.
+
+       Use   -imagewidth,   -imageheight,  -equalpixels,  -width,
+       -height, and -scale to adjust that.
+
+
+
+OPTIONS
+       -imagewidth
+              -imageheight Tells how wide and high you  want  the
+              image  on the page, in inches.  The aspect ratio of
+              the image is preserved, so if you specify  both  of
+              these,  the  image  on the page will be the largest
+              image that will fit within the box of those  dimen­
+              sions.
+
+              If these dimensions are greater than the page size,
+              you get Postscript output that runs off the page.
+
+              You  cannot  use  imagewidth  or  imageheight  with
+              -scale or -equalpixels.
+
+
+       -equalpixels
+              This  option  causes  the  output image to have the
+              same number of pixels as the input  image.   So  if
+              the output is 600 dpi and your image is 3000 pixels
+              wide, the output image would be 5 inches wide.
+
+              You  cannot  use  -equalpixels  with   -imagewidth,
+              -imageheight, or -scale.
+
+
+       -scale tells  how big you want the image on the page.  The
+              value is the number of inches of output image  that
+              you want 72 pixels of the input to generate.
+
+              If  the  size so specified does not fit on the page
+              (as measured  either  by  the  -width  and  -height
+              options  or  the default page size of 8.5 inches by
+              11 inches), pnmtops  ignores  the  -scale  options,
+              issues  a  warning,  and scales the image to fit on
+              the page.
+
+
+       -dpi   This option specifies the dots  per  inch  of  your
+              output  device.  The default is 300 dpi.  In theory
+              PostScript is device-independent and you don't have
+              to  worry  about  this,  but in practice its raster
+              rendering can have unsightly bands  if  the  device
+              pixels and the image pixels aren't in sync.
+
+              Also  this  option is crucial to the working of the
+              equalpixels option.
+
+
+       -width -height These options specify the dimensions of the
+              page  on  which  the output is to be printed.  This
+              affects the size of the output image.
+
+              The page size has  no  effect,  however,  when  you
+              specify    the    -imagewidth,   -imageheight,   or
+              -equalpixels options.
+
+              The default is 8.5 inches by 11 inches.
+
+
+       -turn  -noturn These options  control  whether  the  image
+              gets  turned  90 degrees.  Normally, if an image is
+              wider than it is tall, it gets turned automatically
+              to  better  fit the page.  If you specify the -turn
+              option, pnmtops turns the image no matter what  its
+              shape;  If  you  specify  -noturn, pnmtops does not
+              turn it no matter what its shape.
+
+       -rle   -runlength These  identical  options  specify  run-
+              length  compression.   This  may  save  time if the
+              host-to-printer link  is  slow;  but  normally  the
+              printer's  processing time dominates, so -rle makes
+              things slower.
+
+       -center
+              -nocenter By default, pnmtops centers the image  on
+              the  output  page.  You can specify this explicitly
+              with  the  -center  option,  or  cause  pnmtops  to
+              instead put the image against the upper left corner
+              of the page with the -nocenter option.  The  latter
+              is useful for programs which can include PostScript
+              files, but can't cope with pictures which  are  not
+              positioned in the upper left corner.
+
+       All  options  can  be abbreviated to their shortest unique
+       prefix.
+
+
+
+SEE ALSO
+       pnm(5), gs(1), psidtopgm(1), pstopnm(1), pbmtolps(1), pbm­
+       toepsi(1), pbmtopsg3(1), ppmtopgm(1),
+
+AUTHOR
+       Copyright (C) 1989, 1991 by Jef Poskanzer.
+       Modified   November   1993   by   Wolfgang   Stuerzlinger,
+       wrzl@gup.uni-linz.ac.at
+
+
+
+                           25 May 2001                 pnmtops(1)

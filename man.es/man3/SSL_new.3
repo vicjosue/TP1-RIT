@@ -1,0 +1,46 @@
+SSL_new(3)                   OpenSSL                   SSL_new(3)
+
+
+
+NNAAMMEE
+       SSL_new - create a new SSL structure for a connection
+
+SSYYNNOOPPSSIISS
+        #include <openssl/ssl.h>
+
+        SSL *SSL_new(SSL_CTX *ctx);
+
+
+DDEESSCCRRIIPPTTIIOONN
+       SSL_new() creates a new SSSSLL structure which is needed to
+       hold the data for a TLS/SSL connection. The new structure
+       inherits the settings of the underlying context ccttxx:
+       connection method (SSLv2/v3/TLSv1), options, verification
+       settings, timeout settings.
+
+RREETTUURRNN VVAALLUUEESS
+       The following return values can occur:
+
+       NULL
+           The creation of a new SSL structure failed. Check the
+           error stack to find out the reason.
+
+       Pointer to an SSL structure
+           The return value points to an allocated SSL structure.
+
+SSEEEE AALLSSOO
+       SSL_free(3), SSL_clear(3), SSL_CTX_set_options(3),
+       SSL_get_SSL_CTX(3), ssl(3)
+
+
+
+
+
+
+
+
+
+
+
+
+17/Aug/2001                   0.9.6c                   SSL_new(3)

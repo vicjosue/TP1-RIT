@@ -1,0 +1,1501 @@
+ZSHMISC(1)                                             ZSHMISC(1)
+
+
+
+NAME
+       zshmisc - everything and then some
+
+SIMPLE COMMANDS & PIPELINES
+       A  simple  command  is  a  sequence  of optional parameter
+       assignments  followed  by  blank-separated   words,   with
+       optional redirections interspersed.  The first word is the
+       command to be executed, and the remaining words,  if  any,
+       are arguments to the command.  If a command name is given,
+       the parameter assignments modify the  environment  of  the
+       command  when  it is executed.  The value of a simple com­
+       mand is its exit status, or 128 plus the signal number  if
+       terminated by a signal.  For example,
+
+              echo foo
+
+       is a simple command with arguments.
+
+       A  pipeline  is  either a simple command, or a sequence of
+       two or more simple commands where each  command  is  sepa­
+       rated  from  the  next by `|' or `|&'.  Where commands are
+       separated by `|', the standard output of the first command
+       is  connected  to the standard input of the next.  `|&' is
+       shorthand for `2>&1 |', which connects both  the  standard
+       output  and the standard error of the command to the stan­
+       dard input of the next.  The value of a  pipeline  is  the
+       value of the last command, unless the pipeline is preceded
+       by `!' in which case the value is the logical  inverse  of
+       the value of the last command.  For example,
+
+              echo foo | sed 's/foo/bar/'
+
+       is  a pipeline, where the output (`foo' plus a newline) of
+       the first command will be passed to the input of the  sec­
+       ond.
+
+       If a pipeline is preceded by `coproc', it is executed as a
+       coprocess; a two-way pipe is established  between  it  and
+       the parent shell.  The shell can read from or write to the
+       coprocess by means of  the  `>&p'  and  `<&p'  redirection
+       operators  or  with  `print -p' and `read -p'.  A pipeline
+       cannot be preceded by both `coproc' and `!'.  If job  con­
+       trol is active, the coprocess can be treated in other than
+       input and output as an ordinary background job.
+
+       A sublist is either a single pipeline, or  a  sequence  of
+       two  or  more pipelines separated by `&&' or `||'.  If two
+       pipelines are separated by `&&', the  second  pipeline  is
+       executed  only  if  the  first  succeeds  (returns  a zero
+       value).  If two pipelines are separated by `||', the  sec­
+       ond is executed only if the first fails (returns a nonzero
+       value).  Both operators have equal precedence and are left
+       associative.  The value of the sublist is the value of the
+       last pipeline executed.  For example,
+
+              dmesg | grep panic && print yes
+
+       is a sublist consisting of two pipelines, the second  just
+       a simple command which will be executed if and only if the
+       grep command returns a zero value.  If it  does  not,  the
+       value  of the sublist is that return value, else it is the
+       value returned by the print (almost certainly zero).
+
+       A list is a sequence of zero or more  sublists,  in  which
+       each  sublist  is terminated by `;', `&', `&|', `&!', or a
+       newline.  This terminator may optionally be  omitted  from
+       the  last  sublist  in the list when the list appears as a
+       complex command inside `(...)'  or `{...}'.  When  a  sub­
+       list  is terminated by `;' or newline, the shell waits for
+       it to finish before executing the next sublist.  If a sub­
+       list is terminated by a `&', `&|', or `&!', the shell exe­
+       cutes the last pipeline in it in the background, and  does
+       not  wait for it to finish (note the difference from other
+       shells which execute the whole sublist in the background).
+       A backgrounded pipeline returns a status of zero.
+
+       More  generally,  a list can be seen as a set of any shell
+       commands whatsoever, including the complex commands below;
+       this  is implied wherever the word `list' appears in later
+       descriptions.  For example, the commands in a shell  func­
+       tion form a special sort of list.
+
+PRECOMMAND MODIFIERS
+       A simple command may be preceded by a precommand modifier,
+       which will alter how the command  is  interpreted.   These
+       modifiers are shell builtin commands with the exception of
+       nocorrect which is a reserved word.
+
+       -      The command is executed with a `-' prepended to its
+              argv[0] string.
+
+       noglob Filename  generation (globbing) is not performed on
+              any of the words.
+
+       nocorrect
+              Spelling correction is  not  done  on  any  of  the
+              words.   This  must appear before any other precom­
+              mand modifier, as it  is  interpreted  immediately,
+              before  any  parsing  is done.  It has no effect in
+              non-interactive shells.
+
+       exec   The command is executed in the parent shell without
+              forking.
+
+       command
+              The  command  word  is  taken  to be the name of an
+              external command, rather than a shell  function  or
+              builtin.
+
+       builtin
+              The  command  word  is  taken  to  be the name of a
+              builtin command, rather than a  shell  function  or
+              external command.
+
+COMPLEX COMMANDS
+       A complex command in zsh is one of the following:
+
+       if  list then list [ elif list then list ] ... [ else list
+       ] fi
+              The  if  list is executed, and if it returns a zero
+              exit status, the then list is executed.  Otherwise,
+              the elif list is executed and if its value is zero,
+              the then list  is  executed.   If  each  elif  list
+              returns nonzero, the else list is executed.
+
+       for name [ in word ... term ] do list done
+              where  term  is  at least one newline or ;.  Expand
+              the list of words, and set the  parameter  name  to
+              each of them in turn, executing list each time.  If
+              the in word is omitted, use the positional  parame­
+              ters instead of the words.
+
+       for (( [expr1] ; [expr2] ; [expr3] )) do list done
+              The  arithmetic expression expr1 is evaluated first
+              (see the  section  `Arithmetic  Evaluation').   The
+              arithmetic expression expr2 is repeatedly evaluated
+              until it evaluates to zero and when non-zero,  list
+              is  executed  and  the  arithmetic expression expr3
+              evaluated.  If any expression is omitted,  then  it
+              behaves as if it evaluated to 1.
+
+       while list do list done
+              Execute  the  do  list  as  long  as the while list
+              returns a zero exit status.
+
+       until list do list done
+              Execute the do list as long as until list returns a
+              nonzero exit status.
+
+       repeat word do list done
+              word  is  expanded  and  treated  as  an arithmetic
+              expression, which must  evaluate  to  a  number  n.
+              list is then executed n times.
+
+       case  word  in  [  [(]  pattern  [  | pattern ] ... ) list
+       (;;|;&) ] ... esac
+              Execute  the list associated with the first pattern
+              that matches word, if any.  The form  of  the  pat­
+              terns is the same as that used for filename genera­
+              tion.  See the section `Filename  Generation'.   If
+              the  list  that  is  executed is terminated with ;&
+              rather than ;;, the following  list  is  also  exe­
+              cuted.   This continues until either a list is ter­
+              minated with ;; or the esac is reached.
+
+       select name [ in word ... term ] do list done
+              where term is one or more newline or ; to terminate
+              the  words.   Print the set of words, each preceded
+              by a number.  If the in word is  omitted,  use  the
+              positional   parameters.   The  PROMPT3  prompt  is
+              printed and a line is read from the line editor  if
+              the  shell  is  interactive  and that is active, or
+              else standard input.  If this line consists of  the
+              number of one of the listed words, then the parame­
+              ter name is set to the word corresponding  to  this
+              number.   If this line is empty, the selection list
+              is printed again.   Otherwise,  the  value  of  the
+              parameter name is set to null.  The contents of the
+              line read from  standard  input  is  saved  in  the
+              parameter  REPLY.  list is executed for each selec­
+              tion until a break or end-of-file is encountered.
+
+       ( list )
+              Execute list in a subshell.  Traps set by the  trap
+              builtin  are  reset  to  their default values while
+              executing list.
+
+       { list }
+              Execute list.
+
+       function word ... [ () ] [ term ] { list }
+       word ... () [ term ] { list }
+       word ... () [ term ] command
+              where term is one or more newline or ;.   Define  a
+              function  which  is  referenced by any one of word.
+              Normally, only one word is provided; multiple words
+              are  usually  only  useful  for setting traps.  The
+              body of the function is the list between the {  and
+              }.  See the section `Functions'.
+
+              If the option SH_GLOB is set for compatibility with
+              other shells, then whitespace  may  appear  between
+              between  the  left and right parentheses when there
+              is a single word;  otherwise, the parentheses  will
+              be  treated  as  forming a globbing pattern in that
+              case.
+
+       time [ pipeline ]
+              The pipeline is executed, and timing statistics are
+              reported  on  the standard error in the form speci­
+              fied by the  TIMEFMT  parameter.   If  pipeline  is
+              omitted,  print  statistics about the shell process
+              and its children.
+
+       [[ exp ]]
+              Evaluates the conditional expression exp and return
+              a  zero exit status if it is true.  See the section
+              `Conditional Expressions' for a description of exp.
+
+ALTERNATE FORMS FOR COMPLEX COMMANDS
+       Many  of  zsh's  complex  commands  have  alternate forms.
+       These particular versions of complex  commands  should  be
+       considered  deprecated  and  may be removed in the future.
+       The versions in the previous section should  be  preferred
+       instead.
+
+       The  short  versions  below only work if sublist is of the
+       form `{ list }' or if the SHORT_LOOPS option is set.   For
+       the  if, while and until commands, in both these cases the
+       test part of the loop must  also  be  suitably  delimited,
+       such as by `[[ ... ]]' or `(( ... ))', else the end of the
+       test will not be recognized.  For the  for,  repeat,  case
+       and select commands no such special form for the arguments
+       is necessary, but the other condition (the special form of
+       sublist or use of the SHORT_LOOPS option) still applies.
+
+       if  list { list } [ elif list { list } ] ... [ else { list
+       } ]
+              An alternate form of if.  The rules mean that
+
+                     if [[ -o ignorebraces ]] {
+                       print yes
+                     }
+
+              works, but
+
+                     if true {  # Does not work!
+                       print yes
+                     }
+
+
+              does not, since the test is not suitably delimited.
+
+       if list sublist
+              A short form of the alternate `if'.  The same limi­
+              tations on the form of list apply as for the previ­
+              ous form.
+
+       for name ( word ... ) sublist
+              A short form of for.
+
+       for name [ in word ... term ] sublist
+              where term is at least one newline or  ;.   Another
+              short form of for.
+
+       for (( [expr1] ; [expr2] ; [expr3] )) sublist
+              A short form of the arithmetic for command.
+
+       foreach name ( word ... ) list end
+              Another form of for.
+
+       while list { list }
+              An alternative form of while.  Note the limitations
+              on the form of list mentioned above.
+
+       until list { list }
+              An alternative form of until.  Note the limitations
+              on the form of list mentioned above.
+
+       repeat word sublist
+              This is a short form of repeat.
+
+       case word { [ [(] pattern [ | pattern ] ... ) list (;;|;&)
+       ] ... }
+              An alternative form of case.
+
+       select name [ in word term ] sublist
+              where  term  is at least one newline or ;.  A short
+              form of select.
+
+RESERVED WORDS
+       The following words are recognized as reserved words  when
+       used  as the first word of a command unless quoted or dis­
+       abled using disable -r:
+
+       do done esac then elif else fi for case if while  function
+       repeat time until select coproc nocorrect foreach end ! [[
+       { }
+
+       Additionally, `}' is recognized in  any  position  if  the
+       IGNORE_BRACES option is not set.
+
+COMMENTS
+       In  noninteractive  shells,  or in interactive shells with
+       the INTERACTIVE_COMMENTS option set, a word beginning with
+       the  third  character  of  the histchars parameter (`#' by
+       default) causes that word and all the following characters
+       up to a newline to be ignored.
+
+ALIASING
+       Every  token in the shell input is checked to see if there
+       is an alias defined for it.  If so, it is replaced by  the
+       text  of  the  alias  if  it is in command position (if it
+       could be the first word of a simple command),  or  if  the
+       alias  is global.  If the text ends with a space, the next
+       word in the shell input is treated as though  it  were  in
+       command  position  for  purposes  of  alias expansion.  An
+       alias is defined using the alias builtin;  global  aliases
+       may be defined using the -g option to that builtin.
+
+       Alias  expansion  is  done  on  the shell input before any
+       other expansion except history expansion.   Therefore,  if
+       an  alias is defined for the word foo, alias expansion may
+       be avoided by quoting part of the word,  e.g.  \foo.   But
+       there  is  nothing  to  prevent an alias being defined for
+       \foo as well.
+
+QUOTING
+       A character may be quoted (that  is,  made  to  stand  for
+       itself)  by  preceding  it  with a `\'.  `\' followed by a
+       newline is ignored.
+
+       A string enclosed between `$'' and `''  is  processed  the
+       same way as the string arguments of the print builtin, and
+       the resulting string is considered to be entirely  quoted.
+       A  literal  `'' character can be included in the string by
+       using the `\'' escape.
+
+       All characters enclosed between a pair  of  single  quotes
+       ('')  that  is not preceded by a `$' are quoted.  A single
+       quote cannot appear within single quotes unless the option
+       RC_QUOTES  is  set,  in which case a pair of single quotes
+       are turned into a single quote.  For example,
+
+              print ''''
+
+       outputs nothing apart from a newline if RC_QUOTES  is  not
+       set, but one single quote if it is set.
+
+       Inside double quotes (""), parameter and command substitu­
+       tion occur, and `\' quotes the characters `\',  ``',  `"',
+       and `$'.
+
+REDIRECTION
+       If  a  command  is  followed  by  & and job control is not
+       active, then the default standard input for the command is
+       the  empty file /dev/null.  Otherwise, the environment for
+       the execution of a command contains the  file  descriptors
+       of the invoking shell as modified by input/output specifi­
+       cations.
+
+       The following may appear anywhere in a simple  command  or
+       may precede or follow a complex command.  Expansion occurs
+       before word or digit is used except as  noted  below.   If
+       the  result of substitution on word produces more than one
+       filename, redirection occurs for each separate filename in
+       turn.
+
+       < word Open file word for reading as standard input.
+
+       <> word
+              Open  file word for reading and writing as standard
+              input.  If the file does not exist then it is  cre­
+              ated.
+
+       > word Open  file word for writing as standard output.  If
+              the file does not exist then it is created.  If the
+              file  exists, and the CLOBBER option is unset, this
+              causes an error; otherwise, it is truncated to zero
+              length.
+
+       >| word
+       >! word
+              Same  as  >,  except  that the file is truncated to
+              zero length if it exists, even if CLOBBER is unset.
+
+       >> word
+              Open  file word for writing in append mode as stan­
+              dard output.  If the file does not exist,  and  the
+              CLOBBER option is unset, this causes an error; oth­
+              erwise, the file is created.
+
+       >>| word
+       >>! word
+              Same as >>, except that the file is created  if  it
+              does not exist, even if CLOBBER is unset.
+
+       <<[-] word
+              The  shell  input  is read up to a line that is the
+              same as word, or to an end-of-file.   No  parameter
+              expansion, command substitution or filename genera­
+              tion is performed on word.  The resulting document,
+              called a here-document, becomes the standard input.
+
+              If any character of word is quoted with  single  or
+              double quotes or a `\', no interpretation is placed
+              upon the characters of  the  document.   Otherwise,
+              parameter and command substitution occurs, `\' fol­
+              lowed by a newline is removed, and `\' must be used
+              to quote the characters `\', `$', ``' and the first
+              character of word.
+
+              If <<- is used, then all leading tabs are  stripped
+              from word and from the document.
+
+       <<< word
+              Perform shell expansion on word and pass the result
+              to standard input.  This is known as a here-string.
+
+       <& number
+       >& number
+              The  standard  input/output is duplicated from file
+              descriptor number (see dup2(2)).
+
+       <& -
+       >& -   Close the standard input/output.
+
+       <& p
+       >& p   The input/output from/to the coprocess is moved  to
+              the standard input/output.
+
+       >& word
+       &> word
+              (Except  where  `>&  word' matches one of the above
+              syntaxes; `&>' can always be  used  to  avoid  this
+              ambiguity.)   Redirects  both  standard  output and
+              standard error (file descriptor 2) in the manner of
+              `>  word'.   Note  that this does not have the same
+              effect as `> word 2>&1' in the presence of  multios
+              (see the section below).
+
+       >&| word
+       >&! word
+       &>| word
+       &>! word
+              Redirects  both  standard output and standard error
+              (file descriptor 2) in the manner of `>| word'.
+
+       >>& word
+       &>> word
+              Redirects both standard output and  standard  error
+              (file descriptor 2) in the manner of `>> word'.
+
+       >>&| word
+       >>&! word
+       &>>| word
+       &>>! word
+              Redirects  both  standard output and standard error
+              (file descriptor 2) in the manner of `>>| word'.
+
+       If one of the above is preceded by a digit, then the  file
+       descriptor  referred  to  is  that  specified by the digit
+       instead of the default 0 or 1.  The order in  which  redi­
+       rections  are  specified is significant.  The shell evalu­
+       ates each redirection in terms of  the  (file  descriptor,
+       file) association at the time of evaluation.  For example:
+
+              ... 1>fname 2>&1
+
+       first associates file descriptor 1 with  file  fname.   It
+       then associates file descriptor 2 with the file associated
+       with file descriptor 1 (that is, fname).  If the order  of
+       redirections  were  reversed,  file  descriptor 2 would be
+       associated with the terminal (assuming file  descriptor  1
+       had  been)  and then file descriptor 1 would be associated
+       with file fname.
+
+MULTIOS
+       If the user tries to open a file  descriptor  for  writing
+       more  than  once, the shell opens the file descriptor as a
+       pipe to a process that copies its input to all the  speci­
+       fied  outputs, similar to tee, provided the MULTIOS option
+       is set, as it is by default.  Thus:
+
+              date >foo >bar
+
+       writes the date to two files, named `foo' and `bar'.  Note
+       that a pipe is an implicit redirection; thus
+
+              date >foo | cat
+
+       writes  the  date  to the file `foo', and also pipes it to
+       cat.
+
+       If the MULTIOS option is set, the word after a redirection
+       operator  is  also subjected to filename generation (glob­
+       bing).  Thus
+
+              : > *
+
+       will truncate all files in the current directory, assuming
+       there's  at  least  one.   (Without the MULTIOS option, it
+       would create an empty file called  `*'.)   Similarly,  you
+       can do
+
+              echo exit 0 >> *.sh
+
+       If  the  user  tries to open a file descriptor for reading
+       more than once, the shell opens the file descriptor  as  a
+       pipe  to a process that copies all the specified inputs to
+       its output in the order specified, similar  to  cat,  pro­
+       vided the MULTIOS option is set.  Thus
+
+              sort <foo <fubar
+
+       or even
+
+              sort <f{oo,ubar}
+
+       is equivalent to `cat foo fubar | sort'.
+
+       Note that a pipe is an implicit redirection; thus
+
+              cat bar | sort <foo
+
+       is  equivalent  to `cat bar foo | sort' (note the order of
+       the inputs).
+
+       If the MULTIOS option is unset, each redirection  replaces
+       the  previous  redirection for that file descriptor.  How­
+       ever, all files redirected to are actually opened, so
+
+              echo foo > bar > baz
+
+       when MULTIOS is unset will truncate bar, and  write  `foo'
+       into baz.
+
+
+REDIRECTIONS WITH NO COMMAND
+       When  a simple command consists of one or more redirection
+       operators and zero or more parameter assignments,  but  no
+       command name, zsh can behave in several ways.
+
+       If  the  parameter  NULLCMD  is  not  set  or  the  option
+       CSH_NULLCMD is set, an error is caused.  This is  the  csh
+       behavior  and CSH_NULLCMD is set by default when emulating
+       csh.
+
+       If the option  SH_NULLCMD  is  set,  the  builtin  `:'  is
+       inserted  as  a command with the given redirections.  This
+       is the default when emulating sh or ksh.
+
+       Otherwise, if the parameter NULLCMD is set, its value will
+       be used as a command with the given redirections.  If both
+       NULLCMD and READNULLCMD are set, then  the  value  of  the
+       latter will be used instead of that of the former when the
+       redirection is an input.  The default for NULLCMD is `cat'
+       and for READNULLCMD is `more'. Thus
+
+              < file
+
+       shows the contents of file on standard output, with paging
+       if that is a terminal.  NULLCMD and READNULLCMD may  refer
+       to shell functions.
+
+
+COMMAND EXECUTION
+       If  a command name contains no slashes, the shell attempts
+       to locate it.  If there exists a shell  function  by  that
+       name,  the function is invoked as described in the section
+       `Functions'.  If there exists  a  shell  builtin  by  that
+       name, the builtin is invoked.
+
+       Otherwise,  the shell searches each element of $path for a
+       directory containing an executable file by that name.   If
+       the search is unsuccessful, the shell prints an error mes­
+       sage and returns a nonzero exit status.
+
+       If execution fails because the file is not  in  executable
+       format,  and the file is not a directory, it is assumed to
+       be a shell script.  /bin/sh is spawned to execute it.   If
+       the  program  is a file beginning with `#!', the remainder
+       of the first line specifies an interpreter  for  the  pro­
+       gram.  The shell will execute the specified interpreter on
+       operating systems that do not handle this executable  for­
+       mat in the kernel.
+
+FUNCTIONS
+       Shell  functions  are  defined  with the function reserved
+       word or the special syntax `funcname ()'.  Shell functions
+       are  read  in  and  stored  internally.   Alias  names are
+       resolved when the function is read.   Functions  are  exe­
+       cuted  like  commands  with  the arguments passed as posi­
+       tional parameters.  (See the section `Command Execution'.)
+
+       Functions  execute  in  the same process as the caller and
+       share all files and present  working  directory  with  the
+       caller.   A trap on EXIT set inside a function is executed
+       after the function completes in  the  environment  of  the
+       caller.
+
+       The  return builtin is used to return from function calls.
+
+       Function identifiers can  be  listed  with  the  functions
+       builtin.   Functions  can be undefined with the unfunction
+       builtin.
+
+AUTOLOADING FUNCTIONS
+       A function can be marked as undefined using  the  autoload
+       builtin  (or  `functions  -u'  or  `typeset -fu').  Such a
+       function has no body.  When the  function  is  first  exe­
+       cuted,  the  shell  searches  for its definition using the
+       elements of the fpath variable.  Thus to define  functions
+       for autoloading, a typical sequence is:
+
+              fpath=(~/myfuncs $fpath)
+              autoload myfunc1 myfunc2 ...
+
+       The  usual  alias  expansion  during  reading will be sup­
+       pressed if the autoload builtin or its equivalent is given
+       the  option  -U.  This is recommended for the use of func­
+       tions supplied with the zsh distribution.  Note  that  for
+       functions  precompiled  with  the zcompile builtin command
+       the flag -U must be provided when the .zwc  file  is  cre­
+       ated,  as  the  corresponding information is compiled into
+       the latter.
+
+       For each element in fpath, the shell looks for three  pos­
+       sible files, the newest of which is used to load the defi­
+       nition for the function:
+
+       element.zwc
+              A file created with the zcompile  builtin  command,
+              which  is  expected  to contain the definitions for
+              all functions in the directory named element.   The
+              file  is  treated in the same manner as a directory
+              containing files for functions and is searched  for
+              the definition of the function.   If the definition
+              is not found, the search for a definition  proceeds
+              with the other two possibilities described below.
+
+              If  element already includes a .zwc extension (i.e.
+              the extension was explicitly given  by  the  user),
+              element is searched for the definition of the func­
+              tion without comparing its age  to  that  of  other
+              files;  in  fact,  there  does  not  need to be any
+              directory named element without the  suffix.   Thus
+              including an element such as `/usr/local/funcs.zwc'
+              in fpath will speed up the  search  for  functions,
+              with  the disadvantage that functions included must
+              be explicitly recompiled by hand before  the  shell
+              notices any changes.
+
+       element/function.zwc
+              A  file created with zcompile, which is expected to
+              contain  the  definition  for  function.   It   may
+              include  other  function  definitions  as well, but
+              those are neither loaded nor executed; a file found
+              in  this way is searched only for the definition of
+              function.
+
+       element/function
+              A file of zsh command text, taken to be the defini­
+              tion for function.
+
+       In  summary, the order of searching is, first, in the par­
+       ents of directories in fpath for the  newer  of  either  a
+       compiled  directory  or  a  directory in fpath; second, if
+       more than one of these contains a definition for the func­
+       tion  that is sought, the leftmost in the fpath is chosen;
+       and third, within a directory, the newer of either a  com­
+       piled function or an ordinary function definition is used.
+
+       If the KSH_AUTOLOAD option is set, or  the  file  contains
+       only  a simple definition of the function, the file's con­
+       tents will be executed.  This  will  normally  define  the
+       function in question, but may also perform initialization,
+       which is executed in the context of  the  function  execu­
+       tion, and may therefore define local parameters.  It is an
+       error if the function is not defined by loading the  file.
+
+       Otherwise,  the  function body (with no surrounding `func­
+       name() {...}') is taken to be the complete contents of the
+       file.  This form allows the file to be used directly as an
+       executable  shell  script.   If  processing  of  the  file
+       results  in  the  function  being re-defined, the function
+       itself is not re-executed.  To force the shell to  perform
+       initialization  and  then  call  the function defined, the
+       file should contain initialization  code  (which  will  be
+       executed  then  discarded) in addition to a complete func­
+       tion definition (which will  be  retained  for  subsequent
+       calls  to the function), and a call to the shell function,
+       including any arguments, at the end.
+
+       For example, suppose the autoload file func contains
+
+              func() { print This is func; }
+              print func is initialized
+
+
+       then `func; func' with KSH_AUTOLOAD set will produce  both
+       messages  on the first call, but only the message `This is
+       func'  on  the  second  and  subsequent  calls.    Without
+       KSH_AUTOLOAD  set, it will produce the initialization mes­
+       sage on the first call, and the other message on the  sec­
+       ond and subsequent calls.
+
+       It  is  also  possible  to  create  a function that is not
+       marked as autoloaded, but which loads its  own  definition
+       by  searching fpath, by using `autoload -X' within a shell
+       function.  For example, the following are equivalent:
+
+              myfunc() {
+                autoload -X
+              }
+              myfunc args...
+
+       and
+
+              unfunction myfunc   # if myfunc was defined
+              autoload myfunc
+              myfunc args...
+
+       In fact, the functions command outputs  `builtin  autoload
+       -X'  as  the  body  of  an  autoloaded  function.   A true
+       autoloaded function can be identified by the  presence  of
+       the  comment  `#  undefined' in the body, because all com­
+       ments are discarded from defined functions.  This is  done
+       so that
+
+              eval "$(functions)"
+
+       produces a reasonable result.
+
+       To  load  the  definition of an autoloaded function myfunc
+       without executing myfunc, use:
+
+              autoload +X myfunc
+
+
+SPECIAL FUNCTIONS
+       The following functions, if defined, have special  meaning
+       to the shell:
+
+       chpwd  Executed  whenever the current working directory is
+              changed.
+
+       periodic
+              If the parameter PERIOD is set,  this  function  is
+              executed  every  $PERIOD  seconds,  just  before  a
+              prompt.
+
+       precmd Executed before each prompt.
+
+       preexec
+              Executed just after a command has been read and  is
+              about  to be executed.  If the history mechanism is
+              active (and the line was  not  discarded  from  the
+              history  buffer), the string that the user typed is
+              passed as the first argument, otherwise  it  is  an
+              empty string.  The actual command that will be exe­
+              cuted (including expanded aliases) is passed in two
+              different  forms:  the  second  argument  is a sin­
+              gle-line, size-limited version of the command (with
+              things  like  function  bodies  elided);  the third
+              argument contains the full text what what is  being
+              executed.
+
+       TRAPNAL
+              If defined and non-null, this function will be exe­
+              cuted whenever the shell catches a  signal  SIGNAL,
+              where  NAL  is  a  signal name as specified for the
+              kill builtin.  The signal number will be passed  as
+              the first parameter to the function.
+
+              If a function of this form is defined and null, the
+              shell and processes spawned by it will ignore  SIG­
+              NAL.
+
+       TRAPDEBUG
+              Executed after each command.
+
+       TRAPEXIT
+              Executed  when the shell exits, or when the current
+              function exits if defined inside a function.
+
+       TRAPZERR
+              Executed whenever a command  has  a  non-zero  exit
+              status.   However,  the function is not executed if
+              the command occurred in a sublist followed by  `&&'
+              or  `||';  only  the  final command in a sublist of
+              this type causes the trap to be executed.
+
+       The  functions  beginning  `TRAP'  may  alternatively   be
+       defined with the trap builtin:  this may be preferable for
+       some uses, as they are then run in the environment of  the
+       calling  process,  rather than in their own function envi­
+       ronment.  Apart from the difference in  calling  procedure
+       and  the  fact  that the function form appears in lists of
+       functions, the forms
+
+              TRAPNAL() {
+               # code
+              }
+
+       and
+
+              trap '
+               # code
+
+       are equivalent.
+
+JOBS
+       If the MONITOR option is set, an interactive shell associ­
+       ates  a  job with each pipeline.  It keeps a table of cur­
+       rent jobs, printed by the jobs command, and  assigns  them
+       small  integer  numbers.   When  a  job  is  started asyn­
+       chronously with `&', the shell prints a line  which  looks
+       like:
+
+              [1] 1234
+
+       indicating  that  the job which was started asynchronously
+       was job number 1 and had one  (top-level)  process,  whose
+       process ID was 1234.
+
+       If  a  job  is started with `&|' or `&!', then that job is
+       immediately disowned.  After startup, it does not  have  a
+       place in the job table, and is not subject to the job con­
+       trol features described here.
+
+       If you are running a job and wish to do something else you
+       may  hit  the key ^Z (control-Z) which sends a TSTP signal
+       to the current job:  this key may be redefined by the susp
+       option  of the external stty command.  The shell will then
+       normally indicate that the job has been  `suspended',  and
+       print  another  prompt.  You can then manipulate the state
+       of this job, putting it in the background with the bg com­
+       mand, or run some other commands and then eventually bring
+       the job back into the foreground with the foreground  com­
+       mand  fg.   A  ^Z  takes effect immediately and is like an
+       interrupt in that pending output and unread input are dis­
+       carded when it is typed.
+
+       A job being run in the background will suspend if it tries
+       to read from the terminal.  Background jobs  are  normally
+       allowed  to  produce  output,  but this can be disabled by
+       giving the command `stty tostop'.  If  you  set  this  tty
+       option, then background jobs will suspend when they try to
+       produce output like they do when they try to read input.
+
+       When a command is suspended and continued later  with  the
+       fg  or  wait builtins, zsh restores tty modes that were in
+       effect when it was suspended.  This  (intentionally)  does
+       not  apply  if  the command is continued via `kill -CONT',
+       nor when it is continued with bg.
+
+       There are several ways to refer to jobs in the  shell.   A
+       job can be referred to by the process ID of any process of
+       the job or by one of the following:
+
+       %number
+              The job with the given number.
+       %string
+              Any job whose command line begins with string.
+       %?string
+              Any job whose command line contains string.
+       %%     Current job.
+       %+     Equivalent to `%%'.
+       %-     Previous job.
+
+       The shell learns immediately whenever  a  process  changes
+       state.   It  normally  informs  you whenever a job becomes
+       blocked so that no further progress is possible.   If  the
+       NOTIFY  option  is  not set, it waits until just before it
+       prints a prompt before it informs you.
+
+       When the monitor mode is on, each background job that com­
+       pletes triggers any trap set for CHLD.
+
+       When  you try to leave the shell while jobs are running or
+       suspended, you will be warned  that  `You  have  suspended
+       (running) jobs'.  You may use the jobs command to see what
+       they are.  If you do  this  or  immediately  try  to  exit
+       again, the shell will not warn you a second time; the sus­
+       pended jobs will be terminated, and the running jobs  will
+       be sent a SIGHUP signal, if the HUP option is set.
+
+       To  avoid  having  the  shell  terminate the running jobs,
+       either use the nohup command (see nohup(1)) or the  disown
+       builtin.
+
+SIGNALS
+       The  INT  and  QUIT  signals  for  an  invoked command are
+       ignored if the command is followed by `&' and the  MONITOR
+       option  is not active.  Otherwise, signals have the values
+       inherited by the shell from its parent (but see the  TRAP­
+       NAL special functions in the section `Functions').
+
+ARITHMETIC EVALUATION
+       The  shell  can  perform integer and floating point arith­
+       metic, either using the builtin let, or via a substitution
+       of  the form $((...)).  For integers, the shell is usually
+       compiled to use 8-byte precision where this is  available,
+       otherwise  precision  is 4 bytes.  This can be tested, for
+       example, by giving the command `print  -  $((  12345678901
+       ))';  if the number appears unchanged, the precision is at
+       least 8 bytes.  Floating point arithmetic is always double
+       precision.
+
+       The  let  builtin  command takes arithmetic expressions as
+       arguments; each is evaluated separately.   Since  many  of
+       the arithmetic operators, as well as spaces, require quot­
+       ing, an alternative form  is  provided:  for  any  command
+       which  begins  with  a  `((',  all  the characters until a
+       matching `))' are  treated  as  a  quoted  expression  and
+       arithmetic  expansion performed as for an argument of let.
+       More precisely, `((...))' is equivalent  to  `let  "..."'.
+       For example, the following statement
+
+              (( val = 2 + 1 ))
+
+       is equivalent to
+
+              let "val = 2 + 1"
+
+       both  assigning  the value 3 to the shell variable var and
+       returning a zero status.
+
+       Integers can be in bases other than 10.  A leading `0x' or
+       `0X'  denotes  hexadecimal.   Integers  may also be of the
+       form `base#n', where base is a decimal number between  two
+       and thirty-six representing the arithmetic base and n is a
+       number in that base (for example, `16#ff' is 255  in  hex­
+       adecimal).   The  base# may also be omitted, in which case
+       base 10 is used.  For  backwards  compatibility  the  form
+       `[base]n' is also accepted.
+
+       It  is also possible to specify a base to be used for out­
+       put in the form `[#base]', for example `[#16]'.   This  is
+       used  when  outputting  arithmetical substitutions or when
+       assigning to scalar parameters, but an explicitly  defined
+       integer  or floating point parameter will not be affected.
+       If an integer variable is implicitly defined by an  arith­
+       metic  expression,  any base specified in this way will be
+       set as the variable's output arithmetic  base  as  if  the
+       option  `-i  base'  to  the typeset builtin had been used.
+       The expression has no precedence and  if  it  occurs  more
+       than  once  in a mathematical expression, the last encoun­
+       tered is used.  For clarity  it  is  recommended  that  it
+       appear at the beginning of an expression.  As an example:
+
+              typeset -i 16 y
+              print $(( [#8] x = 32, y = 32 ))
+              print $x $y
+
+       outputs  first  `8#40',  the  rightmost value in the given
+       output base, and then `8#40 16#20',  because  y  has  been
+       explicitly  declared  to  have  output  base  16,  while x
+       (assuming it does not already exist) is  implicitly  typed
+       by the arithmetic evaluation, where it acquires the output
+       base 8.
+
+       When an output base is specified using the `[#base]'  syn­
+       tax,  an  appropriate base prefix will be output if neces­
+       sary, so that the value output is valid syntax for  input.
+       If  the  #  is doubled, for example `[##16]', then no base
+       prefix is output.
+
+       Floating point constants are recognized by the presence of
+       a  decimal point or an exponent.  The decimal point may be
+       the first character of  the  constant,  but  the  exponent
+       character e or E may not, as it will be taken for a param­
+       eter name.
+
+       An arithmetic expression  uses  nearly  the  same  syntax,
+       precedence,  and  associativity  of expressions in C.  The
+       following operators are supported  (listed  in  decreasing
+       order of precedence):
+
+       + - ! ~ ++ --
+              unary    plus/minus,   logical   NOT,   complement,
+              {pre,post}{in,de}crement
+       << >>  bitwise shift left, right
+       &      bitwise AND
+       ^      bitwise XOR
+       |      bitwise OR
+       **     exponentiation
+       * / %  multiplication, division, modulus (remainder)
+       + -    addition, subtraction
+       < > <= >=
+              comparison
+       == !=  equality and inequality
+       &&     logical AND
+       || ^^  logical OR, XOR
+       ? :    ternary operator
+       = += -= *= /= %= &= ^= |= <<= >>= &&= ||= ^^= **=
+              assignment
+       ,      comma operator
+
+       The operators `&&', `||', `&&=', and `||=' are  short-cir­
+       cuiting,  and  only one of the latter two expressions in a
+       ternary operator is evaluated.  Note the precedence of the
+       bitwise AND, OR, and XOR operators.
+
+       Mathematical  functions  can  be  called  with  the syntax
+       `func(args)', where the function decides if  the  args  is
+       used  as  a string or a comma-separated list of arithmetic
+       expressions. The shell currently defines  no  mathematical
+       functions  by  default, but the module zsh/mathfunc may be
+       loaded with  the  zmodload  builtin  to  provide  standard
+       floating point mathematical functions.
+
+       An  expression  of the form `##x' where x is any character
+       sequence such as `a', `^A', or `\M-\C-x' gives  the  ASCII
+       value  of  this  character  and  an expression of the form
+       `#foo' gives the ASCII value of the first character of the
+       value  of  the parameter foo.  Note that this is different
+       from the expression `$#foo', a standard parameter  substi­
+       tution  which gives the length of the parameter foo.  `#\'
+       is accepted instead of `##', but its use is deprecated.
+
+       Named parameters and subscripted arrays can be  referenced
+       by  name within an arithmetic expression without using the
+       parameter expansion syntax.  For example,
+
+              ((val2 = val1 * 2))
+
+       assigns twice the value of $val1 to  the  parameter  named
+       val2.
+
+       An  internal  integer  representation of a named parameter
+       can be specified with  the  integer  builtin.   Arithmetic
+       evaluation is performed on the value of each assignment to
+       a  named  parameter  declared  integer  in  this   manner.
+       Assigning a floating point number to an integer results in
+       rounding down to the next integer.
+
+       Likewise, floating point numbers can be declared with  the
+       float  builtin;  there  are  two  types, differing only in
+       their output format, as described for the typeset builtin.
+       The output format can be bypassed by using arithmetic sub­
+       stitution instead  of  the  parameter  substitution,  i.e.
+       `${float}'  uses the defined format, but `$((float))' uses
+       a generic floating point format.
+
+       Promotion of integer to floating point values is performed
+       where  necessary.   In  addition,  if  any  operator which
+       requires an integer (`~', `&', `|', `^', `%',  `<<',  `>>'
+       and their equivalents with assignment) is given a floating
+       point argument, it will be silently rounded  down  to  the
+       next integer.
+
+       Scalar variables can hold integer or floating point values
+       at different times; there is no memory of the numeric type
+       in this case.
+
+       If a variable is first assigned in a numeric context with­
+       out previously being declared, it will be implicitly typed
+       as  integer or float and retain that type either until the
+       type is explicitly changed or until the end of the  scope.
+       This  can  have  unforeseen consequences.  For example, in
+       the loop
+
+              for (( f = 0; f < 1; f += 0.1 )); do
+              # use $f
+              done
+
+       if f has not already been declared, the  first  assignment
+       will  cause  it  to  be  created as an integer, and conse­
+       quently the operation `f += 0.1'  will  always  cause  the
+       result  to  be  truncated  to  zero, so that the loop will
+       fail.  A simple fix would be to  turn  the  initialization
+       into  `f  = 0.0'.  It is therefore best to declare numeric
+       variables with explicit types.
+
+CONDITIONAL EXPRESSIONS
+       A conditional expression is used with the [[ compound com­
+       mand  to  test attributes of files and to compare strings.
+       Each expression can be constructed from one or more of the
+       following unary or binary expressions:
+
+       -a file
+              true if file exists.
+
+       -b file
+              true if file exists and is a block special file.
+
+       -c file
+              true  if  file  exists  and  is a character special
+              file.
+
+       -d file
+              true if file exists and is a directory.
+
+       -e file
+              true if file exists.
+
+       -f file
+              true if file exists and is a regular file.
+
+       -g file
+              true if file exists and has its setgid bit set.
+
+       -h file
+              true if file exists and is a symbolic link.
+
+       -k file
+              true if file exists and has its sticky bit set.
+
+       -n string
+              true if length of string is non-zero.
+
+       -o option
+              true if option named option is on.  option may be a
+              single character, in which case it is a single let­
+              ter option  name.   (See  the  section  `Specifying
+              Options'.)
+
+       -p file
+              true  if  file  exists  and  is a FIFO special file
+              (named pipe).
+
+       -r file
+              true if file exists and is readable by current pro­
+              cess.
+
+       -s file
+              true if file exists and has size greater than zero.
+
+       -t fd  true if file descriptor number fd is open and asso­
+              ciated  with  a  terminal device.  (note: fd is not
+              optional)
+
+       -u file
+              true if file exists and has its setuid bit set.
+
+       -w file
+              true if file exists and is writable by current pro­
+              cess.
+
+       -x file
+              true  if  file  exists and is executable by current
+              process.  If file exists and is a  directory,  then
+              the current process has permission to search in the
+              directory.
+
+       -z string
+              true if length of string is zero.
+
+       -L file
+              true if file exists and is a symbolic link.
+
+       -O file
+              true if file exists and is owned by  the  effective
+              user ID of this process.
+
+       -G file
+              true  if  file  exists  and  its  group matches the
+              effective group ID of this process.
+
+       -S file
+              true if file exists and is a socket.
+
+       -N file
+              true if file exists and  its  access  time  is  not
+              newer than its modification time.
+
+       file1 -nt file2
+              true if file1 exists and is newer than file2.
+
+       file1 -ot file2
+              true if file1 exists and is older than file2.
+
+       file1 -ef file2
+              true if file1 and file2 exist and refer to the same
+              file.
+
+       string = pattern
+       string == pattern
+              true if string matches pattern.  The `=='  form  is
+              the  preferred  one.   The `=' form is for backward
+              compatibility and should be considered obsolete.
+
+       string != pattern
+              true if string does not match pattern.
+
+       string1 < string2
+              true if string1 comes before string2 based on ASCII
+              value of their characters.
+
+       string1 > string2
+              true  if string1 comes after string2 based on ASCII
+              value of their characters.
+
+       exp1 -eq exp2
+              true if exp1 is numerically equal to exp2.
+
+       exp1 -ne exp2
+              true if exp1 is numerically not equal to exp2.
+
+       exp1 -lt exp2
+              true if exp1 is numerically less than exp2.
+
+       exp1 -gt exp2
+              true if exp1 is numerically greater than exp2.
+
+       exp1 -le exp2
+              true if exp1 is numerically less than or  equal  to
+              exp2.
+
+       exp1 -ge exp2
+              true  if  exp1 is numerically greater than or equal
+              to exp2.
+
+       ( exp )
+              true if exp is true.
+
+       ! exp  true if exp is false.
+
+       exp1 && exp2
+              true if exp1 and exp2 are both true.
+
+       exp1 || exp2
+              true if either exp1 or exp2 is true.
+
+       Normal shell expansion is performed on  the  file,  string
+       and pattern arguments, but the result of each expansion is
+       constrained to be a single word, similar to the effect  of
+       double quotes.  However, pattern metacharacters are active
+       for the pattern arguments; the patterns are  the  same  as
+       those  used  for  filename generation, see zshexpn(1), but
+       there is no special behaviour of `/' nor initial dots, and
+       no glob qualifiers are allowed.
+
+       In  each  of the above expressions, if file is of the form
+       `/dev/fd/n', where n is an integer, then the test  applied
+       to the open file whose descriptor number is n, even if the
+       underlying system does not support the /dev/fd  directory.
+
+       In  the forms which do numeric comparison, the expressions
+       exp undergo arithmetic expansion as if they were  enclosed
+       in $((...)).
+
+       For example, the following:
+
+              [[ ( -f foo || -f bar ) && $report = y* ]] && print File exists.
+
+       tests if either file foo or file bar exists, and if so, if
+       the value of the parameter report begins with `y'; if  the
+       complete  condition is true, the message `File exists.' is
+       printed.
+
+PROMPT EXPANSION
+       Prompt sequences undergo  a  special  form  of  expansion.
+       This  type  of  expansion  is  also available using the -P
+       option to the print builtin.
+
+       If the PROMPT_SUBST option is set, the  prompt  string  is
+       first  subjected to parameter expansion, command substitu­
+       tion and arithmetic expansion.  See zshexpn(1).
+
+       Certain escape sequences may be recognised in  the  prompt
+       string.
+
+       If  the  PROMPT_BANG option is set, a `!' in the prompt is
+       replaced by the current history event number.   A  literal
+       `!' may then be represented as `!!'.
+
+       If  the  PROMPT_PERCENT  option  is  set,  certain  escape
+       sequences that start with `%' are expanded.  Some  escapes
+       take  an  optional  integer  argument, which should appear
+       between the `%' and the next character  of  the  sequence.
+       The following escape sequences are recognized:
+
+       %%     A `%'.
+
+       %)     A `)'.
+
+       %d
+       %/     Present  working  directory  ($PWD).  If an integer
+              follows the `%', it specifies a number of  trailing
+              components  of  $PWD  to show; zero means the whole
+              path.  A negative integer specifies leading  compo­
+              nents, i.e. %-1d specifies the first component.
+
+       %~     As  %d and %/, but if $PWD has a named directory as
+              its prefix, that part is replaced by a `~' followed
+              by  the  name  of the directory.  If it starts with
+              $HOME, that part is replaced by a `~'.
+
+       %h
+       %!     Current history event number.
+
+       %L     The current value of $SHLVL.
+
+       %M     The full machine hostname.
+
+       %m     The hostname up to the first `.'.  An  integer  may
+              follow  the  `%'  to specify how many components of
+              the hostname are desired.  With a negative integer,
+              trailing components of the hostname are shown.
+
+       %S (%s)
+              Start (stop) standout mode.
+
+       %U (%u)
+              Start (stop) underline mode.
+
+       %B (%b)
+              Start (stop) boldface mode.
+
+       %t
+       %@     Current time of day, in 12-hour, am/pm format.
+
+       %T     Current time of day, in 24-hour format.
+
+       %*     Current  time  of  day in 24-hour format, with sec­
+              onds.
+
+       %n     $USERNAME.
+
+       %N     The name of the  script,  sourced  file,  or  shell
+              function that zsh is currently executing, whichever
+              was started most recently.  If there is none,  this
+              is  equivalent to the parameter $0.  An integer may
+              follow the `%' to specify a number of trailing path
+              components  to  show;  zero means the full path.  A
+              negative integer specifies leading components.
+
+       %i     The line number currently  being  executed  in  the
+              script,  sourced  file,  or shell function given by
+              %N.  This is most useful for debugging as  part  of
+              $PS4.
+
+       %w     The date in day-dd format.
+
+       %W     The date in mm/dd/yy format.
+
+       %D     The date in yy-mm-dd format.
+
+       %D{string}
+              string  is  formatted  using the strftime function.
+              See strftime(3) for more details.  Three additional
+              codes  are  available:   %f  prints  the day of the
+              month, like %e but without any preceding  space  if
+              the  day is a single digit, and %K/%L correspond to
+              %k/%l for the hour of the day (24/12 hour clock) in
+              the same way.
+
+       %l     The  line  (tty)  the  user is logged in on without
+              /dev/ prefix.  If name starts with /dev/tty this is
+              stripped.
+
+       %y     The  line  (tty)  the  user is logged in on without
+              /dev/ prefix.  It does  not  treat  /dev/tty*  spe­
+              cially.
+
+       %?     The  return  code of the last command executed just
+              before the prompt.
+
+       %_     The status of the parser, i.e. the shell constructs
+              (like `if' and `for') that have been started on the
+              command line. If given an integer number that  many
+              strings  will  be  printed;  zero or negative or no
+              integer means print as many as there are.  This  is
+              most  useful  in prompts PS2 for continuation lines
+              and PS4 for debugging with the  XTRACE  option;  in
+              the  latter  case  it  will  also work non-interac­
+              tively.
+
+       %E     Clears to end of line.
+
+       %#     A `#' if the shell is running  with  privileges,  a
+              `%'  if not.  Equivalent to `%(!.#.%%)'.  The defi­
+              nition of `privileged', for these purposes, is that
+              either  the  effective  user  ID  is  zero,  or, if
+              POSIX.1e capabilities are supported, that at  least
+              one capability is raised in either the Effective or
+              Inheritable capability vectors.
+
+       %v     The value of the first element of the  psvar  array
+              parameter.  Following the `%' with an integer gives
+              that element of the array.  Negative integers count
+              from the end of the array.
+
+       %{...%}
+              Include a string as a literal escape sequence.  The
+              string within the braces should not change the cur­
+              sor position.  Brace pairs can nest.
+
+       %(x.true-text.false-text)
+              Specifies a ternary expression.  The character fol­
+              lowing the x is arbitrary; the  same  character  is
+              used  to  separate  the  text for the `true' result
+              from that for the `false' result.   This  separator
+              may  not appear in the true-text, except as part of
+              a %-escape sequence.   A  `)'  may  appear  in  the
+              false-text  as  `%)'.  true-text and false-text may
+              both contain arbitrarily-nested  escape  sequences,
+              including further ternary expressions.
+
+              The left parenthesis may be preceded or followed by
+              a positive integer n, which defaults  to  zero.   A
+              negative  integer  will  be  multiplied by -1.  The
+              test character x may be any of the following:
+
+              c
+              .
+              ~      True  if  the  current  path,  with   prefix
+                     replacement, has at least n elements.
+              /
+              C      True  if  the  current  absolute path has at
+                     least n elements.
+              t      True if the time in minutes is equal to n.
+              T      True if the time in hours is equal to n.
+              d      True if the day of the month is equal to  n.
+              D      True  if  the month is equal to n (January =
+                     0).
+              w      True if the day of the week is  equal  to  n
+                     (Sunday = 0).
+              ?      True  if the exit status of the last command
+                     was n.
+              #      True if the effective  uid  of  the  current
+                     process is n.
+              g      True  if  the  effective  gid of the current
+                     process is n.
+              l      True if at least n characters  have  already
+                     been printed on the current line.
+              L      True if the SHLVL parameter is at least n.
+              S      True if the SECONDS parameter is at least n.
+              v      True if the array psvar has at least n  ele­
+                     ments.
+              _      True  if  at  least  n shell constructs were
+                     started.
+              !      True if the shell  is  running  with  privi­
+                     leges.
+
+       %<string<
+       %>string>
+       %[xstring]
+              Specifies truncation behaviour for the remainder of
+              the prompt string.  The third, deprecated, form  is
+              equivalent  to  `%xstringx',  i.e.  x may be `<' or
+              `>'.  The numeric argument, which in the third form
+              may appear immediately after the `[', specifies the
+              maximum permitted length  of  the  various  strings
+              that  can  be  displayed in the prompt.  The string
+              will be displayed in place of the truncated portion
+              of  any  string;  note this does not undergo prompt
+              expansion.
+
+              The forms with `<' truncate  at  the  left  of  the
+              string,  and  the  forms  with  `>' truncate at the
+              right of the string.  For example, if  the  current
+              directory  is  `/home/pike',  the prompt `%8<..<%/'
+              will expand to `..e/pike'.   In  this  string,  the
+              terminating character (`<', `>' or `]'), or in fact
+              any character, may be quoted by  a  preceding  `\';
+              note  when  using print -P, however, that this must
+              be doubled as the string is also subject  to  stan­
+              dard  print  processing,  in  addition to any back­
+              slashes removed by a  double  quoted  string:   the
+              worst case is therefore `print -P "%<\\\\<<..."'.
+
+              If  the string is longer than the specified trunca­
+              tion length, it will  appear  in  full,  completely
+              replacing the truncated string.
+
+              The  part of the prompt string to be truncated runs
+              to the end of the string, or to the end of the next
+              enclosing  group  of  the `%(' construct, or to the
+              next truncation encountered at  the  same  grouping
+              level  (i.e.  truncations  inside  a `%(' are sepa­
+              rate), which ever comes first.   In  particular,  a
+              truncation  with  argument  zero (e.g. `%<<') marks
+              the end of the range of the string to be  truncated
+              while  turning  off  truncation  from there on. For
+              example, the prompt '%10<...<%~%<<%# ' will print a
+              truncated  representation of the current directory,
+              followed by a `%' or  `#',  followed  by  a  space.
+              Without  the  `%<<',  those two characters would be
+              included in the string to be truncated.
+
+       %c
+       %.
+       %C     Trailing component of $PWD.  An integer may  follow
+              the  `%'  to  get  more than one component.  Unless
+              `%C' is used, tilde contraction is performed first.
+              These are deprecated as %c and %C are equivalent to
+              %1~ and %1/, respectively, while explicit  positive
+              integers have the same effect as for the latter two
+              sequences.
+
+
+
+zsh 4.0.4                October 26, 2001              ZSHMISC(1)

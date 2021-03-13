@@ -1,0 +1,51 @@
+IFNAMES(1)                     FSF                     IFNAMES(1)
+
+
+
+NAME
+       ifnames - Extract CPP conditionals from a set of files
+
+SYNOPSIS
+       ifnames [OPTION] ...  [FILE] ...
+
+DESCRIPTION
+       Scan  all of the C source FILES (or the standard input, if
+       none are given) and write to the standard output a  sorted
+       list  of all the identifiers that appear in those files in
+       `#if', `#elif', `#ifdef', or `#ifndef' directives.   Print
+       each  identifier  on a line, followed by a space-separated
+       list of the files in which that identifier occurs.
+
+       -h, --help
+              print this help, then exit
+
+       -V, --version
+              print version number, then exit
+
+AUTHOR
+       Written by David J. MacKenzie and Paul Eggert.
+
+       Copyright 1994, 1995, 1999, 2000 Free Software Foundation,
+       Inc.   This  is  free software; see the source for copying
+       conditions.  There is  NO  warranty;  not  even  for  MER­
+       CHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+REPORTING BUGS
+       Report bugs to <bug-autoconf@gnu.org>.
+
+SEE ALSO
+       autoconf(1),  automake(1),  autoreconf(1),  autoupdate(1),
+       autoheader(1),    autoscan(1),    config.guess(1),    con­
+       fig.sub(1), ifnames(1), libtool(1).
+
+       The full documentation for ifnames is maintained as a Tex­
+       info manual.  If the info and ifnames programs  are  prop­
+       erly installed at your site, the command
+
+              info ifnames
+
+       should give you access to the complete manual.
+
+
+
+GNU Autoconf 2.52d         August 2001                 IFNAMES(1)

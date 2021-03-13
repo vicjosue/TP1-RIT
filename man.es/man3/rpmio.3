@@ -1,0 +1,620 @@
+RPMIO.(3)                                               RPMIO.(3)
+
+
+
+NAME
+       RPMIO. -
+
+   Files
+       file base64.h
+       file falloc.c
+           The entire file space is thus divided into blocks with
+           a 'struct fablock' at the header of each.
+
+
+       file macro.c
+       file rpmerr.h
+       file rpmio.c
+       file rpmio.h
+       file rpmio_internal.h
+       file rpmlog.c
+       file rpmmacro.h
+       file rpmmalloc.c
+       file rpmmessages.h
+       file rpmrpc.c
+       file rpmurl.h
+       file strcasecmp.c
+       file ugid.c
+       file ugid.h
+       file url.c
+
+   Data Structures
+       struct _FD_s
+       struct _FDSTACK_s
+       struct FDIO_s
+       struct OPSTAT_t
+
+   [NOHEADER]
+       typedef off_t _libio_off_t
+       typedef off_t _libio_pos_t
+
+   RPMIO Vectors.
+       typedef ssize_t fdio_read_function_t (void *cookie, char
+           *buf, size_t nbytes)
+       typedef ssize_t fdio_write_function_t (void *cookie, const
+           char *buf, size_t nbytes)
+       typedef int fdio_seek_function_t (void *cookie,
+           _libio_pos_t pos, int whence)
+       typedef int fdio_close_function_t (void *cookie)
+       typedef FD_t fdio_ref_function_t (void *cookie, const char
+           *msg, const char *file, unsigned line)
+       typedef FD_t fdio_deref_function_t (FD_t fd, const char
+           *msg, const char *file, unsigned line)
+       typedef FD_t fdio_new_function_t (const char *msg, const
+           char *file, unsigned line)
+       typedef int fdio_fileno_function_t (void *cookie)
+       typedef FD_t fdio_open_function_t (const char *path, int
+           flags, mode_t mode)
+       typedef FD_t fdio_fopen_function_t (const char *path,
+           const char *fmode)
+       typedef void * fdio_ffileno_function_t (FD_t fd)
+       typedef int fdio_fflush_function_t (FD_t fd)
+
+   RPMIO Interface.
+       const char * Fstrerror (FD_t fd)
+           strerror(3) clone.
+       size_t Fread (void *buf, size_t size, size_t nmemb, FD_t
+           fd)
+           fread(3) clone.
+       size_t Fwrite (const void *buf, size_t size, size_t nmemb,
+           FD_t fd)
+           fwrite(3) clone.
+       int Fseek (FD_t fd, _libio_off_t offset, int whence)
+           fseek(3) clone.
+       int Fclose (FD_t fd)
+           fclose(3) clone.
+       FD_t Fdopen (FD_t fd, const char *fmode)
+       FD_t Fopen (const char *path, const char *fmode)
+           fopen(3) clone.
+       int Fflush (FD_t fd)
+           fflush(3) clone.
+       int Ferror (FD_t fd)
+           ferror(3) clone.
+       int Fileno (FD_t fd)
+           fileno(3) clone.
+       int Fcntl (FD_t fd, int op, void *lip)
+           fcntl(2) clone.
+       ssize_t Pread (FD_t fd, void *buf, size_t count,
+           _libio_off_t offset)
+           pread(2) clone.
+       ssize_t Pwrite (FD_t fd, const void *buf, size_t count,
+           _libio_off_t offset)
+           pwrite(2) clone.
+
+   RPMIO Utilities.
+       off_t fdSize (FD_t fd)
+
+   Typedefs
+       typedef _FD_s * FD_t
+       typedef FDIO_s * FDIO_t
+       typedef _FDSTACK_s FDSTACK_t
+       struct {
+          timeval create
+          timeval begin
+          OPSTAT_t ops [4]
+       } FDSTAT_t
+
+       typedef enum rpmDigestFlags_e rpmDigestFlags
+
+   Enumerations
+       enum FDSTAT_e { FDSTAT_READ =  0, FDSTAT_WRITE =  1,
+           FDSTAT_SEEK =  2, FDSTAT_CLOSE =  3 }
+       enum rpmDigestFlags_e { RPMDIGEST_MD5 =  (1 <<  0),
+           RPMDIGEST_SHA1 =  (1 <<  1), RPMDIGEST_REVERSE =  (1
+           << 16), RPMDIGEST_BCSWAP =  (1 << 17) }
+
+   Functions
+       int xstrcasecmp (const char *s1, const char *s2)
+       int xstrncasecmp (const char *s1, const char *s2, size_t
+           n)
+       DIGEST_CTX rpmDigestInit (rpmDigestFlags flags)
+       void rpmDigestUpdate (DIGEST_CTX ctx, const void *data,
+           size_t len)
+       void rpmDigestFinal (DIGEST_CTX ctx, void **datap, size_t
+           *lenp, int asAscii)
+       const FDIO_t fdGetIo (FD_t fd)
+       void fdSetIo (FD_t fd, FDIO_t io)
+       FILE * fdGetFILE (FD_t fd)
+       void * fdGetFp (FD_t fd)
+       void fdSetFp (FD_t fd, void *fp)
+       int fdGetFdno (FD_t fd)
+       void fdSetFdno (FD_t fd, int fdno)
+       void fdSetContentLength (FD_t fd, ssize_t contentLength)
+       void fdPush (FD_t fd, FDIO_t io, void *fp, int fdno)
+       void fdPop (FD_t fd)
+       void fdstat_enter (FD_t fd, int opx)
+       time_t tvsub (const struct timeval *etv, const struct
+           timeval *btv)
+       void fdstat_exit (FD_t fd, int opx, ssize_t rc)
+       void fdstat_print (FD_t fd, const char *msg, FILE *fp)
+       void fdSetSyserrno (FD_t fd, int syserrno, const void
+           *errcookie)
+       int fdGetRdTimeoutSecs (FD_t fd)
+       long int fdGetCpioPos (FD_t fd)
+       void fdSetCpioPos (FD_t fd, long int cpioPos)
+       FD_t c2f (void *cookie)
+       void fdInitMD5 (FD_t fd, int flags)
+       void fdInitSHA1 (FD_t fd, int flags)
+       void fdFiniMD5 (FD_t fd, void **datap, size_t *lenp, int
+           asAscii)
+       void fdFiniSHA1 (FD_t fd, void **datap, size_t *lenp, int
+           asAscii)
+       int fdFileno (void *cookie)
+
+TYPEDEF DOCUMENTATION
+   typedef off_t _libio_off_t
+       Definition at line 30 of file rpmio.h.
+
+       Referenced by Unlink, xstrcasecmp, and xstrncasecmp.
+
+   typedef off_t _libio_pos_t
+       Definition at line 31 of file rpmio.h.
+
+       Referenced by xstrcasecmp.
+
+   typedef struct _FD_s* FD_t
+       Definition at line 37 of file rpmio.h.
+
+   typedef int fdio_close_function_t(void *cookie)
+       Definition at line 66 of file rpmio.h.
+
+   typedef FD_t fdio_deref_function_t( FD_t fd, const char * msg,
+       const char * file, unsigned line)
+       Definition at line 76 of file rpmio.h.
+
+   typedef void* fdio_ffileno_function_t(FD_t fd)
+       Definition at line 101 of file rpmio.h.
+
+   typedef int fdio_fflush_function_t(FD_t fd)
+       Definition at line 105 of file rpmio.h.
+
+   typedef int fdio_fileno_function_t(void * cookie)
+       Definition at line 88 of file rpmio.h.
+
+   typedef FD_t fdio_fopen_function_t(const char * path, const
+       char * fmode)
+       Definition at line 97 of file rpmio.h.
+
+   typedef FD_t fdio_new_function_t(const char * msg, const char
+       * file, unsigned line)
+       Definition at line 82 of file rpmio.h.
+
+   typedef FD_t fdio_open_function_t(const char * path, int
+       flags, mode_t mode)
+       Definition at line 93 of file rpmio.h.
+
+   typedef ssize_t fdio_read_function_t(void *cookie, char *buf,
+       size_t nbytes)
+       Definition at line 54 of file rpmio.h.
+
+   typedef FD_t fdio_ref_function_t( void * cookie, const char *
+       msg, const char * file, unsigned line)
+       Definition at line 71 of file rpmio.h.
+
+   typedef int fdio_seek_function_t(void *cookie, _libio_pos_t
+       pos, int whence)
+       Definition at line 62 of file rpmio.h.
+
+   typedef struct FDIO_s* FDIO_t
+       Definition at line 41 of file rpmio.h.
+
+   typedef ssize_t fdio_write_function_t(void *cookie, const char
+       *buf, size_t nbytes)
+       Definition at line 58 of file rpmio.h.
+
+   typedef struct _FDSTACK_s  FDSTACK_t
+   typedef { ... }  *  FDSTAT_t
+       Cumulative statistics for a descriptor.
+
+   typedef enum rpmDigestFlags_e  rpmDigestFlags
+       Bit(s) to control digest operation.
+
+       Referenced by rpmDigestInit.
+
+ENUMERATION TYPE DOCUMENTATION
+   enum FDSTAT_e
+       Identify per-desciptor I/O operation statistics.
+
+       Enumeration values:
+
+       FDSTAT_READ
+              Read statistics index.
+
+       FDSTAT_WRITE
+              Write statistics index.
+
+       FDSTAT_SEEK
+              Seek statistics index.
+
+       FDSTAT_CLOSE
+              Close statistics. index
+
+       Definition at line 34 of file rpmio_internal.h.
+
+   enum rpmDigestFlags_e
+       Bit(s) to control digest operation.
+
+       Enumeration values:
+
+       RPMDIGEST_MD5
+              MD5 digest.
+
+       RPMDIGEST_SHA1
+              SHA1 digest.
+
+       RPMDIGEST_REVERSE
+              Should bytes be reversed?
+
+       RPMDIGEST_BCSWAP
+              Should bit count be reversed?
+
+       Definition at line 53 of file rpmio_internal.h.
+
+FUNCTION DOCUMENTATION
+   FD_t c2f (void * cookie) [inline, static]
+       Definition at line 408 of file rpmio_internal.h.
+
+       References FDSANE.
+
+       Referenced by fdFileno.
+
+   int Fclose (FD_t fd)
+       fclose(3) clone.
+
+       Referenced by addFileToTagAux, closeCallback, closeSpec,
+       cpio_doio, db1close, defaultMachine, domd5, doReadRC,
+       doScript, fadOpen, IDTXglob, isCompressed, isSpecFile,
+       main, makeGPGSignature, makePGPSignature, makeTempFile,
+       manageFile, processPackageFiles, readIcon, readLine,
+       readRPM, rewriteRPM, rpmHeaderFromFD, rpmHeaderFromFile,
+       rpmHeaderFromPackage, rpmInitMacros, rpmInstall,
+       rpmInstallSource, rpmMergeHeadersFromFD, rpmQueryVerify,
+       rpmShowProgress, rpmtransDealloc, tsCallback, urlGetFile,
+       verifyGPGSignature, verifyPGPSignature, writeRPM, and
+       XurlFree.
+
+   int Fcntl (FD_t fd, int op, void * lip)
+       fcntl(2) clone.
+
+       Referenced by db1open.
+
+   int fdFileno (void * cookie) [inline, static]
+       Definition at line 484 of file rpmio_internal.h.
+
+       References c2f, _FDSTACK_s::fdno, and _FD_s::fps.
+
+   void fdFiniMD5 (FD_t fd, void ** datap, size_t * lenp, int
+       asAscii) [inline, static]
+       Definition at line 443 of file rpmio_internal.h.
+
+       References _FD_s::digest, and rpmDigestFinal.
+
+       Referenced by domd5.
+
+   void fdFiniSHA1 (FD_t fd, void ** datap, size_t * lenp, int
+       asAscii) [inline, static]
+       Definition at line 463 of file rpmio_internal.h.
+
+       References _FD_s::digest, and rpmDigestFinal.
+
+       Referenced by writeRPM.
+
+   long int fdGetCpioPos (FD_t fd) [inline, static]
+       Definition at line 388 of file rpmio_internal.h.
+
+       References _FD_s::fd_cpioPos, and FDSANE.
+
+   int fdGetFdno (FD_t fd) [inline, static]
+       Definition at line 224 of file rpmio_internal.h.
+
+       References FDSANE, _FD_s::fps, and _FD_s::nfps.
+
+   FILE* fdGetFILE (FD_t fd) [inline, static]
+       Definition at line 186 of file rpmio_internal.h.
+
+       References FDSANE, _FD_s::fps, and _FD_s::nfps.
+
+       Referenced by rdcl.
+
+   void* fdGetFp (FD_t fd) [inline, static]
+       Definition at line 198 of file rpmio_internal.h.
+
+       References FDSANE, _FD_s::fps, and _FD_s::nfps.
+
+       Referenced by addFileToTagAux, doFopen, doScript,
+       processPackageFiles, readLine, rpmReadPackageManifest, and
+       XurlFree.
+
+   const FDIO_t fdGetIo (FD_t fd) [inline, static]
+       Definition at line 162 of file rpmio_internal.h.
+
+       References FDSANE, _FD_s::fps, and _FD_s::nfps.
+
+   int fdGetRdTimeoutSecs (FD_t fd) [inline, static]
+       Definition at line 378 of file rpmio_internal.h.
+
+       References FDSANE, and _FD_s::rd_timeoutsecs.
+
+   void fdInitMD5 (FD_t fd, int flags) [inline, static]
+       Definition at line 421 of file rpmio_internal.h.
+
+       References _FD_s::digest, RPMDIGEST_MD5,
+       RPMDIGEST_REVERSE, and rpmDigestInit.
+
+       Referenced by domd5.
+
+   void fdInitSHA1 (FD_t fd, int flags) [inline, static]
+       Definition at line 432 of file rpmio_internal.h.
+
+       References _FD_s::digest, RPMDIGEST_REVERSE,
+       RPMDIGEST_SHA1, and rpmDigestInit.
+
+       Referenced by writeRPM.
+
+   FD_t Fdopen (FD_t fd, const char * fmode)
+       Referenced by cpio_doio, doScript, and main.
+
+   void fdPop (FD_t fd) [inline, static]
+       Definition at line 268 of file rpmio_internal.h.
+
+       References FDSANE, fdSetFdno, fdSetFp, fdSetIo, and
+       _FD_s::nfps.
+
+   void fdPush (FD_t fd, FDIO_t io, void * fp, int fdno) [inline,
+       static]
+       Definition at line 254 of file rpmio_internal.h.
+
+       References FDSANE, fdSetFdno, fdSetFp, fdSetIo,
+       _FD_s::fps, and _FD_s::nfps.
+
+       Referenced by XurlFree.
+
+   void fdSetContentLength (FD_t fd, ssize_t contentLength)
+       [inline, static]
+       Definition at line 244 of file rpmio_internal.h.
+
+       References _FD_s::bytesRemain, _FD_s::contentLength, and
+       FDSANE.
+
+       Referenced by db1cput.
+
+   void fdSetCpioPos (FD_t fd, long int cpioPos) [inline, static]
+       Definition at line 398 of file rpmio_internal.h.
+
+       References _FD_s::fd_cpioPos, and FDSANE.
+
+   void fdSetFdno (FD_t fd, int fdno) [inline, static]
+       Definition at line 234 of file rpmio_internal.h.
+
+       References FDSANE, _FD_s::fps, and _FD_s::nfps.
+
+       Referenced by fdPop, and fdPush.
+
+   void fdSetFp (FD_t fd, void * fp) [inline, static]
+       Definition at line 211 of file rpmio_internal.h.
+
+       References FDSANE, _FD_s::fps, and _FD_s::nfps.
+
+       Referenced by fdPop, and fdPush.
+
+   void fdSetIo (FD_t fd, FDIO_t io) [inline, static]
+       Definition at line 173 of file rpmio_internal.h.
+
+       References FDSANE, _FD_s::fps, and _FD_s::nfps.
+
+       Referenced by fadOpen, fdPop, and fdPush.
+
+   void fdSetSyserrno (FD_t fd, int syserrno, const void *
+       errcookie) [inline, static]
+       Definition at line 365 of file rpmio_internal.h.
+
+       References _FD_s::errcookie, FDSANE, and _FD_s::syserrno.
+
+   off_t fdSize (FD_t fd)
+       Referenced by doReadRC, and readIcon.
+
+   void fdstat_enter (FD_t fd, int opx) [inline, static]
+       Definition at line 281 of file rpmio_internal.h.
+
+       References _FD_s::stats.
+
+   void fdstat_exit (FD_t fd, int opx, ssize_t rc) [inline,
+       static]
+       Definition at line 307 of file rpmio_internal.h.
+
+       References _FD_s::bytesRemain, errno, FDSTAT_SEEK,
+       _FD_s::stats, _FD_s::syserrno, and tvsub.
+
+   void fdstat_print (FD_t fd, const char * msg, FILE * fp)
+       [inline, static]
+       Definition at line 333 of file rpmio_internal.h.
+
+       References OPSTAT_t::bytes, OPSTAT_t::count, FDSTAT_CLOSE,
+       FDSTAT_READ, FDSTAT_SEEK, FDSTAT_WRITE, OPSTAT_t::msecs,
+       ops, and _FD_s::stats.
+
+   int Ferror (FD_t fd)
+       ferror(3) clone.
+
+       Referenced by addFileToTagAux, cpio_copy, db1open,
+       defaultMachine, doFopen, domd5, doReadRC, doScript,
+       fadOpen, IDTXglob, isCompressed, isSpecFile, main,
+       makeGPGSignature, makePGPSignature, makeTempFile,
+       manageFile, processPackageFiles, readIcon, readLine,
+       readRPM, rpmInitMacros, rpmInstall, rpmInstallSource,
+       rpmQueryVerify, rpmReadRC, urlGetFile, verifyGPGSignature,
+       verifyPGPSignature, and writeRPM.
+
+   int Fflush (FD_t fd)
+       fflush(3) clone.
+
+       Referenced by cpio_doio, and writeRPM.
+
+   int Fileno (FD_t fd)
+       fileno(3) clone.
+
+       Referenced by checkSize, cpio_doio, db1sync, doScript,
+       makeTempFile, readPackageHeaders, and writeRPM.
+
+   FD_t Fopen (const char * path, const char * fmode)
+       fopen(3) clone.
+
+       Referenced by addFileToTagAux, defaultMachine, doFopen,
+       domd5, doReadRC, IDTXglob, isCompressed, isSpecFile, main,
+       makeGPGSignature, makePGPSignature, makeTempFile,
+       manageFile, processPackageFiles, readIcon, readLine,
+       readRPM, rpmHeaderFromFile, rpmInitMacros, rpmInstall,
+       rpmInstallSource, rpmQueryVerify, rpmReadRC,
+       rpmShowProgress, urlGetFile, verifyGPGSignature,
+       verifyPGPSignature, and writeRPM.
+
+   size_t Fread (void * buf, size_t size, size_t nmemb, FD_t fd)
+       fread(3) clone.
+
+       Referenced by copyFile, cpio_copy, defaultMachine, domd5,
+       doReadRC, isCompressed, isSpecFile, main, readIcon,
+       readRPM, and writeRPM.
+
+   int Fseek (FD_t fd, _libio_off_t offset, int whence)
+       fseek(3) clone.
+
+       Referenced by db1cput, doGetRecord, fadOpen, readRPM, and
+       writeRPM.
+
+   const char* Fstrerror (FD_t fd)
+       strerror(3) clone.
+
+       Referenced by copyFile, cpio_copy, doFopen, doReadRC,
+       IDTXglob, isCompressed, isSpecFile, main, manageFile,
+       processPackageFiles, readIcon, readLead, readLine,
+       readRPM, rpmInstall, rpmInstallSource, rpmQueryVerify,
+       rpmReadRC, rpmReSign, urlGetFile, and writeRPM.
+
+   size_t Fwrite (const void * buf, size_t size, size_t nmemb,
+       FD_t fd)
+       fwrite(3) clone.
+
+       Referenced by copyFile, cpio_copy, fadOpen, headerWrite,
+       main, rpmWriteSignature, verifyGPGSignature,
+       verifyPGPSignature, writeLead, and writeRPM.
+
+   ssize_t Pread (FD_t fd, void * buf, size_t count, _libio_off_t
+       offset)
+       pread(2) clone.
+
+       Referenced by fadAlloc, fadFree, fadNextOffset, and
+       fadOpen.
+
+   ssize_t Pwrite (FD_t fd, const void * buf, size_t count,
+       _libio_off_t offset)
+       pwrite(2) clone.
+
+       Referenced by fadAlloc, and fadFree.
+
+   void rpmDigestFinal (DIGEST_CTX ctx, void ** datap, size_t *
+       lenp, int asAscii)
+       Return digest and destroy context. Final wrapup - pad to
+       64-byte boundary with the bit pattern  1 0* (64-bit count
+       of bits processed, MSB-first)
+
+       Parameters:
+
+       private
+              private data
+
+       Return values:
+
+       datap  address of returned digest
+
+       lenp   address of digest length
+
+       Parameters:
+
+       asAscii
+              return digest as ascii string?
+
+       Definition at line 592 of file digest.c.
+
+       Referenced by fdFiniMD5, fdFiniSHA1, and rhnUnload.
+
+   DIGEST_CTX rpmDigestInit (rpmDigestFlags flags)
+       Initialize digest. Set bit count to 0 and buffer to
+       mysterious initialization constants.
+
+       Parameters:
+
+       flags  bit(s) to control digest operation
+
+       Returns:
+           digest private data
+
+       Definition at line 495 of file digest.c.
+
+       Referenced by fdInitMD5, fdInitSHA1, and rhnUnload.
+
+   void rpmDigestUpdate (DIGEST_CTX ctx, const void * data,
+       size_t len)
+       Update context to with next plain text buffer.
+
+       Parameters:
+
+       private
+              private data
+
+       data   next data buffer
+
+       len    no. bytes of data
+
+       Definition at line 544 of file digest.c.
+
+       Referenced by rhnUnload.
+
+   time_t tvsub (const struct timeval * etv, const struct timeval
+       * btv) [inline, static]
+       Definition at line 292 of file rpmio_internal.h.
+
+       Referenced by fdstat_exit.
+
+   int xstrcasecmp (const char * s1, const char * s2)
+       Locale insensitive strcasecmp(3).
+
+       Definition at line 9 of file strcasecmp.c.
+
+       References _libio_off_t, and _libio_pos_t.
+
+   int xstrncasecmp (const char * s1, const char * s2, size_t n)
+       Locale insensitive strncasecmp(3).
+
+       Definition at line 30 of file strcasecmp.c.
+
+       References _libio_off_t.
+
+VARIABLE DOCUMENTATION
+   struct { ... } begin [inherited]
+       Operation start time.
+
+       Definition at line 46 of file rpmio_internal.h.
+
+   struct { ... } create [inherited]
+       Structure creation time.
+
+       Definition at line 45 of file rpmio_internal.h.
+
+   OPSTAT_t { ... } ops[4] [inherited]
+       Cumulative statistics.
+
+       Definition at line 47 of file rpmio_internal.h.
+
+
+
+rpm                        13 Mar 2002                  RPMIO.(3)

@@ -1,0 +1,80 @@
+MKRESCUE(8)                                           MKRESCUE(8)
+
+
+
+NAME
+       mkrescue - make rescue floppy
+
+SYNOPSIS
+       /sbin/mkrescue  -  make a bootable rescue floppy using the
+       existing kernel and any initial ramdisk.
+
+DESCRIPTION
+       mkrescue assumes that the present running system was  suc­
+       cessfully  booted using the lilo boot loader, and that the
+       specification for the kernel and any initial  ramdisk  are
+       in /etc/lilo.conf. This command will make a bootable 1.44M
+       rescue floppy which uses the current kernel,  any  initial
+       ramdisk, and the "current" root directory.
+
+OPTIONS
+       --device <device>
+              Make  the  floppy  on a device other than /dev/fd0.
+              The floppy disk will always be made to boot on BIOS
+              device  code 0x00 (A: drive), without regard to the
+              drive on which it is created.
+
+       --fast Use a faster method of creating  the  boot  floppy.
+              This  involves  first creating a 1.44M file mounted
+              using a loopback device, then copying the  file  to
+              the  disk.  Currently, loopback device 'loop4' must
+              be free for this option to be used.
+
+       --fs [ ext2 | msdos | minix ]
+              Specify the type of filesystem  to  create  on  the
+              drive.   ext2  is  the  default,  but  "msdos"  and
+              "minix" allow slightly more disk sectors for really
+              big kernels.
+
+       --help Print  a  short usage synopsis, including a list of
+              command options.
+
+       --initrd <filepath>  and  --kernel <filepath>
+              These options, which must be used  together,  allow
+              specification  of an arbitrary kernel file and ini­
+              tial ramdisk file to be used on  the  created  boot
+              floppy.  Be sure you know what you are doing before
+              you use these options.
+
+       --nocompact
+              For faster kernel loading from a floppy,  LILO  map
+              compaction  is  normally  enabled. This option will
+              disable map compaction by omitting  the  lilo  "-c"
+              switch.
+
+       --noformat
+              Suppresses creation of a new filesystem on the boot
+              floppy. This option may be used only when you  know
+              that the floppy you will be writing upon is format­
+              ted with the same filesystem as specified by  "--fs
+              XXX" (default is ext2).
+
+       --root <device>
+              Specify  the  root filesystem for the kernel on the
+              boot floppy. The  currently  mounted  root  is  the
+              default, if this option is not specified.
+
+       --version
+              Print the version number of 'mkrescue', then termi­
+              nate.
+
+SEE ALSO
+       lilo(8), lilo.conf(5), mkfs(8),  dd(1),  mount(8),  mkini­
+       trd(8).
+
+AUTHOR
+       John Coffman <johninsd@san.rr.com> (1.0)
+
+
+
+                           31 Oct 2001                MKRESCUE(8)

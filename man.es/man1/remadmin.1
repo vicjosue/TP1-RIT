@@ -1,0 +1,67 @@
+REMADMIN(8)                                           REMADMIN(8)
+
+
+
+NAME
+       remadmin - generic graphical user interface
+
+SYNOPSIS
+       remadmin [ --exec command options ]
+
+DESCRIPTION
+       remadmin  locates  one  GUI  front-end  for Linuxconf (and
+       other programs using the Linuxconf UI toolkit) and  starts
+       it.  At this time, there are 2 implementations: gnome-lin­
+       uxconf and wxxt-linuxconf.  remadmin  locate  one  or  the
+       other  and execute it, passing along all received options.
+
+
+BACK-END OPERATION
+       When Linuxconf starts, it  executes  remadmin  to  find  a
+       suitable  UI  front-end (not only GUI front-end). remadmin
+       tries to locate one. If one is available, it starts it and
+       linuxconf starts using it.
+
+       If  no  UI front-end is available, it returns a small mes­
+       sage.  Linuxconf  starts  its  builtin  text  mode  (using
+       ncurses) user interface.
+
+       In  this  case, we call it a back-end, because the user is
+       not aware of this process. The user runs Linuxconf and  it
+       operates as a graphical program.
+
+
+FRONT-END OPERATION
+       In  this case, this is the GUI front-end which starts Lin­
+       uxconf (or any program made with Linuxconf UI toolkit). In
+       this  case,  Linuxconf  has  to be told how it was started
+       (using the --guiproto option).  Unless it is told, it will
+       tru to connect to a back-end.
+
+       Front-end  operation is done using the --exec command line
+       option like this:
+
+       remadmin --exec linuxconf --guiproto
+
+       The most common usage is:
+
+       remadmin  --exec  ssh  -l  some_user  some_host  linuxconf
+       --guiproto
+
+
+       This  create  a  GUI relation where the GUI component runs
+       locally  and  Linuxconf  runs  remotly,  accross  a  fully
+       encripted  link  (using  ssh,  the secure shell).  The GUI
+       protocol is very light. It works  very  well  on  slow  or
+       overloaded links.
+
+
+SEE ALSO
+       linuxconf (8) , ssh(1)
+
+
+
+
+
+
+                 Linuxconf GUI back-end/front-end     REMADMIN(8)

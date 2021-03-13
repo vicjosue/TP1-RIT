@@ -1,0 +1,132 @@
+rpmio/rpmmalloc.c(3)                         rpmio/rpmmalloc.c(3)
+
+
+
+NAME
+       rpmio/rpmmalloc.c -
+
+SYNOPSIS
+       #include 'system.h'
+       #include 'debug.h'
+
+   Functions
+       void * vmefail (size_t size)
+       void * xmalloc (size_t size)
+       void * xcalloc (size_t nmemb, size_t size)
+       void * xrealloc (void *ptr, size_t size)
+       char * xstrdup (const char *str)
+
+DETAILED DESCRIPTION
+       Definition in file rpmmalloc.c.
+
+FUNCTION DOCUMENTATION
+   void* vmefail (size_t size)
+       Definition at line 12 of file rpmmalloc.c.
+
+       References _, and EXIT_FAILURE.
+
+       Referenced by xcalloc, xmalloc, xrealloc, and xstrdup.
+
+   void* xcalloc (size_t nmemb, size_t size)
+       Definition at line 34 of file rpmmalloc.c.
+
+       References vmefail.
+
+       Referenced by addIndexEntry, alCreate,
+       allocateExtensionCache, alMakeIndex, db3New,
+       dbiIndexNewItem, dbiTagsInit, defaultMachine, fssizesTag,
+       ftpNLST, genCpioListAndHeader, generateDepends,
+       getFilesystemList, headerGetLangs, headerLoad, headerNew,
+       htCreate, IDTXnew, main, newRpmdb, newSpec, newStringBuf,
+       parseFormat, processSourceFiles, rpmdbAppendIterator,
+       rpmdbFindByFile, rpmdbFindFpList, rpmdbInitIterator,
+       rpmdbSetIteratorRE, rpmdepCheck, rpmDigestInit,
+       rpmGetFilesystemUsage, rpmGetRpmlibProvides,
+       rpmReadPackageManifest, and rpmtransCreateSet.
+
+   void* xmalloc (size_t size)
+       Definition at line 22 of file rpmmalloc.c.
+
+       References vmefail.
+
+       Referenced by addCanon, addDefault, addFile, addRelation,
+       addSource, addTriggerIndex, alAddPackage, B64decode,
+       B64encode, buildArgCallback, checkPackageDeps, convertAMD,
+       copyEntry, currentDirectory, db1cget, dbiAppendSet,
+       dbiSearch, depflagsFormat, do_inject, doAddSubtract,
+       doBuildFileList, doHeaderUnload, doLookup, doputenv,
+       doReadRC, dosetenv, expandMacroTable, fflagsFormat,
+       formatValue, fpCacheCreate, genChangelog,
+       genCpioListAndHeader, grabData, headerAddI18NString,
+       headerAppendEntry, headerCopyLoad, headerInitIterator,
+       headerRead, headerSprintf, hexFormat, htAddEntry,
+       htCreate, machAddEquiv, machCompatCacheAdd, main,
+       makeGPGSignature, makePGPSignature, mireDup,
+       newOpenFileInfo, newPackage, newSl, newSt, newStringBuf,
+       octalFormat, parseForLang, parseRCPOT, parseSpec,
+       permsFormat, printDepend, printNewSpecfile, pushMacro,
+       queryArgCallback, readIcon, readLine, realDateFormat,
+       rpmdbInitIterator, rpmdbRebuild, rpmdepOrder,
+       rpmDigestFinal, rpmGlob, rpmProblemString,
+       rpmRebuildTargetVars, rpmSetVarArch, shescapeFormat,
+       showQueryPackage, singleSprintf, splitString,
+       triggercondsTag, triggertypeTag, urlFind,
+       valueMakeInteger, valueMakeString, vfs_parse_ls_lga, and
+       XurlNew.
+
+   void* xrealloc (void * ptr, size_t size)
+       Definition at line 45 of file rpmmalloc.c.
+
+       References vmefail.
+
+       Referenced by addCanon, addDefault, addFile, alAddPackage,
+       alAllFileSatisfiesDepend, alAllSatisfiesDepend,
+       appendStringBufAux, buildArgCallback, checkPackageDeps,
+       currentDirectory, dbiAppendSet, dbiTagsInit,
+       expandMacroTable, ftpNLST, generateDepends,
+       getFilesystemList, gidToGname, gnameToGid, headerAddEntry,
+       headerAddI18NString, headerAppendEntry, headerSprintf,
+       htAddEntry, IDTXgrow, installArgCallback, machAddEquiv,
+       machCompatCacheAdd, main, parseForLang, queryArgCallback,
+       readLine, removePackage, rpmdbGrowIterator,
+       rpmdbSetIteratorRE, rpmdepCheck, rpmGlob, rpmInstall,
+       rpmtransAddPackage, showQueryPackage, singleSprintf,
+       stashSt, triggercondsTag, uidToUname, unameToUid, and
+       urlFind.
+
+   char* xstrdup (const char * str)
+       Definition at line 55 of file rpmmalloc.c.
+
+       References vmefail.
+
+       Referenced by addCanon, addDefault, addFile, addSource,
+       addTriggerIndex, alAddPackage, alAllFileSatisfiesDepend,
+       B64encode, buildArgCallback, checkHardLinks,
+       checkPackageDeps, convertAMD, cpio_doio, db1basename,
+       db3New, dbiTagsInit, depflagsFormat, doLookup,
+       doSetupMacro, dupAttrRec, fflagsFormat, findProgramPath,
+       forceIncludeFile, formatValue, generateDepends,
+       genSourceRpmName, getFilesystemList, getGidS, getGname,
+       getGnameS, getUidS, getUname, getUnameS, headerSprintf,
+       hexFormat, i18nTag, instprefixTag, machAddEquiv,
+       machCompatCacheAdd, main, mireDup, octalFormat,
+       parseExpression, parseExpressionBoolean,
+       parseExpressionString, parseForSimple, parseScript,
+       parseSpec, permsFormat, poptAddItem, poptGetNextOpt,
+       poptSetExecPath, poptSetOtherOptionHelp, printNewSpecfile,
+       processPackageFiles, processSourceFiles, pushMacro,
+       rdToken, readLine, realDateFormat, rpmExpand, rpmGetPath,
+       rpmGlob, rpmInitMacros, rpmInstall, rpmPermsString,
+       rpmQueryVerify, rpmRangesOverlap, rpmReadRC,
+       rpmRebuildTargetVars, rpmSetMachine, rpmSetVar,
+       rpmSetVarArch, rpmtransCreateSet, singleSprintf, stashSt,
+       triggercondsTag, triggertypeFormat, triggertypeTag,
+       urlFind, urlSplit, and writeRPM.
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002       rpmio/rpmmalloc.c(3)

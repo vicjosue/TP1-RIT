@@ -1,0 +1,89 @@
+POSIX_MEMALIGN(3)   Linux Programmer's Manual   POSIX_MEMALIGN(3)
+
+
+
+NAME
+       posix_memalign, memalign, valloc - Allocate aligned memory
+
+SYNOPSIS
+       #include <stdlib.h>
+
+       int posix_memalign(void **memptr, size_t alignment, size_t size);
+       void *memalign(size_t boundary, size_t size);
+       void *valloc(size_t size);
+
+DESCRIPTION
+       The function posix_memalign()  allocates  size  bytes  and
+       places  the  address  of  the allocated memory in *memptr.
+       The address of the allocated memory will be a multiple  of
+       alignment,  which must be a power of two and a multiple of
+       sizeof(void *).
+
+       The obsolete function memalign() allocates size bytes  and
+       returns  a  pointer  to  the allocated memory.  The memory
+       address will be a multiple of boundary, which  must  be  a
+       power of two.
+
+       The  obsolete  function  valloc() allocates size bytes and
+       returns a pointer to the  allocated  memory.   The  memory
+       address will be a multiple of the page size.  It is equiv­
+       alent to memalign(sysconf(_SC_PAGESIZE),size).
+
+       For all three routines, the memory is not zeroed.
+
+
+RETURN VALUE
+       memalign() and valloc() return the pointer  to  the  allo­
+       cated memory, or NULL if the request fails.
+
+       posix_memalign()  returns  zero  on success, or one of the
+       error values listed in the next section on  failure.  Note
+       that errno is not set.
+
+
+ERRORS
+       EINVAL The  alignment parameter was not a power of two, or
+              was not a multiple of sizeof(void *).
+
+       ENOMEM There was insufficient memory to fulfill the  allo­
+              cation request.
+
+
+NOTES
+       posix_memalign()   verifies  that  alignment  matches  the
+       requirements detailed above.   memalign()  may  not  check
+       that the boundary parameter is correct.
+
+       POSIX  requires that memory obtained from posix_memalign()
+       can be freed using free().  Some systems provide no way to
+       reclaim  memory  allocated  with  memalign()  or  valloc()
+       (because one can only pass to free() a pointer gotten from
+       malloc(),  while  e.g.  memalign() would call malloc() and
+       then align the obtained value).  GNU  libc  allows  memory
+       obtained  from any of these three routines to be reclaimed
+       with free().
+
+       GNU libc malloc() always  returns  8-byte  aligned  memory
+       addresses,  so  these  routines  are  only  needed  if you
+       require larger alignment values.
+
+
+AVAILABILITY
+       The functions memalign() and valloc() have been  available
+       in  all  Linux  libc  libraries.  The function posix_mema­
+       lign() is available since glibc 2.1.91.
+
+
+CONFORMING TO
+       The function valloc() appeared in 3.0  BSD.  It  is  docu­
+       mented  as  being  obsolete  in  BSD 4.3, and as legacy in
+       SUSv2. It no longer occurs in SUSv3.  The  function  mema­
+       lign()  appears  in  SunOS  4.1.3 but not in BSD 4.4.  The
+       function posix_memalign() comes from POSIX 1003.1d.
+
+SEE ALSO
+       malloc(3), free(3), getpagesize(2), brk(2)
+
+
+
+GNU                         2001-10-11          POSIX_MEMALIGN(3)

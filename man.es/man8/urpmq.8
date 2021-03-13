@@ -1,0 +1,133 @@
+urpmq(8)                  Mandrake Linux                 urpmq(8)
+
+
+
+NAME
+       urpmq - urpmi database query tool.
+
+SYNOPSIS
+       urpmq [options] [package_names | rpm_files...]
+
+DESCRIPTION
+       urpmq allows querying the urpmi database. It is for you if
+       want to list available packages in the  various  media  of
+       urpmi,  or  list dependancies of packages or packages that
+       will be installed if you start urpmi.
+
+       Output format of urpmq is the following according to  com­
+       mand line options:
+
+              [group/]package_name[-version][-release][.arch]
+
+OPTIONS
+       --help print an help message and exit (this is the same as
+              -h or -?).
+
+       --update
+              use only update media. This means urpmq will search
+              and  resolve  dependencies  only in media marked as
+              update.
+
+       --media
+              select specific media to use instead of  all  media
+              available (or update media is --updtae is used).
+
+       --auto-select
+              automatically  select  all packages that have to be
+              upgraded according to  already  installed  packages
+              and packages listed in various media registered.
+
+       --fuzzy
+              disable  fast  search  on exact package name, ie it
+              will propose all package containing the  name  even
+              if one has the given name (this is the same as -y).
+
+       --src  next package name is a source package and  it  will
+              select  all dependencies if urpmi is run as root or
+              only install source package as simple user (this is
+              the same as -s).
+
+       --headers
+              extract  headers  for  package selected to standard
+              output.
+
+       --sources
+              print  source  url  (or  file)  of   all   packages
+              selected.
+
+       --force
+              ignore error of inexistant packages requested.
+
+       -v     activate verbose mode.
+
+       -d     select dependancies (maximal closure).
+
+       -u     deselect  packages  if  a better version is already
+              installed, this option  can  be  used  with  -d  to
+              simulate -M mode of urpmi.
+
+       -c     if  maximal  closure is used, assume that a package
+              listed mey have wrong or not  up-to-date  dependan­
+              cies.  This  cause  more package to be upgraded and
+              may correct  unresolved  dependancies  on  the  rpm
+              database.
+
+       -p     allow search in provides to find package.
+
+       -P     do  not search in provides to find package (this is
+              the opposite of -p and is the default).
+
+       -y     this is the same as --fuzzy.
+
+       -s     this is the same as --src.
+
+       -g     print group of each packages listed.
+
+       -r     print version and release of each packages  listed.
+
+       -f     print  version,  release  and arch of each packages
+              listed.
+
+FILES
+       /usr/bin/urpmq
+       The urpmq executable (perl script)
+
+       /var/lib/urpmi/list.*
+       Contains the list of all packages known by urpmi and their
+       location.  There is one filelist per media(*).
+
+       /var/lib/urpmi/hdlist.*
+       Contain  information about all known packages, it's a sum­
+       mary of rpm headers.  There is one filelist per  media(*).
+
+       /var/lib/urpmi/synthesis.hdlist.*
+       Contain  synthesis  information  about  all known packages
+       built from hdlist files that can be used by  minimal  clo­
+       sure  algorithm.  If  these  files  are  not  present  use
+       urpmi.update -a to generate  them.  These  files  are  not
+       mandatory.
+
+       /etc/urpmi/urpmi.cfg
+       Contains  media  description,  previous  format from older
+       urpmi is accepted.
+
+       /etc/urpmi/skip.list
+       Contains package names that should  be  not  automatically
+       updated.
+
+       /etc/urpmi/inst.list
+       Contains package names that should be installed instead of
+       updated.
+
+SEE ALSO
+       urpmi(8),       urpmi.addmedia(8),        urpmi.update(8),
+       urpmi.removemedia(8),  autoirpm(8),  gurpmi(8),  urpmf(8),
+       rpmdrake(8)
+
+AUTHOR
+       Francois Pons, Mandrakesoft
+       fpons@mandrakesoft.com
+
+
+
+MandrakeSoft               12 Feb 2001                   urpmq(8)

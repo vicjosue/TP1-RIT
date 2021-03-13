@@ -1,0 +1,71 @@
+Tcl_Main(3)           Tcl Library Procedures          Tcl_Main(3)
+
+
+
+_________________________________________________________________
+
+NAME
+       Tcl_Main - main program for Tcl-based applications
+
+SYNOPSIS
+       #include <tcl.h>
+
+       Tcl_Main(argc, argv, appInitProc)
+
+ARGUMENTS
+       int               argc           (in)      Number  of ele­
+                                                  ments in  argv.
+
+       char              *argv[]        (in)      Array        of
+                                                  strings    con­
+                                                  taining    com­
+                                                  mand-line argu­
+                                                  ments.
+
+       Tcl_AppInitProc   *appInitProc   (in)      Address  of  an
+                                                  application-
+                                                  specific   ini­
+                                                  tialization
+                                                  procedure.  The
+                                                  value for  this
+                                                  argument     is
+                                                  usually
+                                                  Tcl_AppInit.
+_________________________________________________________________
+
+
+DESCRIPTION
+       Tcl_Main  acts  as  the  main  program  for most Tcl-based
+       applications.  Starting with Tcl 7.4 it is not called main
+       anymore because it is part of the Tcl library and having a
+       function main in a library (particularly a shared library)
+       causes  problems  on many systems.  Having main in the Tcl
+       library would also make it hard to use  Tcl  in  C++  pro­
+       grams, since C++ programs must have special C++ main func­
+       tions.
+
+       Normally each application contains a small  main  function
+       that does nothing but invoke Tcl_Main.  Tcl_Main then does
+       all the work of creating and running a tclsh-like applica­
+       tion.
+
+       When it is has finished its own initialization, but before
+       it processes commands, Tcl_Main calls the procedure  given
+       by  the  appInitProc  argument.  This procedure provides a
+       ``hook'' for the application to perform its  own  initial­
+       ization,  such  as defining application-specific commands.
+       The procedure must have an interface that matches the type
+       Tcl_AppInitProc:
+              typedef int Tcl_AppInitProc(Tcl_Interp *interp);
+       AppInitProc is almost always a pointer to Tcl_AppInit; for
+       more details on this procedure, see the documentation  for
+       Tcl_AppInit.
+
+
+KEYWORDS
+       application-specific      initialization,     command-line
+       arguments, main program
+
+
+
+Tcl                            7.4                    Tcl_Main(3)

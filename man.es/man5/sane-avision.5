@@ -1,0 +1,125 @@
+sane-avision(5)                                   sane-avision(5)
+
+
+
+NAME
+       sane-avision  -  SANE  backend  for  Avision  (and OEM HP,
+       Minolta) flatbed scanners
+
+
+ABOUT THIS FILE
+       This file only is a short descripton of the  avision-back­
+       end for sane!
+
+
+DESCRIPTION
+       The sane-avision library implements a SANE (Scanner Access
+       Now Easy) backend that provides access to Avision  flatbed
+       scanners and the Avision OEM scanners labelled with HP and
+       Minolta.
+
+
+CONFIGURATION
+       The  configuration  file  for  this  backend  resides   in
+            /etc/sane.d/avision.conf.
+
+       Its  contents is a list of device names that correspond to
+       Avision and Avision compatible scanners. Empty  lines  and
+       lines  starting with a hash mark (#) are ignored. A sample
+       configuration file is shown below:
+
+       I suggest you hold one hand on  the  power-button  of  the
+       scanner while you try the first scans!
+
+        #scsi Vendor Model Type Bus Channel ID LUN
+        scsi AVISION
+        /dev/scanner
+
+        # this is a comment
+        #
+        option force-a4
+        option allow-usb
+        option disable-gamma-table
+
+        - force-a4:
+          Forces the backend to overwrite the scanable area
+          returned by the scanner. This might be needed for
+          the AV 630 which returns no area - or newer scanners
+          which retuns the area in a unkown format our backend
+          doesn't recongize yet.
+
+        - allow-usb:
+          Tells the backend to use USB scanner - which do not
+          work correctly yet.
+
+        - disable-gamma-table:
+          Disables the usage of the scanner's gamma-table. You
+          might try this if your scans hang, or only produces
+          random garbage.
+
+
+DEVICE NAMES
+       This backend expects device names of the form:
+
+              special
+
+       Where special is the path-name for the special device that
+       corresponds to a SCSI scanner.  The  special  device  name
+       must  be  a  generic  SCSI  device  or a symlink to such a
+       device.  The program sane-find-scanner helps to  find  out
+       the  correct device. Under Linux, such a device name could
+       be /dev/sga or /dev/sge, for  example.   See  sane-scsi(5)
+       for details.
+
+
+FILES
+       /etc/sane.d/avision.conf
+              The  backend  configuration file (see also descrip­
+              tion of SANE_CONFIG_DIR below).
+
+       /usr/lib/sane/libsane-avision.a
+              The static library implementing this backend.
+
+       /usr/lib/sane/libsane-avision.so
+              The shared library implementing this backend  (pre­
+              sent on systems that support dynamic loading).
+
+
+ENVIRONMENT
+       SANE_CONFIG_DIR
+              This  environment  variable  specifies  the list of
+              directories  that  may  contain  the  configuration
+              file.  Under UNIX, the directories are separated by
+              a colon (`:'), under OS/2, they are separated by  a
+              semi-colon (`;').  If this variable is not set, the
+              configuration  file  is  searched  in  two  default
+              directories:  first,  the current working directory
+              (".") and then in /etc/sane.d.  If the value of the
+              environment  variable ends with the directory sepa­
+              rator character, then the default  directories  are
+              searched  after  the  explicitly specified directo­
+              ries.   For  example,  setting  SANE_CONFIG_DIR  to
+              "/tmp/config:"    would   result   in   directories
+              "tmp/config", ".", and "/etc/sane.d" being searched
+              (in this order).
+
+       SANE_DEBUG_AVISION
+              If  the  library  was  compiled  with debug support
+              enabled, this  environment  variable  controls  the
+              debug  level for this backend.  Higher debug levels
+              increase the verbosity of the output.
+
+              Example: export SANE_DEBUG_AVISION=4
+
+
+SEE ALSO
+       sane(7), sane-scsi(5)
+       http://drocklinux.dyndns.org/rene/avision/index.html
+
+
+AUTHOR
+       René Rebe, Meino Christian Cramer and Martin Jelínek
+
+
+
+                           10 Dec 2001            sane-avision(5)

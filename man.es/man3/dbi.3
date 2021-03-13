@@ -1,0 +1,565 @@
+DBI.(3)                                                   DBI.(3)
+
+
+
+NAME
+       DBI. -
+
+   Files
+       file rpmdb.c
+       file rpmdb.h
+           Access RPM indices using Berkeley DB interface(s).
+
+
+       file rpmlib.h
+
+   Data Structures
+       struct _dbiIndex
+       struct _dbiIndexItem
+       struct _dbiIndexSet
+       struct _dbiVec
+       struct dbiBStats_s
+       struct dbiHStats_s
+
+   Functions
+       dbiIndex dbiOpen (rpmdb db, int rpmtag, unsigned int
+           flags)
+       int dbiCopen (dbiIndex dbi, void **dbcp, unsigned int
+           dbiflags)
+       int dbiCclose (dbiIndex dbi, void *dbcursor, unsigned int
+           flags)
+       int dbiDel (dbiIndex dbi, void *dbcursor, const void
+           *keyp, size_t keylen, unsigned int flags)
+       int dbiGet (dbiIndex dbi, void *dbcursor, void **keypp,
+           size_t *keylenp, void **datapp, size_t *datalenp,
+           unsigned int flags)
+       int dbiPut (dbiIndex dbi, void *dbcursor, const void
+           *keyp, size_t keylen, const void *datap, size_t
+           datalen, unsigned int flags)
+       int dbiCount (dbiIndex dbi, void *dbcursor, unsigned int
+           *countp, unsigned int flags)
+       int dbiVerify (dbiIndex dbi, unsigned int flags)
+       int dbiClose (dbiIndex dbi, unsigned int flags)
+       int dbiSync (dbiIndex dbi, unsigned int flags)
+       int dbiByteSwapped (dbiIndex dbi)
+       dbiIndexSet dbiFreeIndexSet (dbiIndexSet set)
+       unsigned int dbiIndexSetCount (dbiIndexSet set)
+       unsigned int dbiIndexRecordOffset (dbiIndexSet set, int
+           recno)
+       unsigned int dbiIndexRecordFileNumber (dbiIndexSet set,
+           int recno)
+
+   Variables
+       int(* open )(rpmdb rpmdb, int rpmtag, dbiIndex *dbip)
+       int(* close )(dbiIndex dbi, unsigned int flags)
+       int(* sync )(dbiIndex dbi, unsigned int flags)
+       int(* copen )(dbiIndex dbi, void **dbcp, unsigned int
+           flags)
+       int(* cclose )(dbiIndex dbi, void *dbcursor, unsigned int
+           flags)
+       int(* cdel )(dbiIndex dbi, void *dbcursor, const void
+           *keyp, size_t keylen, unsigned int flags)
+       int(* cget )(dbiIndex dbi, void *dbcursor, void **keypp,
+           size_t *keylenp, void **datapp, size_t *datalenp,
+           unsigned int flags)
+       int(* cput )(dbiIndex dbi, void *dbcursor, const void
+           *keyp, size_t keylen, const void *datap, size_t
+           datalen, unsigned int flags)
+       int(* ccount )(dbiIndex dbi, void *dbcursor, unsigned int
+           *countp, unsigned int flags)
+       int(* byteswapped )(dbiIndex dbi)
+       int(* stat )(dbiIndex dbi, unsigned int flags)
+
+FUNCTION DOCUMENTATION
+   int dbiByteSwapped (dbiIndex dbi)
+       Is database byte swapped?
+
+       Parameters:
+
+       dbi    index database handle
+
+       Returns:
+           0 no
+
+       Definition at line 153 of file rpmdb.c.
+
+       Referenced by dbiSearch, and dbiUpdateIndex.
+
+   int dbiCclose (dbiIndex dbi, void * dbcursor, unsigned int
+       flags)
+       Parameters:
+
+       dbi    index database handle
+
+       flags  (unused)
+
+       Definition at line 165 of file rpmdb.c.
+
+       Referenced by openDatabase, rpmdbAdd, rpmdbCountPackages,
+       rpmdbFindByFile, rpmdbFreeIterator, rpmdbGrowIterator,
+       rpmdbInitIterator, rpmdbRemove, and unsatisfiedDepend.
+
+   int dbiClose (dbiIndex dbi, unsigned int flags)
+       Close index database.
+
+       Parameters:
+
+       dbi    index database handle
+
+       flags  (unused)
+
+       Returns:
+           0 on success
+
+       Definition at line 307 of file rpmdb.c.
+
+       Referenced by rpmdbClose, and rpmdbCloseDBI.
+
+   int dbiCopen (dbiIndex dbi, void ** dbcp, unsigned int
+       dbiflags)
+       Parameters:
+
+       dbi    index database handle
+
+       dbiflags
+              DBI_WRITECURSOR or DBI_ITERATOR
+
+       Definition at line 158 of file rpmdb.c.
+
+       Referenced by openDatabase, rpmdbAdd, rpmdbCountPackages,
+       rpmdbFindByFile, rpmdbGrowIterator, rpmdbInitIterator,
+       rpmdbNextIterator, rpmdbRemove, and unsatisfiedDepend.
+
+   int dbiCount (dbiIndex dbi, void * dbcursor, unsigned int *
+       countp, unsigned int flags)
+       Retrieve count of (possible) duplicate items.
+
+       Parameters:
+
+       dbi    index database handle
+
+       dbcursor
+              database cursor
+
+       countp address of count
+
+       flags  (unused)
+
+       Returns:
+           0 on success
+
+       Definition at line 281 of file rpmdb.c.
+
+       References _dbiIndex::dbi_re_flags.
+
+   int dbiDel (dbiIndex dbi, void * dbcursor, const void * keyp,
+       size_t keylen, unsigned int flags)
+       Delete (key,data) pair(s) from index database.
+
+       Parameters:
+
+       dbi    index database handle
+
+       keyp   key data
+
+       keylen key data length
+
+       flags  (unused)
+
+       Returns:
+           0 on success
+
+       Definition at line 181 of file rpmdb.c.
+
+       Referenced by dbiUpdateIndex, and rpmdbRemove.
+
+   dbiIndexSet dbiFreeIndexSet (dbiIndexSet set)
+       Destroy set of index database items.
+
+       Parameters:
+
+       set    set of index database items
+
+       Returns:
+           NULL always
+
+       Definition at line 709 of file rpmdb.c.
+
+       Referenced by addIndexEntry, dbiFindByLabel,
+       dbiFindMatches, removeIndexEntry, rpmdbCountPackages,
+       rpmdbFindByFile, rpmdbFreeIterator, rpmdbGrowIterator, and
+       rpmdbInitIterator.
+
+   int dbiGet (dbiIndex dbi, void * dbcursor, void ** keypp,
+       size_t * keylenp, void ** datapp, size_t * datalenp,
+       unsigned int flags)
+       Retrieve (key,data) pair from index database.
+
+       Parameters:
+
+       dbi    index database handle
+
+       keypp  address of key data
+
+       keylenp
+              address of key data length
+
+       datapp address of data pointer
+
+       datalenp
+              address of data length
+
+       flags  (unused)
+
+       Returns:
+           0 on success
+
+       Definition at line 199 of file rpmdb.c.
+
+       Referenced by dbiSearch, openDatabase, rpmdbAdd,
+       rpmdbNextIterator, and unsatisfiedDepend.
+
+   unsigned int dbiIndexRecordFileNumber (dbiIndexSet set, int
+       recno)
+       Return file index from element in index database set.
+
+       Parameters:
+
+       set    set of index database items
+
+       recno  index of item in set
+
+       Returns:
+           file index
+
+       Definition at line 704 of file rpmdb.c.
+
+       Referenced by rpmdbFindByFile, and rpmdbNextIterator.
+
+   unsigned int dbiIndexRecordOffset (dbiIndexSet set, int recno)
+       Return record offset of header from element in index
+       database set.
+
+       Parameters:
+
+       set    set of index database items
+
+       recno  index of item in set
+
+       Returns:
+           record offset of header
+
+       Definition at line 699 of file rpmdb.c.
+
+       Referenced by dbiFindMatches, rpmdbFindByFile, and
+       rpmdbNextIterator.
+
+   unsigned int dbiIndexSetCount (dbiIndexSet set)
+       Count items in index database set.
+
+       Parameters:
+
+       set    set of index database items
+
+       Returns:
+           number of items
+
+       Definition at line 694 of file rpmdb.c.
+
+       Referenced by dbiFindMatches, and rpmdbCountPackages.
+
+   dbiIndex dbiOpen (rpmdb db, int rpmtag, unsigned int flags)
+       Return handle for an index database.
+
+       Parameters:
+
+       db     rpm database
+
+       rpmtag rpm tag
+
+       flags  (unused)
+
+       Returns:
+           index database handle
+
+       Definition at line 313 of file rpmdb.c.
+
+       References rpmdb_s::db_perms.
+
+       Referenced by openDatabase, rpmdbAdd, rpmdbCountPackages,
+       rpmdbFindByFile, rpmdbFreeIterator, rpmdbGrowIterator,
+       rpmdbInitIterator, rpmdbNextIterator, rpmdbOpenAll,
+       rpmdbRemove, and unsatisfiedDepend.
+
+   int dbiPut (dbiIndex dbi, void * dbcursor, const void * keyp,
+       size_t keylen, const void * datap, size_t datalen,
+       unsigned int flags)
+       Store (key,data) pair in index database.
+
+       Parameters:
+
+       dbi    index database handle
+
+       keyp   key data
+
+       keylen key data length
+
+       datap  data pointer
+
+       datalen
+              data length
+
+       flags  (unused)
+
+       Returns:
+           0 on success
+
+       Definition at line 241 of file rpmdb.c.
+
+       References _dbiIndex::dbi_errpfx.
+
+       Referenced by dbiUpdateIndex, dbiUpdateRecord, rpmdbAdd,
+       and unsatisfiedDepend.
+
+   int dbiSync (dbiIndex dbi, unsigned int flags)
+       Flush pending operations to disk.
+
+       Parameters:
+
+       dbi    index database handle
+
+       flags  (unused)
+
+       Returns:
+           0 on success
+
+       Definition at line 146 of file rpmdb.c.
+
+       References _dbiVec::byteswapped, _dbiVec::ccount,
+       _dbiVec::cput, DBC, and _dbiVec::stat.
+
+       Referenced by dbiUpdateRecord, rpmdbAdd, rpmdbRemove, and
+       rpmdbSync.
+
+   int dbiVerify (dbiIndex dbi, unsigned int flags)
+       Verify (and close) index database.
+
+       Parameters:
+
+       dbi    index database handle
+
+       flags  (unused)
+
+       Returns:
+           0 on success
+
+       Definition at line 292 of file rpmdb.c.
+
+       Referenced by rpmdbVerify.
+
+VARIABLE DOCUMENTATION
+   int(* _dbiVec::byteswapped)(dbiIndex dbi) [inherited]
+       Is database byte swapped?
+
+       Parameters:
+
+       dbi    index database handle
+
+       Returns:
+           0 no
+
+       Referenced by dbiByteSwapped, and dbiSync.
+
+   int(* _dbiVec::cclose)(dbiIndex dbi, void * dbcursor, unsigned
+       int flags) [inherited]
+       Close database cursor.
+
+       Parameters:
+
+       dbi    index database handle
+
+       dbcursor
+              database cursor
+
+       flags  (unused)
+
+       Referenced by dbiCclose.
+
+   int(* _dbiVec::ccount)(dbiIndex dbi, void * dbcursor, unsigned
+       int * countp, unsigned int flags) [inherited]
+       Retrieve count of (possible) duplicate items using
+       dbcursor->c_count.
+
+       Parameters:
+
+       dbi    index database handle
+
+       dbcursor
+              database cursor
+
+       countp address of count
+
+       flags  (unused)
+
+       Returns:
+           0 on success
+
+       Referenced by dbiCount, and dbiSync.
+
+   int(* _dbiVec::cdel)(dbiIndex dbi, void * dbcursor, const void
+       * keyp, size_t keylen, unsigned int flags) [inherited]
+       Delete (key,data) pair(s) using db->del or
+       dbcursor->c_del.
+
+       Parameters:
+
+       dbi    index database handle
+
+       dbcursor
+              database cursor
+
+       keyp   key data
+
+       keylen key data length
+
+       flags  (unused)
+
+       Returns:
+           0 on success
+
+       Referenced by dbiDel.
+
+   int(* _dbiVec::cget)(dbiIndex dbi, void * dbcursor, void **
+       keypp, size_t * keylenp, void ** datapp, size_t *
+       datalenp, unsigned int flags) [inherited]
+       Retrieve (key,data) pair using db->get or dbcursor->c_get.
+
+       Parameters:
+
+       dbi    index database handle
+
+       dbcursor
+              database cursor
+
+       keypp  address of key data
+
+       keylenp
+              address of key data length
+
+       datapp address of data pointer
+
+       datalenp
+              address of data length
+
+       flags  (unused)
+
+       Returns:
+           0 on success
+
+       Referenced by dbiGet.
+
+   int(* _dbiVec::close)( dbiIndex dbi, unsigned int flags)
+       [inherited]
+       Close index database, and destroy database handle.
+
+       Parameters:
+
+       dbi    index database handle
+
+       flags  (unused)
+
+       Returns:
+           0 on success
+
+       Referenced by dbiClose, and dbiVerify.
+
+   int(* _dbiVec::copen)(dbiIndex dbi, void ** dbcp, unsigned int
+       flags) [inherited]
+       Open database cursor.
+
+       Parameters:
+
+       dbi    index database handle
+
+       dbcp   address of database cursor
+
+       flags  (unused)
+
+       Referenced by dbiCopen.
+
+   int(* _dbiVec::cput)(dbiIndex dbi, void * dbcursor, const void
+       * keyp, size_t keylen, const void * datap, size_t datalen,
+       unsigned int flags) [inherited]
+       Store (key,data) pair using db->put or dbcursor->c_put.
+
+       Parameters:
+
+       dbi    index database handle
+
+       dbcursor
+              database cursor
+
+       keyp   key data
+
+       keylen key data length
+
+       datap  data pointer
+
+       datalen
+              data length
+
+       flags  (unused)
+
+       Returns:
+           0 on success
+
+       Referenced by dbiPut, and dbiSync.
+
+   int(* _dbiVec::open)(rpmdb rpmdb, int rpmtag, dbiIndex * dbip)
+       [inherited]
+       Return handle for an index database.
+
+       Parameters:
+
+       rpmdb  rpm database
+
+       rpmtag rpm tag
+
+       Returns:
+           0 on success
+
+       Referenced by dbiOpen.
+
+   int(* _dbiVec::stat)(dbiIndex dbi, unsigned int flags)
+       [inherited]
+       Save statistics in database handle.
+
+       Parameters:
+
+       dbi    index database handle
+
+       flags  retrieve statistics that don't require traversal?
+
+       Returns:
+           0 on success
+
+       Referenced by dbiSync.
+
+   int(* _dbiVec::sync)(dbiIndex dbi, unsigned int flags)
+       [inherited]
+       Flush pending operations to disk.
+
+       Parameters:
+
+       dbi    index database handle
+
+       flags  (unused)
+
+       Returns:
+           0 on success
+
+       Referenced by dbiSync.
+
+
+
+rpm                        13 Mar 2002                    DBI.(3)

@@ -1,0 +1,179 @@
+tixScrolledWindow(n)  Tix Built-In Commands  tixScrolledWindow(n)
+
+
+
+_________________________________________________________________
+
+NAME
+       tixScrolledWindow - Create and manipulate Tix ScrolledWin­
+       dow widgets
+
+SYNOPSIS
+       tixScrolledWindow pathName ?options?
+
+STANDARD OPTIONS
+       -anchor         -background    -cursor
+       -relief         -borderWidth
+
+       See the options manual entry for details on  the  standard
+       options.
+
+WIDGET-SPECIFIC OPTIONS
+       Command-Line Name:-height
+       Database Name:  height
+       Database Class: Height
+
+              Specifies  the  desired  height  for the window, in
+              pixels.
+
+       Command-Line Name:-scrollbar
+       Database Name:  scrollbar
+       Database Class: Scrollbar
+
+              Specifies the display policy of the scrollbars. The
+              following values are recognized:
+
+              auto ?+x? ?-x? ?+y? ?-y?
+                     When   -scrollbar  is  set  to  "auto",  the
+                     scrollbars are shown only when needed. Addi­
+                     tional  modifiers  can  be  used  to force a
+                     scrollbar to be shown or hidden.  For  exam­
+                     ple,  "auto -y" means the horizontal scroll­
+                     bar should be shown when needed but the ver­
+                     tical  scrollbar  should  always  be hidden;
+                     "auto  +x"  means  the  vertical   scrollbar
+                     should be shown when needed but the horizon­
+                     tal scrollbar should always be shown, and so
+                     on.
+
+              both   Both scrollbars are shown
+
+              none   The scrollbars are never shown.
+
+              x      Only the horizontal scrollbar is shown;
+
+              y      Only the vertical scrollbar is shown.
+
+       Command-Line Name:-width
+       Database Name:  width
+       Database Class: Width
+
+              Specifies the desired width for the window, in pix­
+              els.
+
+       Command-Line Name:-xscrollincrement
+       Database Name:  xScrollIncrement
+       Database Class: ScrollIncrement
+
+              Specifies by how much the window should be scrolled
+              in  the  horizontal direction when the user presses
+              the arrows in the horizontal scrollbar. In  Pixels.
+
+       Command-Line Name:-yscrollincrement
+       Database Name:  yScrollIncrement
+       Database Class: ScrollIncrement
+
+              Specifies by how much the window should be scrolled
+              in the vertical direction when the user presses the
+              arrows in the horizontal scrollbar. In pixels.
+
+SUBWIDGETS
+       Name:           hsb
+       Class:          Scrollbar
+
+              The horizontal scrollbar subwidget.
+
+       Name:           window
+       Class:          Frame
+
+              The  frame  subwidget  which  is  scrolled  by  the
+              ScrolledWindow widget.
+
+       Name:           vsb
+       Class:          Scrollbar
+
+              The vertical scrollbar subwidget.
+_________________________________________________________________
+
+DESCRIPTION
+       The tixScrolledWindow command creates a new window  (given
+       by the pathName argument) and makes it into a ScrolledWin­
+       dow widget.  Additional options, described above,  may  be
+       specified on the command line or in the option database to
+       configure aspects of the ScrolledWindow widget such as its
+       cursor and relief.
+
+CREATING WIDGETS INSIDE A SCROLLEDWINDOW WIDGET
+       To create widgets inside a ScrolledWindow widget, one must
+       create the new widgets relative to  the  window  subwidget
+       and manage them inside the window subwidget. An error will
+       be generated if one tries to create widgets  as  immediate
+       children  of the ScrolledWindow.  For example: the follow­
+       ing is correct code, which creates new widgets inside  the
+       window subwidget:
+
+           tixScrolledWindow .w; pack .w
+           set f [.w subwidget window]
+           button $f.b -text hi -width 40 -height 40
+           pack $f.b
+
+       The  following  example code is incorrect because it tries
+       to create immediate children of the ScrolledWindow .w:
+
+           tixScrolledWindow .w; pack .w
+           button .w.b -text hi -width 40 -height 40
+           pack .w.b
+
+WIDGET COMMANDS
+       The tixScrolledWindow command creates a  new  Tcl  command
+       whose  name  is the same as the path name of the Scrolled­
+       Window widget's window.   This  command  may  be  used  to
+       invoke  various  operations on the widget. It has the fol­
+       lowing general form:
+                     pathName option ?arg arg ...?
+
+       PathName is the name of the command, which is the same  as
+       the  ScrolledWindow  widget's  path  name.  Option and the
+       args determine the exact behavior  of  the  command.   The
+       following  commands  are  possible for ScrolledWindow wid­
+       gets:
+
+       pathName cget option
+              Returns the  current  value  of  the  configuration
+              option  given by option. Option may have any of the
+              values accepted by the tixScrolledWindow command.
+
+       pathName configure ?option? ?value option value ...?
+              Query or modify the configuration  options  of  the
+              widget.   If no option is specified, returns a list
+              describing all of the available options  for  path­
+              Name  (see  Tk_ConfigureInfo for information on the
+              format of this list).  If option is specified  with
+              no  value, then the command returns a list describ­
+              ing the one named option (this list will be identi­
+              cal  to  the  corresponding  sublist  of  the value
+              returned if no option is  specified).   If  one  or
+              more  option-value  pairs  are  specified, then the
+              command modifies the given widget option(s) to have
+              the  given  value(s);  in  this  case  the  command
+              returns an empty string.  Option may  have  any  of
+              the  values  accepted by the tixScrolledWindow com­
+              mand.
+
+       pathName subwidget  name ?args?
+              When no additional arguments are given, returns the
+              pathname of the subwidget of the specified name.
+
+              When  no additional arguments are given, the widget
+              command of the specified subwidget will  be  called
+              with these parameters.
+
+KEYWORDS
+       Tix(n)
+
+
+
+
+
+
+Tix                            4.0           tixScrolledWindow(n)

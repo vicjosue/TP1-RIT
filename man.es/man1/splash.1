@@ -1,0 +1,44 @@
+splash(1)                                               splash(1)
+
+
+
+NAME
+       splash, splac - a splash screen renderer
+
+SYNOPSIS
+       splash logo.xpm program-or-script
+
+       splac title string
+
+       splac image new.xpm
+
+DESCRIPTION
+       Splash renders splash screens for installers and other non
+       GUI aware application code.  If invoked  from  a  non  X11
+       environment  it  remains  silent but runs the client code.
+       It displays the selected xpm images centered on  the  dis­
+       play and shaped according to the mask of the xpm.  (If you
+       want to no shape use no mask.)
+
+       splash opens a window to display the image  gives  as  the
+       first argument.  This must be a .xpm file.  Then it starts
+       the script given as the second argument.
+
+       splac should only be called from within this  script.   It
+       accepts the following arguments:
+
+       image  new.xpm Changes the image to new.xpm.
+
+       title  string  Sets  the  window title to string.  The new
+              image need not be the same size.
+
+
+AUTHOR
+       splash was written by Alan Cox <alan@redhat.com>
+
+       This manual page was written by Jochen  Voss  <voss@mathe­
+       matik.uni-kl.de>.
+
+
+
+gnome-utils 1.4.0          Apr 21 2001                  splash(1)

@@ -1,0 +1,40 @@
+SSL_CTX_free(3)              OpenSSL              SSL_CTX_free(3)
+
+
+
+NNAAMMEE
+       SSL_CTX_free - free an allocated SSL_CTX object
+
+SSYYNNOOPPSSIISS
+        #include <openssl/ssl.h>
+
+        void SSL_CTX_free(SSL_CTX *ctx);
+
+
+DDEESSCCRRIIPPTTIIOONN
+       SSL_CTX_free() decrements the reference count of ccttxx, and
+       removes the SSL_CTX object pointed to by ccttxx and frees up
+       the allocated memory if the the reference count has
+       reached 0.
+
+       It also calls the free()ing procedures for indirectly
+       affected items, if applicable: the session cache, the list
+       of ciphers, the list of Client CAs, the certificates and
+       keys.
+
+RREETTUURRNN VVAALLUUEESS
+       SSL_CTX_free() does not provide diagnostic information.
+
+SSEEEE AALLSSOO
+       SSL_CTX_new(3), ssl(3)
+
+
+
+
+
+
+
+
+
+
+13/Sep/2001                   0.9.6c              SSL_CTX_free(3)

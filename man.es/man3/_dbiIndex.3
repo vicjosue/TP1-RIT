@@ -1,0 +1,516 @@
+_dbiIndex(3)                                         _dbiIndex(3)
+
+
+
+NAME
+       _dbiIndex -
+
+SYNOPSIS
+       #include <rpmdb.h>
+
+
+   Data Fields
+       const char * dbi_root
+       const char * dbi_home
+       const char * dbi_file
+       const char * dbi_subfile
+       const char * dbi_tmpdir
+       int dbi_ecflags
+       int dbi_cflags
+       int dbi_oeflags
+       int dbi_eflags
+       int dbi_oflags
+       int dbi_tflags
+       int dbi_type
+       unsigned dbi_mode
+       int dbi_perms
+       long dbi_shmkey
+       int dbi_api
+       int dbi_verify_on_close
+       int dbi_tear_down
+       int dbi_use_cursors
+       int dbi_use_dbenv
+       int dbi_permit_dups
+       int dbi_get_rmw_cursor
+       int dbi_no_fsync
+       int dbi_no_dbsync
+       int dbi_lockdbfd
+       int dbi_temporary
+       int dbi_debug
+       char * dbi_host
+       long dbi_cl_timeout
+       long dbi_sv_timeout
+       int dbi_lorder
+       void(* db_errcall )(const char *db_errpfx, char *buffer)
+       FILE * dbi_errfile
+       const char * dbi_errpfx
+       int dbi_verbose
+       int dbi_region_init
+       int dbi_tas_spins
+       int dbi_mp_mmapsize
+       int dbi_mp_size
+       unsigned int dbi_lk_max
+       unsigned int dbi_lk_detect
+       int dbi_lk_nmodes
+       unsigned char * dbi_lk_conflicts
+       unsigned int dbi_lg_max
+       unsigned int dbi_lg_bsize
+       unsigned int dbi_tx_max
+       int dbi_cachesize
+       int dbi_pagesize
+       void *(* dbi_malloc )(size_t nbytes)
+       unsigned int dbi_h_ffactor
+       unsigned int(* dbi_h_hash_fcn )(DB *, const void *bytes,
+           unsigned int length)
+       unsigned int dbi_h_nelem
+       unsigned int dbi_h_flags
+       int(* dbi_h_dup_compare_fcn )(DB *, const DBT *, const DBT
+           *)
+       int dbi_bt_flags
+       int dbi_bt_minkey
+       int(* dbi_bt_compare_fcn )(DB *, const DBT *, const DBT *)
+       int(* dbi_bt_dup_compare_fcn )(DB *, const DBT *, const
+           DBT *)
+       size_t(* dbi_bt_prefix_fcn )(DB *, const DBT *, const DBT
+           *)
+       int dbi_re_flags
+       int dbi_re_delim
+       unsigned int dbi_re_len
+       int dbi_re_pad
+       const char * dbi_re_source
+       unsigned int dbi_q_extentsize
+       rpmdb dbi_rpmdb
+       rpmTag dbi_rpmtag
+       int dbi_jlen
+       unsigned int dbi_lastoffset
+       void * dbi_db
+       void * dbi_dbenv
+       void * dbi_dbinfo
+       void * dbi_rmw
+       void * dbi_stats
+       const struct _dbiVec * dbi_vec
+
+DETAILED DESCRIPTION
+       Describes an index database (implemented on Berkeley db3
+       functionality).
+
+       Definition at line 200 of file rpmdb.h.
+
+FIELD DOCUMENTATION
+   void(* _dbiIndex::db_errcall)(const char *db_errpfx, char
+       *buffer)
+   int _dbiIndex::dbi_api
+       Berkeley API type
+
+       Definition at line 218 of file rpmdb.h.
+
+       Referenced by db1open, db3open, and rpmdbNextIterator.
+
+   int(* _dbiIndex::dbi_bt_compare_fcn)(DB *, const DBT *, const
+       DBT *)
+       Referenced by db3open.
+
+   int(* _dbiIndex::dbi_bt_dup_compare_fcn)(DB *, const DBT *,
+       const DBT *)
+       Referenced by db3open.
+
+   int _dbiIndex::dbi_bt_flags
+       Definition at line 275 of file rpmdb.h.
+
+       Referenced by db3New, and db3open.
+
+   int _dbiIndex::dbi_bt_minkey
+       Definition at line 276 of file rpmdb.h.
+
+       Referenced by db3open.
+
+   size_t(* _dbiIndex::dbi_bt_prefix_fcn)(DB *, const DBT *,
+       const DBT *)
+       Referenced by db3open.
+
+   int _dbiIndex::dbi_cachesize
+       Definition at line 264 of file rpmdb.h.
+
+       Referenced by db3open.
+
+   int _dbiIndex::dbi_cflags
+       db_create flags
+
+       Definition at line 208 of file rpmdb.h.
+
+       Referenced by db3open.
+
+   long _dbiIndex::dbi_cl_timeout
+       Definition at line 233 of file rpmdb.h.
+
+   void* _dbiIndex::dbi_db
+       Berkeley DB handle
+
+       Definition at line 295 of file rpmdb.h.
+
+       Referenced by db1open, and db3open.
+
+   void* _dbiIndex::dbi_dbenv
+       Berkeley DB_ENV handle
+
+       Definition at line 296 of file rpmdb.h.
+
+       Referenced by db3Free, and db3open.
+
+   void* _dbiIndex::dbi_dbinfo
+       (unused)
+
+       Definition at line 297 of file rpmdb.h.
+
+       Referenced by db3Free, and db3open.
+
+   int _dbiIndex::dbi_debug
+       Definition at line 230 of file rpmdb.h.
+
+       Referenced by dbiCclose, dbiClose, dbiCopen, dbiDel,
+       dbiGet, dbiPut, dbiSync, and dbiVerify.
+
+   int _dbiIndex::dbi_ecflags
+       db_env_create flags
+
+       Definition at line 207 of file rpmdb.h.
+
+   int _dbiIndex::dbi_eflags
+       dbenv->open flags
+
+       Definition at line 210 of file rpmdb.h.
+
+       Referenced by db1open, db3New, db3open, and
+       prDbiOpenFlags.
+
+   FILE* _dbiIndex::dbi_errfile
+       Definition at line 240 of file rpmdb.h.
+
+   const char* _dbiIndex::dbi_errpfx
+       Definition at line 241 of file rpmdb.h.
+
+       Referenced by db3Free, and dbiPut.
+
+   const char* _dbiIndex::dbi_file
+       file component of path
+
+       Definition at line 203 of file rpmdb.h.
+
+       Referenced by db3Free, and db3open.
+
+   int _dbiIndex::dbi_get_rmw_cursor
+       Definition at line 225 of file rpmdb.h.
+
+       Referenced by db3open.
+
+   int(* _dbiIndex::dbi_h_dup_compare_fcn)(DB *, const DBT *,
+       const DBT *)
+       Referenced by db3open.
+
+   unsigned int _dbiIndex::dbi_h_ffactor
+       Definition at line 269 of file rpmdb.h.
+
+       Referenced by db3open.
+
+   unsigned int _dbiIndex::dbi_h_flags
+       DB_DUP, DB_DUPSORT
+
+       Definition at line 272 of file rpmdb.h.
+
+       Referenced by db3New, and db3open.
+
+   unsigned int(* _dbiIndex::dbi_h_hash_fcn)(DB *, const void
+       *bytes, unsigned int length)
+       Referenced by db3open.
+
+   unsigned int _dbiIndex::dbi_h_nelem
+       Definition at line 271 of file rpmdb.h.
+
+       Referenced by db3open.
+
+   const char* _dbiIndex::dbi_home
+       directory component of path
+
+       Definition at line 202 of file rpmdb.h.
+
+       Referenced by db3Free, and db3open.
+
+   char* _dbiIndex::dbi_host
+       Definition at line 232 of file rpmdb.h.
+
+       Referenced by db3Free.
+
+   int _dbiIndex::dbi_jlen
+       size of join key
+
+       Definition at line 291 of file rpmdb.h.
+
+       Referenced by db3New.
+
+   unsigned int _dbiIndex::dbi_lastoffset
+       db1 with falloc.c needs this
+
+       Definition at line 293 of file rpmdb.h.
+
+       Referenced by rpmdbInitIterator, and rpmdbNextIterator.
+
+   unsigned int _dbiIndex::dbi_lg_bsize
+       Definition at line 255 of file rpmdb.h.
+
+   unsigned int _dbiIndex::dbi_lg_max
+       Definition at line 254 of file rpmdb.h.
+
+   unsigned char* _dbiIndex::dbi_lk_conflicts
+       Definition at line 252 of file rpmdb.h.
+
+   unsigned int _dbiIndex::dbi_lk_detect
+       Definition at line 250 of file rpmdb.h.
+
+   unsigned int _dbiIndex::dbi_lk_max
+       Definition at line 249 of file rpmdb.h.
+
+   int _dbiIndex::dbi_lk_nmodes
+       Definition at line 251 of file rpmdb.h.
+
+   int _dbiIndex::dbi_lockdbfd
+       do fcntl lock on db fd
+
+       Definition at line 228 of file rpmdb.h.
+
+       Referenced by db1open, and db3open.
+
+   int _dbiIndex::dbi_lorder
+       Definition at line 237 of file rpmdb.h.
+
+       Referenced by db3open.
+
+   void*(* _dbiIndex::dbi_malloc)(size_t nbytes)
+   unsigned _dbiIndex::dbi_mode
+       mode to use on open
+
+       Definition at line 215 of file rpmdb.h.
+
+       Referenced by db1open, db3New, and db3open.
+
+   int _dbiIndex::dbi_mp_mmapsize
+       (10Mb)
+
+       Definition at line 246 of file rpmdb.h.
+
+       Referenced by db3New.
+
+   int _dbiIndex::dbi_mp_size
+       (128Kb)
+
+       Definition at line 247 of file rpmdb.h.
+
+       Referenced by db3New.
+
+   int _dbiIndex::dbi_no_dbsync
+       don't call dbiSync
+
+       Definition at line 227 of file rpmdb.h.
+
+       Referenced by rpmdbAdd, and rpmdbRemove.
+
+   int _dbiIndex::dbi_no_fsync
+       no-op fsync for db
+
+       Definition at line 226 of file rpmdb.h.
+
+   int _dbiIndex::dbi_oeflags
+       common (db,dbenv}->open flags
+
+       Definition at line 209 of file rpmdb.h.
+
+       Referenced by db3open, and prDbiOpenFlags.
+
+   int _dbiIndex::dbi_oflags
+       db->open flags
+
+       Definition at line 211 of file rpmdb.h.
+
+       Referenced by db3open, and prDbiOpenFlags.
+
+   int _dbiIndex::dbi_pagesize
+       (fs blksize)
+
+       Definition at line 265 of file rpmdb.h.
+
+       Referenced by db3open.
+
+   int _dbiIndex::dbi_permit_dups
+       permit duplicate entries?
+
+       Definition at line 224 of file rpmdb.h.
+
+       Referenced by db3New.
+
+   int _dbiIndex::dbi_perms
+       file permission to use on open
+
+       Definition at line 216 of file rpmdb.h.
+
+       Referenced by db1open, db3New, and db3open.
+
+   unsigned int _dbiIndex::dbi_q_extentsize
+       Definition at line 287 of file rpmdb.h.
+
+       Referenced by db3open.
+
+   int _dbiIndex::dbi_re_delim
+       Definition at line 282 of file rpmdb.h.
+
+       Referenced by db3open.
+
+   int _dbiIndex::dbi_re_flags
+       Definition at line 281 of file rpmdb.h.
+
+       Referenced by dbiCount.
+
+   unsigned int _dbiIndex::dbi_re_len
+       Definition at line 283 of file rpmdb.h.
+
+       Referenced by db3open.
+
+   int _dbiIndex::dbi_re_pad
+       Definition at line 284 of file rpmdb.h.
+
+       Referenced by db3open.
+
+   const char* _dbiIndex::dbi_re_source
+       Definition at line 285 of file rpmdb.h.
+
+       Referenced by db3Free, and db3open.
+
+   int _dbiIndex::dbi_region_init
+       Definition at line 243 of file rpmdb.h.
+
+   void* _dbiIndex::dbi_rmw
+       db cursor (with DB_WRITECURSOR)
+
+       Definition at line 298 of file rpmdb.h.
+
+       Referenced by db3open, rpmdbFreeIterator, and
+       rpmdbInitIterator.
+
+   const char* _dbiIndex::dbi_root
+       chroot(2) component of path
+
+       Definition at line 201 of file rpmdb.h.
+
+       Referenced by db3Free, and db3open.
+
+   rpmdb _dbiIndex::dbi_rpmdb
+       Definition at line 289 of file rpmdb.h.
+
+       Referenced by db3New.
+
+   rpmTag _dbiIndex::dbi_rpmtag
+       rpm tag used for index
+
+       Definition at line 290 of file rpmdb.h.
+
+       Referenced by db1open, db3New, db3open, dbiCclose,
+       dbiClose, dbiCopen, dbiCount, dbiDel, dbiGet, dbiPut,
+       dbiSync, dbiVerify, rpmdbAdd, rpmdbNextIterator, and
+       rpmdbRemove.
+
+   long _dbiIndex::dbi_shmkey
+       shared memory base key
+
+       Definition at line 217 of file rpmdb.h.
+
+   void* _dbiIndex::dbi_stats
+       Berkeley db statistics
+
+       Definition at line 299 of file rpmdb.h.
+
+       Referenced by db3Free.
+
+   const char* _dbiIndex::dbi_subfile
+       Definition at line 204 of file rpmdb.h.
+
+       Referenced by db3Free, and db3open.
+
+   long _dbiIndex::dbi_sv_timeout
+       Definition at line 234 of file rpmdb.h.
+
+   int _dbiIndex::dbi_tas_spins
+       Definition at line 244 of file rpmdb.h.
+
+   int _dbiIndex::dbi_tear_down
+       tear down dbenv on close
+
+       Definition at line 221 of file rpmdb.h.
+
+       Referenced by db3New.
+
+   int _dbiIndex::dbi_temporary
+       non-persistent
+
+       Definition at line 229 of file rpmdb.h.
+
+       Referenced by db1open, and db3open.
+
+   int _dbiIndex::dbi_tflags
+       dbenv->txn_begin flags
+
+       Definition at line 212 of file rpmdb.h.
+
+   const char* _dbiIndex::dbi_tmpdir
+       temporary directory
+
+       Definition at line 205 of file rpmdb.h.
+
+   unsigned int _dbiIndex::dbi_tx_max
+       Definition at line 257 of file rpmdb.h.
+
+   int _dbiIndex::dbi_type
+       db index type
+
+       Definition at line 214 of file rpmdb.h.
+
+       Referenced by db1open, and db3open.
+
+   int _dbiIndex::dbi_use_cursors
+       access with cursors? (always)
+
+       Definition at line 222 of file rpmdb.h.
+
+       Referenced by db3New.
+
+   int _dbiIndex::dbi_use_dbenv
+       use db environment?
+
+       Definition at line 223 of file rpmdb.h.
+
+       Referenced by db3New, and db3open.
+
+   const struct _dbiVec* _dbiIndex::dbi_vec
+       private methods
+
+       Definition at line 301 of file rpmdb.h.
+
+       Referenced by db1open, db3open, dbiByteSwapped, dbiCclose,
+       dbiClose, dbiCopen, dbiCount, dbiDel, dbiGet, dbiPut,
+       dbiSync, and dbiVerify.
+
+   int _dbiIndex::dbi_verbose
+       Definition at line 242 of file rpmdb.h.
+
+       Referenced by db3open.
+
+   int _dbiIndex::dbi_verify_on_close
+       Definition at line 220 of file rpmdb.h.
+
+       Referenced by db3open, and dbiVerify.
+
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002               _dbiIndex(3)

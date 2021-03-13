@@ -1,0 +1,78 @@
+rpmdb/dbconfig.c(3)                           rpmdb/dbconfig.c(3)
+
+
+
+NAME
+       rpmdb/dbconfig.c -
+
+SYNOPSIS
+       #include 'system.h'
+       #include <db3/db.h>
+       #include <rpmlib.h>
+       #include <rpmmacro.h>
+       #include 'rpmdb.h'
+       #include 'debug.h'
+
+   Data Structures
+       struct dbOption
+
+   Defines
+       #define __USE_DB3   1
+
+   Functions
+       int dbSaveLong (struct dbOption *opt, int argInfo, long
+           aLong)
+       int dbSaveInt (struct dbOption *opt, int argInfo, long
+           aLong)
+       dbiIndex db3Free (dbiIndex dbi)
+       dbiIndex db3New (rpmdb rpmdb, int rpmtag)
+       char * prDbiOpenFlags (int dbflags, int print_dbenv_flags)
+
+   Variables
+       _dbiIndex db3dbi
+       dbOption rdbOptions []
+       const char * db3_config_default
+
+DETAILED DESCRIPTION
+       Definition in file dbconfig.c.
+
+DEFINE DOCUMENTATION
+   #define __USE_DB3   1
+       Definition at line 20 of file dbconfig.c.
+
+FUNCTION DOCUMENTATION
+   int dbSaveInt (struct dbOption * opt, int argInfo, long aLong)
+       [static]
+       Definition at line 277 of file dbconfig.c.
+
+       Referenced by db3New.
+
+   int dbSaveLong (struct dbOption * opt, int argInfo, long
+       aLong) [static]
+       Definition at line 251 of file dbconfig.c.
+
+       Referenced by db3New.
+
+VARIABLE DOCUMENTATION
+   const char* db3_config_default [static]
+       Initial value:
+
+
+           'db3:hash:mpool:cdb:usecursors:verbose:mp_mmapsize=8Mb:mp_size=512Kb:pagesize=512:perms=0644'
+       Todo:
+            Set a reasonable 'last gasp' default db config.
+
+       Definition at line 322 of file dbconfig.c.
+
+       Referenced by db3New.
+
+   struct _dbiIndex db3dbi
+       Definition at line 23 of file dbconfig.c.
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002        rpmdb/dbconfig.c(3)

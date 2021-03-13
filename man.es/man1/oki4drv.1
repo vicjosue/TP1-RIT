@@ -1,0 +1,151 @@
+OKI4DRV(l)                                             OKI4DRV(l)
+
+
+
+NAME
+       oki4drv - User space based driver for OKIPAGE 4w, OKI400w,
+       OKIPAGE 4w PLUS and OKIPAGE 8w Lite printers.
+
+SYNTAX
+       oki4drv [-gmvV] [-s papersize]  [-o output]  [-d darkness]
+       [-w paperweight] [[file]...]
+
+DESCRIPTION
+       oki4drv  is  a  user  level  driver  for  the OKIPAGE 4w ,
+       OKIPAGE 4w PLUS , as well  as  the  OKIPAGE  8w  Lite  GDI
+       (Generic Display Interface) printers.
+
+       It takes PostScript input from some files specified on the
+       command line or  from  standard  input  and  renders  them
+       through  GhostScript's  raw  bit  device.  The GhostScript
+       output will be coded into a data  stream  appropriate  for
+       those printers and spooled page by page sendid directly to
+       the printer device itself. The default printer device file
+       used is: /dev/lp0.
+
+       WARNING!
+
+       Due to the printing technology involved the feeding of the
+       printer with data imposes some  real-time  constraints  on
+       the  run  of  this  program.  The document processing must
+       therefore be done on a page by page basis. The host system
+       should  be fairly well equipped to keep up with the print­
+       ers hunger for data. Supposedly  an  486  with  about  16M
+       bytes  of  RAM  should  do it. But please don't try to use
+       this program with one of those  printers  on  an  in  esp.
+       386SX/16MHz  with  4  megs of RAM! I'm personally using an
+       K6/333MHz with 64M bytes of RAM and can't  therefore  tell
+       what the real lower limit is.
+
+       However: be warned!  Failing to meet those constraints may
+       result in  severe physical damage to the printer!  Thought
+       it  shouldn't,  since I have been observing those printers
+       ability to stop and resume in the middle of  processing  a
+       sheet  of  paper.   It appears that this behavior involves
+       some control from the computers side, so I can't really at
+       this stage of developement reproduce it.
+
+       Please  make  sure  that  the printer is set to EPP or SPP
+       mode in the BIOS!  ECP will fail for reasons I don't  want
+       to explain in length here.
+
+       To  guarantee  a quite continuous data stream, the process
+       of sending the page image data to the printer is exploring
+       real  time  and execution priority manipulation facilities
+       of the underlying operating system. As a consequence  this
+       program  must be used in SUID root mode. The second conse­
+       quence of this is that it doesn't make sense to  use  this
+       program  in  pure filtering mode under the control of some
+       systems printer spooling daemon  like  for  example:  lpd.
+       Sorry but that's just like the live is. However the user's
+       inconvenience should remain quite moderate.
+
+       If you expirence problems try first  to  output  the  data
+       into  a  separate  file  and  thereafter  to cat it to the
+       printer at once like this:
+
+       oki4drv foo.ps -o temp; cat temp > /dev/lp0.
+
+       And make sure that the machine you are using is  otherwise
+       idle.
+
+
+
+OPTIONS
+       The options recognized by this program are:
+
+       -g     Render in graphics mode instead of text mode, which
+              is the default.
+
+       -m     Use the manual paper feed instead  of  the  default
+              automatic.
+
+       -s papersize
+              Specify   the  paper  size.  Possible  values  are:
+              a4,a5,a6,b5,letter,legal The default value  is  the
+              European a4.
+
+       -o /dev/foo
+              Specify and alternative printer device file name or
+              any file if you wish to cat the data to the printer
+              after  fully finished rendering.  The default value
+              is: /dev/lp0.
+
+       -d darkness
+              Specify the darkness value in the range from -2  to
+              2,  from  dark to light.  0 (medium) is the default
+              value.
+
+       -w weight
+              Specify the paper weight in the range from -2 to 2,
+              from  heavy  to  light.   0  (heavy) is the default
+              value.
+
+       -v     Prints the version information and exit.
+
+       -V     Run in verbose mode diving information  about  run­
+              ning status and currently processed pages in a for­
+              mat similar to the one used by the TeX tools.
+
+
+REQUIREMENTS
+       You will need the excellent  GhostScript  interpreter  for
+       the PostScript language to use this program.
+
+
+BUGS
+       There  are  currently  no known bugs in the driver program
+       itself, other then of linguistic nature  in  comments  and
+       documentation.  The only bogusity accounts go to OKIDATA -
+       which didn't give me any documentation about the protocols
+       used by those printers in first place!
+
+       However  please  note  that this is no longer true at all!
+       They even prvided me for free with  a  recent  model  from
+       them!
+
+       So  all Linux/UNIX enthusiasts out there please note: OKI­
+       DATA is making fine printers for desktop usage, where it's
+       really  fine to use the power of the host CPU for the ren­
+       dering of the data.  They have IMHO the best price to per­
+       formace ratio out there one can imagine!
+
+       With  the  latest 2.0.3x series of kernels there appear to
+       be some bogus workarounds for bugs in the interface proto­
+       col  handling, which are preventing this driver from work­
+       ing properly. Recent 2.2 (namely  2.2.9  and  later)  work
+       fine  again.  I  have only tested this driver release upon
+       2.2.9 as of now. If the situtation remains that the  Linux
+       printer  driver once works and once fails again version by
+       version, I will start to include a propper working  driver
+       in the package too.
+
+
+AUTHOR
+       Marcin Dalecki <dalecki@cs.net.pl> (- constant contact).
+
+
+
+
+
+                           25 May 1999                 OKI4DRV(l)

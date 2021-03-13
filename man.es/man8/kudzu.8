@@ -1,0 +1,79 @@
+kudzu(1)                                                 kudzu(1)
+
+
+
+NAME
+       kudzu - detects and configures new and/or changed hardware
+       on a system
+
+
+SYNOPSIS
+       kudzu
+
+DESCRIPTION
+       kudzu detects and configures new and/or  changed  hardware
+       on  a  system.   When  started,  kudzu detects the current
+       hardware, and checks  it  against  a  database  stored  in
+       /etc/sysconfig/hwconf,  if  one exists. It then determines
+       if any hardware has been added or removed from the system.
+       If so, it gives the users the opportunity to configure any
+       added hardware, and unconfigure any removed  hardware.  It
+       then updates the database in /etc/sysconfig/hwconf.
+
+       If  no  previous database exists, kudzu attempts to deter­
+       mine what devices have already been configured, by looking
+       at /etc/modules.conf, /etc/sysconfig/network-scripts/, and
+       /etc/X11/XF86Config.
+
+
+OPTIONS
+       --usage
+              Show short usage message.
+
+       --help, -?
+              Print help information.
+
+       -q, --quiet
+              Run 'quietly'; do only configuration  that  doesn't
+              require user input.
+
+       -s, --safe
+              Do  only 'safe' probes that won't disturb hardware.
+              Currently, this disables the serial probe  and  the
+              DDC monitor probe.
+
+       -t, --timeout [seconds]
+              This sets the timeout for the initial dialog. If no
+              key is pressed before the  timeout  elapses,  kudzu
+              exits, and /etc/sysconfig/hwconf is not updated.
+
+FILES
+       /etc/sysconfig/hwconf
+              Listing of current installed hardware.
+
+       /etc/sysconfig/kudzu
+              Configuration for the boot-time hardware probe. Set
+              'SAFE' to something other than 'no' to  force  only
+              safe probes.
+
+       /etc/modules.conf
+              Module configuration file.
+
+       /etc/sysconfig/network-scripts/ifcfg-*
+              Network interface configuration files.
+
+       /usr/share/ldetect-lst/pcitable
+              PCI id to driver mappings.
+
+BUGS
+       The   serial  probe  will  disturb  any  currently  in-use
+       devices, and returns odd results if used on machines  act­
+       ing  as serial consoles. On some older graphics cards, the
+       DDC probe can do strange things.
+
+AUTHOR
+       Red Hat, Inc.
+
+
+
+                          Red Hat, Inc.                  kudzu(1)

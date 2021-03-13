@@ -1,0 +1,335 @@
+build/parsePreamble.c(3)                 build/parsePreamble.c(3)
+
+
+
+NAME
+       build/parsePreamble.c - Parse tags in global section from
+       spec file.
+
+SYNOPSIS
+       #include 'system.h'
+       #include <rpmio_internal.h>
+       #include <rpmbuild.h>
+       #include 'debug.h'
+
+   Data Structures
+       struct optionalTag
+       struct PreambleRec_s
+       struct tokenBits_s
+
+   Defines
+       #define SINGLE_TOKEN_ONLY
+
+   Typedefs
+       typedef tokenBits_s * tokenBits
+       typedef PreambleRec_s * PreambleRec
+
+   Functions
+       void addOrAppendListEntry (Header h, int_32 tag, char
+           *line)
+       int parseSimplePart (char *line, char **name, int *flag)
+       int parseYesNo (const char *s)
+       int parseBits (const char *s, const tokenBits tokbits,
+           rpmsenseFlags *bp)
+       char * findLastChar (char *s)
+       int isMemberInEntry (Header h, const char *name, rpmTag
+           tag)
+       int checkForValidArchitectures (Spec spec)
+       int checkForRequired (Header h, const char *NVR)
+           Check that required tags are present in header.
+       int checkForDuplicates (Header h, const char *NVR)
+           Check that no duplicate tags are present in header.
+       void fillOutMainPackage (Header h)
+       int readIcon (Header h, const char *file)
+       spectag stashSt (Spec spec, Header h, int tag, const char
+           *lang)
+       int handlePreambleTag (Spec spec, Package pkg, int tag,
+           const char *macro, const char *lang)
+       void initPreambleList (void)
+       int findPreambleTag (Spec spec, int *tag, const char
+           **macro, char *lang)
+       int parsePreamble (Spec spec, int initialPackage)
+
+   Variables
+       rpmTag copyTagsDuringParse []
+       rpmTag requiredTags []
+       tokenBits_s installScriptBits []
+       tokenBits_s buildScriptBits []
+       optionalTag optionalTags []
+       int noLang
+       PreambleRec_s preambleList []
+
+DETAILED DESCRIPTION
+       Parse tags in global section from spec file.
+
+
+
+       Definition in file parsePreamble.c.
+
+DEFINE DOCUMENTATION
+   #define SINGLE_TOKEN_ONLY
+       Value:
+
+       if (multiToken) {     rpmError(RPMERR_BADSPEC, _('line %d: Tag takes single token only: %s0),              spec->lineNum, spec->line);     return RPMERR_BADSPEC; }
+
+       Definition at line 422 of file parsePreamble.c.
+
+       Referenced by handlePreambleTag.
+
+TYPEDEF DOCUMENTATION
+   typedef struct PreambleRec_s *  PreambleRec
+   typedef struct tokenBits_s *  tokenBits
+FUNCTION DOCUMENTATION
+   void addOrAppendListEntry (Header h, int_32 tag, char * line)
+       [static]
+       Definition at line 49 of file parsePreamble.c.
+
+       References _free, headerAddOrAppendEntry, int_32,
+       poptParseArgvString, and RPM_STRING_ARRAY_TYPE.
+
+       Referenced by handlePreambleTag.
+
+   int checkForDuplicates (Header h, const char * NVR) [static]
+       Check that no duplicate tags are present in header.
+
+       Parameters:
+
+       h      header
+
+       NVR    package name-version-release
+
+       Returns:
+           0 if OK
+
+       Definition at line 280 of file parsePreamble.c.
+
+       References _, headerFreeIterator, headerInitIterator,
+       headerNextIterator, and tagName.
+
+       Referenced by parsePreamble.
+
+   int checkForRequired (Header h, const char * NVR) [static]
+       Check that required tags are present in header.
+
+       Parameters:
+
+       h      header
+
+       NVR    package name-version-release
+
+       Returns:
+           0 if OK
+
+       Definition at line 256 of file parsePreamble.c.
+
+       References _, headerIsEntry, requiredTags, rpmTag, and
+       tagName.
+
+       Referenced by parsePreamble.
+
+   int checkForValidArchitectures (Spec spec) [static]
+       Definition at line 212 of file parsePreamble.c.
+
+       References _, isMemberInEntry, rpmExpand, rpmGetArchInfo,
+       rpmGetOsInfo, RPMTAG_EXCLUDEARCH, RPMTAG_EXCLUDEOS,
+       RPMTAG_EXCLUSIVEARCH, and RPMTAG_EXCLUSIVEOS.
+
+       Referenced by parsePreamble.
+
+   void fillOutMainPackage (Header h) [static]
+       Definition at line 317 of file parsePreamble.c.
+
+       References _free, headerAddEntry, headerIsEntry,
+       optionalTags, optionalTag::ot_mac, optionalTag::ot_tag,
+       RPM_STRING_TYPE, and rpmExpand.
+
+       Referenced by parsePreamble.
+
+   char* findLastChar (char * s) [inline, static]
+       Definition at line 173 of file parsePreamble.c.
+
+       References xisspace.
+
+       Referenced by handlePreambleTag.
+
+   int findPreambleTag (Spec spec, int * tag, const char **
+       macro, char * lang) [static]
+       Definition at line 758 of file parsePreamble.c.
+
+       References initPreambleList, PreambleRec_s::len,
+       PreambleRec_s::multiLang, RPMBUILD_DEFAULT_LANG,
+       RPMTAG_PATCH, RPMTAG_SOURCE, SKIPSPACE,
+       PreambleRec_s::tag, PreambleRec_s::token, xisspace, and
+       xstrncasecmp.
+
+       Referenced by parsePreamble.
+
+   int handlePreambleTag (Spec spec, Package pkg, int tag, const
+       char * macro, const char * lang) [static]
+       Definition at line 435 of file parsePreamble.c.
+
+       References _, _free, addMacro, addOrAppendListEntry,
+       addSource, delMacro, findLastChar, headerAddEntry,
+       headerAddI18NString, HFD_t, HGE_t, noLang, parseBits,
+       parseNoSource, parseNum, parseRCPOT, parseYesNo,
+       poptParseArgvString, readIcon, RMIL_OLDSPEC, RMIL_SPEC,
+       RPM_INT32_TYPE, RPM_STRING_TYPE, RPMBUILD_DEFAULT_LANG,
+       rpmGenPath, RPMSENSE_ANY, rpmsenseFlags, RPMTAG_AUTOPROV,
+       RPMTAG_AUTOREQ, RPMTAG_AUTOREQPROV, RPMTAG_BUILDARCHS,
+       RPMTAG_BUILDCONFLICTS, RPMTAG_BUILDPREREQ,
+       RPMTAG_BUILDREQUIRES, RPMTAG_BUILDROOT,
+       RPMTAG_CONFLICTFLAGS, RPMTAG_DISTRIBUTION, RPMTAG_DOCDIR,
+       RPMTAG_EPOCH, RPMTAG_EXCLUDEARCH, RPMTAG_EXCLUDEOS,
+       RPMTAG_EXCLUSIVEARCH, RPMTAG_EXCLUSIVEOS, RPMTAG_GROUP,
+       RPMTAG_ICON, RPMTAG_LICENSE, RPMTAG_NAME, RPMTAG_NOPATCH,
+       RPMTAG_NOSOURCE, RPMTAG_OBSOLETEFLAGS, RPMTAG_PACKAGER,
+       RPMTAG_PATCH, RPMTAG_PREFIXES, RPMTAG_PREREQ,
+       RPMTAG_PROVIDEFLAGS, RPMTAG_RELEASE, RPMTAG_REQUIREFLAGS,
+       RPMTAG_RHNPLATFORM, RPMTAG_SOURCE, RPMTAG_SUMMARY,
+       RPMTAG_URL, RPMTAG_VENDOR, RPMTAG_VERSION, rpmTagType,
+       SINGLE_TOKEN_ONLY, SKIPNONSPACE, SKIPSPACE, stashSt, and
+       urlPath.
+
+       Referenced by parsePreamble.
+
+   void initPreambleList (void) [inline, static]
+       Definition at line 748 of file parsePreamble.c.
+
+       References PreambleRec_s::len, and PreambleRec_s::token.
+
+       Referenced by findPreambleTag.
+
+   int isMemberInEntry (Header h, const char * name, rpmTag tag)
+       [static]
+       Definition at line 191 of file parsePreamble.c.
+
+       References HFD_t, HGE_t, rpmTag, rpmTagType, and
+       xstrcasecmp.
+
+       Referenced by checkForValidArchitectures.
+
+   int parseBits (const char * s, const tokenBits tokbits,
+       rpmsenseFlags * bp) [static]
+       Definition at line 137 of file parsePreamble.c.
+
+       References tokenBits_s::bits, tokenBits_s::name,
+       RPMSENSE_ANY, rpmsenseFlags, xisalpha, and xisspace.
+
+       Referenced by handlePreambleTag.
+
+   int parseSimplePart (char * line, char ** name, int * flag)
+       [static]
+       Definition at line 66 of file parsePreamble.c.
+
+       References PART_NAME, and PART_SUBNAME.
+
+       Referenced by parsePreamble.
+
+   int parseYesNo (const char * s) [inline, static]
+       Definition at line 98 of file parsePreamble.c.
+
+       References xstrcasecmp.
+
+       Referenced by handlePreambleTag.
+
+   int readIcon (Header h, const char * file) [static]
+       Definition at line 334 of file parsePreamble.c.
+
+       References _, _free, Fclose, fdSize, Ferror, Fopen, Fread,
+       Fstrerror, headerAddEntry, RPM_BIN_TYPE, rpmGetPath,
+       RPMTAG_GIF, RPMTAG_XPM, and xmalloc.
+
+       Referenced by handlePreambleTag.
+
+VARIABLE DOCUMENTATION
+   struct tokenBits_s buildScriptBits[] [static]
+       Initial value:
+
+        {
+           { 'prep',           RPMSENSE_SCRIPT_PREP },
+           { 'build',          RPMSENSE_SCRIPT_BUILD },
+           { 'install',        RPMSENSE_SCRIPT_INSTALL },
+           { 'clean',          RPMSENSE_SCRIPT_CLEAN },
+           { NULL, 0 }
+       }
+
+       Definition at line 127 of file parsePreamble.c.
+
+   rpmTag copyTagsDuringParse[] [static]
+       Initial value:
+
+        {
+           RPMTAG_EPOCH,
+           RPMTAG_VERSION,
+           RPMTAG_RELEASE,
+           RPMTAG_LICENSE,
+           RPMTAG_PACKAGER,
+           RPMTAG_DISTRIBUTION,
+           RPMTAG_DISTURL,
+           RPMTAG_VENDOR,
+           RPMTAG_ICON,
+           RPMTAG_URL,
+           RPMTAG_CHANGELOGTIME,
+           RPMTAG_CHANGELOGNAME,
+           RPMTAG_CHANGELOGTEXT,
+           RPMTAG_PREFIXES,
+           RPMTAG_RHNPLATFORM,
+           0
+       }
+
+       Definition at line 16 of file parsePreamble.c.
+
+       Referenced by parsePreamble.
+
+   struct tokenBits_s installScriptBits[] [static]
+       Initial value:
+
+        {
+           { 'interp',         RPMSENSE_INTERP },
+           { 'prereq',         RPMSENSE_PREREQ },
+           { 'preun',          RPMSENSE_SCRIPT_PREUN },
+           { 'pre',            RPMSENSE_SCRIPT_PRE },
+           { 'postun',         RPMSENSE_SCRIPT_POSTUN },
+           { 'post',           RPMSENSE_SCRIPT_POST },
+           { 'rpmlib',         RPMSENSE_RPMLIB },
+           { 'verify',         RPMSENSE_SCRIPT_VERIFY },
+           { NULL, 0 }
+       }
+
+       Definition at line 113 of file parsePreamble.c.
+
+   int noLang
+       Definition at line 430 of file parsePreamble.c.
+
+       Referenced by handlePreambleTag.
+
+   struct optionalTag  optionalTags[] [static]
+       Referenced by fillOutMainPackage.
+
+   struct PreambleRec_s preambleList[] [static]
+       Definition at line 699 of file parsePreamble.c.
+
+   rpmTag requiredTags[] [static]
+       Initial value:
+
+        {
+           RPMTAG_NAME,
+           RPMTAG_VERSION,
+           RPMTAG_RELEASE,
+           RPMTAG_SUMMARY,
+           RPMTAG_GROUP,
+           RPMTAG_LICENSE,
+           0
+       }
+
+       Definition at line 37 of file parsePreamble.c.
+
+       Referenced by checkForRequired.
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002   build/parsePreamble.c(3)

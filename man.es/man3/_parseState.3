@@ -1,0 +1,69 @@
+_parseState(3)                                     _parseState(3)
+
+
+
+NAME
+       _parseState - Parser state.
+
+SYNOPSIS
+   Data Fields
+       char * str
+       char * p
+       int nextToken
+       Value tokenValue
+       Spec spec
+
+DETAILED DESCRIPTION
+       Parser state.
+
+       Definition at line 99 of file expression.c.
+
+FIELD DOCUMENTATION
+   int _parseState::nextToken
+       current lookahead token
+
+       Definition at line 102 of file expression.c.
+
+       Referenced by doAddSubtract, doLogical, doMultiplyDivide,
+       doPrimary, doRelational, parseExpressionBoolean,
+       parseExpressionString, and rdToken.
+
+   char* _parseState::p
+       current position in expression string
+
+       Definition at line 101 of file expression.c.
+
+       Referenced by parseExpressionBoolean,
+       parseExpressionString, and rdToken.
+
+   Spec _parseState::spec
+       spec file that we are parsing inside of
+
+       Definition at line 104 of file expression.c.
+
+       Referenced by parseExpressionBoolean, and
+       parseExpressionString.
+
+   char* _parseState::str
+       expression string
+
+       Definition at line 100 of file expression.c.
+
+       Referenced by parseExpressionBoolean, and
+       parseExpressionString.
+
+   Value _parseState::tokenValue
+       valid when TOK_INTEGER or TOK_STRING
+
+       Definition at line 103 of file expression.c.
+
+       Referenced by doPrimary, parseExpressionBoolean,
+       parseExpressionString, and rdToken.
+
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+

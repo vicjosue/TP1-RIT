@@ -1,0 +1,134 @@
+POD2TEXT(1)      Perl Programmers Reference Guide     POD2TEXT(1)
+
+
+
+NNAAMMEE
+       pod2text - Convert POD data to formatted ASCII text
+
+SSYYNNOOPPSSIISS
+       pod2text [--aacclloosstt] [--ii indent] [--qq quotes] [--ww width]
+       [input [output]]
+
+       pod2text --hh
+
+DDEESSCCRRIIPPTTIIOONN
+       ppoodd22tteexxtt is a front-end for Pod::Text and its subclasses.
+       It uses them to generate formatted ASCII text from POD
+       source.  It can optionally use either termcap sequences or
+       ANSI color escape sequences to format the text.
+
+       input is the file to read for POD source (the POD can be
+       embedded in code).  If input isn't given, it defaults to
+       STDIN.  output, if given, is the file to which to write
+       the formatted output.  If output isn't given, the format­
+       ted output is written to STDOUT.
+
+OOPPTTIIOONNSS
+       --aa, ----aalltt
+           Use an alternate output format that, among other
+           things, uses a different heading style and marks
+           "=item" entries with a colon in the left margin.
+
+       --cc, ----ccoolloorr
+           Format the output with ANSI color escape sequences.
+           Using this option requires that Term::ANSIColor be
+           installed on your system.
+
+       --ii indent, ----iinnddeenntt==indent
+           Set the number of spaces to indent regular text, and
+           the default indentation for "=over" blocks.  Defaults
+           to 4 spaces if this option isn't given.
+
+       --hh, ----hheellpp
+           Print out usage information and exit.
+
+       --ll, ----lloooossee
+           Print a blank line after a "=head1" heading.  Nor­
+           mally, no blank line is printed after "=head1",
+           although one is still printed after "=head2", because
+           this is the expected formatting for manual pages; if
+           you're formatting arbitrary text documents, using this
+           option is recommended.
+
+       --oo, ----oovveerrssttrriikkee
+           Format the output with overstruck printing.  Bold text
+           is rendered as character, backspace, character.  Ital­
+           ics and file names are rendered as underscore,
+           backspace, character.  Many pagers, such as lleessss, know
+           how to convert this to bold or underlined text.
+
+       --qq quotes, ----qquuootteess=quotes
+           Sets the quote marks used to surround C<> text to
+           quotes.  If quotes is a single character, it is used
+           as both the left and right quote; if quotes is two
+           characters, the first character is used as the left
+           quote and the second as the right quoted; and if
+           quotes is four characters, the first two are used as
+           the left quote and the second two as the right quote.
+
+           quotes may also be set to the special value "none", in
+           which case no quote marks are added around C<> text.
+
+       --ss, ----sseenntteennccee
+           Assume each sentence ends with two spaces and try to
+           preserve that spacing.  Without this option, all con­
+           secutive whitespace in non-verbatim paragraphs is com­
+           pressed into a single space.
+
+       --tt, ----tteerrmmccaapp
+           Try to determine the width of the screen and the bold
+           and underline sequences for the terminal from termcap,
+           and use that information in formatting the output.
+           Output will be wrapped at two columns less than the
+           width of your terminal device.  Using this option
+           requires that your system have a termcap file some­
+           where where Term::Cap can find it and requires that
+           your system support termios.  With this option, the
+           output of ppoodd22tteexxtt will contain terminal control
+           sequences for your current terminal type.
+
+       --ww, ----wwiiddtthh==width, --width
+           The column at which to wrap text on the right-hand
+           side.  Defaults to 76, unless --tt is given, in which
+           case it's two columns less than the width of your ter­
+           minal device.
+
+DDIIAAGGNNOOSSTTIICCSS
+       If ppoodd22tteexxtt fails with errors, see the Pod::Text manpage
+       and the Pod::Parser manpage for information about what
+       those errors might mean.  Internally, it can also produce
+       the following diagnostics:
+
+       -c (--color) requires Term::ANSIColor be installed
+           (F) --cc or ----ccoolloorr were given, but Term::ANSIColor
+           could not be loaded.
+
+       Unknown option: %s
+           (F) An unknown command line option was given.
+
+       In addition, other Getopt::Long error messages may result
+       from invalid command-line options.
+
+EENNVVIIRROONNMMEENNTT
+       COLUMNS
+           If --tt is given, ppoodd22tteexxtt will take the current width
+           of your screen from this environment variable, if
+           available.  It overrides terminal width information in
+           TERMCAP.
+
+       TERMCAP
+           If --tt is given, ppoodd22tteexxtt will use the contents of this
+           environment variable if available to determine the
+           correct formatting sequences for your current terminal
+           device.
+
+SSEEEE AALLSSOO
+       Pod::Text, Pod::Text::Color, Pod::Text::Termcap,
+       Pod::Parser
+
+AAUUTTHHOORR
+       Russ Allbery <rra@stanford.edu>.
+
+
+
+2002-02-21                 perl v5.6.1                POD2TEXT(1)

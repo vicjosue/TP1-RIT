@@ -1,0 +1,261 @@
+PNPDUMP(8)                                             PNPDUMP(8)
+
+
+
+NAME
+       pnpdump - Dump ISA Plug-And-Play devices resource informa­
+       tion
+
+SYNOPSIS
+       pnpdump [ --help ] [ --config ] [ --script[=outputfile]  ]
+       [  --reset ] [ --ignorecsum ] [ --masks ] [ --dumpregs ] [
+       --max-realtime=t ] [ --version ]  [  --debug-isolate  ]  [
+       --outputfile=outputfile] [ [ devs ] readport ]
+
+DESCRIPTION
+       pnpdump  will  scan  all  the ISA PnP cards, dumping their
+       resource data to stdout. The resource data is supposed  to
+       be  a  description of the resources (IO ports, interrupts,
+       DMA channels) that the card would like, or needs,  to  use
+       to  work.  It  is stored in a small ROM on the card, which
+       can be read as part of the  Plug  and  Play  configuration
+       process.
+
+       Note that some manufacturers are rather lax about the con­
+       tents of  this  ROM,  particularly  if  the  card  is  not
+       required  for  booting,  so  the  resource data may not be
+       accurate. As they also  typically  provide  a  DOS/Windows
+       driver  for  the card, they really only need to be able to
+       recognise it, as the driver can then complete the configu­
+       ration.
+
+       The  output  of  pnpdump  is in a form that can be used by
+       isapnp, except that the  actual  configuration  statements
+       are  commented  out. See isapnp.conf(5) for details of the
+       format.
+
+       By default, pnpdump will reset all the  Card  Serial  Num­
+       bers, then ISOLATE each one and allocate it a handle (Card
+       Select Number). This process will include trying different
+       readport  addresses until a suitable one is found avoiding
+       conflicts with other hardware.  For a description of  what
+       the readport is, see the relevant entry in isapnp.conf(5).
+       As of the isapnptools 1.12 release, any existing  configu­
+       ration settings will be unaffected.
+
+       If  a  single  parameter is provided, this will be used as
+       the minimum readport address to start scanning.  This  may
+       be chosen to avoid an unfortunate conflict.
+
+       To  skip the Isolation process, both additional parameters
+       may be supplied:
+
+   Parameters
+       devs is the number of PnP cards that the BIOS has found,
+              ISOLATEd and allocated CSNs to in the system.  Note
+              that  if  this is greater than the actual number of
+              cards in the system,  pnpdump  will  stop  scanning
+              when  it receives a first serial identifier byte of
+              0xff (this is what happens when there isn't a  card
+              with that CSN).
+
+              If  this  parameter  is provided, then pnpdump will
+              not ISOLATE each card and assign CSNs, however, the
+              readport  provided  must be the same as the one the
+              BIOS used. This could be difficult to determine  if
+              it is not assigned via a BIOS setup screen.
+
+       readport is the address of the readport to use for the
+              Plug-And-Play access. The number base is determined
+              by the format: a leading 0x implies hex, a  leading
+              0 implies octal, otherwise decimal is assumed.
+
+              The address of the readport must be chosen to avoid
+              any conflicts with existing  (non  Plug  and  Play)
+              hardware, and must be in the range 0x203..0x3ff.
+
+              If  the  readport  is  specified without devs, then
+              this is the minimum readport to use  when  scanning
+              for a suitable one.
+
+       Note  that  for the two parameter option to work, you must
+       have a PnP BIOS which has already carried out  the  ISOLA­
+       TION  process  correctly,  and you must know what readport
+       address the BIOS used.
+
+       pnpdump will run with real-time scheduling if possible  to
+       achieve  the  required  IO timings. This will lock out all
+       normal programs while it executes.  In  version  1.19  and
+       later  of  isapnptools, pnpdump will only run in this mode
+       for 5 seconds (or as set on the  command  line),  it  then
+       reverts  to  standard  scheduling  like any other program.
+       Previous versions should only be run from a standard  con­
+       sole as ^C will kill it from there. If you run the command
+       remotely (and X counts as remote), you will not be able to
+       kill it as no other programs can run.
+
+
+   Options
+       -h, --help
+              Show a help summary.
+
+       -c, --config
+              attempt  to  determine  safe  settings to which the
+              devices can be set, and uncomment those settings in
+              the  output.   pnpdump  will use information in the
+              /proc  filesystem   and   the   contents   of   the
+              /etc/isapnp.gone  file to discover system resources
+              that have already been allocated, if these  facili­
+              ties are available on the system.
+
+              Note that if the resource allocation is impossible,
+              pnpdump is not intelligent enough to  realise  this
+              and may hang trying to find a solution.
+
+       -d, --dumpregs
+              this  will cause pnpdump will dump all the standard
+              configuration registers for each board.
+
+              Note that this dump is dumping the physical  regis­
+              ters,  and  will  thus  show the settings that have
+              been put in there by the BIOS, or some  cards  will
+              put  a  default  setting  in. Unused registers read
+              back as 0.
+
+       -D, --debug-isolate
+              this will cause pnpdump to output  loads  of  extra
+              information,  showing the actual data received dur­
+              ing the isolation process. You'll probably need the
+              ISAPnP spec to work out what it means.
+
+       -i, --ignorecsum
+              this will cause pnpdump will ignore checksum errors
+              when deciding if the readport address is good. Sec­
+              tion 3.3.2 of the spec suggests that a bad checksum
+              should cause the readport to be rejected. In  real­
+              ity, it seems to be possible for the checksum to be
+              bad for reasons other than a readport address  con­
+              flict, and in this situation all readport addresses
+              will be rejected resulting in no boards found.
+
+              Using this flag  allows  the  boards  to  still  be
+              found.  Boards  with a bad identifier checksum will
+              have the identifier corrected by the resource  data
+              if  the  resource data identifier has a good check­
+              sum.
+
+       -r, --reset
+              Carry out a full configuration reset,  rather  than
+              just  resetting  the  CSNs. DANGEROUS as this could
+              reset PnP boards  in  active  use  by  the  kernel,
+              resulting in a lockup or worse.
+
+       -m, --masks
+              Print the lists of acceptable interrupts and direct
+              memory access (DMA) channels  as  binary  bitmasks.
+              For  example, print "IRQ mask 0x03" instead of "IRQ
+              1, 2, or 3".
+
+       -o, --outputfile=filename
+              write all output to the file specified, rather than
+              stdout.  This  option  is  not available in the DOS
+              version.
+
+       -t t, --max-realtime=t
+              Set the maximum time the process can run  at  real-
+              time  priority  to t seconds. If t is set to 0, the
+              timeout is disabled; in this case you must run  the
+              program  from  a normal text console to allow it to
+              be aborted via control-C if it hangs.  The  default
+              timeout   is  5  seconds.  After  the  timeout  has
+              expired, the process runs with  normal  scheduling,
+              which  means  it may go a lot slower, but will pre­
+              vent locking up the comupter  (if  it  hangs  while
+              running  under  X windows for example). This option
+              is only available  when  compiled  with  real  time
+              scheduling support.
+
+       -s, --script[=outputscript]
+              write a shell script to the specified file that can
+              be used to configure the system based on  what  ISA
+              PnP boards were found and how they were configured.
+              Note that the script  generated  uses  array  vari­
+              ables,  so you need bash version 2 and later to run
+              them. This option is not available in the DOS  ver­
+              sion.
+
+              If  --script is specified without an argument, then
+              the script is piped (using popen) directly  into  a
+              shell  (sh)  process.   This  is really useful only
+              with --config.
+
+              For each card, the  script  tries  to  execute  the
+              shell script /etc/pnp/config-scripts/isa/PRODUCT_ID
+              or,    failing     that,     /usr/share/pnp/config-
+              scripts/isa/PRODUCT_ID.  The generated shell script
+              will try the compatible device ID's if any can  any
+              are  in  the  ISA PnP information and no script for
+              the device itself can be found.
+
+              The /usr/share directory contents are the  standard
+              location,  while  the  /etc directory is for you to
+              put your customized versions of these scripts.  You
+              should  write  these  shell scripts to generate the
+              file /etc/conf.modules.isapnp  at  boot  time,  and
+              then   do   something   like   "cat  /etc/conf.mod­
+              ules.isapnp /etc/conf.modules.base > /etc/conf.mod­
+              ules",  so that you can automatically configure the
+              modules for the devices that you have.
+
+       -v, --version
+              Print the isapnptools version number on stderr.
+
+FILES
+       /sbin/pnpdump
+              The executable.
+
+       /etc/isapnp.conf
+              The  resting   place   of   the   editted   output.
+              /etc/isapnp.gone  The standard place for describing
+              resources that are unavailable, but not flagged  as
+              such  in  /proc/*  etc.  The format of this file is
+              explained in the example provided with isapnptools.
+
+BUGS
+       If  the  resource  allocation is impossible, pnpdump -c is
+       not intelligent enough to realise this and may hang trying
+       to find a solution.
+
+       Check   http://www.roestock.demon.co.uk/isapnptools/   for
+       latest information and FAQ.
+
+       If you think you have found one not mentioned in the  lat­
+       est   version,   please   send  a  report  to  isapnp@roe­
+       stock.demon.co.uk.
+
+WARNING
+       This program can reset all your Plug-and-Play devices.  It
+       can also lock up your machine.  Use at your own risk.
+
+AUTHOR
+       pnpdump   has   been   written   by  Peter  Fox  <fox@roe­
+       stock.demon.co.uk>, the creator and  maintainer  of  isap­
+       nptools.
+
+AVAILABILITY
+       The  latest  version of the sources may be obtained by ftp
+       from ftp://ftp.demon.co.uk/pub/unix/linux/utils
+       Or follow the pointer from my web page at  http://www.roe­
+       stock.demon.co.uk/isapnptools/
+
+REFERENCES
+       Plug  and  Play  ISA  Specification,  Version 1.0a, May 5,
+       1994.    Available   from   ftp://ftp.microsoft.com/devel­
+       opr/drg/Plug-and-Play/Pnpspecs
+
+SEE ALSO
+       isapnp(8), isapnp.conf(5)
+
+
+
+isapnptools                05 Jan 2001                 PNPDUMP(8)

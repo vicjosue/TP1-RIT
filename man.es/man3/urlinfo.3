@@ -1,0 +1,167 @@
+urlinfo(3)                                             urlinfo(3)
+
+
+
+NAME
+       urlinfo - URL control structure.
+
+SYNOPSIS
+       #include <rpmurl.h>
+
+
+   Data Fields
+       int nrefs
+       const char * url
+       const char * service
+       const char * user
+       const char * password
+       const char * host
+       const char * portstr
+       const char * proxyu
+       const char * proxyh
+       int proxyp
+       int port
+       int urltype
+       FD_t ctrl
+       FD_t data
+       int bufAlloced
+       char * buf
+       int openError
+       int httpVersion
+       int httpHasRange
+       int magic
+
+DETAILED DESCRIPTION
+       URL control structure.
+
+       Definition at line 27 of file rpmurl.h.
+
+FIELD DOCUMENTATION
+   char* urlinfo::buf
+       I/O buffer
+
+       Definition at line 43 of file rpmurl.h.
+
+       Referenced by XurlFree, and XurlNew.
+
+   int urlinfo::bufAlloced
+       sizeof I/O buffer
+
+       Definition at line 42 of file rpmurl.h.
+
+       Referenced by XurlNew.
+
+   FD_t urlinfo::ctrl
+       control channel
+
+       Definition at line 40 of file rpmurl.h.
+
+       Referenced by XurlFree, and XurlNew.
+
+   FD_t urlinfo::data
+       per-xfer data channel
+
+       Definition at line 41 of file rpmurl.h.
+
+       Referenced by XurlFree, and XurlNew.
+
+   const char* urlinfo::host
+       Definition at line 33 of file rpmurl.h.
+
+       Referenced by doScript, urlFind, urlSplit, and XurlFree.
+
+   int urlinfo::httpHasRange
+       Definition at line 46 of file rpmurl.h.
+
+       Referenced by XurlNew.
+
+   int urlinfo::httpVersion
+       Definition at line 45 of file rpmurl.h.
+
+       Referenced by XurlNew.
+
+   int urlinfo::magic
+       Definition at line 47 of file rpmurl.h.
+
+       Referenced by XurlNew.
+
+   int urlinfo::nrefs
+       no. of references
+
+       Definition at line 28 of file rpmurl.h.
+
+       Referenced by XurlFree, XurlLink, and XurlNew.
+
+   int urlinfo::openError
+       Type of open failure
+
+       Definition at line 44 of file rpmurl.h.
+
+       Referenced by ftpNLST.
+
+   const char* urlinfo::password
+       Definition at line 32 of file rpmurl.h.
+
+       Referenced by urlFind, urlSplit, and XurlFree.
+
+   int urlinfo::port
+       Definition at line 38 of file rpmurl.h.
+
+       Referenced by urlSplit, and XurlNew.
+
+   const char* urlinfo::portstr
+       Definition at line 34 of file rpmurl.h.
+
+       Referenced by urlFind, urlSplit, and XurlFree.
+
+   const char* urlinfo::proxyh
+       FTP/HTTP: proxy host
+
+       Definition at line 36 of file rpmurl.h.
+
+       Referenced by urlFind, and XurlFree.
+
+   int urlinfo::proxyp
+       FTP/HTTP: proxy port
+
+       Definition at line 37 of file rpmurl.h.
+
+       Referenced by urlFind, and XurlNew.
+
+   const char* urlinfo::proxyu
+       FTP: proxy user
+
+       Definition at line 35 of file rpmurl.h.
+
+       Referenced by urlFind, and XurlFree.
+
+   const char* urlinfo::service
+       Definition at line 30 of file rpmurl.h.
+
+       Referenced by urlFind, urlSplit, and XurlFree.
+
+   const char* urlinfo::url
+       copy of original url
+
+       Definition at line 29 of file rpmurl.h.
+
+       Referenced by urlSplit, and XurlFree.
+
+   int urlinfo::urltype
+       Definition at line 39 of file rpmurl.h.
+
+       Referenced by doScript, urlFind, urlSplit, and XurlNew.
+
+   const char* urlinfo::user
+       Definition at line 31 of file rpmurl.h.
+
+       Referenced by urlFind, urlSplit, and XurlFree.
+
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002                 urlinfo(3)

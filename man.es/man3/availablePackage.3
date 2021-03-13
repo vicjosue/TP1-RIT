@@ -1,0 +1,203 @@
+availablePackage(3)                           availablePackage(3)
+
+
+
+NAME
+       availablePackage -
+
+SYNOPSIS
+       #include <depends.h>
+
+
+   Data Fields
+       Header h
+       const char * name
+       const char * version
+       const char * release
+       const char ** provides
+       const char ** providesEVR
+       int * provideFlags
+       const char ** requires
+       const char ** requiresEVR
+       int * requireFlags
+       const char ** baseNames
+       int_32 * epoch
+       int providesCount
+       int requiresCount
+       int filesCount
+       int npreds
+       int depth
+       tsortInfo tsi
+       uint_32 multiLib
+       const void * key
+       rpmRelocation * relocs
+       FD_t fd
+
+DETAILED DESCRIPTION
+       Info about a single package to be installed.
+
+       Definition at line 30 of file depends.h.
+
+FIELD DOCUMENTATION
+   const char** availablePackage::baseNames
+       Header file basenames.
+
+       Definition at line 41 of file depends.h.
+
+       Referenced by alAddPackage, and alFree.
+
+   int availablePackage::depth
+       Max. depth in dependency tree.
+
+       Definition at line 47 of file depends.h.
+
+       Referenced by addRelation, alAddPackage, and rpmdepOrder.
+
+   int_32* availablePackage::epoch
+       Header epoch (if any).
+
+       Definition at line 42 of file depends.h.
+
+       Referenced by alAddPackage.
+
+   FD_t availablePackage::fd
+       Definition at line 52 of file depends.h.
+
+       Referenced by alAddPackage, and alFree.
+
+   int availablePackage::filesCount
+       No. of files in header.
+
+       Definition at line 45 of file depends.h.
+
+       Referenced by alAddPackage.
+
+   Header availablePackage::h
+       Package header.
+
+       Definition at line 31 of file depends.h.
+
+       Referenced by alAddPackage, alFree, and rpmdepCheck.
+
+   const void* availablePackage::key
+       Private data associated with a package (e.g. file name of
+       package).
+
+       Definition at line 50 of file depends.h.
+
+       Referenced by alAddPackage, and checkPackageDeps.
+
+   uint_32 availablePackage::multiLib
+       Definition at line 49 of file depends.h.
+
+       Referenced by alAddPackage, alAllFileSatisfiesDepend,
+       alMakeIndex, rpmdepCheck, and rpmtransAddPackage.
+
+   const char* availablePackage::name
+       Header name.
+
+       Definition at line 32 of file depends.h.
+
+       Referenced by alAddPackage, rpmdepCheck, and rpmdepOrder.
+
+   int availablePackage::npreds
+       No. of predecessors.
+
+       Definition at line 46 of file depends.h.
+
+       Referenced by alAddPackage, and rpmdepOrder.
+
+   int* availablePackage::provideFlags
+       Provides: logical range qualifiers.
+
+       Definition at line 37 of file depends.h.
+
+       Referenced by alAddPackage, alAllSatisfiesDepend, and
+       alMakeIndex.
+
+   const char** availablePackage::provides
+       Provides: name strings.
+
+       Definition at line 35 of file depends.h.
+
+       Referenced by alAddPackage, alAllSatisfiesDepend, alFree,
+       alMakeIndex, and rpmdepCheck.
+
+   int availablePackage::providesCount
+       No. of Provide:'s in header.
+
+       Definition at line 43 of file depends.h.
+
+       Referenced by alAddPackage, alMakeIndex, and rpmdepCheck.
+
+   const char** availablePackage::providesEVR
+       Provides: [epoch:]version[-release] strings.
+
+       Definition at line 36 of file depends.h.
+
+       Referenced by alAddPackage, alAllSatisfiesDepend, and
+       alFree.
+
+   const char* availablePackage::release
+       Header release.
+
+       Definition at line 34 of file depends.h.
+
+       Referenced by alAddPackage, rpmdepCheck, and rpmdepOrder.
+
+   rpmRelocation* availablePackage::relocs
+       Definition at line 51 of file depends.h.
+
+       Referenced by alAddPackage, and alFree.
+
+   int* availablePackage::requireFlags
+       Requires: logical range qualifiers.
+
+       Definition at line 40 of file depends.h.
+
+       Referenced by alAddPackage, and rpmdepOrder.
+
+   const char** availablePackage::requires
+       Requires: name strings.
+
+       Definition at line 38 of file depends.h.
+
+       Referenced by alAddPackage, and alFree.
+
+   int availablePackage::requiresCount
+       No. of Require:'s in header.
+
+       Definition at line 44 of file depends.h.
+
+       Referenced by alAddPackage, and rpmdepOrder.
+
+   const char** availablePackage::requiresEVR
+       Requires: [epoch:]version[-release] strings.
+
+       Definition at line 39 of file depends.h.
+
+       Referenced by alAddPackage, and alFree.
+
+   struct tsortInfo availablePackage::tsi
+       Dependency tsort data.
+
+       Definition at line 48 of file depends.h.
+
+       Referenced by addQ, addRelation, alAddPackage, alFree,
+       markLoop, and rpmdepOrder.
+
+   const char* availablePackage::version
+       Header version.
+
+       Definition at line 33 of file depends.h.
+
+       Referenced by alAddPackage, rpmdepCheck, and rpmdepOrder.
+
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002        availablePackage(3)

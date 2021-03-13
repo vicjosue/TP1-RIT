@@ -1,0 +1,51 @@
+LDD(1)                                                     LDD(1)
+
+
+
+NAME
+       ldd - print shared library dependencies
+
+SYNOPSIS
+       ldd [OPTION]...  FILE...
+
+DESCRIPTION
+       ldd  prints  the shared libraries required by each program
+       or shared library specified on the command line.
+
+OPTIONS
+       --version
+              Print the version number of ldd.
+
+       -v --verbose
+              Print all information.
+
+       -d --data-relocs
+              Perform relocations and report  any  missing  func­
+              tions (ELF only).
+
+       -r --function-relocs
+              Perform relocations for both data objects and func­
+              tions, and report any missing objects (ELF only).
+
+       --help Usage information.
+
+BUGS
+       ldd does not work very well on libc.so.5 itself.
+
+       ldd does not work on a.out shared libraries.
+
+       ldd does not work with some extremely old  a.out  programs
+       which  were built before ldd support was added to the com­
+       piler releases.  If you use ldd on one of these  programs,
+       the  program  will  attempt  to  run with argc = 0 and the
+       results will be unpredictable.
+
+AUTHOR
+       David Engel.
+
+SEE ALSO
+       ldconfig(8), ld.so(8).
+
+
+
+                        30 September 2000                  LDD(1)

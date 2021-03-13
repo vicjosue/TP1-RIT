@@ -1,0 +1,38 @@
+lprm(1)               Easy Software Products              lprm(1)
+
+
+
+NAME
+       lprm - cancel print jobs
+
+SYNOPSIS
+       lprm [ -E ] [ - ] [ -P destination ] [ job ID(s) ]
+
+DESCRIPTION
+       lprm  cancels  print jobs that have been queued for print­
+       ing. The -P option specifies the  destination  printer  or
+       class.
+
+       If  no  arguments  are  supplied,  the  current job on the
+       default destination is cancelled. You can specify  one  or
+       more  job  ID  numbers  to cancel those jobs, or use the -
+       option to cancel all jobs.
+
+       The -E option forces encryption  when  connecting  to  the
+       server.
+
+COMPATIBILITY
+       The  CUPS  version of lprm is compatible with the standard
+       Berkeley lprm command.
+
+SEE ALSO
+       cancel(1), lp(1), lpstat(1), lpr(1), CUPS  Software  Users
+       Manual, http://localhost:631/documentation.html
+
+COPYRIGHT
+       Copyright  1993-2002 by Easy Software Products, All Rights
+       Reserved.
+
+
+
+23 January 2001    Common UNIX Printing System            lprm(1)

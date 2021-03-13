@@ -1,0 +1,77 @@
+ISAMLOG(1)                                             ISAMLOG(1)
+
+
+
+NAME
+       isamlog - Write info about whats in a nisam log file.
+
+USAGE
+       isamlog [-?iruvIV] [-c #] [-f #] [-F filepath/] [-o #] [-R
+       file recordpos] [-w write_file] [log-filename [table ...]]
+
+SYNOPSIS
+       isamlog  [-?|-I] [-V] [-c] [-f] [-F] [-i] [-o] [-p #] [-r]
+       [-R] [-u] [-v] [-w]
+
+DESCRIPTION
+       isamlog
+
+       -?|-I  info
+
+       -V     version
+
+       -c     do only # commands
+
+       -f     max open files
+
+       -F     file path
+
+       -i     extra info
+
+       -o     offset
+
+       -p #   remove # components from path
+
+       -r     recover
+
+       -R     file recordposition
+
+       -u     update
+
+       -v     verbose
+
+       -w     write file
+
+NOTE
+       If no file name is given isam.log is used One can  give  a
+       second  and  a  third  '-v' for more verbose.  Normaly one
+       does a update (-u).  If a recover is done all  writes  and
+       all  possibly  updates  and deletes is done and errors are
+       only counted.  If one gives table names as arguments  only
+       these tables will be updated
+
+
+
+
+SEE ALSO
+       isamchk (1), isamlog (1), mysqlaccess (1), mysqladmin (1),
+       mysqlbug (1), mysqld (1), mysqldump  (1),  mysqlshow  (1),
+       msql2mysql  (1), perror (1), replace (1), safe_mysqld (1),
+       which1 (1), zap (1),
+
+
+AUTHOR
+       Ver 1.0, distribution 3.23.29a  Michael  (Monty)  Widenius
+       (monty@tcx.se),  TCX  Datakonsult  AB (http://www.tcx.se).
+       This software comes with no warranty.  Manual page  by  L.
+       (Kill-9)  Pedersen  (kill-9@kill-9.dk),  Mercurmedia  Data
+       Model Architect / system  developer  (http://www.mercurme­
+       dia.com)
+
+
+
+
+
+
+
+                         20 December 2000              ISAMLOG(1)

@@ -1,0 +1,41 @@
+CHPASSWD(8)                                           CHPASSWD(8)
+
+
+
+NAME
+       chpasswd - update password file in batch
+
+SYNOPSIS
+       chpasswd [-e]
+
+DESCRIPTION
+       chpasswd reads a file of user name and password pairs from
+       standard input and uses this information to update a group
+       of  existing  users.  Without the -e switch, the passwords
+       are expected to be cleartext.  With  the  -e  switch,  the
+       passwords are expected to be in encrypted form.  Each line
+       is of the format
+
+              user_name:password
+
+       The named user must exist.  The supplied password will  be
+       encrypted  as  necessary, and the password age updated, if
+       present.
+
+       This command is intended to be  used  in  a  large  system
+       environment  where  many  accounts are created at a single
+       time.
+
+CAVEATS
+       The input file must be  protected  if  it  contains  unen­
+       crypted passwords.
+
+SEE ALSO
+       passwd(1), useradd(8), newusers(8)
+
+AUTHOR
+       Julianne Frances Haugh (jfh@austin.ibm.com)
+
+
+
+                                                      CHPASSWD(8)

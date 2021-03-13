@@ -1,0 +1,41 @@
+ASKRUNLEVEL(8)                                     ASKRUNLEVEL(8)
+
+
+
+NAME
+       askrunlevel - Selects operation mode at boot time
+
+SYNOPSIS
+       /sbin/askrunlevel
+
+DESCRIPTION
+       askrunlevel  is generally called at the end of the initial
+       boot script, just before jumping to  the  proper  runlevel
+       (enabling  multi-user).  The command does some cleanup for
+       Linuxconf and prints the following message
+
+       Hit any key to enter Linuxconf configuration mode
+       Hit <Enter> to resume the boot sequence
+       The boot sequence will resume in 20 seconds
+
+       The configuration mode allows you to perform the following
+       task:
+
+       Select the graphical option mode (runlevel 5 generally)
+       Select the text operation mode
+       Configure the workstation (enter linuxconf main menu)
+       Select a system profile
+       Enter maintenance mode (a shell with nothing else running)
+
+       askrunlevel is currently a symbolic  link  to  /bin/linux­
+       conf.
+
+
+SEE ALSO
+       linuxconf(8)
+
+
+
+
+
+                          Boot time menu           ASKRUNLEVEL(8)

@@ -1,0 +1,38 @@
+mime.convs(5)         Easy Software Products        mime.convs(5)
+
+
+
+NAME
+       mime.convs - mime type conversion file for cups
+
+DESCRIPTION
+       The mime.convs file defines the filters that are available
+       for converting files from one format to another. The stan­
+       dard  filters  support text, PDF, PostScript, HP-GL/2, and
+       many types of image files.
+
+       Additional filters can be added to the mime.convs file  or
+       to  other files in the configuration directory (/etc/cups)
+       with the extension ".convs".
+
+       Each line in the mime.types file is a comment,  blank,  or
+       filter  line.  Comment  lines  start with the # character.
+       Filter lines specify the source and destination MIME types
+       along  with a relative cost associated with the filter and
+       the filter to run:
+
+       super/type super/type cost filter
+       application/postscript application/vnd.cups-raster 50 pstoraster
+
+SEE ALSO
+       classes.conf(5), cupsd(8),  cupsd.conf(5),  mime.types(5),
+       printers.conf(5),  CUPS  Software  Administrators  Manual,
+       http://localhost:631/documentation.html
+
+COPYRIGHT
+       Copyright 1993-2002 by Easy Software Products, All  Rights
+       Reserved.
+
+
+
+22 June 2000       Common UNIX Printing System      mime.convs(5)

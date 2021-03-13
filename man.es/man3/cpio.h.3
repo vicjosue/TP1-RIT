@@ -1,0 +1,93 @@
+lib/cpio.h(3)                                       lib/cpio.h(3)
+
+
+
+NAME
+       lib/cpio.h - Structures used to handle cpio payloads
+       within rpm packages.
+
+SYNOPSIS
+       #include <zlib.h>
+       #include <sys/types.h>
+       #include <rpmio_internal.h>
+
+   Data Structures
+       struct cpioCrcPhysicalHeader
+
+   Defines
+       #define CPIOERR_CHECK_ERRNO   0x00008000
+       #define CPIO_NEWC_MAGIC   '070701'
+       #define CPIO_CRC_MAGIC   '070702'
+       #define CPIO_TRAILER   'TRAILER!!!'
+
+   Typedefs
+       typedef enum cpioMapFlags_e cpioMapFlags
+
+   Enumerations
+       enum cpioErrorReturns { CPIOERR_BAD_MAGIC =
+           (2             ), CPIOERR_BAD_HEADER =
+           (3               ), CPIOERR_OPEN_FAILED =  (4    |
+           0x00008000 ), CPIOERR_CHMOD_FAILED =  (5    |
+           0x00008000 ), CPIOERR_CHOWN_FAILED =  (6    |
+           0x00008000 ), CPIOERR_WRITE_FAILED =  (7    |
+           0x00008000 ), CPIOERR_UTIME_FAILED =  (8    |
+           0x00008000 ), CPIOERR_UNLINK_FAILED =  (9    |
+           0x00008000 ), CPIOERR_RENAME_FAILED =  (10   |
+           0x00008000 ), CPIOERR_SYMLINK_FAILED =  (11   |
+           0x00008000 ), CPIOERR_STAT_FAILED =  (12   |
+           0x00008000 ), CPIOERR_LSTAT_FAILED =  (13   |
+           0x00008000 ), CPIOERR_MKDIR_FAILED =  (14   |
+           0x00008000 ), CPIOERR_RMDIR_FAILED =  (15   |
+           0x00008000 ), CPIOERR_MKNOD_FAILED =  (16   |
+           0x00008000 ), CPIOERR_MKFIFO_FAILED =  (17   |
+           0x00008000 ), CPIOERR_LINK_FAILED =  (18   |
+           0x00008000 ), CPIOERR_READLINK_FAILED =  (19   |
+           0x00008000 ), CPIOERR_READ_FAILED =  (20   |
+           0x00008000 ), CPIOERR_COPY_FAILED =  (21   |
+           0x00008000 ), CPIOERR_HDR_SIZE =  (22             ),
+           CPIOERR_HDR_TRAILER =  (23            ),
+           CPIOERR_UNKNOWN_FILETYPE =  (24            ),
+           CPIOERR_MISSING_HARDLINK =  (25            ),
+           CPIOERR_MD5SUM_MISMATCH =  (26             ),
+           CPIOERR_INTERNAL =  (27               ),
+           CPIOERR_UNMAPPED_FILE =  (28               ) }
+       enum cpioMapFlags_e { CPIO_MAP_PATH =  (1 << 0),
+           CPIO_MAP_MODE =  (1 << 1), CPIO_MAP_UID =  (1 << 2),
+           CPIO_MAP_GID =  (1 << 3), CPIO_FOLLOW_SYMLINKS =  (1
+           << 4), CPIO_MAP_ABSOLUTE =  (1 << 5), CPIO_MAP_ADDDOT
+           =  (1 << 6), CPIO_ALL_HARDLINKS =  (1 << 7),
+           CPIO_MAP_TYPE =  (1 << 8), CPIO_MULTILIB =  (1 << 31)
+           }
+
+DETAILED DESCRIPTION
+       Structures used to handle cpio payloads within rpm
+       packages.
+
+
+
+       Warning:
+           Rpm's cpio implementation may be different than
+           standard cpio. The implementation is pretty close, but
+           it has some behaviors which are more to RPM's liking.
+           I tried to document the differing behavior in cpio.c,
+           but I may have missed some (ewt).
+
+       Definition in file cpio.h.
+
+DEFINE DOCUMENTATION
+   #define CPIO_CRC_MAGIC   '070702'
+       Definition at line 74 of file cpio.h.
+
+   #define CPIO_NEWC_MAGIC   '070701'
+       Definition at line 73 of file cpio.h.
+
+   #define CPIO_TRAILER   'TRAILER!!!'
+       Definition at line 75 of file cpio.h.
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002              lib/cpio.h(3)

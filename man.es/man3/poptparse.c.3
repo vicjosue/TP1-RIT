@@ -1,0 +1,54 @@
+popt/poptparse.c(3)                           popt/poptparse.c(3)
+
+
+
+NAME
+       popt/poptparse.c -
+
+SYNOPSIS
+       #include 'system.h'
+
+   Defines
+       #define POPT_ARGV_ARRAY_GROW_DELTA   5
+
+   Functions
+       int poptDupArgv (int argc, const char **argv, int
+           *argcPtr, const char ***argvPtr)
+       int poptParseArgvString (const char *s, int *argcPtr,
+           const char ***argvPtr)
+
+DETAILED DESCRIPTION
+       Definition in file poptparse.c.
+
+DEFINE DOCUMENTATION
+   #define POPT_ARGV_ARRAY_GROW_DELTA   5
+       Definition at line 11 of file poptparse.c.
+
+       Referenced by poptParseArgvString.
+
+FUNCTION DOCUMENTATION
+   int poptDupArgv (int argc, const char ** argv, int * argcPtr,
+       const char *** argvPtr)
+       Definition at line 13 of file poptparse.c.
+
+       Referenced by handleAlias, poptParseArgvString, and
+       poptStuffArgs.
+
+   int poptParseArgvString (const char * s, int * argcPtr, const
+       char *** argvPtr)
+       Definition at line 52 of file poptparse.c.
+
+       References alloca, POPT_ARGV_ARRAY_GROW_DELTA, and
+       poptDupArgv.
+
+       Referenced by addOrAppendListEntry, configLine, doScript,
+       doSetupMacro, ftpGlob, generateDepends, handlePreambleTag,
+       parseDescription, parseFiles, parseScript, and rpmGlob.
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002        popt/poptparse.c(3)

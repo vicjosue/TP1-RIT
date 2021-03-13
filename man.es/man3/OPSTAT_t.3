@@ -1,0 +1,51 @@
+OPSTAT_t(3)                                           OPSTAT_t(3)
+
+
+
+NAME
+       OPSTAT_t -
+
+SYNOPSIS
+       #include <rpmio_internal.h>
+
+
+   Data Fields
+       int count
+       off_t bytes
+       time_t msecs
+
+DETAILED DESCRIPTION
+       Cumulative statistics for an I/O operation.
+
+       Definition at line 25 of file rpmio_internal.h.
+
+FIELD DOCUMENTATION
+   off_t OPSTAT_t::bytes
+       Number of bytes transferred.
+
+       Definition at line 27 of file rpmio_internal.h.
+
+       Referenced by fdstat_print.
+
+   int OPSTAT_t::count
+       Number of operations.
+
+       Definition at line 26 of file rpmio_internal.h.
+
+       Referenced by fdstat_print.
+
+   time_t OPSTAT_t::msecs
+       Number of milli-seconds.
+
+       Definition at line 28 of file rpmio_internal.h.
+
+       Referenced by fdstat_print.
+
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002                OPSTAT_t(3)

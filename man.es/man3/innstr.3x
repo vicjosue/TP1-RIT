@@ -1,0 +1,55 @@
+curs_instr(3X)                                     curs_instr(3X)
+
+
+
+NAME
+       instr,  innstr, winstr, winnstr, mvinstr, mvinnstr, mvwin­
+       str, mvwinnstr - get a string of characters from a  curses
+       window
+
+SYNOPSIS
+       #include <curses.h>
+
+       int instr(char *str);
+       int innstr(char *str, int n);
+       int winstr(WINDOW *win, char *str);
+       int winnstr(WINDOW *win, char *str, int n);
+       int mvinstr(int y, int x, char *str);
+       int mvinnstr(int y, int x, char *str, int n);
+       int mvwinstr(WINDOW *win, int y, int x, char *str);
+       int  mvwinnstr(WINDOW  *win,  int y, int x, char *str, int
+       n);
+
+DESCRIPTION
+       These routines return  a  string  of  characters  in  str,
+       extracted  starting  at the current cursor position in the
+       named window.  Attributes are stripped  from  the  charac­
+       ters.   The  four  functions  with  n as the last argument
+       return a leading  substring  at  most  n  characters  long
+       (exclusive of the trailing NUL).
+
+RETURN VALUE
+       All  of the functions return ERR upon failure, or the num­
+       ber of characters actually read into the string.
+
+NOTES
+       Note that all routines except winnstr may be macros.
+
+PORTABILITY
+       The XSI Curses error  conditions  EILSEQ  and  EILOVERFLOW
+       associated  with  extended-level  conformance  are not yet
+       detected (this implementation does not  yet  support  XPG4
+       multibyte  characters).   SVr4 does not document whether a
+       length limit includes or excludes the trailing NUL.
+
+       The ncurses library extends the XSI description by  allow­
+       ing  a  negative value for n.  In this case, the functions
+       return the string ending at the right margin.
+
+SEE ALSO
+       curses(3X).
+
+
+
+
+                                                   curs_instr(3X)

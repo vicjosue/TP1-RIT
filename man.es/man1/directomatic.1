@@ -1,0 +1,70 @@
+DIRECTOMATIC(1)                                   DIRECTOMATIC(1)
+
+
+
+NAME
+       directomatic - Print without spooler
+
+SYNOPSIS
+       directomatic -P <printdef> [-J jobtitle]  [-o option=value
+       [...]] [file]
+
+
+DESCRIPTION
+       Directomatic is a filter script to print with  free  soft­
+       ware  printer drivers without the need of a print spooler.
+       It is designed to be used together with a Foomatic printer
+       definition file.
+
+
+   Options
+       -P <printdef>
+                 where printdef is the printer definition file to
+                 use.
+
+       -J <jobtitle>
+                 where job title will be printed in the head line
+                 of every page of a plain text job.
+
+       -o option=value
+                 Set an arbitrary option.
+
+       file      The file to print.
+
+
+
+   Commands
+       Directomatic  will print from standard input unless a file
+       to print is  specified  on  the  command  line.   If  your
+       printer  definition  file  is  in  /etc/foomatic/direct or
+       ~/.foomatic/direct you do not need to  specify  its  path.
+       Put a (instructions in the file) to redirect the output of
+       directomatic to your printer instead of  standard  output.
+       To  make  normal  users able to print this way add them to
+       group lp and make sure the appropriate printer device file
+       /dev/lpX is group-writable.
+
+       See http://www.linuxprinting.org/direct-doc.html
+
+
+FILES
+       /etc/foomatic/direct/<queue>
+                                The  foomatic  printer definition
+                                file.
+
+
+EXIT STATUS
+       directomatic returns 0 unless  something  unexpected  hap­
+       pens.
+
+AUTHOR
+       Manfred  Wassmann  <manolo@NCC-1701.B.Shuttle.de>  for the
+       foomatic project using output from the associated  binary.
+
+BUGS
+       None so far.
+
+
+
+
+Foomatic Project            2001-05-07            DIRECTOMATIC(1)

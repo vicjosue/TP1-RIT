@@ -1,0 +1,49 @@
+DSA_new(3)                   OpenSSL                   DSA_new(3)
+
+
+
+NNAAMMEE
+       DSA_new, DSA_free - allocate and free DSA objects
+
+SSYYNNOOPPSSIISS
+        #include <openssl/dsa.h>
+
+        DSA* DSA_new(void);
+
+        void DSA_free(DSA *dsa);
+
+
+DDEESSCCRRIIPPTTIIOONN
+       DSA_new() allocates and initializes a DDSSAA structure.
+
+       DSA_free() frees the DDSSAA structure and its components. The
+       values are erased before the memory is returned to the
+       system.
+
+RREETTUURRNN VVAALLUUEESS
+       If the allocation fails, DSA_new() returns NNUULLLL and sets
+       an error code that can be obtained by ERR_get_error(3).
+       Otherwise it returns a pointer to the newly allocated
+       structure.
+
+       DSA_free() returns no value.
+
+SSEEEE AALLSSOO
+       dsa(3), err(3), DSA_generate_parameters(3),
+       DSA_generate_key(3)
+
+HHIISSTTOORRYY
+       DSA_new() and DSA_free() are available in all versions of
+       SSLeay and OpenSSL.
+
+
+
+
+
+
+
+
+
+
+
+27/Jan/2000                   0.9.6c                   DSA_new(3)

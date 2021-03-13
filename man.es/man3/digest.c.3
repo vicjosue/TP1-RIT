@@ -1,0 +1,282 @@
+rpmio/digest.c(3)                               rpmio/digest.c(3)
+
+
+
+NAME
+       rpmio/digest.c -
+
+SYNOPSIS
+       #include 'system.h'
+       #include 'rpmio_internal.h'
+       #include 'debug.h'
+
+   Data Structures
+       union _mendian
+       struct DIGEST_CTX_s
+           MD5/SHA1 digest private data.
+
+   Defines
+       #define f1(x, y, z)   ( z ^ ( x & ( y ^ z ) ) )
+           The SHA f()-functions.
+       #define f2(x, y, z)   ( x ^ y ^ z )
+       #define f3(x, y, z)   ( ( x & y ) | ( z & ( x | y ) ) )
+       #define f4(x, y, z)   ( x ^ y ^ z )
+       #define K1   0x5A827999L
+           The SHA Mysterious Constants.
+       #define K2   0x6ED9EBA1L
+       #define K3   0x8F1BBCDCL
+       #define K4   0xCA62C1D6L
+       #define ROTL(n, X)   ( ( (X) << (n) ) | ( (X) >> ( 32 -
+           (n) ) ) )
+           32-bit rotate left - kludged with shifts.
+       #define expand(W, i)
+           The initial expanding function.
+       #define subRound(a, b, c, d, e, f, k, data)   ( e += ROTL(
+           5, a ) + f( b, c, d ) + k + data, b = ROTL( 30, b ) )
+           The prototype SHA sub-round.
+       #define DPRINTF(_a)
+       #define F1(x, y, z)   (z ^ (x & (y ^ z)))
+           The four core functions used in MD5 - F1 is optimized
+           somewhat.
+       #define F2(x, y, z)   F1(z, x, y)
+       #define F3(x, y, z)   (x ^ y ^ z)
+       #define F4(x, y, z)   (y ^ (x | ~z))
+       #define MD5STEP(f, w, x, y, z, data, s)   ( w += f(x, y,
+           z) + data,  w = w<<s | w>>(32-s),  w += x )
+           The central step in the MD5 algorithm.
+       #define IS_BIG_ENDIAN()   (_endian->b[0] == '4')
+       #define IS_LITTLE_ENDIAN()   (_endian->b[0] == '1')
+
+   Typedefs
+       typedef unsigned int uint32
+       typedef unsigned char byte
+
+   Functions
+       void SHA1Transform (DIGEST_CTX ctx)
+           The core of the SHA algorithm.
+       void MD5Transform (DIGEST_CTX ctx)
+           The core of the MD5 algorithm.
+       void byteReverse (byte *buf, unsigned nbytes)
+       DIGEST_CTX rpmDigestInit (rpmDigestFlags flags)
+       void rpmDigestUpdate (DIGEST_CTX ctx, const void *data,
+           size_t len)
+       void rpmDigestFinal (DIGEST_CTX ctx, void **datap, size_t
+           *lenp, int asAscii)
+
+   Variables
+       int _ie = 0x44332211
+       _mendian * _endian
+
+DETAILED DESCRIPTION
+       Definition in file digest.c.
+
+DEFINE DOCUMENTATION
+   #define DPRINTF(_a)
+   #define expand(W, i)
+       Value:
+
+       ( W[ i & 15 ] =                       ROTL( 1, ( W[ i & 15 ] ^ W[ (i - 14) & 15 ] ^                                  W[ (i - 8) & 15 ] ^ W[ (i - 3) & 15 ] ) ) )
+       The initial expanding function.
+
+       The hash function is defined over an 80-word expanded
+       input array W, where the first 16 are copies of the input
+       data, and the remaining 64 are defined by
+
+
+        *      W[ i ] = W[ i - 16 ] ^ W[ i - 14 ] ^ W[ i - 8 ] ^ W[ i - 3 ]
+        *
+
+       This implementation generates these values on the fly in a
+       circular buffer - thanks to Colin Plumb,
+       colin@nyx10.cs.du.edu for this optimization.
+
+       The updated SHA changes the expanding function by adding a
+       rotate of 1 bit. Thanks to Jim Gillogly, jim@rand.org, and
+       an anonymous contributor for this information
+
+       Definition at line 100 of file digest.c.
+
+       Referenced by SHA1Transform.
+
+   #define F1(x, y, z)   (z ^ (x & (y ^ z)))
+       The four core functions used in MD5 - F1 is optimized
+       somewhat.
+
+       Definition at line 357 of file digest.c.
+
+       Referenced by MD5Transform.
+
+   #define f1(x, y, z)   ( z ^ ( x & ( y ^ z ) ) )
+       The SHA f()-functions.
+
+       The f1 and f3 functions can be optimized to save one
+       boolean operation each - thanks to Rich Schroeppel,
+       rcs@cs.arizona.edu for discovering this.
+
+       Definition at line 64 of file digest.c.
+
+       Referenced by SHA1Transform.
+
+   #define F2(x, y, z)   F1(z, x, y)
+       Definition at line 358 of file digest.c.
+
+       Referenced by MD5Transform.
+
+   #define f2(x, y, z)   ( x ^ y ^ z )
+       Definition at line 65 of file digest.c.
+
+       Referenced by SHA1Transform.
+
+   #define F3(x, y, z)   (x ^ y ^ z)
+       Definition at line 359 of file digest.c.
+
+       Referenced by MD5Transform.
+
+   #define f3(x, y, z)   ( ( x & y ) | ( z & ( x | y ) ) )
+       Definition at line 67 of file digest.c.
+
+       Referenced by SHA1Transform.
+
+   #define F4(x, y, z)   (y ^ (x | ~z))
+       Definition at line 360 of file digest.c.
+
+       Referenced by MD5Transform.
+
+   #define f4(x, y, z)   ( x ^ y ^ z )
+       Definition at line 68 of file digest.c.
+
+       Referenced by SHA1Transform.
+
+   #define IS_BIG_ENDIAN()   (_endian->b[0] == '4')
+       Definition at line 461 of file digest.c.
+
+   #define IS_LITTLE_ENDIAN()   (_endian->b[0] == '1')
+       Definition at line 462 of file digest.c.
+
+   #define K1   0x5A827999L
+       The SHA Mysterious Constants.
+
+       Definition at line 73 of file digest.c.
+
+       Referenced by SHA1Transform.
+
+   #define K2   0x6ED9EBA1L
+       Definition at line 74 of file digest.c.
+
+       Referenced by SHA1Transform.
+
+   #define K3   0x8F1BBCDCL
+       Definition at line 75 of file digest.c.
+
+       Referenced by SHA1Transform.
+
+   #define K4   0xCA62C1D6L
+       Definition at line 76 of file digest.c.
+
+       Referenced by SHA1Transform.
+
+   #define MD5STEP(f, w, x, y, z, data, s)   ( w += f(x, y, z) +
+       data,  w = w<<s | w>>(32-s),  w += x )
+       The central step in the MD5 algorithm.
+
+       Definition at line 363 of file digest.c.
+
+   #define ROTL(n, X)   ( ( (X) << (n) ) | ( (X) >> ( 32 - (n) )
+       ) )
+       32-bit rotate left - kludged with shifts.
+
+       Definition at line 81 of file digest.c.
+
+   #define subRound(a, b, c, d, e, f, k, data)   ( e += ROTL( 5,
+       a ) + f( b, c, d ) + k + data, b = ROTL( 30, b ) )
+       The prototype SHA sub-round.
+
+       The fundamental sub-round is:
+
+
+        *      a' = e + ROTL( 5, a ) + f( b, c, d ) + k + data;
+        *      b' = a;
+        *      c' = ROTL( 30, b );
+        *      d' = c;
+        *      e' = d;
+        *
+
+       but this is implemented by unrolling the loop 5 times and
+       renaming the variables ( e, a, b, c, d ) = ( a', b', c',
+       d', e' ) each iteration. This code is then replicated 20
+       times for each of the 4 functions, using the next 20
+       values from the W[] array each time.
+
+       Definition at line 122 of file digest.c.
+
+       Referenced by SHA1Transform.
+
+TYPEDEF DOCUMENTATION
+   typedef unsigned char byte
+       Definition at line 11 of file digest.c.
+
+       Referenced by byteReverse, rpmDigestFinal, and
+       rpmDigestUpdate.
+
+   typedef unsigned int uint32
+       Definition at line 10 of file digest.c.
+
+       Referenced by byteReverse, MD5Transform, rpmDigestFinal,
+       rpmDigestUpdate, and SHA1Transform.
+
+FUNCTION DOCUMENTATION
+   void byteReverse (byte * buf, unsigned nbytes) [static]
+       Definition at line 471 of file digest.c.
+
+       References byte, IS_BIG_ENDIAN, and uint32.
+
+       Referenced by rpmDigestFinal, rpmDigestUpdate,
+       rpmMD5Final, and rpmMD5Update.
+
+   void MD5Transform (DIGEST_CTX ctx) [static]
+       The core of the MD5 algorithm.
+
+       Update MD5 context with next 64 bytes of plain text.
+
+       Parameters:
+
+       private
+              MD5 private data
+
+       Definition at line 372 of file digest.c.
+
+       References DIGEST_CTX_s::digest, F1, F2, F3, F4,
+       DIGEST_CTX_s::in, MD5STEP, and uint32.
+
+       Referenced by rpmDigestInit.
+
+   void SHA1Transform (DIGEST_CTX ctx) [static]
+       The core of the SHA algorithm.
+
+       This alters an existing SHA hash to reflect the addition
+       of 16 longwords of new data.
+
+       Parameters:
+
+       private
+              SHA private data
+
+       Definition at line 141 of file digest.c.
+
+       References DIGEST_CTX_s::digest, expand, f1, f2, f3, f4,
+       DIGEST_CTX_s::in, K1, K2, K3, K4, subRound, and uint32.
+
+       Referenced by rpmDigestInit.
+
+VARIABLE DOCUMENTATION
+   union _mendian * _endian [static]
+   int _ie = 0x44332211 [static]
+       Definition at line 454 of file digest.c.
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002          rpmio/digest.c(3)

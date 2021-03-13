@@ -1,0 +1,109 @@
+rpmDependencyConflict_s(3)             rpmDependencyConflict_s(3)
+
+
+
+NAME
+       rpmDependencyConflict_s - Dependency problems found by
+       rpmdepCheck().
+
+SYNOPSIS
+       #include <rpmlib.h>
+
+
+   Public Types
+       enum { RPMDEP_SENSE_REQUIRES, RPMDEP_SENSE_CONFLICTS }
+
+   Data Fields
+       const char * byName
+       const char * byVersion
+       const char * byRelease
+       Header byHeader
+       const char * needsName
+       const char * needsVersion
+       int needsFlags
+       const void ** suggestedPackages
+       enum rpmDependencyConflict_s:: { ... }  sense
+
+DETAILED DESCRIPTION
+       Dependency problems found by rpmdepCheck().
+
+       Definition at line 954 of file rpmlib.h.
+
+MEMBER ENUMERATION DOCUMENTATION
+   anonymous enum
+       Enumeration values:
+
+       RPMDEP_SENSE_REQUIRES
+              requirement not satisfied.
+
+       RPMDEP_SENSE_CONFLICTS
+              conflict was found.
+
+       Definition at line 967 of file rpmlib.h.
+
+FIELD DOCUMENTATION
+   Header rpmDependencyConflict_s::byHeader
+       header with dependency problems
+
+       Definition at line 958 of file rpmlib.h.
+
+       Referenced by checkPackageDeps, and rpmdepFreeConflicts.
+
+   const char* rpmDependencyConflict_s::byName
+       package name
+
+       Definition at line 955 of file rpmlib.h.
+
+       Referenced by checkPackageDeps, and rpmdepFreeConflicts.
+
+   const char* rpmDependencyConflict_s::byRelease
+       package release
+
+       Definition at line 957 of file rpmlib.h.
+
+       Referenced by checkPackageDeps, and rpmdepFreeConflicts.
+
+   const char* rpmDependencyConflict_s::byVersion
+       package version
+
+       Definition at line 956 of file rpmlib.h.
+
+       Referenced by checkPackageDeps, and rpmdepFreeConflicts.
+
+   int rpmDependencyConflict_s::needsFlags
+       dependency flags
+
+       Definition at line 965 of file rpmlib.h.
+
+       Referenced by checkPackageDeps, and printDepProblems.
+
+   const char* rpmDependencyConflict_s::needsName
+       dependency name
+
+       Definition at line 963 of file rpmlib.h.
+
+       Referenced by checkPackageDeps, and rpmdepFreeConflicts.
+
+   const char* rpmDependencyConflict_s::needsVersion
+       dependency epoch:version-release
+
+       Definition at line 964 of file rpmlib.h.
+
+       Referenced by checkPackageDeps, and rpmdepFreeConflicts.
+
+   enum { ... }   rpmDependencyConflict_s::sense
+       Referenced by checkPackageDeps, and printDepProblems.
+
+   const void** rpmDependencyConflict_s::suggestedPackages
+       Definition at line 966 of file rpmlib.h.
+
+       Referenced by checkPackageDeps, and rpmdepFreeConflicts.
+
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002 rpmDependencyConflict_s(3)

@@ -1,0 +1,30 @@
+cups-polld(8)         Easy Software Products        cups-polld(8)
+
+
+
+NAME
+       cups-polld - cups printer polling daemon
+
+SYNOPSIS
+       cups-polld address ipp-port interval browse-port
+
+DESCRIPTION
+       cups-polld  polls  remote  servers for a list of available
+       printers  and  printer  classes  every  interval  seconds.
+       Printer  and  class  information  is then broadcast to the
+       localhost interface (127.0.0.1) for reception by cupsd(8).
+
+       This  program  is  started automatically by cupsd for each
+       BrowsePoll directive found in the cupsd.conf file.
+
+SEE ALSO
+       cupsd.conf(5),  CUPS   Software   Administrators   Manual,
+       http://localhost:631/documentation.html
+
+COPYRIGHT
+       Copyright  1993-2002 by Easy Software Products, All Rights
+       Reserved.
+
+
+
+10 May 2000        Common UNIX Printing System      cups-polld(8)

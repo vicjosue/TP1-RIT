@@ -1,0 +1,86 @@
+ogginfo(1)                 Vorbis Tools                ogginfo(1)
+
+
+
+NAME
+       ogginfo - gives information about Ogg files.
+
+
+SYNOPSIS
+       ogginfo file1.ogg ...  fileN.ogg
+
+
+DESCRIPTION
+       ogginfo  reads  one or more Ogg files and decodes the com­
+       ments contained within, writing them to  standard  output,
+       in  a  "attribute=value"  format, one per line.  The first
+       attribute printed will  always  be  the  filename  of  the
+       stream.  ogginfo cannot accept URLs.
+
+       In  addition  to the comments, ogginfo will also print the
+       following attributes for each logical bitstream within the
+       file:
+
+              serial The  serial number of the logical bitstream.
+
+              header_integrity
+                     "pass" if the header is intact,  and  "fail"
+                     if it is corrupted.
+
+              stream_integrity
+                     "pass" if the stream contains no bad packets
+                     or holes (not counting the last packet), and
+                     "fail" otherwise.
+
+              stream_truncated
+                     "true" if the last good packet in the stream
+                     is not marked as the last packet and "false"
+                     if the stream is complete.
+
+              vendor The  vendor  string  of  the encoder used to
+                     make this stream.
+
+              bitrate_upper
+                     The upper bitrate limit of  the  stream,  or
+                     "none" if not set.
+
+              bitrate_nominal
+                     The  "target"  bitrate  of  the  stream,  or
+                     "none" if not set.
+
+              bitrate_lower
+                     The lower bitrate limit of  the  stream,  or
+                     "none" if not set.
+
+              bitrate_average
+                     The average bitrate of the stream.
+
+              length Length of of the file in seconds.
+
+              playtime
+                     Playing  time  in  a  humanly-readable MM:SS
+                     format.
+
+       At the end of each file, ogginfo will also print:
+
+              total_playtime
+                     The total playing time for the  entire  file
+                     in seconds.
+
+
+OPTIONS
+       None.
+
+
+BUGS
+       Although  ogginfo  properly handles chained bitstreams, it
+       cannot handle multiplexed logical bitstreams
+
+
+AUTHORS
+       JAmes Atwill <ogg@linuxstuff.org>
+       Stan Seibert <indigo@aztec.asu.edu>
+
+
+
+                           July 8, 2001                ogginfo(1)

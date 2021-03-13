@@ -1,0 +1,36 @@
+rpmdbMIObject_s(3)                             rpmdbMIObject_s(3)
+
+
+
+NAME
+       rpmdbMIObject_s -
+
+SYNOPSIS
+   Data Fields
+       PyObject_HEAD
+       rpmdbObject * db
+       rpmdbMatchIterator mi
+
+FIELD DOCUMENTATION
+   rpmdbObject* rpmdbMIObject_s::db
+       Definition at line 778 of file rpmmodule.c.
+
+       Referenced by py_rpmdbInitIterator, and rpmdbMIDealloc.
+
+   rpmdbMatchIterator rpmdbMIObject_s::mi
+       Definition at line 779 of file rpmmodule.c.
+
+       Referenced by py_rpmdbInitIterator, rpmdbMIDealloc, and
+       rpmdbMINext.
+
+   rpmdbMIObject_s::PyObject_HEAD
+       Definition at line 777 of file rpmmodule.c.
+
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002         rpmdbMIObject_s(3)

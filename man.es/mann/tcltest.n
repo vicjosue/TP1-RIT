@@ -1,0 +1,841 @@
+Tcltest(n)            Tcl Built-In Commands            Tcltest(n)
+
+
+
+_________________________________________________________________
+
+NAME
+       Tcltest - Test harness support code and utilities
+
+SYNOPSIS
+       package require tcltest ?1.0?
+
+       ::tcltest::test  name desc ?constraint? script expectedAn­
+       swer
+
+       ::tcltest::cleanupTests ?runningMultipleTests?
+
+       ::tcltest::getMatchingTestFiles
+
+       ::tcltest::loadTestedCommands
+
+       ::tcltest::makeFile contents name
+
+       ::tcltest::removeFile name
+
+       ::tcltest::makeDirectory name
+
+       ::tcltest::removeDirectory name
+
+       ::tcltest::viewFile name
+
+       ::tcltest::normalizeMsg msg
+
+       ::tcltest::bytestring string
+
+       ::tcltest::saveState
+
+       ::tcltest::restoreState
+
+       ::tcltest::threadReap
+_________________________________________________________________
+
+DESCRIPTION
+       The tcltest package provides the user with  utility  tools
+       for  writing  and running tests in the Tcl test suite.  It
+       can also be used to create a customized test  harness  for
+       an extension.
+
+       The  Tcl test suite consists of multiple .test files, each
+       of which contains multiple test  cases.   Each  test  case
+       consists  of  a  call to the test command, which specifies
+       the name of  test, a short  description,  any  constraints
+       that  apply  to  the  test case, the script to be run, and
+       expected results.  See the sections  "Tests,"  "Test  Con­
+       straints,"  and  "Test Files and How to Run Them" for more
+       details.
+
+       It is also possible to add to this test harness to  create
+       your own customized test harness implementation.  For more
+       defails, see the section "How to Customize the  Test  Har­
+       ness".
+
+       This approach to testing was designed and initially imple­
+       mented by Mary Ann May-Pumphrey of Sun Microsystems in the
+       early  1990's.   Many  thanks to her for donating her work
+       back to the public Tcl release.
+
+COMMANDS
+       ::tcltest::test name desc ?constraints? script expectedAn­
+       swer
+              The ::tcltest::test command runsscript and compares
+              its  result  to  expectedAnswer. It prints an error
+              message   if   the   two   do   not   match.     If
+              ::tcltest::verbose  contains  "p"  or  "s", it also
+              prints out a message if  the  test  passed  or  was
+              skipped.   The  test  will be skipped if it doesn't
+              match the ::tcltest::match variable, if it  matches
+              an  element  in  ::tcltest::skip,  or if one of the
+              elements of constraint turns out not  to  be  true.
+              The  ::tcltest::test  command has no defined return
+              values.  See the "Writing a new test"  section  for
+              more details on this command.
+
+       ::tcltest::cleanupTests ?runningMultipleTests?
+              This  command should be called at the end of a test
+              file.  It prints statistics about the tests run and
+              removes     files     that    were    created    by
+              ::tcltest::makeDirectory  and  ::tcltest::makeFile.
+              Names  of  files and directories created outside of
+              ::tcltest::makeFile  and   ::tcltest::makeDirectory
+              and  never  deleted  are printed to ::tcltest::out­
+              putChannel.  This command also restores the  origi­
+              nal  shell  environment,  as described by the ::env
+              array.  calledFromAll  should  be  specified   when
+              ::tcltest::cleanupTests is called from an "all.tcl"
+              file.  Tcl files files are generally  used  to  run
+              multiple  tests.   For  more  details on how to run
+              multiple tests, please  see  the  section  "Running
+              test  files".   This  proc  has  no  defined return
+              value.
+
+       ::tcltest::getMatchingTestFiles
+              This command is used when you want to run  multiple
+              test  files.   It  returns  the  list of tests that
+              should be sourced in an 'all.tcl'  file.   See  the
+              section  "Running test files" for more information.
+
+       ::tcltest::loadTestedCommands
+              This command uses  the  script  specified  via  the
+              -load  or -loadfile to load the commands checked by
+              the test suite.  Allowed to be empty, as the tested
+              commands  could  have been compiled into the inter­
+              preter running the test suite.
+
+       ::tcltest::makeFile contents name
+              Create a file that will be automatically be removed
+              by  ::tcltest::cleanupTests  at  the  end of a test
+              file.  This proc has no defined return value.
+
+       ::tcltest::removeFile name
+              Force the file referenced by name  to  be  removed.
+              This    file    name    should   be   relative   to
+              ::tcltest::temporaryDirectory.  This  proc  has  no
+              defined return values.
+
+       ::tcltest::makeDirectory name
+              Create  a  directory named name that will automati­
+              cally be removed by ::tcltest::cleanupTests at  the
+              end  of  a  test  file.   This  proc has no defined
+              return value.
+
+       ::tcltest::removeDirectory name
+              Force  the  directory  referenced  by  name  to  be
+              removed. This proc has no defined return value.
+
+       ::tcltest::viewFile file
+              Returns the contents of file.
+
+       ::tcltest::normalizeMsg msg
+              Remove extra newlines from msg.
+
+       ::tcltest::bytestring string
+              Construct  a  string that consists of the requested
+              sequence of bytes, as opposed to a string of  prop­
+              erly  formed  UTF-8 characters using the value sup­
+              plied in string.  This allows the tester to  create
+              denormalized  or  improperly formed strings to pass
+              to C procedures that are supposed to accept strings
+              with  embedded NULL types and confirm that a string
+              result has a certain pattern of bytes.
+
+       ::tcltest::saveState
+              ::tcltest::restoreState Save and restore the proce­
+              dure  and global variable names.  A test file might
+              contain   calls   to    ::tcltest::saveState    and
+              ::tcltest:restoreState  if  it  creates  or deletes
+              global variables or procs.
+
+       ::tcltest::threadReap
+              ::tcltest::threadReap only works if  testthread  is
+              defined,  generally by compiling tcltest.  If test­
+              thread is defined, ::tcltest::threadReap kills  all
+              threads except for the main thread.  It gets the ID
+              of the main thread by calling testthread names dur­
+              ing   initialization.   This  value  is  stored  in
+              ::tcltest::mainThread.        ::tcltest::threadReap
+              returns  the  number of existing threads at comple­
+              tion.
+
+TESTS
+       The test procedure runs a test script and prints an  error
+       message if the script's result does not match the expected
+       result.  The following is the spec for the test command:
+
+              test <name> <description> ?<constraint>? <script> <expectedAnswer>
+
+       The <name> argument should follow the pattern:
+
+              <target>-<majorNum>.<minorNum>
+
+       For white-box (regression) tests, the target should be the
+       name of the C function or Tcl procedure being tested.  For
+       black-box tests, the target should be the name of the fea­
+       ture  being  tested.   Related  tests should share a major
+       number.
+
+       The <description> argument is a short textual  description
+       of the test, to help humans understand what it tests.  The
+       name of a  Tcl  or  C  function  being  tested  should  be
+       included for regression tests.  If the test case exists to
+       reproduce a bug, include the bug ID in the description.
+
+       The optional <constraints> argument can be list of one  or
+       more  keywords  or  an  expression.   If the <constraints>
+       argument consists of keywords, each of these keywords must
+       be the name of an element in the array ::tcltest::testCon­
+       straints.  If any of these elements is false or  does  not
+       exist, the test is skipped.  If the <constraints> argument
+       consists of an expression, that expression  is  evaluated.
+       If the expression evaluates to true, then the test is run.
+
+       Add appropriate constraints (e.g., unixOnly) to any  tests
+       that  should  not always be run.  For example, a test that
+       should only be run on Unix should look like the following:
+
+
+              test getAttribute-1.1 {testing file permissions} {unixOnly} {
+                  lindex [file attributes foo.tcl] 5
+              } {00644}
+
+
+       An example of a test that contains an expression:
+
+
+              test unixNotfy-1.1 {Tcl_DeleteFileHandler} {unixOnly && !testthread} {
+                  catch {vwait x}
+                  set f [open foo w]
+                  fileevent $f writable {set x 1}
+                  vwait x
+                  close $f
+                  list [catch {vwait x} msg] $msg
+              } {1 {can't wait for variable "x":  would wait forever}}
+
+
+       See  the "Test Constraints" section for a list of built-in
+       constraints and information on how to add  your  own  con­
+       straints.
+
+       The  <script> argument contains the script to run to carry
+       out the test.  It must return a result that can be checked
+       for  correctness.   If your script requires that a file be
+       created on the fly,  please  use  the  ::tcltest::makeFile
+       procedure.   If  your test requires that a small file (<50
+       lines) be checked in, please consider creating the file on
+       the  fly  using  the ::tcltest::makeFile procedure.  Files
+       created by the ::tcltest::makeFile procedure will automat­
+       ically  be  removed by the ::tcltest::cleanupTests call at
+       the end of each test file.
+
+       The <expectedAnswer> argument will be compared against the
+       result  of  evaluating  the  <script>  argument.   If they
+       match, the test passes, otherwise the test fails.
+
+TCLTEST NAMEPSACE VARIABLES
+       The following variables are also defined  in  the  tcltest
+       namespace and can be used by tests:
+
+       ::tcltest::outputChannel
+              output  file  ID  -  defaults  to stdout and can be
+              specified using -outfile on the command line.   Any
+              test  that  prints  test related output should send
+              that output to ::tcltest::outputChannel rather than
+              letting that output default to stdout.
+
+       ::tcltest::errorChannel
+              error file ID - defaults to stderr and can be spec­
+              ified using -errfile on the command line.  Any test
+              that  prints error messages should send that output
+              to  ::tcltest::errorChannel  rather  than  printing
+              directly to stderr.
+
+       ::tcltest::mainThread
+              main  thread  ID - defaults to 1.  This is the only
+              thread that is not killed by  ::tcltest::threadReap
+              and  is  set according to the return value of test­
+              thread names at initialization.
+
+       ::tcltest::originalEnv
+              copy of the global "env" array at the beginning  of
+              the  test  run.   This array is used to restore the
+              "env"   array   to   its   original   state    when
+              ::tcltest::cleanupTests is called.
+
+       ::tcltest::workingDirectory
+              the directory in which the test suite was launched.
+
+       ::tcltest::temporaryDirectory
+              the output directory - defaults to ::tcltest::work­
+              ingDirectory  and can be specified using -tmpdir on
+              the command line.
+
+       ::tcltest::testsDirectory
+              where   the   tests   reside    -    defaults    to
+              ::tcltest::workingDirectory  if  the  script cannot
+              determine where the tests directory is located.  It
+              is  possible  to  change  the default by specifying
+              -testdir on the commandline. This  variable  should
+              be  explicitly  set  if tests are being run from an
+              all.tcl file.
+
+       ::tcltest::tcltest
+              the name of the executable used to invoke the  test
+              suite.
+
+       ::tcltest::loadScript
+              The  script  executed loadTestedCommands. Specified
+              either by -load or -loadfile.
+
+TEST CONSTRAINTS
+       Constraints are used to determine whether a test should be
+       skipped.   Each  constraint  is  stored as an index in the
+       array  ::tcltest::testConstraints.    For   example,   the
+       unixOnly constraint is defined as the following:
+
+              set ::tcltest::testConstraints(unixOnly) \
+                  [string equal $tcl_platform(platform) "unix"]
+
+       If  a test is constrained by "unixOnly", then it will only
+       be   run   if    the    value    of    ::tcltest::testCon­
+       straints(unixOnly)   is  true.   Several  constraints  are
+       defined in the tcltest package.  To add file- or test-spe­
+       cific  constraints,  you  can set the desired index of the
+       ::tcltest::testsConstraints array in your own test file.
+
+       The following is a list  of  constraints  defined  in  the
+       tcltest package:
+
+       unix   test can only be run on any UNIX platform
+
+       pc     test can only be run on any Windows platform
+
+       nt     test can only be run on any Windows NT platform
+
+       95     test can only be run on any Windows 95 platform
+
+       98     test can only be run on any Windows 98 platform
+
+       mac    test can only be run on any Mac platform
+
+       unixOrPc
+              test can only be run on a UNIX or PC platform
+
+       macOrPc
+              test can only be run on a Mac or PC platform
+
+       macOrUnix
+              test can only be run on a Mac or UNIX platform
+
+       tempNotPc
+              test  can not be run on Windows.  This flag is used
+              to temporarily disable a test.
+
+       tempNotMac
+              test can not be run on a Mac.  This flag is used to
+              temporarily disable a test.
+
+       unixCrash
+              test  crashes  if  it's  run on UNIX.  This flag is
+              used to temporarily disable a test.
+
+       pcCrash
+              test crashes if it's run on Windows.  This flag  is
+              used to temporarily disable a test.
+
+       macCrash
+              test  crashes  if  it's run on a Mac.  This flag is
+              used to temporarily disable a test.
+
+       emptyTest
+              test is empty, and so not  worth  running,  but  it
+              remains  as a place-holder for a test to be written
+              in the future.  This constraint always causes tests
+              to be skipped.
+
+       knownBug
+              test is known to fail and the bug is not yet fixed.
+              This constraint always causes tests to  be  skipped
+              unless  the  user  specifies  otherwise.   See  the
+              "Introduction" section for more details.
+
+       nonPortable
+              test can only be run in the master Tcl/Tk  develop­
+              ment  environment.   Some tests are inherently non-
+              portable because they depend on  things  like  word
+              length,  file system configuration, window manager,
+              etc.  These tests are only  run  in  the  main  Tcl
+              development  directory  where  the configuration is
+              well known.  This constraint always causes tests to
+              be skipped unless the user specifies otherwise.
+
+       userInteraction
+              test requires interaction from the user.  This con­
+              straint always causes tests to  be  skipped  unless
+              the user specifies otherwise.
+
+       interactive
+              test  can  only  be run in if the interpreter is in
+              interactive mode, that is the  global  tcl_interac­
+              tive variable is set to 1.
+
+       nonBlockFiles
+              test  can  only be run if platform supports setting
+              files into nonblocking mode
+
+       asyncPipeClose
+              test can only be run  if  platform  supports  async
+              flush and async close on a pipe
+
+       unixExecs
+              test  can  only be run if this machine has commands
+              such as 'cat', 'echo', etc. available.
+
+       hasIsoLocale
+              test can only be run if can switch to an ISO locale
+
+       root   test can only run if Unix user is root
+
+       notRoot
+              test can only run if Unix user is not root
+
+       eformat
+              test  can  only run if app has a working version of
+              sprintf with respect to the "e" format of floating-
+              point numbers.
+
+       stdio  test  can  only  be  run  if the current app can be
+              spawned via a pipe
+
+RUNNING TEST FILES
+       Use the following command to run a  test  file  that  uses
+       package tcltest:
+
+              <shell> <testFile> ?<option> ?<value>?? ...
+
+       Command  line options include (tcltest namespace variables
+       that correspond to each flag are listed at the end of each
+       flag description in parenthesis):
+
+              -help  display usage information.
+
+              -verbose <level>
+                     set the level of verbosity to a substring of
+                     "bps".  See the "Test output" section for an
+                     explanation       of       this      option.
+                     (::tcltest::verbose)
+
+              -match <matchList>
+                     only run tests that match one or more of the
+                     glob      patterns      in      <matchList>.
+                     (::tcltest::match)
+
+              -skip <skipList>
+                     do not run tests that match one or  more  of
+                     the    glob    patterns    in    <skipList>.
+                     (::tcltest::skip)
+
+              -file <globPatternList>
+                     only source test files that match any of the
+                     items   in   <globPatternList>  relative  to
+                     ::tcltest::testsDirectory.  This option only
+                     makes  sense  if you are running tests using
+                     "all.tcl" as the <testFile> instead of  run­
+                     ning    single    test    files    directly.
+                     (::tcltest::matchFiles)
+
+              -notfile <globPatternList>
+                     source files except for those that match any
+                     of  the  items in <globPatternList> relative
+                     to ::tcltest::testsDirectory.   This  option
+                     only  makes  sense  if you are running tests
+                     using "all.tcl" as the <testFile> instead of
+                     running    single   test   files   directly.
+                     (::tcltest::skipFiles)
+
+              -constraints <list>
+                     tests with any constraints  in  <list>  will
+                     not  be  skipped.   Note  that  elements  of
+                     <list> must exactly match the existing  con­
+                     straints.   This  is  useful  if you want to
+                     make sure that tests with a particular  con­
+                     straint  are run (for example, if the tester
+                     wants to run all  tests  with  the  knownBug
+                     constraint).            (::tcltest::testCon­
+                     straints(constraintName))
+
+              -limitconstraints <bool>
+                     If the argument to this flag is 1, the  test
+                     harness limits test runs to those tests that
+                     match the constraints listed  by  the  -con­
+                     straints flag. Use of this flag requires use
+                     of the -constraints flag.  The default value
+                     for  this flag is 0 (false).  This is useful
+                     if you want to run  only  those  tests  that
+                     match the constraints listed using the -con­
+                     straints option.  A tester might want to  do
+                     this  if  he were interested in running only
+                     those  tests  that  are  constrained  to  be
+                     unixOnly     and     no     other     tests.
+                     (::tcltest::limitConstraints)
+
+              -load <script>
+                     will use the specified script  to  load  the
+                     commands  under test (::tcltest::loadTested­
+                     Commands). The default is the empty  script.
+                     See  -loadfile  below too. (::tcltest::load­
+                     Script)
+
+              -loadfile <scriptfile>
+                     will use the contents of the named  file  to
+                     load     the     commands     under     test
+                     (::tcltest::loadTestedCommands).  See  -load
+                     above  too. The default is the empty script.
+                     (::tcltest::loadScript)
+
+              -tmpdir <directoryName>
+                     put  any  temporary  files   (created   with
+                     ::tcltest::makeFile  and  ::tcltest::makeDi­
+                     rectory)  into  the  named  directory.   The
+                     default location is ::tcltest::workingDirec­
+                     tory.  (::tcltest::temporaryDirectory)
+
+              -testdir <directoryName>
+                     search the test  suite  to  execute  in  the
+                     named  directory.   The  default location is
+                     ::tcltest::workingDirectory.
+                     (::tcltest::testsDirectory)
+
+              -preservecore <level>
+                     check  for core files.  This flag is used to
+                     determine how much checking should  be  done
+                     for core files.  The default value for level
+                     is 0.  Levels are defined as:
+
+                      0      No checking - do not check for  core
+                             files  at  the end of each test com­
+                             mand, but do check for them whenever
+                             ::tcltest::cleanupTests   is  called
+                             from an all.tcl file.
+
+                      1      Check for core files at the  end  of
+                             each   test   command  and  whenever
+                             ::tcltest::cleanupTests  is   called
+                             from all.tcl.
+
+                      2      Check  for  core files at the end of
+                             all  test  commands   and   whenever
+                             ::tcltest::cleanupTests   is  called
+                             from all.tcl.  Save any  core  files
+                             produced  in ::tcltest::temporaryDi­
+                             rectory.
+
+              (::tcltest::preserveCore)
+
+              -debug <debugLevel>
+                     print debug information to stdout.  This  is
+                     used to debug code in the test harness.  The
+                     default  debug  level  is  0.   Levels   are
+                     defined as:
+
+                      0      Do  not  display  any debug informa­
+                             tion.
+
+                      1      Display    information     regarding
+                             whether a test is skipped because it
+                             doesn't match any of the tests  that
+                             were   specified   using  -match  or
+                             ::tcltest::match  (userSpecifiedNon­
+                             Match)  or  matches any of the tests
+                             specified      by      -skip      or
+                             ::tcltest::skip (userSpecifiedSkip).
+
+                      2      Display the flag array parsed by the
+                             command line processor, the contents
+                             of the ::env array,  and  all  user-
+                             defined  variables that exist in the
+                             current namespace as they are  used.
+
+                      3      Display  information  regarding what
+                             individual procs in the test harness
+                             are doing.
+
+              (::tcltest::debug)
+
+              -outfile <filename>
+                     print  output generated by the tcltest pack­
+                     age to the named  file.   This  defaults  to
+                     stdout.   Note that debug output always goes
+                     to stdout, regardless of  this  flag's  set­
+                     ting.  (::tcltest::outputChannel)
+
+              -errfile <filename>
+                     print  errors generated by the tcltest pack­
+                     age to the named  file.   This  defaults  to
+                     stderr.  (::tcltest::errorChannel)
+
+       A  second way to run tets is to start up a shell, load the
+       tcltest package, and then source an appropriate test  file
+       or  use  the test command.  To use the options in interac­
+       tive mode, set their corresponding tcltest namespace vari­
+       ables after loading the package.
+
+       See  "Test  Constraints" for all built-in constraint names
+       that can be used in the ::tcltest::testConstraints  array.
+       See  "Tcltest  namespace  variables"  for details on other
+       variables defined in the tcltest namespace.
+
+       A final way to run tests would be to  specify  which  test
+       files  to run within an all.tcl (or otherwise named) file.
+       This is the approach used by the  Tcl  test  suite.   This
+       file  loads  the tcltest package, sets the location of the
+       test  directory  (::tcltest::testsDirectory),   determines
+       which  test  files  to  run,  sources each of these files,
+       calls ::tcltest::cleanupTests and then exits.
+
+       A more elaborate all.tcl file might do some pre- and post-
+       processing  before  sourcing each .test file, use separate
+       interpreters for each file, or  handle  complex  directory
+       structures.  For an example of an all.tcl file, please see
+       the "Examples" section of this document.
+
+TEST OUTPUT
+       After all specified test files  are  run,  the  number  of
+       tests   passed,   skipped,   and   failed  is  printed  to
+       ::tcltest::outputChannel.   Aside  from  this  statistical
+       information,  output can be controlled on a per-test basis
+       by the ::tcltest::verbose variable.
+
+       ::tcltest::verbose can be set to any substring or permuta­
+       tion  of  "bps". In the string "bps", the 'b' stands for a
+       test's "body", the 'p' stands for "passed" tests, and  the
+       's'  stands  for  "skipped"  tests.  The  default value of
+       ::tcltest::verbose is "b".  If 'b' is  present,  then  the
+       entire  body  of the test is printed for each failed test,
+       otherwise only the test's name, desired output, and actual
+       output,  are printed for each failed test.  If 'p' is pre­
+       sent, then a line is printed for each passed test,  other­
+       wise  no line is printed for passed tests.  If 's' is pre­
+       sent, then a line (containing the  consraints  that  cause
+       the  test to be skipped) is printed for each skipped test,
+       otherwise no line is printed for skipped tests.
+
+       You can set ::tcltest::verbose either interactively (after
+       the  tcltest package has been loaded) or by using the com­
+       mand line argument -verbose, for example:
+
+              tclsh socket.test -verbose bps
+
+
+CONTENTS OF A TEST FILE
+       Test files should begin by loading the tcltest package:
+
+              if {[lsearch [namespace children] ::tcltest] == -1} {
+                  package require tcltest
+                  namespace import ::tcltest::*
+              }
+
+       Test files should end by cleaning up after themselves  and
+       calling            ::tcltest::cleanupTests.            The
+       ::tcltest::cleanupTests procedure prints statistics  about
+       the  number of tests that passed, skipped, and failed, and
+       removes  all   files   that   were   created   using   the
+       ::tcltest::makeFile  and  ::tcltest::makeDirectory  proce­
+       dures.
+
+              # Remove files created by these tests
+              # Change to original working directory
+              # Unset global arrays
+              ::tcltest::cleanupTests
+              return
+
+       When naming test files, file names should end with a .test
+       extension.   The  names of test files that contain regres­
+       sion (or glass-box) tests should correspond to the Tcl  or
+       C  code file that they are testing.  For example, the test
+       file for the C file "tclCmdAH.c"  is  "cmdAH.test".   Test
+       files  that  contain black-box tests should match the pat­
+       tern "*_bb.test".
+
+SELECTING TESTS FOR EXECUTION WITHIN A FILE
+       Normally, all the tests in a file  are  run  whenever  the
+       file  is  sourced.   An individual test will be skipped if
+       one of the following conditions is met:
+
+       [1]    the name of the tests does not  match  (using  glob
+              style   matching)  one  or  more  elements  in  the
+              ::tcltest::match variable
+
+       [2]    the name of the tests  matches  (using  glob  style
+              matching)    one    or   more   elements   in   the
+              ::tcltest::skip variable
+
+       [3]    the constraints  argument  to  the  ::tcltest::test
+              call,  if  given,  contains  one or more false ele­
+              ments.
+
+       You can set ::tcltest::match and/or ::tcltest::skip either
+       interactively   (after   the   tcltest  package  has  been
+       sourced), or by using the command  line  arguments  -match
+       and -skip, for example:
+
+              tclsh info.test -match '*-5.* *-7.*' -skip '*-7.1*'
+
+       Be  sure to use the proper quoting convention so that your
+       shell does not perform the glob substitution on the  match
+       or skip patterns you specify.
+
+       Predefined constraints (e.g. knownBug and nonPortable) can
+       be overridden  either  interactively  (after  the  tcltest
+       package   has   been   sourced)   by  setting  the  proper
+       ::tcltest::testConstraints(constraint)  variable   or   by
+       using  the  -constraints command line option with the name
+       of the constraint in the argument.  The following  example
+       shows  how to run tests that are constrained by the known­
+       Bug and nonPortable restrictions:
+
+              tclsh all.tcl -constraints "knownBug nonPortable"
+
+       See the "Constraints" package for information about  using
+       built-in constraints and adding new ones.
+
+HOW TO CUSTOMIZE THE TEST HARNESS
+       To create your own custom test harness, create a .tcl file
+       that contains your namespace.  Within this  file,  require
+       package  tcltest.   Commands that can be redefined to cus­
+       tomize the test harness include:
+
+       ::tcltest::PrintUsageInfoHook
+              print additional usage information specific to your
+              situation.
+
+       ::tcltest::processCmdLineArgsFlagHook
+              tell  the  test harness about additional flags that
+              you want it to understand.
+
+       ::tcltest::processCmdLineArgsHook flags
+              process the additional  flags  that  you  told  the
+              harness   about  in  ::tcltest::processCmdLineArgs­
+              FlagHook.
+
+       ::tcltest::initConstraintsHook
+              used to  add  additional  built-in  constraints  to
+              those already defined by tcltest.
+
+       ::tcltest::cleanupTestsHook
+              do additional cleanup
+
+
+       To add new flags to your customized test harness, redefine
+       ::tcltest::processCmdLineArgsAddFlagHook to  define  addi­
+       tional  flags  to  be parsed and ::tcltest::processCmdLin­
+       eArgsHook to actually process them.  For example:
+
+              proc ::tcltest::processCmdLineArgsAddFlagHook {} {
+                  return [list -flag1 -flag2]
+              }
+
+              proc ::tcltest::processCmdLineArgsHook {flagArray} {
+                  array set flag $flagArray
+
+                  if {[info exists flag(-flag1)]} {
+                      # Handle flag1
+                  }
+
+                  if {[info exists flag(-flag2)]} {
+                      # Handle flag2
+                  }
+
+                  return
+              }
+
+       You may also want  to  add  usage  information  for  these
+       flags.   This  information would be displayed whenever the
+       user specifies -help.  To define additional usage informa­
+       tion,  define your own ::tcltest::PrintUsageInfoHook proc.
+       Within this proc, you should print  out  additional  usage
+       information for any flags that you've implemented.
+
+       To  add  new  built-in  constraints  to  the test harness,
+       define your own version of ::tcltest::initConstraintsHook.
+       Within  your  proc, you can add to the ::tcltest::testCon­
+       straints array.  For example:
+
+              proc ::tcltest::initConstraintsHook {} {
+                  set ::tcltest::testConstraints(win95Or98) \
+                          [expr {$::tcltest::testConstraints(95) || \
+                          $::tcltest::testConstraints(98)}]
+              }
+
+
+       Finally, if you want to add  additional  cleanup  code  to
+       your     harness     you     can     define    your    own
+       ::tcltest::cleanupTestsHook.  For example:
+
+              proc ::tcltest::cleanupTestsHook {} {
+                  # Add your cleanup code here
+              }
+
+
+EXAMPLES
+       [1]    A simple test file (foo.test)
+
+              if {[lsearch [namespace children] ::tcltest] == -1} {
+                  package require tcltest
+                  namespace import ::tcltest::*
+              }
+
+              test foo-1.1 {save 1 in variable name foo} {} {
+                  set foo 1
+              } {1}
+
+              ::tcltest::cleanupTests
+              return
+
+
+       [2]    A simple all.tcl
+
+              if {[lsearch [namespace children] ::tcltest] == -1} {
+                  package require tcltest
+                  namespace import ::tcltest::*
+              }
+
+              set ::tcltest::testSingleFile false
+              set ::tcltest::testsDirectory [file dir [info script]]
+
+              foreach file [::tcltest::getMatchingTestFiles] {
+                  if {[catch {source $file} msg]} {
+                      puts stdout $msg
+                  }
+              }
+
+              ::tclttest::cleanupTests 1
+              return
+
+
+       [3]    Running a single test
+
+              tclsh foo.test
+
+
+       [4]    Running multiple tests
+
+              tclsh all.tcl -file 'foo*.test' -notfile 'foo2.test'
+
+
+KEYWORDS
+       test, test harness, test suite
+
+
+
+
+Tcl                            8.2                     Tcltest(n)

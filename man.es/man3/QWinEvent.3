@@ -1,0 +1,49 @@
+Tk_QueueWindowEvent(3)Tk Library ProceduresTk_QueueWindowEvent(3)
+
+
+
+_________________________________________________________________
+
+NAME
+       Tk_QueueWindowEvent  - Add a window event to the Tcl event
+       queue
+
+SYNOPSIS
+       #include <tk.h>
+
+       Tk_QueueWindowEvent(eventPtr, position)
+
+ARGUMENTS
+       XEvent              *eventPtr  (in)      An event  to  add
+                                                to    the   event
+                                                queue.
+
+       Tcl_QueuePosition   position   (in)      Where to add  the
+                                                new  event in the
+                                                queue:
+                                                TCL_QUEUE_TAIL,
+                                                TCL_QUEUE_HEAD,
+                                                or
+                                                TCL_QUEUE_MARK.
+_________________________________________________________________
+
+
+DESCRIPTION
+       This procedure places a window  event  on  Tcl's  internal
+       event   queue   for  eventual  servicing.   It  creates  a
+       Tcl_Event structure, copies the event into that structure,
+       and  calls  Tcl_QueueEvent  to add the event to the queue.
+       When the event is eventually removed from the queue it  is
+       processed just like all window events.
+
+       The  position argument to Tk_QueueWindowEvent has the same
+       significance as for Tcl_QueueEvent;  see the documentation
+       for Tcl_QueueEvent for details.
+
+
+KEYWORDS
+       callback, clock, handler, modal timeout
+
+
+
+Tk                             7.5         Tk_QueueWindowEvent(3)

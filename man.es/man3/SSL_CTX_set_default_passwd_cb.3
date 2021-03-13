@@ -1,0 +1,94 @@
+SSL_CTX_set_default_passwd_cb(O3p)enSSL_CTX_set_default_passwd_cb(3)
+
+
+
+NNAAMMEE
+       SSL_CTX_set_default_passwd_cb,
+       SSL_CTX_set_default_passwd_cb_userdata - set passwd
+       callback for encrypted PEM file handling
+
+SSYYNNOOPPSSIISS
+        #include <openssl/ssl.h>
+
+        void SSL_CTX_set_default_passwd_cb(SSL_CTX *ctx, pem_password_cb *cb);
+        void SSL_CTX_set_default_passwd_cb_userdata(SSL_CTX *ctx, void *u);
+
+        int pem_passwd_cb(char *buf, int size, int rwflag, void *userdata);
+
+
+DDEESSCCRRIIPPTTIIOONN
+       SSL_CTX_set_default_passwd_cb() sets the default password
+       callback called when loading/storing a PEM certificate
+       with encryption.
+
+       SSL_CTX_set_default_passwd_cb_userdata() sets a pointer to
+       uusseerrddaattaa which will be provided to the password callback
+       on invocation.
+
+       The pem_passwd_cb(), which must be provided by the
+       application, hands back the password to be used during
+       decryption. On invocation a pointer to uusseerrddaattaa is
+       provided. The pem_passwd_cb must write the password into
+       the provided buffer bbuuff which is of size ssiizzee. The actual
+       length of the password must be returned to the calling
+       function. rrwwffllaagg indicates whether the callback is used
+       for reading/decryption (rwflag=0) or writing/encryption
+       (rwflag=1).
+
+NNOOTTEESS
+       When loading or storing private keys, a password might be
+       supplied to protect the private key. The way this password
+       can be supplied may depend on the application. If only one
+       private key is handled, it can be practical to have
+       pem_passwd_cb() handle the password dialog interactively.
+       If several keys have to be handled, it can be practical to
+       ask for the password once, then keep it in memory and use
+       it several times. In the last case, the password could be
+       stored into the uusseerrddaattaa storage and the pem_passwd_cb()
+       only returns the password already stored.
+
+       When asking for the password interactively,
+       pem_passwd_cb() can use rrwwffllaagg to check, whether an item
+       shall be encrypted (rwflag=1).  In this case the password
+       dialog may ask for the same password twice for comparison
+       in order to catch typos, that would make decryption
+       impossible.
+
+       Other items in PEM formatting (certificates) can also be
+       encrypted, it is however not usual, as certificate
+       information is considered public.
+
+RREETTUURRNN VVAALLUUEESS
+       SSL_CTX_set_default_passwd_cb() and
+       SSL_CTX_set_default_passwd_cb_userdata() do not provide
+       diagnostic information.
+
+EEXXAAMMPPLLEESS
+       The following example returns the password provided as
+       uusseerrddaattaa to the calling function. The password is
+       considered to be a '\0' terminated string. If the password
+       does not fit into the buffer, the password is truncated.
+
+        int pem_passwd_cb(char *buf, int size, int rwflag, void *password)
+        {
+         strncpy(buf, (char *)(password), size);
+         buf[size - 1] = '\0';
+         return(strlen(buf));
+        }
+
+
+SSEEEE AALLSSOO
+       ssl(3), SSL_CTX_use_certificate(3)
+
+
+
+
+
+
+
+
+
+
+
+
+11/Jul/2001                   0.9.S6ScL_CTX_set_default_passwd_cb(3)

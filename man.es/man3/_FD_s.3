@@ -1,0 +1,130 @@
+_FD_s(3)                                                 _FD_s(3)
+
+
+
+NAME
+       _FD_s -
+
+SYNOPSIS
+       #include <rpmio_internal.h>
+
+
+   Data Fields
+       int nrefs
+       int flags
+       int magic
+       int nfps
+       FDSTACK_t fps [8]
+       int urlType
+       void * url
+       int rd_timeoutsecs
+       ssize_t bytesRemain
+       ssize_t contentLength
+       int persist
+       int wr_chunked
+       int syserrno
+       const void * errcookie
+       FDSTAT_t stats
+       DIGEST_CTX digest
+       int ftpFileDoneNeeded
+       unsigned int firstFree
+       long int fileSize
+       long int fd_cpioPos
+
+DETAILED DESCRIPTION
+       The FD_t File Handle data structure.
+
+       Definition at line 98 of file rpmio_internal.h.
+
+FIELD DOCUMENTATION
+   ssize_t _FD_s::bytesRemain
+       Definition at line 111 of file rpmio_internal.h.
+
+       Referenced by fdSetContentLength, and fdstat_exit.
+
+   ssize_t _FD_s::contentLength
+       Definition at line 112 of file rpmio_internal.h.
+
+       Referenced by fdSetContentLength.
+
+   DIGEST_CTX _FD_s::digest
+       Definition at line 120 of file rpmio_internal.h.
+
+       Referenced by fdFiniMD5, fdFiniSHA1, fdInitMD5, and
+       fdInitSHA1.
+
+   const void* _FD_s::errcookie
+       Definition at line 117 of file rpmio_internal.h.
+
+       Referenced by fdSetSyserrno.
+
+   long int _FD_s::fd_cpioPos
+       Definition at line 125 of file rpmio_internal.h.
+
+       Referenced by fdGetCpioPos, and fdSetCpioPos.
+
+   long int _FD_s::fileSize
+       Definition at line 124 of file rpmio_internal.h.
+
+   unsigned int _FD_s::firstFree
+       Definition at line 123 of file rpmio_internal.h.
+
+   int _FD_s::flags
+       Definition at line 100 of file rpmio_internal.h.
+
+   FDSTACK_t _FD_s::fps[8]
+       Definition at line 106 of file rpmio_internal.h.
+
+       Referenced by fdFileno, fdGetFdno, fdGetFILE, fdGetFp,
+       fdGetIo, fdPush, fdSetFdno, fdSetFp, and fdSetIo.
+
+   int _FD_s::ftpFileDoneNeeded
+       Definition at line 122 of file rpmio_internal.h.
+
+   int _FD_s::magic
+       Definition at line 103 of file rpmio_internal.h.
+
+   int _FD_s::nfps
+       Definition at line 105 of file rpmio_internal.h.
+
+       Referenced by fdGetFdno, fdGetFILE, fdGetFp, fdGetIo,
+       fdPop, fdPush, fdSetFdno, fdSetFp, and fdSetIo.
+
+   int _FD_s::nrefs
+       Definition at line 99 of file rpmio_internal.h.
+
+   int _FD_s::persist
+       Definition at line 113 of file rpmio_internal.h.
+
+   int _FD_s::rd_timeoutsecs
+       Definition at line 110 of file rpmio_internal.h.
+
+       Referenced by fdGetRdTimeoutSecs.
+
+   FDSTAT_t _FD_s::stats
+       Definition at line 119 of file rpmio_internal.h.
+
+       Referenced by fdstat_enter, fdstat_exit, and fdstat_print.
+
+   int _FD_s::syserrno
+       Definition at line 116 of file rpmio_internal.h.
+
+       Referenced by fdSetSyserrno, and fdstat_exit.
+
+   void* _FD_s::url
+       Definition at line 109 of file rpmio_internal.h.
+
+   int _FD_s::urlType
+       Definition at line 107 of file rpmio_internal.h.
+
+   int _FD_s::wr_chunked
+       Definition at line 114 of file rpmio_internal.h.
+
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002                   _FD_s(3)

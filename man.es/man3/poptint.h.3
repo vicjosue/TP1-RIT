@@ -1,0 +1,179 @@
+popt/poptint.h(3)                               popt/poptint.h(3)
+
+
+
+NAME
+       popt/poptint.h -
+
+SYNOPSIS
+   Data Structures
+       struct optionStackEntry
+       struct pbm_set
+       struct poptContext_s
+
+   Defines
+       #define __PBM_NBITS   (8 * sizeof (__pbm_bits))
+       #define __PBM_IX(d)   ((d) / __PBM_NBITS)
+       #define __PBM_MASK(d)   ((__pbm_bits) 1 << ((d) %
+           __PBM_NBITS))
+       #define __PBM_BITS(set)   ((set)->bits)
+       #define PBM_ALLOC(d)   calloc(__PBM_IX (d) + 1,
+           sizeof(__pbm_bits))
+       #define PBM_FREE(s)   _free(s);
+       #define PBM_SET(d, s)   (__PBM_BITS (s)[__PBM_IX (d)] |=
+           __PBM_MASK (d))
+       #define PBM_CLR(d, s)   (__PBM_BITS (s)[__PBM_IX (d)] &=
+           ~__PBM_MASK (d))
+       #define PBM_ISSET(d, s)   ((__PBM_BITS (s)[__PBM_IX (d)] &
+           __PBM_MASK (d)) != 0)
+       #define _(foo)   foo
+       #define D_(dom, str)   str
+       #define POPT_(foo)   foo
+       #define N_(foo)   foo
+
+   Typedefs
+       typedef unsigned int __pbm_bits
+
+   Functions
+       void * _free (const void *p)
+           Wrapper to free(3), hides const compilation noise,
+           permit NULL, return NULL.
+
+DETAILED DESCRIPTION
+       Definition in file poptint.h.
+
+DEFINE DOCUMENTATION
+   #define _(foo)   foo
+       Definition at line 83 of file poptint.h.
+
+   #define __PBM_BITS(set)   ((set)->bits)
+       Definition at line 33 of file poptint.h.
+
+   #define __PBM_IX(d)   ((d) / __PBM_NBITS)
+       Definition at line 28 of file poptint.h.
+
+   #define __PBM_MASK(d)   ((__pbm_bits) 1 << ((d) %
+       __PBM_NBITS))
+       Definition at line 29 of file poptint.h.
+
+   #define __PBM_NBITS   (8 * sizeof (__pbm_bits))
+       Definition at line 27 of file poptint.h.
+
+   #define D_(dom, str)   str
+       Definition at line 90 of file poptint.h.
+
+       Referenced by getArgDescrip, singleOptionDefaultValue,
+       singleOptionHelp, and singleTableHelp.
+
+   #define N_(foo)   foo
+       Definition at line 94 of file poptint.h.
+
+   #define PBM_ALLOC(d)   calloc(__PBM_IX (d) + 1,
+       sizeof(__pbm_bits))
+       Definition at line 35 of file poptint.h.
+
+       Referenced by findNextArg, and poptStripArg.
+
+   #define PBM_CLR(d, s)   (__PBM_BITS (s)[__PBM_IX (d)] &=
+       ~__PBM_MASK (d))
+       Definition at line 38 of file poptint.h.
+
+   #define PBM_FREE(s)   _free(s);
+       Definition at line 36 of file poptint.h.
+
+       Referenced by cleanOSE, poptFreeContext, and
+       poptResetContext.
+
+   #define PBM_ISSET(d, s)   ((__PBM_BITS (s)[__PBM_IX (d)] &
+       __PBM_MASK (d)) != 0)
+       Definition at line 39 of file poptint.h.
+
+       Referenced by findNextArg, poptGetNextOpt, and
+       poptStrippedArgv.
+
+   #define PBM_SET(d, s)   (__PBM_BITS (s)[__PBM_IX (d)] |=
+       __PBM_MASK (d))
+       Definition at line 37 of file poptint.h.
+
+       Referenced by findNextArg, and poptStripArg.
+
+   #define POPT_(foo)   foo
+       Definition at line 91 of file poptint.h.
+
+       Referenced by getArgDescrip, poptGetNextOpt,
+       poptPrintHelp, poptStrerror, showHelpIntro, and strerror.
+
+TYPEDEF DOCUMENTATION
+   typedef unsigned int __pbm_bits
+       Definition at line 26 of file poptint.h.
+
+FUNCTION DOCUMENTATION
+   void* _free (const void * p) [inline, static]
+       Wrapper to free(3), hides const compilation noise, permit
+       NULL, return NULL.
+
+       Parameters:
+
+       p      memory to free
+
+       Return values:
+
+       NULL   always
+
+       Definition at line 18 of file poptint.h.
+
+       Referenced by addFileToTagAux, addOrAppendListEntry,
+       addSource, alAllFileSatisfiesDepend, alFree, alFreeIndex,
+       alSatisfiesDepend, buildForTarget, checkHardLinks,
+       checkPackageDeps, checkSpec, cleanOSE, closeSpec,
+       cpio_doio, db1close, db1open, db3close, db3Free, db3New,
+       db3open, db3stat, db_init, dbiFreeIndexSet, dbiTagsInit,
+       dbiUpdateRecord, defaultMachine, doBuildFileList,
+       doHeaderUnload, doPatch, doReadRC, doRmSource, doScript,
+       doSetupMacro, doUntar, expandFilelist, fillOutMainPackage,
+       formatValue, freeAttrRec, freeExtensionCache,
+       freeFileList, freeFilesystems, freeFormat, freeNames,
+       freePackage, freeRpmVar, freeSl, freeSources, freeSpec,
+       freeSplitString, freeSt, freeStringBuf, freeTriggerFiles,
+       fssizesTag, genCpioListAndHeader, generateDepends,
+       getFilesystemList, handlePreambleTag, headerAddI18NString,
+       headerCopyLoad, headerFree, headerFreeIterator,
+       headerFreeTag, headerLoad, headerModifyEntry, headerRead,
+       headerReload, headerRemoveEntry, headerSprintf,
+       headerWrite, htFree, i18nTag, IDTXfree, IDTXglob,
+       machCompatCacheAdd, machFindEquivs, main,
+       makeGPGSignature, makePGPSignature, makeTempFile,
+       packageBinaries, packageSources, parseDescription,
+       parseExpressionBoolean, parseExpressionString, parseFiles,
+       parseForRegexLang, parseForRegexMultiLib, parseForSimple,
+       parseRCPOT, parseScript, parseSpec, permsFormat, popMacro,
+       poptFreeContext, poptGetNextOpt, poptResetContext,
+       poptSetExecPath, poptSetOtherOptionHelp, printFileInfo,
+       printNewSpecfile, processBinaryFile, processPackageFiles,
+       processSourceFiles, pushMacro, readIcon, readLine,
+       rhnUnload, rpmCheckSig, rpmdbAdd, rpmdbClose,
+       rpmdbFindByFile, rpmdbFindFpList, rpmdbFreeIterator,
+       rpmdbMoveDatabase, rpmdbNextIterator, rpmdbRebuild,
+       rpmdbRemove, rpmdbRemoveDatabase, rpmdbSetIteratorRE,
+       rpmdepCheck, rpmdepFreeConflicts, rpmdepOrder,
+       rpmDetectPGPVersion, rpmErase, rpmExpandNumeric,
+       rpmFreeMacros, rpmFreeRpmrc, rpmGenPath,
+       rpmGetFilesystemUsage, rpmGetPassPhrase,
+       rpmGetRpmlibProvides, rpmGlob, rpmInitMacros, rpmInstall,
+       rpmInstallSource, rpmLookupSignatureType, rpmProblemPrint,
+       rpmQueryVerify, rpmRangesOverlap, rpmReadConfigFiles,
+       rpmReadPackageManifest, rpmReadRC, rpmRebuildTargetVars,
+       rpmReSign, rpmRollback, rpmSetMachine, rpmSetVarArch,
+       rpmShowProgress, rpmtransFree, setPathDefault,
+       showQueryPackage, singleOptionDefaultValue,
+       singleOptionHelp, singleSprintf, triggercondsTag, urlFind,
+       urlFreeCache, urlSplit, valueFree, verifyGPGSignature,
+       verifyPGPSignature, writeRPM, XurlFree, and zapRelation.
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002          popt/poptint.h(3)

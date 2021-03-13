@@ -1,0 +1,55 @@
+FOOMATIC-GETPJLOPTIONS(8)               FOOMATIC-GETPJLOPTIONS(8)
+
+
+
+NAME
+       foomatic-getpjloptions - <put a short description here>
+
+SYNOPSIS
+       foomatic-getpjloptionsdevice
+
+       foomatic-getpjloptionshostname port
+
+
+DESCRIPTION
+       foomatic-getpjloptions  Reads  the  PJL options from local
+       (parallel, USB, serial, ...) or remote (only  socket,  LPD
+       is  not  bi-directional)  printers to standard output. The
+       output can be piped  into  foomatic-addpjloptions  to  add
+       options to the database.
+
+
+
+   Options
+       device    where   a   local  printer  is  connected,  e.g.
+                 /dev/lp0, /dev/usb/lp0. Have your parallel  port
+                 in  EPP/bi-directional  mode (see your BIOS set­
+                 tings).
+
+
+       hostname  Host name or IP of a network printer (HP  JetDi­
+                 rect, Socket, ...)
+
+
+       port      Port on which your network printer listens.
+
+
+
+
+EXIT STATUS
+       foomatic-getpjloptions returns ???
+
+
+AUTHOR
+       Manfred  Wassmann  <manolo@NCC-1701.B.Shuttle.de>  for the
+       foomatic project using output from the associated  binary.
+
+
+BUGS
+       Uni-directional  protocols  as  remote  LPD  are  not sup­
+       ported..
+
+
+
+
+Foomatic Project            2001-05-07  FOOMATIC-GETPJLOPTIONS(8)

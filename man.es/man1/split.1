@@ -1,0 +1,66 @@
+SPLIT(1)                       FSF                       SPLIT(1)
+
+
+
+NAME
+       split - split a file into pieces
+
+SYNOPSIS
+       split [OPTION] [INPUT [PREFIX]]
+
+DESCRIPTION
+       Output  fixed-size  pieces of INPUT to PREFIXaa, PREFIXab,
+       ...; default PREFIX is `x'.  With no INPUT, or when  INPUT
+       is -, read standard input.
+
+       Mandatory  arguments  to  long  options  are mandatory for
+       short options too.
+
+       -b, --bytes=SIZE
+              put SIZE bytes per output file
+
+       -C, --line-bytes=SIZE
+              put at most SIZE bytes of lines per output file
+
+       -l, --lines=NUMBER
+              put NUMBER lines per output file
+
+       -NUMBER
+              same as -l NUMBER
+
+       --verbose
+              print a diagnostic to standard  error  just  before
+              each output file is opened
+
+       --help display this help and exit
+
+       --version
+              output version information and exit
+
+       SIZE  may have a multiplier suffix: b for 512, k for 1K, m
+       for 1 Meg.
+
+AUTHOR
+       Written by Torbjorn Granlund and Richard M. Stallman.
+
+REPORTING BUGS
+       Report bugs to <bug-textutils@gnu.org>.
+
+COPYRIGHT
+       Copyright © 2001 Free Software Foundation, Inc.
+       This is free software; see the source for  copying  condi­
+       tions.  There is NO warranty; not even for MERCHANTABILITY
+       or FITNESS FOR A PARTICULAR PURPOSE.
+
+SEE ALSO
+       The full documentation for split is maintained as  a  Tex­
+       info  manual.  If the info and split programs are properly
+       installed at your site, the command
+
+              info split
+
+       should give you access to the complete manual.
+
+
+
+split (textutils) 2.0.17  November 2001                  SPLIT(1)

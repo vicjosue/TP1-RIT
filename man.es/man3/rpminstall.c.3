@@ -1,0 +1,240 @@
+lib/rpminstall.c(3)                           lib/rpminstall.c(3)
+
+
+
+NAME
+       lib/rpminstall.c -
+
+SYNOPSIS
+       #include 'system.h'
+       #include <rpmcli.h>
+       #include 'manifest.h'
+       #include 'misc.h'
+       #include 'debug.h'
+
+   Data Structures
+       struct rpmEIU
+
+   Typedefs
+       typedef const char * str_t
+
+   Functions
+       void printHash (const unsigned long amount, const unsigned
+           long total)
+       void * rpmShowProgress (const void *arg, const
+           rpmCallbackType what, const unsigned long amount,
+           const unsigned long total, const void *pkgKey, void
+           *data)
+       int rpmInstall (const char *rootdir, const char
+           **fileArgv, rpmtransFlags transFlags,
+           rpmInstallInterfaceFlags interfaceFlags,
+           rpmprobFilterFlags probFilter, rpmRelocation
+           *relocations)
+       int rpmErase (const char *rootdir, const char **argv,
+           rpmtransFlags transFlags, rpmEraseInterfaceFlags
+           interfaceFlags)
+       int rpmInstallSource (const char *rootdir, const char
+           *arg, const char **specFile, char **cookie)
+       int IDTintcmp (const void *a, const void *b)
+       IDTX IDTXfree (IDTX idtx)
+       IDTX IDTXnew (void)
+       IDTX IDTXgrow (IDTX idtx, int need)
+       IDTX IDTXsort (IDTX idtx)
+       IDTX IDTXload (rpmdb db, rpmTag tag)
+       IDTX IDTXglob (const char *globstr, rpmTag tag)
+       int rpmRollback (struct rpmInstallArguments_s *ia, const
+           char **argv)
+
+   Variables
+       int hashesPrinted = 0
+       int packagesTotal = 0
+       int progressTotal = 0
+       int progressCurrent = 0
+       int reverse = -1
+
+DETAILED DESCRIPTION
+       Definition in file rpminstall.c.
+
+TYPEDEF DOCUMENTATION
+   typedef const char* str_t
+       Definition at line 169 of file rpminstall.c.
+
+FUNCTION DOCUMENTATION
+   int IDTintcmp (const void * a, const void * b) [static]
+       Definition at line 710 of file rpminstall.c.
+
+       References reverse.
+
+       Referenced by IDTXsort.
+
+   IDTX IDTXfree (IDTX idtx)
+       Definition at line 718 of file rpminstall.c.
+
+       References _free, and headerFree.
+
+       Referenced by rpmRollback.
+
+   IDTX IDTXglob (const char * globstr, rpmTag tag)
+       Definition at line 808 of file rpminstall.c.
+
+       References _, _free, Fclose, Ferror, Fopen, Fstrerror,
+       headerFree, headerLink, HGE_t, IDTXgrow, int_32, rpmGlob,
+       rpmRC, RPMRC_OK, rpmReadPackageHeader, rpmTag, and
+       rpmTagType.
+
+       Referenced by rpmRollback.
+
+   IDTX IDTXgrow (IDTX idtx, int need)
+       Definition at line 742 of file rpminstall.c.
+
+       References IDTXnew, and xrealloc.
+
+       Referenced by IDTXglob, and IDTXload.
+
+   IDTX IDTXload (rpmdb db, rpmTag tag)
+       Definition at line 766 of file rpminstall.c.
+
+       References HGE_t, IDTXgrow, IDTXsort, int_32,
+       RPM_INT32_TYPE, RPM_NULL_TYPE, rpmdbFreeIterator,
+       rpmdbGetIteratorOffset, rpmdbInitIterator,
+       rpmdbNextIterator, rpmTag, and rpmTagType.
+
+       Referenced by rpmRollback.
+
+   IDTX IDTXnew (void)
+       Definition at line 734 of file rpminstall.c.
+
+       References xcalloc.
+
+       Referenced by IDTXgrow.
+
+   IDTX IDTXsort (IDTX idtx)
+       Definition at line 759 of file rpminstall.c.
+
+       References IDTintcmp.
+
+       Referenced by IDTXload.
+
+   void printHash (const unsigned long amount, const unsigned
+       long total) [static]
+       Definition at line 29 of file rpminstall.c.
+
+       References hashesPrinted, progressCurrent, and
+       progressTotal.
+
+       Referenced by rpmShowProgress.
+
+   int rpmErase (const char * rootdir, const char ** argv,
+       rpmtransFlags transFlags, rpmEraseInterfaceFlags
+       interfaceFlags)
+       Definition at line 582 of file rpminstall.c.
+
+       References _, _free, printDepProblems, rpmdbClose,
+       rpmdbFreeIterator, rpmdbGetIteratorCount,
+       rpmdbGetIteratorOffset, RPMDBI_LABEL, rpmdbInitIterator,
+       rpmdbNextIterator, rpmdbOpen, rpmdepCheck,
+       rpmdepFreeConflicts, rpmGetPath, rpmRunTransactions,
+       RPMTRANS_FLAG_REVERSE, RPMTRANS_FLAG_TEST,
+       rpmtransCreateSet, rpmtransFlags, rpmtransFree, and
+       rpmtransRemovePackage.
+
+       Referenced by main.
+
+   int rpmInstall (const char * rootdir, const char ** fileArgv,
+       rpmtransFlags transFlags, rpmInstallInterfaceFlags
+       interfaceFlags, rpmprobFilterFlags probFilter,
+       rpmRelocation * relocations)
+       Todo:
+            Generalize --freshen policies.
+
+       Definition at line 194 of file rpminstall.c.
+
+       References _, _free, alloca, rpmEIU::argc, rpmEIU::argv,
+       rpmEIU::db, Fclose, rpmEIU::fd, Ferror, rpmEIU::fnp,
+       Fopen, Fstrerror, ftpStrerror, rpmEIU::h, headerFree,
+       headerFreeData, headerGetEntry, headerNVR,
+       rpmEIU::isSource, rpmRelocation_s::newPath,
+       rpmEIU::numFailed, rpmEIU::numPkgs, rpmEIU::numRPMS,
+       rpmEIU::numSRPMS, rpmRelocation_s::oldPath, packagesTotal,
+       rpmEIU::pkgState, rpmEIU::pkgURL, rpmEIU::pkgx,
+       rpmEIU::prevx, printDepProblems, rpmEIU::relocations,
+       rpmdbClose, rpmdbFreeIterator, rpmdbGetIteratorCount,
+       rpmdbInitIterator, rpmdbNextIterator, rpmdbOpen,
+       rpmdepCheck, rpmdepFreeConflicts, rpmdepOrder, rpmGenPath,
+       rpmGetPath, rpmGlob, rpmInstallSourcePackage,
+       rpmprobFilterFlags, rpmProblemSetFree, rpmProblemSetPrint,
+       rpmEIU::rpmrc, RPMRC_BADMAGIC, RPMRC_BADSIZE, RPMRC_FAIL,
+       RPMRC_OK, RPMRC_SHORTREAD, rpmReadPackageHeader,
+       rpmReadPackageManifest, rpmRunTransactions,
+       rpmShowProgress, RPMTAG_NAME, RPMTAG_PREFIXES,
+       RPMTRANS_FLAG_TEST, rpmtransAddPackage, rpmtransCreateSet,
+       rpmtransFlags, rpmtransFree, rpmVersionCompare,
+       rpmEIU::sourceURL, rpmEIU::ts, Unlink, URL_IS_FTP,
+       URL_IS_HTTP, URL_IS_PATH, urlGetFile, urlIsURL, urlPath,
+       xrealloc, and xstrdup.
+
+       Referenced by main.
+
+   int rpmInstallSource (const char * rootdir, const char * arg,
+       const char ** specFile, char ** cookie)
+       Definition at line 668 of file rpminstall.c.
+
+       References _, _free, Fclose, Ferror, Fopen, Fstrerror,
+       rpmInstallSourcePackage, rpmRC, and RPMRC_OK.
+
+       Referenced by main.
+
+   int rpmRollback (struct rpmInstallArguments_s * ia, const char
+       ** argv)
+       Definition at line 877 of file rpminstall.c.
+
+       References _free, IDTXfree, IDTXglob, IDTXload, rpmdbOpen,
+       rpmExpand, RPMTAG_INSTALLTID, RPMTAG_REMOVETID,
+       rpmtransCreateSet, and rpmtransFree.
+
+       Referenced by main.
+
+   void* rpmShowProgress (const void * arg, const rpmCallbackType
+       what, const unsigned long amount, const unsigned long
+       total, const void * pkgKey, void * data)
+       Definition at line 71 of file rpminstall.c.
+
+       References _, _free, Fclose, fdFree, fdLink, Fopen,
+       hashesPrinted, headerSprintf, packagesTotal, printHash,
+       progressCurrent, progressTotal, and rpmTagTable.
+
+       Referenced by rpmInstall.
+
+VARIABLE DOCUMENTATION
+   int hashesPrinted = 0 [static]
+       Definition at line 21 of file rpminstall.c.
+
+       Referenced by printHash, and rpmShowProgress.
+
+   int packagesTotal = 0
+       Definition at line 23 of file rpminstall.c.
+
+       Referenced by rpmInstall, and rpmShowProgress.
+
+   int progressCurrent = 0 [static]
+       Definition at line 25 of file rpminstall.c.
+
+       Referenced by printHash, and rpmShowProgress.
+
+   int progressTotal = 0 [static]
+       Definition at line 24 of file rpminstall.c.
+
+       Referenced by printHash, and rpmShowProgress.
+
+   int reverse = -1 [static]
+       Definition at line 706 of file rpminstall.c.
+
+       Referenced by IDTintcmp.
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002        lib/rpminstall.c(3)

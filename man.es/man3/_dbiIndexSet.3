@@ -1,0 +1,47 @@
+_dbiIndexSet(3)                                   _dbiIndexSet(3)
+
+
+
+NAME
+       _dbiIndexSet -
+
+SYNOPSIS
+       #include <rpmdb.h>
+
+
+   Data Fields
+       _dbiIndexItem * recs
+       int count
+
+DETAILED DESCRIPTION
+       Items retrieved from the index database.
+
+       Definition at line 50 of file rpmdb.h.
+
+FIELD DOCUMENTATION
+   int _dbiIndexSet::count
+       number of records
+
+       Definition at line 52 of file rpmdb.h.
+
+       Referenced by dbiIndexSetCount, dbiSearch,
+       rpmdbFindByFile, rpmdbFindFpList, rpmdbGetIteratorCount,
+       rpmdbGrowIterator, and rpmdbNextIterator.
+
+   struct _dbiIndexItem* _dbiIndexSet::recs
+       array of records
+
+       Definition at line 51 of file rpmdb.h.
+
+       Referenced by dbiFreeIndexSet, dbiIndexRecordFileNumber,
+       dbiIndexRecordOffset, dbiSearch, rpmdbFindFpList, and
+       rpmdbGrowIterator.
+
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002            _dbiIndexSet(3)

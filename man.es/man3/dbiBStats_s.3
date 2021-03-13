@@ -1,0 +1,132 @@
+dbiBStats_s(3)                                     dbiBStats_s(3)
+
+
+
+NAME
+       dbiBStats_s -
+
+SYNOPSIS
+   Data Fields
+       unsigned int bt_magic
+       unsigned int bt_version
+       unsigned int bt_nkeys
+       unsigned int bt_ndata
+       unsigned int bt_pagesize
+       unsigned int bt_minkey
+       unsigned int bt_re_len
+       unsigned int bt_re_pad
+       unsigned int bt_levels
+       unsigned int bt_int_pg
+       unsigned int bt_leaf_pg
+       unsigned int bt_dup_pg
+       unsigned int bt_over_pg
+       unsigned int bt_free
+       unsigned int bt_int_pgfree
+       unsigned int bt_leaf_pgfree
+       unsigned int bt_dup_pgfree
+       unsigned int bt_over_pgfree
+
+DETAILED DESCRIPTION
+       B-tree database statistics.
+
+       Definition at line 53 of file db3.c.
+
+FIELD DOCUMENTATION
+   unsigned int dbiBStats_s::bt_dup_pg
+       no. of database duplicate pages.
+
+       Definition at line 65 of file db3.c.
+
+   unsigned int dbiBStats_s::bt_dup_pgfree
+       no. of bytes free in duplicate pages.
+
+       Definition at line 70 of file db3.c.
+
+   unsigned int dbiBStats_s::bt_free
+       no. of pages on the free list.
+
+       Definition at line 67 of file db3.c.
+
+   unsigned int dbiBStats_s::bt_int_pg
+       no. of database internal pages.
+
+       Definition at line 63 of file db3.c.
+
+   unsigned int dbiBStats_s::bt_int_pgfree
+       no. of bytes free in internal pages.
+
+       Definition at line 68 of file db3.c.
+
+   unsigned int dbiBStats_s::bt_leaf_pg
+       no. of database leaf pages.
+
+       Definition at line 64 of file db3.c.
+
+   unsigned int dbiBStats_s::bt_leaf_pgfree
+       no. of bytes free in leaf pages.
+
+       Definition at line 69 of file db3.c.
+
+   unsigned int dbiBStats_s::bt_levels
+       no. of levels in the database.
+
+       Definition at line 62 of file db3.c.
+
+   unsigned int dbiBStats_s::bt_magic
+       btree database magic.
+
+       Definition at line 54 of file db3.c.
+
+   unsigned int dbiBStats_s::bt_minkey
+       minimum keys per page.
+
+       Definition at line 59 of file db3.c.
+
+   unsigned int dbiBStats_s::bt_ndata
+       no. of key/data pairs in the database.
+
+       Definition at line 57 of file db3.c.
+
+   unsigned int dbiBStats_s::bt_nkeys
+       no. of unique keys in the database.
+
+       Definition at line 56 of file db3.c.
+
+   unsigned int dbiBStats_s::bt_over_pg
+       no. of database overflow pages.
+
+       Definition at line 66 of file db3.c.
+
+   unsigned int dbiBStats_s::bt_over_pgfree
+       no. of bytes free in overflow pages.
+
+       Definition at line 71 of file db3.c.
+
+   unsigned int dbiBStats_s::bt_pagesize
+       database page size, in bytes.
+
+       Definition at line 58 of file db3.c.
+
+   unsigned int dbiBStats_s::bt_re_len
+       length of fixed-length records.
+
+       Definition at line 60 of file db3.c.
+
+   unsigned int dbiBStats_s::bt_re_pad
+       padding byte for fixed-length records.
+
+       Definition at line 61 of file db3.c.
+
+   unsigned int dbiBStats_s::bt_version
+       version of the btree database.
+
+       Definition at line 55 of file db3.c.
+
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002             dbiBStats_s(3)

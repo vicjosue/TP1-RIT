@@ -1,0 +1,44 @@
+pamchannel(1)                                       pamchannel(1)
+
+
+
+NAME
+       pamchannel - extract channels from a PAM image
+
+
+SYNOPSIS
+       pamchannel [ -infile infile ] [channum] ...
+
+       All options may be abbreviated to the shortest unique pre­
+       fix.
+
+
+DESCRIPTION
+       Reads a PAM or PNM image as input.  Produces a  PAM  image
+       as  output,  consisting  of  the indicated channels of the
+       input.
+
+       The output is the same dimensions  as  the  input,  except
+       that the depth is the number of channum arguments you sup­
+       ply.  The tuple type is a null string.
+
+
+
+OPTIONS
+       -infile infile
+              This specifies the input file,  which  defaults  to
+              Standard  Input.  You may specify - to select Stan­
+              dard Input explicitly.
+
+              This is a little  unconventional  for  Netpbm  pro­
+              grams, which usually have the input file specifica­
+              tion as an argument.  For pamchannel, the arguments
+              are channel numbers.
+
+
+SEE ALSO
+       pnm(5)
+
+
+
+                          05 August 2000            pamchannel(1)

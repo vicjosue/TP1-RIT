@@ -1,0 +1,218 @@
+REQUEST_IRQ(9)        Linux Kernel Functions       REQUEST_IRQ(9)
+
+
+
+NAME
+       request_irq, free_irq - register an interrupt handler
+
+SYNOPSIS
+       #include <asm/irq.h>
+       #include <linux/signal.h>
+       #include <linux/sched.h>
+       #include <linux/interrupt.h>
+
+       int request_irq(unsigned int irq,
+              void (*handler)(int, void *, struct pt_regs *),
+              unsigned long irqflags, const char *devname,
+              void *dev_id);
+       void free_irq(unsigned int irq, void *dev_id);
+
+DESCRIPTION
+   Usage
+       The request_irq() function requests that a specified func­
+       tion  (the handler) be called whenever the kernel receives
+       a given interrupt.  The handler may  in  turn  register  a
+       bottom half, which is usually a slower part of the handler
+       which does not need to be executed as soon as  the  inter­
+       rupt  is received.  See init_bh(9) for more information on
+       bottom halves.
+
+       The irq parameter is the interrupt number you want to han­
+       dle.   It must be less than NR_IRQS (16 on Intel systems),
+       and there may be additional limitations on the value.  See
+       arch/*/kernel/irq.c  (intr.c  on  m68k  machines) for more
+       information.
+
+       handler is a pointer to the a pointer to the function that
+       will handle the interrupt.  The handler is passed the fol­
+       lowing parameters:
+
+              int irq
+                     The interrupt number.  By testing the  value
+                     of this parameter, it is possible for a sin­
+                     gle function to handle multiple IRQs.
+
+              void *dev_id
+                     The device ID of this handler (see below).
+
+              struct pt_regs *regs
+                     The registers stored on  the  stack  of  the
+                     process that was interrupted.  Normally, one
+                     shouldn't mess with these, although they can
+                     be  read  to determine, for example, whether
+                     the interrupted process  was  in  kernel  or
+                     user mode.
+
+       irqflags is, as the name suggests, a bitmask of flags per­
+       taining to this interrupt handler.  Legal bits are:
+
+              SA_INTERRUPT
+                     This bit indicates that you are  registering
+                     a  fast interrupt handler.  The semantics of
+                     this are discussed below.
+
+              SA_SHIRQ
+                     This bit indicates that  your  handler  sup­
+                     ports  sharing  an  IRQ  with other handlers
+                     (see also *dev_id below).
+
+              SA_SAMPLE_RANDOM
+                     This bit indicates that this IRQ may be used
+                     as  an  entropy  source  for /dev/random and
+                     /dev/urandom (see drivers/char/random.c).
+
+              SA_PROBE
+                     This bit indicates that  the  IRQ  is  being
+                     probed  and that the handler being installed
+                     is not a real one.   It  was  intended  that
+                     this    value    be   used   internally   by
+                     probe_irq_on() (q.v.), but it is  no  longer
+                     used  in  2.1.x kernels.  In fact, even with
+                     2.0.x kernels, it is only used by  the  MIPS
+                     architecture.   You should not be using this
+                     value unless you know what you are doing.
+
+              SA_STATIC_ALLOC
+                     (Sparc/Sparc64 only)  This bit requests that
+                     your  struct  irqaction (see below) be added
+                     to a statically allocated array of four han­
+                     dlers,  rather  than the normal irq_action[]
+                     table.  This is used for IRQs that  must  be
+                     requested  early in the boot process, before
+                     kmalloc_init() has been called.
+
+       The devname parameter is a short name for the  device  and
+       is displayed in the /proc/interrupts list.
+
+       The  dev_id parameter is the device ID.  This parameter is
+       usually set to NULL, but should be non-null if you wish to
+       do  IRQ  sharing.   This  doesn't  matter when hooking the
+       interrupt, but is required so  that,  when  free_irq()  is
+       called,  the  correct driver is unhooked.  Since this is a
+       void *, it can point to anything (such  as  a  device-spe­
+       cific  structure,  or even empty space), but make sure you
+       pass the same pointer to free_irq().
+
+       The free_irq() function releases an interrupt handler from
+       operation.   It takes as parameters the IRQ to unregister,
+       and the device ID of the handler to be unregistered.   You
+       should   pass   the   same  values  here  as  you  did  to
+       request_irq().  You probably  shouldn't  unregister  other
+       people's  interrupt  handlers unless you know what you are
+       doing.
+
+   Operation
+       For most architectures, request_irq() operates by allocat­
+       ing  memory for a struct irqaction, filling out the fields
+       thereof,  and  adding  it  to  the   irq_action[]   table.
+       enable_irq() is then called, which simply tells the kernel
+       to start delivering interrupts to the  installed  handler.
+       This  process  is vastly different on m68k machines, where
+       it varies depending on what type of machine (Amiga, Atari,
+       etc.) one is using.  free_irq() simply removes the entries
+       that request_irq() added. Note that some  of  these  names
+       differ  depending on the architecture (for example, struct
+       irqaction is known as struct irq_action on the Power  PC).
+       If  you  need  to know more about the internal workings of
+       these functions, you are best off reading the  source,  as
+       some  of this information may have changed by the time you
+       read this (if so, tell me, so I can  try  to  update  this
+       page).
+
+   Fast Interrupt Handlers
+       A `fast' interrupt handler (one with SA_INTERRUPT set) has
+       the following differences  from  normal  `slow'  interrupt
+       handlers:
+
+              On  the  ix86  and MIPS, the handler is called with
+              interrupts disabled (they are enabled by default on
+              these  machines;  on  other machines, they are dis­
+              abled by default).
+
+              On the MIPS, a faster return is used.
+
+              On the Alpha, MIPS, Sparc, and Sparc64, a fast  and
+              a slow handler may not share the same IRQ.
+
+              On  all architectures except the m68k and the ix86,
+              a `+' is displayed between the interrupt count  and
+              the device name in /proc/interrupts.
+
+       The slow-versus-fast interrupt distinction is slowly being
+       phased  out.   For  example,  under  2.0.x  on  the  ix86,
+       SA_INTERRUPT enabled a fast return as it still does on the
+       MIPS; this distiction was removed in 2.1.x.
+
+RETURN VALUE
+       On success, request_irq() returns 0 if everything goes  as
+       planned.   Your interrupt handler will start receiving its
+       interrupts   immediately.    On   failure,   request_irq()
+       returns:
+
+              -EINVAL
+                     The  IRQ  number  you  requested  was either
+                     invalid or reserved, or your passed  a  NULL
+                     pointer for the handler() parameter.
+
+              -ENOMEM
+                     request_irq() could not allocate enough mem­
+                     ory  for  something  (probably  the   struct
+                     irqaction).
+
+              -EBUSY The  IRQ you requested is already being han­
+                     dled, and the IRQ cannot  be  shared.   This
+                     can  occur  because either the handler being
+                     registered or the  handler  already  present
+                     does  not  have  SA_SHIRQ  in  its  irqflags
+                     field.  In addition, on most  architectures,
+                     all handlers sharing a single IRQ must be of
+                     the same speed; i.e., either all or none  of
+                     them  may  have  the  SA_INTERRUPT flag set.
+                     Finally, it is possible that your  architec­
+                     ture  may not support sharing of the IRQ you
+                     are attempting to use.
+
+              -ENXIO The m68k returns this value for  an  invalid
+                     IRQ number.
+
+       free_irq() does not return a value.
+
+AVAILABILITY
+       Linux  2.1+.  The information on this page should work for
+       2.0.x, but there may be subtle differences  (for  example,
+       the  semantics  of  SA_INTERRUPT on Intel-based machines).
+       Versions earlier than 2.0 had  these  functions,  but  the
+       dev_id  parameter  was  missing.  If you want your code to
+       work with versions both earlier and later  than  2.0,  you
+       should  protect  your  code with preprocessor macros using
+       LINUX_VERSION_CODE.
+
+SEE ALSO
+       init_bh(9),     probe_irq_on(9),      arch/*/kernel/irq.c,
+       arch/*/kernel/entry.S,          include/linux/interrupt.h,
+       include/asm*/signal.h.
+
+AUTHOR
+       Neil Moore <amethyst@maxwell.ml.org>
+
+BUGS
+       It's not exactly a bug, but request_irq() on the  m68k  is
+       very  strange  compared  to the same function on the other
+       supported   architectures.    You   should   really   read
+       arch/m68k/kernel/ints.c,        arch/m68k/atari/ataints.c,
+       arch/m68k/amiga/amiints.c,  and  arch/m68k/amiga/cia.c  if
+       you plan on writing drivers for any of these systems.
+
+
+
+Linux DDI 2.1.47       1997/08/14 07:53:47         REQUEST_IRQ(9)

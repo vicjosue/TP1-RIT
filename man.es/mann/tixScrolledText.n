@@ -1,0 +1,139 @@
+tixScrolledText(n)    Tix Built-In Commands    tixScrolledText(n)
+
+
+
+_________________________________________________________________
+
+NAME
+       tixScrolledText  -  Create and manipulate Tix ScrolledText
+       widgets
+
+SYNOPSIS
+       tixScrolledText pathName ?options?
+
+STANDARD OPTIONS
+       -anchor         -background    -cursor
+       -relief         -borderWidth
+
+       See the options manual entry for details on  the  standard
+       options.
+
+WIDGET-SPECIFIC OPTIONS
+       Command-Line Name:-height
+       Database Name:  height
+       Database Class: Height
+
+              Specifies  the  desired  height  for the window, in
+              pixels.
+
+       Command-Line Name:-scrollbar
+       Database Name:  scrollbar
+       Database Class: Scrollbar
+
+              Specifies the display policy of the scrollbars. The
+              following values are recognized:
+
+              auto ?+x? ?-x? ?+y? ?-y?
+                     When   -scrollbar  is  set  to  "auto",  the
+                     scrollbars are shown only when needed. Addi­
+                     tional  modifiers  can  be  used  to force a
+                     scrollbar to be shown or hidden.  For  exam­
+                     ple,  "auto -y" means the horizontal scroll­
+                     bar should be shown when needed but the ver­
+                     tical  scrollbar  should  always  be hidden;
+                     "auto  +x"  means  the  vertical   scrollbar
+                     should be shown when needed but the horizon­
+                     tal scrollbar should always be shown, and so
+                     on.
+
+              both   Both scrollbars are shown
+
+              none   The scrollbars are never shown.
+
+              x      Only the horizontal scrollbar is shown;
+
+              y      Only the vertical scrollbar is shown.
+
+       Command-Line Name:-width
+       Database Name:  width
+       Database Class: Width
+
+              Specifies the desired width for the window, in pix­
+              els.
+
+SUBWIDGETS
+       Name:           hsb
+       Class:          Scrollbar
+
+              The horizontal scrollbar subwidget.
+
+       Name:           text
+       Class:          Text
+
+              The Text subwidget inside the ScrolledText  widget.
+
+       Name:           vsb
+       Class:          Scrollbar
+
+              The vertical scrollbar subwidget.
+_________________________________________________________________
+
+DESCRIPTION
+       The tixScrolledText command creates a new window (given by
+       the pathName argument) and makes it  into  a  ScrolledText
+       widget.  Additional options, described above, may be spec­
+       ified on the command line or in  the  option  database  to
+       configure  aspects  of the ScrolledText widget such as its
+       cursor and relief.
+
+WIDGET COMMANDS
+       The tixScrolledText command  creates  a  new  Tcl  command
+       whose  name  is the same as the path name of the Scrolled­
+       Text widget's window.  This command may be used to  invoke
+       various  operations  on  the  widget. It has the following
+       general form:
+                     pathName option ?arg arg ...?
+
+       PathName is the name of the command, which is the same  as
+       the  ScrolledText widget's path name.  Option and the args
+       determine the exact behavior of the command.  The  follow­
+       ing commands are possible for ScrolledText widgets:
+
+       pathName cget option
+              Returns  the  current  value  of  the configuration
+              option given by option. Option may have any of  the
+              values accepted by the tixScrolledText command.
+
+       pathName configure ?option? ?value option value ...?
+              Query  or  modify  the configuration options of the
+              widget.  If no option is specified, returns a  list
+              describing  all  of the available options for path­
+              Name (see Tk_ConfigureInfo for information  on  the
+              format  of this list).  If option is specified with
+              no value, then the command returns a list  describ­
+              ing the one named option (this list will be identi­
+              cal to  the  corresponding  sublist  of  the  value
+              returned  if  no  option  is specified).  If one or
+              more option-value pairs  are  specified,  then  the
+              command modifies the given widget option(s) to have
+              the  given  value(s);  in  this  case  the  command
+              returns  an  empty  string.  Option may have any of
+              the values accepted by the tixScrolledText command.
+
+       pathName subwidget  name ?args?
+              When no additional arguments are given, returns the
+              pathname of the subwidget of the specified name.
+
+              When no additional arguments are given, the  widget
+              command  of  the specified subwidget will be called
+              with these parameters.
+
+KEYWORDS
+       Tix(n)
+
+
+
+
+
+
+Tix                            4.0             tixScrolledText(n)

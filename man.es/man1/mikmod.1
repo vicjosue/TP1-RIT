@@ -1,0 +1,531 @@
+MIKMOD(1)                                               MIKMOD(1)
+
+
+
+NAME
+       mikmod - play soundtracker etc. modules on a Unix machine.
+
+
+
+SYNOPSIS
+       mikmod [-options]... [module|playlist]...
+
+
+
+DESCRIPTION
+       MikMod is a very portable module player based  on  libmik­
+       mod,  written originally by Jean-Paul Mikkers (MikMak). It
+       will play the IT, XM, MOD, MTM, S3M, STM, ULT,  FAR,  MED,
+       DSM,  AMF, IMF and 669 module formats. It works under AIX,
+       FreeBSD,  HP-UX,  IRIX,  Linux,  NetBSD,  OpenBSD,  OSF/1,
+       SunOS,  Solaris  and OS/2. It is controllable via an easy-
+       to-use curses interface and will extract and play  modules
+       from a variety of different archive formats.
+
+
+
+OPTIONS
+       Options can be given in any order, and are case-sensitive.
+       For the options which have both a short and a  long  form,
+       the  long  form can be prefixed by one or two dashes. Note
+       that the settings in your  $HOME/.mikmodrc  will  override
+       the defaults shown in this man page.
+
+
+
+OUTPUT OPTIONS
+       -d n
+
+       --driver n
+              Use  the  specified  device driver for output, 0 is
+              autodetect. The default is 0.   If  your  installed
+              libmikmod  engine  is  recent enough (>=3.1.7), you
+              can also specify the driver with an alias, as  well
+              as driver options separated by commas. The list and
+              driver aliases and recognized options can be  found
+              in libmikmod's documentation.
+
+       -o[utput] 8m|8s|16m|16s
+              Output settings, 8 or 16 bit in stereo or mono. The
+              default is "16s".
+
+       -f freq
+
+       --frequency freq
+              Set mixing  frequency  in  hertz.  The  default  is
+              44100.
+
+       -i
+
+       --interpolate
+              Use   interpolated   mixing.  This  will  generally
+              improve audio quality, at the expense of a bit more
+              CPU   usage.  Note  that  this  option  alters  the
+              behaviour  of  software  drivers  only  ;  hardware
+              drivers are not affected.
+
+       --nointerpolate
+              Do not use interpolated mixing (default).
+
+       -hq
+
+       --hqmixer
+              Use  high  quality  software  mixer.  This improves
+              audio quality, but requires a lot more  CPU  power.
+              Note that this option alters the behaviour of soft­
+              ware  drivers  only  ;  hardware  drivers  are  not
+              affected.
+
+       --nohqmixer
+              Do not use high quality software mixer (default).
+
+       -s
+
+       --surround
+              Use surround mixing.
+
+       --nosurround
+              Do not use surround mixing (default).
+
+       -r n
+
+       --reverb n
+              Sets  reverb  amount  from 0 (no reverb) to 15 (max
+              reverb). The default is 0 (no reverb).
+
+
+
+PLAYBACK OPTIONS
+       -v volume
+
+       --volume volume
+              Set volume from 0% (silence) to 100%.  The  default
+              is 100%.
+
+       -F
+
+       --fadeout
+              Fade out the volume during the last pattern of each
+              module.
+
+       --nofadeout
+              Do not fade out the volume during the last  pattern
+              of each module (default).
+
+       -l
+
+       --loops
+              Enable in-module backwards loops.
+
+       --noloops
+              Disable in-module backwards loops (default).
+
+       -a
+
+       --panning
+              Process  panning  effects (default). This should be
+              disabled (using --nopanning) for very old demo mod­
+              ules which use the panning effects for synchroniza­
+              tion purposes.
+
+       --nopanning
+              Do not process panning effects.
+
+       -x
+
+       --protracker
+              Enable protracker extended speed effect  (default).
+              This  should be disabled (using --noprotracker) for
+              very old demo modules which use the extended  speed
+              effect for synchronization purposes.
+
+       --noprotracker
+              Disable protracker extended speed effect.
+
+
+
+LOADING OPTIONS
+       -c
+
+       --curious
+              Look  for  hidden  patterns in module. Most modules
+              don't  have  hidden  patterns,  but  you  can  find
+              "bonus" patterns (or just silence) in some modules.
+
+       --nocurious
+              Do  not  look  for  hidden   patterns   in   module
+              (default).
+
+       -p n
+
+       --playmode n
+              Playlist  mode.  The  allowed values here are 0, to
+              loop the current module ;  1,  to  play  the  whole
+              playlist  once  ;  2,  to  play  the whole playlist
+              repeatedly, and 3, to play the whole playlist  ran­
+              domly. The default is 2.
+
+       -t
+
+       --tolerant
+              Don't  halt MikMod if a module cannot be read or is
+              an unknown format.
+
+       --notolerant
+              Halt MikMod if a module cannot be  read  or  is  an
+              unknown format (default).
+
+
+
+SCHEDULING OPTIONS
+       The  following  options  need root privileges (or a setuid
+       root binary), and don't work under all systems.
+
+       -s Y|N
+
+       --renice Y|N
+              Renice to -20 if possible to gain more  CPU  prior­
+              ity.  This  option is only available under FreeBSD,
+              Linux, NetBSD, OpenBSD and OS/2.
+
+       --norenice
+              Do not renice to -20 (default).
+
+       -S Y|N
+
+       --realtime Y|N
+              Reschedule mikmod to gain real-time  priority  (and
+              thus  more CPU time).  DANGEROUS! USE WITH CAUTION!
+              This option is only available under FreeBSD,  Linux
+              and OS/2.
+
+       --norealtime
+              Do not reschedule MikMod to gain real-time priority
+              (default).
+
+
+
+DISPLAY OPTIONS
+       -q
+
+       --quiet
+              Quiet mode. Disables interactive commands and  dis­
+              plays only errors.
+
+       -te
+
+       --terse
+              Terse  display  like  MikMod  2,  i.e.  without the
+              information panels.
+
+
+
+INFORMATION OPTIONS
+       -n
+
+       --information
+              Display the list of the known  drivers  and  module
+              loaders.
+
+       -V
+
+       --version
+              Display MikMod version.
+
+       -h
+
+       --help Display a summary of the options.
+
+
+
+CONFIGURATION OPTION
+       --norc Do  not  parse  the  $HOME/.mikmodrc  configuration
+              file. This file contains your default settings,  so
+              that  you  don't have to specify them each time you
+              run MikMod. The file is read when  you  run  MikMod
+              and  updated  on  exit.  Using this option prevents
+              MikMod from accessing this file.
+
+
+
+RUNTIME COMMANDS
+       At play time, the following keystrokes offer control  over
+       MikMod:
+
+       H, function key F1
+              Display help panel.
+
+       S, function key F2
+              Display samples panel.
+
+       I, function key F3
+              Display  instruments  panel (if present in the mod­
+              ule).
+
+       M, function key F4
+              Display song message panel (if present in the  mod­
+              ule).
+
+       L, function key F5
+              Display the playlist panel.
+
+       C, function key F6
+              Display the configuration panel.
+
+       digits Set volume from 10% (digit 1) to 100% (digit 0).
+
+       <      Decrease volume.
+
+       >      Increase volume.
+
+       -, Left
+              Restart current pattern / skip to previous pattern.
+
+       +, Right
+              Skip to next pattern in current module.
+
+       Up, Down
+              Scroll panel.
+
+       PgUp, PgDown
+              Scroll panel (faster).
+
+       Home   Go on top of the panel.
+
+       End    Go to the end of the panel.
+
+       (      Decrease speed variable (module plays faster).
+
+       )      Increase speed variable (module plays slower).
+
+       {      Decrease tempo variable (module plays slower).
+
+       }      Increase tempo variable (module plays faster).
+
+       : or ; Toggle interpolation mixing.
+
+       U      Toggle surround mixing.
+
+       Q      Exit MikMod.
+
+       P      Switch to previous module in playlist.
+
+       N      Switch to next module in playlist.
+
+       R      Restart current module.
+
+       space  Toggle pause.
+
+       Control-L
+              Refresh the screen.
+
+
+
+MENU BASICS
+       Some functions of MikMod are available through  menus,  in
+       the playlist and configuration panels.
+
+       You  can select commands in the menus either by moving the
+       selection with the  arrow  keys  and  pressing  enter,  or
+       entering  the  highlighted  letter  corresponding  ot  the
+       command you want to select.
+
+       Menu entries ending with a >  character  open  a  submenu,
+       whereas  entries  ending in ... open a dialog box. You can
+       dismiss a submenu either by choosing  a  command  in  this
+       menu, or using the left arrow key to go back, or switching
+       panels.
+
+       In dialog boxes, you can move the  focus  from  the  input
+       line  to  the  Ok and Cancel buttons either with the "tab"
+       key, or the up and down arrow keys.
+
+       Also, if the statusbar is active  (which  is  the  default
+       behaviour),  it  will contain a short help text describing
+       the menu option currently highlighted.
+
+
+
+PLAYLIST MENU
+       When the playlist panel is displayed, pressing the  return
+       key will popup a menu. The menu commands are:
+
+
+       Play   Continue  list  playback  from  the currently high­
+              lighted module.
+
+       Remove Remove module from the playlist.
+
+       Delete...
+              Remove module from the playlist, and delete  module
+              file  on  disk,  or  whole archive if the module is
+              stored in an archive file. This function  asks  you
+              to confirm your choice.
+
+       File > This  entry  opens  a  submenu  with four commands,
+              "Load", "Insert", "Save" and "Save  as".  The  Load
+              and  Insert  commands  ask  you for a filename, and
+              replace the playlist with it  (load)  or  merge  it
+              with   the  playlist  (insert).  No  wildcards  are
+              allowed. The Save and Save  as  commands  save  the
+              current    playlist   in   a   file,   by   default
+              ``playlist.mpl'', in the  current  directory.  Note
+              that playlist filenames should end in .mpl, or they
+              won't be loaded by MikMod.
+
+       Shuffle
+              Randomize the playlist.
+
+       Sort > This entry opens a submenu with sort commands.  You
+              can select a normal or reverse order, and then sort
+              the playlist with one  of  the  four  criteria:  by
+              name, by extension, by path or by time.
+
+       Back   Discards the menu.
+
+
+
+CONFIGURATION PANEL
+       The  configuration  panel  lets  you customize your MikMod
+       settings, and save them.  You can also try some particular
+       settings without losing your previous configuration.
+
+
+       Output options
+              This section lets you choose various vital playback
+              settings,  such   as   the   output   driver,   the
+              stereo/mono and 16/8 bit output settings, the play­
+              back frequency, and the software mixer settings.
+
+       Playback options
+              This section lets you choose various  module  play­
+              back  settings, such as the output volume, the pro­
+              cessing of panning effects and bacwards loops, etc.
+
+       Other options
+              This  section  lets  you  choose the remaining set­
+              tings, such as the playlist mode, and various  pro­
+              gram settings.
+
+
+       Use config
+              This  command  activates  the current configuration
+              settings, but does not save them.
+
+       Save config
+              This command saves and activates the  current  con­
+              figuration settings.
+
+       Revert config
+              This  command  reverts to the on-disk configuration
+              file settings.
+
+
+
+MODULE FORMATS
+       MikMod will currently play the following common and not so
+       common formats:
+
+       669    Composer 669 and Extended 669 modules.
+
+       AMF    DSMI  internal  module format (Advanced Module For­
+              mat, converted with M2AMF).
+
+       DSM    DSIK's internal module format.
+
+       FAR    Farandole composer modules.
+
+       GDM    General Digital Munsic internal module format (con­
+              verted with 2GDM).
+
+       IMF    Imago Orpheus modules.
+
+       IT     Impulse Tracker modules.
+
+       MED    Amiga  MED  modules,  but  synthsounds are not sup­
+              ported.
+
+       MOD    Protracker,  Startracker,  Fasttracker,  Oktalyzer,
+              and Taketracker modules.
+
+       MTM    Multitracker module editor modules.
+
+       S3M    Screamtracker version 3 modules.
+
+       STM    Screamtracker version 2 modules.
+
+       STX    STMIK converted modules.
+
+       ULT    Ultratracker modules.
+
+       UNI, APUN
+              Old MikMod (UNI) and APlayer (APUN) internal module
+              format.
+
+       XM     Fasttracker 2 modules.
+
+
+
+ARCHIVE FORMATS
+       MikMod should recognize and extract the  following  common
+       archive  formats.   However, to use each of these you will
+       need to find the appropriate program(s) for MikMod to  use
+       to extract them. These are commonly available and you will
+       most likely find them with this distribution of MikMod.
+
+
+       zip    Info-zip  or  PkZip  archives,  commonly  used   on
+              DOS/Windows platforms.
+
+       lha, lzh
+              Lharc archives, commonly used on the Amiga.
+
+       zoo    Zoo archives, quite rare those days...
+
+       rar    Rar archives.
+
+       gz     Gzip compressed files.
+
+       bz2    Bzip2 compressed files.
+
+       tar, tar.gz and tar.bz2
+              Tar archives, even compressed with gzip or bzip2.
+
+
+
+FILES
+       $HOME/.mikmodrc (or MikMod.cfg under OS/2)
+              User  configuration  settings,  can  also contain a
+              default playlist.
+
+       playlist.mpl
+              Default playlist filename.
+
+
+
+AUTHORS
+       MikMod is the result of the work of many  people,  includ­
+       ing:  Jean-Paul Mikkers, Jake Stine, Miodrag Vallat, Frank
+       Loemker, Steve McIntyre, Peter Amstutz, "MenTaLguY",  Dim­
+       itri  Boldyrev,  Shlomi Fish, Stefan Tibus, Tinic Urou.  A
+       full list of people having worked on libmikmod and  MikMod
+       is displayed when MikMod starts.
+
+
+
+LOCATING NEWER VERSIONS...
+       The official MikMod and libmikmod home page is located on
+         http://mikmod.darkorb.net An European mirror is at:
+         http://www.multimania.com/miodrag/mikmod
+
+       New releases can also be found on the official ftp site
+         ftp://mikmod.darkorb.net and after a short delay on met­
+       alab (formerly known as sunsite) and its mirrors
+         ftp://metalab.unc.edu/pub/Linux/apps/sound/players   and
+       on hobbes, in source and OS/2 binary forms
+         ftp://hobbes.nmsu.edu/pub/os2/mmedia
+
+
+
+
+                   Version 3.1.6, 5th July 1999         MIKMOD(1)

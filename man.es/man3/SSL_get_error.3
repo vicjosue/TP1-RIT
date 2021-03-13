@@ -1,0 +1,133 @@
+SSL_get_error(3)             OpenSSL             SSL_get_error(3)
+
+
+
+NNAAMMEE
+       SSL_get_error - obtain result code for TLS/SSL I/O
+       operation
+
+SSYYNNOOPPSSIISS
+        #include <openssl/ssl.h>
+
+        int SSL_get_error(SSL *ssl, int ret);
+
+
+DDEESSCCRRIIPPTTIIOONN
+       SSL_get_error() returns a result code (suitable for the C
+       "switch" statement) for a preceding call to SSL_connect(),
+       SSL_accept(), SSL_read(), SSL_peek(), or SSL_write() on
+       ssssll.  The value returned by that TLS/SSL I/O function must
+       be passed to SSL_get_error() in parameter rreett.
+
+       In addition to ssssll and rreett, SSL_get_error() inspects the
+       current thread's OpenSSL error queue.  Thus,
+       SSL_get_error() must be used in the same thread that
+       performed the TLS/SSL I/O operation, and no other OpenSSL
+       function calls should appear in between.  The current
+       thread's error queue must be empty before the TLS/SSL I/O
+       operation is attempted, or SSL_get_error() will not work
+       reliably.
+
+RREETTUURRNN VVAALLUUEESS
+       The following return values can currently occur:
+
+       SSL_ERROR_NONE
+           The TLS/SSL I/O operation completed.  This result code
+           is returned if and only if rreett >> 00.
+
+       SSL_ERROR_ZERO_RETURN
+           The TLS/SSL connection has been closed.  If the
+           protocol version is SSL 3.0 or TLS 1.0, this result
+           code is returned only if a closure alert has occurred
+           in the protocol, i.e. if the connection has been
+           closed cleanly. Note that in this case
+           SSSSLL_EERRRROORR_ZZEERROO_RREETTUURRNN does not necessarily indicate
+           that the underlying transport has been closed.
+
+       SSL_ERROR_WANT_READ, SSL_ERROR_WANT_WRITE
+           The operation did not complete; the same TLS/SSL I/O
+           function should be called again later.  If, by then,
+           the underlying BBIIOO has data available for reading (if
+           the result code is SSSSLL_EERRRROORR_WWAANNTT_RREEAADD) or allows
+           writing data (SSSSLL_EERRRROORR_WWAANNTT_WWRRIITTEE), then some TLS/SSL
+           protocol progress will take place, i.e. at least part
+           of an TLS/SSL record will be read or written.  Note
+           that the retry may again lead to a SSSSLL_EERRRROORR_WWAANNTT_RREEAADD
+           or SSSSLL_EERRRROORR_WWAANNTT_WWRRIITTEE condition.  There is no fixed
+           upper limit for the number of iterations that may be
+           necessary until progress becomes visible at
+           application protocol level.
+
+           For socket BBIIOOs (e.g. when SSL_set_fd() was used),
+           select() or poll() on the underlying socket can be
+           used to find out when the TLS/SSL I/O function should
+           be retried.
+
+           Caveat: Any TLS/SSL I/O function can lead to either of
+           SSSSLL_EERRRROORR_WWAANNTT_RREEAADD and SSSSLL_EERRRROORR_WWAANNTT_WWRRIITTEE.  In
+           particular, SSL_read() or SSL_peek() may want to write
+           data and SSL_write() may want to read data.  This is
+           mainly because TLS/SSL handshakes may occur at any
+           time during the protocol (initiated by either the
+           client or the server); SSL_read(), SSL_peek(), and
+           SSL_write() will handle any pending handshakes.
+
+       SSL_ERROR_WANT_CONNECT, SSL_ERROR_WANT_ACCEPT
+           The operation did not complete; the same TLS/SSL I/O
+           function should be called again later. The underlying
+           BIO was not connected yet to the peer and the call
+           would block in connect()/accept(). The SSL function
+           should be called again when the connection is
+           established. These messages can only appear with a
+           BIO_s_connect() or BIO_s_accept() BIO, respectively.
+           In order to find out, when the connection has been
+           successfully established, on many platforms select()
+           or poll() for writing on the socket file descriptor
+           can be used.
+
+       SSL_ERROR_WANT_X509_LOOKUP
+           The operation did not complete because an application
+           callback set by SSL_CTX_set_client_cert_cb() has asked
+           to be called again.  The TLS/SSL I/O function should
+           be called again later.  Details depend on the
+           application.
+
+       SSL_ERROR_SYSCALL
+           Some I/O error occurred.  The OpenSSL error queue may
+           contain more information on the error.  If the error
+           queue is empty (i.e. ERR_get_error() returns 0), rreett
+           can be used to find out more about the error: If rreett
+           ==== 00, an EOF was observed that violates the protocol.
+           If rreett ==== --11, the underlying BBIIOO reported an I/O error
+           (for socket I/O on Unix systems, consult eerrrrnnoo for
+           details).
+
+       SSL_ERROR_SSL
+           A failure in the SSL library occurred, usually a
+           protocol error.  The OpenSSL error queue contains more
+           information on the error.
+
+SSEEEE AALLSSOO
+       ssl(3), err(3)
+
+HHIISSTTOORRYY
+       SSL_get_error() was added in SSLeay 0.8.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+13/Sep/2001                   0.9.6c             SSL_get_error(3)

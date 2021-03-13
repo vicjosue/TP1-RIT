@@ -1,0 +1,134 @@
+RGREP(1)                   User Manuals                  RGREP(1)
+
+
+
+NAME
+       rgrep - a recursive, highlighting grep program
+
+SYNOPSIS
+       rgrep [ options ] pattern [ file ] ...
+
+DESCRIPTION
+       rgrep,  unlike  grep(1) and egrep(1) rgrep has the ability
+       to recursively descend directories. The traditional way of
+       performing  this  kind  of search on Unix systems utilizes
+       the find(1) command in conjunction with grep(1).  However,
+       this results in very poor performance.
+
+COMMAND LINE OPTIONS
+       -?
+              additional  help (use '-?' to avoid shell expansion
+              on some systems)
+       -c
+              count matches
+       -h
+              highlight match (ANSI compatable terminal assumed)
+       -H
+              Output match  instead  of  entire  line  containing
+              match
+       -i
+              ignore case
+       -l
+              list filename only
+       -n
+              print line number of match
+       -F
+              follow links
+       -r
+              recursively scan through directory tree
+       -N
+              Do NOT perform a recursive search
+       -R 'pat'
+              like  '-r'  except  that  only those files matching
+              'pat' are checked
+       -v
+              print only lines that do NOT  match  the  specified
+              pattern
+       -x 'ext'
+              checks only files with extension given by 'ext'.
+       -D
+              Print all directories that would be searched.  This
+              option is for debugging purposes only.  No file  is
+              grepped with this option.
+       -W 'len'
+              lines are 'len' characters long (not newline termi­
+              nated).
+
+
+SUPPORTED REGULAR EXPRESSIONS:
+       .
+              match any character except newline
+       \d
+              match any digit
+       \e
+              match ESC char
+       *
+              matches zero or more occurences of previous RE
+       +
+              matches one or more occurences of previous RE
+       ?
+              matches zero or one occurence of previous RE
+       ^
+              matches beginning of line
+       $
+              matches end of line
+       [ ... ]
+              matches any single character between brackets.  For
+              example,  [-02468]  matches  '-' or any even digit.
+              and [-0-9a-z] matches '-' and any digit  between  0
+              and 9 as well as letters a through z.
+
+       \{ ... \}
+
+       \( ... \)
+
+       \1, \2, ..., \9
+              matches  match specified by nth '\( ... \)' expres­
+              sion.   For  example,   '\([ \t][a-zA-Z]+\)\1[ \t]'
+              matches any word repeated consecutively.
+
+
+EXAMPLES
+       Look  in  all files with a 'c' extension in current direc­
+       tory and all its subdirectories  looking  for  matches  of
+       'int  ' at the beginning of a line, printing the line con­
+       taining the match with its line number: (two methods)
+
+       rgrep -n -R '*.c' '^int ' .
+
+       rgrep -n -x c '^int ' .
+
+       Highlight  all  matches  of   repeated   words   in   file
+       'paper.tex':
+
+       rgrep -h '[ \t]\([a-zA-Z]+\)[ \t]+\1[ \t\n]' paper.tex
+
+       rgrep -h '^\([a-zA-Z]+\)[ \t]+\1[ \t\n]' paper.tex
+
+       (Note  that  this version of rgrep requires two passes for
+       this example)
+
+       Search through all files  EXCEPT  .o  and  .a  file  below
+       /usr/src/linux  looking  for  the  string  'mouse' without
+       regard to case:
+
+       rgrep -i -R '*.[^ao]' mouse /usr/src/linux
+
+       Search a fixed record length FITS  file  for  the  keyword
+       EXTNAME:
+
+       rgrep -W80 ^EXTNAME file.fits
+
+       (Note  that the regular expression '^[A-Z]+' will dump all
+       fits headers.)
+
+AUTHOR
+              "John E. Davis" <davis@space.mit.edu>
+
+       -- This manpage was translated to troff by
+
+       "Boris D. Beletsky" <borik@isracom.co.il>
+
+
+
+Debian                       OCT 1996                    RGREP(1)

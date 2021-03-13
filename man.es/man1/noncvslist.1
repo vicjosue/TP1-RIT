@@ -1,0 +1,48 @@
+NONCVSLIST(1)         K Desktop Environment         NONCVSLIST(1)
+
+
+
+NNAAMMEE
+       noncvslist -- List all files in a checked out CVS module
+       that are not known by the CVS server.
+
+SSYYNNOOPPSSIISS
+       When the current directory is a CVS module:
+
+               noncvslist
+
+       Checking checked out subdirectories:
+
+               noncvslist [<dir>...]
+
+DDEESSCCRRIIPPTTIIOONN
+       This script will list all files and directories in the
+       module(s) that are not listed in the CVS/Entries files.
+       These may be files created during builds, new un-added
+       sources files etc. It is a useful housekeeping tool.
+
+       A current limitation is that .cvsignore files are not
+       checked.
+
+EEXXAAMMPPLLEESS
+       Assuming baseline/ has kdelibs/ and kdebase/ checked out
+       within it:
+
+               cd baseline/kdelibs; noncvslist
+               cd baseline; noncvslist kdelibs kdebase
+
+
+AAUUTTHHOORR
+       Sirtaj Singh Kang <taj@kde.org>
+
+       known by the CVS server."
+
+
+
+
+
+
+
+
+
+31/May/2000            perl 5.005, patch 03         NONCVSLIST(1)

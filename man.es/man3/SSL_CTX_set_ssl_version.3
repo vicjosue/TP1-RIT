@@ -1,0 +1,64 @@
+SSL_CTX_set_ssl_version(3)   OpenSSL   SSL_CTX_set_ssl_version(3)
+
+
+
+NNAAMMEE
+       SSL_CTX_set_ssl_version, SSL_set_ssl_method,
+       SSL_get_ssl_method - choose a new TLS/SSL method
+
+SSYYNNOOPPSSIISS
+        #include <openssl/ssl.h>
+
+        int SSL_CTX_set_ssl_version(SSL_CTX *ctx, SSL_METHOD *method);
+        int SSL_set_ssl_method(SSL *s, SSL_METHOD *method);
+        SSL_METHOD *SSL_get_ssl_method(SSL *ssl);
+
+
+DDEESSCCRRIIPPTTIIOONN
+       SSL_CTX_set_ssl_version() sets a new default TLS/SSL
+       mmeetthhoodd for SSL objects newly created from this ccttxx. SSL
+       objects already created with SSL_new(3) are not affected,
+       except when SSL_clear(3) is being called.
+
+       SSL_set_ssl_method() sets a new TLS/SSL mmeetthhoodd for a
+       particular ssssll object. It may be reset, when SSL_clear()
+       is called.
+
+       SSL_get_ssl_method() returns a function pointer to the
+       TLS/SSL method set in ssssll.
+
+NNOOTTEESS
+       The available mmeetthhoodd choices are described in
+       SSL_CTX_new(3).
+
+       When SSL_clear(3) is called and no session is connected to
+       an SSL object, the method of the SSL object is reset to
+       the method currently set in the corresponding SSL_CTX
+       object.
+
+RREETTUURRNN VVAALLUUEESS
+       The following return values can occur for
+       SSL_CTX_set_ssl_version() and SSL_set_ssl_method():
+
+       0   The new choice failed, check the error stack to find
+           out the reason.
+
+       1   The operation succeeded.
+
+SSEEEE AALLSSOO
+       SSL_CTX_new(3), SSL_new(3), SSL_clear(3), ssl(3),
+       SSL_set_connect_state(3)
+
+
+
+
+
+
+
+
+
+
+
+
+
+8/Mar/2001                    0.9.6c   SSL_CTX_set_ssl_version(3)

@@ -1,0 +1,41 @@
+rpmio/ugid.h(3)                                   rpmio/ugid.h(3)
+
+
+
+NAME
+       rpmio/ugid.h -
+
+SYNOPSIS
+   Functions
+       int unameToUid (const char *thisUname, uid_t *uid)
+       int gnameToGid (const char *thisGname, gid_t *gid)
+       char * uidToUname (uid_t uid)
+       char * gidToGname (gid_t gid)
+
+DETAILED DESCRIPTION
+       Definition in file ugid.h.
+
+FUNCTION DOCUMENTATION
+   char* gidToGname (gid_t gid)
+       Definition at line 129 of file ugid.c.
+
+   int gnameToGid (const char * thisGname, gid_t * gid)
+       Definition at line 57 of file ugid.c.
+
+       Referenced by vfs_parse_ls_lga.
+
+   char* uidToUname (uid_t uid)
+       Definition at line 98 of file ugid.c.
+
+   int unameToUid (const char * thisUname, uid_t * uid)
+       Definition at line 16 of file ugid.c.
+
+       Referenced by vfs_parse_ls_lga.
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002            rpmio/ugid.h(3)

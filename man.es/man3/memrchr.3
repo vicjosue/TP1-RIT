@@ -1,0 +1,41 @@
+MEMCHR(3)           Linux Programmer's Manual           MEMCHR(3)
+
+
+
+NAME
+       memchr, memrchr - scan memory for a character
+
+SYNOPSIS
+       #include <string.h>
+
+       void *memchr(const void *s, int c, size_t n);
+
+       void *memrchr(const void *s, int c, size_t n);
+
+DESCRIPTION
+       The  memchr() function scans the first n bytes of the mem­
+       ory area pointed to by s for the character c.   The  first
+       byte  to  match  c  (interpreted as an unsigned character)
+       stops the operation.
+
+       The memrchr() function  is  like  the  memchr()  function,
+       except  that  it  searches backwards from the end of the n
+       bytes pointed to by s instead of forwards from the  front.
+
+RETURN VALUE
+       The  memchr()  and memrchr() functions return a pointer to
+       the matching byte or NULL if the character does not  occur
+       in the given memory area.
+
+CONFORMING TO
+       The  memchr()  function  conforms  to SVID 3, BSD 4.3, ISO
+       9899, POSIX.  The memrchr() function is a  GNU  extension,
+       available since glibc 2.1.91.
+
+SEE ALSO
+       index(3),  rindex(3),  strchr(3),  strpbrk(3), strrchr(3),
+       strsep(3), strspn(3), strstr(3)
+
+
+
+GNU                         2002-02-20                  MEMCHR(3)

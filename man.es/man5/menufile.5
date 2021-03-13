@@ -1,0 +1,186 @@
+MENUFILE(5L)                                         MENUFILE(5L)
+
+
+
+NAME
+       menufile - entry in the Debian menu system
+
+SYNOPSIS
+       ~/.menu/*
+
+       /etc/menu/*
+
+       /usr/lib/menu/*
+
+       /usr/lib/menu/default/*
+
+DESCRIPTION
+       Menu files add entries to the Debian menu system. The sys­
+       tem administrator can place menu files  in  /etc/menu/  to
+       override  menu files that packages add to /usr/lib/menu/ .
+       The user can place menu files in ~/.menu/ to override  all
+       other menu files.
+
+       This  man  page may be out of date in some places. Look at
+       /usr/doc/menu/html for more up-to-date info.
+
+       The menu files are usually named after the Debian  package
+       that  contains the programs listed in them. In it, you can
+       list several "menuentries", that specify a  specific  item
+       in  the  menu "menu entries", that specify a specific item
+       in the menu structure.  Each  menu  entry  specifies  what
+       package  it  depends on, if that package is not installed,
+       the menu entry will be ignored by update-menus(1).  (In  a
+       menu entry you can specify pseudo-packages that start with
+       "local.",  update-menus  will  always   use   those   menu
+       entries).   If  you  wish  to remove an item from the menu
+       entirely, make an empty menu file with the  same  name  as
+       the file you want to override.
+
+Examples
+       Dosemu   could   install   the   following  menu  file  as
+       /usr/lib/menu/dosemu:
+
+        ?package(dosemu):needs=text        section=Apps/Emulators
+       title="Dosemu" command=dosemu
+        ?package(dosemu):needs=x11         section=Apps/Emulators
+       title="Dosemu" command=xdos
+
+       The system administrator wants to override  this  file  to
+       change how dosemu is run, so /etc/menu/dosemu is created:
+
+        ?package(dosemu):needs=text        section=Apps/Emulators
+       title="Dosemu" command="dosemu -A"
+        ?package(dosemu):needs=x11         section=Apps/Emulators
+       title="Dosemu" command="xdos -A"
+
+       A user does not want Dosemu to appear on his menus at all,
+       so he creates an empty file named ~/.menu/dosemu .
+
+FORMAT
+       A menu file consists of 0 or more lines of  the  following
+       format:
+
+              ?package(package-name):var1=value var2=varlue2  ...
+
+              needs= What type of display will  the  program  run
+                     on?  This  variable  must  be  defined,  and
+                     should be one of the following:
+
+                     needs=text
+                             any text display
+
+                     needs=x11
+                             X11 displays
+
+                     needs=vc
+                             At the Linux console (i.e.:  svgalib
+                             programs)
+
+                     needs=wm
+                             A window manager.
+
+                     needs=fvwmmodule
+                             A  fvwm  version 1.x compatible mod­
+                             ule.
+
+                     needs=fvwm2module
+                             A fvwm version 2.x  compatible  mod­
+                             ule.
+
+              section
+                     The  section  in which the menu entry should
+                     appear. See MENU LAYOUT for  preferred  sec­
+                     tion names.
+
+              icon   An  icon  for this menu entry. If no icon is
+                     available,   just   don't    define    this.
+                     (icon="none"  is  also  possible, preferably
+                     just leave it out)
+
+              title  The title of the program that will appear on
+                     the  menus.  Keep  it  short.   If  two menu
+                     entries share the same  title  and  section,
+                     the  one  that bests fits the available dis­
+                     play will be used. So in the  example  above
+                     with  two  menu  entries  that both have the
+                     menu id "title", if X is available, the  x11
+                     one  will  be  used,  otherwise the text one
+                     will be used.  Must be defined.
+
+              command
+                     The command to be executed  when  this  menu
+                     entry is selected.
+
+MENU LAYOUT
+       This is the preferred layout of the menus. Currently it is
+       a suggestion only. Use `/' to separate sub-menu names, for
+       example, "Apps/Editors" or "Games/Arcade".
+
+        Apps            -- all normal apps
+          Editors       -- editors
+          Emulators     -- Dosemu, ...
+          Graphics      -- xpaint, xfig, xtiff,
+          Math          -- Math apps: gnuplot, octave, oleo,..
+          Net           -- mail, news, web, irc, etc
+          Programming   -- debuggers, etc
+          Shells         -- Different shells, like bash, zsh, ...
+          Sound         --
+          System        -- system administration and monitoring
+          Tools         -- other tools: xclock, xmag, xman,
+          Viewers       -- Picture viewers, gs, ...
+        Games           -- games and recreations
+          Adventure      --  walk  around  virtual  space,  zork,
+       MOO's, etc
+          Arcade        -- (any game where reflexes count)
+          Board         -- Like: Gnuchess, pente, gnugo
+          Card          -- solitaire, etc
+          Puzzles       -- Stuff from xpuzzles, ...
+          Sports        -- Games derived from "real world" sports
+          Tetris-like   -- games involving falling blocks
+          Toys          -- (oneko, xeyes, etc.)
+        Screen          --
+          Lock          -- xlock, etc.
+          Screen-saver  --
+          Root-window   -- things that fill the root window
+        Window-managers -- (change between fvwm, afterstep, etc)
+          Modules       -- fvwm modules, etc.
+        XShells         -- shells (like xterm, rxvt, ...)
+
+NOTES
+       If you want to specify an icon or hotkey  for  a  sub-menu
+       (for  example,  the  Editors  sub-menu), just use the same
+       syntax but leave the command empty:
+
+       ?package(mypackage):needs=X11  section=Apps  icon=icon.xpm
+       hotkey=E title="Editors"
+
+
+       Whenever  any menu files are changed, you must run update-
+       menus(1)
+
+FILES
+       (Earlier listed files override later files with  the  same
+       names.)
+
+       ~/.menus/*
+              Menu files added by the user.
+       /etc/menu/*
+              Menu files added by the system administrator.
+       /usr/lib/menu/*
+              Menu files provided by other Debian packages.
+       /usr/lib/menu/default/*
+              Menu files provided by the menu package.
+
+AUTHOR
+       Joost  Witteveen  <joostje@debian.org>,  based  on work by
+       Lars Wirzenius <liw@iki.fi>
+
+       (Man page by Joey Hess, <joeyh@master.debian.org>)
+
+SEE ALSO
+       update-menus(1), /usr/doc/menu/html/index.html
+
+
+
+DEBIAN                     File Formats              MENUFILE(5L)

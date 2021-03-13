@@ -1,0 +1,172 @@
+USERADD(8)                                             USERADD(8)
+
+
+
+NAME
+       useradd  -  Create  a  new user or update default new user
+       information
+
+SYNOPSIS
+       useradd [-c comment] [-d home_dir]
+               [-e expire_date] [-f inactive_time]
+               [-g initial_group] [-G group[,...]]
+               [-m [-k skeleton_dir] | -M] [-p passwd]
+               [-s shell] [-u uid [ -o]] [-n] [-r] login
+
+       useradd -D [-g default_group] [-b default_home]
+               [-f default_inactive] [-e default_expire_date]
+               [-s default_shell]
+
+DESCRIPTION
+   Creating New Users
+       When invoked without the -D option,  the  useradd  command
+       creates  a  new user account using the values specified on
+       the command line and the default values from  the  system.
+       The new user account will be entered into the system files
+       as needed, the home directory will be created, and initial
+       files  copied, depending on the command line options.  The
+       version provided with Red Hat Linux will  create  a  group
+       for  each  user  added  to the system, unless -n option is
+       given.  The options which apply to the useradd command are
+
+       -c comment
+              The new user's password file comment field.
+
+       -d home_dir
+              The  new user will be created using home_dir as the
+              value for the user's login directory.  The  default
+              is to append the login name to default_home and use
+              that as the login directory name.
+
+       -e expire_date
+              The date on which the user  account  will  be  dis­
+              abled.   The  date is specified in the format YYYY-
+              MM-DD.
+
+       -f inactive_days
+              The number of days after a password  expires  until
+              the  account is permanently disabled.  A value of 0
+              disables the account as soon as  the  password  has
+              expired,  and  a  value of -1 disables the feature.
+              The default value is -1.
+
+       -g initial_group
+              The group name or  number  of  the  user's  initial
+              login  group.   The group name must exist.  A group
+              number must refer to  an  already  existing  group.
+              The default group number is 1.
+
+       -G group,[...]
+              A  list  of  supplementary groups which the user is
+              also a member of.  Each group is separated from the
+              next  by  a  comma, with no intervening whitespace.
+              The groups are subject to the same restrictions  as
+              the group given with the -g option.  The default is
+              for the user to belong only to the initial group.
+
+       -m     The user's home directory will  be  created  if  it
+              does  not  exist.   The  files  contained in skele­
+              ton_dir will be copied to the home directory if the
+              -k option is used, otherwise the files contained in
+              /etc/skel will be used  instead.   Any  directories
+              contained in skeleton_dir or /etc/skel will be cre­
+              ated in the user's home directory as well.  The  -k
+              option  is  only  valid  in conjunction with the -m
+              option.  The default is to not create the directory
+              and to not copy any files.
+
+       -M     The  user  home directory will not be created, even
+              if the system wide settings from /etc/login.defs is
+              to create home dirs.
+
+       -n     A  group  having  the  same  name as the user being
+              added to the system will  be  created  by  default.
+              This  option  will turn off this Red Hat Linux spe­
+              cific behavior.
+
+       -r     This flag is used to create a system account.  That
+              is, an user with an UID lower than value of UID_MIN
+              defined in /etc/login.defs. Note that useradd  will
+              not  create  a  home  directory  for  such an user,
+              regardless    of    the    default    setting    in
+              /etc/login.defs.   You have to specify -m option if
+              you want a home directory for a system  account  to
+              be created.  This is an option added by Red Hat.
+
+       -p passwd
+              The  encrypted password, as returned by crypt(3) or
+              an MD5 password generator.  The default is to  dis­
+              able the account.
+
+       -s shell
+              The name of the user's login shell.  The default is
+              to leave this field blank, which causes the  system
+              to select the default login shell.
+
+       -u uid The  numerical  value of the user's ID.  This value
+              must be unique, unless the -o option is used.   The
+              value  must be non-negative.  The default is to use
+              the smallest ID value greater than 99  and  greater
+              than every other user.  Values between 0 and 99 are
+              typically reserved for system accounts.
+
+   Changing the default values
+       When invoked with the -D option, useradd will either  dis­
+       play  the  current  default  values, or update the default
+       values from the command line.  The valid options are
+
+       -b default_home
+              The initial path  prefix  for  a  new  user's  home
+              directory.   The user's name will be affixed to the
+              end of default_home to  create  the  new  directory
+              name  if  the -d option is not used when creating a
+              new account.
+
+       -e default_expire_date
+              The date on which the user account is disabled.
+
+       -f default_inactive
+              The number of days after  a  password  has  expired
+              before the account will be disabled.
+
+       -g default_group
+              The  group  name  or  ID  for  a new user's initial
+              group.  The named group must exist, and a numerical
+              group ID must have an existing entry .
+
+       -s default_shell
+              The  name of the new user's login shell.  The named
+              program will  be  used  for  all  future  new  user
+              accounts.
+
+       If  no options are specified, useradd displays the current
+       default values.
+
+NOTES
+       The system administrator is responsible  for  placing  the
+       default user files in the /etc/skel directory.
+       This  version  of  useradd was modified by Red Hat to suit
+       Red Hat user/group convention.
+
+CAVEATS
+       You may not add a user to an NIS group.  This must be per­
+       formed on the NIS server.
+
+FILES
+       /etc/passwd - user account information
+       /etc/shadow - secure user account information
+       /etc/group - group information
+       /etc/default/useradd - default information
+       /etc/login.defs - system-wide settings
+       /etc/skel - directory containing default files
+
+SEE ALSO
+       chfn(1),   chsh(1),  crypt(3),  groupadd(8),  groupdel(8),
+       groupmod(8), passwd(1), userdel(8), usermod(8)
+
+AUTHOR
+       Julianne Frances Haugh (jfh@austin.ibm.com)
+
+
+
+                                                       USERADD(8)

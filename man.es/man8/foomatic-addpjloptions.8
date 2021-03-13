@@ -1,0 +1,63 @@
+FOOMATIC-ADDPJLOPTIONS(8)               FOOMATIC-ADDPJLOPTIONS(8)
+
+
+
+NAME
+       foomatic-addpjloptions   -   Edit  PJL  options  into  the
+       foomatic database
+
+SYNOPSIS
+       foomatic-addpjloptions [OPTION]...
+
+       foomatic-addpjlop­
+       tions[ -f ] [ -i ]-p<printer ID> [ <pjl option file> ]
+       foomatic-addpjloptions-h
+
+
+Description
+       foomatic-addpjloptions adds the PJL options  listed  by  a
+       printer  to the Foomatic database. The option list is read
+       from a file if specified or else from standard input.
+
+       The appropriate printer ID must be provided through option
+       -p.
+
+
+   Options
+       -p<printer ID>
+                 Printer where to add the PJL options
+
+                 <pjl option file> File with PJL options returned
+                 by the printer. If this  filename  is  not  pro­
+                 vided,  the  PJL options are taken from standard
+                 input.
+
+                 -f Force adding PJL options, no questions.
+
+                 -i Add the most important PJL options only.
+
+                 -h Print a help message
+
+
+FILES
+       foomatic-templates/pjl*.xml
+                                Necessary for  successful  opera­
+                                tion.
+
+
+EXIT STATUS
+       foomatic-addpjloptions returns ...
+
+AUTHOR
+       Manfred  Wassmann  <manolo@NCC-1701.B.Shuttle.de>  for the
+       foomatic project using output from the associated  binary.
+
+BUGS
+       The program needs three files
+
+       Please  send  bug  reports  to  foomatic-devel@linuxprint­
+       ing.org.
+
+
+
+Foomatic Project            2001-05-07  FOOMATIC-ADDPJLOPTIONS(8)

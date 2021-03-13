@@ -1,0 +1,32 @@
+CLOCKDIFF(8)             Iputils-ss990107            CLOCKDIFF(8)
+
+
+
+NAME
+       clockdiff - Measures clock difference between us and <des­
+       tination> with 1msec resolution. Without -o option it uses
+       icmp  timestamps, with -o it uses icmp echo with timestamp
+       IP option.
+
+SYNOPSIS
+       clockdiff [-o|-o1] <destination>
+
+WARNINGS
+       * some nodes (f.e. Solaris<2.4) do not support icmp
+              timestamps. clockdiff -o still works.
+
+       * some nodes (Cisco) use non-standard timestamps,
+              which makes clockdiff useless.
+
+       * some nodes use wrong timestamps (Solaris>2.4), if
+              run xntpd. Seems, it uses different  clock  source,
+              which is synchronized to time-of-day clock periodi­
+              cally.
+
+       * -o1 uses three-node tstamp. What option (-o or -o1)
+              works better depends on target host.
+
+
+
+
+local                        Jan 1999                CLOCKDIFF(8)

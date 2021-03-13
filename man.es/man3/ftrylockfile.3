@@ -1,0 +1,74 @@
+LOCKFILE(3)         Linux Programmer's Manual         LOCKFILE(3)
+
+
+
+NAME
+       flockfile, ftrylockfile, funlockfile - lock FILE for stdio
+
+SYNOPSIS
+       #include <stdio.h>
+
+       void flockfile(FILE *filehandle);
+       int ftrylockfile(FILE *filehandle);
+       void funlockfile(FILE *filehandle);
+
+DESCRIPTION
+       The stdio functions are thread-safe. This is  achieved  by
+       assigning  to  each  FILE  object  a lockcount and (if the
+       lockcount is nonzero) an owning thread.  For each  library
+       call,  these  functions  wait  until the FILE object is no
+       longer locked by a different thread, then lock it, do  the
+       requested I/O, and unlock the object again.
+
+       (Note:  this locking has nothing to do with the file lock­
+       ing done by functions like flock(2) and lockf(3).)
+
+       All this is invisible to the C-programmer, but  there  may
+       be  two  reasons to wish for more detailed control. On the
+       one hand, maybe a series of  I/O  actions  by  one  thread
+       belongs together, and should not be interrupted by the I/O
+       of some other thread.  On the other hand, maybe the  lock­
+       ing overhead should be avoided for greater efficiency.
+
+       To this end, a thread can explicitly lock the FILE object,
+       then do its series of I/O actions, then unlock. This  pre­
+       vents  other threads from coming in between. If the reason
+       for doing this was to achieve greater efficiency, one does
+       the  I/O  with the non-locking versions of the stdio func­
+       tions: with getc_unlocked() and putc_unlocked() instead of
+       getc() and putc().
+
+       The  flockfile()  function  waits for *filehandle to be no
+       longer locked by a different thread, then makes  the  cur­
+       rent thread owner of *filehandle, and increments the lock­
+       count.
+
+       The funlockfile() function decrements the lock count.
+
+       The ftrylockfile() function is a non-blocking  version  of
+       flockfile().  It  does  nothing  in case some other thread
+       owns *filehandle, and it obtains ownership and  increments
+       the lockcount otherwise.
+
+RETURN VALUE
+       The  ftrylockfile() function returns zero for success (the
+       lock was obtained), and nonzero for failure.
+
+ERRORS
+       None.
+
+AVAILABILITY
+       These       functions       are       available       when
+       _POSIX_THREAD_SAFE_FUNCTIONS  is defined. They are in libc
+       since libc 5.1.1 and in glibc since glibc 2.0.
+
+CONFORMING TO
+       POSIX.1
+
+SEE ALSO
+       unlocked_stdio(3)
+
+
+
+
+                            2001-10-18                LOCKFILE(3)

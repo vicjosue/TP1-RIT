@@ -1,0 +1,39 @@
+Tcl_Sleep(3)          Tcl Library Procedures         Tcl_Sleep(3)
+
+
+
+_________________________________________________________________
+
+NAME
+       Tcl_Sleep  -  delay  execution  for a given number of mil­
+       liseconds
+
+SYNOPSIS
+       #include <tcl.h>
+
+       Tcl_Sleep(ms)
+
+ARGUMENTS
+       int          ms                 (in)      Number  of  mil­
+                                                 liseconds     to
+                                                 sleep.
+_________________________________________________________________
+
+
+DESCRIPTION
+       This procedure delays the calling process by the number of
+       milliseconds  given  by the ms parameter and returns after
+       that time has elapsed.  It is typically  used  for  things
+       like  flashing  a button, where the delay is short and the
+       application needn't  do  anything  while  it  waits.   For
+       longer  delays  where  the application needs to respond to
+       other events during the delay, the  procedure  Tcl_Create­
+       TimerHandler should be used instead of Tcl_Sleep.
+
+
+KEYWORDS
+       sleep, time, wait
+
+
+
+Tcl                            7.5                   Tcl_Sleep(3)

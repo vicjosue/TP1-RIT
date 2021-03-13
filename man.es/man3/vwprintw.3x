@@ -1,0 +1,49 @@
+curs_printw(3X)                                   curs_printw(3X)
+
+
+
+NAME
+       printw,  wprintw, mvprintw, mvwprintw, vwprintw, vw_printw
+       - print formatted output in curses windows
+
+SYNOPSIS
+       #include <curses.h>
+
+       int printw(char *fmt [, arg] ...);
+       int wprintw(WINDOW *win, char *fmt [, arg] ...);
+       int mvprintw(int y, int x, char *fmt [, arg] ...);
+       int mvwprintw(WINDOW *win, int y, int x,
+             char *fmt [, arg] ...);
+
+       #include <varargs.h>
+       int vwprintw(WINDOW *win, char *fmt, varglist);
+       int vw_printw(WINDOW *win, char *fmt, varglist);
+
+DESCRIPTION
+       The printw, wprintw, mvprintw and mvwprintw  routines  are
+       analogous  to  printf  [see  printf(3S)].   In effect, the
+       string that would be output by printf is output instead as
+       though waddstr were used on the given window.
+
+       The   vwprintw   routine  is  analogous  to  vprintf  [see
+       printf(3S)] and performs a wprintw using a variable  argu­
+       ment  list.  The third argument is a va_list, a pointer to
+       a list of arguments, as defined in <varargs.h>.
+
+RETURN VALUE
+       Routines that return an integer return  ERR  upon  failure
+       and  OK  (SVr4 only specifies "an integer value other than
+       ERR") upon successful completion.
+
+PORTABILITY
+       The XSI Curses standard, Issue  4  describes  these  func­
+       tions.   The  function vwprintw is marked TO BE WITHDRAWN,
+       and is to be replaced by a function  vw_printw  using  the
+       <stdarg.h> interface.
+
+SEE ALSO
+       curses(3X), printf(3S), vprintf(3S)
+
+
+
+                                                  curs_printw(3X)

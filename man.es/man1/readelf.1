@@ -1,0 +1,166 @@
+READELF(1)            GNU Development Tools            READELF(1)
+
+
+
+NNAAMMEE
+       readelf - Displays information about ELF files.
+
+SSYYNNOOPPSSIISS
+       readelf [--aa|----aallll]
+               [--hh|----ffiillee--hheeaaddeerr]
+               [--ll|----pprrooggrraamm--hheeaaddeerrss|----sseeggmmeennttss]
+               [--SS|----sseeccttiioonn--hheeaaddeerrss|----sseeccttiioonnss]
+               [--ee|----hheeaaddeerrss]
+               [--ss|----ssyymmss|----ssyymmbboollss]
+               [--nn|----nnootteess]
+               [--rr|----rreellooccss]
+               [--uu|----uunnwwiinndd]
+               [--dd|----ddyynnaammiicc]
+               [--VV|----vveerrssiioonn--iinnffoo]
+               [--DD|----uussee--ddyynnaammiicc]
+               [--xx <number>|----hheexx--dduummpp==<number>]
+               [--ww[[lliiaapprrmmffss]]|----ddeebbuugg--
+       dduummpp[=line,=info,=abbrev,=pub­
+       names,=ranges,=macro,=frames,=str]]
+               [--hhiissttooggrraamm]
+               [--vv|----vveerrssiioonn]
+               [--WW|----wwiiddee]
+               [--HH|----hheellpp]
+               elffile...
+
+DDEESSCCRRIIPPTTIIOONN
+       rreeaaddeellff  displays information about one or more ELF format
+       object files.  The options control what particular  infor­
+       mation to display.
+
+       elffile...  are  the  object files to be examined.  At the
+       moment, rreeaaddeellff does not support examining  archives,  nor
+       does it support examing 64 bit ELF files.
+
+OOPPTTIIOONNSS
+       The  long and short forms of options, shown here as alter­
+       natives, are equivalent.  At least one option  besides  --vv
+       or --HH must be given.
+
+       --aa
+       ----aallll
+           Equivalent  to  specifiying  ----ffiillee--hheeaaddeerr, ----pprrooggrraamm--
+           hheeaaddeerrss, ----sseeccttiioonnss, ----ssyymmbboollss,  ----rreellooccss,  ----ddyynnaammiicc,
+           ----nnootteess and ----vveerrssiioonn--iinnffoo.
+
+       --hh
+       ----ffiillee--hheeaaddeerr
+           Displays  the  information contained in the ELF header
+           at the start of the file.
+
+       --ll
+       ----pprrooggrraamm--hheeaaddeerrss
+       ----sseeggmmeennttss
+           Displays the information contained in the file's  seg­
+           ment headers, if it has any.
+
+       --SS
+       ----sseeccttiioonnss
+       ----sseeccttiioonn--hheeaaddeerrss
+           Displays  the information contained in the file's sec­
+           tion headers, if it has any.
+
+       --ss
+       ----ssyymmbboollss
+       ----ssyymmss
+           Displays the entries in symbol table  section  of  the
+           file, if it has one.
+
+       --ee
+       ----hheeaaddeerrss
+           Display all the headers in the file.  Equivalent to --hh
+           --ll --SS.
+
+       --nn
+       ----nnootteess
+           Displays the contents  of  the  NOTE  segment,  if  it
+           exists.
+
+       --rr
+       ----rreellooccss
+           Displays  the  contents  of the file's relocation sec­
+           tion, if it has one.
+
+       --uu
+       ----uunnwwiinndd
+           Displays the contents of the file's unwind section, if
+           it  has  one.   Only  the unwind sections for IA64 ELF
+           files are currently supported.
+
+       --dd
+       ----ddyynnaammiicc
+           Displays the contents of the file's  dynamic  section,
+           if it has one.
+
+       --VV
+       ----vveerrssiioonn--iinnffoo
+           Displays  the  contents of the version sections in the
+           file, it they exist.
+
+       --DD
+       ----uussee--ddyynnaammiicc
+           When displaying symbols, this option makes rreeaaddeellff use
+           the symbol table in the file's dynamic section, rather
+           than the one in the symbols section.
+
+       --xx <<nnuummbbeerr>>
+       ----hheexx--dduummpp==<<nnuummbbeerr>>
+           Displays the contents of the indicated  section  as  a
+           hexadecimal dump.
+
+       --ww[[lliiaapprrmmffss]]
+       ----ddeebbuugg--dduummpp[[==lliinnee,,==iinnffoo,,==aabbbbrreevv,,==ppuubb­­
+       nnaammeess,,==rraannggeess,,==mmaaccrroo,,==ffrraammeess,,==ssttrr]]
+           Displays  the  contents  of  the debug sections in the
+           file, if any are present.  If one of the optional let­
+           ters  or words follows the switch then only data found
+           in those specific sections will be dumped.
+
+       ----hhiissttooggrraamm
+           Display a histogram of bucket list lengths  when  dis­
+           playing the contents of the symbol tables.
+
+       --vv
+       ----vveerrssiioonn
+           Display the version number of readelf.
+
+
+
+       --WW
+       ----wwiiddee
+           Don't  break  output  lines to fit into 80 columns. By
+           default rreeaaddeellff  breaks  section  header  and  segment
+           listing  lines  for 64-bit ELF files, so that they fit
+           into 80 columns. This option causes rreeaaddeellff  to  print
+           each  section  header  resp. each segment one a single
+           line, which is far more readable  on  terminals  wider
+           than 80 columns.
+
+       --HH
+       ----hheellpp
+           Display  the  command line options understood by rreeaadd­­
+           eellff.
+
+SSEEEE AALLSSOO
+       objdump(1), and the Info entries for binutils.
+
+CCOOPPYYRRIIGGHHTT
+       Copyright (c) 1991, 92, 93, 94, 95, 96, 97, 98, 99,  2000,
+       2001 Free Software Foundation, Inc.
+
+       Permission  is  granted  to copy, distribute and/or modify
+       this document under the terms of the GNU  Free  Documenta­
+       tion  License,  Version 1.1 or any later version published
+       by the Free Software Foundation; with  no  Invariant  Sec­
+       tions,  with  no Front-Cover Texts, and with no Back-Cover
+       Texts.  A copy of the license is included in  the  section
+       entitled "GNU Free Documentation License".
+
+
+
+2002-02-20            binutils-2.11.92.0.12            READELF(1)

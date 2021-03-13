@@ -1,0 +1,186 @@
+FileList_s(3)                                       FileList_s(3)
+
+
+
+NAME
+       FileList_s - Package file tree walk data.
+
+SYNOPSIS
+   Data Fields
+       const char * buildRootURL
+       const char * prefix
+       int fileCount
+       int totalFileSize
+       int processingFailed
+       int passedSpecialDoc
+       int isSpecialDoc
+       int noGlob
+       unsigned devtype
+       unsigned devmajor
+       int devminor
+       int isDir
+       int inFtw
+       int currentFlags
+       specdFlags currentSpecdFlags
+       int currentVerifyFlags
+       AttrRec_s cur_ar
+       AttrRec_s def_ar
+       specdFlags defSpecdFlags
+       int defVerifyFlags
+       int nLangs
+       const char ** currentLangs
+       const char * docDirs [1024]
+       int docDirCount
+       FileListRec fileList
+       int fileListRecsAlloced
+       int fileListRecsUsed
+
+DETAILED DESCRIPTION
+       Package file tree walk data.
+
+       Definition at line 96 of file files.c.
+
+FIELD DOCUMENTATION
+   const char* FileList_s::buildRootURL
+       Definition at line 97 of file files.c.
+
+       Referenced by processPackageFiles, and processSourceFiles.
+
+   struct AttrRec_s FileList_s::cur_ar
+       Definition at line 117 of file files.c.
+
+       Referenced by processPackageFiles.
+
+   int FileList_s::currentFlags
+       Definition at line 114 of file files.c.
+
+       Referenced by processPackageFiles.
+
+   const char** FileList_s::currentLangs
+       Definition at line 122 of file files.c.
+
+       Referenced by processPackageFiles.
+
+   specdFlags FileList_s::currentSpecdFlags
+       Definition at line 115 of file files.c.
+
+       Referenced by processPackageFiles.
+
+   int FileList_s::currentVerifyFlags
+       Definition at line 116 of file files.c.
+
+       Referenced by processPackageFiles.
+
+   struct AttrRec_s FileList_s::def_ar
+       Definition at line 118 of file files.c.
+
+       Referenced by processPackageFiles.
+
+   specdFlags FileList_s::defSpecdFlags
+       Definition at line 119 of file files.c.
+
+       Referenced by processPackageFiles.
+
+   int FileList_s::defVerifyFlags
+       Definition at line 120 of file files.c.
+
+       Referenced by processPackageFiles.
+
+   unsigned FileList_s::devmajor
+       Definition at line 109 of file files.c.
+
+       Referenced by processPackageFiles.
+
+   int FileList_s::devminor
+       Definition at line 110 of file files.c.
+
+       Referenced by processPackageFiles.
+
+   unsigned FileList_s::devtype
+       Definition at line 108 of file files.c.
+
+       Referenced by processPackageFiles.
+
+   int FileList_s::docDirCount
+       Definition at line 127 of file files.c.
+
+       Referenced by processPackageFiles.
+
+   const char* FileList_s::docDirs[ 1024 ]
+       Definition at line 126 of file files.c.
+
+       Referenced by processPackageFiles.
+
+   int FileList_s::fileCount
+       Definition at line 100 of file files.c.
+
+       Referenced by processPackageFiles.
+
+   FileListRec FileList_s::fileList
+       Definition at line 129 of file files.c.
+
+       Referenced by processPackageFiles, and processSourceFiles.
+
+   int FileList_s::fileListRecsAlloced
+       Definition at line 130 of file files.c.
+
+       Referenced by processPackageFiles.
+
+   int FileList_s::fileListRecsUsed
+       Definition at line 131 of file files.c.
+
+       Referenced by processPackageFiles, and processSourceFiles.
+
+   int FileList_s::inFtw
+       Definition at line 113 of file files.c.
+
+       Referenced by processPackageFiles.
+
+   int FileList_s::isDir
+       Definition at line 112 of file files.c.
+
+       Referenced by processPackageFiles.
+
+   int FileList_s::isSpecialDoc
+       Definition at line 105 of file files.c.
+
+       Referenced by processPackageFiles.
+
+   int FileList_s::nLangs
+       Definition at line 121 of file files.c.
+
+       Referenced by processPackageFiles.
+
+   int FileList_s::noGlob
+       Definition at line 107 of file files.c.
+
+       Referenced by processPackageFiles.
+
+   int FileList_s::passedSpecialDoc
+       Definition at line 104 of file files.c.
+
+       Referenced by processPackageFiles.
+
+   const char* FileList_s::prefix
+       Definition at line 98 of file files.c.
+
+       Referenced by processPackageFiles, and processSourceFiles.
+
+   int FileList_s::processingFailed
+       Definition at line 102 of file files.c.
+
+       Referenced by processPackageFiles, and processSourceFiles.
+
+   int FileList_s::totalFileSize
+       Definition at line 101 of file files.c.
+
+       Referenced by processPackageFiles, and processSourceFiles.
+
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002              FileList_s(3)

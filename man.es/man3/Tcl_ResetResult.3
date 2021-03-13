@@ -1,0 +1,230 @@
+Tcl_SetResult(3)      Tcl Library Procedures     Tcl_SetResult(3)
+
+
+
+_________________________________________________________________
+
+NAME
+       Tcl_SetObjResult,     Tcl_GetObjResult,     Tcl_SetResult,
+       Tcl_GetStringResult, Tcl_AppendResult, Tcl_AppendResultVA,
+       Tcl_AppendElement,   Tcl_ResetResult,   Tcl_FreeResult   -
+       manipulate Tcl result
+
+SYNOPSIS
+       #include <tcl.h>
+
+       Tcl_SetObjResult(interp, objPtr)
+
+       Tcl_Obj *
+       Tcl_GetObjResult(interp)
+
+       Tcl_SetResult(interp, string, freeProc)
+
+       char *
+       Tcl_GetStringResult(interp)
+
+       Tcl_AppendResult(interp, string, string, ... , (char *) NULL)
+
+       Tcl_AppendResultVA(interp, argList)
+
+       Tcl_AppendElement(interp, string)
+
+       Tcl_ResetResult(interp)
+
+       Tcl_FreeResult(interp)
+
+ARGUMENTS
+       Tcl_Interp     *interp    (out)     Interpreter      whose
+                                           result  is to be modi­
+                                           fied or read.
+
+       Tcl_Obj        *objPtr    (in)      Object value to become
+                                           result for interp.
+
+       char           *string    (in)      String value to become
+                                           result for  interp  or
+                                           to  be appended to the
+                                           existing result.
+
+       Tcl_FreeProc   *freeProc  (in)      Address  of  procedure
+                                           to   call  to  release
+                                           storage at string,  or
+                                           TCL_STATIC,
+                                           TCL_DYNAMIC,        or
+                                           TCL_VOLATILE.
+
+       va_list        argList    (in)      An argument list which
+                                           must  have  been  ini­
+                                           tialised         using
+                                           TCL_VARARGS_START, and
+                                           cleared  using va_end.
+_________________________________________________________________
+
+
+DESCRIPTION
+       The procedures described here are utilities for manipulat­
+       ing   the   result   value  in  a  Tcl  interpreter.   The
+       interpreter result may be either a Tcl object or a string.
+       For  example,  Tcl_SetObjResult  and Tcl_SetResult set the
+       interpreter result  to,  respectively,  an  object  and  a
+       string.   Similarly, Tcl_GetObjResult and Tcl_GetStringRe­
+       sult return the interpreter result as an object and  as  a
+       string.   The procedures always keep the string and object
+       forms of the interpreter result consistent.  For  example,
+       if  Tcl_SetObjResult  is  called  to  set the result to an
+       object, then Tcl_GetStringResult is called, it will return
+       the object's string value.
+
+       Tcl_SetObjResult  arranges for objPtr to be the result for
+       interp, replacing any existing result.  The result is left
+       pointing  to  the  object  referenced by objPtr.  objPtr's
+       reference count is incremented since there is  now  a  new
+       reference  to it from interp.  The reference count for any
+       old result object is decremented and the old result object
+       is freed if no references to it remain.
+
+       Tcl_GetObjResult  returns  the  result  for  interp  as an
+       object.  The object's reference count is not  incremented;
+       if  the  caller needs to retain a long-term pointer to the
+       object they should use Tcl_IncrRefCount to  increment  its
+       reference  count  in order to keep it from being freed too
+       early or accidently changed.
+
+       Tcl_SetResult arranges for string to be the result for the
+       current  Tcl  command  in  interp,  replacing any existing
+       result.  The freeProc argument specifies how to manage the
+       storage  for  the  string argument; it is discussed in the
+       section THE TCL_FREEPROC ARGUMENT TO TCL_SETRESULT  below.
+       If string is NULL, then freeProc is ignored and Tcl_SetRe­
+       sult re-initializes interp's result to point to  an  empty
+       string.
+
+       Tcl_GetStringResult  returns  the  result for interp as an
+       string.  If the result was set to an object by a Tcl_SetO­
+       bjResult  call,  the  object  form  will be converted to a
+       string and returned.  If the object's  string  representa­
+       tion contains null bytes, this conversion will lose infor­
+       mation.  For this reason, programmers  are  encouraged  to
+       write  their code to use the new object API procedures and
+       to call Tcl_GetObjResult instead.
+
+       Tcl_ResetResult clears the result for  interp  and  leaves
+       the  result in its normal empty initialized state.  If the
+       result is an object, its reference  count  is  decremented
+       and the result is left pointing to an unshared object rep­
+       resenting an empty string.  If the result is a dynamically
+       allocated  string,  its memory is free*d and the result is
+       left as a empty string.  Tcl_ResetResult also  clears  the
+       error  state managed by Tcl_AddErrorInfo, Tcl_AddObjError­
+       Info, and Tcl_SetErrorCode.
+
+
+OLD STRING PROCEDURES
+       Use of the following procedures is deprecated  since  they
+       manipulate the Tcl result as a string.  Procedures such as
+       Tcl_SetObjResult that manipulate the result as  an  object
+       can be significantly more efficient.
+
+       Tcl_AppendResult  makes it easy to build up Tcl results in
+       pieces.  It takes each of its string arguments and appends
+       them  in  order  to  the  current  result  associated with
+       interp.  If the result is in its initialized  empty  state
+       (e.g.   a   command   procedure   was   just   invoked  or
+       Tcl_ResetResult was just  called),  then  Tcl_AppendResult
+       sets  the  result to the concatenation of its string argu­
+       ments.  Tcl_AppendResult may be called repeatedly as addi­
+       tional  pieces  of  the  result  are produced.  Tcl_Appen­
+       dResult takes care of all the  storage  management  issues
+       associated with managing interp's result, such as allocat­
+       ing a larger result area if necessary.  It  also  converts
+       the current interpreter result from an object to a string,
+       if necessary, before appending the argument strings.   Any
+       number of string arguments may be passed in a single call;
+       the last argument in the list must be a NULL pointer.
+
+       Tcl_AppendResultVA is the same as Tcl_AppendResult  except
+       that  instead  of taking a variable number of arguments it
+       takes an argument list.
+
+       Tcl_AppendElement is similar to Tcl_AppendResult  in  that
+       it  allows  results  to  be  built up in pieces.  However,
+       Tcl_AppendElement takes only a single string argument  and
+       it appends that argument to the current result as a proper
+       Tcl list element.  Tcl_AppendElement adds  backslashes  or
+       braces  if necessary to ensure that interp's result can be
+       parsed as a list and that string will be  extracted  as  a
+       single  element.   Under normal conditions, Tcl_AppendEle­
+       ment will add a space character to  interp's  result  just
+       before  adding the new list element, so that the list ele­
+       ments in the result are properly  separated.   However  if
+       the  new  list  element is the first in a list or sub-list
+       (i.e. interp's current result is empty, or consists of the
+       single  character ``{'', or ends in the characters `` {'')
+       then no space is added.
+
+       Tcl_FreeResult performs part of the work  of  Tcl_ResetRe­
+       sult.   It  frees  up  the memory associated with interp's
+       result.   It  also  sets  interp->freeProc  to  zero,  but
+       doesn't   change  interp->result  or  clear  error  state.
+       Tcl_FreeResult is most commonly used when a  procedure  is
+       about to replace one result value with another.
+
+
+DIRECT ACCESS TO INTERP->RESULT IS DEPRECATED
+       It  used  to  be  legal  for programs to directly read and
+       write interp->result to manipulate the interpreter result.
+       Direct access to interp->result is now strongly deprecated
+       because it can make the result's string and  object  forms
+       inconsistent.   Programs  should  always  read  the result
+       using the procedures Tcl_GetObjResult or  Tcl_GetStringRe­
+       sult,  and  write  the  result  using  Tcl_SetObjResult or
+       Tcl_SetResult.
+
+
+THE TCL_FREEPROC ARGUMENT TO TCL_SETRESULT
+       Tcl_SetResult's freeProc argument specifies  how  the  Tcl
+       system  is  to manage the storage for the string argument.
+       If Tcl_SetResult or Tcl_SetObjResult are called at a  time
+       when  interp  holds  a  string result, they do whatever is
+       necessary to dispose of the old  string  result  (see  the
+       Tcl_Interp manual entry for details on this).
+
+       If  freeProc  is TCL_STATIC it means that string refers to
+       an area of static storage that is  guaranteed  not  to  be
+       modified  until  at  least  the next call to Tcl_Eval.  If
+       freeProc is TCL_DYNAMIC it means that string was allocated
+       with  a  call  to Tcl_Alloc and is now the property of the
+       Tcl system.  Tcl_SetResult will arrange for  the  string's
+       storage  to  be released by calling Tcl_Free when it is no
+       longer needed.  If freeProc is TCL_VOLATILE it means  that
+       string  points  to  an area of memory that is likely to be
+       overwritten when Tcl_SetResult returns (e.g. it points  to
+       something  in  a stack frame).  In this case Tcl_SetResult
+       will make a copy of the string  in  dynamically  allocated
+       storage  and arrange for the copy to be the result for the
+       current Tcl command.
+
+       If  freeProc  isn't  one   of   the   values   TCL_STATIC,
+       TCL_DYNAMIC, and TCL_VOLATILE, then it is the address of a
+       procedure that Tcl should call to free the  string.   This
+       allows  applications  to  use non-standard storage alloca­
+       tors.  When Tcl  no  longer  needs  the  storage  for  the
+       string,  it will call freeProc. FreeProc should have argu­
+       ments and result that match the type Tcl_FreeProc:
+              typedef void Tcl_FreeProc(char *blockPtr);
+       When freeProc is called, its blockPtr will be set  to  the
+       value of string passed to Tcl_SetResult.
+
+
+SEE ALSO
+       Tcl_AddErrorInfo,  Tcl_CreateObjCommand, Tcl_SetErrorCode,
+       Tcl_Interp
+
+
+KEYWORDS
+       append, command, element,  list,  object,  result,  return
+       value, interpreter
+
+
+
+Tcl                            8.0               Tcl_SetResult(3)

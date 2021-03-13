@@ -1,0 +1,65 @@
+cups-config(3)        Easy Software Products       cups-config(3)
+
+
+
+NAME
+       cups-config  - get cups api, compiler, directory, and link
+       information.
+
+SYNOPSIS
+       cups-config --api-version
+       cups-config --cflags
+       cups-config --datadir
+       cups-config --help
+       cups-config --ldflags
+       cups-config [ --image ] [ --static ] --libs
+       cups-config --serverbin
+       cups-config --serverroot
+       cups-config --version
+
+DESCRIPTION
+       cups-config is the CUPS program configuration utility.  It
+       should  be used by application developers to determine the
+       necessary  command-line  options  for  the  compiler   and
+       linker,  as  well  as determining installation directories
+       for filters, configuration files, and drivers.
+
+       The --api-version command displays the current API version
+       (major.minor).
+
+       The  --cflags  command  displays  the  necessary  compiler
+       options.
+
+       The --datadir  command  displays  the  default  CUPS  data
+       directory.
+
+       The --help command displays the program usage message.
+
+       The   --ldflags  command  displays  the  necessary  linker
+       options.
+
+       The --libs command displays the necessary librarys to link
+       to.   The  --image option adds the CUPS imaging library to
+       the list.  The --static option shows the static  libraries
+       instead of the default (shared) libraries.
+
+       The  --serverbin  command displays the default CUPS binary
+       directory, where filters and backends are stored.
+
+       The --serverroot command displays the default CUPS config­
+       uration file directory.
+
+       The  --version command displays the full version number of
+       the CUPS installation (major.minor.patch).
+
+SEE ALSO
+       CUPS   Software    Programmers    Manual,    http://local­
+       host:631/documentation.html
+
+COPYRIGHT
+       Copyright  1993-2002 by Easy Software Products, All Rights
+       Reserved.
+
+
+
+25 October 2001    Common UNIX Printing System     cups-config(3)

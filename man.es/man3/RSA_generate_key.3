@@ -1,0 +1,74 @@
+RSA_generate_key(3)          OpenSSL          RSA_generate_key(3)
+
+
+
+NNAAMMEE
+       RSA_generate_key - generate RSA key pair
+
+SSYYNNOOPPSSIISS
+        #include <openssl/rsa.h>
+
+        RSA *RSA_generate_key(int num, unsigned long e,
+           void (*callback)(int,int,void *), void *cb_arg);
+
+
+DDEESSCCRRIIPPTTIIOONN
+       RSA_generate_key() generates a key pair and returns it in
+       a newly allocated RRSSAA structure. The pseudo-random number
+       generator must be seeded prior to calling
+       RSA_generate_key().
+
+       The modulus size will be nnuumm bits, and the public exponent
+       will be ee. Key sizes with nnuumm < 1024 should be considered
+       insecure.  The exponent is an odd number, typically 3 or
+       65535.
+
+       A callback function may be used to provide feedback about
+       the progress of the key generation. If ccaallllbbaacckk is not
+       NNUULLLL, it will be called as follows:
+
+       ·   While a random prime number is generated, it is called
+           as described in BN_generate_prime(3).
+
+       ·   When the n-th randomly generated prime is rejected as
+           not suitable for the key, ccaallllbbaacckk((22,, nn,, ccbb_aarrgg)) is
+           called.
+
+       ·   When a random p has been found with p-1 relatively
+           prime to ee, it is called as ccaallllbbaacckk((33,, 00,, ccbb_aarrgg)).
+
+       The process is then repeated for prime q with ccaallllbbaacckk((33,,
+       11,, ccbb_aarrgg)).
+
+RREETTUURRNN VVAALLUUEE
+       If key generation fails, RSA_generate_key() returns NNUULLLL;
+       the error codes can be obtained by ERR_get_error(3).
+
+BBUUGGSS
+       ccaallllbbaacckk((22,, xx,, ccbb_aarrgg)) is used with two different
+       meanings.
+
+       RSA_generate_key() goes into an infinite loop for illegal
+       input values.
+
+SSEEEE AALLSSOO
+       err(3), rand(3), rsa(3), RSA_free(3)
+
+HHIISSTTOORRYY
+       The ccbb_aarrgg argument was added in SSLeay 0.9.0.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+24/Feb/2000                   0.9.6c          RSA_generate_key(3)

@@ -1,0 +1,149 @@
+lib/problems.c(3)                               lib/problems.c(3)
+
+
+
+NAME
+       lib/problems.c -
+
+SYNOPSIS
+       #include 'system.h'
+       #include <rpmlib.h>
+       #include 'depends.h'
+       #include 'misc.h'
+       #include 'debug.h'
+
+   Functions
+       void printDepFlags (FILE *fp, const char *version, int
+           flags)
+       int sameProblem (const rpmDependencyConflict ap, const
+           rpmDependencyConflict bp)
+       void printDepProblems (FILE *fp, const
+           rpmDependencyConflict conflicts, int numConflicts)
+           Print results of rpmdepCheck() dependency check.
+       int vsnprintf (char *buf, int nb, const char *fmt, va_list
+           ap)
+       int snprintf (char *buf, int nb, const char *fmt,...)
+       const char * rpmProblemString (const rpmProblem prob)
+           Return formatted string representation of problem.
+       void rpmProblemPrint (FILE *fp, rpmProblem prob)
+           Output formatted string representation of problem to
+           file handle.
+       void rpmProblemSetPrint (FILE *fp, rpmProblemSet probs)
+           Print problems to file handle.
+
+DETAILED DESCRIPTION
+       Definition in file problems.c.
+
+FUNCTION DOCUMENTATION
+   void printDepFlags (FILE * fp, const char * version, int
+       flags)
+       Definition at line 19 of file problems.c.
+
+       References RPMSENSE_EQUAL, RPMSENSE_GREATER, and
+       RPMSENSE_LESS.
+
+   void printDepProblems (FILE * fp, const rpmDependencyConflict
+       conflicts, int numConflicts)
+       Print results of rpmdepCheck() dependency check.
+
+       Parameters:
+
+       fp     output file
+
+       conflicts
+              dependency problems
+
+       numConflicts
+              no. of dependency problems
+
+       Definition at line 61 of file problems.c.
+
+       References _, rpmDependencyConflict_s::needsFlags,
+       printDepFlags, sameProblem, and
+       rpmDependencyConflict_s::sense.
+
+   void rpmProblemPrint (FILE * fp, rpmProblem prob)
+       Output formatted string representation of problem to file
+       handle.
+
+       Deprecated:
+           API: prob used to be passed by value, now passed by
+           reference.
+
+       Parameters:
+
+       fp     file handle
+
+       prob   rpm problem
+
+       Definition at line 191 of file problems.c.
+
+       References _free, and rpmProblemString.
+
+   void rpmProblemSetPrint (FILE * fp, rpmProblemSet probs)
+       Print problems to file handle.
+
+       Parameters:
+
+       fp     file handle
+
+       probs  problem set
+
+       Definition at line 198 of file problems.c.
+
+       References rpmProblem_s::ignoreProblem,
+       rpmProblemSet_s::numProblems, rpmProblemSet_s::probs, and
+       rpmProblemPrint.
+
+   const char* rpmProblemString (const rpmProblem prob)
+       Return formatted string representation of problem.
+
+       Deprecated:
+           API: prob used to be passed by value, now passed by
+           reference.
+
+       Parameters:
+
+       prob   rpm problem
+
+       Returns:
+           formatted string
+
+       Definition at line 114 of file problems.c.
+
+       References _, rpmProblem_s::altNEVR,
+       rpmProblem_s::pkgNEVR, RPMPROB_BADARCH, RPMPROB_BADOS,
+       RPMPROB_BADPRETRANS, RPMPROB_BADRELOCATE,
+       RPMPROB_CONFLICT, RPMPROB_DISKNODES, RPMPROB_DISKSPACE,
+       RPMPROB_FILE_CONFLICT, RPMPROB_NEW_FILE_CONFLICT,
+       RPMPROB_OLDPACKAGE, RPMPROB_PKG_INSTALLED,
+       RPMPROB_REQUIRES, snprintf, rpmProblem_s::str1, strerror,
+       rpmProblem_s::type, rpmProblem_s::ulong1, and xmalloc.
+
+   int sameProblem (const rpmDependencyConflict ap, const
+       rpmDependencyConflict bp) [static]
+       Definition at line 35 of file problems.c.
+
+       Referenced by printDepProblems.
+
+   int snprintf (char * buf, int nb, const char * fmt, ...)
+       [inline, static]
+       Definition at line 101 of file problems.c.
+
+       References vsnprintf.
+
+       Referenced by rpmInitDB, rpmOpenDB, and rpmProblemString.
+
+   int vsnprintf (char * buf, int nb, const char * fmt, va_list
+       ap) [inline, static]
+       Definition at line 93 of file problems.c.
+
+       Referenced by snprintf.
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002          lib/problems.c(3)

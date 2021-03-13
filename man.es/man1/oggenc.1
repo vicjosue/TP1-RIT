@@ -1,0 +1,189 @@
+oggenc(1)        Vorbis Tools release candidate 2       oggenc(1)
+
+
+
+NAME
+       oggenc - encode audio into the Ogg Vorbis format
+
+
+SYNOPSIS
+       oggenc  [  -hrQ  ]  [  -B raw input sample size ] [ -C raw
+       input number of channels ] [ -R raw input samplerate  ]  [
+       -b  nominal  bitrate ] [ -m minimum bitrate ] [ -M maximum
+       bitrate ] [ -q quality ] [ -s serial ] [ -o output_file  ]
+       [  -n  pattern  ]  [ -c extra_comment ] [ -a artist ] [ -t
+       title ] [ -l album ] [ -G genre ] input_files ...
+
+
+DESCRIPTION
+       oggenc reads audio data in either raw, WAV, or AIFF format
+       and  encodes  it  into an Ogg Vorbis stream.  If the input
+       file "-" is specified, audio data is read from  stdin  and
+       the  Vorbis  stream  is  written  to  stdout unless the -o
+       option is used to redirect the output.  By  default,  disk
+       files  are  output  to  Ogg Vorbis files of the same name,
+       with the extension changed to ".ogg".  This naming conven­
+       tion  can  be  overridden by the -o option (in the case of
+       one file) or the -n option (in the case of several files).
+
+
+OPTIONS
+       -h, --help
+              Show command help.
+
+       -r, --raw
+              Assume  input  data is raw little-endian audio data
+              with no header information. If  other  options  are
+              not  specified,  defaults to 44.1kHz stereo 16 bit.
+              See next three options for how to change this.
+
+       -B n, --raw-bits=n
+              Sets raw input sample size in bits. Default is  16.
+
+       -C n, --raw-chan=n
+              Sets raw input number of channels. Default is 2.
+
+       -R n, --raw-rate=n
+              Sets raw input samplerate. Default is 44100.
+
+       -Q, --quiet
+              Quiet mode.  No messages are displayed.
+
+       -b n, --bitrate=n
+              Sets  encoding  to  the  bitrate  closest  to n (in
+              kb/s).
+
+       -m n, --min-bitrate=n
+              Sets minimum bitrate to n (in kb/s).
+
+       -M n, --max-bitrate=n
+              Sets maximum bitrate to n (in kb/s).
+
+       -q n, --quality=n
+              Sets encoding quality to n, between 0 (low) and  10
+              (high). This is the default mode of operation.
+
+       -s, --serial
+              Forces  a  specific  serial  number  in  the output
+              stream. This is primarily useful for testing.
+
+       -o output_file, --output=output_file
+              Write the Ogg Vorbis stream  to  output_file  (only
+              valid if a single input file is specified)
+
+
+       -n pattern, --names=pattern
+              Produce  filenames as this string, with %a, %t, %l,
+              %G replaced by artist,  title,  album  respectively
+              (see  below for specifying these). Also, %% gives a
+              literal %.
+
+
+       -c comment, --comment comment
+              Add the string comment as an extra  comment.   This
+              may  be used multiple times, and all instances will
+              be added to each of the input files specified.
+
+
+       -a artist, --artist artist
+              Set the artist comment field  in  the  comments  to
+              artist.
+
+
+       -G genre, --genre genre
+              Set  the  genre  comment  field  in the comments to
+              genre.
+
+
+       -d date, --date date
+              Sets the date comment field  to  the  given  value.
+              This should be the date of recording.
+
+
+       -N n, --tracknum n
+              Sets  the  track  number comment field to the given
+              value.
+
+
+       -t title, --title title
+              Set the track title comment field to title.
+
+
+       -l album, --album album
+              Set the album comment field to album.
+
+
+       Note that the -a, -t, and -l options can be given multiple
+       times.   They  will  be  applied, one to each file, in the
+       order given.  If there are fewer album, title,  or  artist
+       comments  given  than  there  are input files, oggenc will
+       reuse the final one for the remaining files, and  issue  a
+       warning in the case of repeated titles.
+
+
+EXAMPLES
+       Simplest version. Produces output as somefile.ogg:
+              oggenc somefile.wav
+
+
+       Specifying an output filename:
+              oggenc somefile.wav -o out.ogg
+
+
+       Specifying a high-quality encoding averaging 256 kbps.
+              oggenc infile.wav -b 256 out.ogg
+
+
+       Specifying a maximum and average bitrate.
+              oggenc infile.wav -b 128 -M 160 out.ogg
+
+
+       Specifying  quality  rather  than  bitrate (to a very high
+       quality mode)
+              oggenc infile.wav -q 9 out.ogg
+
+
+       Adding some info about the track:
+              oggenc somefile.wav -t "The track title" -a "artist
+              who  performed  this" -l "name of album" -c "OTHER­
+              FIELD=contents of some other  field  not  explictly
+              supported"
+
+
+       This   encodes   the  three  files,  each  with  the  same
+       artist/album tag, but with different title  tags  on  each
+       one. The string given as an argument to -n is used to gen­
+       erate filenames, as shown in the section above. This exam­
+       ple gives filenames like "The Tea Party - Touch.ogg":
+              oggenc  -b  192 -a "The Tea Party" -l "Triptych" -t
+              "Touch" track01.wav -t "Underground" track02.wav -t
+              "Great Big Lie" track03.wav -n "%a - %t.ogg"
+
+
+       Encoding from stdin, to stdout (you can also use the vari­
+       ous tagging options, like -t, -a, -l, etc.):
+              oggenc -
+
+
+
+AUTHORS
+       Program Author:
+              Michael Smith <msmith@labyrinth.net.au>
+
+
+       Manpage Author:
+              Stan Seibert <indigo@aztec.asu.edu>
+
+
+BUGS
+       Options -m, -M, and -q for  for  flexible  bitrate/quality
+       selection  exist,  but  are  not implemented in the vorbis
+       encoder, and so are not documented here yet.
+
+
+SEE ALSO
+       ogg123(1)
+
+
+
+                          2001 August 13                oggenc(1)

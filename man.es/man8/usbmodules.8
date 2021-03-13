@@ -1,0 +1,105 @@
+usbmodules(8)          Linux USB Utilities          usbmodules(8)
+
+
+
+NAME
+       usbmodules  -  List  kernel driver modules available for a
+       plugged in USB device
+
+SYNOPSIS
+       usbmodules [--device /proc/bus/bus/NNN/NNN] [--check modu­
+       lename] [--help] [--mapfile pathname] [--version pathname]
+
+DESCRIPTION
+       usbmodules lists driver modules that may be able to manage
+       interfaces  on  currently plugged in USB devices.  usbmod­
+       ules may be used by /sbin/hotplug or  one  of  its  agents
+       (normally  /etc/hotplug/usb.agent)  when  USB  devices are
+       "hot plugged" into the system.  This can be  done  by  the
+       following Bourne shell syntax:
+
+                   for module in $(usbmodules --device $DEVICE) ;
+              do
+
+                        modprobe -s -k "$module"
+
+                   done
+
+       The DEVICE environment variable is passed from the  kernel
+       to  /sbin/hotplug during USB hotplugging if the kernel was
+       configured using usbdevfs.  usbmodules currently  requires
+       usbdevfs to operate.
+
+       When  a  USB  device is removed from the system, the Linux
+       kernel will decrement a usage count on USB driver  module.
+       If  this  count  drops to zero (i.e., there are no clients
+       for the USB device driver), then the modprobe  -r  process
+       that  is  normally  configured  to run from cron every few
+       minutes will eventually remove the unneeded module.
+
+
+OPTIONS
+       --check modulename
+              Instead of listing the relevant modules, just  exit
+              with   code  0  (success)  if  the  given  module's
+              exported  USB  ID  patterns  matches.    Otherwise,
+              return  failure.  usbmodules emits no output either
+              way.
+
+       --device /proc/bus/usb/MMM/NNN
+              Selects which device usbmodules will examine.   The
+              argument is currently mandatory.
+
+       --help, -h
+              Print a help message
+
+       --mapfile /etc/hotplug/usb.handmap
+              Use  the  specified  file  instead of the /lib/mod­
+              ules/.../modules.usbmap file corresponding  to  the
+              running kernel.
+
+       --version
+              Identifies  the  version  of usbutils this tool was
+              built with.
+
+FILES
+       /lib/modules/<kernel-version>/modules.usbmap
+              This file is  automatically  generated  by  depmod,
+              versions 2.4.2 and later, and is used by usbmodules
+              to determine which modules correspond to which  USB
+              ID's.
+
+       /proc/bus/usb
+              An  optional  interface  to USB devices provided by
+              Linux kernels with versions of the 2.4 USB support.
+              Contains  per-bus  subdirectories  with  per-device
+              files (offering a usermode driver API  as  well  as
+              access  to device and configuration descriptors), a
+              devices file containing a list of all USB  devices,
+              and a drivers file listing USB device drivers known
+              to the USB subsystem.
+
+
+SEE ALSO
+       lsusb(8), http://linux-hotplug.sourceforge.net
+
+
+AUTHOR
+       usbmodules   was    written    by    Adam    J.    Richter
+       <adam@yggdrasil.com>,  and is based partly on lsusb, which
+       was written by Thomas Sailer <sailer@ife.ee.ethz.ch>.
+
+
+
+
+COPYRIGHT
+       usbmodules is copyright 2000, Yggdrasil Computing,  Incor­
+       porated,  and  copyright  1999, Thomas Sailer.  usbmodules
+       may may be copied under the terms and conditions  of  ver­
+       sion  2  of the GNU General Public License as published by
+       the Free  Software  Foundation  (Cambrige,  Massachusetts,
+       United States of America).
+
+
+
+usbutils-0.8               12 June 2001             usbmodules(8)

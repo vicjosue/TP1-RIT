@@ -1,0 +1,34 @@
+bmptoppm(1)                                           bmptoppm(1)
+
+
+
+NAME
+       bmptoppm - convert a BMP file into a portable pixmap
+
+SYNOPSIS
+       bmptoppm [bmpfile]
+
+
+DESCRIPTION
+       Reads a Microsoft Windows or OS/2 BMP file as input.  Pro­
+       duces a portable pixmap as output.
+
+       This program cannot convert BMP files with compressed (run
+       length encoded) image data.  It recognizes the compression
+       and issues an error message.
+
+       This program cannot convert BMP files  with  16  bits  per
+       pixel  (only  because  the  author did not have a complete
+       specification for them).  It  recognizes  the  format  and
+       issues an error message.
+
+
+SEE ALSO
+       ppmtobmp(1), ppmtowinicon(1), ppm(5)
+
+AUTHOR
+       Copyright (C) 1992 by David W. Sanderson.
+
+
+
+                           08 June 2000               bmptoppm(1)

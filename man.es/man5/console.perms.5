@@ -1,0 +1,56 @@
+console.perms(5)  System Administrator's Manual  console.perms(5)
+
+
+
+NAME
+       console.perms  - permissions control file for users at the
+       system console
+
+DESCRIPTION
+       /etc/security/console.perms  determines  the   permissions
+       that  will be given to priviledged users of the console at
+       login time, and the permissions to which  to  revert  when
+       the  users log out.  It is read by the pam_console module.
+
+       The format is:
+
+       <class>=space-separated list of words
+
+       login-regexp|<login-class> perm dev-glob|<dev-class> \
+               revert-mode revert-owner[.revert-group]
+
+       The revert-mode, revert-owner, and revert-group fields are
+       optional,  and  default  to  0600, root, and root, respec­
+       tively.
+
+       The words in a class definition are evaluated as globs  if
+       they  refer  to  files, but as regular expressions if they
+       apply to a console definition.  Do not mix them.
+
+       Any line can be broken and continued on the next  line  by
+       using a \ character as the last character on the line.
+
+       The login-class class and the login-regexp word are evalu­
+       ated as regular expressions.  The dev-class and  the  dev-
+       glob  word  are evaluated as shell-style globs.  If a name
+       given corresponds to a directory, and if  it  is  a  mount
+       point  listed  in  /etc/fstab,  the device node associated
+       with the filesystem mounted at that point will be  substi­
+       tuted in its place.
+
+       Classes  are denoted by being contained in < angle bracket
+       > characters; a lack of < angle brackets > indicates  that
+       the string is to be taken literally as a login-regexp or a
+       dev-glob, depending on its input position.
+
+SEE ALSO
+       pam_console(8)
+       pam_console_apply(8)
+       console.apps(5)
+
+AUTHOR
+       Michael K. Johnson <johnsonm@redhat.com>
+
+
+
+Red Hat Software             1999/2/3            console.perms(5)

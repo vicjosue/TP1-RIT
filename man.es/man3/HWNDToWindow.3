@@ -1,0 +1,34 @@
+Tk_HWNDToWindow(3)    Tk Library Procedures    Tk_HWNDToWindow(3)
+
+
+
+_________________________________________________________________
+
+NAME
+       Tk_HWNDToWindow  - Find Tk's window information for a Win­
+       dows window
+
+SYNOPSIS
+       #include <tkPlatDecls.h>
+
+       Tk_Window
+       Tk_HWNDToWindow(hwnd)
+
+ARGUMENTS
+       HWND         hwnd               (in)      Windows   handle
+                                                 for  the window.
+_________________________________________________________________
+
+
+DESCRIPTION
+       Given a Windows HWND  window  identifier,  this  procedure
+       returns the corresponding Tk_Window handle. If there is no
+       Tk_Window corresponding to hwnd then NULL is returned.
+
+
+KEYWORDS
+       Windows window id
+
+
+
+Tk                                             Tk_HWNDToWindow(3)

@@ -1,0 +1,115 @@
+hdrObject_s(3)                                     hdrObject_s(3)
+
+
+
+NAME
+       hdrObject_s -
+
+SYNOPSIS
+   Data Fields
+       PyObject_HEAD
+       Header h
+       Header sigs
+       char ** md5list
+       char ** fileList
+       char ** linkList
+       int_32 * fileSizes
+       int_32 * mtimes
+       int_32 * uids
+       int_32 * gids
+       unsigned short * rdevs
+       unsigned short * modes
+
+FIELD DOCUMENTATION
+   char** hdrObject_s::fileList
+       Definition at line 121 of file rpmmodule.c.
+
+       Referenced by getTsHeader, hdrDealloc, hdrLoad,
+       hdrVerifyFile, rhnLoad, rpmdbMINext, rpmdbSubscript,
+       rpmHeaderFromPackage, rpmMergeHeaders, and rpmReadHeaders.
+
+   int_32* hdrObject_s::fileSizes
+       Definition at line 123 of file rpmmodule.c.
+
+       Referenced by getTsHeader, hdrLoad, hdrVerifyFile,
+       rhnLoad, rpmdbMINext, rpmdbSubscript,
+       rpmHeaderFromPackage, and rpmReadHeaders.
+
+   int_32 * hdrObject_s::gids
+       Definition at line 125 of file rpmmodule.c.
+
+       Referenced by getTsHeader, hdrLoad, hdrVerifyFile,
+       rhnLoad, rpmdbMINext, rpmdbSubscript,
+       rpmHeaderFromPackage, and rpmReadHeaders.
+
+   Header hdrObject_s::h
+       Definition at line 118 of file rpmmodule.c.
+
+       Referenced by getTsHeader, hdrCompressFilelist,
+       hdrDealloc, hdrExpandFilelist, hdrFullFilelist,
+       hdrKeyList, hdrLoad, hdrSubscript, hdrUnload,
+       hdrVerifyFile, rhnLoad, rhnUnload, rpmdbMINext,
+       rpmdbSubscript, rpmHeaderFromPackage, rpmMergeHeaders,
+       rpmReadHeaders, rpmtransAdd, and versionCompare.
+
+   char** hdrObject_s::linkList
+       Definition at line 122 of file rpmmodule.c.
+
+       Referenced by getTsHeader, hdrDealloc, hdrLoad,
+       hdrVerifyFile, rhnLoad, rpmdbMINext, rpmdbSubscript,
+       rpmHeaderFromPackage, rpmMergeHeaders, and rpmReadHeaders.
+
+   char** hdrObject_s::md5list
+       Definition at line 120 of file rpmmodule.c.
+
+       Referenced by getTsHeader, hdrDealloc, hdrLoad,
+       hdrVerifyFile, mdfile, rhnLoad, rpmdbMINext,
+       rpmdbSubscript, rpmHeaderFromPackage, rpmMergeHeaders, and
+       rpmReadHeaders.
+
+   unsigned short* hdrObject_s::modes
+       Definition at line 127 of file rpmmodule.c.
+
+       Referenced by getTsHeader, hdrLoad, hdrVerifyFile,
+       rhnLoad, rpmdbMINext, rpmdbSubscript,
+       rpmHeaderFromPackage, and rpmReadHeaders.
+
+   int_32* hdrObject_s::mtimes
+       Definition at line 124 of file rpmmodule.c.
+
+       Referenced by getTsHeader, hdrLoad, hdrVerifyFile,
+       rhnLoad, rpmdbMINext, rpmdbSubscript,
+       rpmHeaderFromPackage, and rpmReadHeaders.
+
+   hdrObject_s::PyObject_HEAD
+       Definition at line 117 of file rpmmodule.c.
+
+   unsigned short* hdrObject_s::rdevs
+       Definition at line 126 of file rpmmodule.c.
+
+       Referenced by getTsHeader, hdrLoad, hdrVerifyFile,
+       rhnLoad, rpmdbMINext, rpmdbSubscript,
+       rpmHeaderFromPackage, and rpmReadHeaders.
+
+   Header hdrObject_s::sigs
+       Definition at line 119 of file rpmmodule.c.
+
+       Referenced by getTsHeader, hdrDealloc, hdrLoad,
+       hdrSubscript, rhnLoad, rpmdbMINext, rpmdbSubscript,
+       rpmHeaderFromPackage, rpmMergeHeaders, and rpmReadHeaders.
+
+   int_32* hdrObject_s::uids
+       Definition at line 125 of file rpmmodule.c.
+
+       Referenced by getTsHeader, hdrLoad, hdrVerifyFile,
+       rhnLoad, rpmdbMINext, rpmdbSubscript,
+       rpmHeaderFromPackage, and rpmReadHeaders.
+
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002             hdrObject_s(3)

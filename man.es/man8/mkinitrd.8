@@ -1,0 +1,114 @@
+MKINITRD(8)                                           MKINITRD(8)
+
+
+
+NAME
+       mkinitrd  -  creates initial ramdisk images for preloading
+       modules
+
+SYNOPSIS
+       mkinitrd [-fv] [--with=module] [--preload=module]
+                [--omit-scsi-modules] [--omit-raid-modules]
+                [--version] [--fstab=fstab] image
+                kernel-version
+
+DESCRIPTION
+       mkinitrd creates filesystem images which are suitable  for
+       use  as Linux initial ramdisk (initrd) images. Such images
+       are often used for preloading  the  block  device  modules
+       (such as IDE, SCSI or RAID) which are needed to access the
+       root filesystem. mkinitrd automatically loads IDE modules,
+       all scsi_hostadapter entries and all modules in a probeall
+       scsi_hostadapter .. line in  /etc/modules.conf,  and  raid
+       modules  if  the system's root partition is on raid, which
+       makes it simple to build and  use  kernels  using  modular
+       device drivers.
+
+       Any  module  options  specified  in  /etc/modules.conf are
+       passed to the modules as they are loaded  by  the  initial
+       ramdisk.
+
+       It  honours  the  mount options of the root filesystem (if
+       using Linux kernel version 2.4 or superior). It  currently
+       supports  mounting  of the root filesystem in at least the
+       following filesystems: ext2 (e.g. Linux native), reiserfs,
+       ext3,  jfs,  and  xfs.  It supports compressed modules. It
+       also behaves nicely with the use of devfs.
+
+
+OPTIONS
+       -f     Allows mkinitrd  to  overwrite  an  existing  image
+              file.
+
+
+       --fstab=fstab
+              Use  fstab  to automatically determine what type of
+              filesystem  the  root  device  is   on.   Normally,
+              /etc/fstab is used.
+
+
+       --ifneeded
+              Only  builds  the  image  if there are modules that
+              need to be loaded at boot time.
+
+
+       --omit-scsi-modules
+              Do not load any scsi modules, including  'scsi_mod'
+              and 'sd_mod' modules, even if they are present.
+
+
+       --omit-raid-modules
+              Do  not  load  any raid modules, even if /etc/fstab
+              and /etc/raidtab expect them.
+
+
+       --preload=module
+              Load the  module  module  in  the  initial  ramdisk
+              image.  The module gets loaded before any SCSI mod­
+              ules  which  are  specified  in  /etc/modules.conf.
+              This option may be used as many times as necessary.
+
+
+       -v     Prints out verbose information while  creating  the
+              image (normally the mkinitrd runs silently).
+
+
+       --version
+              Prints  the  version  of mkinitrd that's being used
+              and then exits.
+
+
+       --with=module
+              Load the modules  module  in  the  initial  ramdisk
+              image.  The  module gets loaded after any SCSI mod­
+              ules which are specified in /etc/modules.conf. This
+              option may be used as many times as necessary.
+
+
+       --tmpdir=tmpdir
+              Use  tmpdir  as  temporary  directory  for mkinitrd
+              operations. The underlying filesystem must be capa­
+              ble  of doing loopback-mounts, so tmpfs and nfs are
+              not (currently) possible.
+
+
+FILES
+       /dev/loop*          A block loopback  device  is  used  to
+                           create  the  image,  which  makes this
+                           script  useless  on  systems   without
+                           block loopback support available.
+
+       /etc/modules.conf   Specified  SCSI  modules  to be loaded
+                           and module options to be used.
+
+SEE ALSO
+       fstab(5), insmod(1), kerneld(8), lilo(8)
+
+
+AUTHOR
+       Erik Troan <ewt@redhat.com>
+       Patches for MandrakeSoft by Guillaume Cottenceau <gc@mandrakesoft.com> and Pixel <pixel@mandrakesoft.com>.
+
+
+
+                         Sat Mar 27 1999              MKINITRD(8)

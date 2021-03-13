@@ -1,0 +1,119 @@
+QUOTAON(8)                                             QUOTAON(8)
+
+
+
+NAME
+       quotaon, quotaoff - turn filesystem quotas on and off
+
+SYNOPSIS
+       /usr/sbin/quotaon [ -vugf ] filesystem...
+       /usr/sbin/quotaon [ -avugf ]
+
+       /usr/sbin/quotaoff [ -vug ] [ -x state ] filesystem...
+       /usr/sbin/quotaoff [ -avug ]
+
+DESCRIPTION
+   quotaon
+       quotaon announces to the system that disk quotas should be
+       enabled on one or more filesystems. The  filesystem  quota
+       files  must be present in the root directory of the speci­
+       fied filesystem and be named either aquota.user (for  ver­
+       sion 2 user quota), quota.user (for version 1 user quota),
+       aquota.group (for version 2 group quota),  or  quota.group
+       (for version 1 group quota).
+
+       XFS  filesystems  are a special case - XFS considers quota
+       information as filesystem metadata and uses journaling  to
+       provide  a  higher  level guarantee of consistency.  There
+       are two components to the XFS disk quota system:  account­
+       ing and limit enforcement.  Except in the case of the root
+       filesystem, XFS filesystems require that quota  accounting
+       be  turned on at mount time.  It is possible to enable and
+       disable limit enforcement  on  any  XFS  filesystem  after
+       quota  accounting is already turned on.  The default is to
+       turn on both accounting and enforcement.
+
+       The XFS  quota  implementation  does  not  maintain  quota
+       information  in user-visible files, but rather stores this
+       information internally.
+
+   quotaoff
+       quotaoff  announces  to  the  system  that  the  specified
+       filesystems should have any disk quotas turned off.
+
+OPTIONS
+   quotaon
+       -a     All  automatically  mounted (no noauto option) non-
+              NFS filesystems in /etc/fstab with quotas will have
+              their  quotas  turned on.  This is normally used at
+              boot time to enable quotas.
+
+       -v     Display a message for each filesystem where  quotas
+              are turned on.
+
+       -u     Manipulate user quotas. This is the default.
+
+       -g     Manipulate group quotas.
+
+       -f     Make  quotaon behave like being called as quotaoff.
+
+   quotaoff
+       -a     Force all filesystems in /etc/fstab to  have  their
+              quotas disabled.
+
+       -v     Display a message for each filesystem affected.
+
+       -u     Manipulate user quotas. This is the default.
+
+       -g     Manipulate group quotas.
+
+       -x delete
+              Free  up  the  space used to hold quota information
+              (maintained internally) within XFS.  This option is
+              only applicable to XFS, and is silently ignored for
+              other filesystem types.  It can only be used  on  a
+              filesystem with quota previously turned off.
+
+       -x enforce
+              Switch  off  limit  enforcement for XFS filesystems
+              (perform quota accounting only).   This  option  is
+              only applicable to XFS, and is silently ignored for
+              other filesystem types.
+
+
+XFS EXAMPLES
+       Turning on quotas on a non-root XFS filesystem
+       Use mount(8) or /etc/fstab option  quota  to  enable  both
+       accounting  and limit enforcement.  quotaon utility cannot
+       be used for this purpose.
+
+       Turning on quotas on an XFS root filesystem
+       Use quotaon -v /,  and  reboot(8).   This  procedure  will
+       enable both accounting and limit enforcement.
+
+       Turning off quota limit enforcement on any XFS filesystem
+       Make  sure  that quota accounting and enforcement are both
+       turned on using repquota -s.  Use quotaoff -vo to  disable
+       limit  enforcement.  This may be done while the filesystem
+       is mounted.
+
+       Turning on quota limit enforcement on any XFS filesystem
+       Make  sure  that  quota  accounting  is  turned  on  using
+       repquota  -s.  Use quotaon -v.  This may be done while the
+       filesystem is mounted.
+
+FILES
+       aquota.user or aquota.group
+                           quota  file  at  the  filesystem  root
+                           (version 2 quota, non-XFS filesystems)
+       quota.user or quota.group
+                           quota  file  at  the  filesystem  root
+                           (version 1 quota, non-XFS filesystems)
+       /etc/fstab          default filesystems
+
+SEE ALSO
+       quotactl(2), fstab(5), repquota(8).
+
+
+
+                                                       QUOTAON(8)

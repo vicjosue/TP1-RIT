@@ -1,0 +1,66 @@
+sane-find-scanner(1)                         sane-find-scanner(1)
+
+
+
+NAME
+       sane-find-scanner  -  find SCSI and USB scanners and their
+       device files
+
+SYNOPSIS
+       sane-find-scanner [-h|-?]  [-v] [devname]
+
+DESCRIPTION
+       sane-find-scanner is a command-line tool to find SCSI  and
+       some  USB  scanners and determine their Unix device files.
+       It's part of the  sane-backends  package.  It  checks  the
+       default  generic SCSI devices, e.g. /dev/sg? for Linux and
+       the their USB  pendants  (e.g.  /dev/usb/scanner0).   Also
+       /dev/scanner and /dev/usb/scanner are checked. The test is
+       done by sending a SCSI inquiry command and looking  for  a
+       device type of "scanner" or "processor" (some old HP scan­
+       ners seem to send "processor"). So sane-find-scanner  will
+       find  any  SCSI  scanner even if it isn't supported by any
+       SANE backend. For USB devices, the corresponding files are
+       opened and the vendor and device ids are determined if the
+       operating system  supports  this  feature.  Currently  USB
+       scanners are only found if they are supported by the Linux
+       scanner module or the FreeBSD uscanner driver.  sane-find-
+       scanner  won't  find  parallel  port scanners, or scanners
+       connected to proprietary ports.
+
+
+OPTIONS
+       -h, -?  Prints a short usage message.
+
+       -v      Verbose output. Show every  device  name  and  the
+               test result.
+
+       devname Test  device  file "devname". No other devices are
+               checked if devname is given.
+
+EXAMPLE
+       sane-find-scanner -v
+       Check all SCSI and USB devices for available scanners  and
+       print a line for every device file.
+
+       sane-find-scanner /dev/scanner
+       Look  for  a  scanner (only) at /dev/scanner and print the
+       result.
+
+SEE ALSO
+       sane(7), sane-scsi(5), sane-usb(5), scanimage(1), xscanim­
+       age(1), xsane(1), sane-"backendname"(5)
+
+AUTHOR
+       Oliver  Rauch,  Henning  Meier-Geinitz  and others. Manual
+       page by Henning Meier-Geinitz.
+
+BUGS
+       No support for parallel port  scanners  yet.  USB  support
+       should be extended to other platforms and scanners. Detec­
+       tion of USB vendor/device ids should be extended, if  pos­
+       sible.
+
+
+
+                           16 Aug 2001       sane-find-scanner(1)

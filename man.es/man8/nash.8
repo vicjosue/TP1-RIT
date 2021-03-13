@@ -1,0 +1,111 @@
+NASH(8)                                                   NASH(8)
+
+
+
+NAME
+       nash - script interpretor to interpret linuxrc images
+
+SYNOPSIS
+       nash [--force] script
+
+
+DESCRIPTION
+       nash is a very simple script interpretor designed to be as
+       small as possible. It is primarily designed to run  simple
+       linuxrc  scripts on an initrd image. Arguments to commands
+       may be enclosed in either single or double quotes to allow
+       spaces  to be included in the arguments. Spaces outside of
+       quotations always delineate arguments,  and  so  backslash
+       escaping is supported.
+
+       Additionally,  if  nash  is  invoked  as modprobe, it will
+       immediately exit with a return code of zero.  This  is  to
+       allow  initrd's  to  prevent  some extraneous kernel error
+       messages during startup originating from kmod.
+
+       There are two types of commands, built  in  and  external.
+       External   commands   are  run  from  the  filesystem  via
+       execve(). If commands names are given without a path, nash
+       will  search  it's  builtin PATH, which is /usr/bin, /bin,
+       /sbin, /usr/sbin.
+
+       Currently, nash supports the following built in  commands.
+
+
+       echo [item]* [> filename]
+              Echos  the  text  strings  given  to a file, with a
+              space in between  each  item.  The  output  may  be
+              optionally redirected to a file.
+
+              exec  <command>  The command given is execed, over­
+              laying the nash process.
+
+
+       losetup /dev/loopdev file
+              Binds file to the loopback device /dev/loopdev. See
+              losetup(8) for information on loopback devices.
+
+
+       mkdir [-p] path
+              Creates  the  directory  path.  If -p is specified,
+              this command will not  complain  if  the  directory
+              exists. Note this is a subset of the standard mkdir
+              -p behavior.
+
+
+       mkrootdev path
+              Makes path a  block  inode  for  the  device  whose
+              device number is /proc/sys/kernel/real-root-dev.
+
+
+       mount [--ro] -t type device mntpoint [flags]
+              Mounts  a  filesystem. It does not support NFS, and
+              it must be used in exactly the form given above. If
+              --ro is given, the filesystem is mounted read only.
+              flags may be omitted.
+
+
+       pivot_root newrootpath oldrootpath
+              Makes the filesystem mounted at newrootpath the new
+              root   filesystem,  and  mounts  the  current  root
+              filesystem as oldrootpath.
+
+
+       raidautorun mddevice
+              Runs raid autodetection on  all  raid-typed  parti­
+              tions.  mddevice  must  be  a raid device (any will
+              do).
+
+
+       umount path
+              Unmounts the filesystem mounted at path.
+
+
+       handledevfs
+              Useful  after  a  pivot_root,  because  the   devfs
+              filesystem,  if already mounted by the kernel (with
+              the use of kernel parameter devfs=mount), is at the
+              wrong  location  (/initrd/dev  instead of /dev) and
+              needs to be remounted at the correct location.
+
+
+OPTIONS
+       --force
+              Allows force really execute the script, even though
+              nash  doesn't  appear  to be running from an initrd
+              image.
+
+
+BUGS
+       Probably many. nash is not a shell, and  it  shouldn't  be
+       though  of  as  one.  It  isn't  entirely different from a
+       shell, but that's mostly by accident.
+
+
+AUTHOR
+       Erik Troan <ewt@redhat.com>
+       Patches for MandrakeSoft by Guillaume Cottenceau <gc@mandrakesoft.com>
+
+
+
+                         Sat Mar 27 1999                  NASH(8)

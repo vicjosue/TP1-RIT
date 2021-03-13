@@ -1,0 +1,69 @@
+MAKEDBM(8)                                             MAKEDBM(8)
+
+
+
+NAME
+       makedbm - create or dump a ypserv database file
+
+SYNOPSIS
+       /usr/lib/yp/makedbm  [ -a | -r ] [ -b ] [ -c ] [ -s ] [ -l
+       ] [ -i YP_INPUT_NAME ] [ -o YP_OUTPUT_NAME ] [ -m  YP_MAS­
+       TER_NAME ] inputfile dbname
+       /usr/lib/yp/makedbm -u dbname
+       /usr/lib/yp/makedbm -c
+       /usr/lib/yp/makedbm --version
+
+DESCRIPTION
+       makedbm  takes  the  inputfile and converts it to a ypserv
+       database file. In the moment, GDBM is  used  as  database.
+       Each  line  of  the  input  file  is converted to a single
+       record. All characters up to the first TAB  or  SPACE  are
+       the  key,  and  the rest of the line is the data.  makedbm
+       does not treat `#' as a special character.
+
+OPTIONS
+       -a     Special support for mail aliases. We  couldn't  use
+              sendmail for it, since sendmail uses db, but ypserv
+              gdbm as database format.
+
+       -b     Insert the YP_INTERDOMAIN into  the  output.   This
+              key  causes  ypserv(8) to use DNS for host name and
+              address lookups for hosts not found in the maps.
+
+       -c     send a YPPROC_CLEAR to the local  ypserv(8).   This
+              causes ypserv to invalidate all cached entries.
+
+       -l     Convert the keys of the given map to lower case.
+
+       -i YP_INPUT_NAME
+              Create  a special entry with the key YP_INPUT_NAME.
+
+       -m YP_MASTER_NAME
+              Create a special entry with the key YP_MASTER_NAME.
+              If no master host name is specified, YP_MASTER_NAME
+              will be set to the local host name.
+
+       -o YP_OUTPUT_NAME
+              Create a special entry with the key YP_OUTPUT_NAME.
+
+       -r     Handle  `#' as comment sign and remove the comment.
+
+       -s     Secure map. Accept connections from secure NIS net­
+              works only (reserved ports).
+
+       -u dbname
+              Dump a ypserv database file. Prints out the file in
+              text format, one entry  per  line,  with  a  single
+              space separating keys from values.
+
+       --no-limit-check
+              Don't check for NIS key and data limit.
+
+SEE ALSO
+       ypserv(8)
+
+AUTHOR
+       makedbm was written by Thorsten Kukuk <kukuk@suse.de>.
+
+
+

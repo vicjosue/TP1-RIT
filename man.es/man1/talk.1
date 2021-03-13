@@ -1,0 +1,74 @@
+TALK(1)                 System General Commands Manual                 TALK(1)
+
+NAME
+     talk - talk to another user
+
+SYNOPSIS
+     talk person [ttyname]
+
+DESCRIPTION
+     Talk is a visual communication program which copies lines from your ter­
+     minal to that of another user.
+
+     Options available:
+
+     person   If you wish to talk to someone on your own machine, then person
+              is just the person's login name.  If you wish to talk to a user
+              on another host, then person is of the form `user@host'.
+
+     ttyname  If you wish to talk to a user who is logged in more than once,
+              the ttyname argument may be used to indicate the appropriate
+              terminal name, where ttyname is of the form `ttyXX' or `pts/X'.
+
+     When first called, talk contacts the talk daemon on the other user's
+     machine, which sends the message
+           Message from TalkDaemon@his_machine...
+           talk: connection requested by your_name@your_machine.
+           talk: respond with: talk your_name@your_machine
+
+     to that user. At this point, he then replies by typing
+
+           talk  your_name@your_machine
+
+     It doesn't matter from which machine the recipient replies, as long as
+     his login name is the same.  Once communication is established, the two
+     parties may type simultaneously; their output will appear in separate
+     windows.  Typing control-L (^L) will cause the screen to be reprinted.
+     The erase, kill line, and word erase characters (normally ^H, ^U, and ^W
+     respectively) will behave normally.  To exit, just type the interrupt
+     character (normally ^C); talk then moves the cursor to the bottom of the
+     screen and restores the terminal to its previous state.
+
+     As of netkit-ntalk 0.15 talk supports scrollback; use ^P and ^N to scroll
+     your window, and meta-p and meta-n to scroll the other window. (You can
+     also use escape-p and escape-n.)
+
+     If you do not want to receive talk requests, you may block them using the
+     mesg(1) command.  By default, talk requests are normally not blocked.
+     Certain commands, in particular nroff(1), pine(1), and pr(1), may block
+     messages temporarily in order to prevent messy output.
+
+FILES
+     /etc/hosts     to find the recipient's machine
+     /var/run/utmp  to find the recipient's tty
+
+SEE ALSO
+     mail(1), mesg(1), who(1), write(1), talkd(8)
+
+BUGS
+     The protocol used to communicate with the talk daemon is braindead.
+
+     Also, the version of talk(1) released with 4.2BSD uses a different and
+     even more braindead protocol that is completely incompatible. Some vendor
+     Unixes (particularly those from Sun) have been found to use this old pro­
+     tocol.
+
+     Old versions of talk may have trouble running on machines with more than
+     one IP address, such as machines with dynamic SLIP or PPP connections.
+     This problem is fixed as of netkit-ntalk 0.11, but may affect people you
+     are trying to communicate with.
+
+HISTORY
+     The talk command appeared in 4.2BSD.
+
+Linux NetKit (0.17-pre-20000412)November 24, 199L9inux NetKit (0.17-pre-20000412)

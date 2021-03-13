@@ -1,0 +1,49 @@
+ppmtowinicon(1)                                   ppmtowinicon(1)
+
+
+
+NAME
+       ppmtowinicon  -  convert 1 or more portable pixmaps into a
+       Windows .ico file
+
+SYNOPSIS
+       ppmtowinicon [-andppms] [-output output.ico] [ppmfiles...]
+
+DESCRIPTION
+       Reads  one  or more portable pixmaps as input.  Produces a
+       Microsoft Windows .ico file as output.
+
+       A Windows icon contains 1 or  more  images,  at  different
+       resolutions and color depths.
+
+       Microsoft recommends including at least the following for­
+       mats in each icon.
+
+       16 x 16 - 4 bpp
+
+       32 x 32 - 4 bpp
+
+       48 x 48 - 8 bpp
+
+       Default I/O is STDIN/STDOUT.
+
+OPTIONS
+       -andppms
+              If this option is given, every other file  is  read
+              as a bitmask to be used by windows for transparancy
+              data for the previous image.   (These  are  set  to
+              blank by default.)
+
+       -output output.ico
+              File  to write.  By default, the icon is written to
+              stdout.
+
+SEE ALSO
+       winicontoppm(1), ppm(5)
+
+AUTHOR
+       Copyright (C) 2000 by Lee Benfield.
+
+
+
+                           22 May 2000            ppmtowinicon(1)

@@ -1,0 +1,243 @@
+MYSQLDUMP(1)                                         MYSQLDUMP(1)
+
+
+
+NAME
+       mysqldump  -  text-based  client for dumping or backing up
+       mysql databases , tables and or data.
+
+
+USAGE
+       mysqldump [OPTIONS] database [tables]
+
+       OR     mysqldump [OPTIONS] --databases [OPTIONS] DB1  [DB2
+              DB3...]
+
+       OR     mysqldump [OPTIONS] --all-databases [OPTIONS]
+
+
+OPTION SYNOPSIS
+       mysqldump [-A|--all-databases] [-a|--all] [-#|--debug=...]
+       [--character-sets-dir=...]   [-?|--help]  [-B|--databases]
+       [-c|--complete-insert]  [-C|--compress] [--default-charac­
+       ter-set=...]   [-e|--extended-insert]   [--add-drop-table]
+       [--add-locks]     [--allow-keywords]    [--delayed-insert]
+       [-F|--flush-logs]       [-f|--force]       [-h|--host=...]
+       [-l|--lock-tables]   [-n|--no-create-db]  [-t|--no-create-
+       info] [-d|--no-data] [-O|--set-variablevar=option] [--opt]
+       [-p|--password[=...]]     [-P|--port=...]     [-q|--quick]
+       [-Q|--quote-names]      [-S|--socket=...]       [--tables]
+       [-T|--tab=...]   [-u|--user=#]  [-v|--verbose]  [-V|--ver­
+       sion]  [-w|--where=]  [--delayed]   [-e|--extended-insert]
+       [--fields-terminated-by=...]    [--fields-enclosed-by=...]
+       [--fields-optionally-enclosed-by=...]
+       [--fields-escaped-by=...]      [--lines-terminated-by=...]
+       [-v|--verbose]  [-V|--version]  [-O   net_buffer_length=#,
+       where # < 16M]
+
+DESCRIPTION
+       Dumping definition and data mysql database or table mysql­
+       dump supports by executing
+
+       -A|--all-databases
+              Dump all  the  databases.  This  will  be  same  as
+              -databases with all databases selected.
+
+       -a|--all
+              Include all MySQL specific create options.
+
+       -#|--debug=...
+              Output debug log. Often this is 'd:t:o,filename`.
+
+       --character-sets-dir=...
+              Directory where character sets are
+
+       -?|--help
+              Display this help message and exit.
+
+       -B|--databases
+              To  dump  several databases. Note the difference in
+              usage; In this case no tables are given.  All  name
+              arguments are regarded as databasenames.
+
+       -c|--complete-insert
+              Use complete insert statements.
+
+       -C|--compress
+              Use compression in server/client protocol.
+
+       --default-character-set=...
+              Set the default character set
+
+       -e|--extended-insert
+              Allows  utilization  of the new, much faster INSERT
+              syntax.
+
+       --add-drop-table
+              Add a 'drop table' before each create.
+
+       --add-locks
+              Add locks around insert statements.
+
+       --allow-keywords
+              Allow creation of column names that are keywords.
+
+       --delayed-insert
+              Insert rows with INSERT DELAYED.
+
+       -F|--flush-logs
+              Flush logs file in server before starting dump.
+
+       -f|--force
+              Continue even if we get an sql-error.
+
+       -h|--host=...
+              Connect to host.
+
+       -l|--lock-tables
+              Lock all tables for read.
+
+       -n|--no-create-db
+              will not be put in the output. The above line  will
+              be    added    otherwise,    if    --databases   or
+              --all-databases option was given.
+
+       -t|--no-create-info
+              Don't write table creation info.
+
+       -d|--no-data
+              No row information.
+
+       -O|--set-variable var=option
+              give a variable a value.  --help lists variables
+
+       --opt  Same  as     --add-drop-table   --add-locks   --all
+              --extended-insert --quick --lock-tables
+
+       -p|--password[=...]
+              Password  to  use  when  connecting  to server.  If
+              password is not given it's solicited on the tty.
+
+       -P|--port=...
+              Port number to use for connection.
+
+       -q|--quick
+              Don't buffer query, dump directly to stdout.
+
+       -Q|--quote-names
+              Quote table and column names with `
+
+       -S|--socket=...
+              Socket file to use for connection.
+
+       --tables
+              Overrides option --databases(-B).
+
+       -T|--tab=...
+              Creates tab separated textfile for  each  table  to
+              given  path.  (creates .sql and .txt files).  NOTE:
+              This only works if mysqldump is  run  on  the  same
+              machine as the mysqld daemon.
+
+       -u|--user=#
+              User for login if not current user.
+
+       -v|--verbose
+              Print info about the various stages.
+
+       -V|--version
+              Output version information and exit.
+
+       -w|--where=
+              dump only selected records; QUOTES mandatory!
+
+       --delayed
+              Insert rows with the INSERT DELAYED command.
+
+       -e|--extended-insert
+              Use  the  new  multiline INSERT syntax. (Gives more
+              compact and faster inserts statements.)
+
+       --fields-terminated-by=...
+
+       --fields-enclosed-by=...
+
+
+       --fields-optionally-enclosed-by=...
+
+       --fields-escaped-by=...
+
+       --lines-terminated-by=...
+              These options are used with  the  -T  option
+              and have the same meaning as the correspond­
+              ing clauses for LOAD DATA INFILE. See  Mysql
+              manual section 7.23 LOAD DATA INFILE Syntax.
+
+       -v|--verbose
+              Verbose mode. Print out more information  on
+              what the program does.
+
+       -V|--version
+              Print version information and exit.
+
+       -O net_buffer_length=#, where # < 16M
+              When  creating  multi-row-insert  statements
+              (as with option --extended-insert  or  --opt
+              ),   mysqldump   will   create  rows  up  to
+              net_buffer_length length.  If  you  increase
+              this  variable,  you should also ensure that
+              the max_allowed_packet variable in the MySQL
+              server is bigger than the net_buffer_length.
+
+EXAMPLES
+       The most normal use of mysqldump  is  probably  for
+       making  a backup of whole databases. See Mysql Man­
+       ual section 21.2 Database Backups.
+
+       mysqldump  --opt database > backup-file.sql
+
+       You can read this back into MySQL with:
+
+       mysql  database < backup-file.sql
+
+       or
+
+       mysql  -e 'source /patch-to-backup/backup-file.sql'
+              database
+
+       However,  it's also very useful to populate another
+       MySQL server with information from a database:
+
+       mysqldump --opt database | mysql --host=remote-host
+       -C database
+
+       It  is  possible to dump several databases with one
+       command:
+
+       mysqldump   --databases   database1   [   database2
+       database3... ]  > my_databases.sql
+
+       If all the databases are wanted, one can use:
+
+       mysqldump --all-databases > all_databases.sql
+
+
+SEE ALSO
+       isamchk (1), isamlog (1), mysqlaccess (1), mysqlad­
+       min (1), mysqlbug (1), mysqld (1),  mysqldump  (1),
+       mysqlshow  (1), msql2mysql (1), perror (1), replace
+       (1), safe_mysqld (1), which1 (1), zap (1),
+
+AUTHOR
+       Ver  1.0,  distribution  3.23.29a  Michael  (Monty)
+       Widenius   (monty@tcx.se),   TCX   Datakonsult   AB
+       (http://www.tcx.se).  This software comes  with  no
+       warranty.   Manual  page  by  L.  (Kill-9) Pedersen
+       (kill-9@kill-9.dk), Mercurmedia Data  Model  Archi­
+       tect   /   system  developer  (http://www.mercurme­
+       dia.com)
+
+
+
+
+                         19 December 2000            MYSQLDUMP(1)

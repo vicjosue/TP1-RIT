@@ -1,0 +1,57 @@
+SUPERMOUNT(8)              MandrakeSoft             SUPERMOUNT(8)
+
+
+
+NAME
+       supermount - Enable or disable supermount feature
+
+SYNOPSIS
+       supermount [OPTION]... <disable | enable>
+
+DESCRIPTION
+       supermount  allows  system administrator to enable or dis­
+       able the supermount feature  offered  in  recent  mandrake
+       kernels.   This feature automatically manages mounting and
+       unmounting removable medias when needed.  The script  sim­
+       ply  adds  or remove the supermount option from within the
+       entries of the /etc/fstab file.   Without  option  -i  the
+       modified file is printed to stdout.
+
+       supermount  has  to  be launched with one of the following
+       arguments:
+
+       enable in order to enable supermount feature  on  relevant
+       drives
+              (cdrom and floppy drives),
+
+       disable in order to disable the supermount feature on all
+              drives.
+
+OPTIONS
+       -f=FILE, --file=FILE Indicates an alternate file where
+              to make modifications. The default is /etc/fstab.
+
+       -m, --mountpoint Specify a specificall mountpoint to
+              enable.
+
+       -i, --infile Modifications are made directly to
+              /etc/fstab or FILE  specified  through  -f  option,
+              instead of being outputted to stdout.
+
+       -h, --help, -? print a short help message.
+
+SEE ALSO
+       fstab(5), mount(8), umount(8),
+
+AUTHOR
+       Chmouel Boudjnah  - chmouel@mandrakesoft.com and others.
+
+COPYRIGHT
+       Copyright © 1999/2000/2001 MandrakeSoft.
+       This  is  free software; see the source for copying condi­
+       tions.  There is NO warranty; not even for MERCHANTABILITY
+       or FITNESS FOR A PARTICULAR PURPOSE.
+
+
+
+initscripts                  Dec 1999               SUPERMOUNT(8)

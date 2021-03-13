@@ -1,0 +1,118 @@
+aaxine(1)                                               aaxine(1)
+
+
+
+NAME
+       aaxine - an ASCII art video player
+
+
+SYNOPSIS
+       aaxine  [aalib-options] [-A<audio-driver>] [-a<audio-chan­
+       nel>] [-R<rec-by>] [MRL...]
+
+
+DESCRIPTION
+       This manual page explains the aaxine program.  Aaxine,  is
+       an   aalib   based   frontend  for  libxine,  a  versatile
+       video/multimedia player.
+
+       aaxine is for those who don't have a high end video  card,
+       but just want to watch DVDs on their good old vt100 ;-)
+
+       Like  xine,  aaxine  plays  MPEG  system (audio and video)
+       streams,  mpeg  elementary  streams  (e.g.  .mp3  or  .mpv
+       files),  avi files (using win32 codecs or ffmpeg), (S)VCDs
+       and DVDs. In short, anything that's supported by xine-lib.
+
+
+OPTIONS
+       The  program  follows  usual GNU command line syntax, with
+       long options starting with two dashes (`-').  A summary of
+       options  are  included below.  For a complete description,
+       see README and FAQ in  /usr/share/doc/xine-ui  or  on  the
+       xine home page.
+
+       -h, --help
+              Show   summary  of  options  and  available  output
+              drivers (plugins).  A big bunch of these options is
+              provided by aalib. Please refer to your aalib docu­
+              mentation for those!
+
+              The remaining  options,  labelled  AAXINE  options:
+              when  listed  with  "aaxine  --help", are explained
+              here.
+
+       -A, --audio-driver <id>
+              Use given audio driver. Available  drivers  can  be
+              listed with "aaxine --help"
+
+       -a, --audio-channel #
+              Use  given audio channel. Channels are sequentially
+              numbered from 0 for first audio track.
+
+       -R, --recognize-by [option]
+              Determine the method used to recognize stream type.
+              Possible options are:
+              default: by content, then by extension,
+              revert: by extension, then by content,
+              content: only by content,
+              extension: only by extension.
+              If  -R  is  given  without  an  additional option,,
+              'revert' is selected.
+
+
+MRLs
+       MRLs are  similar  to  URLs  in  your  web  browser.  They
+       describe  the  media to read from. valid MRLs may be plain
+       file names or one of the following:
+       file://<path>
+       fifo://<path>
+       stdin://mpeg1 or stdin://mpeg2
+       dvd://VTS_xx_y.VOB
+       vcd://<track number>
+       tcp://<host>:<port>
+       rtp://<host>:<port>
+       udp://<host>:<port>
+
+       Several MRLs may be specified in order to play a number of
+       consecutive streams. Additional input plugins will provide
+       additional MRL types.  The ones listed above are available
+       with stock libxine...
+
+
+CONTROL KEYS
+       Many  features can be controlled by pressing control keys.
+       The Key bindings are:
+
+       RETURN or R: Play
+       SPACE or P: Pause
+       0: Jump to start of current stream
+       1..9: Jump to 10%..90% of current stream
+       PgUp: Jump to previous stream in playlist
+       PgDown: Jump to next stream in playlist
+       +: Select next audio channel (may take up to a few seconds
+       to take effect)
+       -: Select prev audio channel
+       Q: Exit.
+
+
+BUGS
+       none, of course ;-) Well, there are surely a few of those.
+       You can probably best ask for support (and report bugs) on
+       our mailing list at <xine-user@lists.sf.net>.
+
+
+SEE ALSO
+       xine(1)
+       http://xine.sf.net
+       http://aa-project.sf.net/aalib
+       xine-lib(3)
+
+
+AUTHOR
+       Siggi Langauf for the xine project.
+       Copyright © 2001 The xine project
+
+
+
+The xine project         August 29, 2001                aaxine(1)

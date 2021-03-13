@@ -1,0 +1,61 @@
+MEDUSA-CONFIG(1)                                 MEDUSA-CONFIG(1)
+
+
+
+NAME
+       medusa-config  -  get  compilation  options  needed to use
+       medusa libraries
+
+SYNOPSIS
+       medusa-config
+              [ --prefix=directory ] [ --exec_prefix=directory  ]
+              --cflags  |  --libs  |  --prefix  | --exec-prefix |
+              --version | --help
+
+DESCRIPTION
+       medusa-config provides information about the command  line
+       options needed to use the medusa libraries.
+
+       These options change medusa-config's idea of the installa­
+       tion prefix:
+
+       --prefix=directory
+              Act as if medusa files had been installed into  the
+              specified directory
+
+       --exec_prefix=directory
+              Act  as  if  medusa  executables had been installed
+              into the specified directory
+
+       These options  specify  what  you  want  medusa-config  to
+       report.  At least one of these must be specified.
+
+       --cflags
+              Report  the  flags  that  need to be given to the C
+              compiler to use the medusa libraries
+
+       --libs Report the flags that need to be  given  to  the  C
+              compiler to link against the medusa libraries
+
+       --prefix
+              Report  the  prefix directory into which the medusa
+              files were installed
+
+       --exec_prefix
+              Report the prefix directory into which  the  medusa
+              executables were installed.
+
+       --version
+              Report the version of medusa that is installed
+
+       This   option  provides  information  about  medusa-config
+       itself:
+
+       --help Summarize the options available for  medusa-config.
+
+SEE ALSO
+       libmedusa(3)
+
+
+
+Eazel                    February 8, 2001        MEDUSA-CONFIG(1)

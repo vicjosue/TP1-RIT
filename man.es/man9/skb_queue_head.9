@@ -1,0 +1,54 @@
+SKB_QUEUE_HEAD(9)      Networking Functions     SKB_QUEUE_HEAD(9)
+
+
+
+NAME
+       skb_queue_head - insert an sk_buff at the head of a list
+
+SYNOPSIS
+       #include <linux/skbuff.h>
+
+       void  __skb_queue_head(struct sk_buff_head *list, struct
+              sk_buff *newsk);
+
+       void  skb_queue_head(struct sk_buff_head *list, struct
+       sk_buff *newsk);
+
+
+DESCRIPTION
+       The skb_queue_head function adds  newsk  to  the  head  of
+       list.   Specifically,  it  sets  the  list, next, and prev
+       pointers in newsk, and  increments  the  qlen  element  of
+       list.   It  also  rearranges the next and prev pointers in
+       the existing head of list before returning.
+
+RETURN VALUE
+       None.
+
+NOTES
+       It is important to note the difference  between  not  only
+       __skb_queue_head  and  skb_queue_head,  but all the __skb_
+       functions and their skb_ counterparts.   Essentially,  the
+       __skb_  functions  are non-atomic, and should only be used
+       with interrupts disabled.   As  a  convenience,  the  skb_
+       functions  are provided, which perform interrupt disable /
+       enable wrapper functionality  in  addition  to  performing
+       their specific tasks.
+
+AVAILABILITY
+       Linux 1.0+
+
+SEE ALSO
+       intro(9), skb_queue_tail(9), skb_insert(9)
+
+       /usr/src/linux/net/ax25/af_ax25.c
+       /usr/src/linux/net/core/skbuff.c
+       /usr/src/linux/net/ipv4/tcp_input.c
+       /usr/src/linux/net/netrom/nr_in.c
+
+AUTHOR
+       Cyrus Durgin <cider@speakeasy.org>
+
+
+
+Linux DDI               November 24, 1997       SKB_QUEUE_HEAD(9)

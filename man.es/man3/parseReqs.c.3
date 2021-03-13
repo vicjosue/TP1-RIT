@@ -1,0 +1,57 @@
+build/parseReqs.c(3)                         build/parseReqs.c(3)
+
+
+
+NAME
+       build/parseReqs.c - Parse dependency tag from spec file or
+       from auto-dependency generator.
+
+SYNOPSIS
+       #include 'system.h'
+       #include 'rpmbuild.h'
+       #include 'debug.h'
+
+   Data Structures
+       struct ReqComp
+
+   Defines
+       #define SKIPWHITE(_x)   {while(*(_x) && (xisspace(*_x) ||
+           *(_x) == ',')) (_x)++;}
+       #define SKIPNONWHITE(_x)   {while(*(_x) &&!(xisspace(*_x)
+           || *(_x) == ',')) (_x)++;}
+
+   Functions
+       int parseRCPOT (Spec spec, Package pkg, const char *field,
+           int tag, int index, rpmsenseFlags tagflags)
+
+   Variables
+       ReqComp ReqComparisons []
+
+DETAILED DESCRIPTION
+       Parse dependency tag from spec file or from auto-
+       dependency generator.
+
+
+
+       Definition in file parseReqs.c.
+
+DEFINE DOCUMENTATION
+   #define SKIPNONWHITE(_x)   {while(*(_x) &&!(xisspace(*_x) ||
+       *(_x) == ',')) (_x)++;}
+       Definition at line 32 of file parseReqs.c.
+
+   #define SKIPWHITE(_x)   {while(*(_x) && (xisspace(*_x) ||
+       *(_x) == ',')) (_x)++;}
+       Definition at line 31 of file parseReqs.c.
+
+VARIABLE DOCUMENTATION
+   struct ReqComp  ReqComparisons[] [static]
+       Referenced by parseRCPOT.
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002       build/parseReqs.c(3)

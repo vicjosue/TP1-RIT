@@ -1,0 +1,73 @@
+LWRES_GETNAMEINFO(3)                         LWRES_GETNAMEINFO(3)
+
+
+
+NAME
+       lwres_getnameinfo  -  lightweight  resolver socket address
+       structure to hostname and service name
+
+SYNOPSIS
+       #include <lwres/netdb.h>
+
+       int lwres_getnameinfo(const struct sockaddr *sa, size_t
+       salen, char *host, size_t hostlen, char *serv, size_t
+       servlen, int flags);
+
+DESCRIPTION
+       This function is equivalent to the getnameinfo(3) function
+       defined in RFC2133.  lwres_getnameinfo() returns the host­
+       name for the struct sockaddr sa which is salen bytes long.
+       The  hostname  is  of  length  hostlen and is returned via
+       *host. The maximum length of the hostname is  1025  bytes:
+       NI_MAXHOST.
+
+       The name of the service associated with the port number in
+       sa is returned in *serv.  It is servlen  bytes  long.  The
+       maximum  length  of  the  service  name is NI_MAXSERV - 32
+       bytes.
+
+       The flags argument sets the following bits:
+
+       NI_NOFQDN
+              A fully qualified domain name is not  required  for
+              local hosts.  The local part of the fully qualified
+              domain name is returned instead.
+
+       NI_NUMERICHOST
+              Return the address in numeric form, as  if  calling
+              inet_ntop(), instead of a host name.
+
+       NI_NAMEREQD
+              A name is required. If the hostname cannot be found
+              in the DNS and this flag is set, a  non-zero  error
+              code is returned.  If the hostname is not found and
+              the flag is not set, the  address  is  returned  in
+              numeric form.
+
+       NI_NUMERICSERV
+              The service name is returned as a digit string rep­
+              resenting the port number.
+
+       NI_DGRAM
+              Specifies that the service being  looked  up  is  a
+              datagram  service, and causes getservbyport() to be
+              called with a second argument of "udp"  instead  of
+              its  default of "tcp". This is required for the few
+              ports (512-514) that have  different  services  for
+              UDP and TCP.
+
+RETURN VALUES
+       lwres_getnameinfo()  returns  0  on  success or a non-zero
+       error code if an error occurs.
+
+SEE ALSO
+       RFC2133, getservbyport(3), lwres(3), lwres_getnameinfo(3),
+       lwres_getnamebyaddr(3).  lwres_net_ntop(3).
+
+BUGS
+       RFC2133  fails to define what the nonzero return values of
+       getnameinfo(3) are.
+
+
+
+BIND9                      Jun 30, 2000      LWRES_GETNAMEINFO(3)

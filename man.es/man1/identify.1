@@ -1,0 +1,175 @@
+identify(1)                                           identify(1)
+
+
+
+NAME
+       display - display an image on an X terminal
+
+SYNOPSIS
+       identify file [ file ... ]
+
+
+DESCRIPTION
+       Identify  describes  the format and characteristics of one
+       or more image files. It will also report if  an  image  is
+       incomplete or corrupt.  The information displayed includes
+       the scene number, the file name, the width and  height  of
+       the  image,  whether  the image is colormapped or not, the
+       number of colors in the image, the number of bytes in  the
+       image,  the  format  of  the  image (JPEG, PNM, etc.), and
+       finally the number of seconds it took to read and  process
+       the image. An example line output from identify follows:
+
+           images/aquarium.miff  640x480 PseudoClass 256c 308135b
+       MIFF 1s
+
+       If -verbose is set, expect additional output including any
+       image comment:
+
+
+           Image: images/aquarium.miff
+           class: PseudoClass
+           colors: 256
+           signature:
+       eb5dca81dd93ae7e6ffae99a527eb5dca81dd93ae7e6ffae99a5275a53e
+           matte: False
+           geometry: 640x480
+              depth: 8
+           bytes: 308135
+           format: MIFF
+           comments:
+           Imported from MTV raster image: aquarium.mtv
+
+OPTIONS
+       Options  are  processed  in command line order. Any option
+       you specify on the command line remains in effect until it
+       is  explicitly changed by specifying the option again with
+       a different effect.
+
+       -cache threshold
+              megabytes of memory available to the pixel cache
+
+              Image  pixels  are  stored  in  memory   until   80
+              megabytes  of memory have been consumed. Subsequent
+              pixel operations are cached on disk. Operations  to
+              memory  are  significantly  faster but if your com­
+              puter does not have a  sufficient  amount  of  free
+              memory you may want to adjust this threshold value.
+
+
+       -debug enable debug printout
+
+       -density <width>x<height>
+              vertical and horizontal resolution in pixels of the
+              image
+
+              This   option   specifies  an  image  density  when
+              decoding a PostScript or  Portable  Document  page.
+              The  default  is 72 dots per inch in the horizontal
+              and vertical direction. This option is used in con­
+              cert with -page.
+
+
+       -depth value
+              depth of the image
+
+              This  is  the  number  of bits in a pixel. The only
+              acceptable values are 8 or 16.  Use this option  to
+              specify  the  depth  of  raw  images whose depth is
+              unknown such as GRAY, RGB, or CMYK,  or  to  change
+              the depth of any image after it has been read.
+
+
+       -format
+              output formatted image characteristics
+
+       -help  print usage instructions
+
+       -ping  efficiently determine image characteristics
+
+       -size <width>x<height>{+offset}
+              width and height of the image
+
+              Use  this option to specify the width and height of
+              raw images whose dimensions  are  unknown  such  as
+              GRAY,  RGB,  or  CMYK.  In  addition  to  width and
+              height, use -size with an offset to skip any header
+              information in the image or tell the number of col­
+              ors in a MAP image file, (e.g. -size  640x512+256).
+
+
+              For Photo CD images, choose from these sizes:
+
+                   192x128
+                   384x256
+                   768x512
+                   1536x1024
+                   3072x2048
+
+              Finally,  use  this  option  to choose a particular
+              resolution layer of a  JBIG  or  JPEG  image  (e.g.
+              -size 1024x768).
+
+
+       -verbose
+              print detailed information about the image
+
+              This  information  is  printed: image scene number;
+              image name; image size; the  image  class  (Direct­
+              Class  or  PseudoClass); the total number of unique
+              colors; and the  number  of  seconds  to  read  and
+              transform  the image.  Refer to miff for a descrip­
+              tion of the image class.
+
+
+              If -colors is also specified, the total unique col­
+              ors  in  the image and color reduction error values
+              are printed. Refer to quantize for a description of
+              these values.
+
+
+SEE ALSO
+       display(1),     animate(1),     montage(1),    mogrify(1),
+       convert(1), composite(1)
+
+
+COPYRIGHT
+       Copyright (C) 2002 ImageMagick Studio, a non-profit  orga­
+       nization  dedicated  to  making software imaging solutions
+       freely available.
+
+       Permission is hereby granted, free of charge, to any  per­
+       son obtaining a copy of this software and associated docu­
+       mentation files ("ImageMagick"), to  deal  in  ImageMagick
+       without  restriction,  including  without  limitation  the
+       rights to use, copy, modify, merge,  publish,  distribute,
+       sublicense, and/or sell copies of ImageMagick, and to per­
+       mit persons to whom the ImageMagick is furnished to do so,
+       subject to the following conditions:
+
+       The  above  copyright  notice  and  this permission notice
+       shall be included in all copies or substantial portions of
+       ImageMagick.
+
+       The  software is provided "as is", without warranty of any
+       kind, express or implied, including but not limited to the
+       warranties  of  merchantability,  fitness for a particular
+       purpose and noninfringement.  In no event shall  ImageMag­
+       ick  Studio be liable for any claim, damages or other lia­
+       bility, whether in an action of contract, tort  or  other­
+       wise, arising from, out of or in connection with ImageMag­
+       ick or the use or other dealings in ImageMagick.
+
+       Except as contained  in  this  notice,  the  name  of  the
+       ImageMagick  Studio  shall  not  be used in advertising or
+       otherwise to promote the sale, use or  other  dealings  in
+       ImageMagick  without  prior written authorization from the
+       ImageMagick Studio.
+
+
+AUTHORS
+       John Cristy, ImageMagick Studio LLC
+
+
+
+ImageMagick        $Date: 2002/01/01 06:46:48 $       identify(1)

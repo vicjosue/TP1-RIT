@@ -1,0 +1,868 @@
+PERLTODO(1)      Perl Programmers Reference Guide     PERLTODO(1)
+
+
+
+NNAAMMEE
+       perltodo - Perl TO-DO List
+
+DDEESSCCRRIIPPTTIIOONN
+       This is a list of wishes for Perl.  It is maintained by
+       Nathan Torkington for the Perl porters.  Send updates to
+       perl5-porters@perl.org.  If you want to work on any of
+       these projects, be sure to check the perl5-porters
+       archives for past ideas, flames, and propaganda.  This
+       will save you time and also prevent you from implementing
+       something that Larry has already vetoed.  One set of
+       archives may be found at:
+
+           http://www.xray.mpe.mpg.de/mailing-lists/perl5-porters/
+
+
+IInnffrraassttrruuccttuurree
+       MMaaiilliinngg lliisstt aarrcchhiivveess
+
+       Chaim suggests contacting egroup and asking them to
+       archive the other perl.org mailing lists.  Probably not
+       advocacy, but definitely perl6-porters, etc.
+
+       BBuugg ttrraacckkiinngg ssyysstteemm
+
+       Richard Foley richard@perl.org is writing one.  We looked
+       at several, like gnats and the Debian system, but at the
+       time we investigated them, none met our needs.  Since
+       then, Jitterbug has matured, and may be worth reinvestiga­
+       tion.
+
+       The system we've developed is the recipient of perlbug
+       mail, and any followups it generates from perl5-porters.
+       New bugs are entered into a mysql database, and sent on to
+       perl5-porters with the subject line rewritten to include a
+       "ticket number" (unique ID for the new bug).  If the
+       incoming message already had a ticket number in the sub­
+       ject line, then the message is logged against that bug.
+       There is a separate email interface (not forwarding to
+       p5p) that permits porters to claim, categorize, and close
+       tickets.
+
+       There is also a web interface to the system at
+       http://bugs.perl.org.
+
+       The current delay in implementation is caused by perl.org
+       lockups.  One suspect is the mail handling system, possi­
+       bly going into loops.
+
+       We still desperately need a bugmaster, someone who will
+       look at every new "bug" and kill those that we already
+       know about, those that are not bugs at all, etc.
+
+       RReeggrreessssiioonn TTeessttss
+
+       The test suite for Perl serves two needs: ensuring fea­
+       tures work, and ensuring old bugs have not been reintro­
+       duced.  Both need work.
+
+       Brent LaVelle (lavelle@metronet.com) has stepped forward
+       to work on performance tests and improving the size of the
+       test suite.
+
+       Coverage
+           Do the tests that come with Perl exercise every line
+           (or every block, or ...)  of the Perl interpreter, and
+           if not then how can we make them do so?
+
+       Regression
+           No bug fixes should be made without a corresponding
+           testsuite addition.  This needs a dedicated enforcer,
+           as the current pumpking is either too lazy or too
+           stupid or both and lets enforcement wander all over
+           the map.  :-)
+
+       __DIE__
+           Tests that fail need to be of a form that can be read­
+           ily mailed to perlbug and diagnosed with minimal back-
+           and-forth's to determine which test failed, due to
+           what cause, etc.
+
+       suidperl
+           We need regression/sanity tests for suidperl
+
+       The 25% slowdown from perl4 to perl5
+           This value may or may not be accurate, but it cer­
+           tainly is eye-catching.  For some things perl5 is
+           faster than perl4, but often the reliability and
+           extensibility have come at a cost of speed.  The
+           benchmark suite that Gisle released earlier has been
+           hailed as both a fantastic solution and as a source of
+           entirely meaningless figures.  Do we need to test
+           "real applications"?  Can you do so?  Anyone have
+           machines to dedicate to the task?  Identify the things
+           that have grown slower, and see if there's a way to
+           make them faster.
+
+CCoonnffiigguurree
+       Andy Dougherty maintain(ed|s) a list of "todo" items for
+       the configure that comes with Perl.  See Porting/pump­
+       kin.pod in the latest source release.
+
+       IInnssttaallll HHTTMMLL
+
+       Have "make install" give you the option to install HTML as
+       well.  This would be part of Configure.  Andy Wardley
+       (certified Perl studmuffin) will look into the current
+       problems of HTML installation--is 'installhtml' preventing
+       this from happening cleanly, or is pod2html the problem?
+       If the latter, Brad Appleton's pod work may fix the prob­
+       lem for free.
+
+PPeerrll LLaanngguuaaggee
+       6644--bbiitt PPeerrll
+
+       Verify complete 64 bit support so that the value of
+       sysseek, or "-s", or stat(), or tell can fit into a perl
+       number without losing precision.  Work with the perl-64bit
+       mailing list on perl.org.
+
+       PPrroottoottyyppeess
+
+
+       Named prototypes
+           Add proper named prototypes that actually work use­
+           fully.
+
+
+
+       Indirect objects
+           Fix prototype bug that forgets indirect objects.
+
+       Method calls
+           Prototypes for method calls.
+
+       Context
+           Return context prototype declarations.
+
+       Scoped subs
+           lexically-scoped subs, e.g. my sub
+
+PPeerrll IInntteerrnnaallss
+       mmaaggiicc_sseettiissaa
+
+       "magic_setisa" should be made to update %FIELDS [???]
+
+       GGaarrbbaaggee CCoolllleeccttiioonn
+
+       There was talk of a mark-and-sweep garbage collector at
+       TPC2, but the (to users) unpredictable nature of its
+       behaviour put some off.  Sarathy, I believe, did the work.
+       Here's what he has to say:
+
+       Yeah, I hope to implement it someday too.  The points that
+       were raised in TPC2 were all to do with calling DESTROY()
+       methods, but I think we can accommodate that by extending
+       bless() to stash extra information for objects so we track
+       their lifetime accurately for those that want their
+       DESTROY() to be predictable (this will be a speed hit,
+       naturally, and will therefore be optional, naturally. :)
+
+       [N.B. Don't even ask me about this now!  When I have the
+       time to write a cogent summary, I'll post it.]
+
+       RReelliiaabbllee ssiiggnnaallss
+
+       Sarathy and Dan Sugalski are working on this.  Chip posted
+       a patch earlier, but it was not accepted into 5.005.  The
+       issue is tricky, because it has the potential to greatly
+       slow down the core.
+
+       There are at least three things to consider:
+
+       Alternate runops() for signal despatch
+           Sarathy and Dan are discussed this on perl5-porters.
+
+       Figure out how to die() in delayed sighandler
+       Add tests for Thread::Signal
+       Automatic tests against CPAN
+           Is there some way to automatically build all/most of
+           CPAN with the new Perl and check that the modules
+           there pass all the tests?
+
+       IInntteerrppoollaatteedd rreeggeexx ppeerrffoorrmmaannccee bbuuggss
+
+         while (<>) {
+           $found = 0;
+           foreach $pat (@patterns) {
+             $found++ if /$pat/o;
+           }
+           print if $found;
+         }
+
+       The qr// syntax added in 5.005 has solved this problem,
+       but it needs more thorough documentation.
+
+       MMeemmoorryy lleeaakkss ffrroomm ffaaiilleedd eevvaall//rreeggccoommpp
+
+       The only known memory leaks in Perl are in failed code or
+       regexp compilation.  Fix this.  Hugo Van Der Sanden will
+       attempt this but won't have tuits until January 1999.
+
+       MMaakkee XXSS eeaassiieerr ttoo uussee
+
+       There was interest in SWIG from porters, but nothing has
+       happened lately.
+
+       MMaakkee eemmbbeeddddeedd PPeerrll eeaassiieerr ttoo uussee
+
+       This is probably difficult for the same reasons that "XS
+       For Dummies" will be difficult.
+
+       NNaammeessppaaccee cclleeaannuupp
+
+           CPP-space:    restrict CPP symbols exported from headers
+           header-space: move into CORE/perl/
+           API-space:    begin list of things that constitute public api
+           env-space:    Configure should use PERL_CONFIG instead of CONFIG etc.
+
+
+       MMUULLTTIIPPLLIICCIITTYY
+
+       Complete work on safe recursive interpreters
+       "Perl->new()".  Sarathy says that a reference implementa­
+       tion exists.
+
+       MMaaccPPeerrll
+
+       Chris Nandor and Matthias Neeracher are working on better
+       integrating MacPerl into the Perl distribution.
+
+DDooccuummeennttaattiioonn
+       There's a lot of documentation that comes with Perl.  The
+       quantity of documentation makes it difficult for users to
+       know which section of which manpage to read in order to
+       solve their problem.  Tom Christiansen has done much of
+       the documentation work in the past.
+
+       AA cclleeaarr ddiivviissiioonn iinnttoo ttuuttoorriiaall aanndd rreeffeerreennccee
+
+       Some manpages (e.g., perltoot and perlreftut) clearly set
+       out to educate the reader about a subject.  Other manpages
+       (e.g., perlsub) are references for which there is no tuto­
+       rial, or are references with a slight tutorial bent.  If
+       things are either tutorial or reference, then the reader
+       knows which manpage to read to learn about a subject, and
+       which manpage to read to learn all about an aspect of that
+       subject.  Part of the solution to this is:
+
+       RReemmoovvee tthhee aarrttiiffiicciiaall ddiissttiinnccttiioonn bbeettwweeeenn ooppeerraattoorrss aanndd
+       ffuunnccttiioonnss
+
+       History shows us that users, and often porters, aren't
+       clear on the operator-function distinction.  The present
+       split in reference material between perlfunc and perlop
+       hinders user navigation.  Given that perlfunc is by far
+       the larger of the two, move operator reference into perl­
+       func.
+
+
+
+       MMoorree ttuuttoorriiaallss
+
+       More documents of a tutorial nature could help.  Here are
+       some candidates:
+
+       Regular expressions
+           Robin Berjon (r.berjon@ltconsulting.net) has volun­
+           teered.
+
+       I/O Mark-Jason Dominus (mjd@plover.com) has an outline for
+           perliotut.
+
+       pack/unpack
+           This is badly needed.  There has been some discussion
+           on the subject on perl5-porters.
+
+       Debugging
+           Ronald Kimball (rjk@linguist.dartmouth.edu) has volun­
+           teered.
+
+       IInncclluuddee aa sseeaarrcchh ttooooll
+
+       perldoc should be able to 'grep' fulltext indices of
+       installed POD files.  This would let people say:
+
+         perldoc -find printing numbers with commas
+
+       and get back the perlfaq entry on 'commify'.
+
+       This solution, however, requires documentation to contain
+       the keywords the user is searching for.  Even when the
+       users know what they're looking for, often they can't
+       spell it.
+
+       IInncclluuddee aa llooccaattee ttooooll
+
+       perldoc should be able to help people find the manpages on
+       a particular high-level subject:
+
+         perldoc -find web
+
+       would tell them manpages, web pages, and books with mate­
+       rial on web programming.  Similarly "perldoc -find
+       databases", "perldoc -find references" and so on.
+
+       We need something in the vicinity of:
+
+         % perl -help random stuff
+         No documentation for perl function `random stuff' found
+         The following entry in perlfunc.pod matches /random/a:
+           =item rand EXPR
+
+           =item rand
+
+           Returns a random fractional number greater than or equal to C<0> and less
+           than the value of EXPR.  (EXPR should be positive.)  If EXPR is
+           omitted, the value C<1> is used.  Automatically calls C<srand()> unless
+           C<srand()> has already been called.  See also C<srand()>.
+
+
+
+
+
+
+
+           (Note: If your rand function consistently returns numbers that are too
+           large or too small, then your version of Perl was probably compiled
+           with the wrong number of RANDBITS.)
+         The following pod pages seem to have /stuff/a:
+           perlfunc.pod        (7 hits)
+           perlfaq7.pod        (6 hits)
+           perlmod.pod         (4 hits)
+           perlsyn.pod         (3 hits)
+           perlfaq8.pod        (2 hits)
+           perlipc.pod         (2 hits)
+           perl5004delta.pod   (1 hit)
+           perl5005delta.pod   (1 hit)
+           perlcall.pod        (1 hit)
+           perldelta.pod       (1 hit)
+           perlfaq3.pod        (1 hit)
+           perlfaq5.pod        (1 hit)
+           perlhist.pod        (1 hit)
+           perlref.pod         (1 hit)
+           perltoc.pod         (1 hit)
+           perltrap.pod        (1 hit)
+         Proceed to open perlfunc.pod? [y] n
+         Do you want to speak perl interactively? [y] n
+         Should I dial 911? [y] n
+         Do you need psychiatric help? [y] y
+         <PELIZA> Hi, what bothers you today?
+                  A Python programmer in the next cubby is driving me nuts!
+         <PELIZA> Hmm, thats fixable.  Just [rest censored]
+
+
+       SSeeppaarraattee ffuunnccttiioonn mmaannppaaggeess bbyy ddeeffaauulltt
+
+       Perl should install 'manpages' for every function/operator
+       into the 3pl or 3p manual section.  By default.  The
+       splitman program in the Perl source distribution does the
+       work of turning big perlfunc into little 3p pages.
+
+       UUsseerrss ccaann''tt ffiinndd tthhee mmaannppaaggeess
+
+       Make "perldoc" tell users what they need to add to their
+       .login or .cshrc to set their MANPATH correctly.
+
+       IInnssttaallll AALLLL DDooccuummeennttaattiioonn
+
+       Make the standard documentation kit include the VMS, OS/2,
+       Win32, Threads, etc information.  installperl and
+       pod/Makefile should know enough to copy README.foo to
+       perlfoo.pod before building everything, when appropriate.
+
+       OOuuttssttaannddiinngg iissssuueess ttoo bbee ddooccuummeenntteedd
+
+       Tom has a list of 5.005_5* features or changes that
+       require documentation.
+
+       Create one document that coherently explains the delta
+       between the last camel release and the current release.
+       perldelta was supposed to be that, but no longer.  The
+       things in perldelta never seemed to get placed in the
+       right places in the real manpages, either.  This needs
+       work.
+
+       AAddaapptt wwwwww..lliinnuuxxhhqq..ccoomm ffoorr PPeerrll
+
+       This should help glorify documentation and get more people
+       involved in perl development.
+
+
+
+       RReeppllaaccee mmaann wwiitthh aa ppeerrll pprrooggrraamm
+
+       Can we reimplement man in Perl?  Tom has a start.  I
+       believe some of the Linux systems distribute a manalike.
+       Alternatively, build on perldoc to remove the unfeatures
+       like "is slow" and "has no apropos".
+
+       UUnniiccooddee ttuuttoorriiaall
+
+       We could use more work on helping people understand Perl's
+       new Unicode support that Larry has created.
+
+MMoodduulleess
+       UUppddaattee tthhee PPOOSSIIXX eexxtteennssiioonn ttoo ccoonnffoorrmm wwiitthh tthhee PPOOSSIIXX
+       11000033..11 EEddiittiioonn 22
+
+       The current state of the POSIX extension is as of Edition
+       1, 1991, whereas the Edition 2 came out in 1996.  ISO/IEC
+       9945:1-1996(E), ANSI/IEEE Std 1003.1, 1996 Edition. ISBN
+       1-55937-573-6.  The updates were legion: threads, IPC, and
+       real time extensions.
+
+       MMoodduullee vveerrssiioonnss
+
+       Automate the checking of versions in the standard distri­
+       bution so it's easy for a pumpking to check whether CPAN
+       has a newer version that we should be including?
+
+       NNeeww mmoodduulleess
+
+       Which modules should be added to the standard distribu­
+       tion?  This ties in with the SDK discussed on the perl-sdk
+       list at perl.org.
+
+       PPrrooffiilleerr
+
+       Make the profiler (Devel::DProf) part of the standard
+       release, and document it well.
+
+       TTiiee MMoodduulleess
+
+
+       VecArray
+           Implement array using vec().  Nathan Torkington has
+           working code to do this.
+
+       SubstrArray
+           Implement array using substr()
+
+       VirtualArray
+           Implement array using a file
+
+       ShiftSplice
+           Defines shift et al in terms of splice method
+
+       PPrroocceedduurraall ooppttiioonnss
+
+       Support procedural interfaces for the common cases of
+       Perl's gratuitously OOO modules.  Tom objects to "use
+       IO::File" reading many thousands of lines of code.
+
+       RRPPCC
+
+       Write a module for transparent, portable remote procedure
+       calls.  (Not core).  This touches on the CORBA and ILU
+       work.
+
+       yy22kk llooccaallttiimmee//ggmmttiimmee
+
+       Write a module, Y2k::Catch, which overloads localtime and
+       gmtime's returned year value and catches "bad" attempts to
+       use it.
+
+       EExxppoorrtt FFiillee::::FFiinndd vvaarriiaabblleess
+
+       Make File::Find export "$name" etc manually, at least if
+       asked to.
+
+       IIooccttll
+
+       Finish a proper Ioctl module.
+
+       DDeebbuuggggeerr aattttaacchh//ddeettaacchh
+
+       Permit a user to debug an already-running program.
+
+       RReegguullaarr EExxpprreessssiioonn ddeebbuuggggeerr
+
+       Create a visual profiler/debugger tool that stepped you
+       through the execution of a regular expression point by
+       point.  Ilya has a module to color-code and display regu­
+       lar expression parses and executions.  There's something
+       at http://tkworld.org/ that might be a good start, it's a
+       Tk/Tcl RE wizard, that builds regexen of many flavours.
+
+       AAlltteerrnnaattiivvee RREE SSyynnttaaxx
+
+       Make an alternative regular expression syntax that is
+       accessed through a module.  For instance,
+
+         use RE;
+         $re = start_of_line()
+             ->literal("1998/10/08")
+             ->optional( whitespace() )
+             ->literal("[")
+             ->remember( many( or( "-", digit() ) ) );
+
+         if (/$re/) {
+           print "time is $1\n";
+         }
+
+       Newbies to regular expressions typically only use a subset
+       of the full language.  Perhaps you wouldn't have to imple­
+       ment the full feature set.
+
+       BBuunnddlleedd mmoodduulleess
+
+       Nicholas Clark (nick@flirble.org) had a patch for storing
+       modules in zipped format.  This needs exploring and con­
+       cluding.
+
+       EExxppeecctt
+
+       Adopt IO::Tty, make it as portable as Don Libes' "expect"
+       (can we link against expect code?), and perfect a Perl
+       version of expect.  IO::Tty and expect could then be dis­
+       tributed as part of the core distribution, replacing
+       Comm.pl and other hacks.
+
+
+
+
+       GGUUII::::NNaattiivvee
+
+       A simple-to-use interface to native graphical abilities
+       would be welcomed.  Oh, Perl's access Tk is nice enough,
+       and reasonably portable, but it's not particularly as fast
+       as one would like.  Simple access to the mouse's cut
+       buffer or mouse-presses shouldn't required loading a few
+       terabytes of Tk code.
+
+       UUppddaattee sseemmiibbrrookkeenn aauuxxiilliiaarryy ttoooollss;; hh22pphh,, aa22pp,, eettcc..
+
+       Kurt Starsinic is working on h2ph.  mjd has fixed bugs in
+       a2p in the past.  a2p apparently doesn't work on nawk and
+       gawk extensions.  Graham Barr has an Include module that
+       does h2ph work at runtime.
+
+       ppoodd22hhttmmll
+
+       A short-term fix: pod2html generates absolute HTML links.
+       Make it generate relative links.
+
+       PPooddcchheecckkeerr
+
+       Something like lint for Pod would be good.  Something that
+       catches common errors as well as gross ones.  Brad Apple­
+       ton is putting together something as part of his PodParser
+       work.
+
+TToomm''ss WWiisshheess
+       WWeebbppeerrll
+
+       Design a webperl environment that's as tightly integrated
+       and as easy-to-use as Perl's current command-line environ­
+       ment.
+
+       MMoobbiillee aaggeennttss
+
+       More work on a safe and secure execution environment for
+       mobile agents would be neat; the Safe.pm module is a
+       start, but there's a still a lot to be done in that area.
+       Adopt Penguin?
+
+       PPOOSSIIXX oonn nnoonn--PPOOSSIIXX
+
+       Standard programming constructs for non-POSIX systems
+       would help a lot of programmers stuck on primitive, legacy
+       systems.  For example, Microsoft still hasn't made a
+       usable POSIX interface on their clunky systems, which
+       means that standard operations such as alarm() and fork(),
+       both critical for sophisticated client-server programming,
+       must both be kludged around.
+
+       I'm unsure whether Tom means to emulate alarm( )and
+       fork(), or merely to provide a document like perlport.pod
+       to say which features are portable and which are not.
+
+       PPoorrttaabbllee iinnssttaallllaattiioonnss
+
+       Figure out a portable semi-gelled installation, that is,
+       one without full paths.  Larry has said that he's thinking
+       about this.  Ilya pointed out that perllib_mangle() is
+       good for this.
+
+WWiinn3322 SSttuuffff
+
+
+       RReennaammee nneeww hheeaaddeerrss ttoo bbee ccoonnssiisstteenntt wwiitthh tthhee rreesstt
+
+
+       SSoorrtt oouutt tthhee spawnvp() mmeessss
+
+
+       WWoorrkk oouutt DDLLLL vveerrssiioonniinngg
+
+
+       SSttyyllee--cchheecckk
+
+
+WWoouulldd bbee nniiccee ttoo hhaavvee
+       ""pack ""(stuff)*""""
+       Contiguous bitfields in pack/unpack
+       lexperl
+       Bundled perl preprocessor
+       Use posix calls internally where possible
+       format BOTTOM
+       -i rename file only when successfully changed
+       All ARGV input should act like <>
+       report HANDLE [formats].
+       support in perlmain to rerun debugger
+       lvalue functions
+           Tuomas Lukka, on behalf of the PDL project, greatly
+           desires this and Ilya has a patch for it (probably
+           against an older version of Perl).  Tuomas points out
+           that what PDL really wants is lvalue methods, not just
+           subs.
+
+PPoossssiibbllee pprraaggmmaass
+       (use less memory, CPU)
+
+OOppttiimmiizzaattiioonnss
+       ccoonnssttaanntt ffuunnccttiioonn ccaacchhee
+
+
+       ffoorreeaacchh((rreevveerrssee......))
+
+
+       CCaacchhee eevvaall ttrreeee
+
+       Unless lexical outer scope used (mark in &compiling?).
+
+       rrccaattmmaayybbee
+
+
+       SShhrriinnkk ooppccooddee ttaabblleess
+
+       Via multiple implementations selected in peep.
+
+       CCaacchhee hhaasshh vvaalluuee
+
+       Not a win, according to Guido.
+
+       OOppttiimmiizzee aawwaayy @@_ wwhheerree ppoossssiibbllee
+
+
+       OOppttiimmiizzee ssoorrtt bbyy {{ $$aa <<==>> $$bb }}
+
+       Greg Bacon added several more sort optimizations.  These
+       have made it into 5.005_55, thanks to Hans Mulder.
+
+
+
+
+       RReewwrriittee rreeggeexxpp ppaarrsseerr ffoorr bbeetttteerr iinntteeggrraatteedd ooppttiimmiizzaattiioonn
+
+       The regexp parser was rewritten for 5.005.  Ilya's the
+       regexp guru.
+
+VVaagguuee ppoossssiibbiilliittiieess
+       ref function in list context
+           This seems impossible to do without substantially
+           breaking code.
+
+       make tr/// return histogram in list context?
+       Loop control on do{} et al
+       Explicit switch statements
+           Nobody has yet managed to come up with a switch syntax
+           that would allow for mixed hash, constant, regexp
+           checks.  Submit implementation with syntax, please.
+
+       compile to real threaded code
+       structured types
+       Modifiable $1 et al
+           The intent is for this to be a means of editing the
+           matched portions of the target string.
+
+TToo DDoo OOrr NNoott TToo DDoo
+       These are things that have been discussed in the past and
+       roundly criticized for being of questionable value.
+
+       MMaakkiinngg my() wwoorrkk oonn ""ppaacckkaaggee"" vvaarriiaabblleess
+
+       Being able to say my($Foo::Bar), something that sounds
+       ludicrous and the 5.6 pumpking has mocked.
+
+       ""oorr"" tteessttiinngg ddeeffiinneedd nnoott ttrruutthh
+
+       We tell people that "||" can be used to give a default
+       value to a variable:
+
+           $children = shift || 5;             # default is 5 children
+
+       which is almost (but not):
+
+           $children = shift;
+           $children = 5 unless $children;
+
+       but if the first argument was given and is "0", then it
+       will be considered false by "||" and "5" used instead.
+       Really we want an "||"-like operator that behaves like:
+
+           $children = shift;
+           $children = 5 unless defined $children;
+
+       Namely, a "||" that tests defined-ness rather than truth.
+       One was discussed, and a patch submitted, but the objec­
+       tions were many.  While there were objections, many still
+       feel the need.  At least it was decided that "??" is the
+       best name for the operator.
+
+       ""ddyynnaammiicc"" lleexxiiccaallss
+
+         my $x;
+         sub foo {
+           local $x;
+         }
+
+       Localizing, as Tim Bunce points out, is a separate concept
+       from whether the variable is global or lexical.  Chip
+       Salzenberg had an implementation once, but Larry thought
+       it had potential to confuse.
+
+       ""ccllaassss""--bbaasseedd,, rraatthheerr tthhaann ppaacckkaaggee--bbaasseedd ""lleexxiiccaallss""
+
+       This is like what the Alias module provides, but the vari­
+       ables would be lexicals reserved by perl at compile-time,
+       which really are indices pointing into the pseudo-hash
+       object visible inside every method so declared.
+
+TThhrreeaaddiinngg
+       MMoodduulleess
+
+       Which of the standard modules are thread-safe?  Which CPAN
+       modules?  How easy is it to fix those non-safe modules?
+
+       TTeessttiinngg
+
+       Threading is still experimental.  Every reproducible bug
+       identifies something else for us to fix.  Find and submit
+       more of these problems.
+
+       $$AAUUTTOOLLOOAADD
+
+
+       eexxiitt//ddiiee
+
+       Consistent semantics for exit/die in threads.
+
+       EExxtteerrnnaall tthhrreeaaddss
+
+       Better support for externally created threads.
+
+       TThhrreeaadd::::PPooooll
+
+
+       tthhrreeaadd--ssaaffeettyy
+
+       Spot-check globals like statcache and global GVs for
+       thread-safety.  "PPaarrtt ddoonnee", says Sarathy.
+
+       PPeerr--tthhrreeaadd GGVVss
+
+       According to Sarathy, this would make @_ be the same in
+       threaded and non-threaded, as well as helping solve prob­
+       lems like filehandles (the same filehandle currently can­
+       not be used in two threads).
+
+CCoommppiilleerr
+       OOppttiimmiizzaattiioonn
+
+       The compiler's back-end code-generators for creating byte­
+       code or compilable C code could use optimization work.
+
+       BByytteeppeerrll
+
+       Figure out how and where byteperl will be built for the
+       various platforms.
+
+       PPrreeccoommppiilleedd mmoodduulleess
+
+       Save byte-compiled modules on disk.
+
+
+
+
+       EExxeeccuuttaabblleess
+
+       Auto-produce executable.
+
+       TTyyppeedd lleexxiiccaallss
+
+       Typed lexicals should affect B::CC::load_pad.
+
+       WWiinn3322
+
+       Workarounds to help Win32 dynamic loading.
+
+       EENNDD bblloocckkss
+
+       END blocks need saving in compiled output, now that CHECK
+       blocks are available.
+
+       _AAUUTTOOLLOOAADD
+
+       _AUTOLOAD prodding.
+
+       ccoommppppaaddlliisstt
+
+       Fix comppadlist (names in comppad_name can have fake SvCUR
+       from where newASSIGNOP steals the field).
+
+       CCaacchheedd ccoommppiillaattiioonn
+
+       Can we install modules as bytecode?
+
+RReecceennttllyy FFiinniisshheedd TTaasskkss
+       FFiigguurree aa wwaayy oouutt ooff $$^^((ccaappiittaall lleetttteerr))
+
+       Figure out a clean way to extend $^(capital letter) beyond
+       the 26 alphabets.  (${^WORD} maybe?)
+
+       Mark-Jason Dominus sent a patch which went into 5.005_56.
+
+       FFiilleennaammeess
+
+       Keep filenames in the distribution and in the standard
+       module set be 8.3 friendly where feasible.  Good luck
+       changing the standard modules, though.
+
+       FFoorreeiiggnn lliinneess
+
+       Perl should be more generous in accepting foreign line
+       terminations.  Mostly ddoonnee in 5.005.
+
+       NNaammeessppaaccee cclleeaannuupp
+
+           symbol-space: "pl_" prefix for all global vars
+                         "Perl_" prefix for all functions
+
+           CPP-space:    stop malloc()/free() pollution unless asked
+
+
+       IISSAA..ppmm
+
+       Rename and alter ISA.pm.  DDoonnee.  It is now base.pm.
+
+       ggeettttiimmeeooffddaayy
+
+       See Time::HiRes.
+
+
+       aauuttooccrrooaakk??
+
+       This is the Fatal.pm module, so any builtin that does not
+       return success automatically die()s.  If you're feeling
+       brave, tie this in with the unified exceptions scheme.
+
+
+
+2001-03-18                 perl v5.6.1                PERLTODO(1)

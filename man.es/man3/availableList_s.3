@@ -1,0 +1,76 @@
+availableList_s(3)                             availableList_s(3)
+
+
+
+NAME
+       availableList_s -
+
+SYNOPSIS
+       #include <depends.h>
+
+
+   Data Fields
+       availablePackage * list
+       availableIndex index
+       int delta
+       int size
+       int alloced
+       int numDirs
+       dirInfo dirs
+
+DETAILED DESCRIPTION
+       Set of available packages, items, and directories.
+
+       Definition at line 98 of file depends.h.
+
+FIELD DOCUMENTATION
+   int availableList_s::alloced
+       No. of pkgs allocated for list.
+
+       Definition at line 103 of file depends.h.
+
+   int availableList_s::delta
+       Delta for pkg list reallocation.
+
+       Definition at line 101 of file depends.h.
+
+       Referenced by rpmtransCreateSet.
+
+   dirInfo availableList_s::dirs
+       Set of directories.
+
+       Definition at line 105 of file depends.h.
+
+   struct availableIndex availableList_s::index
+       Set of available items.
+
+       Definition at line 100 of file depends.h.
+
+   struct availablePackage* availableList_s::list
+       Set of packages.
+
+       Definition at line 99 of file depends.h.
+
+       Referenced by rpmdepCheck, rpmdepOrder, and
+       rpmtransAddPackage.
+
+   int availableList_s::numDirs
+       No. of directories.
+
+       Definition at line 104 of file depends.h.
+
+   int availableList_s::size
+       No. of pkgs in list.
+
+       Definition at line 102 of file depends.h.
+
+       Referenced by rpmdepCheck, and rpmdepOrder.
+
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002         availableList_s(3)

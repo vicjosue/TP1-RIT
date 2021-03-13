@@ -1,0 +1,37 @@
+OUTB(2)             Linux Programmer's Manual             OUTB(2)
+
+
+
+NAME
+       outb, outw, outl, outsb, outsw, outsl - port output
+       inb, inw, inl, insb, insw, insl - port input
+       outb_p, outw_p, outl_p, inb_p, inw_p, inl_p - paused I/O
+
+
+DESCRIPTION
+       This  family  of  functions  is  used to do low level port
+       input and output.  They are primarily designed for  inter­
+       nal kernel use, but can be used from user space.
+
+       You  compile  with -O or -O2 or similar. The functions are
+       defined as inline macros, and will not be  substituted  in
+       without  optimization  enabled,  causing unresolved refer­
+       ences at link time.
+
+       You use ioperm(2) or alternatively  iopl(2)  to  tell  the
+       kernel  to  allow the user space application to access the
+       I/O ports in question. Failure to do this will  cause  the
+       application to receive a segmentation fault.
+
+
+CONFORMING TO
+       outb and friends are hardware specific. The port and value
+       arguments are in the opposite order to most DOS  implemen­
+       tations.
+
+SEE ALSO
+       ioperm(2), iopl(2)
+
+
+
+Linux                       1995-11-29                    OUTB(2)

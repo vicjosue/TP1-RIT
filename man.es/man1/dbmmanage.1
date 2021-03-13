@@ -1,0 +1,102 @@
+dbmmanage(1)                                         dbmmanage(1)
+
+
+
+NAME
+       dbmmanage - Create and update user authentication files in
+       DBM format
+
+SYNOPSIS
+       dbmmanage filename [ command ] [ username [ encpasswd ] ]
+
+
+DESCRIPTION
+       dbmmanage is used to create  and  update  the  DBM  format
+       files  used  to  store  usernames  and  password for basic
+       authentication of HTTP users.   Resources  available  from
+       the  httpd Apache web server can be restricted to just the
+       users listed in the files created by dbmmanage.  This pro­
+       gram  can  only be used when the usernames are stored in a
+       DBM file. To use a flat-file database see htpasswd.
+
+       This manual page only lists the  command  line  arguments.
+       For  details of the directives necessary to configure user
+       authentication in httpd see the Apache  manual,  which  is
+       part  of  the  Apache  distribution  or  can  be  found at
+       http://httpd.apache.org/.
+
+OPTIONS
+       filename
+              The filename of the DBM format file. Usually  with­
+              out the extension .db, .pag, or .dir.
+
+       command
+              This selects the operation to perform:
+
+       add         Adds  an  entry for username to filename using
+                   the encrypted password encpassword.
+
+       adduser     Asks for a password and then adds an entry for
+                   username to filename .
+
+       check       Asks  for  a password and then checks if user­
+                   name is  in  filename  and  if  it's  password
+                   matches the specified one.
+
+       delete      Deletes the username entry from filename.
+
+       import      Reads username:password entries (one per line)
+                   from STDIN and  adds  them  to  filename.  The
+                   passwords already has to be crypted.
+
+       update      Same  as the "adduser" command, except that it
+                   makes sure username already  exists  in  file­
+                   name.
+
+       view        Just displays the complete contents of the DBM
+                   file.
+
+       username    The user for which  the  update  operation  is
+                   performed.
+
+BUGS
+       One  should  be aware that there are a number of different
+       DBM file formats in existance, and  with  all  likelihood,
+       libraries  for more than one format may exist on your sys­
+       tem.   The  three  primary  examples  are  NDBM,  the  GNU
+       project's  GDBM,  and  Berkeley  DB 2.  Unfortunately, all
+       these libraries use different file formats, and  you  must
+       make  sure  that  the  file format used by filename is the
+       same format that dbmmanage expects to see.  dbmmanage cur­
+       rently  has no way of determining what type of DBM file it
+       is looking at.  If used against  the  wrong  format,  will
+       simply  return nothing, or may create a different DBM file
+       with a different name, or at worst, it may corrupt the DBM
+       file if you were attempting to write to it.
+
+       dbmmanage has a list of DBM format preferences, defined by
+       the @AnyDBM::ISA array near the beginning of the  program.
+       Since  we  prefer the Berkeley DB 2 file format, the order
+       in which dbmmanage  will  look  for  system  libraries  is
+       Berkeley  DB  2,  then  NDBM,  and  then  GDBM.  The first
+       library found will be the library dbmmanage  will  attempt
+       to  use  for  all DBM file transactions.  This ordering is
+       slightly different than the standard @AnyDBM::ISA ordering
+       in  perl,  as  well  as  the  ordering  used by the simple
+       dbmopen() call in Perl, so if you use any other  utilities
+       to manage your DBM files, they must also follow this pref­
+       erence ordering.  Similar care must be taken if using pro­
+       grams in other languages, like C, to access these files.
+
+       Apache's mod_auth_db.c module corresponds to Berkeley DB 2
+       library, while  mod_auth_dbm.c  corresponds  to  the  NDBM
+       library.   Also, one can usually use the file program sup­
+       plied with most Unix systems to see what format a DBM file
+       is in.
+
+SEE ALSO
+       httpd(8)
+
+
+
+                            March 1998               dbmmanage(1)

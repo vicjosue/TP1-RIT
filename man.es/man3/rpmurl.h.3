@@ -1,0 +1,257 @@
+rpmio/rpmurl.h(3)                               rpmio/rpmurl.h(3)
+
+
+
+NAME
+       rpmio/rpmurl.h -
+
+SYNOPSIS
+       #include <assert.h>
+
+   Data Structures
+       struct urlinfo
+           URL control structure.
+
+   Defines
+       #define URLMAGIC   0xd00b1ed0
+       #define URLSANE(u)   assert(u && u->magic == URLMAGIC)
+       #define urlNew(_msg)   XurlNew(_msg, __FILE__, __LINE__)
+       #define urlLink(_u, _msg)   XurlLink(_u, _msg, __FILE__,
+           __LINE__)
+       #define urlFree(_u, _msg)   XurlFree(_u, _msg, __FILE__,
+           __LINE__)
+
+   Typedefs
+       typedef urlinfo * urlinfo
+           URL control structure.
+
+   Enumerations
+       enum urltype { URL_IS_UNKNOWN =  0, URL_IS_DASH =  1,
+           URL_IS_PATH =  2, URL_IS_FTP =  3, URL_IS_HTTP =  4 }
+           Supported URL types.
+
+   Functions
+       urlinfo urlNew (const char *msg)
+           Create a URL control structure instance.
+       urlinfo XurlNew (const char *msg, const char *file,
+           unsigned line)
+       urlinfo urlLink (urlinfo u, const char *msg)
+           Reference a URL control structure instance.
+       urlinfo XurlLink (urlinfo u, const char *msg, const char
+           *file, unsigned line)
+       urlinfo urlFree (urlinfo u, const char *msg)
+           Dereference a URL control structure instance.
+       urlinfo XurlFree (urlinfo u, const char *msg, const char
+           *file, unsigned line)
+       void urlFreeCache (void)
+           Free cached URL control structures.
+       urltype urlIsURL (const char *url)
+           Return type of URL.
+       urltype urlPath (const char *url, const char **pathp)
+           Return path component of URL.
+       int urlSplit (const char *url, urlinfo *u)
+           Parse URL string into a control structure.
+       int urlGetFile (const char *url, const char *dest)
+           Copy data from URL to local file.
+
+   Variables
+       int url_iobuf_size
+
+DETAILED DESCRIPTION
+       Definition in file rpmurl.h.
+
+DEFINE DOCUMENTATION
+   #define urlFree(_u, _msg)   XurlFree(_u, _msg, __FILE__,
+       __LINE__)
+       Definition at line 94 of file rpmurl.h.
+
+       Referenced by urlFind, urlFreeCache, and urlSplit.
+
+   #define urlLink(_u, _msg)   XurlLink(_u, _msg, __FILE__,
+       __LINE__)
+       Definition at line 79 of file rpmurl.h.
+
+       Referenced by urlFind.
+
+   #define URLMAGIC   0xd00b1ed0
+       Definition at line 21 of file rpmurl.h.
+
+       Referenced by XurlNew.
+
+   #define urlNew(_msg)   XurlNew(_msg, __FILE__, __LINE__)
+       Definition at line 65 of file rpmurl.h.
+
+       Referenced by urlSplit.
+
+   #define URLSANE(u)   assert(u && u->magic == URLMAGIC)
+       Definition at line 22 of file rpmurl.h.
+
+       Referenced by urlFind, XurlFree, and XurlLink.
+
+TYPEDEF DOCUMENTATION
+   typedef struct urlinfo * urlinfo
+       URL control structure.
+
+
+ENUMERATION TYPE DOCUMENTATION
+   enum urltype
+       Supported URL types.
+
+       Enumeration values:
+
+       URL_IS_UNKNOWN
+              unknown (aka a file)
+
+       URL_IS_DASH
+              stdin/stdout
+
+       URL_IS_PATH
+              file://...
+
+       URL_IS_FTP
+              ftp://...
+
+       URL_IS_HTTP
+              http://...
+
+       Definition at line 13 of file rpmurl.h.
+
+       Referenced by doPatch, doUntar, rpmfileexists, urlIsURL,
+       and urlPath.
+
+FUNCTION DOCUMENTATION
+   urlinfo urlFree (urlinfo u, const char * msg)
+       Dereference a URL control structure instance.
+
+       Parameters:
+
+       u      URL control structure
+
+       msg    debugging identifier (unused)
+
+       Returns:
+           dereferenced instance (NULL if freed)
+
+   void urlFreeCache (void)
+       Free cached URL control structures.
+
+       Definition at line 142 of file url.c.
+
+       Referenced by main.
+
+   int urlGetFile (const char * url, const char * dest)
+       Copy data from URL to local file.
+
+       Parameters:
+
+       url    url string of source
+
+       dest   file name of destination
+
+       Returns:
+           0 on success, otherwise FTPERR_* code
+
+       Definition at line 464 of file url.c.
+
+   urltype urlIsURL (const char * url)
+       Return type of URL.
+
+       Parameters:
+
+       url    url string
+
+       Returns:
+           type of url
+
+       Definition at line 320 of file url.c.
+
+   urlinfo urlLink (urlinfo u, const char * msg)
+       Reference a URL control structure instance.
+
+       Parameters:
+
+       u      URL control structure
+
+       msg    debugging identifier (unused)
+
+       Returns:
+           referenced instance
+
+   urlinfo urlNew (const char * msg)
+       Create a URL control structure instance.
+
+       Parameters:
+
+       msg    debugging identifier (unused)
+
+       Returns:
+           new instance
+
+   urltype urlPath (const char * url, const char ** pathp)
+       Return path component of URL.
+
+       Parameters:
+
+       url    url string
+
+       Return values:
+
+       pathp  pointer to path component of url
+
+       Returns:
+           type of url
+
+       Definition at line 336 of file url.c.
+
+   int urlSplit (const char * url, urlinfo * u)
+       Parse URL string into a control structure.
+
+       Parameters:
+
+       url    url string
+
+       Return values:
+
+       u      address of new control instance pointer
+
+       Returns:
+           0 on success, -1 on error
+
+       Definition at line 373 of file url.c.
+
+   urlinfo XurlFree (urlinfo u, const char * msg, const char *
+       file, unsigned line)
+       Todo:
+            Remove debugging entry from the ABI.
+
+       Definition at line 82 of file url.c.
+
+   urlinfo XurlLink (urlinfo u, const char * msg, const char *
+       file, unsigned line)
+       Todo:
+            Remove debugging entry from the ABI.
+
+       Definition at line 54 of file url.c.
+
+       References url_iobuf_size.
+
+   urlinfo XurlNew (const char * msg, const char * file, unsigned
+       line)
+       Todo:
+            Remove debugging entry from the ABI.
+
+       Definition at line 62 of file url.c.
+
+VARIABLE DOCUMENTATION
+   int url_iobuf_size
+       Definition at line 54 of file rpmurl.h.
+
+       Referenced by XurlLink.
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002          rpmio/rpmurl.h(3)

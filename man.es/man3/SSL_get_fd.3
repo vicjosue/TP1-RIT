@@ -1,0 +1,47 @@
+SSL_get_fd(3)                OpenSSL                SSL_get_fd(3)
+
+
+
+NNAAMMEE
+       SSL_get_fd - get file descriptor linked to an SSL object
+
+SSYYNNOOPPSSIISS
+        #include <openssl/ssl.h>
+
+        int SSL_get_fd(SSL *ssl);
+        int SSL_get_rfd(SSL *ssl);
+        int SSL_get_wfd(SSL *ssl);
+
+
+DDEESSCCRRIIPPTTIIOONN
+       SSL_get_fd() returns the file descriptor which is linked
+       to ssssll.  SSL_get_rfd() and SSL_get_wfd() return the file
+       descriptors for the read or the write channel, which can
+       be different. If the read and the write channel are
+       different, SSL_get_fd() will return the file descriptor of
+       the read channel.
+
+RREETTUURRNN VVAALLUUEESS
+       The following return values can occur:
+
+       -1  The operation failed, because the underlying BIO is
+           not of the correct type (suitable for file
+           descriptors).
+
+       >=0 The file descriptor linked to ssssll.
+
+SSEEEE AALLSSOO
+       SSL_set_fd(3), ssl(3) , bio(3)
+
+
+
+
+
+
+
+
+
+
+
+
+16/Sep/2000                   0.9.6c                SSL_get_fd(3)

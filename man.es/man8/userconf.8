@@ -1,0 +1,79 @@
+USERCONF(8)                                           USERCONF(8)
+
+
+
+NAME
+       userconf - Manage user accounts
+
+SYNOPSIS
+       userconf
+       userconf options
+
+DESCRIPTION
+       userconf  is Linuxconf user accounts management component.
+       Without argument, it presents its main menu.
+
+       ,SH OPTIONS
+
+
+       --adduser userid group username shell
+              add a new user account with the  specified  parame­
+              ters.  Do  not  forget  to quote the username if it
+              contains spaces. The interest of using this command
+              over  command  such  as useradd (8) is the accounts
+              and policies settings. You end  up  with  the  same
+              behavior   when   creating  accounts  interactivly.
+              Namely, you get
+
+              The post-create script is executed.
+              The home is created according to the  specification
+              recorded with the group.
+
+              Note  that  on most distribution, useradd is called
+              internally.
+
+
+       --addgroup group
+              add a new group.
+
+
+
+       --deluser userid [ --archive | --deldata | --keepdata ]
+              It deletes a user account. The extra option let you
+              control  how  the  user data (the home and the mail
+              inbox) are processed.
+
+              Archiving means all the data will be "tared" in the
+              old-accounts  sub-directory  (located  in  the same
+              directory as the user home directory). The data  is
+              archived  in  a file which is name after the userid
+              and the date.  This way, a user account may be cre­
+              ated  and  delete several time and all archives are
+              preserved. You may want to  clean  up  the  archive
+              once in a while, potentially twice a year.
+
+              If  the  archiving is successful, then all the data
+              and home directory will be deleted.
+
+              The --deldata option deletes both the  home  direc­
+              tory and the mail inbox. Nothing is kept.
+
+              The --keepdata option keeps everything in place.
+
+
+       --delgroup group
+              delete a group.
+
+
+       --help present the command line options sumary.
+
+
+SEE ALSO
+       linuxconf(8)
+
+
+
+
+
+
+           Linuxconf accounts administration componentUSERCONF(8)

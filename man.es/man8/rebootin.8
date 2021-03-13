@@ -1,0 +1,51 @@
+rebootin(8)               Linux-Mandrake              rebootin(8)
+
+
+
+NAME
+       rebootin  -  Reboots  the  machine using a particular Boot
+       Loader entry
+
+SYNOPSIS
+       rebootin [OPTIONS] <label>
+
+DESCRIPTION
+       rebootin reboots the machine it is launched on. While with
+       a simple reboot you need to manually select the boot entry
+       to use at startup, rebootin allows  to  specify  the  boot
+       entry on the command line.
+
+       <label>  is  the  name  of  the entry as named in the boot
+       loader configuration file.
+
+       rebootin currently works with LILO and Grub.
+
+       Running rebootin without any argument displays the list of
+       available  boot  entries  as supported by the current boot
+       loader.
+
+OPTIONS
+       -f     Create a /fastboot file to reboot in fastboot  mode
+              (eg: no fsck(8)).
+
+       -n     Don't  reboot  immediately  just  set the flags for
+              next reboot.
+
+FILES
+       /etc/lilo.conf /boot/grub/menu.lst
+       The rebootin executable (perl script)
+
+
+SEE ALSO
+       grub(8), lilo(8), fsck(8)
+
+AUTHORS
+       Pascal Rigaux, Mandrakesoft
+       pixel@mandrakesoft.com
+
+       Chmouel Boudjnah, Mandrakesoft
+       chmouel@mandrakesoft.com
+
+
+
+Mandrakesoft               03 Mar 2001                rebootin(8)

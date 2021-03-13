@@ -1,0 +1,50 @@
+SSL_clear(3)                 OpenSSL                 SSL_clear(3)
+
+
+
+NNAAMMEE
+       SSL_clear - reset SSL object to allow another connection
+
+SSYYNNOOPPSSIISS
+        #include <openssl/ssl.h>
+
+        int SSL_clear(SSL *ssl);
+
+
+DDEESSCCRRIIPPTTIIOONN
+       Reset ssssll to allow another connection. All settings
+       (method, ciphers, BIOs) are kept.
+
+NNOOTTEESS
+       SSL_clear is used to prepare an SSL object for a new
+       connection. While all settings are kept, a side effect is
+       the handling of the current SSL session.  If a session is
+       still ooppeenn, it is considered bad and will be removed from
+       the session cache, as required by RFC2246. A session is
+       considered open, if SSL_shutdown(3) was not called for the
+       connection or at least SSL_set_shutdown(3) was used to set
+       the SSL_SENT_SHUTDOWN state.
+
+RREETTUURRNN VVAALLUUEESS
+       The following return values can occur:
+
+       0   The SSL_clear() operation could not be performed.
+           Check the error stack to find out the reason.
+
+       1   The SSL_clear() operation was successful.
+
+       SSL_new(3), SSL_free(3), SSL_shutdown(3),
+       SSL_set_shutdown(3), SSL_CTX_set_options(3), ssl(3)
+
+
+
+
+
+
+
+
+
+
+
+
+13/Feb/2001                   0.9.6c                 SSL_clear(3)

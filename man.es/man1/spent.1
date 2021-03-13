@@ -1,0 +1,59 @@
+OSPENT(1)                     ospent                    OSPENT(1)
+
+
+
+NAME
+       ospent - Concatenate entities
+
+SYNOPSIS
+       ospent [-Cnrv] [-bbctf] [-Ddirectory] [sysid...]
+
+
+
+DESCRIPTION
+       ospent  (OpenJade SGML print entity) prints the concatena­
+       tion of the entities with system identifiers [sysid...] on
+       the standard output.
+
+
+       The following options are available:
+
+
+       -bbctf Use the BCTF with name bctf for output.
+
+
+       -C     This has the same effect as in onsgmls(1).
+
+
+       -Ddirectory
+              Search  directory  for  files  specified  in system
+              identifiers. This has the same effect  as  in  ons­
+              gmls(1).
+
+
+       -n     The  entity  is a non-SGML data entity. This option
+              forces the octets in the storage objects comprising
+              the  entity to be copied exactly without any of the
+              conversions  that  are  done  for  text   entities.
+              Implies -r.
+
+
+       -r     Raw output. Don't perform any conversion on RSs and
+              REs when printing the entity. The entity would typ­
+              ically   have   the   storage   manager   attribute
+              records=asis.
+
+
+       -v     Print the version number.
+
+
+SEE ALSO
+       onsgmls(1), openjade(1)
+
+
+AUTHORS
+       James Clark, Ian Castle <ian.castle@looksystems.co.uk>.
+
+
+
+OpenJade                   January 2002                 OSPENT(1)

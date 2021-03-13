@@ -1,0 +1,67 @@
+STRTOK(3)           Linux Programmer's Manual           STRTOK(3)
+
+
+
+NAME
+       strtok, strtok_r - extract tokens from strings
+
+SYNOPSIS
+       #include <string.h>
+
+       char *strtok(char *s, const char *delim);
+
+       char *strtok_r(char *s, const char *delim, char **ptrptr);
+
+DESCRIPTION
+       A `token' is a nonempty string of characters not occurring
+       in the string delim, followed by  \0  or  by  a  character
+       occurring in delim.
+
+       The  strtok()  function  can be used to parse the string s
+       into tokens. The first call to strtok() should have  s  as
+       its first argument. Subsequent calls should have the first
+       argument set to NULL. Each call returns a pointer  to  the
+       next token, or NULL when no more tokens are found.
+
+       If  a token ends with a delimiter, this delimiting charac­
+       ter is overwritten with a \0 and a  pointer  to  the  next
+       character  is  saved  for  the next call to strtok().  The
+       delimiter string delim may be different for each call.
+
+       The strtok_r() function is a reentrant version of the str­
+       tok()  function,  which  instead  of  using its own static
+       buffer, requires a pointer to a user allocated char*. This
+       pointer,  the  ptrptr  parameter,  must  be the same while
+       parsing the same string.
+
+BUGS
+       Never use these functions. If you do, note that:
+
+              These functions modify their first argument.
+
+              These functions cannot be used on constant strings.
+
+              The identity of the delimiting character is lost.
+
+              The  strtok()  function  uses a static buffer while
+              parsing, so it's not thread safe. Use strtok_r() if
+              this matters to you.
+
+RETURN VALUE
+       The strtok() function returns a pointer to the next token,
+       or NULL if there are no more tokens.
+
+CONFORMING TO
+       strtok()
+              SVID 3, POSIX, BSD 4.3, ISO 9899
+
+       strtok_r()
+              POSIX.1c
+
+SEE ALSO
+       index(3),  memchr(3),  rindex(3),  strchr(3),  strpbrk(3),
+       strsep(3), strspn(3), strstr(3)
+
+
+
+GNU                         2000-02-13                  STRTOK(3)

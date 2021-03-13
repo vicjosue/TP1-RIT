@@ -1,0 +1,35 @@
+PS2PDFWR(1)                Ghostscript                PS2PDFWR(1)
+
+
+
+NAME
+       ps2pdfwr  -  Convert  PostScript to PDF without specifying
+       CompatibilityLevel, using ghostscript
+
+SYNOPSIS
+       ps2pdfwr  [options...] (input.[e]ps|-) [output.pdf|-]
+
+DESCRIPTION
+       This script invokes gs(1) with following arguments
+
+                 -q -dNOPAUSE -dBATCH -sDEVICE=pdfwrite
+
+       as well as the -dOutputFile  argument,  all  preceded  and
+       followed by any command-line arguemnts.
+
+SEE ALSO
+       gs(1)
+
+VERSION
+       This  document  was  last  revised for Ghostscript version
+       6.53.
+
+AUTHOR
+       L. Peter  Deutsch  <ghost@aladdin.com>  is  the  principal
+       author  of Ghostscript.  Russell J. Lang <rjl@aladdin.com>
+       is  the  author  of  most  of  the  MS  Windows  code   in
+       Ghostscript.  This manpage by George Ferguson.
+
+
+
+6.53                     5 February 2002              PS2PDFWR(1)

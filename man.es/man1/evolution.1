@@ -1,0 +1,48 @@
+Evolution(1)            GNOME Applications           Evolution(1)
+
+
+
+NAME
+       evolution  -  Run  Ximian  Evolution,  the GNOME groupware
+       suite.
+
+SYNOPSIS
+       evolution [OPTION] ... [URI]
+
+DESCRIPTION
+       This program is a graphical groupware  suite.   Documenta­
+       tion for Evolution is available by running the application
+       and selecting items from the Help menu, or by visiting the
+       Ximian knowledge base at http://support.ximian.com.
+
+       --no-splash
+              do not display the start-up splash screen
+
+       --debug=FILENAME
+              output debugging messages to FILENAME
+
+EXAMPLES
+       To run this program the standard way type:
+
+            evolution
+
+       To open your Inbox
+
+            evolution evolution:/local/Inbox
+
+       To send mail to joe@somewhere.net
+
+            evolution mailto:joe@somewhere.net
+
+       To use Evolution as the handler for mailto: links in GNOME
+       applications, set the GNOME URL handler in the GNOME  Con­
+       trol Center to be:
+
+            evolution "%s"
+
+       (The similar approach works for Mozilla and other applica­
+       tions.)
+
+
+
+Ximian, Inc.                   1.0                   Evolution(1)

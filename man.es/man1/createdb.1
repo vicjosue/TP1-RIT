@@ -1,0 +1,117 @@
+CREATEDB(1)       PostgreSQL Client Applications      CREATEDB(1)
+
+
+
+NAME
+       createdb - create a new PostgreSQL database
+
+SYNOPSIS
+       createdb [ options... ] [ dbname ] [ description ]
+
+   INPUTS
+       -h, --host host
+              Specifies the host name of the machine on which the
+              server is running. If host begins with a slash,  it
+              is  used  as  the  directory  for  the  Unix domain
+              socket.
+
+       -p, --port port
+              Specifies the Internet TCP/IP  port  or  the  local
+              Unix  domain  socket  file  extension  on which the
+              server is listening for connections.
+
+       -U, --username username
+              User name to connect as
+
+       -W, --password
+              Force password prompt.
+
+       -e, --echo
+              Echo the queries that createdb generates and  sends
+              to the server.
+
+       -q, --quiet
+              Do not display a response.
+
+       -D, --location datadir
+              Specifies   the   alternative   location   for  the
+              database. See also initlocation(1).
+
+       -T, --template template
+              Specifies the template database from which to build
+              this database.
+
+       -E, --encoding encoding
+              Specifies  the character encoding scheme to be used
+              in this database.
+
+       dbname Specifies the name of the database to  be  created.
+              The  name  must  be  unique  among  all  PostgreSQL
+              databases in this installation.  The default is  to
+              create a database with the same name as the current
+              system user.
+
+       description
+              This optionally specifies a comment to  be  associ­
+              ated with the newly created database.
+
+       The options -h, -p, -U, -W, and -e are passed on literally
+       to psql(1).  The options -D, -T, and -E are converted into
+       options  for  the  underlying  SQL command CREATE DATABASE
+       [create_database(7)]; see there for more information about
+       them.
+
+   OUTPUTS
+       CREATE DATABASE
+              The database was successfully created.
+
+       createdb: Database creation failed.
+              (Says it all.)
+
+       createdb: Comment creation failed. (Database was created.)
+              The  comment/description for the database could not
+              be created.  The database  itself  will  have  been
+              created  already.  You can use the SQL command COM­
+              MENT ON DATABASE to create the comment later on.
+
+       If there is an error condition, the backend error  message
+       will    be   displayed.    See   CREATE   DATABASE   [cre­
+       ate_database(7)] and psql(1) for possibilities.
+
+DESCRIPTION
+       createdb creates a new PostgreSQL database. The  user  who
+       executes this command becomes the database owner.
+
+       createdb  is a shell script wrapper around the SQL command
+       CREATE DATABASE [create_database(7)]  via  the  PostgreSQL
+       interactive  terminal psql(1). Thus, there is nothing spe­
+       cial about creating databases via this or  other  methods.
+       This  means  that  the  psql  program must be found by the
+       script and that a database server must be running  at  the
+       targeted  port. Also, any default settings and environment
+       variables  available  to  psql  and  the  libpq  front-end
+       library will apply.
+
+USAGE
+       To  create  the  database  demo using the default database
+       server:
+
+       $ createdb demo
+       CREATE DATABASE
+
+       The response is the same as you  would  have  gotten  from
+       running the CREATE DATABASE SQL command.
+
+
+       To create the database demo using the server on host eden,
+       port 5000, using the LATIN1 encoding scheme with a look at
+       the underlying query:
+
+       $ createdb -p 5000 -h eden -E LATIN1 -e demo
+       CREATE DATABASE "demo" WITH ENCODING = 'LATIN1'
+       CREATE DATABASE
+
+
+
+
+Application                 2000-11-11                CREATEDB(1)

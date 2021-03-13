@@ -1,0 +1,61 @@
+menu_mark(3X)                                       menu_mark(3X)
+
+
+
+NAME
+       menu_mark - get and set the menu mark string
+
+SYNOPSIS
+       #include <menu.h>
+       int set_menu_mark(MENU *menu, const char *mark);
+       const char *menu_mark(const MENU *menu);
+
+DESCRIPTION
+       In  order  to make menu selections visible on older termi­
+       nals without highlighting or color  capability,  the  menu
+       library  marks  selected  items  in  a  menu with a prefix
+       string.
+
+       The function set_menu_mark sets the mark  string  for  the
+       given  menu.   Calling set_menu_mark with a null menu item
+       will abolish the mark  string.   Note  that  changing  the
+       length  of  the  mark  string for a menu while the menu is
+       posted is likely to produce unhelpful behavior.
+
+       The default string is "-" (a dash). Calling  set_menu_mark
+       with a NULL menu argument will change this default.
+
+       The  function menu_mark returns the menu's mark string (or
+       NULL if there is none).
+
+RETURN VALUE
+       The function menu_mark returns NULL on error.   The  func­
+       tion set_menu_mark may return the following error codes:
+
+       E_OK The routine succeeded.
+
+       E_SYSTEM_ERROR
+            System error occurred (see errno).
+
+       E_BAD_ARGUMENT
+            Routine  detected  an incorrect or out-of-range argu­
+            ment.
+
+SEE ALSO
+       curses(3X), menu(3X).
+
+NOTES
+       The header file <menu.h> automatically includes the header
+       file <curses.h>.
+
+PORTABILITY
+       These  routines  emulate  the System V menu library.  They
+       were not supported on Version 7 or BSD versions.
+
+AUTHORS
+       Juergen Pfeifer.  Manual  pages  and  adaptation  for  new
+       curses by Eric S. Raymond.
+
+
+
+                                                    menu_mark(3X)

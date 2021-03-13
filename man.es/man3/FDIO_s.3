@@ -1,0 +1,100 @@
+FDIO_s(3)                                               FDIO_s(3)
+
+
+
+NAME
+       FDIO_s -
+
+SYNOPSIS
+       #include <rpmio.h>
+
+
+   Data Fields
+       fdio_read_function_t * read
+       fdio_write_function_t * write
+       fdio_seek_function_t * seek
+       fdio_close_function_t * close
+       fdio_ref_function_t * _fdref
+       fdio_deref_function_t * _fdderef
+       fdio_new_function_t * _fdnew
+       fdio_fileno_function_t * _fileno
+       fdio_open_function_t * _open
+       fdio_fopen_function_t * _fopen
+       fdio_ffileno_function_t * _ffileno
+       fdio_fflush_function_t * _fflush
+       fdio_mkdir_function_t * _mkdir
+       fdio_chdir_function_t * _chdir
+       fdio_rmdir_function_t * _rmdir
+       fdio_rename_function_t * _rename
+       fdio_unlink_function_t * _unlink
+
+FIELD DOCUMENTATION
+   fdio_chdir_function_t* FDIO_s::_chdir
+       Definition at line 145 of file rpmio.h.
+
+   fdio_deref_function_t* FDIO_s::_fdderef
+       Definition at line 135 of file rpmio.h.
+
+       Referenced by XurlFree.
+
+   fdio_new_function_t* FDIO_s::_fdnew
+       Definition at line 136 of file rpmio.h.
+
+   fdio_ref_function_t* FDIO_s::_fdref
+       Definition at line 134 of file rpmio.h.
+
+       Referenced by Rename.
+
+   fdio_ffileno_function_t* FDIO_s::_ffileno
+       Definition at line 141 of file rpmio.h.
+
+   fdio_fflush_function_t* FDIO_s::_fflush
+       Definition at line 142 of file rpmio.h.
+
+   fdio_fileno_function_t* FDIO_s::_fileno
+       Definition at line 137 of file rpmio.h.
+
+       Referenced by XurlFree.
+
+   fdio_fopen_function_t* FDIO_s::_fopen
+       Definition at line 140 of file rpmio.h.
+
+   fdio_mkdir_function_t* FDIO_s::_mkdir
+       Definition at line 144 of file rpmio.h.
+
+   fdio_open_function_t* FDIO_s::_open
+       Definition at line 139 of file rpmio.h.
+
+       Referenced by fadOpen.
+
+   fdio_rename_function_t* FDIO_s::_rename
+       Definition at line 147 of file rpmio.h.
+
+   fdio_rmdir_function_t* FDIO_s::_rmdir
+       Definition at line 146 of file rpmio.h.
+
+   fdio_unlink_function_t* FDIO_s::_unlink
+       Definition at line 148 of file rpmio.h.
+
+   fdio_close_function_t* FDIO_s::close
+       Definition at line 132 of file rpmio.h.
+
+       Referenced by XurlFree.
+
+   fdio_read_function_t* FDIO_s::read
+       Definition at line 129 of file rpmio.h.
+
+   fdio_seek_function_t* FDIO_s::seek
+       Definition at line 131 of file rpmio.h.
+
+   fdio_write_function_t* FDIO_s::write
+       Definition at line 130 of file rpmio.h.
+
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002                  FDIO_s(3)

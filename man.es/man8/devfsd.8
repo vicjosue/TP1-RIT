@@ -1,0 +1,381 @@
+DEVFSD(8)                                               DEVFSD(8)
+
+
+
+NAME
+       devfsd  -  optional  daemon  for managing devfs (the Linux
+       Device Filesystem)
+
+
+SYNOPSIS
+       devfsd mntpnt [ -v ] [ -d ] [ -t num ] [ -D mask ] [ -fg ]
+       [ -np ]
+
+
+DESCRIPTION
+       The  devfsd  programme is a daemon, run by the system boot
+       scripts, which can provide for intelligent  management  of
+       device  entries  in  the  Device Filesystem (devfs). It is
+       desirable to start the daemon at the beginning of the boot
+       scripts, in particular before filesystem checks.
+
+       As part of its setup phase devfsd creates certain symbolic
+       links which are compiled into the code.  These  links  are
+       required by /usr/src/linux/Documentation/devices.txt. This
+       behaviour may change in future revisions.
+
+       devfsd will read the special control  file  .devfsd  in  a
+       mounted  devfs,  listening for the creation and removal of
+       device entries (this is termed a  change  operation).  For
+       each  change  operation, devfsd can take many actions. The
+       daemon will normally run itself in the background and send
+       messages to syslog.
+
+       The opening of the syslog service is automatically delayed
+       until /dev/log is created.
+
+       At startup, before switching to daemon mode,  devfsd  will
+       scan  the  mounted device tree and will generate synthetic
+       REGISTER events for each leaf node and directory.
+
+
+OPTIONS
+       mntpnt This specifies a mount point  for  where  devfs  is
+              mounted.  This is typically "/dev". The daemon will
+              change directory to this mount point before opening
+              any files.
+
+       -v     This option will print the protocol version numbers
+              for devfsd and  the  kernel-side  protocol  version
+              provided by devfs itself. The programme then exits.
+
+       -d     Run devfsd in debug mode. Used  for  debugging  the
+              kernel-side  protocol  implemented  by  devfs. This
+              also prints the protocol version numbers.  In  this
+              mode the daemon runs in the foreground.
+
+       -t num Set the trace level to num. If the level is greater
+              than 0 then output is sent to  stderr  rather  than
+              syslog(3).  If  the  level  is  greater than 1 then
+              devfsd will run in trace mode. Higher levels  yield
+              more trace information.
+
+       -D mask
+              Set the debug mask for devfs.
+
+       -fg    Run the daemon in the foreground.
+
+       -np    Exit  after parsing the configuration file and pro­
+              cessing synthetic REGISTER events. Do not poll  for
+              events. This is primarily used for creating compat­
+              ibility entries without needing a daemon running in
+              the background.
+
+
+CONFIGURATION
+       The  configuration  file  /etc/devfsd.conf  configures the
+       devfsd programme. It is a simple ASCII file with one  con­
+       figuration  option per line. Comment lines must start with
+       a leading '#' character. Comment lines and blank lines are
+       ignored.  Each  configuration option is a keyword followed
+       by zero or more parameters, depending on the  option.  The
+       following section details the configuration options. Below
+       are the permitted keywords:
+
+       INCLUDE location
+              Include the configuration file named  by  location.
+              Variable  expansion is applied to location (see the
+              section on VARIABLE EXPANSION below). If this is  a
+              directory, then all files (except those which start
+              with '.') are read. This is recursive  (i.e.  files
+              which are in fact subdirectories are also read).
+
+              If the first character of location is "+", then the
+              rest of location is the name of an NIS map to load.
+              This  operation  is  silently  ignored  if  the NIS
+              domain has not yet been set (SIGHUP should then  be
+              sent after the NIS domain has been set).
+
+       OPTIONAL_INCLUDE location
+              As  above,  except that if the file does not exist,
+              it is silently ignored.
+
+       CLEAR_CONFIG
+              Clear the current configuration.
+
+       RESTORE directory
+              This will restore entries  previously  saved  under
+              directory  to devfs. Only symbolic links or entries
+              with the sticky bit  set  will  be  restored.  This
+              action  is taken as the configuration file is read.
+              With appropriate COPY actions, complete persistence
+              is acheived.
+
+       The  config  file can also be used to specify actions that
+       should be taken at specified events. Each  line  specifies
+       an event and action. Multiple actions (of the same or dif­
+       ferent types) per event may be specified (one  action  per
+       line). Events are processed in order, with the first event
+       config line being processed first. The syntax is:
+
+       EVENT devname ACTION [args...]
+              where EVENT is the event and ACTION is  the  action
+              to  take  when the event occurs. The action is only
+              taken when devname matches the name of  the  device
+              entry  affected  (this  does  not include the mount
+              point for the filesystem). This is processed  as  a
+              regular  expression.  Some  actions  support  extra
+              arguments, passed as args.
+
+              Variable expansion is applied to the arguments (see
+              the  section  on  VARIABLE  EXPANSION below). After
+              variable expansion, regular expression substitution
+              is performed (see the section on REGULAR EXPRESSION
+              SUBSTITUTION).  Note  that  the  following  special
+              variable names are also recognised:
+
+              devpath
+                     the full path name of the new device
+
+              devname
+                     the  name of the new device inside the devfs
+                     namespace
+
+              mode   the mode of the device entry in octal
+
+              uid    the user ID of the process or inode
+
+              gid    the group ID of the process or inode
+
+       The following events are recognised:
+
+       REGISTER
+              The device entry or directory was registered  by  a
+              device driver.
+
+       UNREGISTER
+              The  device  entry  was  unregistered  by  a device
+              driver.
+
+       ASYNC_OPEN
+              The inode was opened (the opening process does  not
+              wait for a response).
+
+       CLOSE  The file was closed.
+
+       LOOKUP An  inode  lookup  was  performed  and there was no
+              device entry. This event is not sent if the  initi­
+              ating process is devfsd or one of its children.
+
+       CHANGE Some inode attributes were changed.
+
+       CREATE An inode was created by a process.
+
+       DELETE An inode was deleted by a process.
+
+       The following actions are recognised:
+
+       PERMISSIONS owner_and_group access_mode
+              owner_and_group  specifies the owner and group that
+              the file should be set to. This must be of the form
+              "user.group" and either "user" or "group" component
+              may be symbolic or numeric.  To  specify  that  the
+              user or group be left alone, use a numeric value of
+              "-1"  for  the  respective  component.  access_mode
+              specifies  the  access  mode the file should be set
+              to. This must be either an octal value  or  a  sym­
+              bolic  string  of  nine  characters  with  the form
+              "rwxrwxrwx". Where access is not given, a '-' char­
+              acter  should  be  used  in place (e.g. "rw-rw-r--"
+              gives read and write access to the user  and  group
+              and only read access to everybody else).
+
+       MODLOAD
+              This action will pass "/dev/$devname" (i.e. "/dev/"
+              prefixed to the device name) to the module  loading
+              facility.  In addition, the /etc/modules.devfs con­
+              figuration file is used.
+
+       EXECUTE path [arg...]
+              This action allows you to run a programme. path  is
+              the  pathname  of the programme to run and arg is a
+              set of optional arguments passed to  the  programme
+              (maximum  6).  path  is  the  first  argument (i.e.
+              argv[0]) passed to the programme.
+
+       MFUNCTION path function [arg...]
+              This action allows you to run a "main"-style  func­
+              tion  within  a shared object. path is the pathname
+              of the shared object,  with  the  special  path  of
+              "GLOBAL"  signifying  all global symbols (e.g. from
+              libc). function is the name of the function  symbol
+              to  run  and  arg  is  a  set of optional arguments
+              passed to the function (maximum  5).  path  is  the
+              first  argument  (i.e. argv[0]) passed to the func­
+              tion. The prototype for this function is similar to
+              the  main  function  of C programmes. The prototype
+              is:
+
+              int func (int argc, char **argv);
+
+       CFUNCTION path function [arg...]
+              This action is similar  to  the  MFUNCTION  action,
+              except  for  the  calling convention. The prototype
+              for this function is:
+
+              int func (void *arg1, void *arg2, void *arg3,  void
+              *arg4, void *arg5);
+
+              Up to 5 arguments may be passed, each being of type
+              void *. The following special arguments are  recog­
+              nised:
+
+              EVENT  a struct devfsd_notify_struct * is passed
+
+
+       COPY source destination
+              This  action  will copy the device type and permis­
+              sions of source to destination. The sticky  bit  is
+              set  on  the  destination inode if the source inode
+              was create  manually  (i.e.  not  by  a  driver  or
+              devfsd).
+
+       IGNORE This  action  causes  all subsequent processing for
+              the event to be ignored.
+
+       MKOLDCOMPAT
+              This action creates an  "old"  compatibility  entry
+              for the device.
+
+       MKNEWCOMPAT
+              This action creates a "new" compatibility entry for
+              the device.
+
+       RMOLDCOMPAT
+              This action removes an  "old"  compatibility  entry
+              for the device.
+
+       RMNEWCOMPAT
+              This action removes a "new" compatibility entry for
+              the device.
+
+
+VARIABLE EXPANSION
+       A subset of normal  Bourne  shell  variable  expansion  is
+       applied  to  various  expressions. The currently supported
+       subset is: $variable, ${variable}  and  ${variable:-word}.
+       Variables  are  taken  from the environment. The following
+       variable names are also defined :
+
+       hostname
+              The hostname of the machine
+
+       mntpnt The mount point for devfs
+
+
+REGULAR EXPRESSION SUBSTITUTION
+       Sections of the matched regular expression can be included
+       in  an  action.   Use  \0  to  refer to the entire regular
+       expression matched, \1 to refer to the first parenthesized
+       subexpression, \2 to refer to the second, and so on.  (Use
+       \\ to include an actual backslash.)
+
+       See devfsd.conf(5) for examples of regular expression sub­
+       stitution.
+
+
+SIGNALS
+       devfsd responds to signals in a variety of ways:
+
+       SIGINT devfsd will exit cleanly.
+
+       SIGTERM
+              devfsd will exit cleanly.
+
+       SIGHUP The  configuration  file  is re-read and any shared
+              objects are reloaded. Then the mounted device  tree
+              is scanned and synthetic REGISTER events are gener­
+              ated for each leaf node.
+
+
+EXAMPLES
+       Create and destroy old compatibility entries:
+              REGISTER     .*           MKOLDCOMPAT
+              UNREGISTER   .*           RMOLDCOMPAT
+
+       Create and destroy new compatibility entries:
+              REGISTER     .*           MKNEWCOMPAT
+              UNREGISTER   .*           RMNEWCOMPAT
+
+       Load modules:
+              LOOKUP       .*           MODLOAD
+
+       Make and remove a symbolic link:
+              REGISTER     mydir/mydev  CFUNCTION GLOBAL mksymlink $devname mydev
+              UNREGISTER   mydir/mydev  CFUNCTION GLOBAL unlink  mydev
+
+       Give sndusers group access to sound drivers
+              REGISTER     sound/.*     PERMISSIONS root.sndusers rw-rw----
+
+
+FILES
+       /etc/devfsd.conf
+              the configuration file. If this file is missing  or
+              has  zero  size,  devfsd  will exit after its setup
+              phase.
+
+       /etc/modules.devfs
+              the generic module configuration file (required for
+              the   MODLOAD  action),  which  is  installed  with
+              devfsd. This in turn includes /etc/modules.conf
+
+
+CAVEATS
+       Make sure  you  understand  the  implications  of  regular
+       expression  matching. For example, if you had a configura­
+       tion line such as:
+
+       LOOKUP     cdrom      CFUNCTION      GLOBAL      mksymlink
+       ${mntpnt}/cdroms/cdrom0 $devpath
+
+       then  referencing  "/dev/cdrom1"  will create the symbolic
+       link "/dev/cdrom1". Further,  referencing  "/dev/cdroms/1"
+       would  also create the "/dev/cdroms/1" symbolic link. This
+       is probably not what you want.  If there was not already a
+       "/dev/cdroms" directory, then you would get a "/dev/cdrom"
+       symbolic link. Definately not what you want!  The  correct
+       configuration line would be:
+
+       LOOKUP      ^cdrom$     CFUNCTION     GLOBAL     mksymlink
+       ${mntpnt}/cdroms/cdrom0 $devpath
+
+
+SEE ALSO
+       init(8), devfsd.conf(5), modprobe(8)
+
+
+AUTHOR
+       Richard Gooch (rgooch@atnf.csiro.au)
+
+
+AVAILABILITY
+       The  Device   Filesystem   daemon   is   available   from:
+       http://www.atnf.csiro.au/~rgooch/linux/
+
+
+FURTHER READING
+       It  is  strongly  recommended to read the devfs FAQ, which
+       contains  configuration  tips.   It   is   available   at:
+       http://www.atnf.csiro.au/~rgooch/linux/docs/devfs.html
+
+
+MAILING LIST
+       A  mailing  list  exists for devfs kernel patch and devfsd
+       release announcements. This list also has a  small  amount
+       of  discussion  traffic (a few messages per week). You may
+       subscribe by sending a  message  to  majordomo@oss.sgi.com
+       with subscribe devfs in the message body.
+
+
+
+Linux System Daemons       27 Jan 2002                  DEVFSD(8)

@@ -1,0 +1,125 @@
+rpc.mountd(8)                                       rpc.mountd(8)
+
+
+
+NAME
+       rpc.mountd - NFS mount daemon
+
+SYNOPSIS
+       /usr/sbin/rpc.mountd [options]
+
+DESCRIPTION
+       The  rpc.mountd program implements the NFS mount protocol.
+       When receiving a MOUNT request  from  an  NFS  client,  it
+       checks  the request against the list of currently exported
+       file systems. If the client is permitted to mount the file
+       system,  rpc.mountd  obtains  a  file handle for requested
+       directory and returns it to the client.
+
+   Exporting NFS File Systems
+       Making file systems available to  NFS  clients  is  called
+       exporting.
+
+       Usually,  a  file  system  and the hosts it should be made
+       available to are listed  in  the  /etc/exports  file,  and
+       invoking  exportfs  -a  whenever the system is booted. The
+       exportfs(8) command makes export information available  to
+       both  the kernel NFS server module and the rpc.mountd dae­
+       mon.
+
+       Alternatively, you can export individual directories  tem­
+       porarily using exportfs's host:/directory syntax.
+
+   The rmtab File
+       For  every  mount  request  received  from  an NFS client,
+       rpc.mountd adds an entry to the /var/state/nfs/rmtab file.
+       When  receiving an unmount request, that entry is removed.
+       user level part of the NFS service.
+
+       However, this file is mostly ornamental. One,  the  client
+       can  continue  to  use  the file handle even after calling
+       rpc.mountd 's UMOUNT  procedure.  And  two,  if  a  client
+       reboots  without notifying rpc.mountd , a stale entry will
+       remain in rmtab.
+
+OPTIONS
+       -d kind  or  --debug kind
+              Turn on debugging for kind.
+
+       -F  or  --foreground
+              Run in foreground (do not daemonize)
+
+       -f  or  --exports-file
+              This option specifies the exports file, listing the
+              clients  that  this server is prepared to serve and
+              parameters  to  apply  to  each  such  mount   (see
+              exports(5)).   By  default,  export  information is
+              read from /etc/exports.
+
+       -h  or  --help
+              Display usage message.
+
+       -o num  or  --descriptors num
+              Set the limit of the number of open  file  descrip­
+              tors to num. The default is 256.
+
+       -N  or  --no-nfs-version
+              This  option can be used to request that rpc.mountd
+              do not offer certain versions of NFS.  The  current
+              version  of rpc.mountd can support both NFS version
+              2 and the newer version 3. If the NFS kernel module
+              was  compiled without support for NFSv3, rpc.mountd
+              must be invoked with the option --no-nfs-version  3
+              .
+
+       -n  or  --no-tcp
+              Don't advertise TCP for mount.
+
+       -P     Ignored (compatibility with unfsd??).
+
+       -p  or  --port
+              Force  rpc.mountd  to  bind  to the specified port,
+              instead of using the random port number assigned by
+              the portmapper.
+
+       -V  or  --nfs-version
+              This  option can be used to request that rpc.mountd
+              offer certain versions of NFS. The current  version
+              of  rpc.mountd  can  support both NFS version 2 and
+              the newer version 3.
+
+       -v  or  --version
+              Print the version of rpc.mountd and exit.
+
+
+TCP_WRAPPERS SUPPORT
+       This rpc.mountd version is protected  by  the  tcp_wrapper
+       library. You have to give the clients access to rpc.mountd
+       if they should be allowed to use  it.  To  allow  connects
+       from clients of the .bar.com domain you could use the fol­
+       lowing line in /etc/hosts.allow:
+
+       mountd: .bar.com
+
+       You have to use the daemon name mountd for the daemon name
+       (even  if the binary has a different name). For the client
+       names you can only use the keyword  ALL  or  IP  addresses
+       (NOT host or domain names).
+
+       For further information please have a look at the tcpd(8),
+       hosts_allow(5) and hosts_access(5) manual pages.
+
+
+SEE ALSO
+       rpc.nfsd(8), exportfs(8), exports(5), rpc.rquotad(8).
+
+FILES
+       /etc/exports, /var/state/nfs/xtab.
+
+AUTHOR
+       Olaf Kirch, H. J. Lu, G. Allan Morris III, and a  host  of
+       others.
+
+
+
+                           25 Aug 2000              rpc.mountd(8)

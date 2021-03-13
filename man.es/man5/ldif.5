@@ -1,0 +1,101 @@
+LDIF(5)                                                   LDIF(5)
+
+
+
+NAME
+       ldif - LDAP Data Interchange Format
+
+DESCRIPTION
+       The  LDAP Data Interchange Format (LDIF) is used to repre­
+       sent LDAP entries in text form. LDAP tools, such  as  lda­
+       padd(1) and ldapsearch(1), read and write LDIF.
+
+       The basic form of an LDIF entry is:
+
+            dn: <distinguished name>
+            <attrdesc>: <attrvalue>
+            <attrdesc>: <attrvalue>
+            <attrdesc>:: <base64-encoded-value>
+            <attrdesc>:< <URL>
+            ...
+
+       The  value  may  be  specified  as UTF-8 text or as base64
+       encoded data, or a URI may be provided to the location  of
+       the attribute value.
+
+       A  line  may be continued by starting the next line with a
+       single space or tab, e.g.,
+
+            dn: cn=Barbara J Jensen, dc=exam
+             ple, dc=com
+
+       Lines beginning with a sharpe sign ('#') are ignored.
+
+       Multiple attribute values are specified on separate lines,
+       e.g.,
+
+            cn: Barbara J Jensen
+            cn: Babs Jensen
+
+       If  an  value contains a non-printing character, or begins
+       with a space or a colon ':', the <attrtype> is followed by
+       a  double  colon and the value is encoded in base 64 nota­
+       tion. e.g., the value " begins  with  a  space"  would  be
+       encoded like this:
+
+            cn:: IGJlZ2lucyB3aXRoIGEgc3BhY2U=
+
+       If  the  attribute  value is located in a file, the <attr­
+       type> is followed by a ':<' and a file:  URI.   e.g.,  the
+       value  contained  in  the  file /tmp/value would be listed
+       like this:
+
+            cn:< file:///tmp/value
+       Other URI schemes (ftp,http) may be supported as well.
+
+       Multiple entries within the same LDIF file  are  separated
+       by blank lines.
+
+EXAMPLE
+       Here  is  an  example  of  an  LDIF  file containing three
+       entries.
+
+            dn: cn=Barbara J Jensen, dc=example, dc=com
+            cn: Barbara J Jensen
+            cn: Babs Jensen
+            objectclass: person
+            description:< file://tmp/babs
+            sn: Jensen
+
+            dn: cn=Bjorn J Jensen, dc=example, dc=com
+            cn: Bjorn J Jensen
+            cn: Bjorn Jensen
+            objectclass: person
+            sn: Jensen
+
+            dn: cn=Jennifer J Jensen, dc=example, dc=com
+            cn: Jennifer J Jensen
+            cn: Jennifer Jensen
+            objectclass: person
+            sn: Jensen
+            jpegPhoto:: /9j/4AAQSkZJRgABAAAAAQABAAD/2wBDABALD
+             A4MChAODQ4SERATGCgaGBYWGDEjJR0oOjM9PDkzODdASFxOQ
+             ERXRTc4UG1RV19iZ2hnPk1xeXBkeFxlZ2P/2wBDARESEhgVG
+            ...
+
+       Notice that the description in Barbara Jensen's  entry  is
+       read  from  file://tmp/babs  and the jpegPhoto in Jennifer
+       Jensen's entry is encoded using base 64.
+
+SEE ALSO
+       ldap(3), ldapsearch(1), ldapadd(1) LDAP  Data  Interchange
+       Format,Good,G.,RFC2849.
+
+ACKNOWLEDGEMENTS
+       OpenLDAP  is developed and maintained by The OpenLDAP Pro­
+       ject (http://www.openldap.org/).  OpenLDAP is derived from
+       University of Michigan LDAP 3.3 Release.
+
+
+
+OpenLDAP 2.0.21-Release   20 August 2000                  LDIF(5)

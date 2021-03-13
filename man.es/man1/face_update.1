@@ -1,0 +1,59 @@
+FACE_UPDATE(1L)                                   FACE_UPDATE(1L)
+
+
+
+NAME
+       faces - automatic faces database update script.
+
+SYNOPSIS
+       face_update [ -o ] [ -w ]
+
+DESCRIPTION
+       face_update  is  a shell script for automatically updating
+       the faces database with "on-the-fly" faces. When faces  is
+       run with the -U option, every time that a new "on-the-fly"
+       face is found, it is mailed to a special mail alias  which
+       by  default  is facemaker.  There would be a special entry
+       in the /etc/aliases file for facemaker.  Something like:
+
+            "|/usr/local/bin/face_update"
+
+       This mail message has a certain format. The  Subject  line
+       contains  the file in the database to be updated. The body
+       of the mail message is 48 lines  in  Blit  ikon  (48x48x1)
+       format.  Depending  upon  command  line  options, this new
+       faces is included in the faces database.  face_update will
+       also  perform  various tests on the mail message to ensure
+       it is a valid update.
+
+       An entry will be written in the /var/log/facelog log  file
+       upon  completion.  This entry will consist of a timestamp,
+       the name of the user who sent the update,  the  ikon  that
+       was  updated, and the status of the update (whether it was
+       successful or not).
+
+       Note that the log file (  /var/log/facelog)  needs  to  be
+       created and owned by daemon with permissions of 0644.
+
+OPTIONS
+       -o     This  is  to  allow ikons to be stored in the "old"
+              style format, where the username was the ikon,  and
+              not a directory where the icons were kept.
+
+       -w     If  the  given  ikon  is  already  present  in  the
+              database, this option will allow it to be overwrit­
+              ten. By default this doesn't happen.
+
+FILES
+       /var/log/facelog
+              log file for all ikon updates.
+
+SEE ALSO
+       faces(1)
+
+AUTHOR
+       Hal Stern Sun Microsystems Inc.
+
+
+
+                           25 June 1990           FACE_UPDATE(1L)

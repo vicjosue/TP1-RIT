@@ -1,0 +1,149 @@
+mirrordir(1)                                         mirrordir(1)
+
+
+
+NAME secure-mcserv
+       secure-mcserv  -  secure  server for encrypted login, file
+       transfer and socket forwarding.
+
+SYNOPSIS
+       secure-mcserv [options] [-p portnum]
+
+DESCRIPTION
+       secure-mcserv is a server for the Midnight Commander (net­
+       work)  filesystem  (mcfs)  of  the  Midnight Commander vfs
+       (virtual file system).  It is part of the mirrordir  pack­
+       age.  In  can operate as a substitute to the Midnight Com­
+       mander's native mcserv daemon,  although  It  has  several
+       extensions for use with mirrordir.
+
+       security and compression
+              This  is  not so much a feature of secure-mcserv as
+              of the transparent secure TCP layer implemented for
+              the  whole  of mirrordir. This layer can operate in
+              normal mode, compressed (gzipped)  mode,  encrypted
+              mode, or compressed and encrypted mode. The mode of
+              connection is autodetected from  magic  numbers  at
+              the  head of the TCP stream. The Midnight Commander
+              can use secure-mcserv instead of its native mcserv.
+              See  the  -z,  --secure  and  -K  options  of  mir­
+              rordir(1).
+
+       Denying access from specific hosts
+              You can add to  your  /etc/hosts.allow  file  lines
+              like the following:
+
+                  secure-mcserv:  <source-ip-address> : ALLOW
+                  secure-mcserv:  212.89.128.0/255.255.255.0 : ALLOW
+                  secure-mcserv:  ALL : DENY
+
+              (This feature was submitted to me by Juergen Kammer
+              <j.kammer@eurodata.de> who claims it works.)
+
+       logins You can securely login to secure-mcserv with  pslo­
+              gin  which  comes  with the mirrordir distribution.
+              This  is  analogous  to  rlogin(1)   working   with
+              rlogind(1).  See  the  --login-mode  option of mir­
+              rordir(1).
+
+       TCP socket forwarding
+              Using the forward(1) command of the mirrordir  dis­
+              tribution,  you  can  forward  arbitrary TCP socket
+              connections over a  secure  and/or  compressed  TCP
+              channel.  This  is very useful for making encrypted
+              services out of ordinary services.  forward(1)  has
+              an examples section.
+
+OPTIONS
+       -d     Become  a  daemon (set -q). This option will almost
+              always be used.  Alternative -d can be omitted  and
+              -v (see below) set to debug failed connections.
+
+       -q     Quiet mode. This is the default.
+
+       -f     Try  ftp  authentication  if  normal authentication
+              fails.
+
+       -v     Verbose mode. Print out various debugging  informa­
+              tion.
+
+       -p port
+              Specify  a port number to listen to. The default is
+              9876.
+
+       -s server[:port]
+              Specify a password  server  to  use.  The  password
+              server  is  just  another  machine  running secure-
+              mcserv albeit without the -s option.
+
+              This is a very useful option if you  have  lots  of
+              machines  that  a group of users have to be able to
+              log into. Create accounts for all  these  users  on
+              each  machine  and  disable  them  by editing their
+              password  fields  to   *   in   /etc/password   (or
+              /etc/shadow).
+
+              Select  one machine as your password server (say it
+              is called passerv.my.doma.in).  This  machine  will
+              contain proper password fields in /etc/password. On
+              this machine run secure-mcserv -d as usual. On  all
+              other    machines,    run   secure-mcserv   -d   -s
+              passerv.my.doma.in
+
+              Because all intermediate connections use  the  same
+              encrypted  TCP  stream, and are all equally secure,
+              you can use this method even if  passerv.my.doma.in
+              is  across  the  open  internet.  In  fact the very
+              method to authenticate against the password  server
+              is to check the exit status of the command:
+              pslogin user@passerv.my.doma.in --test-login --read-password-from-stdin
+
+              I  also  see no reason why you cannot use cascading
+              password servers, although there is no advantage to
+              doing this.
+
+              Each authentication takes the same time to execute,
+              so using a password server takes twice as long as a
+              normal  login,  because of the second connection it
+              has to make to the password server.  Cascades  will
+              take that much time extra for each successive pass­
+              word server.
+
+BUGS
+       Does not log to syslog.
+
+       Midnight Commander vfs has a bug  that  device  files  are
+       always  major:minor  of  0:0.  This  bug  is fixed in this
+       implementation.   Don't  use  the  Midnight  Commander  to
+       transfer device files. By the time you read this, the lat­
+       est Midnight Commander may have had this fixed.
+
+       The special escape characters  for  suspending  an  rlogin
+       session are not recognised. Hence programs like screen (?)
+       will not work. I will  add  this  functionality  if  users
+       request it. Currently, ^Z etc. do not have any effect.
+
+
+FILES
+       See mirrordir(1).
+
+
+STANDARDS
+       None. See BUGS.
+
+
+AVAILABILITY
+       The  latest  version of the program can be found at either
+       ftp://sunsite.unc.edu/pub/Linux/system/backup,
+       ftp://lava.obsidian.co.za/pub/linux/mirrordir,          or
+       ftp://obsidian.co.za/pub/linux/mirrordir.
+
+AUTHOR
+       Paul Sheer  <psheer@obsidian.co.za>  <psheer@icon.co.za>
+
+SEE ALSO
+       mirrordir(1), ssh(1), mcserv(1), mc(1)
+
+
+
+Linux                    1998 November 8             mirrordir(1)

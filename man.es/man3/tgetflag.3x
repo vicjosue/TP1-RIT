@@ -1,0 +1,100 @@
+curs_termcap(3X)                                 curs_termcap(3X)
+
+
+
+NAME
+       tgetent, tgetflag, tgetnum, tgetstr, tgoto, tputs - direct
+       curses interface to the terminfo capability database
+
+SYNOPSIS
+       #include <curses.h>
+       #include <term.h>
+       int tgetent(char *bp, const char *name);
+       int tgetflag(char *id);
+       int tgetnum(char *id);
+       char *tgetstr(char *id, char **area);
+       char *tgoto(const char *cap, int col, int row);
+       int tputs(const char *str, int affcnt, int (*putc)(int));
+
+DESCRIPTION
+       These routines are included as a conversion aid  for  pro­
+       grams  that use the termcap library.  Their parameters are
+       the same and the routines are emulated using the  terminfo
+       database.   Thus, they can only be used to query the capa­
+       bilities of entries for which a terminfo  entry  has  been
+       compiled.
+
+       The  tgetent routine loads the entry for name.  It returns
+       1 on success, 0 if there is no such entry, and -1  if  the
+       terminfo  database  could  not  be  found.   The emulation
+       ignores the buffer pointer bp.
+
+       The tgetflag routine gets the boolean  entry  for  id,  or
+       zero if it is not available.
+
+       The  tgetnum  routine gets the numeric entry for id, or -1
+       if it is not available.
+
+       The tgetstr routine returns the string entry  for  id,  or
+       zero  if  it  is  not  available.  Use tputs to output the
+       returned string.  The return value will also be copied  to
+       the  buffer pointed to by area, and the area value will be
+       updated to point past the null ending this value.
+
+       Only the first two characters of the id parameter of tget­
+       flag, tgetnum and tgetstr are compared in lookups.
+
+       The  tgoto  routine  instantiates  the parameters into the
+       given capability.  The output from this routine is  to  be
+       passed to tputs.
+
+       The  tputs  routine  is described on the curs_terminfo(3X)
+       manual page.  It can retrieve capabilities by either term­
+       cap or terminfo name.
+
+
+RETURN VALUE
+       Except  where  explicitly  noted,  routines that return an
+       integer return ERR upon failure and OK (SVr4  only  speci­
+       fies  "an  integer  value other than ERR") upon successful
+       completion.
+
+       Routines that return pointers return NULL on error.
+
+BUGS
+       If you call tgetstr to fetch ca or any other parameterized
+       string,  be  aware  that  it  will be returned in terminfo
+       notation, not the older and  not-quite-compatible  termcap
+       notation.  This won't cause problems if all you do with it
+       is call tgoto or tparm, which both  expand  terminfo-style
+       strings  as  terminfo.  (The tgoto function, if configured
+       to support termcap, will check if  the  string  is  indeed
+       terminfo-style  by  looking for "%p" parameters or "$<..>"
+       delays, and invoke a termcap-style parser  if  the  string
+       does not appear to be terminfo).
+
+       Because  terminfo  conventions for representing padding in
+       string capabilities differ  from  termcap's,  tputs("50");
+       will  put  out a literal "50" rather than busy-waiting for
+       50 milliseconds.  Cope with it.
+
+PORTABILITY
+       The XSI Curses standard, Issue  4  describes  these  func­
+       tions.   However,  they are marked TO BE WITHDRAWN and may
+       be removed in future versions.
+
+       Neither the XSI Curses standard nor  the  SVr4  man  pages
+       documented  the return values of tgetent correctly, though
+       all three were in fact returned ever since SVr1.  In  par­
+       ticular,  an  omission in the XSI Curses documentation has
+       been misinterpreted to mean that  tgetent  returns  OK  or
+       ERR.  Because the purpose of these functions is to provide
+       compatibility with the termcap library, that is  a  defect
+       in XCurses, Issue 4, Version 2 rather than in ncurses.
+
+SEE ALSO
+       curses(3X), terminfo(5), putc(3S).
+
+
+
+                                                 curs_termcap(3X)

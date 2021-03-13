@@ -1,0 +1,54 @@
+ftpcount(1)                                           ftpcount(1)
+
+
+
+NAME
+       ftpcount  -  show  current  number of connections for each
+       proftpd server configuration
+
+SYNOPSIS
+       ftpcount
+
+DESCRIPTION
+       The ftpcount command shows the current number  of  connec­
+       tions  per  server and virtualhost/anonymous configuration
+       defined in the proftpd.conf file.  Connections spawned  by
+       inetd  are counted seperately from those created by a mas­
+       ter proftpd standalone server.
+
+OPTIONS
+       -h,--help   Display a short usage  description,  including
+                   all available options.
+
+       -p,--path scoreboard-path
+                   Specify  the  full  path to proftpd's run-time
+                   scoreboard files (configured  via  the  Score­
+                   boardPath   directive  in  proftpd.conf).   If
+                   proftpd's default directory has  been  changed
+                   via  this  directive,  ftpcount must either be
+                   recompiled or this  option  must  be  used  in
+                   order to find proftpd's scoreboard.
+
+FILES
+       /usr/bin/ftpcount
+       /var/run/proftpd-[pid]
+       /var/run/proftpd-inetd
+
+AUTHORS
+       ProFTPD  is  written and maintained by a number of people,
+       full credits can be found on  http://www.proftpd.org/cred­
+       its.html
+
+SEE ALSO
+       inetd(8),ftp(1),proftpd(8),ftpwho(1),ftpshut(8)
+
+       Full documentation on ProFTPD, including configuration and
+       FAQs is available at http://www.proftpd.org/.
+
+       Report bugs at http://bugs.proftpd.org/ For  help/support,
+       try    the    ProFTPD    mailing    lists,   detailed   on
+       http://www.proftpd.org/lists.html
+
+
+
+                            March 2000                ftpcount(1)

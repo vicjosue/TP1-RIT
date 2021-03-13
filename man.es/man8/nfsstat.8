@@ -1,0 +1,69 @@
+nfsstat(8)                                             nfsstat(8)
+
+
+
+NAME
+       nfsstat - print NFS statistics
+
+SYNOPSIS
+       /usr/sbin/nfsstat [-anrcsz] [-o facility] ...
+
+DESCRIPTION
+       The nfsstat command retrieves and pretty-prints NFS kernel
+       statistics. Currently,  only  server-side  statistics  are
+       supported, because the NFS client does not yet collect any
+       data.
+
+OPTIONS
+       -s     Print only server-side statistics. The  default  is
+              to print both server and client statistics.
+
+       -c     Print only client-side statistics.
+
+       -n     Print  only NFS statistics. The default is to print
+              both NFS and RPC information.
+
+       -r     Print only RPC statistics.
+
+       -z     Zero the kernel statistics counters.   This  option
+              is not currently supported.
+
+       -o facility
+              Display  statistics  for  the  specified  facility,
+              which must be one of:
+
+              nfs    NFS protocol information, split  up  by  RPC
+                     call.
+
+              rpc    General RPC information.
+
+              net    Network layer statistics, such as the number
+                     of received packets, number of  TCP  connec­
+                     tions, etc.
+
+              fh     Usage  information on the server's file han­
+                     dle cache, including  the  total  number  of
+                     lookups,  and the number of hits and misses.
+
+              rc     Usage information on  the  server's  request
+                     reply  cache,  including the total number of
+                     lookups, and the number of hits and  misses.
+
+EXAMPLES
+FILES
+       /proc/net/rpc/nfsd
+              procfs-based interface to kernel NFS server statis­
+              tics.
+
+       /proc/net/rpc/nfs
+              procfs-based interface to kernel NFS client statis­
+              tics.
+
+SEE ALSO
+       rpc.nfsd(8).
+
+AUTHOR
+       Olaf Kirch, <okir@monad.swb.de>
+
+
+

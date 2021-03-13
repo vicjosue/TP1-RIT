@@ -1,0 +1,261 @@
+tixGrid(n)            Tix Built-In Commands            tixGrid(n)
+
+
+
+_________________________________________________________________
+
+NAME
+       tixGrid - Create and manipulate Tix Grid widgets
+
+STANDARD OPTIONS
+       -background     -borderWidth   -cursor
+       -font           -foreground    -height
+       -highlightColor -highlightThickness            -relief
+       -selectBackground              -selectForeground-width
+       -xScrollCommand -yScrollCommand
+
+       See  the  options manual entry for details on the standard
+       options.
+
+WIDGET-SPECIFIC OPTIONS
+       Command-Line Name:-editdonecmd
+       Database Name:  editDoneCmd
+       Database Class: EditDoneCmd
+
+              If non-empty, gives a Tcl command  to  be  executed
+              when  the user has edited grid cell. When this com­
+              mand is called, it is passed  with  two  additional
+              parameters: x y, where (x,y) is the location of the
+              cell that has just been edited.
+
+       Command-Line Name:-editnotifycmd
+       Database Name:  editNotifyCmd
+       Database Class: EditNotifyCmd
+
+              If non-empty, gives a Tcl command  to  be  executed
+              when  the user tries to edit a grid cell. When this
+              command is called, it is passed with two additional
+              parameters:  x  y,  where (x,y,) is the location of
+              the cell. This  command  should  return  a  boolean
+              value:  true  indicates  that the cells is editable
+              and false otherwise.
+
+       Command-Line Name:-formatcmd
+       Database Name:  formatCmd
+       Database Class: FormatCmd
+
+              If non-empty, gives a Tcl command  to  be  executed
+              when  the  grid  cells  need to be formatted on the
+              screen. Normally, this  command  calls  the  format
+              widget  command  (see  below). When this command is
+              called, it is passed with five  additional  parame­
+              ters: type x1 y1 x2 y2. type gives the logical type
+              of the region in the grid. It may  be  one  of  the
+              following.  x-region:  the  horizontal  margin;  y-
+              region: the vertical  margin;  s-region,  the  area
+              where  the  the horizontal and vertical margins are
+              joined; main: all the cells that do not  fall  into
+              the  above  three  types.   x1  y1  x2 y2 gives the
+              extent of the region that needs formatting.
+
+       Command-Line Name:-leftmargin
+       Database Name:  leftMargin
+       Database Class: LeftMargin
+
+              In the number of cells, gives the width of vertical
+              margin. A zero indicates that no vertical should be
+              drawn.
+
+       Command-Line Name:-selectmode
+       Database Name:  selectMode
+       Database Class: SelectMode
+
+              Specifies one of several  styles  for  manipulating
+              the selection. The value of the option may be arbi­
+              trary, but the default bindings  expect  it  to  be
+              either  single,  browse, multiple, or extended; the
+              default value is single.
+
+       Command-Line Name:-selectunit
+       Database Name:  selectUnit
+       Database Class: SelectUnit
+
+              Specifies the  selection  unit.  Valid  values  are
+              cell, column or row.
+
+       Command-Line Name:-topmargin
+       Database Name:  topMargin
+       Database Class: TopMargin
+
+              In  the  number of cells, gives the height of hori­
+              zontal margin. A zero indicates that no  horizontal
+              should be drawn.
+_________________________________________________________________
+
+DESCRIPTION
+       The  tixGrid  command  creates  a new window (given by the
+       pathName argument) and makes it  into  a  tixGrid  widget.
+       Additional  options,  described above, may be specified on
+       the command line or in the option  database  to  configure
+       aspects  of  the  tixGrid  widget  such  as its cursor and
+       relief.
+
+       A Grid widget displays its contents in a  two  dimensional
+       grid of cells. Each cell may contain one Tix display item,
+       which may be in text, graphics or other formats.  See  the
+       tixDisplayStyle manual page for more information about Tix
+       display items. Individual cells, or groups of  cells,  can
+       be  formatted with a wide range of attributes, such as its
+       color, relief and border.
+
+WIDGET COMMAND
+       The tixGrid command creates a new Tcl command  whose  name
+       is  the same as the path name of the tixGrid widget's win­
+       dow. This command may be used to invoke various operations
+       on the widget. It has the following general form:
+                     pathName option ?arg arg ...?
+       PathName  is the name of the command, which is the same as
+       the tixGrid widget's path name. Option and the args deter­
+       mine the exact behavior of the command. The following com­
+       mands are possible for tixGrid widgets:
+
+       pathName anchor option ?args ...?
+              Manipulates the anchor cell of the tixGrid  widget.
+              The anchor cell is the end of the selection that is
+              fixed while the user is dragging  out  a  selection
+              with the mouse.
+
+       pathName bdtype
+              TODO place holder
+
+       pathName cget option
+              Returns  the  current  value  of  the configuration
+              option given by option. Option may have any of  the
+              values accepted by the tixGrid command.
+
+       pathName configure ?option? ?value option value ...?
+              Query  or  modify  the configuration options of the
+              widget.  If no option is specified, returns a  list
+              describing  all  of the available options for path­
+              Name (see Tk_ConfigureInfo(n)  for  information  on
+              the  format  of  this list.) If option is specified
+              with no value, then  the  command  returns  a  list
+              describing  the one named option (this list will be
+              identical to the corresponding sublist of the value
+              returned if no option is specified). If one or more
+              option-value pairs are specified, then the  command
+              modifies  the  given  widget  option(s) to have the
+              given value(s); in this case the command returns an
+              empty  string.  Option  may  have any of the values
+              accepted by the tixGrid command.
+
+       pathName delete dim from ?to?
+              Dim may be row or  column.  If  to  is  not  given,
+              deletes  a  single  row (or column) at the position
+              from. If to is given, deletes the range of rows (or
+              columns) from position from through to.
+
+       pathName edit apply
+              If  any cell is being edited, de-highlight the cell
+              and applies the changes.
+
+       pathName edit set x y
+              Highlights the cell at (x,y) for  editing,  if  the
+              -editnotify command returns true for this cell.
+
+       pathName entrycget x y option
+              Returns  the  current  value  of  the configuration
+              option given by option of the cell at (x,y). Option
+              may have any of the values accepted by the set wid­
+              get command.
+
+       pathName entryconfigure x y ?option? ?value  option  value
+       ...?
+              Query or modify the configuration  options  of  the
+              cell  at (x,y).  If no option is specified, returns
+              a list describing all of the available options  for
+              the  cell  (see Tk_ConfigureInfo(n) for information
+              on the format of this list.)  If option  is  speci­
+              fied with no value, then the command returns a list
+              describing the one named option (this list will  be
+              identical to the corresponding sublist of the value
+              returned if no option is specified.) If one or more
+              option-value  pairs are specified, then the command
+              modifies the given widget  option(s)  to  have  the
+              given value(s); in this case the command returns an
+              empty string.  Option may have any  of  the  values
+              accepted by the set widget command.
+
+       pathName format
+              TODO place holder
+
+       pathName index
+              TODO place holder
+
+       pathName move dim from to offset
+              Dim  may  be  row or column. Moves the the range of
+              rows (or columns) from position from through to  by
+              the distance indicated by offset. For example, move
+              row 2 4 1 moves the rows 2,3,4 to rows 3,4,5.
+
+       pathName set x y ?-itemtype type? ?option value...?
+              Creates a new display item at the  cell  at  (x,y).
+              The  optional -itemtype parameter gives the type of
+              the display item. An  additional  list  of  option-
+              value pairs specify options of the display item. If
+              a display item already exists at this cell, the old
+              item will be deleted automatically.
+
+       pathName size dim index ?option value ...?
+              Queries or sets the size of the row or column given
+              by dim and index. Dim may be row or column.   Index
+              may  be  any  non-negative  integer  that gives the
+              position of a given row (or column). Index can also
+              be  the  string default; in this case, this command
+              queries or sets the default size of  all  rows  (or
+              columns).
+
+       When no option-value pair is given, this command returns a
+       list containing the current size setting of the given  row
+       (or column). When option-value pairs are given, the corre­
+       sponding options of the size setting of the given row  are
+       changed. Option may be one of the follwing:
+
+              -pad0 pixels
+                     Specifies the paddings to the left or a col­
+                     umn or the top of a row.
+
+              -pad1 pixels
+                     Specifies the paddings to  the  right  or  a
+                     column or the bottom of a row.
+
+              -size val
+                     Specifies  the  width  of  a  column  or the
+                     height of a row. Val may  be:  auto  --  the
+                     width  of  the  column is set the the widest
+                     cell in the column; a valid Tk  screen  dis­
+                     tance  unit (see Tk_GetPixels(n)); or a real
+                     number following by  the  word  chars  (e.g.
+                     3.4chars)  that sets the width of the column
+                     to the given number of characters.
+
+       pathName unset x y
+              Clears the cell at (x,y) by  removing  its  display
+              item.
+
+       pathName xview
+              TODO place holder
+
+       pathName yview
+              TODO place holder
+
+KEYWORDS
+       grid, spread sheet, table
+
+
+
+
+
+
+
+Tix                            4.1                     tixGrid(n)

@@ -1,0 +1,932 @@
+rpmio/macro.c(3)                                 rpmio/macro.c(3)
+
+
+
+NAME
+       rpmio/macro.c -
+
+SYNOPSIS
+       #include 'system.h'
+       #include <stdarg.h>
+       #include <rpmio_internal.h>
+       #include <rpmmessages.h>
+       #include <rpmerr.h>
+       #include <rpmmacro.h>
+       #include 'debug.h'
+
+   Data Structures
+       struct MacroBuf_s
+           Macro expansion state.
+
+   Defines
+       #define isblank(_c)   ((_c) == ' ' || (_c) ==')'   ')
+       #define iseol(_c)   ((_c) == '0 || (_c) == '
+       #define STREQ(_t, _f, _fn)   ((_fn) == (sizeof(_t)-1) &&
+           !strncmp((_t), (_f), (_fn)))
+       #define SAVECHAR(_mb, _c)   { *(_mb)->t = (_c),
+           (_mb)->t++, (_mb)->nb--; }
+       #define MAX_MACRO_DEPTH   16
+       #define MACRO_CHUNK_SIZE   16
+       #define SKIPBLANK(_s, _c)
+       #define SKIPNONBLANK(_s, _c)
+       #define COPYNAME(_ne, _s, _c)
+       #define COPYOPTS(_oe, _s, _c)
+       #define COPYBODY(_be, _s, _c)
+
+   Typedefs
+       typedef MacroBuf_s * MacroBuf
+           Macro expansion state.
+
+   Functions
+       int expandMacro (MacroBuf mb)
+           The main macro recursion loop.
+       void * _free (const void *p)
+           Wrapper to free(3), hides const compilation noise,
+           permit NULL, return NULL.
+       int compareMacroName (const void *ap, const void *bp)
+           Compare macro entries by name (qsort/bsearch).
+       void expandMacroTable (MacroContext mc)
+           Enlarge macro table.
+       void sortMacroTable (MacroContext mc)
+           Sort entries in macro table.
+       void rpmDumpMacroTable (MacroContext mc, FILE *fp)
+           Print macros to file stream.
+       MacroEntry * findEntry (MacroContext mc, const char *name,
+           size_t namelen)
+           Find entry in macro table.
+       char * rdcl (char *buf, size_t size, FD_t fd, int escapes)
+           fgets(3) analogue that reads  continuations.
+       const char * matchchar (const char *p, char pl, char pr)
+           Return text between pl and matching pr characters.
+       void printMacro (MacroBuf mb, const char *s, const char
+           *se)
+           Pre-print macro expression to be expanded.
+       void printExpansion (MacroBuf mb, const char *t, const
+           char *te)
+           Post-print expanded macro expression.
+       int expandT (MacroBuf mb, const char *f, size_t flen)
+           Save source and expand field into target.
+       int expandU (MacroBuf mb, char *u, size_t ulen)
+           Save source/target and expand macro in u.
+       int doShellEscape (MacroBuf mb, const char *cmd, size_t
+           clen)
+           Expand output of shell command into target buffer.
+       const char * doDefine (MacroBuf mb, const char *se, int
+           level, int expandbody)
+           Parse (and execute) new macro definition.
+       const char * doUndefine (MacroContext mc, const char *se)
+           Parse (and execute) macro undefinition.
+       void pushMacro (MacroEntry *mep, const char *n, const char
+           *o, const char *b, int level)
+           Push new macro definition onto macro entry stack.
+       void popMacro (MacroEntry *mep)
+           Pop macro definition from macro entry stack.
+       void freeArgs (MacroBuf mb)
+           Free parsed arguments for parameterized macro.
+       const char * grabArgs (MacroBuf mb, const MacroEntry me,
+           const char *se, char lastc)
+           Parse arguments (to next new line) for parameterized
+           macro.
+       void doOutput (MacroBuf mb, int waserror, const char *msg,
+           size_t msglen)
+           Perform macro message output.
+       void doFoo (MacroBuf mb, int negate, const char *f, size_t
+           fn, const char *g, size_t glen)
+           Execute macro primitives.
+       int expandMacros (void *spec, MacroContext mc, char *s,
+           size_t slen)
+           Expand macro into buffer.
+       void addMacro (MacroContext mc, const char *n, const char
+           *o, const char *b, int level)
+           Add macro to context.
+       void delMacro (MacroContext mc, const char *n)
+           Delete macro from context.
+       int rpmDefineMacro (MacroContext mc, const char *macro,
+           int level)
+           Define macro in context.
+       void rpmLoadMacros (MacroContext mc, int level)
+           Load macros from context into global context.
+       void rpmInitMacros (MacroContext mc, const char
+           *macrofiles)
+           Initialize macro context from set of macrofile(s).
+       void rpmFreeMacros (MacroContext mc)
+           Destroy macro context.
+       int isCompressed (const char *file, rpmCompressedMagic
+           *compressed)
+           Return type of compression used in file.
+       char * rpmExpand (const char *arg,...)
+           Return (malloc'ed) concatenated macro expansion(s).
+       int rpmExpandNumeric (const char *arg)
+           Return macro expansion as a numeric value.
+       char * rpmCleanPath (char *path)
+           Canonicalize file path.
+       const char * rpmGetPath (const char *path,...)
+           Return (malloc'ed) expanded, canonicalized, file path.
+       const char * rpmGenPath (const char *urlroot, const char
+           *urlmdir, const char *urlfile)
+           Merge 3 args into path, any or all of which may be a
+           url.
+
+   Variables
+       int _debug = 0
+       MacroContext_s rpmGlobalMacroContext
+       MacroContext_s rpmCLIMacroContext
+       int max_macro_depth = 16
+       int print_macro_trace = 0
+       int print_expand_trace = 0
+
+DETAILED DESCRIPTION
+       Definition in file macro.c.
+
+DEFINE DOCUMENTATION
+   #define COPYBODY(_be, _s, _c)
+       Value:
+
+       {       while(((_c) = *(_s)) && !iseol(_c)) {                 if ((_c) == '\')                         (_s)++;                 *(_be)++ = *(_s)++;         }                               *(_be) = ' ';              }
+
+       Definition at line 422 of file macro.c.
+
+       Referenced by doDefine.
+
+   #define COPYNAME(_ne, _s, _c)
+       Value:
+
+       {       SKIPBLANK(_s,_c);               while(((_c) = *(_s)) && (xisalnum(_c) || (_c) == '_'))                 *(_ne)++ = *(_s)++;         *(_ne) = ' ';              }
+
+       Definition at line 409 of file macro.c.
+
+       Referenced by doDefine, and doUndefine.
+
+   #define COPYOPTS(_oe, _s, _c)
+       Value:
+
+       {       while(((_c) = *(_s)) && (_c) != ')')                 *(_oe)++ = *(_s)++;         *(_oe) = ' ';              }
+
+       Definition at line 416 of file macro.c.
+
+       Referenced by doDefine.
+
+   #define isblank(_c)   ((_c) == ' ' || (_c) == '')
+       Definition at line 11 of file macro.c.
+
+       Referenced by doDefine, doFoo, expandMacro, and grabArgs.
+                                               ')
+   #define iseol(_c)   ((_c) == '0 || (_c) == '
+       Definition at line 13 of file macro.c.
+
+       Referenced by doDefine, doShellEscape, doUndefine,
+       expandMacro, printExpansion, printMacro, and rdcl.
+
+   #define MACRO_CHUNK_SIZE   16
+       Definition at line 93 of file macro.c.
+
+       Referenced by expandMacroTable.
+
+   #define MAX_MACRO_DEPTH   16
+       Definition at line 81 of file macro.c.
+
+   #define SAVECHAR(_mb, _c)   { *(_mb)->t = (_c), (_mb)->t++,
+       (_mb)->nb--; }
+       Definition at line 75 of file macro.c.
+
+       Referenced by doShellEscape, and expandMacro.
+
+   #define SKIPBLANK(_s, _c)
+       Value:
+
+       while (((_c) = *(_s)) && isblank(_c))                 (_s)++;
+
+       Definition at line 401 of file macro.c.
+
+       Referenced by doDefine, and rpmInitMacros.
+
+   #define SKIPNONBLANK(_s, _c)
+       Value:
+
+       while (((_c) = *(_s)) && !(isblank(_c) || iseol(_c)))                 (_s)++;
+
+       Definition at line 405 of file macro.c.
+
+   #define STREQ(_t, _f, _fn)   ((_fn) == (sizeof(_t)-1) &&
+       !strncmp((_t), (_f), (_fn)))
+       Definition at line 15 of file macro.c.
+
+       Referenced by doFoo, and expandMacro.
+
+TYPEDEF DOCUMENTATION
+   typedef struct MacroBuf_s *  MacroBuf
+       Macro expansion state.
+
+
+FUNCTION DOCUMENTATION
+   void* _free (const void * p) [inline, static]
+       Wrapper to free(3), hides const compilation noise, permit
+       NULL, return NULL.
+
+       Parameters:
+
+       p      memory to free
+
+       Return values:
+
+       NULL   always
+
+       Definition at line 101 of file macro.c.
+
+   void addMacro (MacroContext mc, const char * n, const char *
+       o, const char * b, int level)
+       Add macro to context.
+
+       Deprecated:
+           Use rpmDefineMacro().
+
+       Parameters:
+
+       mc     macro context (NULL uses global context).
+
+       n      macro name
+
+       o      macro paramaters
+
+       b      macro body
+
+       level  macro recursion level (0 is entry API)
+
+       Definition at line 1420 of file macro.c.
+
+       References expandMacroTable, findEntry,
+       MacroContext_s::firstFree,
+       MacroContext_s::macrosAllocated,
+       MacroContext_s::macroTable, pushMacro, and sortMacroTable.
+
+   int compareMacroName (const void * ap, const void * bp)
+       [static]
+       Compare macro entries by name (qsort/bsearch).
+
+       Parameters:
+
+       ap     1st macro entry
+
+       bp     2nd macro entry
+
+       Returns:
+           result of comparison
+
+       Definition at line 117 of file macro.c.
+
+       References MacroEntry_s::name.
+
+       Referenced by findEntry, and sortMacroTable.
+
+   void delMacro (MacroContext mc, const char * n)
+       Delete macro from context.
+
+       Parameters:
+
+       mc     macro context (NULL uses global context).
+
+       n      macro name
+
+       Definition at line 1446 of file macro.c.
+
+       References findEntry, popMacro, and sortMacroTable.
+
+   const char* doDefine (MacroBuf mb, const char * se, int level,
+       int expandbody) [static]
+       Parse (and execute) new macro definition.
+
+       Parameters:
+
+       mb     macro expansion state
+
+       se     macro definition to parse
+
+       level  macro recursion level
+
+       expandbody
+              should body be expanded?
+
+       Returns:
+           address to continue parsing
+
+       Definition at line 565 of file macro.c.
+
+       References _, addMacro, COPYBODY, COPYNAME, COPYOPTS,
+       expandU, isblank, iseol, matchchar, SKIPBLANK, and
+       xisalpha.
+
+       Referenced by expandMacro, and rpmDefineMacro.
+
+   void doFoo (MacroBuf mb, int negate, const char * f, size_t
+       fn, const char * g, size_t glen) [static]
+       Execute macro primitives.
+
+       Parameters:
+
+       mb     macro expansion state
+
+       negate should logic be inverted?
+
+       f      beginning of field f
+
+       fn     length of field f
+
+       g      beginning of field g
+
+       gn     length of field g
+
+       Definition at line 970 of file macro.c.
+
+       References COMPRESSED_OTHER, expandT, expandU, isblank,
+       isCompressed, rpmCompressedMagic, STREQ, urlPath, and
+       xisdigit.
+
+       Referenced by expandMacro.
+
+   void doOutput (MacroBuf mb, int waserror, const char * msg,
+       size_t msglen) [static]
+       Perform macro message output.
+
+       Parameters:
+
+       mb     macro expansion state
+
+       waserror
+              use rpmError()?
+
+       msg    message to ouput
+
+       msglen no. of bytes in message
+
+       Definition at line 946 of file macro.c.
+
+       References expandU.
+
+       Referenced by expandMacro.
+
+   int doShellEscape (MacroBuf mb, const char * cmd, size_t clen)
+       [static]
+       Expand output of shell command into target buffer.
+
+       Parameters:
+
+       mb     macro expansion state
+
+       cmd    shell command
+
+       clen   no. bytes in shell command
+
+       Returns:
+           result of expansion
+
+       Definition at line 528 of file macro.c.
+
+       References expandU, iseol, and SAVECHAR.
+
+       Referenced by expandMacro.
+
+   const char* doUndefine (MacroContext mc, const char * se)
+       [static]
+       Parse (and execute) macro undefinition.
+
+       Parameters:
+
+       mc     macro context
+
+       se     macro name to undefine
+
+       Returns:
+           address to continue parsing
+
+       Definition at line 652 of file macro.c.
+
+       References _, COPYNAME, delMacro, iseol, and xisalpha.
+
+       Referenced by expandMacro.
+
+   int expandMacro (MacroBuf mb) [static]
+       The main macro recursion loop.
+
+       Todo:
+           Dynamically reallocate target buffer.
+
+       Parameters:
+
+       mb     macro expansion state
+
+       Returns:
+           0 on success, 1 on failure
+
+       Definition at line 1065 of file macro.c.
+
+       References _, addMacro, MacroEntry_s::body, doDefine,
+       doFoo, doOutput, doShellEscape, doUndefine, expandT,
+       findEntry, freeArgs, grabArgs, isblank, iseol, matchchar,
+       max_macro_depth, MacroEntry_s::name, MacroEntry_s::opts,
+       print_expand_trace, print_macro_trace, printExpansion,
+       printMacro, RMIL_GLOBAL, rpmDumpMacroTable, SAVECHAR,
+       STREQ, MacroEntry_s::used, and xisalnum.
+
+       Referenced by expandMacros, expandT, and expandU.
+
+   int expandMacros (void * spec, MacroContext mc, char * sbuf,
+       size_t sbuflen)
+       Expand macro into buffer.
+
+       Deprecated:
+           Use rpmExpand().
+
+       Todo:
+           Eliminate from API.
+
+       Parameters:
+
+       spec   cookie (unused)
+
+       mc     macro context (NULL uses global context).
+
+       Return values:
+
+       sbuf   input macro to expand, output expansion
+
+       Parameters:
+
+       sbuflen
+              size of buffer
+
+       Returns:
+           0 on success
+
+       Definition at line 1381 of file macro.c.
+
+       References _, alloca, MacroBuf_s::depth,
+       MacroBuf_s::expand_trace, expandMacro,
+       MacroBuf_s::macro_trace, MacroBuf_s::mc, MacroBuf_s::nb,
+       print_expand_trace, print_macro_trace, MacroBuf_s::s,
+       MacroBuf_s::spec, and MacroBuf_s::t.
+
+   void expandMacroTable (MacroContext mc) [static]
+       Enlarge macro table.
+
+       Parameters:
+
+       mc     macro context
+
+       Definition at line 137 of file macro.c.
+
+       References MACRO_CHUNK_SIZE, xmalloc, and xrealloc.
+
+       Referenced by addMacro.
+
+   int expandT (MacroBuf mb, const char * f, size_t flen)
+       [static]
+       Save source and expand field into target.
+
+       Parameters:
+
+       mb     macro expansion state
+
+       f      field
+
+       flen   no. bytes in field
+
+       Returns:
+           result of expansion
+
+       Definition at line 439 of file macro.c.
+
+       References alloca, and expandMacro.
+
+       Referenced by doFoo, and expandMacro.
+
+   int expandU (MacroBuf mb, char * u, size_t ulen) [static]
+       Save source/target and expand macro in u.
+
+       Parameters:
+
+       mb     macro expansion state
+
+       u      input macro, output expansion
+
+       ulen   no. bytes in u buffer
+
+       Returns:
+           result of expansion
+
+       Definition at line 490 of file macro.c.
+
+       References alloca, and expandMacro.
+
+       Referenced by doDefine, doFoo, doOutput, doShellEscape,
+       and grabArgs.
+
+   MacroEntry* findEntry (MacroContext mc, const char * name,
+       size_t namelen) [static]
+       Find entry in macro table.
+
+       Parameters:
+
+       mc     macro context
+
+       name   macro name
+
+       namelen
+              no. of byes
+
+       Returns:
+           address of slot in macro table with name (or NULL)
+
+       Definition at line 220 of file macro.c.
+
+       References compareMacroName, and MacroEntry_s::name.
+
+       Referenced by addMacro, delMacro, expandMacro,
+       headerAddI18NString, headerAddOrAppendEntry,
+       headerAppendEntry, headerFindI18NString,
+       headerGetRawEntry, headerIsEntry, headerModifyEntry,
+       headerRemoveEntry, htGetEntry, htHasEntry, and
+       intGetEntry.
+
+   void freeArgs (MacroBuf mb) [static]
+       Free parsed arguments for parameterized macro.
+
+       Parameters:
+
+       mb     macro expansion state
+
+       Definition at line 753 of file macro.c.
+
+       References _, MacroEntry_s::body,
+       MacroContext_s::firstFree, MacroEntry_s::level,
+       MacroContext_s::macroTable, MacroEntry_s::name, popMacro,
+       sortMacroTable, and MacroEntry_s::used.
+
+       Referenced by expandMacro.
+
+   const char* grabArgs (MacroBuf mb, const MacroEntry me, const
+       char * se, char lastc) [static]
+       Parse arguments (to next new line) for parameterized
+       macro.
+
+       Todo:
+           Use popt rather than getopt to parse args.
+
+       Parameters:
+
+       mb     macro expansion state
+
+       me     macro entry slot
+
+       se     arguments to parse
+
+       lastc  stop parsing at lastc
+
+       Returns:
+           address to continue parsing
+
+       Definition at line 804 of file macro.c.
+
+       References _, addMacro, alloca, expandU, isblank, and
+       stpcpy.
+
+       Referenced by expandMacro.
+
+   int isCompressed (const char * file, rpmCompressedMagic *
+       compressed)
+       Return type of compression used in file.
+
+       Parameters:
+
+       file   name of file
+
+       Return values:
+
+       compressed
+              address of compression type
+
+       Returns:
+           0 on success, 1 on I/O error
+
+       Definition at line 1588 of file macro.c.
+
+       References _, COMPRESSED_BZIP2, COMPRESSED_NOT,
+       COMPRESSED_OTHER, COMPRESSED_ZIP, Fclose, Ferror, Fopen,
+       Fread, Fstrerror, and rpmCompressedMagic.
+
+   const char* matchchar (const char * p, char pl, char pr)
+       [static]
+       Return text between pl and matching pr characters.
+
+       Parameters:
+
+       p      start of text
+
+       pl     left char, i.e. '[', '(', '{', etc.
+
+       pr     right char, i.e. ']', ')', '}', etc.
+
+       Returns:
+           address of last char before pr (or NULL)
+
+       Definition at line 296 of file macro.c.
+
+       Referenced by doDefine, and expandMacro.
+
+   void popMacro (MacroEntry * mep) [static]
+       Pop macro definition from macro entry stack.
+
+       Parameters:
+
+       mep    address of macro entry slot
+
+       Definition at line 731 of file macro.c.
+
+       References _free, MacroEntry_s::body, MacroEntry_s::name,
+       MacroEntry_s::opts, and MacroEntry_s::prev.
+
+       Referenced by delMacro, and freeArgs.
+
+   void printExpansion (MacroBuf mb, const char * t, const char *
+       te) [static]
+       Post-print expanded macro expression.
+
+       Parameters:
+
+       mb     macro expansion state
+
+       t      current expansion string result
+
+       te     end of string
+
+       Definition at line 365 of file macro.c.
+
+       References _, and iseol.
+
+       Referenced by expandMacro.
+
+   void printMacro (MacroBuf mb, const char * s, const char * se)
+       [static]
+       Pre-print macro expression to be expanded.
+
+       Parameters:
+
+       mb     macro expansion state
+
+       s      current expansion string
+
+       se     end of string
+
+       Definition at line 322 of file macro.c.
+
+       References _, and iseol.
+
+       Referenced by expandMacro.
+
+   void pushMacro (MacroEntry * mep, const char * n, const char *
+       o, const char * b, int level) [static]
+       Push new macro definition onto macro entry stack.
+
+       Parameters:
+
+       mep    address of macro entry slot
+
+       n      macro name
+
+       o      macro parameters (NULL if none)
+
+       b      macro body (NULL becomes '')
+
+       level  macro recursion level
+
+       Definition at line 702 of file macro.c.
+
+       References _free, MacroEntry_s::body, MacroEntry_s::level,
+       MacroEntry_s::name, MacroEntry_s::opts,
+       MacroEntry_s::prev, MacroEntry_s::used, xmalloc, and
+       xstrdup.
+
+       Referenced by addMacro.
+
+   char* rdcl (char * buf, size_t size, FD_t fd, int escapes)
+       [static]
+       fgets(3) analogue that reads \ continuations.
+
+       Last newline always trimmed.
+
+       Definition at line 254 of file macro.c.
+
+       References fdGetFILE, and iseol.
+
+       Referenced by rpmInitMacros.
+
+   char* rpmCleanPath (char * path)
+       Canonicalize file path.
+
+       Parameters:
+
+       path   path to canonicalize (in-place)
+
+       Returns:
+           canonicalized path (malloc'ed)
+
+       Definition at line 1688 of file macro.c.
+
+       References begin.
+
+   int rpmDefineMacro (MacroContext mc, const char * macro, int
+       level)
+       Define macro in context.
+
+       Parameters:
+
+       mc     macro context (NULL uses global context).
+
+       n      macro name, options, body
+
+       level  macro recursion level (0 is entry API)
+
+       Returns:
+           Todo:
+                Document.
+
+       Definition at line 1461 of file macro.c.
+
+       References alloca, doDefine, and MacroBuf_s::mc.
+
+   void rpmDumpMacroTable (MacroContext mc, FILE * fp)
+       Print macros to file stream.
+
+       Parameters:
+
+       mc     macro context (NULL uses global context).
+
+       fp     file stream (NULL uses stderr).
+
+       Definition at line 180 of file macro.c.
+
+       References _, MacroEntry_s::body,
+       MacroContext_s::firstFree, MacroEntry_s::level,
+       MacroContext_s::macroTable, MacroEntry_s::name,
+       MacroEntry_s::opts, and MacroEntry_s::used.
+
+   char* rpmExpand (const char * arg, ...)
+       Return (malloc'ed) concatenated macro expansion(s).
+
+       Parameters:
+
+       arg    macro(s) to expand (NULL terminates list)
+
+       Returns:
+           macro expansion (malloc'ed)
+
+       Definition at line 1639 of file macro.c.
+
+       References expandMacros, stpcpy, and xstrdup.
+
+   int rpmExpandNumeric (const char * arg)
+       Return macro expansion as a numeric value.
+
+       Boolean values ('Y' or 'y' returns 1, 'N' or 'n' returns
+       0) are permitted as well. An undefined macro returns 0.
+
+       Parameters:
+
+       arg    macro to expand
+
+       Returns:
+           numeric value
+
+       Definition at line 1661 of file macro.c.
+
+       References _free, and rpmExpand.
+
+   void rpmFreeMacros (MacroContext mc)
+       Destroy macro context.
+
+       Parameters:
+
+       mc     macro context (NULL uses global context).
+
+       Definition at line 1561 of file macro.c.
+
+       References _free, MacroEntry_s::body,
+       MacroContext_s::firstFree, MacroContext_s::macroTable,
+       MacroEntry_s::name, MacroEntry_s::opts, and
+       MacroEntry_s::prev.
+
+   const char* rpmGenPath (const char * root, const char * mdir,
+       const char * file)
+       Merge 3 args into path, any or all of which may be a url.
+
+       The leading part of the first URL encountered is used for
+       the result, other URL's are discarded, permitting a
+       primitive form of inheiritance.
+
+       Parameters:
+
+       root   root URL (often path to chroot, or NULL)
+
+       mdir   directory URL (often a directory, or NULL)
+
+       file   file URL (often a file, or NULL)
+
+       Returns:
+           expanded, merged, canonicalized path (malloc'ed)
+
+       Definition at line 1800 of file macro.c.
+
+       References _free, alloca, rpmGetPath, URL_IS_DASH, and
+       urlPath.
+
+   const char* rpmGetPath (const char * path, ...)
+       Return (malloc'ed) expanded, canonicalized, file path.
+
+       Parameters:
+
+       path   macro(s) to expand (NULL terminates list)
+
+       Returns:
+           canonicalized path (malloc'ed)
+
+       Definition at line 1771 of file macro.c.
+
+       References expandMacros, rpmCleanPath, stpcpy, and
+       xstrdup.
+
+   void rpmInitMacros (MacroContext mc, const char * macrofiles)
+       Initialize macro context from set of macrofile(s).
+
+       Parameters:
+
+       mc     macro context (NULL uses global context).
+
+       macrofiles
+              colon separated list of macro files (NULL does
+              nothing)
+
+       Definition at line 1496 of file macro.c.
+
+       References _free, Fclose, Ferror, Fopen, getenv,
+       max_macro_depth, rdcl, RMIL_CMDLINE, RMIL_MACROFILES,
+       rpmDefineMacro, rpmLoadMacros, SKIPBLANK, and xstrdup.
+
+   void rpmLoadMacros (MacroContext mc, int level)
+       Load macros from context into global context.
+
+       Parameters:
+
+       mc     macro context (NULL does nothing).
+
+       level  macro recursion level (0 is entry API)
+
+       Definition at line 1475 of file macro.c.
+
+       References addMacro, MacroEntry_s::body,
+       MacroContext_s::firstFree, MacroContext_s::macroTable,
+       MacroEntry_s::name, and MacroEntry_s::opts.
+
+   void sortMacroTable (MacroContext mc) [static]
+       Sort entries in macro table.
+
+       Parameters:
+
+       mc     macro context
+
+       Definition at line 159 of file macro.c.
+
+       References compareMacroName.
+
+       Referenced by addMacro, delMacro, and freeArgs.
+
+VARIABLE DOCUMENTATION
+   int _debug = 0 [static]
+       Definition at line 5 of file macro.c.
+
+   int max_macro_depth = 16
+       Definition at line 82 of file macro.c.
+
+       Referenced by expandMacro, and rpmInitMacros.
+
+   int print_expand_trace = 0
+       Definition at line 89 of file macro.c.
+
+       Referenced by expandMacro, and expandMacros.
+
+   int print_macro_trace = 0
+       Definition at line 88 of file macro.c.
+
+       Referenced by expandMacro, and expandMacros.
+
+   struct MacroContext_s rpmCLIMacroContext
+       Definition at line 59 of file macro.c.
+
+   struct MacroContext_s rpmGlobalMacroContext
+       Definition at line 58 of file macro.c.
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002           rpmio/macro.c(3)

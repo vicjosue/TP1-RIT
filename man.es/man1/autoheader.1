@@ -1,0 +1,78 @@
+AUTOHEADER(1)                  FSF                  AUTOHEADER(1)
+
+
+
+NAME
+       autoheader - Create a template header for configure
+
+SYNOPSIS
+       autoheader [OPTION] ... [TEMPLATE-FILE]
+
+DESCRIPTION
+       Create a template file of C `#define' statements for `con­
+       figure' to use.  To this end, scan TEMPLATE-FILE, or `con­
+       figure.ac' if present, or else `configure.in'.
+
+       -h, --help
+              print this help, then exit
+
+       -V, --version
+              print version number, then exit
+
+       -v, --verbose
+              verbosely report processing
+
+       -d, --debug
+              don't remove temporary files
+
+       -I, --include=DIR
+              look for input files in DIR.  Accumulates
+
+       -f, --force
+              consider all the files are obsolete
+
+       -W, --warnings=CATEGORY
+              report the warnings falling in CATEGORY
+
+   Warning categories include:
+       `obsolete'
+              obsolete constructs
+
+       `all'  all the warnings
+
+       `no-CATEGORY'
+              turn off the warnings on CATEGORY
+
+       `none' turn off all the warnings
+
+       `error'
+              warnings are error
+
+AUTHOR
+       Written by Roland McGrath.
+
+       Copyright  1992,  1993, 1994, 1996, 1998, 1999, 2000, 2001
+       Free Software Foundation, Inc.  This is free software; see
+       the  source for copying conditions.  There is NO warranty;
+       not even for MERCHANTABILITY or FITNESS FOR  A  PARTICULAR
+       PURPOSE.
+
+REPORTING BUGS
+       Report bugs to <bug-autoconf@gnu.org>.
+
+SEE ALSO
+       autoconf(1),  automake(1),  autoreconf(1),  autoupdate(1),
+       autoheader(1),    autoscan(1),    config.guess(1),    con­
+       fig.sub(1), ifnames(1), libtool(1).
+
+       The  full  documentation for autoheader is maintained as a
+       Texinfo manual.  If the info and autoheader  programs  are
+       properly installed at your site, the command
+
+              info autoheader
+
+       should give you access to the complete manual.
+
+
+
+GNU Autoconf 2.52d         August 2001              AUTOHEADER(1)

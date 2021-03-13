@@ -1,0 +1,67 @@
+RSA_sign_ASN1_OCTET_STRING(3)OpenSSLRSA_sign_ASN1_OCTET_STRING(3)
+
+
+
+NNAAMMEE
+       RSA_sign_ASN1_OCTET_STRING, RSA_verify_ASN1_OCTET_STRING -
+       RSA signatures
+
+SSYYNNOOPPSSIISS
+        #include <openssl/rsa.h>
+
+        int RSA_sign_ASN1_OCTET_STRING(int dummy, unsigned char *m,
+           unsigned int m_len, unsigned char *sigret, unsigned int *siglen,
+           RSA *rsa);
+
+        int RSA_verify_ASN1_OCTET_STRING(int dummy, unsigned char *m,
+           unsigned int m_len, unsigned char *sigbuf, unsigned int siglen,
+           RSA *rsa);
+
+
+DDEESSCCRRIIPPTTIIOONN
+       RSA_sign_ASN1_OCTET_STRING() signs the octet string mm of
+       size mm_lleenn using the private key rrssaa represented in DER
+       using PKCS #1 padding. It stores the signature in ssiiggrreett
+       and the signature size in ssiigglleenn. ssiiggrreett must point to
+       RRSSAA_ssiizzee((rrssaa)) bytes of memory.
+
+       dduummmmyy is ignored.
+
+       The random number generator must be seeded prior to
+       calling RSA_sign_ASN1_OCTET_STRING().
+
+       RSA_verify_ASN1_OCTET_STRING() verifies that the signature
+       ssiiggbbuuff of size ssiigglleenn is the DER representation of a given
+       octet string mm of size mm_lleenn. dduummmmyy is ignored. rrssaa is the
+       signer's public key.
+
+RREETTUURRNN VVAALLUUEESS
+       RSA_sign_ASN1_OCTET_STRING() returns 1 on success, 0
+       otherwise.  RSA_verify_ASN1_OCTET_STRING() returns 1 on
+       successful verification, 0 otherwise.
+
+       The error codes can be obtained by ERR_get_error(3).
+
+BBUUGGSS
+       These functions serve no recognizable purpose.
+
+SSEEEE AALLSSOO
+       err(3), objects(3), rand(3), rsa(3), RSA_sign(3),
+       RSA_verify(3)
+
+HHIISSTTOORRYY
+       RSA_sign_ASN1_OCTET_STRING() and
+       RSA_verify_ASN1_OCTET_STRING() were added in SSLeay 0.8.
+
+
+
+
+
+
+
+
+
+
+
+
+26/Jan/2000                   0.9.6cRSA_sign_ASN1_OCTET_STRING(3)

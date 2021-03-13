@@ -1,0 +1,55 @@
+hashTable_s(3)                                     hashTable_s(3)
+
+
+
+NAME
+       hashTable_s -
+
+SYNOPSIS
+   Data Fields
+       int numBuckets
+       int keySize
+       int freeData
+       hashBucket ** buckets
+       hashFunctionType fn
+       hashEqualityType eq
+
+FIELD DOCUMENTATION
+   struct hashBucket** hashTable_s::buckets
+       hash bucket array
+
+       Definition at line 26 of file rpmhash.c.
+
+   hashEqualityType hashTable_s::eq
+       compare hash keys for equality
+
+       Definition at line 28 of file rpmhash.c.
+
+   hashFunctionType hashTable_s::fn
+       generate hash value for key
+
+       Definition at line 27 of file rpmhash.c.
+
+   int hashTable_s::freeData
+       should data be freed when table is destroyed?
+
+       Definition at line 25 of file rpmhash.c.
+
+   int hashTable_s::keySize
+       size of key (0 if unknown)
+
+       Definition at line 24 of file rpmhash.c.
+
+   int hashTable_s::numBuckets
+       number of hash buckets
+
+       Definition at line 23 of file rpmhash.c.
+
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002             hashTable_s(3)

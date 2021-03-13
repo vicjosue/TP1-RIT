@@ -1,0 +1,78 @@
+VORBISCOMMENT(1)           Vorbis Tools          VORBISCOMMENT(1)
+
+
+
+NAME
+       vorbiscomment - edits Ogg Vorbis comments
+
+
+SYNOPSIS
+       vorbiscomment [-l] file.ogg
+       vorbiscomment -a [ -t "tag=value" ] in.ogg out.ogg
+       vorbiscomment -w in.ogg out.ogg
+
+
+DESCRIPTION
+       vorbiscomment  reads,  modifies,  and  appends  Ogg Vorbis
+       audio file metadata tags.
+
+
+OPTIONS
+       -a     Append comments.
+
+       -c commentfile
+              Take comments from a file. The  file  is  the  same
+              format  as is output by the the -l option: one ele­
+              ment per line in 'tag=value' format.
+
+       -h     Show command help.
+
+       -l     List the comments in the ogg vorbis file.
+
+       -q     Quiet mode.  No messages are displayed.
+
+       -t 'tag=value'
+              Specify a new tag on the command line. Each tag  is
+              given  as  a single string. The part before the '='
+              is treated as the tag name and the  part  after  as
+              the value.
+
+       -w     Replace  comments  with the new set given either on
+              the command line with -t or from a file with -c.
+
+
+EXAMPLES
+       To just see what comment tags are in a file:
+
+           vorbiscomment -l file.ogg
+
+       To edit those comments:
+
+           vorbiscomment -l file.ogg > file.txt
+           [edit the comments in file.txt to your statisfaction]
+           vorbiscomment -w -c file.txt file.ogg newfile.ogg
+
+       To simply add a comment:
+
+           vorbiscomment -a -t 'ARTIST=No One You Know'  file.ogg
+       newfile.ogg
+
+
+SEE ALSO
+       See http://xiph.org/ogg/vorbis/doc/vcomment.html for docu­
+       mentation on the Ogg Vorbis tag format, including  a  sug­
+       gested list of canonical tag names.
+
+
+AUTHORS
+       Program Authors:
+              Michael Smith <msmith@labyrinth.net.au>
+              Ralph Giles <giles@xiph.org>
+
+
+       Manpage Author:
+              Christopher L Cheney <ccheney@debian.org>
+
+
+
+Xiphophorus             December 24, 2001        VORBISCOMMENT(1)

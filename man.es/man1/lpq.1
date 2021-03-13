@@ -1,0 +1,40 @@
+lpq(1)                Easy Software Products               lpq(1)
+
+
+
+NAME
+       lpq - show printer queue status
+
+SYNOPSIS
+       lpq [ -E ] [ -P dest ] [ -a ] [ -l ] [ +interval ]
+
+DESCRIPTION
+       lpq  shows  the  current  print  queue status on the named
+       printer.  Jobs queued on the default destination  will  be
+       shown  if no printer or class is specified on the command-
+       line.
+
+       The interval option allows you to continuously report  the
+       jobs  in  the  queue until the queue is empty; the list of
+       jobs is show one every interval seconds.
+
+       The -E option forces encryption  when  connecting  to  the
+       server.
+
+       The -a option reports jobs on all printers.
+
+       The  -l  option  requests  a more verbose (long) reporting
+       format.
+
+SEE ALSO
+       cancel(1), lp(1), lpr(1), lprm(1), lpstat(1)
+       CUPS Software Users Manual,  http://localhost:631/documen­
+       tation.html
+
+COPYRIGHT
+       Copyright  1993-2002 by Easy Software Products, All Rights
+       Reserved.
+
+
+
+13 February 2001   Common UNIX Printing System             lpq(1)

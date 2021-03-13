@@ -1,0 +1,70 @@
+LPDOMATIC(8)                                         LPDOMATIC(8)
+
+
+
+NAME
+       lpdomatic  -  Foomatic  filter  script for LPD, LPRng, and
+       GNUlpr
+
+SYNOPSIS
+       lpdomatic [OPTION]... <PPD-filename>
+
+
+DESCRIPTION
+       The lpdomatic print filter serves as an input  filter  for
+       the  lp  family  of print spoolers. The print spooler will
+       use it if there is an entry if=/usr/sbin/lpdomatic in  the
+       appropriate printer section in /etc/printcap. You can gen­
+       erate such an entry using foomatic-configure.
+
+       A listing of  the  attached  printer  drivers  options  is
+       printed,  when  the  option docs is passed to this filter.
+       This can be achieved by issuing one of the following  com­
+       mands:
+
+       for LPRng use
+              echo | lpr -Z docs
+
+       for other spoolers
+              echo | lpr -J docs
+
+
+   Options
+       -j option (all  but  LPRng)  Pass  option  to  the printer
+                 driver.  May also be read from the  environment.
+
+
+       -J jobtitle
+                 (LPRng  only)  Set  the  job  title to jobtitle.
+                 This may be used to  set  a  title  header  when
+                 printing plain text.
+
+
+       -Z option (LPRng  only) Pass option to the printer driver.
+
+
+SEE ALSO
+       printcap(5), foomatic-configure(1)
+
+
+FILES
+       /etc/printcap
+
+
+EXIT STATUS
+       lpdomatic returns 0 unless something unexpected happens.
+
+
+AUTHOR
+       Manfred Wassmann  <manolo@NCC-1701.B.Shuttle.de>  for  the
+       foomatic  project using output from the associated binary.
+
+
+BUGS
+       None known.  If you find one please report  to  <foomatic-
+       devel@linuxprinting.org>
+
+
+
+
+Foomatic Project            2001-05-07               LPDOMATIC(8)

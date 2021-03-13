@@ -1,0 +1,173 @@
+tixPopupMenu(n)       Tix Built-In Commands       tixPopupMenu(n)
+
+
+
+_________________________________________________________________
+
+NAME
+       tixPopupMenu - Create and manipulate tixPopupMenu widgets
+
+SYNOPSIS
+       tixPopupMenu pathName ?options?
+
+SUPER-CLASS
+       The  tixPopupMenu class is derived from the TixShell class
+       and inherits all the commands, options and  subwidgets  of
+       its super-class.
+
+STANDARD OPTIONS
+       The  PopupMenu widget supports all the standard options of
+       a frame widget.   See  the  options(n)  manual  entry  for
+       details on the standard options.
+
+WIDGET-SPECIFIC OPTIONS
+       Command-Line Name:-buttons
+       Database Name:  buttons
+       Database Class: Buttons
+
+              A  Tcl  list that specifies the mouse button(s) and
+              key modifier(s) that bring up the popup menu.  Each
+              element  of  this  list is in turn a list that con­
+              tains two elements: the first element is an integer
+              that  indicates the mouse button that brings up the
+              popup menu; the second element  specifies  the  key
+              modifiers  that  should be used in conjunction with
+              the mouse button. For example, the value {{1  {Con­
+              trol  Meta}}  {3  {Any}}}  specifies that the popup
+              menu can be popped up by (a) pressing mouse  button
+              1  with  either  the Control or the Meta key or (b)
+              pressing mouse button 3 with any key modifier.  The
+              default  value  is {{3 {Any}}}: only mouse button 3
+              brings up the popup menu.
+
+       Command-Line Name:-postcmd
+       Database Name:  postCmd
+       Database Class: PostCmd
+
+              Specifies a command to be evaluated just before the
+              menu  is  about  to  pop-up. This command is called
+              with two default arguments: the  root  x-y  coordi­
+              nates  where the user has pressed the mouse button.
+              This command must return a boolean value:  a  false
+              indicates  that  the menu shouldn't be popped up at
+              this point; a true indicates that the  menu  should
+              be  popped  up. This option can be used to find out
+              where the user has  pressed  the  mouse-button  and
+              optionally  disable  the  popup  menu  over certain
+              screen areas.
+
+       Command-Line Name:-spring
+       Database Name:  spring
+       Database Class: Spring
+
+              When set to true, the menu  will  be  automatically
+              popped  down  if the user releases the mouse button
+              outside of the menu and no menu  commands  will  be
+              invoked.  This makes it easy for the user to cancel
+              the popup menu without pressing the Escape key. The
+              default value is true.
+
+       Command-Line Name:-state
+       Database Name:  state
+       Database Class: State
+
+              Must  be  either  disabled or normal. The PopupMenu
+              widget will not pop up unless its -state is set  to
+              normal.
+
+       Command-Line Name:-title
+       Database Name:  title
+       Database Class: Title
+
+              Specifies  a  text  string  to  display  inside the
+              menubutton subwidget, as the title of  this  Popup­
+              Menu.
+
+SUBWIDGETS
+       Name:           menu
+       Class:          Menu
+
+              The menu subwidget.
+
+       Name:           menubutton
+       Class:          Menubutton
+
+              The menubutton subwidget.
+_________________________________________________________________
+
+DESCRIPTION
+       The  tixPopupMenu  command  creates a new window (given by
+       the pathName argument) and makes it into a PopupMenu  wid­
+       get.   Additional  options, described above, may be speci­
+       fied on the command line or in the option database to con­
+       figure  aspects of the PopupMenu widget such as its cursor
+       and relief.
+
+       The Tix PopupMenu widget can be used as a  replacement  of
+       the  tk_popup  command. The advantage of the Tix PopupMenu
+       widget is it requires less application code to manipulate.
+       Also, it provides a title for the popup menu, which is not
+       available from tk_popup.
+
+WIDGET COMMANDS
+       The tixPopupMenu command creates a new Tcl  command  whose
+       name  is  the  same as the path name of the PopupMenu wid­
+       get's window.  This command may be used to invoke  various
+       operations  on  the  widget.  It has the following general
+       form:
+                     pathName option ?arg arg ...?
+       PathName is the name of the command, which is the same  as
+       the  PopupMenu  widget's  path  name.  Option and the args
+       determine the exact behavior of the command. The following
+       commands are possible for PopupMenu widgets:
+
+       pathName bind widget ?widget ...?
+              Binds  this  PopupMenu  to one or more widgets. The
+              PopupMenu will be activated when the  user  presses
+              the right mouse button over these widgets.
+
+       pathName cget option
+              Returns  the  current  value  of  the configuration
+              option given by option. Option may have any of  the
+              values accepted by the tixPopupMenu command.
+
+       pathName configure ?option? ?value option value ...?
+              Query  or  modify  the configuration options of the
+              widget.  If no option is specified, returns a  list
+              describing  all  of the available options for path­
+              Name (see Tk_ConfigureInfo for information  on  the
+              format  of this list).  If option is specified with
+              no value, then the command returns a list  describ­
+              ing the one named option (this list will be identi­
+              cal to  the  corresponding  sublist  of  the  value
+              returned  if  no  option  is specified).  If one or
+              more option-value pairs  are  specified,  then  the
+              command modifies the given widget option(s) to have
+              the  given  value(s);  in  this  case  the  command
+              returns  an  empty  string.  Option may have any of
+              the values accepted by the tixPopupMenu command.
+
+       pathName post widget x y
+              Posts the PopupMenu inside the widget at the  coor­
+              dinate x,y.
+
+       pathName unbind widget ?widget ...?
+              Cancels the PopupMenu's binding with the widget(s).
+
+       pathName subwidget  name ?args?
+              When no options are given, this command returns the
+              pathname of the subwidget of the specified name.
+
+              When  options  are given, the widget command of the
+              specified  subwidget  will  be  called  with  these
+              options.
+
+KEYWORDS
+       Tix(n)
+
+
+
+
+
+
+Tix                            4.0                tixPopupMenu(n)

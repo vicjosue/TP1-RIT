@@ -1,0 +1,1084 @@
+ZSHPARAM(1)                                           ZSHPARAM(1)
+
+
+
+NAME
+       zshparam - zsh parameters
+
+DESCRIPTION
+       A  parameter  has  a  name,  a  value,  and  a  number  of
+       attributes.  A name may be any  sequence  of  alphanumeric
+       characters  and underscores, or the single characters `*',
+       `@', `#', `?', `-', `$', or  `!'.   The  value  may  be  a
+       scalar  (a  string), an integer, an array (indexed numeri­
+       cally), or an  associative  array  (an  unordered  set  of
+       name-value  pairs,  indexed by name).  To declare the type
+       of a parameter, or to assign a scalar or integer value  to
+       a parameter, use the typeset builtin.
+
+       The  value  of  a  scalar or integer parameter may also be
+       assigned by writing:
+
+              name=value
+
+       If the integer attribute, -i, is set for name,  the  value
+       is  subject  to  arithmetic  evaluation.   See the section
+       `Array Parameters' for additional forms of assignment.
+
+       To refer to the value of a  parameter,  write  `$name'  or
+       `${name}'.  See Parameter Expansion in zshexpn(1) for com­
+       plete details.
+
+       In the parameter lists that follow, the mark  `<S>'  indi­
+       cates  that  the parameter is special.  Special parameters
+       cannot have their type changed, and they stay special even
+       if  unset.   `<Z>'  indicates  that the parameter does not
+       exist when the shell initializes in sh  or  ksh  emulation
+       mode.
+
+ARRAY PARAMETERS
+       To assign an array value, write one of:
+
+              set -A name value ...
+              name=(value ...)
+
+       If  no  parameter name exists, an ordinary array parameter
+       is created.  If the parameter name exists and is a scalar,
+       it  is replaced by a new array.  Ordinary array parameters
+       may also be explicitly declared with:
+
+              typeset -a name
+
+       Associative arrays must be declared before assignment,  by
+       using:
+
+              typeset -A name
+
+       When  name  refers to an associative array, the list in an
+       assignment is interpreted as alternating keys and values:
+
+              set -A name key value ...
+              name=(key value ...)
+
+       Every key must have a value in this case.  Note that  this
+       assigns to the entire array, deleting any elements that do
+       not appear in the list.
+
+       To create an empty array (including  associative  arrays),
+       use one of:
+
+              set -A name
+              name=()
+
+
+   Array Subscripts
+       Individual  elements  of  an array may be selected using a
+       subscript.  A subscript of the form  `[exp]'  selects  the
+       single  element exp, where exp is an arithmetic expression
+       which will be subject to arithmetic  expansion  as  if  it
+       were  surrounded by `$((...))'.  The elements are numbered
+       beginning with 1, unless the KSH_ARRAYS option is  set  in
+       which case they are numbered from zero.
+
+       Subscripts  may  be  used  inside braces used to delimit a
+       parameter  name,  thus  `${foo[2]}'   is   equivalent   to
+       `$foo[2]'.   If  the  KSH_ARRAYS option is set, the braced
+       form is the only one that works, as bracketed  expressions
+       otherwise are not treated as subscripts.
+
+       The  same  subscripting  syntax  is  used  for associative
+       arrays, except that no arithmetic expansion is applied  to
+       exp.   However,  the  parsing rules for arithmetic expres­
+       sions still apply, which affects the way that certain spe­
+       cial  characters  must  be  protected from interpretation.
+       See Subscript Parsing below for details.
+
+       A subscript of the form `[*]' or `[@]'  evaluates  to  all
+       elements  of  an array; there is no difference between the
+       two  except  when  they  appear  within   double   quotes.
+       `"$foo[*]"'  evaluates to `"$foo[1] $foo[2] ..."', whereas
+       `"$foo[@]"' evaluates to `"$foo[1]" "$foo[2]"  ...'.   For
+       associative  arrays,  `[*]'  or  `[@]' evaluate to all the
+       values (not the keys, but see Subscript Flags  below),  in
+       no  particular  order.   When an array parameter is refer­
+       enced as `$name'  (with  no  subscript)  it  evaluates  to
+       `$name[*]',  unless  the KSH_ARRAYS option is set in which
+       case it evaluates  to  `${name[0]}'  (for  an  associative
+       array,  this means the value of the key `0', which may not
+       exist even if there are values for other keys).
+
+       A subscript of the form `[exp1,exp2]' selects all elements
+       in  the range exp1 to exp2, inclusive. (Associative arrays
+       are unordered, and so do not support ranges.)  If  one  of
+       the  subscripts  evaluates  to  a negative number, say -n,
+       then the nth element from the end of the  array  is  used.
+       Thus  `$foo[-3]'  is the third element from the end of the
+       array foo, and `$foo[1,-1]' is the same as `$foo[*]'.
+
+       Subscripting may also be performed on non-array values, in
+       which  case  the  subscripts  specify  a  substring  to be
+       extracted.  For example, if FOO is set to  `foobar',  then
+       `echo $FOO[2,5]' prints `ooba'.
+
+
+   Array Element Assignment
+       A  subscript may be used on the left side of an assignment
+       like so:
+
+              name[exp]=value
+
+       In this form of assignment the element or range  specified
+       by  exp  is  replaced by the expression on the right side.
+       An array (but not an associative array) may be created  by
+       assignment  to a range or element.  Arrays do not nest, so
+       assigning a parenthesized list of values to an element  or
+       range  changes the number of elements in the array, shift­
+       ing the other elements  to  accommodate  the  new  values.
+       (This is not supported for associative arrays.)
+
+       This  syntax also works as an argument to the typeset com­
+       mand:
+
+              typeset "name[exp]"=value
+
+       The value may not be a parenthesized list  in  this  case;
+       only  single-element assignments may be made with typeset.
+       Note that quotes are necessary in this case to prevent the
+       brackets  from  being  interpreted  as filename generation
+       operators.  The noglob precommand modifier could  be  used
+       instead.
+
+       To  delete an element of an ordinary array, assign `()' to
+       that element.  To delete  an  element  of  an  associative
+       array, use the unset command:
+
+              unset "name[exp]"
+
+
+   Subscript Flags
+       If  the  opening  bracket, or the comma in a range, in any
+       subscript expression is directly followed  by  an  opening
+       parenthesis,  the string up to the matching closing one is
+       considered   to   be   a   list   of    flags,    as    in
+       `name[(flags)exp]'.  The flags currently understood are:
+
+       w      If  the parameter subscripted is a scalar than this
+              flag makes subscripting work on  words  instead  of
+              characters.   The default word separator is whites­
+              pace.
+
+       s:string:
+              This gives the string that separates words (for use
+              with the w flag).
+
+       p      Recognize  the  same  escape sequences as the print
+              builtin in the string argument of a subsequent  `s'
+              flag.
+
+       f      If  the parameter subscripted is a scalar than this
+              flag makes subscripting work on  lines  instead  of
+              characters,  i.e.  with  elements separated by new­
+              lines.  This is a shorthand for `pws:\n:'.
+
+       r      Reverse subscripting: if this flag  is  given,  the
+              exp  is  taken  as  a pattern and the result is the
+              first matching array element, substring or word (if
+              the parameter is an array, if it is a scalar, or if
+              it is a scalar and the `w' flag is  given,  respec­
+              tively).   The  subscript used is the number of the
+              matching element, so that pairs of subscripts  such
+              as `$foo[(r)??,3]' and `$foo[(r)??,(r)f*]' are pos­
+              sible.  If the parameter is an  associative  array,
+              only the value part of each pair is compared to the
+              pattern, and the result  is  that  value.   Reverse
+              subscripts  may  be  used for assigning to ordinary
+              array elements, but not for assigning  to  associa­
+              tive arrays.
+
+       R      Like   `r',   but   gives   the  last  match.   For
+              associative arrays, gives all possible matches.
+
+       i      Like `r', but gives the index of the match instead;
+              this  may  not  be combined with a second argument.
+              On the left side of  an  assignment,  behaves  like
+              `r'.   For associative arrays, the key part of each
+              pair is compared to  the  pattern,  and  the  first
+              matching key found is the result.
+
+       I      Like `i', but gives the index of the last match, or
+              all possible matching keys in an associative array.
+
+       k      If  used  in  a  subscript on an associative array,
+              this flag causes the keys to be interpreted as pat­
+              terns,  and  returns  the  value  for the first key
+              found where exp is matched by the key.   This  flag
+              does  not work on the left side of an assignment to
+              an associative array element.  If used  on  another
+              type of parameter, this behaves like `r'.
+
+       K      On  an  associative  array  this  is  like  `k' but
+              returns all values where  exp  is  matched  by  the
+              keys.   On  other  types of parameters this has the
+              same effect as `R'.
+
+       n:expr:
+              If combined with `r', `R', `i' or `I',  makes  them
+              give  the  nth or nth last match (if expr evaluates
+              to n).  This flag is  ignored  when  the  array  is
+              associative.
+
+       b:expr:
+              If  combined  with `r', `R', `i' or `I', makes them
+              begin at the nth or  nth  last  element,  word,  or
+              character  (if  expr evaluates to n).  This flag is
+              ignored when the array is associative.
+
+       e      This flag has no effect and for ordinary arrays  is
+              retained  for  backward  compatibility  only.   For
+              associative arrays, this flag can be used to  force
+              *  or  @  to  be interpreted as a single key rather
+              than as a reference to all values.  This  flag  may
+              be used on the left side of an assignment.
+
+       See  Parameter Expansion Flags (zshexpn(1)) for additional
+       ways to manipulate the results of array subscripting.
+
+
+   Subscript Parsing
+       This discussion applies mainly to  associative  array  key
+       strings and to patterns used for reverse subscripting (the
+       `r', `R', `i', etc. flags), but it may also affect parame­
+       ter  substitutions  that  appear  as part of an arithmetic
+       expression in an ordinary subscript.
+
+       The basic  rule  to  remember  when  writing  a  subscript
+       expression  is  that  all text between the opening `[' and
+       the closing `]' is interpreted as if  it  were  in  double
+       quotes  (see  zshmisc(1)).   However, unlike double quotes
+       which normally  cannot  nest,  subscript  expressions  may
+       appear  inside  double-quoted strings or inside other sub­
+       script expressions (or  both!),  so  the  rules  have  two
+       important differences.
+
+       The  first  difference is that brackets (`[' and `]') must
+       appear as balanced pairs in a subscript expression  unless
+       they are preceded by a backslash (`\').  Therefore, within
+       a subscript expression (and  unlike  true  double-quoting)
+       the  sequence `\[' becomes `[', and similarly `\]' becomes
+       `]'.  This applies even in cases where a backslash is  not
+       normally  required;  for  example,  the pattern `[^[]' (to
+       match any character other than an open bracket) should  be
+       written  `[^\[]' in a reverse-subscript pattern.  However,
+       note that `\[^\[\]' and even `\[^[]' mean the same  thing,
+       because  backslashes  are always stripped when they appear
+       before brackets!
+
+       The same rule applies to parentheses  (`('  and  `)')  and
+       braces  (`{' and `}'): they must appear either in balanced
+       pairs or preceded by a  backslash,  and  backslashes  that
+       protect  parentheses or braces are removed during parsing.
+       This is because parameter  expansions  may  be  surrounded
+       balanced  braces,  and  subscript  flags are introduced by
+       balanced parenthesis.
+
+       The second difference is that  a  double-quote  (`"')  may
+       appear  as  part  of  a subscript expression without being
+       preceded by a backslash, and therefore that the two  char­
+       acters  `\"' remain as two characters in the subscript (in
+       true double-quoting, `\"' becomes `"').  However,  because
+       of  the  standard  shell  quoting rules, any double-quotes
+       that appear must occur in balanced pairs  unless  preceded
+       by  a  backslash.  This makes it more difficult to write a
+       subscript expression that contains an odd number  of  dou­
+       ble-quote  characters,  but the reason for this difference
+       is so that when a subscript expression appears inside true
+       double-quotes,  one  can  still  write  `\"'  (rather than
+       `\\\"') for `"'.
+
+       To use an odd number of double  quotes  as  a  key  in  an
+       assignment,  use the typeset builtin and an enclosing pair
+       of double quotes; to refer to the value of that key, again
+       use double quotes:
+
+              typeset -A aa
+              typeset "aa[one\"two\"three\"quotes]"=QQQ
+              print "$aa[one\"two\"three\"quotes]"
+
+       It  is  important  to  note  that the quoting rules do not
+       change when a parameter  expansion  with  a  subscript  is
+       nested  inside  another subscript expression.  That is, it
+       is not necessary to use additional backslashes within  the
+       inner  subscript  expression;  they are removed only once,
+       from the innermost  subscript  outwards.   Parameters  are
+       also  expanded from the innermost subscript first, as each
+       expansion is  encountered  left  to  right  in  the  outer
+       expression.
+
+       A  further  complication  arises  from a way in which sub­
+       script parsing is not different from double quote parsing.
+       As  in  true  double-quoting, the sequences `\*', and `\@'
+       remain as two characters when they appear in  a  subscript
+       expression.  To use a literal `*' or `@' as an associative
+       array key, the `e' flag must be used:
+
+              typeset -A aa
+              aa[(e)*]=star
+              print $aa[(e)*]
+
+       A last detail must be considered when reverse subscripting
+       is  performed.   Parameters  appearing  in  the  subscript
+       expression  are  first  expanded  and  then  the  complete
+       expression  is  interpreted  as  a  pattern.  This has two
+       effects: first, parameters behave as if GLOB_SUBST were on
+       (and  it  cannot  be  turned off); second, backslashes are
+       interpreted twice, once when parsing the  array  subscript
+       and  again  when  parsing  the pattern.  In a reverse sub­
+       script, it's necessary to use four backslashes to cause  a
+       single  backslash  to match literally in the pattern.  For
+       complex patterns,  it  is  often  easiest  to  assign  the
+       desired  pattern  to  a  parameter  and then refer to that
+       parameter in the subscript, because then the  backslashes,
+       brackets,  parentheses,  etc., are seen only when the com­
+       plete expression is converted to a pattern.  To match  the
+       value  of  a  parameter  literally in a reverse subscript,
+       rather than as  a  pattern,  use  `${(q)name}'  (see  zsh­
+       expn(1)) to quote the expanded value.
+
+       Note  that  the `k' and `K' flags are reverse subscripting
+       for an ordinary array, but are  not  reverse  subscripting
+       for  an associative array!  (For an associative array, the
+       keys in the array itself are interpreted  as  patterns  by
+       those  flags;  the  subscript  is  a  plain string in that
+       case.)
+
+       One final note, not directly related to subscripting:  the
+       numeric  names  of positional parameters (described below)
+       are parsed specially, so for example `$2foo' is equivalent
+       to  `${2}foo'.   Therefore,  to  use  subscript  syntax to
+       extract a  substring  from  a  positional  parameter,  the
+       expansion  must  be  surrounded  by  braces;  for example,
+       `${2[3,5]}' evaluates to the third through  fifth  charac­
+       ters  of the second positional parameter, but `$2[3,5]' is
+       the entire second parameter concatenated with the filename
+       generation pattern `[3,5]'.
+
+
+POSITIONAL PARAMETERS
+       The  positional  parameters  provide  access  to  the com­
+       mand-line arguments of a shell function, shell script,  or
+       the  shell  itself; see the section `Invocation', and also
+       the section `Functions'.  The parameter n, where  n  is  a
+       number,  is  the nth positional parameter.  The parameters
+       *, @ and argv are arrays  containing  all  the  positional
+       parameters; thus `$argv[n]', etc., is equivalent to simply
+       `$n'.
+
+       Positional parameters may be changed after  the  shell  or
+       function  starts by using the set builtin, by assigning to
+       the argv array,  or  by  direct  assignment  of  the  form
+       `n=value'  where n is the number of the positional parame­
+       ter to be changed.  This also creates (with empty  values)
+       any  of the positions from 1 to n that do not already have
+       values.  Note that, because the positional parameters form
+       an  array, an array assignment of the form `n=(value ...)'
+       is allowed, and has the effect of shifting all the  values
+       at positions greater than n by as many positions as neces­
+       sary to accommodate the new values.
+
+
+LOCAL PARAMETERS
+       Shell function executions delimit scopes for shell parame­
+       ters.   (Parameters  are dynamically scoped.)  The typeset
+       builtin, and its alternative forms declare, integer, local
+       and  readonly  (but  not export), can be used to declare a
+       parameter as being local to the innermost scope.
+
+       When a parameter is read or  assigned  to,  the  innermost
+       existing  parameter  of  that name is used.  (That is, the
+       local parameter hides any less-local parameter.)  However,
+       assigning  to a non-existent parameter, or declaring a new
+       parameter with export, causes it to be created in the out­
+       ermost scope.
+
+       Local  parameters  disappear when their scope ends.  unset
+       can be used to delete a parameter while  it  is  still  in
+       scope;  any  outer parameter of the same name remains hid­
+       den.
+
+       Special parameters may also be  made  local;  they  retain
+       their special attributes unless either the existing or the
+       newly-created parameter has the -h (hide) attribute.  This
+       may have unexpected effects: there is no default value, so
+       if there is no assignment at the  point  the  variable  is
+       made  local,  it will be set to an empty value (or zero in
+       the case of integers).  The following:
+
+              typeset PATH=/new/directory:$PATH
+
+       is valid for temporarily allowing the shell or  programmes
+       called  from  it  to  find  the programs in /new/directory
+       inside a function.
+
+       Note that the restriction in older versions  of  zsh  that
+       local parameters were never exported has been removed.
+
+
+PARAMETERS SET BY THE SHELL
+       The  following  parameters  are  automatically  set by the
+       shell:
+
+       ! <S>  The process  ID  of  the  last  background  command
+              invoked.
+
+       # <S>  The  number  of  positional  parameters in decimal.
+              Note that some confusion may occur with the  syntax
+              $#param which substitutes the length of param.  Use
+              ${#} to resolve ambiguities.   In  particular,  the
+              sequence  `$#-...'  in  an arithmetic expression is
+              interpreted as the length of the parameter -,  q.v.
+
+       ARGC <S> <Z>
+              Same as #.
+
+       $ <S>  The process ID of this shell.
+
+       - <S>  Flags supplied to the shell on invocation or by the
+              set or setopt commands.
+
+       * <S>  An array containing the positional parameters.
+
+       argv <S> <Z>
+              Same as *.  Assigning to  argv  changes  the  local
+              positional  parameters,  but  argv  is not itself a
+              local parameter.  Deleting argv with unset  in  any
+              function  deletes  it everywhere, although only the
+              innermost positional parameter array is deleted (so
+              * and @ in other scopes are not affected).
+
+       @ <S>  Same as argv[@], even when argv is not set.
+
+       ? <S>  The exit value returned by the last command.
+
+       0 <S>  The  name used to invoke the current shell.  If the
+              FUNCTION_ARGZERO option is set, this  is  set  tem­
+              porarily within a shell function to the name of the
+              function, and within a sourced script to  the  name
+              of the script.
+
+       status <S> <Z>
+              Same as ?.
+
+       pipestatus <S> <Z>
+              An array containing the exit values returned by all
+              commands in the last pipeline.
+
+       _ <S>  The last argument of the previous  command.   Also,
+              this  parameter  is set in the environment of every
+              command executed to the full pathname of  the  com­
+              mand.
+
+       CPUTYPE
+              The  machine  type (microprocessor class or machine
+              model), as determined at run time.
+
+       EGID <S>
+              The effective group ID of the  shell  process.   If
+              you  have sufficient privileges, you may change the
+              effective group ID of the shell process by  assign­
+              ing  to  this parameter.  Also (assuming sufficient
+              privileges), you may start a single command with  a
+              different  effective  group  ID by `(EGID=gid; com­
+              mand)'
+
+       EUID <S>
+              The effective user ID of the shell process.  If you
+              have  sufficient  privileges,  you  may  change the
+              effective user ID of the shell process by assigning
+              to this parameter.  Also (assuming sufficient priv­
+              ileges), you may start a single command with a dif­
+              ferent effective user ID by `(EUID=uid; command)'
+
+       ERRNO <S>
+              The  value  of  errno  (see errno(3)) as set by the
+              most recently failed system call.   This  value  is
+              system dependent and is intended for debugging pur­
+              poses.
+
+       GID <S>
+              The real group ID of the  shell  process.   If  you
+              have  sufficient  privileges,  you  may  change the
+              group ID of the shell process by assigning to  this
+              parameter.   Also (assuming sufficient privileges),
+              you may start a single command  under  a  different
+              group ID by `(GID=gid; command)'
+
+       HOST   The current hostname.
+
+       LINENO <S>
+              The line number of the current line within the cur­
+              rent script, sourced file, or shell function  being
+              executed,  whichever  was  started  most  recently.
+              Note that in the case of shell functions  the  line
+              number refers to the function as it appeared in the
+              original definition, not necessarily  as  displayed
+              by the functions builtin.
+
+       LOGNAME
+              If  the  corresponding  variable  is not set in the
+              environment of the shell, it is initialized to  the
+              login  name corresponding to the current login ses­
+              sion. This parameter is  exported  by  default  but
+              this can be disabled using the typeset builtin.
+
+       MACHTYPE
+              The  machine  type (microprocessor class or machine
+              model), as determined at compile time.
+
+       OLDPWD The previous working directory.  This is  set  when
+              the  shell  initializes  and whenever the directory
+              changes.
+
+       OPTARG <S>
+              The value of the last option argument processed  by
+              the getopts command.
+
+       OPTIND <S>
+              The  index of the last option argument processed by
+              the getopts command.
+
+       OSTYPE The operating  system,  as  determined  at  compile
+              time.
+
+       PPID <S>
+              The process ID of the parent of the shell.
+
+       PWD    The  present  working  directory.  This is set when
+              the shell initializes and  whenever  the  directory
+              changes.
+
+       RANDOM <S>
+              A  random  integer from 0 to 32767, newly generated
+              each time this parameter is referenced.  The random
+              number  generator  can  be  seeded  by  assigning a
+              numeric value to RANDOM.
+
+       SECONDS <S>
+              The number of seconds since shell  invocation.   If
+              this  parameter is assigned a value, then the value
+              returned upon reference will be the value that  was
+              assigned  plus  the  number  of  seconds  since the
+              assignment.
+
+       SHLVL <S>
+              Incremented  by  one  each  time  a  new  shell  is
+              started.
+
+       signals
+              An array containing the names of the signals.
+
+       TTY    The  name  of the tty associated with the shell, if
+              any.
+
+       TTYIDLE <S>
+              The idle time of the tty associated with the  shell
+              in seconds or -1 if there is no such tty.
+
+       UID <S>
+              The real user ID of the shell process.  If you have
+              sufficient privileges, you may change the  user  ID
+              of  the shell by assigning to this parameter.  Also
+              (assuming sufficient privileges), you may  start  a
+              single   command  under  a  different  user  ID  by
+              `(UID=uid; command)'
+
+       USERNAME <S>
+              The username corresponding to the real user  ID  of
+              the  shell  process.  If you have sufficient privi­
+              leges, you may change the username  (and  also  the
+              user  ID and group ID) of the shell by assigning to
+              this parameter.  Also (assuming  sufficient  privi­
+              leges), you may start a single command under a dif­
+              ferent username (and  user  ID  and  group  ID)  by
+              `(USERNAME=username; command)'
+
+       VENDOR The vendor, as determined at compile time.
+
+       ZSH_NAME
+              Expands  to  the  basename  of  the command used to
+              invoke this instance of zsh.
+
+       ZSH_VERSION
+              The version number of this zsh.
+
+PARAMETERS USED BY THE SHELL
+       The following parameters are used by the shell.
+
+       In cases where there are two parameters with an upper- and
+       lowercase  form  of  the same name, such as path and PATH,
+       the lowercase form is an array and the uppercase form is a
+       scalar  with  the elements of the array joined together by
+       colons.  These are similar to tied parameters created  via
+       `typeset -T'.  The normal use for the colon-separated form
+       is for exporting to the environment, while the array  form
+       is  easier  to  manipulate  within  the  shell.  Note that
+       unsetting either of the pair will unset  the  other;  they
+       retain their special properties when recreated, and recre­
+       ating one of the pair will recreate the other.
+
+       ARGV0  If exported, its value is used as  the  argv[0]  of
+              external commands.  Usually used in constructs like
+              `ARGV0=emacs nethack'.
+
+       BAUD   The baud rate of the current connection.   Used  by
+              the  line editor update mechanism to compensate for
+              a slow terminal by delaying  updates  until  neces­
+              sary.   This may be profitably set to a lower value
+              in some circumstances, e.g.  for slow modems  dial­
+              ing into a communications server which is connected
+              to a host via a fast link; in this case, this vari­
+              able  would  be  set by default to the speed of the
+              fast link,  and  not  the  modem.   This  parameter
+              should  be set to the baud rate of the slowest part
+              of the link for best performance. The  compensation
+              mechanism can be turned off by setting the variable
+              to zero.
+
+       cdpath <S> <Z> (CDPATH <S>)
+              An  array  (colon-separated  list)  of  directories
+              specifying the search path for the cd command.
+
+       COLUMNS <S>
+              The  number  of  columns for this terminal session.
+              Used for printing select lists  and  for  the  line
+              editor.
+
+       DIRSTACKSIZE
+              The  maximum  size  of the directory stack.  If the
+              stack gets larger than this, it will  be  truncated
+              automatically.   This is useful with the AUTO_PUSHD
+              option.
+
+       FCEDIT The default editor for the fc builtin.
+
+       fignore <S> <Z> (FIGNORE <S>)
+              An array (colon separated list) containing the suf­
+              fixes  of  files to be ignored during filename com­
+              pletion.  However, if the completion generates only
+              files  which  would match if this variable would be
+              ignored, than these files are completed anyway.
+
+       fpath <S> <Z> (FPATH <S>)
+              An array  (colon  separated  list)  of  directories
+              specifying  the  search  path  for function defini­
+              tions.  This path is searched when a function  with
+              the  -u  attribute is referenced.  If an executable
+              file is found, then it is read and executed in  the
+              current environment.
+
+       histchars <S>
+              Three  characters  used  by the shell's history and
+              lexical analysis mechanism.   The  first  character
+              signals  the  start of a history expansion (default
+              `!').  The second character signals the start of  a
+              quick  history  substitution  (default  `^').   The
+              third character is the comment  character  (default
+              `#').
+
+       HISTCHARS <S> <Z>
+              Same as histchars.  (Deprecated.)
+
+       HISTFILE
+              The file to save the history in when an interactive
+              shell exits.  If unset, the history is not saved.
+
+       HISTSIZE <S>
+              The maximum number of events stored in the internal
+              history      list.       If     you     use     the
+              HIST_EXPIRE_DUPS_FIRST option, setting  this  value
+              larger  than  the  SAVEHIST  size will give you the
+              difference as a cushion for saving duplicated  his­
+              tory events.
+
+       HOME <S>
+              The default argument for the cd command.
+
+       IFS <S>
+              Internal  field  separators (by default space, tab,
+              newline and NUL), that are used to  separate  words
+              which  result  from  command or parameter expansion
+              and words read by the read builtin.  Any characters
+              from  the set space, tab and newline that appear in
+              the IFS are called IFS white space.   One  or  more
+              IFS  white  space  characters  or one non-IFS white
+              space character  together  with  any  adjacent  IFS
+              white  space  character delimit a field.  If an IFS
+              white space character appears  twice  consecutively
+              in the IFS, this character is treated as if it were
+              not an IFS white space character.
+
+       KEYTIMEOUT
+              The time the shell waits, in hundredths of seconds,
+              for  another  key  to be pressed when reading bound
+              multi-character sequences.
+
+       LANG <S>
+              This variable determines the  locale  category  for
+              any   category  not  specifically  selected  via  a
+              variable starting with `LC_'.
+
+       LC_ALL <S>
+              This variable overrides the  value  of  the  `LANG'
+              variable  and  the  value of any of the other vari­
+              ables starting with `LC_'.
+
+       LC_COLLATE <S>
+              This variable determines the  locale  category  for
+              character  collation  information  within ranges in
+              glob brackets and for sorting.
+
+       LC_CTYPE <S>
+              This variable determines the  locale  category  for
+              character handling functions.
+
+       LC_MESSAGES <S>
+              This variable determines the language in which mes­
+              sages should be written.  Note that  zsh  does  not
+              use message catalogs.
+
+       LC_NUMERIC <S>
+              This  variable  affects the decimal point character
+              and thousands separator character for the formatted
+              input/output  functions and string conversion func­
+              tions.  Note that zsh  ignores  this  setting  when
+              parsing floating point mathematical expressions.
+
+       LC_TIME <S>
+              This  variable  determines  the locale category for
+              date  and  time   formatting   in   prompt   escape
+              sequences.
+
+       LINES <S>
+              The  number  of  lines  for  this terminal session.
+              Used for printing select lists  and  for  the  line
+              editor.
+
+       LISTMAX
+              In  the  line editor, the number of matches to list
+              without asking first. If the value is negative, the
+              list  will  be  shown  if  it spans at most as many
+              lines as given by the absolute value.   If  set  to
+              zero, the shell asks only if the top of the listing
+              would scroll off the screen.
+
+       LOGCHECK
+              The  interval  in  seconds   between   checks   for
+              login/logout activity using the watch parameter.
+
+       MAIL   If  this  parameter is set and mailpath is not set,
+              the shell looks for mail in the specified file.
+
+       MAILCHECK
+              The interval in  seconds  between  checks  for  new
+              mail.
+
+       mailpath <S> <Z> (MAILPATH <S>)
+              An  array  (colon-separated  list)  of filenames to
+              check for new mail.  Each filename can be  followed
+              by  a  `?' and a message that will be printed.  The
+              message will undergo parameter  expansion,  command
+              substitution  and  arithmetic  expansion  with  the
+              variable $_ defined as the name of  the  file  that
+              has  changed.  The default message is `You have new
+              mail'.  If an element is a directory instead  of  a
+              file the shell will recursively check every file in
+              every subdirectory of the element.
+
+       manpath <S> <Z> (MANPATH <S> <Z>)
+              An array (colon-separated list) whose value is  not
+              used  by  the shell.  The manpath array can be use­
+              ful, however, since setting it also  sets  MANPATH,
+              and vice versa.
+
+       module_path <S> <Z> (MODULE_PATH <S>)
+              An array (colon-separated list) of directories that
+              zmodload searches for dynamically loadable modules.
+              This is initialized to a standard pathname, usually
+              `/usr/local/lib/zsh/$ZSH_VERSION'.             (The
+              `/usr/local/lib'  part  varies from installation to
+              installation.)  For security reasons, any value set
+              in  the  environment when the shell is started will
+              be ignored.
+
+              These parameters only  exist  if  the  installation
+              supports dynamic module loading.
+
+       NULLCMD <S>
+              The  command  name  to  assume  if a redirection is
+              specified with no command.  Defaults to  cat.   For
+              sh/ksh  behavior,  change  this to :.  For csh-like
+              behavior, unset  this  parameter;  the  shell  will
+              print   an  error  message  if  null  commands  are
+              entered.
+
+       path <S> <Z> (PATH <S>)
+              An array (colon-separated list) of  directories  to
+              search  for  commands.  When this parameter is set,
+              each directory is scanned and all files  found  are
+              put in a hash table.
+
+       POSTEDIT <S>
+              This  string  is  output  whenever  the line editor
+              exits.  It  usually  contains  termcap  strings  to
+              reset the terminal.
+
+       PROMPT <S> <Z>
+       PROMPT2 <S> <Z>
+       PROMPT3 <S> <Z>
+       PROMPT4 <S> <Z>
+              Same as PS1, PS2, PS3 and PS4, respectively.
+
+       prompt <S> <Z>
+              Same as PS1.
+
+       PS1 <S>
+              The primary prompt string, printed before a command
+              is read.  the default is `%m%# '.  It  undergoes  a
+              special  form  of expansion before being displayed;
+              see the section `Prompt Expansion'.
+
+       PS2 <S>
+              The secondary prompt, printed when the shell  needs
+              more  information  to  complete  a  command.  It is
+              expanded in the same way as PS1.   The  default  is
+              `%_> ', which displays any shell constructs or quo­
+              tation marks which are currently being processed.
+
+       PS3 <S>
+              Selection prompt used within a select loop.  It  is
+              expanded  in  the  same way as PS1.  The default is
+              `?# '.
+
+       PS4 <S>
+              The execution trace prompt.  Default is `+%N:%i> ',
+              which displays the name of the current shell struc­
+              ture and the line number within it.  In sh  or  ksh
+              emulation, the default is `+ '.
+
+       psvar <S> <Z> (PSVAR <S>)
+              An  array  (colon-separated  list) whose first nine
+              values can be  used  in  PROMPT  strings.   Setting
+              psvar also sets PSVAR, and vice versa.
+
+       READNULLCMD <S>
+              The  command name to assume if a single input redi­
+              rection is specified with no command.  Defaults  to
+              more.
+
+       REPORTTIME
+              If  nonnegative,  commands  whose combined user and
+              system execution times (measured  in  seconds)  are
+              greater  than  this  value  have  timing statistics
+              printed for them.
+
+       REPLY  This parameter is reserved by  convention  to  pass
+              string  values  between  shell  scripts  and  shell
+              builtins in situations where  a  function  call  or
+              redirection  are  impossible  or  undesirable.  The
+              read builtin and the select complex command may set
+              REPLY,  and filename generation both sets and exam­
+              ines its value when evaluating certain expressions.
+              Some  modules  also  employ  REPLY for similar pur­
+              poses.
+
+       reply  As REPLY, but for array values rather than strings.
+
+       RPROMPT <S>
+       RPS1 <S>
+              This  prompt is displayed on the right-hand side of
+              the screen when the primary prompt  is  being  dis­
+              played on the left.  This does not work if the SIN­
+              GLELINEZLE option is set.  It is  expanded  in  the
+              same way as PS1.
+
+       SAVEHIST
+              The maximum number of history events to save in the
+              history file.
+
+       SPROMPT <S>
+              The  prompt  used  for  spelling  correction.   The
+              sequence  `%R'  expands to the string which presum­
+              ably needs spelling correction, and `%r' expands to
+              the  proposed correction.  All other prompt escapes
+              are also allowed.
+
+       STTY   If this parameter is set in  a  command's  environ­
+              ment,  the  shell  runs  the  stty command with the
+              value of this parameter as arguments  in  order  to
+              set  up  the terminal before executing the command.
+              The modes apply only to the command, and are  reset
+              when it finishes or is suspended. If the command is
+              suspended and continued later with the fg  or  wait
+              builtins  it  will see the modes specified by STTY,
+              as if it were not suspended.  This  (intentionally)
+              does  not  apply  if  the  command is continued via
+              `kill -CONT'.  STTY is ignored if  the  command  is
+              run  in the background, or if it is in the environ­
+              ment of the shell but not explicitly assigned to in
+              the  input  line. This avoids running stty at every
+              external command by accidentally exporting it. Also
+              note  that  STTY should not be used for window size
+              specifications; these will not be local to the com­
+              mand.
+
+       TERM <S>
+              The  type  of  terminal  in use.  This is used when
+              looking up termcap  sequences.   An  assignment  to
+              TERM causes zsh to re-initialize the terminal, even
+              if the value does not change (e.g.,  `TERM=$TERM').
+              It is necessary to make such an assignment upon any
+              change to the terminal definition database or  ter­
+              minal  type  in  order for the new settings to take
+              effect.
+
+       TIMEFMT
+              The format of process time reports  with  the  time
+              keyword.  The default is `%E real  %U user  %S sys­
+              tem   %P  %J'.   Recognizes  the  following  escape
+              sequences:
+
+              %%     A `%'.
+              %U     CPU seconds spent in user mode.
+              %S     CPU seconds spent in kernel mode.
+              %E     Elapsed time in seconds.
+              %P     The  CPU percentage, computed as (%U+%S)/%E.
+              %J     The name of this job.
+
+              A star may be inserted between the percent sign and
+              flags  printing  time.   This  cause the time to be
+              printed in `hh:mm:ss.ttt' format (hours and minutes
+              are only printed if they are not zero).
+
+       TMOUT  If  this  parameter  is  nonzero,  the  shell  will
+              receive an ALRM signal if a command is not  entered
+              within  the specified number of seconds after issu­
+              ing a prompt. If there is a  trap  on  SIGALRM,  it
+              will be executed and a new alarm is scheduled using
+              the value of the TMOUT  parameter  after  executing
+              the  trap.  If no trap is set, and the idle time of
+              the terminal is not less  than  the  value  of  the
+              TMOUT  parameter,  zsh terminates.  Otherwise a new
+              alarm is scheduled to TMOUT seconds after the  last
+              keypress.
+
+       TMPPREFIX
+              A  pathname prefix which the shell will use for all
+              temporary files.  Note that this should include  an
+              initial  part  for  the  file  name  as well as any
+              directory names.  The default is `/tmp/zsh'.
+
+       watch <S> <Z> (WATCH <S>)
+              An array  (colon-separated  list)  of  login/logout
+              events  to  report.  If it contains the single word
+              `all', then all login/logout events  are  reported.
+              If  it  contains  the single word `notme', then all
+              events are reported as with `all' except $USERNAME.
+              An entry in this list may consist of a username, an
+              `@' followed by a remote hostname, and a  `%'  fol­
+              lowed  by a line (tty).  Any or all of these compo­
+              nents may be present in an entry; if a login/logout
+              event matches all of them, it is reported.
+
+       WATCHFMT
+              The  format  of  login/logout  reports if the watch
+              parameter is set.  Default is `%n has  %a  %l  from
+              %m'.  Recognizes the following escape sequences:
+
+              %n     The name of the user that logged in/out.
+
+              %a     The  observed  action,  i.e.  "logged on" or
+                     "logged off".
+
+              %l     The line (tty) the user is logged in on.
+
+              %M     The full hostname of the remote host.
+
+              %m     The hostname up to the first `.'.   If  only
+                     the  IP  address  is  available  or the utmp
+                     field contains the name of an X-windows dis­
+                     play, the whole name is printed.
+
+                     NOTE:  The  `%m'  and `%M' escapes will work
+                     only if there is a host name  field  in  the
+                     utmp  on  your  machine.  Otherwise they are
+                     treated as ordinary strings.
+
+              %S (%s)
+                     Start (stop) standout mode.
+
+              %U (%u)
+                     Start (stop) underline mode.
+
+              %B (%b)
+                     Start (stop) boldface mode.
+
+              %t
+              %@     The time, in 12-hour, am/pm format.
+
+              %T     The time, in 24-hour format.
+
+              %w     The date in `day-dd' format.
+
+              %W     The date in `mm/dd/yy' format.
+
+              %D     The date in `yy-mm-dd' format.
+
+              %(x:true-text:false-text)
+                     Specifies a ternary expression.  The charac­
+                     ter  following  the x is arbitrary; the same
+                     character is used to separate the  text  for
+                     the  "true" result from that for the "false"
+                     result.  Both the separator  and  the  right
+                     parenthesis may be escaped with a backslash.
+                     Ternary expressions may be nested.
+
+                     The test character x may be any one of  `l',
+                     `n',  `m'  or  `M',  which indicate a `true'
+                     result if the corresponding escape  sequence
+                     would return a non-empty value; or it may be
+                     `a', which indicates a `true' result if  the
+                     watched user has logged in, or `false' if he
+                     has logged out.  Other  characters  evaluate
+                     to   neither  true  nor  false;  the  entire
+                     expression is omitted in this case.
+
+                     If the result is `true', then the  true-text
+                     is  formatted  according  to the rules above
+                     and printed, and the false-text is  skipped.
+                     If `false', the true-text is skipped and the
+                     false-text is formatted and printed.  Either
+                     or  both  of  the branches may be empty, but
+                     both separators must be present in any case.
+
+       WORDCHARS <S>
+              A  list  of  non-alphanumeric characters considered
+              part of a word by the line editor.
+
+       ZBEEP  If set, this gives a string  of  characters,  which
+              can  use  all the same codes as the bindkey command
+              as described in the zsh/zle module entry in zshmod­
+              ules(1),  that  will  be  output  to  the  terminal
+              instead  of  beeping.   This  may  have  a  visible
+              instead  of  an  audible  effect;  for example, the
+              string `\e[?5h\e[?5l' on a vt100 or xterm will have
+              the effect of flashing reverse video on and off (if
+              you usually use reverse video, you should  use  the
+              string  `\e[?5l\e[?5h' instead).  This takes prece­
+              dence over the NOBEEP option.
+
+       ZDOTDIR
+              The directory to search  for  shell  startup  files
+              (.zshrc, etc), if not $HOME.
+
+
+
+zsh 4.0.4                October 26, 2001             ZSHPARAM(1)

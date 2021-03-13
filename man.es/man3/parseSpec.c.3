@@ -1,0 +1,96 @@
+build/parseSpec.c(3)                         build/parseSpec.c(3)
+
+
+
+NAME
+       build/parseSpec.c - Top level dispatcher for spec file
+       parsing.
+
+SYNOPSIS
+       #include 'system.h'
+       #include <rpmio_internal.h>
+       #include <rpmbuild.h>
+       #include 'debug.h'
+
+   Data Structures
+       struct PartRec
+
+   Functions
+       void initParts (struct PartRec *p)
+       rpmParseState isPart (const char *line)
+       int matchTok (const char *token, const char *line)
+       void handleComments (char *s)
+       void forceIncludeFile (Spec spec, const char *fileName)
+       int copyNextLine (Spec spec, OFI_t *ofi, int strip)
+       int readLine (Spec spec, int strip)
+       void closeSpec (Spec spec)
+       int parseSpec (Spec *specp, const char *specFile, const
+           char *rootURL, const char *buildRootURL, int
+           recursing, const char *passPhrase, char *cookie, int
+           anyarch, int force)
+
+   Variables
+       int _debug = 0
+       PartRec partList []
+       int noLang
+
+DETAILED DESCRIPTION
+       Top level dispatcher for spec file parsing.
+
+
+
+       Definition in file parseSpec.c.
+
+FUNCTION DOCUMENTATION
+   int copyNextLine (Spec spec, OFI_t * ofi, int strip) [static]
+       Definition at line 114 of file parseSpec.c.
+
+       References _, expandMacros, handleComments,
+       SpecStruct::lbuf, SpecStruct::line, SpecStruct::lineNum,
+       SpecStruct::macros, SpecStruct::nextline,
+       SpecStruct::nextpeekc, ReadLevelEntry::reading,
+       OpenFileInfo::readPtr, SpecStruct::readStack,
+       STRIP_COMMENTS, STRIP_TRAILINGSPACE, and xisspace.
+
+       Referenced by readLine.
+
+   void forceIncludeFile (Spec spec, const char * fileName)
+       [static]
+       Definition at line 102 of file parseSpec.c.
+
+       References OpenFileInfo::fileName, SpecStruct::fileStack,
+       newOpenFileInfo, OpenFileInfo::next, and xstrdup.
+
+       Referenced by readLine.
+
+   void initParts (struct PartRec * p) [inline, static]
+       Definition at line 45 of file parseSpec.c.
+
+       References PartRec::len, and PartRec::token.
+
+       Referenced by isPart.
+
+   int matchTok (const char * token, const char * line) [static]
+       Definition at line 72 of file parseSpec.c.
+
+       References SKIPNONSPACE, SKIPSPACE, and xstrncasecmp.
+
+       Referenced by readLine.
+
+VARIABLE DOCUMENTATION
+   int _debug = 0 [static]
+       Definition at line 8 of file parseSpec.c.
+
+   int noLang
+       Definition at line 356 of file parseSpec.c.
+
+   struct PartRec  partList[] [static]
+       Referenced by isPart.
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002       build/parseSpec.c(3)

@@ -1,0 +1,254 @@
+CONSOLECHARS(8)        Linux User's Manual        CONSOLECHARS(8)
+
+
+
+NAME
+       consolechars  -  load EGA/VGA console screen font, screen-
+       font map, and/or application-charset map.
+
+
+SYNOPSIS
+       consolechars  [-v|--verbose]  [-V|--version]   [-h|--help]
+       [-1|--g1]   [-n|--no-act]   [--force-no-sfm]   [-H|--char-
+       height=N] [--tty=device] [-m|--acm=|--app-charset-map=acm]
+       [-M|--old-acm=acm.orig]   [-f|--font=font.new]  [-F|--old-
+       font=font.orig]  [--old-font-raw=font.orig]   [--old-font-
+       psf-with-sfm=font.orig.psf] [--old-font-psf=font.orig.psf]
+       [-u|--sfm=|--screen-font-map=sfm]  [-U|--old-sfm=sfm.orig]
+       [-k|--sfm-fallback]
+
+
+DESCRIPTION
+       The  consolechars  command  loads  a font into the EGA/VGA
+       character generator, and optionally outputs  the  previous
+       font.  This  command  reads  an 8xH font from the file and
+       loads it into the character generator memory. Usually  the
+       font size H will be read from the file, but some file-for­
+       mats do not contain enough  information  for  this,  espe­
+       cially  the  raw file format, which only contains the font
+       bitmaps. In this case, H will be computed  from  the  file
+       size,  which implies these files cannot be compressed.  If
+       the input file has codepage format, containing  the  three
+       fonts  8x8,  8x14 and 8x16, one of the options -H 8, -H 14
+       or -H 16 must be used to select one.  Codepage  format  is
+       also recognized by size, and cannot be compressed.
+
+       As  currently  there  is  no mode switching support in the
+       Linux kernel, consolechars has nothing to do with the cur­
+       rent  EGA/VGA  mode. It's totally user's responsibility to
+       choose a font matching the current video mode.
+
+
+OPTIONS
+       -h --help
+              Display a short help message and exit.
+
+
+       -V --version
+              Display version-number and exit.
+
+
+       -v --verbose
+              Display on stderr informations on what's going  on.
+
+
+       -n --no_act
+              Do  not change the console state; do not write any­
+              thing to any file. Implies --verbose.
+
+
+       -1 --g1
+              Activate the G1 charset instead of G0 (see  --acm).
+
+
+       --tty=device
+              Use device as console device for ioctls, instead of
+              guessing which one to use,  which  usually  chooses
+              the  current  tty.   This can be useful for testing
+              when under X, in conjunction with --no-act - actual
+              ioctls are refused for some reason then.
+
+
+COMMANDS
+       -f --font=file
+              The  font  file  is  a  file containing the bitmap-
+              description (glyph) of characters. Since fonts  may
+              contain  the  glyphs  for arbitrary character-sets,
+              knowledge about these characters may come either in
+              the  font-file  (eg.  in PSF files), or in separate
+              screen-font-map files (see --sfm option).
+
+              Font-files can be compressed with gzip(1)  or  com­
+              press(1),  with  the  exception of raw and codepage
+              file-formats.
+
+              Raw font files  are  binary  files  of  size  256*H
+              bytes,  containing bit images for each of 256 char­
+              acters, one byte per scan line,  and  H  bytes  per
+              character  (0  <  H  <= 32); H is computed from the
+              file-size, thus  raw  font  files  cannot  be  com­
+              pressed. The other font-formats are described else­
+              where.
+
+
+       -d --default-font
+              Load a default font. The -H option can be given  to
+              force a given char-height.
+
+
+       -m --acm --app-charset-map=file
+              Load a user-defined Application-Charset Map (ACM) -
+              save current ACM.
+              The mapping  from  8-bit  characters  sent  to  the
+              screen  into  Unicode (UCS2) characters by the run­
+              ning application is described by an  ACM  (formerly
+              called  screen  map).   This  map characterizes the
+              8-bit encoding used by the application,  hence  its
+              new  name.  If  no  ACM is provided using the --acm
+              option, the trivial map is assumed. Unless the --g1
+              option   in  specified,  the  G0  charset  is  then
+              selected, and set to use the ACM just  loaded.   If
+              --g1  is  specified, the G1 charset is used instead
+              of G0.
+
+              There are 2 types of ACM's recognized by the  --acm
+              option,  which  can be fed in binary or ASCII form.
+              Binary maps are checked by  size,  and  contain  an
+              array  of  256 bytes (old style 8-bit to font-posi­
+              tion maps) or 256 unicodes (8-bit  to  UCS2  maps).
+              Because  of  this check, you should not compress or
+              pipe them.
+              In the ASCII format, new  style  (UCS2)  ACM's  are
+              composed  of lines of the form `byte unicode' where
+              each first byte is the one to map (from the  Appli­
+              cation-Charset), in either of the C decimal, octal,
+              hex, or character syntaxes for  integers,  and  the
+              unicode is formed either with the `U+' prefix and 4
+              hex  digits,  or  with  an  UTF8-encoded  character
+              enclosed  between  single  quotes; unspecified map­
+              pings default to ASCII (identity) for characters in
+              the  range  0-127,  and  to 0xFFFD (the replacement
+              character) for those in the range 128-255.
+              Old style (8-bit) maps  in  the  ASCII  format  are
+              composed of lines of the form `byte byte' where the
+              first byte has the same meaning as above,  and  the
+              second one is the position in the font; unspecified
+              mappings default to straight-to-font identity  map­
+              ping.
+              An  old-style  mapping is equivalent to a new-style
+              mapping where the second byte b would  be  replaced
+              by  the unicode U+F000 | b, ie. in the straight-to-
+              font zone.  However,  due  to  the  differences  of
+              defaults  regarding unspecified mappings, just con­
+              verting each mapping individually will not be  suf­
+              ficient to get an equivalent ACM.
+
+
+       -M --old-acm=file
+              Saves the previous ACM can be saved to a file.
+
+
+       -u --sfm --screen-font-map=file
+              Load a Screen Font Map (SFM)
+              The  correspondance  between Unicode values and the
+              glyphs in the curent console-font is described by a
+              Screen-Font  Map  (formerly  called Unicode mapping
+              table).  Some fonts have a SFM included in the font
+              file,  and  an  explicit one can be indicated using
+              the --sfm option.  consolechars will  load  such  a
+              builtin  SFM,  unless  a  --force-no-sfm  option is
+              given.  One may add a  SFM  to  a  psf  font  using
+              psfaddtable(1).
+
+
+       --force-no-sfm
+              Prevent  the  loading  of a SFM when loading a font
+              containing one.  You should use  this  option  with
+              care,  as  you  probably  don't want to have a font
+              without a SFM; it could cause trouble.
+
+
+       -U --old-sfm=file
+              Save current SFM into a file.
+
+
+       -k --sfm-fallback=file
+              Use the given file as a SFM fallback table, to sup­
+              plement  the SFM. Multiple -k options may be given.
+
+              A fallback table tells, for  some  UCS2  characters
+              you're  interested  to  display,  which character's
+              glyph it may  use  if  its  own  is  not  available
+              according to the SFM in use.
+
+              If  a  SFM  was to be loaded, fallback mappings are
+              added to this map before it is loaded. If there was
+              not  (ie.  no  --sfm  option  was given, and a font
+              without  SFM  was  loaded,  or  the  --force-no-sfm
+              option   was   given),  then  the  current  SFM  is
+              requested from the kernel, the  the  fallback  map­
+              pings are added, and the resulting SFM is loaded.
+
+
+       -F --old-font=file
+              Save  old  font  in the prefered format. It is cur­
+              rently the same as  using  --old-font-psf-with-sfm,
+              but may change when a better format is supported.
+
+
+       --old-font-psf-with-sfm=file
+              Save old font in PSF format, with corresponding SFM
+              (PSF mode 2 or 3).
+
+
+       --old-font-psf=file
+              Save old font in PSF format (PSF mode 0 or 1). Usu­
+              ally a bad idea.
+
+
+       --old-font-raw=file
+              Save  old font in RAW format. Usually an even worse
+              idea.
+
+
+       -H --char-height=N
+              When loading a font from  a  codepage  file,  or  a
+              default  font,  specify  which font-size to use.  N
+              should be a number between 1 and 31.
+
+
+HISTORY
+       consolechars was originally  called  setfont(8),  but  was
+       renamed (in version 1997.10.28 of the Linux Console Tools)
+       to allow for changing the command-line options while  pro­
+       viding  backward compatibility with the old `kbd' package.
+
+
+FILES
+       /usr/lib/kbd/consolefonts/ is the  default  directory  for
+       fonts.
+
+       /usr/lib/kbd/consoletrans/  is  the  default directory for
+       both ACM's and SFM's.
+
+
+BUGS
+       For implementation reasons, binary ACM's and  ASCII  8-bit
+       ACM's  cannot  be compressed nor piped. This is not likely
+       to change (except if a good reason is given to  the  main­
+       tainer, or a patch is submitted), because I consider these
+       formats to be obsolete.
+
+
+AUTHORS
+       Eugene G. Crosser <crosser@pccross.msk.su>
+       Andries E. Brouwer <aeb@cwi.nl>
+       Extended by Yann Dirson <dirson@debian.org>
+
+
+SEE ALSO
+       psfaddtable(1), psfstriptable(1).
+
+
+
+Console tools              31 Oct 1997            CONSOLECHARS(8)

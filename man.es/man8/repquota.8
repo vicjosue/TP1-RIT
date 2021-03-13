@@ -1,0 +1,65 @@
+REPQUOTA(8)                                           REPQUOTA(8)
+
+
+
+NAME
+       repquota - summarize quotas for a filesystem
+
+SYNOPSIS
+       /usr/sbin/repquota  [ -vtsug ] [ -F format-name ] filesys­
+       tem...
+
+       /usr/sbin/repquota [ -avtsug ] [ -F format-name ]
+
+DESCRIPTION
+       repquota prints a summary of the disc usage and quotas for
+       the  specified  file  systems.   For each user the current
+       number of files and amount  of  space  (in  kilobytes)  is
+       printed, along with any quotas created with edquota(8).
+
+OPTIONS
+       -a     Report on all filesystems indicated in /etc/mtab to
+              be read-write with quotas.
+
+       -v     Report all quotas, even if there is  no  usage.  Be
+              also more verbose about quotafile information.
+
+       -t     Truncate user/group names longer than 9 characters.
+              This results in nicer output when  there  are  such
+              names.
+
+       -s     Try to report used space, number of used inodes and
+              limits in more appropriate units than default ones.
+
+       -F format-name
+              Report  quota  for specified format (ie. don't per­
+              form format autodetection).  Possible format  names
+              are:  vfsold  (version  1  quota), vfsv0 (version 2
+              quota), rpc (quota over NFS),  xfs  (quota  on  XFS
+              filesystem)
+
+       -g     Report quotas for groups.
+
+       -u     Report quotas for users. This is the default.
+
+       Only  the  super-user  may view quotas which are not their
+       own.
+
+FILES
+       aquota.user or aquota.group
+                           quota  file  at  the  filesystem  root
+                           (version 2 quota, non-XFS filesystems)
+       quota.user or quota.group
+                           quota  file  at  the  filesystem  root
+                           (version 1 quota, non-XFS filesystems)
+       /etc/mtab           default filesystems
+       /etc/passwd         default set of users
+       /etc/passwd         default set of groups
+
+SEE ALSO
+       quota(1),  quotactl(2),  edquota(8),  quotacheck(8),  quo­
+       taon(8)
+
+
+
+                                                      REPQUOTA(8)

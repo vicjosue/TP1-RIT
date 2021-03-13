@@ -1,0 +1,51 @@
+FOOMATIC-COMPILEDB(8)                       FOOMATIC-COMPILEDB(8)
+
+
+
+NAME
+       foomatic-compiledb - complie the foomatic driver database
+
+SYNOPSIS
+       foomatic-compiledb [-f ] [-j n ] [ driver ...  ]
+
+
+DESCRIPTION
+       foomatic-compiledb   generally  should  not  be  necessary
+       except for people  who  modify  option  and  driver  data.
+       Foomatic-datafile  and  especially foomatic-configure will
+       automagically compute just what they need at runtime,  and
+       cache the results.
+
+
+   Options
+       -f        recompile everything regardless of cache states
+
+
+       -j n      n  =  number  of  work  processes  to run (150MB
+                 each!)
+
+
+       driver ...
+                 only compile the database for these driver(s)
+
+
+
+EXIT STATUS
+       foomatic-compiledb returns 0 unless  something  unexpected
+       happens.
+
+
+AUTHOR
+       Manfred  Wassmann  <manolo@NCC-1701.B.Shuttle.de>  for the
+       foomatic project using output from the associated  binary.
+
+
+BUGS
+       None known.
+
+       Please  send  bug  reports  to  foomatic-devel@linuxprint­
+       ing.org.
+
+
+
+Foomatic Project            2001-05-07      FOOMATIC-COMPILEDB(8)

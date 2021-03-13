@@ -1,0 +1,143 @@
+VACUUMDB(1)       PostgreSQL Client Applications      VACUUMDB(1)
+
+
+
+NAME
+       vacuumdb   -  garbage-collect  and  analyze  a  PostgreSQL
+       database
+
+SYNOPSIS
+       vacuumdb [ connection-options... ] [  [ -d ]  dbname  ]  [
+       --full  |  -f  ]  [  --verbose | -v ] [ --analyze | -z ] [
+       --table 'table [ ( column [,...] ) ]' ]
+
+       vacuumdb [ connection-options... ] [ --all | -a ] [ --full
+       | -f ] [ --verbose | -v ] [ --analyze | -z ]
+
+   INPUTS
+       vacuumdb accepts the following command line arguments:
+
+       -d dbname
+
+       --dbname dbname
+              Specifies the name of the database to be cleaned or
+              analyzed.
+
+       -a
+
+       --all  Vacuum all databases.
+
+       -f
+
+       --full Perform ``full'' vacuuming.
+
+       -v
+
+       --verbose
+              Print detailed information during processing.
+
+       -z
+
+       --analyze
+              Calculate statistics for use by the optimizer.
+
+       -t table [ (column [,...]) ]
+
+       --table table [ (column [,...]) ]
+              Clean or analyze table only.  Column names  may  be
+              specified  only  in  conjunction with the --analyze
+              option.
+
+              Tip: If you specify columns to vacuum, you probably
+              have to escape the parentheses from the shell.
+
+
+
+       vacuumdb also accepts the following command line arguments
+       for connection parameters:
+
+       -h host
+
+       --host host
+              Specifies the host name of the machine on which the
+              server  is running. If host begins with a slash, it
+              is used  as  the  directory  for  the  Unix  domain
+              socket.
+
+       -p port
+
+       --port port
+              Specifies  the  Internet  TCP/IP port or local Unix
+              domain socket file extension on which the server is
+              listening for connections.
+
+       -U username
+
+       --username username
+              User name to connect as
+
+       -W
+
+       --password
+              Force password prompt.
+
+       -e
+
+       --echo Echo the commands that vacuumdb generates and sends
+              to the server.
+
+       -q
+
+       --quiet
+              Do not display a response.
+
+
+   OUTPUTS
+       VACUUM Everything went well.
+
+       vacuumdb: Vacuum failed.
+              Something went wrong. vacuumdb is  only  a  wrapper
+              script.  See  VACUUM  [vacuum(7)] and psql(1) for a
+              detailed discussion of error messages and potential
+              problems.
+
+
+
+DESCRIPTION
+       vacuumdb  is a utility for cleaning a PostgreSQL database.
+       vacuumdb will also generate internal  statistics  used  by
+       the PostgreSQL query optimizer.
+
+       vacuumdb is a shell script wrapper around the backend com­
+       mand VACUUM [vacuum(7)]  via  the  PostgreSQL  interactive
+       terminal psql(1). There is no effective difference between
+       vacuuming databases via this or other methods.  psql  must
+       be  found by the script and a database server must be run­
+       ning at the targeted host. Also, any default settings  and
+       environment  variables  available  to  psql  and the libpq
+       front-end library do apply.
+
+USAGE
+       To clean the database test:
+
+       $ vacuumdb test
+
+
+
+       To clean and analyze for the optimizer  a  database  named
+       bigdb:
+
+       $ vacuumdb --analyze bigdb
+
+
+
+       To clean a single table foo in a database named xyzzy, and
+       analyze a single column bar of the  table  for  the  opti­
+       mizer:
+
+       $ vacuumdb --analyze --verbose --table 'foo(bar)' xyzzy
+
+
+
+
+Application                 2000-11-11                VACUUMDB(1)

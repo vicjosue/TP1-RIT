@@ -1,0 +1,72 @@
+PCDTOPPM(1)              Contributed tool             PCDTOPPM(1)
+
+
+
+NAME
+       pcdtoppm  -  a program converting PhotoCD images to ppm or
+       jpeg
+
+SYNOPSIS
+       pcdtoppm [OPTIONS] <infile> <outfile>
+
+DESCRIPTION
+       This manual page describes pcdtoppm from xpcd-2.04, a tool
+       to  convert  Photo CD Images (*.pcd) into Portable Pixmaps
+       (*.ppm) or JPEG (*.jp[e]g) images.
+
+       Portable Pixmaps is  the  default  format  for  <outfile>.
+       Using '-' as <outfile> writes to stdout.
+
+OPTIONS
+       -h, --help
+              Display a short usage help.
+
+       -v, --verbose
+              Prints a rotor while decoding.
+
+       -1, --gray
+              Produce a grayscaled image.
+
+       -r<n>, --resolution=<n>
+              Set Photo CD resolution to extract to <n>. Possible
+              values for <n> are [1..5], with 1 being the lowest,
+              5  the  highest  possible  resolution of a Photo CD
+              image.  If this option is not given, 3 is  used  as
+              default.
+
+       -o<n>, --orientation=<n>
+              Set orientation to <n>. Possible values for <n> are
+              [0..3].  turned 270, '2' 180  and  '3'  90  degrees
+              clockwise  from normal orientation.  If this option
+              is not given, the default of the Photo CD image  is
+              used.
+
+       -g<WxH+L+T>, --geometry=<WxH+L+T>
+              Crop  out  and  decode a given region of the image.
+              All 4  values  are  mandatory:  W=width,  H=height,
+              L/T=left/top offset
+
+       -j[<quality>], --jpeg[=<quality>]
+              Set  the  format  of  the  output file to JPEG; the
+              optional argument <quality> may be used to set  the
+              JPEG quality.
+
+
+SEE ALSO
+       xpcd(1x), pcdview(1).
+
+
+AUTHOR, COPYRIGHT
+       pcdtoppm  is  part  of  xpcd,  Copyright  (c)  Gerd  Knorr
+       <kraxel@goldbach.in-berlin.de>.
+
+       The xpcd package is licensed under the  GPL  (GNU  General
+       Public License).
+
+       This  manual page was written by Stephan Alexander Suerken
+       <absurd@debian.org>, mainly expanding the --help switch of
+       pcdtoppm.
+
+
+
+3rd party                  1997 Oct 23                PCDTOPPM(1)

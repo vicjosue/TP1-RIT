@@ -1,0 +1,49 @@
+popt/poptconfig.c(3)                         popt/poptconfig.c(3)
+
+
+
+NAME
+       popt/poptconfig.c -
+
+SYNOPSIS
+       #include 'system.h'
+       #include 'poptint.h'
+
+   Functions
+       void configLine (poptContext con, char *line)
+       int poptReadConfigFile (poptContext con, const char *fn)
+       int poptReadDefaultConfig (poptContext con, int useEnv)
+
+DETAILED DESCRIPTION
+       Definition in file poptconfig.c.
+
+FUNCTION DOCUMENTATION
+   void configLine (poptContext con, char * line) [static]
+       Definition at line 13 of file poptconfig.c.
+
+       References alloca, POPT_ARG_STRING, poptAddItem, and
+       poptParseArgvString.
+
+       Referenced by poptReadConfigFile.
+
+   int poptReadConfigFile (poptContext con, const char * fn)
+       Definition at line 85 of file poptconfig.c.
+
+       References alloca, configLine, errno, and SEEK_END.
+
+       Referenced by main, and poptReadDefaultConfig.
+
+   int poptReadDefaultConfig (poptContext con, int useEnv)
+       Definition at line 150 of file poptconfig.c.
+
+       References alloca, getenv, and poptReadConfigFile.
+
+       Referenced by main.
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002       popt/poptconfig.c(3)

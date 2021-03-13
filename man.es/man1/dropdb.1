@@ -1,0 +1,94 @@
+DROPDB(1)         PostgreSQL Client Applications        DROPDB(1)
+
+
+
+NAME
+       dropdb - remove a PostgreSQL database
+
+SYNOPSIS
+       dropdb [ options... ] dbname
+
+   INPUTS
+       -h, --host host
+              Specifies the host name of the machine on which the
+              server is running. If host begins with a slash,  it
+              is  used  as  the  directory  for  the  Unix domain
+              socket.
+
+       -p, --port port
+              Specifies the Internet TCP/IP port  or  local  Unix
+              domain socket file extension on which the server is
+              listening for connections.
+
+       -U, --username username
+              User name to connect as
+
+       -W, --password
+              Force password prompt.
+
+       -e, --echo
+              Echo the queries that dropdb generates and sends to
+              the server.
+
+       -q, --quiet
+              Do not display a response.
+
+       -i, --interactive
+              Issues  a verification prompt before doing anything
+              destructive.
+
+       dbname Specifies the name of the database to  be  removed.
+              The database must be one of the existing PostgreSQL
+              databases in this installation.
+
+       The options -h, -p, -U, -W, and -e are passed on literally
+       to psql(1).
+
+   OUTPUTS
+       DROP DATABASE
+              The database was successfully removed.
+
+       dropdb: Database removal failed.
+              Something didn't work out.
+
+       If  there is an error condition, the backend error message
+       will be displayed.  See DROP  DATABASE  [drop_database(7)]
+       and psql(1) for possibilities.
+
+DESCRIPTION
+       dropdb destroys an existing PostgreSQL database.  The user
+       who executes this command must be a database superuser  or
+       the owner of the database.
+
+       dropdb  is  a  shell script wrapper around the SQL command
+       DROP DATABASE [drop_database(7)] via the PostgreSQL inter­
+       active  terminal  psql(1).  Thus, there is nothing special
+       about dropping databases via this or other  methods.  This
+       means that the psql must be found by the script and that a
+       database server is running at the targeted host. Also, any
+       default  settings  and  environment variables available to
+       psql and the libpq front-end library do apply.
+
+USAGE
+       To destroy the  database  demo  on  the  default  database
+       server:
+
+       $ dropdb demo
+       DROP DATABASE
+
+
+
+       To  destroy  the  database  demo  using the server on host
+       eden, port 5000, with  verification  and  a  peek  at  the
+       underlying query:
+
+       $ dropdb -p 5000 -h eden -i -e demo
+       Database "demo" will be permanently deleted.
+       Are you sure? (y/n) y
+       DROP DATABASE "demo"
+       DROP DATABASE
+
+
+
+
+Application                 2000-11-11                  DROPDB(1)

@@ -1,0 +1,88 @@
+ACCOUNTBATCH(8)                                   ACCOUNTBATCH(8)
+
+
+
+NAME
+       accountbatch - Create and delete many user accounts
+
+SYNOPSIS
+       linuxconf --modulemain accountbatch
+
+DESCRIPTION
+       accountbatch  is  a  Linuxconf module to maintain the user
+       account database from another database.  The  module  will
+       add  missing  accounts  and  delete somes based on config­
+       urable rules.
+
+       The module main menu  entry  can  be  found  in  the  user
+       accounts / policies sub-menu.
+
+       Check out its help screen for a complete description.
+
+
+       The  module  interactive  dialog  may be accessed from the
+       command line
+              linuxconf --modulemain accountbatch
+
+
+The --update command line option
+       The  --update  command  line  option  allows complete, non
+       interactive, operation of the module. It accepts the  fol­
+       lowing extra options:
+
+       --test select the simulation mode. You get a report of the
+       job to perform but no modification to the user database is
+       done.
+
+       --silent  Do  not  print  anything  on standard output. On
+       report errors.
+
+       --file  path  specifies  the  file  used  to  learn  about
+       account.  This  file has the following format. It is a tab
+       delimited test file. Each line describes an account.  Each
+       line has 5 columns.
+
+       account ID
+       primary group
+       The name
+       The shell
+       The password
+
+
+
+       --group groupname specifies the group on which we operate.
+       This option may be specified several time. This option  is
+       mandatory unless option --grouplow has been specified.
+
+       specifies the threshold for the group ID. The module won't
+       touch account with a group ID lower than  the  one  speci­
+       fied.  This  option  is  mandatory unless --group has been
+       specified.
+
+       --add specifies that missing accounts must be added.
+
+       --del specifies that old accounts must be deleted.
+
+       --mod specifies that existing account must be updated. The
+       password  is change using the one supplied in the configu­
+       ration file.
+
+       --archive specifies the way  account  are  deleted.  Their
+       home  directory  and  mail  inbox  are  archived  and then
+       deleted. The default is to keep the home and  mail  folder
+       in place.
+
+       --delfiles  specifies  the  way account are deleted. Their
+       home directory and mail  inbox  folder  are  deleted.  The
+       default is to keep the home and mail folder in place.
+
+
+SEE ALSO
+       linuxconf(8)
+
+
+
+
+
+
+                 User accounts batched management ACCOUNTBATCH(8)

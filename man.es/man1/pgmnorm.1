@@ -1,0 +1,47 @@
+pgmnorm(1)                                             pgmnorm(1)
+
+
+
+NAME
+       pgmnorm - normalize the contrast in a portable graymap
+
+SYNOPSIS
+       pgmnorm  [-bpercent  N | -bvalue N] [-wpercent N | -wvalue
+       N] [pgmfile]
+
+DESCRIPTION
+       Reads a portable graymap as input.   Normalizes  the  con­
+       trast by forcing the lightest pixels to white, the darkest
+       pixels to  black,  and  linearly  rescaling  the  ones  in
+       between; and produces a portable graymap as output.
+
+OPTIONS
+       By default, the darkest 2 percent of all pixels are mapped
+       to black, and the lightest 1 percent are mapped to  white.
+       You  can override these percentages by using the -bpercent
+       and -wpercent flags, or you can specify  the  exact  pixel
+       values  to  be  mapped  by  using  the -bvalue and -wvalue
+       flags.  Appropriate numbers for the flags  can  be  gotten
+       from  the  pgmhist  tool.  If you just want to enhance the
+       contrast, then choose values at elbows in  the  histogram;
+       e.g.  if  value 29 represents 3% of the image but value 30
+       represents 20%, choose 30 for  bvalue.   If  you  want  to
+       lighten  the  image,  then set bvalue to 0 and just fiddle
+       with wvalue; similarly, to darken the image, set wvalue to
+       maxval and play with bvalue.
+
+       All flags can be abbreviated to their shortest unique pre­
+       fix.
+
+SEE ALSO
+       pgmhist(1), ppmnorm(1), pgm(5)
+
+AUTHOR
+       Partially based on the fbnorm filter in Michael  Mauldin's
+       "Fuzzy Pixmap" package.
+
+       Copyright (C) 1989 by Jef Poskanzer.
+
+
+
+                         28 February 1989              pgmnorm(1)

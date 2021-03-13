@@ -1,0 +1,62 @@
+BN_new(3)                    OpenSSL                    BN_new(3)
+
+
+
+NNAAMMEE
+       BN_new, BN_init, BN_clear, BN_free, BN_clear_free -
+       allocate and free BIGNUMs
+
+SSYYNNOOPPSSIISS
+        #include <openssl/bn.h>
+
+        BIGNUM *BN_new(void);
+
+        void BN_init(BIGNUM *);
+
+        void BN_clear(BIGNUM *a);
+
+        void BN_free(BIGNUM *a);
+
+        void BN_clear_free(BIGNUM *a);
+
+
+DDEESSCCRRIIPPTTIIOONN
+       BN_new() allocated and initializes a BBIIGGNNUUMM structure.
+       BN_init() initializes an existing uninitialized BBIIGGNNUUMM.
+
+       BN_clear() is used to destroy sensitive data such as keys
+       when they are no longer needed. It erases the memory used
+       by aa and sets it to the value 0.
+
+       BN_free() frees the components of the BBIIGGNNUUMM, and if it
+       was created by BN_new(), also the structure itself.
+       BN_clear_free() additionally overwrites the data before
+       the memory is returned to the system.
+
+RREETTUURRNN VVAALLUUEESS
+       BN_new() returns a pointer to the BBIIGGNNUUMM. If the
+       allocation fails, it returns NNUULLLL and sets an error code
+       that can be obtained by ERR_get_error(3).
+
+       BN_init(), BN_clear(), BN_free() and BN_clear_free() have
+       no return values.
+
+SSEEEE AALLSSOO
+       bn(3), err(3)
+
+HHIISSTTOORRYY
+       BN_new(), BN_clear(), BN_free() and BN_clear_free() are
+       available in all versions on SSLeay and OpenSSL.
+       BN_init() was added in SSLeay 0.9.1b.
+
+
+
+
+
+
+
+
+
+
+
+26/Jan/2000                   0.9.6c                    BN_new(3)

@@ -1,0 +1,196 @@
+DEPMOD(8)              Linux Module Support             DEPMOD(8)
+
+
+
+NAME
+       depmod  - handle dependency descriptions for loadable ker­
+       nel modules
+
+SYNOPSIS
+       depmod [-aA] [-ehnqrsuvV] [-C configfile]  [-F kernelsyms]
+       [-b basedirectory] [forced_version]
+       depmod  [-enqrsuv] [-F kernelsyms] module1.o module2.o ...
+
+DESCRIPTION
+       The depmod and modprobe utilities are intended to  make  a
+       Linux modular kernel manageable for all users, administra­
+       tors and distribution maintainers.
+
+       Depmod creates a "Makefile"-like dependency file, based on
+       the  symbols  it  finds in the set of modules mentioned on
+       the command line or from the directories specified in  the
+       configuration file.  This dependency file is later used by
+       modprobe to automatically load the correct module or stack
+       of modules.
+
+       The normal use of depmod is to include the line
+
+       /sbin/depmod -a
+
+       somewhere  in  the rc-files in /etc/rc.d, so that the cor­
+       rect module dependencies  will  be  available  immediately
+       after  booting the system.  Note that the option -a is now
+       optional.  For boot-up purposes, the option  -q  might  be
+       more  appropriate  since  that  makes  depmod silent about
+       unresolved symbols.
+
+       It is also possible to create the dependency file  immedi­
+       ately  after  compiling  a  new  kernel.   If you do "dep­
+       mod -a 2.2.99" when you have compiled  kernel  2.2.99  and
+       its  modules  the  first  time,  while  still running e.g.
+       2.2.98, the file will be created in the correct place.  In
+       this case however, the dependencies on the kernel will not
+       be  guaranteed   to   be   correct.    See   the   options
+       -F, -C and -b above for more information on handling this.
+
+       While building the relationship between  modules  and  the
+       symbols  exported  by  other modules, depmod does not con­
+       sider the GPL status of the modules nor  of  the  exported
+       symbols.  That is, depmod will not flag an error if a mod­
+       ule without a GPL compatible license refers to a GPL  only
+       symbol  (EXPORT_SYMBOL_GPL in the kernel).  However insmod
+       will refuse to resolve GPL only symbols for  non-GPL  mod­
+       ules so the actual load will fail.
+
+OPTIONS
+       -a, --all
+              Search  for modules in all directories specified in
+              the   (optional)   configuration   file   /etc/mod­
+              ules.conf.
+
+       -A, --quick
+              Compare file timestamps and, if necessary, act like
+              depmod -a.  This option only updates the dependency
+              file if anything has changed.
+
+       -e, --errsyms
+              Show all the unresolved symbols for each module.
+
+       -h, --help
+              Display  a summary of options and immediately exit.
+
+       -n, --show
+              Write the dependency file on stdout instead  of  in
+              the /lib/modules tree.
+
+       -q, --quiet
+              Tell depmod to keep quiet and not to complain about
+              missing symbols.
+
+       -r, --root
+              Some users compile modules under a non-root  userid
+              then install the modules as root.  This process can
+              leave the modules owned  by  the  non-root  userid,
+              even though the modules directory is owned by root.
+              If the non-root userid is compromised, an  intruder
+              can overwrite existing modules owned by that userid
+              and use this  exposure  to  bootstrap  up  to  root
+              access.
+
+              By  default, modutils will reject attempts to use a
+              module that is not owned by  root.   Specifying  -r
+              will suppress the error and allow root to load mod­
+              ules that are not owned by root.
+
+              Use of -r is a major security exposure and  is  not
+              recommended.
+
+       -s, --syslog
+              Write  all  error  messages  via  the syslog daemon
+              instead of stderr.
+
+       -u, --unresolved-error
+              depmod 2.4 does not set a return  code  when  there
+              are any unresolved symbols.  The next major release
+              of modutils (2.5) will set a return code for  unre­
+              solved symbols.  Some distributions want a non-zero
+              return code in modutils 2.4 but that  change  might
+              cause   problems  for  users  who  expect  the  old
+              behaviour.  If you want a non-zero return  code  in
+              depmod  2.4,  specify -u.  depmod 2.5 will silently
+              ignore the -u flag and will always give a  non-zero
+              return code for unresolved symbols.
+
+       -v, --verbose
+              Show  the  name  of each module as it is being pro­
+              cessed.
+
+       -V, --version
+              Display the version of depmod.
+
+       The following options are useful for people managing  dis­
+       tributions:
+
+       -b basedirectory, --basedir basedirectory
+              If  the  directory tree /lib/modules containing the
+              sub-trees of modules is  moved  somewhere  else  in
+              order  to  handle  modules for a different environ­
+              ment, the -b option tells depmod where to find  the
+              moved  image  of  the  /lib/modules tree.  The file
+              references in the depmod output file that is built,
+              modules.dep,  will  not  contain  the basedirectory
+              path.  This means that when the file tree is  moved
+              back  from basedirectory/lib/modules into /lib/mod­
+              ules in the final distribution, all references will
+              be correct.
+
+       -C configfile, --config configfile
+              Use   the  file  configfile  instead  of  /etc/mod­
+              ules.conf.  The environment variable MODULECONF can
+              also  be  used  to select a different configuration
+              file  from  the   default   /etc/modules.conf   (or
+              /etc/conf.modules (deprecated)).
+
+       -F kernelsyms,--filesyms kernelsyms
+              When building dependency files for a different ker­
+              nel than the currently running kernel, it is impor­
+              tant  that  depmod  uses  the correct set of kernel
+              symbols to resolve the kernel  references  in  each
+              module.  These symbols can either be a copy of Sys­
+              tem.map from the other kernel, or  a  copy  of  the
+              output  from /proc/ksyms.  If your kernel uses ver­
+              sioned symbols, it is best to use  a  copy  of  the
+              /proc/ksyms  output,  since  that file contains the
+              symbol versions of the kernel symbols.  However you
+              can use a System.map even with versioned symbols.
+
+CONFIGURATION
+       The behavior of depmod and modprobe can be adjusted by the
+       (optional) configuration file /etc/modules.conf.
+       See  modprobe(8)  and  modules.conf(5)  for   a   complete
+       description.
+
+
+STRATEGY
+       Each time you compile a new kernel, the command "make mod­
+       ules_install" will  create  a  new  directory,  but  won't
+       change the default.
+
+       When you get a module unrelated to the kernel distribution
+       you should place it  in  one  of  the  version-independent
+       directories under /lib/modules.
+
+       This  is  the default strategy, which can be overridden in
+       /etc/modules.conf.
+
+FILES
+       /etc/modules.conf (alternatively but deprecated /etc/conf.modules)
+       /lib/modules/*/modules.dep,
+       /lib/modules/*
+
+SEE ALSO
+       modules.conf(5),   modprobe(8),   modinfo(8),    lsmod(8),
+       ksyms(8)
+
+BUGS
+       depmod  [  -V  |  --version  ]  should  exit  immediately.
+       Instead, it prints the version information and behaves  as
+       if no options were given.
+
+AUTHORS
+       Jacques Gelinas (jack@solucorp.qc.ca)
+       Bjorn Ekwall (bj0rn@blox.se)
+
+
+
+Linux                    January 26, 2002               DEPMOD(8)

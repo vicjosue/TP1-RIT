@@ -1,0 +1,323 @@
+conjure(1)                                             conjure(1)
+
+
+
+NAME
+       conjure - process a Magick Scripting Language (MSL) script
+
+       WARNING: Conjure and MSL are in very early development and
+       the syntax is subject to change!
+
+
+SYNOPSIS
+       conjure [ options ] script.msl imagefiles
+
+
+DESCRIPTION
+       The Magick scripting language (MSL) will primarily benefit
+       those that want  to  accomplish  custom  image  processing
+       tasks  but  do  not  wish to program, or those that do not
+       have access to a Perl  interpreter  or  a  compiler.   The
+       interpreter  is  called  conjure  and  here  is an example
+       script:
+
+
+           <?xml version="1.0" encoding="UTF-8"?>
+           <image size="400x400" >
+             <read filename="image.gif" />
+             <get width="base-width" height="base-height" />
+             <resize geometry="%[dimensions]" />
+             <get width="width" height="height" />
+             <print output=
+               "Image sized from %[base-width]x%[base-height]
+                to %[width]x%[height].\n" />
+             <write filename="image.png" />
+           </image>
+
+       invoked with
+
+
+           conjure -dimensions 400x400 incantation.msl
+
+       All operations will closely  follow  the  key/value  pairs
+       defined in PerlMagick, unless otherwise noted.
+
+
+       Conjure is in the early stages of development as of Decem­
+       ber 2001.
+
+
+       This early announcement is to allow ImageMagick  users  to
+       contribute  ideas early in the process so when the script­
+       ing language is released it will be useful/stable from the
+       get-go!   If  you want to contribute suggestions about the
+       Magick scripting langauge  (MSL),  post  them  to  magick-
+       developers@imagemagick.org.
+
+
+OPTIONS
+       Options  are  processed  in command line order. Any option
+       you specify on the command line remains in effect until it
+       is  explicitly changed by specifying the option again with
+       a different effect, or if it is changed by a statement  in
+       the scripting language.
+
+
+       You can define your own keyword/value pairs on the command
+       line.  The script can then use this information when  set­
+       ting  values  by  including %[keyword] in the string.  For
+       example, if you included "-dimensions 400x400" on the com­
+       mand  line, as illustrated above, then any string contain­
+       ing "%[dimensions]" would have 400x400 substituted.   This
+       can be either an entire string, such as geometry="%[dimen­
+       sions]" or part of  a  string  such  as  filename="%[base­
+       name].png".
+
+
+       -debug enable debug printout
+
+       -help  print usage instructions
+
+       -verbose
+              print detailed information about the image
+
+              This  information  is  printed: image scene number;
+              image name; image size; the  image  class  (Direct­
+              Class  or  PseudoClass); the total number of unique
+              colors; and the  number  of  seconds  to  read  and
+              transform  the image.  Refer to miff for a descrip­
+              tion of the image class.
+
+
+              If -colors is also specified, the total unique col­
+              ors  in  the image and color reduction error values
+              are printed. Refer to quantize for a description of
+              these values.
+
+
+MAGICK SCRIPTING LANGUAGE
+       The  Magick Scripting Language (MSL) presently defines the
+       following elements and their attributes:
+
+               <image>
+
+                    Define a new image object.  </image> destroys
+                    it. Because of this, if you wish to reference
+                    multiple "subimages" (aka pages  or  layers),
+                    you  can  embed  one  image element inside of
+                    another. For example:
+
+
+
+                        <image>
+                        <read filename="input.png" />
+                        <get   width="base-width"   height="base-
+                    height" />
+                        <image  height="base-height" width="base-
+                    width">
+                        <label>this is a simple label<label/>
+                        <image />
+                        <write filename="output.mng" />
+                        </image>
+
+
+
+                        <image size="400x400" />
+
+               <group>
+                    Define a new  group  of  image  objects.   By
+                    default,  images  are only valid for the life
+                    of their <image>element.
+
+
+
+                        <image>   -- creates the image
+                        .....     -- do stuff with it
+                        </image>  -- dispose of the image
+
+
+                    However, in a group, all images in that group
+                    will stay around for the life of the group:
+
+
+
+                        <group>                                --
+                    start a group
+                            <image>                       -- cre­
+                    ate an image
+                            ....                           --  do
+                    stuff
+                            </image>                      -- NOOP
+                            <image>                       -- cre­
+                    ate another image
+                            ....                           --  do
+                    more stuff
+                            </image>                      -- NOOP
+                            <write  filename="image.mng"  />   --
+                    output
+                        </group>                          -- dis­
+                    pose of both images
+
+               <read>
+                    Read a new image from a disk file.
+
+
+
+                        <read filename="image.gif" />
+
+                    To read two images use
+
+
+
+                        <read filename="image.gif" />
+                        <read filename="image.png />
+
+               <write>
+                    Write the image(s) to disk, either as a  sin­
+                    gle  multiple-image  file or multiple ones if
+                    necessary.
+
+
+
+                         <write filename=image.tiff" />
+               <get>
+                    Get any attribute recognized by  PerlMagick's
+                    GetAttribute()  and  stores  it  as  an image
+                    attribute  for  later  use.  Currently   only
+                    <em>width</em>  and  <em>height</em> are sup­
+                    ported.
+
+
+                        <get   width="base-width"   height="base-
+                    height" />
+                        <print   output="Image  size  is  %[base-
+                    width]x%[base-height].\n" />
+
+               <border>
+
+                        fill, geometry, height, width
+               <blur>
+
+                        radius, sigma
+               <charcoal>
+
+                        radius, sigma
+               <chop>
+
+                        geometry, height, width, x, y
+               <crop>
+
+                        geometry, height, width, x, y
+               <despeckle>
+
+               <emboss>
+
+                        radius, sigma
+               <enhance>
+
+               <equalize>
+
+               <flip>
+
+               <flop>
+
+               <frame>
+
+                        fill,  geometry,  height,  width,  x,  y,
+                    inner, outer
+               <get>
+
+               <image>
+
+               <magnify>
+
+               <minify>
+
+               <normalize>
+
+               <print>
+
+                        output
+               <read>
+
+               <resize>
+
+                        blur, filter, height, width
+               <roll>
+
+                        geometry, x, y
+               <rotate>
+
+                        degrees
+               <sample>
+
+                        geometry, height, width
+               <scale>
+
+                        geometry, height, width
+               <sharpen>
+
+                        radius, sigma
+               <shave>
+
+                        geometry, height, width
+               <shear>
+
+                        x, y
+               <solarize>
+
+                        threshold
+               <spread>
+
+                        radius
+               <swirl>
+
+                        degrees
+               <threshold>
+
+                        threshold
+               <trim>
+
+
+
+COPYRIGHT
+       Copyright  (C) 2002 ImageMagick Studio, a non-profit orga­
+       nization dedicated to making  software  imaging  solutions
+       freely available.
+
+       Permission  is hereby granted, free of charge, to any per­
+       son obtaining a copy of this software and associated docu­
+       mentation  files  ("ImageMagick"),  to deal in ImageMagick
+       without  restriction,  including  without  limitation  the
+       rights  to  use, copy, modify, merge, publish, distribute,
+       sublicense, and/or sell copies of ImageMagick, and to per­
+       mit persons to whom the ImageMagick is furnished to do so,
+       subject to the following conditions:
+
+       The above copyright  notice  and  this  permission  notice
+       shall be included in all copies or substantial portions of
+       ImageMagick.
+
+       The software is provided "as is", without warranty of  any
+       kind, express or implied, including but not limited to the
+       warranties of merchantability, fitness  for  a  particular
+       purpose  and noninfringement.  In no event shall ImageMag­
+       ick Studio be liable for any claim, damages or other  lia­
+       bility,  whether  in an action of contract, tort or other­
+       wise, arising from, out of or in connection with ImageMag­
+       ick or the use or other dealings in ImageMagick.
+
+       Except  as  contained  in  this  notice,  the  name of the
+       ImageMagick Studio shall not be  used  in  advertising  or
+       otherwise  to  promote  the sale, use or other dealings in
+       ImageMagick without prior written authorization  from  the
+       ImageMagick Studio.
+
+
+AUTHORS
+       John Cristy, ImageMagick Studio LLC
+       Leonard Rosenthol, ImageMagick Studio LLC
+
+
+
+ImageMagick        $Date: 2002/01/01 06:46:48 $        conjure(1)

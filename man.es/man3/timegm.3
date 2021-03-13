@@ -1,0 +1,52 @@
+TIMEGM(3)           Linux Programmer's Manual           TIMEGM(3)
+
+
+
+NAME
+       timegm, timelocal - inverses for gmtime and localtime
+
+SYNOPSIS
+       #include <time.h>
+
+       time_t timelocal (struct tm *tm);
+
+       time_t timegm (struct tm *tm);
+
+DESCRIPTION
+       The functions timelocal() and timegm() are the inverses to
+       localtime(3) and gmtime(3).
+
+NOTES
+       These functions are GNU extensions.  The timelocal() func­
+       tion   is   equivalent  to  the  POSIX  standard  function
+       mktime(3).  There is no reason to ever use it.
+
+       For a portable version of timegm(), set the TZ environment
+       variable  to  UTC,  call mktime() and restore the value of
+       TZ.  Something like
+
+              #include <time.h>
+              #include <stdlib.h>
+
+              time_t my_timegm (struct tm *tm) {
+                  time_t ret;
+                  char *tz;
+
+                  tz = getenv("TZ");
+                  setenv("TZ", "", 1);
+                  tzset();
+                  ret = mktime(tm);
+                  if (tz)
+                      setenv("TZ", tz, 1);
+                  else
+                      unsetenv("TZ");
+                  tzset();
+                  return ret;
+              }
+
+SEE ALSO
+       gmtime(3), localtime(3), mktime(3), tzset(3)
+
+
+
+GNU                         2001-12-26                  TIMEGM(3)

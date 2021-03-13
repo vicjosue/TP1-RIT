@@ -1,0 +1,105 @@
+build/buildio.h(3)                             build/buildio.h(3)
+
+
+
+NAME
+       build/buildio.h - Routines to read and write packages.
+
+SYNOPSIS
+       #include 'psm.h'
+
+   Data Structures
+       struct cpioSourceArchive_s
+
+   Typedefs
+       typedef cpioSourceArchive_s * CSA_t
+
+   Functions
+       int readRPM (const char *fileName, Spec *specp, struct
+           rpmlead *lead, Header *sigs, CSA_t csa)
+           Read rpm package components from file.
+       int writeRPM (Header *hdrp, const char *fileName, int
+           type, CSA_t csa, char *passPhrase, const char
+           **cookie)
+           Write rpm package to file.
+
+DETAILED DESCRIPTION
+       Routines to read and write packages.
+
+
+
+       Deprecated:
+           this information will move elsewhere eventually.
+
+       Todo:
+            Eliminate, merge into rpmlib.
+
+
+       Definition in file buildio.h.
+
+TYPEDEF DOCUMENTATION
+   typedef struct cpioSourceArchive_s *  CSA_t
+FUNCTION DOCUMENTATION
+   int readRPM (const char * fileName, Spec * specp, struct
+       rpmlead * lead, Header * sigs, CSA_t csa)
+       Read rpm package components from file.
+
+       Parameters:
+
+       filename
+              file name of package (or NULL to use stdin)
+
+       Return values:
+
+       specp  spec structure to carry package header (or NULL)
+
+       lead   package lead
+
+       sigs   package signature
+
+       Parameters:
+
+       csa    Returns:
+                  0 on success
+
+       Definition at line 264 of file pack.c.
+
+   int writeRPM (Header * hdrp, const char * fileName, int type,
+       CSA_t csa, char * passPhrase, const char ** cookie)
+       Write rpm package to file.
+
+       Warning:
+           The first argument (header) is now passed by reference
+           in order to return a reloaded contiguous header to the
+           caller.
+
+       Return values:
+
+       hdrp   header to write (final header is returned).
+
+       Parameters:
+
+       filename
+              file name of package
+
+       type   RPMLEAD_SOURCE/RPMLEAD_BINARY
+
+       csa
+
+       passPhrase
+              Return values:
+
+       cookie generated cookie (i.e build host/time)
+
+       Returns:
+           0 on success
+
+       Definition at line 364 of file pack.c.
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002         build/buildio.h(3)

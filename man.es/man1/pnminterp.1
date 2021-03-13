@@ -1,0 +1,60 @@
+pnminterp(1)                                         pnminterp(1)
+
+
+
+NAME
+       pnminterp  -  scale  up  portable  anymap by interpolating
+       between pixels.
+
+SYNOPSIS
+       pnminterp [-blackedge] [-dropedge] N [pnmfile]
+
+       You  can  use  the  minimum  unique  abbreviation  of  the
+       options.
+
+
+DESCRIPTION
+       Pnminterp  scales  up  pictures, producing output with one
+       NxN pixel for each pixel  in  the  original  image.  Where
+       pnminterp improves over using pnmscale/pnmenlarge for this
+       is that it interpolates between pixels, producing  better-
+       looking output.
+
+       To  scale  up  to  non-integer  pixel sizes, e.g. 2.5, try
+       pnminterp-gen(1) instead.
+
+
+OPTIONS
+       The options let you select alternative methods of  dealing
+       with  the  right/bottom  edges  of  the picture. Since the
+       interpolation is done between the top-left corners of  the
+       scaled-up  pixels,  it's  not  obvious what to do with the
+       right/bottom edges. The  default  behaviour  is  to  scale
+       those  up without interpolation (more precisely, the right
+       edge is only interpolated vertically, and the bottom  edge
+       is  only  interpolated  horizontally),  but  there are two
+       other possibilities, listed below.
+
+       -blackedge
+              interpolate to black at right/bottom edges.
+       -dropedge
+              drop one (source) pixel at right/bottom edges. This
+              is   arguably   more   logical   than  the  default
+              behaviour, but it means producing output which is a
+              slightly odd size.
+
+BUGS
+       Usually produces fairly ugly output for PBMs. For most PBM
+       input you'll probably want to  reduce  the  `noise'  first
+       using something like pnmnlfilt(1).
+       Always  produces  images  with  a maxval of 255, which may
+       lose sample resolution if the input is (say) a 16-bit PGM.
+SEE ALSO
+       pnmenlarge(1), pnmscale(1), pnmnlfilt(1)
+
+AUTHOR
+       Russell Marks (russell.marks@ntlworld.com).
+
+
+
+                          10 April 2000              pnminterp(1)

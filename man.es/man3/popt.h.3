@@ -1,0 +1,57 @@
+popt/popt.h(3)                                     popt/popt.h(3)
+
+
+
+NAME
+       popt/popt.h -
+
+SYNOPSIS
+       #include <stdio.h>
+
+   Arg type identifiers
+       #define POPT_ARG_NONE   0     /*!< no arg */
+       #define POPT_ARG_STRING   1   /*!< arg will be saved as
+           string */
+       #define POPT_ARG_INT   2 /*!< arg will be converted to int
+           */
+       #define POPT_ARG_LONG   3     /*!< arg will be converted
+           to long */
+       #define POPT_ARG_INCLUDE_TABLE   4 /*!< arg points to
+           table */
+       #define POPT_ARG_CALLBACK   5 /*!< table-wide callback...
+           must be
+       #define POPT_ARG_INTL_DOMAIN   6       /*!< set the
+           translation domain
+       #define POPT_ARG_VAL   7 /*!< arg should take value val */
+       #define POPT_ARG_FLOAT   8    /*!< arg will be converted
+           to float */
+       #define POPT_ARG_DOUBLE   9   /*!< arg will be converted
+           to double */
+       #define POPT_ARG_MASK   0x0000FFFF
+       set first in table
+       arg points to callback
+       for this table and any included tables
+
+   Arg modifiers
+       #define POPT_ARGFLAG_ONEDASH   0x80000000  /*!< allow
+           -longoption */
+
+   Defines
+       #define POPT_OPTION_DEPTH   10
+
+DETAILED DESCRIPTION
+       Definition in file popt.h.
+
+DEFINE DOCUMENTATION
+   #define POPT_OPTION_DEPTH   10
+       Definition at line 18 of file popt.h.
+
+       Referenced by handleAlias, and poptStuffArgs.
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002             popt/popt.h(3)

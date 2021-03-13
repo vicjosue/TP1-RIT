@@ -1,0 +1,97 @@
+tixMeter(n)           Tix Built-In Commands           tixMeter(n)
+
+
+
+_________________________________________________________________
+
+NAME
+       tixMeter - Create and manipulate Tix Meter widgets
+
+SYNOPSIS
+       tixMeter pathName ?options?
+
+SUPER-CLASS
+       None.
+
+STANDARD OPTIONS
+       The  Meter  widget  supports all the standard options of a
+       frame widget.  See the options(n) manual entry for details
+       on the standard options.
+
+WIDGET-SPECIFIC OPTIONS
+       Command-Line Name:-fillcolor
+       Database Name:  fillColor
+       Database Class: FillColor
+
+              The color of the progress bar.
+
+       Command-Line Name:-text
+       Database Name:  text
+       Database Class: Text
+
+              The  text  string to place inside the progress bar.
+              If not specified, then the text string will be  the
+              percentage value specified by the -value option.
+
+       Command-Line Name:-value
+       Database Name:  value
+       Database Class: Value
+
+              A  real  value that specifies the progress. Must be
+              between 0.0 to 1.0.
+
+DESCRIPTION
+       The tixMeter command creates a new window  (given  by  the
+       pathName  argument)  and  makes  it  into  a Meter widget.
+       Additional options, described above, may be  specified  on
+       the  command  line  or in the option database to configure
+       aspects of the Meter widget such as its cursor and relief.
+
+       The  Meter  widget  can  be used to show the pregress of a
+       background job which may take a long time to execute.
+
+WIDGET COMMANDS
+       The tixMeter command creates a new Tcl command whose  name
+       is the same as the path name of the Meter widget's window.
+       This command may be used to invoke various  operations  on
+       the widget. It has the following general form:
+                     pathName option ?arg arg ...?
+       PathName  is the name of the command, which is the same as
+       the Meter widget's path name. Option and the  args  deter­
+       mine the exact behavior of the command. The following com­
+       mands are possible for Meter widgets:
+
+       pathName cget option
+              Returns the  current  value  of  the  configuration
+              option  given by option. Option may have any of the
+              values accepted by the tixMeter command.
+
+       pathName configure ?option? ?value option value ...?
+              Query or modify the configuration  options  of  the
+              widget.   If no option is specified, returns a list
+              describing all of the available options  for  path­
+              Name  (see  Tk_ConfigureInfo for information on the
+              format of this list).  If option is specified  with
+              no  value, then the command returns a list describ­
+              ing the one named option (this list will be identi­
+              cal  to  the  corresponding  sublist  of  the value
+              returned if no option is  specified).   If  one  or
+              more  option-value  pairs  are  specified, then the
+              command modifies the given widget option(s) to have
+              the  given  value(s);  in  this  case  the  command
+              returns an empty string.  Option may  have  any  of
+              the values accepted by the tixMeter command.
+
+BINDINGS
+       There is no bindings for the Meter widget.
+
+KEYWORDS
+       Tix(n), Meter Widget
+
+
+
+
+
+
+
+Tix                            4.0                    tixMeter(n)

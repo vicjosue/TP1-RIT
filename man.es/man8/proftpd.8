@@ -1,0 +1,99 @@
+proftpd(8)                                             proftpd(8)
+
+
+
+NAME
+       proftpd  - Professional configurable, secure file transfer
+       protocol server
+
+SYNOPSIS
+       proftpd [ -hlntv ] [ -d debuglevel ] [ -c config-file ]  [
+       -p 0|1 ]
+
+DESCRIPTION
+       proftpd  is  the Professional File Transfer Protocol (FTP)
+       server daemon.  The server may be invoked by the  Internet
+       "super-server"  inetd(8) each time a connection to the FTP
+       service is made, or alternatively  it  can  be  run  as  a
+       stand-alone daemon.
+
+       When  proftpd  is run in standalone mode and it receives a
+       SIGHUP then it will reread its config file.  When  run  in
+       standalone  mode  without  the -n option, the main proftpd
+       daemon writes its process ID  to  /var/run/proftpd.pid  to
+       make it easy to know which process to SIGHUP.
+
+OPTIONS
+       -h,--help   Display  a  short usage description, including
+                   all available options.
+
+       -n,--nodaemon
+                   Runs the proftpd process  in  standalone  mode
+                   (must  be configured as such in the configura­
+                   tion file), but does not background  the  pro­
+                   cess  or  disassociate it from the controlling
+                   tty.  Additionally, all output (log  or  debug
+                   messages)  are sent to stdout, rather than the
+                   syslog mechanism.  Most often used with the -d
+                   option for debugging.
+
+       -v,--version
+                   Displays the version number of ProFTPD to std­
+                   out.
+
+       -d,--debug debuglevel
+                   Sets proftpd's internal debug level  (normally
+                   0).  The debuglevel should be an integer value
+                   from 0 to 5,  with  higher  numbers  producing
+                   more  debug  output.  Normally, debug messages
+                   are sent to syslog using the  DEBUG  facility,
+                   however  if  the  -n  option is used, all such
+                   output is sent to stdout.
+
+       -c,--config config-file
+                   Specifies  an  alternate  config-file  to   be
+                   parsed  at  startup,  rather  than the default
+                   (typically found in /etc/proftpd.conf).
+
+       -t,--configtest
+                   Read the configuration file, report any syntax
+                   errors, and exit.
+
+       -p,--persistent 0|1
+                   Disables  (0)  or enables (1) the default per­
+                   sistent password support, which is  determined
+                   at  configure  time  for  each platform.  This
+                   option only affects the  default  support,  it
+                   can  still  be overridden at run-time with the
+                   PersistentPasswd directive.
+
+       -l,--list   Lists all modules compiled into proftpd.
+
+FILES
+       /usr/sbin/proftpd
+       /usr/bin/ftpwho
+       /usr/bin/ftpcount
+       /usr/sbin/ftpshut
+       /var/log/xferlog
+       /var/run/proftpd-[pid]
+       /var/run/proftpd.pid
+       /var/run/proftpd-inetd
+
+AUTHORS
+       ProFTPD is written and maintained by a number  of  people,
+       full  credits can be found on http://www.proftpd.org/cred­
+       its.html
+
+SEE ALSO
+       inetd(8),ftp(1),ftpwho(1),ftpcount(1),ftpshut(8)
+
+       Full documentation on ProFTPD, including configuration and
+       FAQs is available at http://www.proftpd.org/
+
+       Report  bugs at http://bugs.proftpd.org/ For help/support,
+       try   the   ProFTPD    mailing    lists,    detailed    on
+       http://www.proftpd.org/lists.html
+
+
+
+                            July 2000                  proftpd(8)

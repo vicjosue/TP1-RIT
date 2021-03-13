@@ -1,0 +1,61 @@
+lftpget(1)                                             lftpget(1)
+
+
+
+NAME
+       lftpget - gets files via FTP using lftp
+
+SYNTAX
+       lftpget [-c] [-d] [-v] URL [URL...]
+
+
+DESCRIPTION
+       lftpget will get a file from a remote host. It will recon­
+       nect if needed until the transfer is done.
+
+       lftpget is just a shell script that calls lftp(1).
+
+
+OPTIONS
+       -c     Continue a previous transfer, reget.
+
+       -d     Debug output.
+
+       -v     Verbose output.
+
+
+FILES
+       /etc/lftp.conf
+              System wide startup file  for  lftp,  affects  this
+              script.
+
+
+       ~/.lftp/rc, ~/.lftprc
+              These  files  are  executed  on  lftp startup after
+              /etc/lftp.conf.
+
+       ~/.lftp/log
+              The file things are logged to when lftp moves  into
+              the background in nohup mode.
+
+       ~/.netrc
+
+              The  file  is consulted to get default login to ftp
+              server. It's documented in the ftp(1) manpage.
+
+
+SEE ALSO
+       ftp(1), lftp(1)
+
+
+AUTHOR
+       Alexander V. Lukyanov <lav@yars.free.net>
+
+
+ACKNOWLEDGMENTS
+       This manual page was originally written by Nicolás  Licht­
+       maier  <nick@debian.org>, for the Debian GNU/Linux system.
+
+
+
+                           11 Sep 1999                 lftpget(1)

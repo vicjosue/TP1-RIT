@@ -1,0 +1,65 @@
+build/parseDescription.c(3)           build/parseDescription.c(3)
+
+
+
+NAME
+       build/parseDescription.c - Parse description section from
+       spec file.
+
+SYNOPSIS
+       #include 'system.h'
+       #include 'rpmbuild.h'
+       #include 'debug.h'
+
+   Functions
+       int parseDescription (Spec spec)
+
+   Variables
+       int noLang
+       const char * name = NULL
+       const char * lang = NULL
+       poptOption optionsTable []
+
+DETAILED DESCRIPTION
+       Parse description section from spec file.
+
+
+
+       Definition in file parseDescription.c.
+
+VARIABLE DOCUMENTATION
+   const char* lang = NULL [static]
+       Definition at line 17 of file parseDescription.c.
+
+       Referenced by parseDescription.
+
+   const char* name = NULL [static]
+       Definition at line 16 of file parseDescription.c.
+
+       Referenced by parseDescription.
+
+   int noLang
+       Definition at line 12 of file parseDescription.c.
+
+       Referenced by parseDescription.
+
+   struct poptOption optionsTable[] [static]
+       Initial value:
+
+        {
+               { NULL, 'n', POPT_ARG_STRING, &name, 'n',       NULL, NULL},
+               { NULL, 'l', POPT_ARG_STRING, &lang, 'l',       NULL, NULL},
+               { 0, 0, 0, 0, 0,        NULL, NULL}
+           }
+
+       Definition at line 19 of file parseDescription.c.
+
+       Referenced by parseDescription.
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002build/parseDescription.c(3)

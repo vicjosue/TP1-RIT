@@ -1,0 +1,80 @@
+availableIndexEntry(3)                     availableIndexEntry(3)
+
+
+
+NAME
+       availableIndexEntry -
+
+SYNOPSIS
+       #include <depends.h>
+
+
+   Public Types
+       enum indexEntryType { IET_PROVIDES = 1 }
+
+   Data Fields
+       availablePackage * package
+       const char * entry
+       int entryLen
+       int entryIx
+       enum availableIndexEntry::indexEntryType type
+
+DETAILED DESCRIPTION
+       A single available item (e.g. a Provides: dependency).
+
+       Definition at line 58 of file depends.h.
+
+MEMBER ENUMERATION DOCUMENTATION
+   enum availableIndexEntry::indexEntryType
+       Enumeration values:
+
+       IET_PROVIDES
+              A Provides: dependency.
+
+       Definition at line 63 of file depends.h.
+
+FIELD DOCUMENTATION
+   const char* availableIndexEntry::entry
+       Available item name.
+
+       Definition at line 60 of file depends.h.
+
+       Referenced by alAllSatisfiesDepend, alMakeIndex, and
+       indexcmp.
+
+   int availableIndexEntry::entryIx
+       Item index.
+
+       Definition at line 62 of file depends.h.
+
+       Referenced by alAllSatisfiesDepend, and alMakeIndex.
+
+   int availableIndexEntry::entryLen
+       No. of bytes in name.
+
+       Definition at line 61 of file depends.h.
+
+       Referenced by alAllSatisfiesDepend, alMakeIndex, and
+       indexcmp.
+
+   struct availablePackage* availableIndexEntry::package
+       Containing package.
+
+       Definition at line 59 of file depends.h.
+
+       Referenced by alAllSatisfiesDepend, and alMakeIndex.
+
+   enum availableIndexEntry::indexEntryType
+       availableIndexEntry::type
+       Type of available item.
+
+       Referenced by alAllSatisfiesDepend, and alMakeIndex.
+
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002     availableIndexEntry(3)

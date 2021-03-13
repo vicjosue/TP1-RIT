@@ -1,0 +1,74 @@
+SSL_SESSION_get_time(3)      OpenSSL      SSL_SESSION_get_time(3)
+
+
+
+NNAAMMEE
+       SSL_SESSION_get_time, SSL_SESSION_set_time,
+       SSL_SESSION_get_timeout, SSL_SESSION_get_timeout -
+       retrieve and manipulate session time and timeout settings
+
+SSYYNNOOPPSSIISS
+        #include <openssl/ssl.h>
+
+        long SSL_SESSION_get_time(SSL_SESSION *s);
+        long SSL_SESSION_set_time(SSL_SESSION *s, long tm);
+        long SSL_SESSION_get_timeout(SSL_SESSION *s);
+        long SSL_SESSION_set_timeout(SSL_SESSION *s, long tm);
+
+        long SSL_get_time(SSL_SESSION *s);
+        long SSL_set_time(SSL_SESSION *s, long tm);
+        long SSL_get_timeout(SSL_SESSION *s);
+        long SSL_set_timeout(SSL_SESSION *s, long tm);
+
+
+DDEESSCCRRIIPPTTIIOONN
+       SSL_SESSION_get_time() returns the time at which the
+       session ss was established. The time is given in seconds
+       since the Epoch and therefore compatible to the time
+       delivered by the time() call.
+
+       SSL_SESSION_set_time() replaces the creation time of the
+       session ss with the chosen value ttmm.
+
+       SSL_SESSION_get_timeout() returns the timeout value set
+       for session ss in seconds.
+
+       SSL_SESSION_set_timeout() sets the timeout value for
+       session ss in seconds to ttmm.
+
+       The SSL_get_time(), SSL_set_time(), SSL_get_timeout(), and
+       SSL_set_timeout() functions are synonyms for the
+       SSL_SESSION_*() counterparts.
+
+NNOOTTEESS
+       Sessions are expired by examining the creation time and
+       the timeout value.  Both are set at creation time of the
+       session to the actual time and the default timeout value
+       at creation, respectively, as set by
+       SSL_CTX_set_timeout(3).  Using these functions it is
+       possible to extend or shorten the lifetime of the session.
+
+RREETTUURRNN VVAALLUUEESS
+       SSL_SESSION_get_time() and SSL_SESSION_get_timeout()
+       return the currently valid values.
+
+       SSL_SESSION_set_time() and SSL_SESSION_set_timeout()
+       return 1 on success.
+
+       If any of the function is passed the NULL pointer for the
+       session ss, 0 is returned.
+
+SSEEEE AALLSSOO
+       ssl(3), SSL_CTX_set_timeout(3), SSL_get_default_timeout(3)
+
+
+
+
+
+
+
+
+
+
+
+17/Aug/2001                   0.9.6c      SSL_SESSION_get_time(3)

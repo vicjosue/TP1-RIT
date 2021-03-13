@@ -1,0 +1,84 @@
+initlog(8)                                             initlog(8)
+
+
+
+NAME
+       initlog - log messages and events to the system logger
+
+SYNOPSIS
+       initlog  [-cefnpqrs]  [--cmd=ARG]  [--event=ARG] [--facil­
+       ity=ARG]   [--name=ARG]    [--priority=ARG]    [--run=ARG]
+       [--string=ARG]
+
+DESCRIPTION
+       initlog logs messages and events to the system logger.  It
+       is mainly designed for use in init scripts. initlog  reads
+       a  configuration  file  /etc/initlog.conf  by  default, to
+       determine its settings. Any line preceded with a  #  is  a
+       comment,  and  the  following configuration directives are
+       recognized:
+
+       facility <logging facility>
+              Sets the default logging facility
+
+       priority <logging priority>
+              Sets the default logging priority
+
+       ignore <regexp>
+              Messages that match the regular expression will not
+              be logged.
+
+       initlog  behavior  can  also be configured by command-line
+       options.
+
+
+   OPTIONS
+       -c, --cmd=[program]
+              Execute  the  specified  program,  logging anything
+              output to stdout or stderr.
+
+       -e, --event=[number]
+              Logs that the specified  event  happened.  Used  in
+              conjuction  with --name. Currently specified events
+              are:
+               1  the action completed successfully
+               2  the action failed
+               3  the action was cancelled at user request
+               4  the action failed due to the failure of a dependent action
+
+       -f, --facility=[facility]
+
+              Log at the specified syslog facility. The default
+              is daemon (see syslog(3)).
+
+       -n, --name=[string]
+              Log the event under the specified string, such as
+              "inetd".
+
+       -p, --priority=[priority]
+              Log at the specified syslog priority. The default
+              is notice (see syslog(3)).
+
+       -q     Do not print the program's output, unless it exits
+              with a non-zero exit code.
+
+       -r, --run=[program]
+              Execute the specified program, with an open file
+              descriptor so that the program can pass back
+              commands to initlog.
+
+       -s, --string=[string]
+              Log the specified string to the logger.
+
+       --conf=[file]
+              Specifies an alternate configuration file.
+
+FILES
+       /etc/initlog.conf
+
+SEE ALSO
+       syslog(3), logger(1)
+
+
+
+                         Sun Jan 24 1999               initlog(8)

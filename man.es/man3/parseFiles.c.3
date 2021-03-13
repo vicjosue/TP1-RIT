@@ -1,0 +1,58 @@
+build/parseFiles.c(3)                       build/parseFiles.c(3)
+
+
+
+NAME
+       build/parseFiles.c - Parse files section from spec file.
+
+SYNOPSIS
+       #include 'system.h'
+       #include 'rpmbuild.h'
+       #include 'debug.h'
+
+   Functions
+       int parseFiles (Spec spec)
+
+   Variables
+       const char * name = NULL
+       const char * file = NULL
+       poptOption optionsTable []
+
+DETAILED DESCRIPTION
+       Parse files section from spec file.
+
+
+
+       Definition in file parseFiles.c.
+
+VARIABLE DOCUMENTATION
+   const char* file = NULL [static]
+       Definition at line 16 of file parseFiles.c.
+
+       Referenced by parseFiles.
+
+   const char* name = NULL [static]
+       Definition at line 15 of file parseFiles.c.
+
+       Referenced by parseFiles.
+
+   struct poptOption optionsTable[] [static]
+       Initial value:
+
+        {
+               { NULL, 'n', POPT_ARG_STRING, &name, 'n',       NULL, NULL},
+               { NULL, 'f', POPT_ARG_STRING, &file, 'f',       NULL, NULL},
+               { 0, 0, 0, 0, 0,        NULL, NULL}
+           }
+
+       Definition at line 17 of file parseFiles.c.
+
+       Referenced by parseFiles.
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002      build/parseFiles.c(3)

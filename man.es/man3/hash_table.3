@@ -1,0 +1,48 @@
+hash_table(3)                                       hash_table(3)
+
+
+
+NAME
+       hash_table -
+
+SYNOPSIS
+   Data Fields
+       int size
+       int entries
+       int overHead
+       bucket * bucket
+
+FIELD DOCUMENTATION
+   struct bucket* hash_table::bucket
+       Definition at line 29 of file hash.c.
+
+       Referenced by htAddToTable, htFreeHashTable, htHashStats,
+       htIterGetNext, htNewTable, htRemoveFromTable, and
+       in_table_aux.
+
+   int hash_table::entries
+       Definition at line 27 of file hash.c.
+
+       Referenced by htAddToTable, htHashStats, htNewTable, and
+       htNumEntries.
+
+   int hash_table::overHead
+       Definition at line 28 of file hash.c.
+
+       Referenced by htAddToTable, htHashStats, and htNewTable.
+
+   int hash_table::size
+       Definition at line 26 of file hash.c.
+
+       Referenced by htAddToTable, htFreeHashTable, htHashStats,
+       htInTable, htIterGetNext, htNewTable, and
+       htRemoveFromTable.
+
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002              hash_table(3)

@@ -1,0 +1,45 @@
+BN_mod_inverse(3)            OpenSSL            BN_mod_inverse(3)
+
+
+
+NNAAMMEE
+       BN_mod_inverse - compute inverse modulo n
+
+SSYYNNOOPPSSIISS
+        #include <openssl/bn.h>
+
+        BIGNUM *BN_mod_inverse(BIGNUM *r, BIGNUM *a, const BIGNUM *n,
+                  BN_CTX *ctx);
+
+
+DDEESSCCRRIIPPTTIIOONN
+       BN_mod_inverse() computes the inverse of aa modulo nn places
+       the result in rr ((a*r)%n==1). If rr is NULL, a new BBIIGGNNUUMM
+       is created.
+
+       ccttxx is a previously allocated BBNN_CCTTXX used for temporary
+       variables. rr may be the same BBIIGGNNUUMM as aa or nn.
+
+RREETTUURRNN VVAALLUUEESS
+       BN_mod_inverse() returns the BBIIGGNNUUMM containing the
+       inverse, and NULL on error. The error codes can be
+       obtained by ERR_get_error(3).
+
+SSEEEE AALLSSOO
+       bn(3), err(3), BN_add(3)
+
+HHIISSTTOORRYY
+       BN_mod_inverse() is available in all versions of SSLeay
+       and OpenSSL.
+
+
+
+
+
+
+
+
+
+
+
+24/Feb/2000                   0.9.6c            BN_mod_inverse(3)

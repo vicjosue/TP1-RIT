@@ -1,0 +1,115 @@
+USERMOD(8)                                             USERMOD(8)
+
+
+
+NAME
+       usermod - Modify a user account
+
+SYNOPSIS
+       usermod [-c comment] [-d home_dir [ -m]]
+               [-e expire_date] [-f inactive_time]
+               [-g initial_group] [-G group[,...]]
+               [-l login_name] [-p passwd]
+               [-s shell] [-u uid [ -o]] [-L|-U] login
+
+DESCRIPTION
+       The  usermod  command modifies the system account files to
+       reflect the changes that  are  specified  on  the  command
+       line.  The options which apply to the usermod command are
+
+       -c comment
+              The  new  value of the user's password file comment
+              field.  It is normally modified using  the  chfn(1)
+              utility.
+
+       -d home_dir
+              The  user's  new login directory.  If the -m option
+              is given the contents of the current home directory
+              will  be  moved to the new home directory, which is
+              created if it does not already exist.
+
+       -e expire_date
+              The date on which the user  account  will  be  dis­
+              abled.   The  date is specified in the format YYYY-
+              MM-DD.
+
+       -f inactive_days
+              The number of days after a password  expires  until
+              the  account is permanently disabled.  A value of 0
+              disables the account as soon as  the  password  has
+              expired,  and  a  value of -1 disables the feature.
+              The default value is -1.
+
+       -g initial_group
+              The group name or number of the user's new  initial
+              login  group.   The group name must exist.  A group
+              number must refer to  an  already  existing  group.
+              The default group number is 1.
+
+       -G group,[...]
+              A  list  of  supplementary groups which the user is
+              also a member of.  Each group is separated from the
+              next  by  a  comma, with no intervening whitespace.
+              The groups are subject to the same restrictions  as
+              the group given with the -g option.  If the user is
+              currently a member of a group which is not  listed,
+              the user will be removed from the group
+
+       -l login_name
+              The  name of the user will be changed from login to
+              login_name.  Nothing else is changed.  In  particu­
+              lar, the user's home directory name should probably
+              be changed to reflect the new login name.
+
+       -p passwd
+              The encrypted password, as returned by crypt(3).
+
+       -s shell
+              The name of the user's new  login  shell.   Setting
+              this field to blank causes the system to select the
+              default login shell.
+
+       -u uid The numerical value of the user's ID.   This  value
+              must  be unique, unless the -o option is used.  The
+              value must be non-negative.  Values between  0  and
+              99 are typically reserved for system accounts.  Any
+              files which the user owns and which are located  in
+              the directory tree rooted at the user's home direc­
+              tory will have the file user ID  changed  automati­
+              cally.   Files outside of the user's home directory
+              must be altered manually.
+
+       -L     Lock a user's password.  This puts a '!'  in  front
+              of  the  encrypted  password, effectively disabling
+              the password.  You can't use this option with -p or
+              -U.
+
+       -U     Unlock  a user's password.  This removes the '!' in
+              front of the encrypted  password.   You  can't  use
+              this option with -p or -L.
+
+CAVEATS
+       usermod  will  not  allow you to change the name of a user
+       who is logged in.  You must make certain  that  the  named
+       user  is  not executing any processes when this command is
+       being executed if the user's numerical user  ID  is  being
+       changed.   You  must change the owner of any crontab files
+       manually.  You must change the owner of any at jobs  manu­
+       ally.   You must make any changes involving NIS on the NIS
+       server.
+
+FILES
+       /etc/passwd - user account information
+       /etc/shadow - secure user account information
+       /etc/group - group information
+
+SEE ALSO
+       chfn(1),  chsh(1),  crypt(3),  groupadd(8),   groupdel(8),
+       groupmod(8), passwd(1), useradd(8), userdel(8)
+
+AUTHOR
+       Julianne Frances Haugh (jfh@austin.ibm.com)
+
+
+
+                                                       USERMOD(8)

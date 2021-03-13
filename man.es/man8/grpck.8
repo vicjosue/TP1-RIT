@@ -1,0 +1,78 @@
+GRPCK(1)                                                 GRPCK(1)
+
+
+
+NAME
+       grpck - verify integrity of group files
+
+SYNOPSIS
+       grpck [-r] [group shadow]
+
+DESCRIPTION
+       grpck  verifies the integrity of the system authentication
+       information.   All   entries   in   the   /etc/group   and
+       /etc/gshadow  are  checked  to  see that the entry has the
+       proper format and valid data in each field.  The  user  is
+       prompted  to  delete entries that are improperly formatted
+       or which have other incorrectable errors.
+
+       Checks are made to verify that each entry has
+
+            - the correct number of fields
+            - a unique group name
+            - a valid list of members and administrators
+
+
+       The checks for correct number of fields and  unique  group
+       name  are  fatal.   If  the  entry has the wrong number of
+       fields, the user will be prompted  to  delete  the  entire
+       line.  If the user does not answer affirmatively, all fur­
+       ther checks are bypassed.   An  entry  with  a  duplicated
+       group  name  is  prompted  for deletion, but the remaining
+       checks will still be made.  All other errors are  warnings
+       and  the user is encouraged to run the groupmod command to
+       correct the error.
+
+       The commands which operate on the /etc/group file are  not
+       able  to  alter  corrupted  or  duplicated entries.  grpck
+       should be  used  in  those  circumstances  to  remove  the
+       offending entry.
+
+OPTIONS
+       By  default,  grpck  operates  on the files /etc/group and
+       /etc/gshadow.  The user may select  alternate  files  with
+       the  group  and shadow parameters.  Additionally, the user
+       may execute the command in read-only  mode  by  specifying
+       the  -r flag.  This causes all questions regarding changes
+       to be answered no without user intervention.
+
+FILES
+       /etc/group - group account information
+       /etc/gshadow - encrypted passwords and group administrator
+       information
+       /etc/passwd - user information
+
+SEE ALSO
+       groupmod(8), group(5), passwd(5), shadow(5)
+
+DIAGNOSTICS
+       The grpck command exits with the following values:
+
+       0    Success
+
+       1    Syntax Error
+
+       2    One or more bad group entries
+
+       3    Cannot open group files
+
+       4    Cannot lock group files
+
+       5    Cannot update group files
+
+AUTHOR
+       Julianne Frances Haugh (jfh@austin.ibm.com)
+
+
+
+                                                         GRPCK(1)

@@ -1,0 +1,39 @@
+LWRES_INETNTOP(3)                               LWRES_INETNTOP(3)
+
+
+
+NAME
+       lwres_net_ntop - lightweight resolver IP address presenta­
+       tion
+
+SYNOPSIS
+       #include <lwres/net.h>
+
+       const char * lwres_net_ntop(int af, const void *src, char
+       *dst, size_t size);
+
+DESCRIPTION
+       lwres_net_ntop() converts an IP address of protocol family
+       af -- IPv4 or IPv6 -- at location src from network  format
+       to  its  conventional representation as a string. For IPv4
+       addresses, that string would be a dotted-decimal. An  IPv6
+       address   would   be  represented  in  colon  notation  as
+       described in RFC1884.
+
+       The generated string is copied to dst provided size  indi­
+       cates  it is long enough to store the ASCII representation
+       of the address.
+
+RETURN VALUES
+       If successful, the function returns dst: a  pointer  to  a
+       string  containing the presentation format of the address.
+       lwres_net_ntop() returns NULL and sets the global variable
+       errno  to  EAFNOSUPPORT if the protocol family given in af
+       is not supported.
+
+SEE ALSO
+       RFC1884, inet_ntop(3), errno(3).
+
+
+
+BIND9                      Jun 30, 2000         LWRES_INETNTOP(3)

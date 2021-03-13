@@ -1,0 +1,79 @@
+STRTOL(3)           Linux Programmer's Manual           STRTOL(3)
+
+
+
+NAME
+       strtol, strtoll - convert a string to a long integer.
+
+SYNOPSIS
+       #include <stdlib.h>
+
+       long int
+       strtol(const char *nptr, char **endptr, int base);
+
+       long long int
+       strtoll(const char *nptr, char **endptr, int base);
+
+DESCRIPTION
+       The  strtol()  function  converts  the initial part of the
+       string in nptr to a long integer value  according  to  the
+       given  base,  which must be between 2 and 36 inclusive, or
+       be the special value 0.
+
+       The string must begin with an arbitrary  amount  of  white
+       space  (as  determined by isspace(3)) followed by a single
+       optional `+' or `-' sign.  If base  is  zero  or  16,  the
+       string may then include a `0x' prefix, and the number will
+       be read in base 16; otherwise, a zero base is taken as  10
+       (decimal)  unless the next character is `0', in which case
+       it is taken as 8 (octal).
+
+       The remainder of the string is converted  to  a  long  int
+       value in the obvious manner, stopping at the first charac­
+       ter which is not a valid digit in  the  given  base.   (In
+       bases  above  10,  the letter `A' in either upper or lower
+       case represents 10, `B' represents 11, and so forth,  with
+       `Z' representing 35.)
+
+       If  endptr is not NULL, strtol() stores the address of the
+       first invalid character in *endptr.  If there were no dig­
+       its  at all, strtol() stores the original value of nptr in
+       *endptr (and returns 0).  In particular, if *nptr  is  not
+       `\0'  but **endptr is `\0' on return, the entire string is
+       valid.
+
+       The strtoll() function works just like the strtol()  func­
+       tion but returns a long long integer value.
+
+RETURN VALUE
+       The  strtol()  function  returns the result of the conver­
+       sion, unless the value would underflow or overflow.  If an
+       underflow  occurs, strtol() returns LONG_MIN.  If an over­
+       flow occurs, strtol() returns LONG_MAX.   In  both  cases,
+       errno is set to ERANGE.  Precisely the same holds for str­
+       toll() (with LLONG_MIN and LLONG_MAX instead  of  LONG_MIN
+       and LONG_MAX).
+
+ERRORS
+       ERANGE The resulting value was out of range.
+
+       EINVAL (not in C99) The given base contains an unsupported
+              value.
+
+       The implementation may also set errno to EINVAL in case no
+       conversion was performed (no digits seen, and 0 returned).
+
+NOTE
+       In locales other than the "C" locale, also  other  strings
+       may be accepted.
+
+CONFORMING TO
+       strtol()  conforms  to SVID 3, BSD 4.3, ISO 9899 (C99) and
+       POSIX, and strtoll() to ISO 9899 (C99) and POSIX-2001.
+
+SEE ALSO
+       atof(3), atoi(3), atol(3), strtod(3), strtoul(3)
+
+
+
+GNU                         2002-02-22                  STRTOL(3)

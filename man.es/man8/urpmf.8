@@ -1,0 +1,119 @@
+urpmf(8)                  Mandrake Linux                 urpmf(8)
+
+
+
+NAME
+       urpmf  -  RPMFind  -  Finds  the RPM package providing the
+       specified file
+
+SYNOPSIS
+       urpmf [options] <file>
+
+DESCRIPTION
+       urpmf outputs a list of packages providing the file speci­
+       fied as an argument.
+
+       <file>  is the name of the file you wish to know the pack­
+       age providing it. Note that you may type just a  substring
+       of  the  file you are looking for, urpmf will then print a
+       list of matching files with their corresponding  packages.
+
+       urpmf searches through installed and uninstalled packages.
+
+OPTIONS
+       --help print an help message and exit.
+
+       --quiet
+              do not print tag name (default if no tag  given  on
+              command  line, incompatible with interactive mode).
+
+       --all  print all tags.
+
+       --name print tag name: rpm filename  (assumed  if  no  tag
+              given on command line but without package name).
+
+       --group
+              print tag group: group.
+
+       --size print tag size: size.
+
+       --serial
+              print tag serial: serial.
+
+       --summary
+              print tag summary: summary.
+
+       --description
+              print tag description: description.
+
+       --provides
+              print  tag provides: all provides (mutliple lines).
+
+       --requires
+              print tag requires: all requires (multiple  lines).
+
+       --files
+              print tag files: all files (multiple lines).
+
+       --conflicts
+              print   tag   conflicts:  all  conflicts  (multiple
+              lines).
+
+       --obsoletes
+              print  tag  obsoletes:  all   obsoletes   (multiple
+              lines).
+
+       --prereqs
+              print tag prereqs: all prereqs (multiple lines).
+
+FILES
+       /usr/bin/urpmf
+       The urpmf executable (perl script)
+
+       /var/lib/urpmi/list.*
+       Contains the list of all packages known by urpmi and their
+       location.  There is one filelist per media(*).
+
+       /var/lib/urpmi/hdlist.*
+       Contain information about all known packages, it's a  sum­
+       mary  of rpm headers.  There is one filelist per media(*).
+
+       /var/lib/urpmi/synthesis.hdlist.*
+       Contain synthesis information  about  all  known  packages
+       built  from  hdlist files that can be used by minimal clo­
+       sure  algorithm.  If  these  files  are  not  present  use
+       urpmi.update  -a  to  generate  them.  These files are not
+       mandatory.
+
+       /etc/urpmi/urpmi.cfg
+       Contains media description,  previous  format  from  older
+       urpmi is accepted.
+
+       /etc/urpmi/skip.list
+       Contains  package  names  that should be not automatically
+       updated.
+
+       /var/lib/urpmi/depslist.ordered
+       A simple text file  containing  all  dependencies  of  all
+       known packages.
+
+       /var/lib/urpmi/provides
+       A  simple  text file containning all provides and the list
+       of associated packages that contains them.
+
+       /var/lib/urpmi/compss
+       A simple text file containning for  each  Group  used  the
+       list of package in this group.
+
+SEE ALSO
+       urpmi(8),  urpmq(8),  urpmi.addmedia(8),  urpmi.update(8),
+       urpmi.removemedia(8),   autoirpm(8),    autoirpm-icons(8),
+       gurpmi(8), rpmdrake(8)
+
+AUTHOR
+       Pascal Rigaux, Mandrakesoft <pixel@mandrakesoft.com>
+       Francois Pons, Mandrakesoft <fpons@mandrakesoft.com>
+
+
+
+MandrakeSoft               05 Jul 2001                   urpmf(8)

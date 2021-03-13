@@ -1,0 +1,77 @@
+DIALOUT(8)                                             DIALOUT(8)
+
+
+
+NAME
+       dialout - Configure and control PPP links
+
+SYNOPSIS
+       linuxconf --modulemain dialout [ options ]
+
+DESCRIPTION
+       The  dialout  module  is a configurator for PPP links over
+       modem and other facilities.  It  also  offers  interactive
+       and command line solution to control the link.
+
+
+OPTIONS
+       Without  options,  the  configuration mode is started. You
+       are presented with the list of PPP configurations. You can
+       add  new ones and edit existing one. This dialog is avail­
+       able from the linuxconf / networking / client tasks  menu.
+
+
+
+       --connect config [ --fore ]
+              triggers  a  link.  If  the  link is already up, do
+              nothing. The command returns only when  either  the
+              link  is  up  or  the  connection  has failed. This
+              offers a nice way to do scripting. One can do:
+
+              if linuxconf --modulemain dialout --connect config
+              then
+                   The link is up, do something
+              else
+                   The connection failed, do something else
+              fi
+
+              The --fore  parameter  controls  if  the  ppp  link
+              should  stay  in foreground. This means the command
+              returns only if the connection failed or  the  link
+              ends.   This is useful to control a link from init­
+              tab (5). One can use the following script to  reli­
+              ably re-connect if the link ends.
+
+              while true
+              do
+                   linuxconf --modulemain dialout config --fore
+              done
+
+
+       --dialctl
+              triggers  the control panel for PPP configurations.
+              From this screen you can turn on and off  PPP  con­
+              nections.  You  also see which one is active.  This
+              control panel is also available from the  linuxconf
+              / control / control panel menu.
+
+
+       --disconnect config
+              terminate a PPP connection.
+
+
+netconf
+       The  dialout  module used to be part of Linuxconf core and
+       the various command line options were available  from  the
+       netconf  command.   netconf --connect config is equivalent
+       to linuxconf --modulemain dialout config here.
+
+
+SEE ALSO
+       linuxconf(8)
+
+
+
+
+
+                   Linuxconf PPP dialout module        DIALOUT(8)

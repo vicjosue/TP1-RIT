@@ -1,0 +1,445 @@
+LINKS(1)                                                 LINKS(1)
+
+
+
+NAME
+       links - lynx-like alternative character mode WWW browser
+
+
+
+SYNOPSIS
+       links [options] URL
+
+
+
+DESCRIPTION
+       links  is a text mode WWW browser, supporting colors, cor­
+       rect table rendering, background downloading, menu  driven
+       configuration interface and slim code.
+
+       Frames  are supported. You can have different file formats
+       associated with external viewers. mailto: and telnet:  are
+       supported via external clients.
+
+       links  can  handle  local  (file://)  or  remote (http://,
+       ftp:// or https:// if  there's  compiled-in  SSL  support)
+       URLs.
+
+
+
+
+OPTIONS
+       Most  options  can  be set in the user interface or config
+       file, so usually you do not need to care about them.
+
+
+       -anonymous
+              Restrict links so that it can run on  an  anonymous
+              account.   No  local  file  browsing. No downloads.
+              Executing of viewers is allowed, but user can't add
+              or modify entries in association table.
+
+
+       -assume-codepage <codepage>
+              Use  the  given  codepage  when the webpage did not
+              specify its codepage. (default: ISO 8859-1)
+
+
+       -async-dns <0>/<1>
+              Asynchronous DNS resolver on(1)/off(0). Default  is
+              on.
+
+
+       -base-session <number>
+              Linkses  are  connecting together, forming sessions
+              by default. Normally, there's only one session with
+              number  0.  In  this  way, you can make him to form
+              more sessions at once. See also -no-connect option.
+
+
+       -download-dir <path>
+              Default download directory.  (default: actual dir)
+
+
+       -download-utime <0>/<1>
+              Set time of download files on(1)/off(0). Default is
+              off.
+
+
+       -dump  Write a plain-text version of the given HTML  docu­
+              ment to stdout.
+
+
+       -format-cache-size <num>
+              Number   of   formatted   document   pages  cached.
+              (default: 5)
+
+
+       -ftp.anonymous-password <password>
+              Use this as the password for anonymous ftp sites.
+
+
+       -ftp-proxy <host:port>
+              Host and port number of the FTP  proxy,  or  blank.
+              (default: blank)
+
+
+       -help  Print a help screen.
+
+
+       -http-bugs.http10 <0>/<1>
+              Turn  use of HTTP/1.0 on(1)/off(0). Default is off.
+
+
+       -http-bugs.allow-blacklist <0>/<1>
+              Turn  blacklist  of  buggy  servers   on(1)/off(0).
+              Default is on.
+
+
+       -http-bugs.bug-302-redirect <0>/<1>
+              Turn broken redirect 302 (violates RFC, but compat­
+              ible with Netscape) on(1)/off(0). Default is off.
+
+
+       -http-bugs.bug_post-no-keepalive <0>/<1>
+              Turn no keepalive  connection  after  POST  request
+              (for   some   buggy  PHP  databases)  on(1)/off(0).
+              Default is off.
+
+
+       -http-proxy <host:port>
+              Host and port number of the HTTP proxy,  or  blank.
+              (default: blank)
+
+
+       -language <langname>
+              Language to use in user interface.
+
+
+       -max-connections <max>
+              Maximum    number    of   concurrent   connections.
+              (default: 10)
+
+
+       -max-connections-to-host <max>
+              Maximum number of concurrent connection to a  given
+              host.  (default: 2)
+
+
+       -memory-cache-size <Kbytes>
+              Cache memory in Kilobytes.  (default: 1024)
+
+
+       -no-connect
+              Runs links as a separate instance - instead of con­
+              necting to existing instance. Prevents him to  con­
+              necting  to  an  existing session.  See also -base-
+              session option.
+
+
+       -receive-timeout <sec>
+              Timeout on receive.  (default: 120)
+
+
+       -retries <retry>
+              Number of retries.  (default: 3)
+
+
+       -source
+              Write the given HTML document  in  source  form  to
+              stdout.
+
+
+       -unrestartable-receive-timeout <sec>
+              Timeout  on non restartable connections.  (default:
+              600)
+
+
+       -version
+              Print the links version number and exit.
+
+
+
+NAVIGATION KEYS
+       You may optionally prefix each of this keys with a number,
+       telling  its  repeat  count (how much times to do it). You
+       can also re-bind those keys, altough this feature is still
+       in  the  state  of testing, so undocumented.  The keys you
+       may use for navigation are:
+
+       PGDN   page down
+
+       Space  page down
+
+       PGUP   page up
+
+       b      page up
+
+       B      page up
+
+       CursorDOWN
+              next link/down
+
+       CursorUP
+              prev link/up
+
+       ^INS   copy to clipboard
+
+       ^C     copy to clipboard
+
+       INS    scroll up
+
+       ^P     scroll up
+
+       DEL    scroll down
+
+       ^N     scroll down
+
+       [      scroll left
+
+       ]      scroll right
+
+       HOME   home
+
+       END    end of page
+
+       CursorRIGHT
+              enter link/press button
+
+       ENTER  enter link/press button
+
+       CursorLEFT
+              go back
+
+       d      download link
+
+       D      download link
+
+       /      search in the page
+
+       ?      search back in the page
+
+       n      find next match
+
+       N      find next match backwards
+
+       f      zoom actual frame
+
+       F      zoom actual frame
+
+       ^R     reload page
+
+       g      go to URL
+
+       G      go to the current URL
+
+       a      add a new bookmark
+
+       A      add a new bookmark
+
+       s      bookmark manager
+
+       S      bookmark manager
+
+       q      quit
+
+       Q      quit
+
+       =      document information
+
+       |      header information
+
+       \      toggle HTML source/rendered view
+
+       *      toggle display of images
+
+       TAB    next frame
+
+       ESC    menu/escape
+
+       F9     menu
+
+       F10    file menu
+
+
+
+EDITING KEYS
+       The following keys can be used while editing a  line/jump­
+       ing to a URL:
+
+       CursorRIGHT
+              move right
+
+       CursorLEFT
+              move left
+
+       HOME   jump to the beginning
+
+       ^A     jump to the beginning
+
+       END    jump to the end
+
+       ^E     jump to the end
+
+       ^INS   copy to clipboard
+
+       ^B     copy to clipboard
+
+       ^X     cut to clipboard
+
+       ^V     paste from clipboard
+
+       ENTER  enter line
+
+       BACKSPACE
+              delete back character
+
+       ^H     delete back character
+
+       DEL    delete character
+
+       ^D     delete character
+
+       ^U     delete from beginning of the line
+
+       ^K     delete to the end of the line
+
+       ^W     auto complete line
+
+
+
+ENVIRONMENT
+       CONFIG_DIR
+              The location of ".links/"
+
+
+       WWW_HOME
+              Homepage location (as in lynx )
+
+
+       LINKS_XTERM
+              The  command to run when selecting "File/New
+              window" and if DISPLAY is  defined  (default
+              "xterm -e")
+
+
+       LINKS_TWTERM
+              The  command to run when selecting "File/New
+              window" and if TWDISPLAY is defined (default
+              "twterm -e")
+
+
+       SHELL  Used for "File/OS Shell" menu
+
+
+       COMSPEC
+              Used for "File/OS Shell" menu in DOS/Windows
+
+
+
+FILES
+       ~/.links/links.cfg
+              Per-user config  file,  automatically
+              created by links.  Its format is same
+              as the one of user.cfg.
+
+
+       ~/.links/html.cfg
+              Per-user config  file,  automatically
+              created  by  links.  It contains HTML
+              rendering options. Its format is same
+              as the one of user.cfg.
+
+
+       ~/.links/user.cfg
+              Per-user config file, not overwritten
+              while saving links configuration. You
+              can  add your own options there (e.g.
+              keybindings).   Each  line   consists
+              from  option  name  (same as the com­
+              mand-line one,  but  without  leading
+              dash  and  with  dashes  converted to
+              underscores), space, and  its  value,
+              in  quotes  if  it's  a string. Lines
+              which start with # are considered  as
+              comments and skipped.
+
+
+       ~/.links/bookmarks
+              Bookmarks file
+
+
+       ~/.links/links.his
+              Sites history file
+
+
+       ~/.links/socket
+              Internal  links socket for communica­
+              tion between its instances.
+
+
+
+PLATFORMS
+       links is known to work  on  Linux,  FreeBSD,
+       OpenBSD,  Solaris, IRIX, HPUX, Digital Unix,
+       AIX, OS/2 and BeOS.  Port for  Win32  is  in
+       state of beta testing.
+
+
+
+BUGS
+       Can't  connect  to some FTP servers (Novell,
+       NT).  Connection  stays  in  "Request  sent"
+       state.
+
+       Frames  don't  work  if there're more frames
+       with same name. Turn them off in such  case.
+
+       You  can't  upload  large  files;  it  takes
+       _lots_ of memory.
+
+       You shouldn't press '^Z' when you are  in  a
+       viewer
+
+       Please  report  any  other  bugs you find to
+       Mikulas     Patocka      <mikulas@artax.kar­
+       lin.mff.cuni.cz>  or  to  links mailing list
+       <links-list@linuxfromscratch.org>.
+
+
+
+LICENSE
+       links is free software; you can redistribute
+       it  and/or  modify it under the terms of the
+       GNU General Public License as  published  by
+       the Free Software Foundation; either version
+       2 of the License, or (at  your  option)  any
+       later version.
+
+
+
+AUTHOR
+       links  was written by Mikulas Patocka <miku­
+       las@artax.karlin.mff.cuni.cz>.    See   file
+       AUTHORS  in  the  source  tree for a list of
+       people contributing to this project.
+
+       The  homepage  of  links  can  be  found  at
+       http://links.browser.org/
+
+       This manual page was written by Peter Gervai
+       <grin@tolna.net>,  using  excerpts  from   a
+       (yet?)  unknown  links  fan  for  the Debian
+       GNU/Linux system (but may be  used  by  oth­
+       ers).   Contributions from Francis A. Holop.
+       Extended, clarified and made more up-to-date
+       by Petr Baudis <pasky@ji.cz>.
+
+
+
+SEE ALSO
+       lynx(1), w3m(1), wget(1)
+
+
+
+                            Oct, 2001                    LINKS(1)

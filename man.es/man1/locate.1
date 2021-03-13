@@ -1,0 +1,99 @@
+SLOCATE(1)                                             SLOCATE(1)
+
+
+
+NAME
+       slocate - Security Enhanced version of the GNU Locate
+
+SYNOPSIS
+       slocate  [-qi]  [-d  <path>]  [--database=<path>]  <search
+       string>
+       slocate [-i] [-r <regexp>] [--regexp=<regexp>]
+       slocate [-qv] [-o <file>]  [--output=<file>]  slocate  [-e
+       <dir1,dir2,...>]  [-f  <fstype1,...>]  <[-l  <level>] [-c]
+       <[-U <path>] [-u]>
+       slocate [-Vh] [--version] [--help]
+
+
+DESCRIPTION
+          Secure Locate  provides  a  secure  way  to  index  and
+       quickly search for files on your system. It uses incremen­
+       tal encoding just like GNU locate to compress its database
+       to make searching faster, but it will also store file per­
+       missions and ownership so that users will  not  see  files
+       they do not have access to.
+
+          This  manual page documents the GNU version of slocate.
+       slocate Enables system users to search entire  filesystems
+       without displaying unauthorized files.
+
+   OPTIONS
+       -u     Create slocate database starting at path /.
+
+       -U <dir>
+              Create slocate database starting at path <dir>.
+
+       -e <dir1,dir2,...>
+              Exclude directories from the slocate database.
+
+       -f <fstype1,...>
+              Exclude  files  on  specific  file systems from the
+              slocate database.
+
+       -c     Parse '/etc/updatedb.conf' when updating  the  slo­
+              cate database.
+
+       -l <level>
+              Security  level.  0 turns security checks off. This
+              will make searchs faster.  1 turns security  checks
+              on. This is the default.
+
+       -i     Does a case insensitive search.
+
+       -q     Quiet mode.  Error messages are suppressed.
+
+       -n <num>
+              Limit the amount of results shown to <num>.
+
+       -r <regexp>
+              --regexp=<regexp> Search the database using a basic
+              POSIX regular expression.
+
+       -o <file>
+              --output=<file> Specfies the database to create.
+
+       -d <path>
+              --database=<path> Specfies the path of databases to
+              search in.
+
+       -h     --help Display this help.
+
+       -v     --verbose Verbose mode. Display files when creating
+              database.
+
+       -V     --version Display version.
+
+
+VERSION
+       Secure Locate v2.6
+
+
+AUTHOR
+       Kevin Lindsay - Copyright (c) 1999, 2000
+
+
+BUG REPORT
+       Report any bugs to klindsay@mkintraweb.com
+
+
+FTP
+       ftp://ftp.geekreview.org/slocate/          ftp://ftp.mkin­
+       traweb.com/pub/linux/slocate/
+
+
+WEB
+       http://www.geekreview.org/slocate/
+
+
+
+                                                       SLOCATE(1)

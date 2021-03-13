@@ -1,0 +1,66 @@
+LOCKF(3)            Linux Programmer's Manual            LOCKF(3)
+
+
+
+NAME
+       lockf - apply, test or remove a POSIX lock on an open file
+
+SYNOPSIS
+       #include <sys/file.h>
+
+       int lockf(int fd, int cmd, off_t len);
+
+DESCRIPTION
+       Apply, test or remove a POSIX lock on an open  file.   The
+       file  is  specified by fd.  This call is just an interface
+       for fcntl(2).  Valid operations are given below:
+
+
+              F_LOCK    Set an exclusive lock to the  file.  Only
+                        one  process  may  hold an exclusive lock
+                        for a given file at a given time. If  the
+                        file  is  already  locked it blocks until
+                        the previous lock is released.
+
+              F_TLOCK   Same  as  F_LOCK  but  never  blocks  and
+                        return  error  instead  if  the  file  is
+                        already locked.
+
+              F_ULOCK   Unlock the file.
+
+              F_TEST    Test the lock: return 0 if fd is unlocked
+                        or locked by this process; return -1, set
+                        errno to EACCES, if another process holds
+                        the lock.
+
+
+
+RETURN VALUE
+       On  success,  zero is returned.  On error, -1 is returned,
+       and errno is set appropriately.
+
+ERRORS
+       EAGAIN The  file  is  locked  and  the  LOCK_NB  flag  was
+              selected,  or  operation  is prohibited because the
+              file has been memory-mapped by another process.
+
+       EBADF  fd is not an open file descriptor.
+
+       EDEADLK
+              Specified lock operation would cause a deadlock.
+
+       EINVAL An invalid operation was specified in fd.
+
+       ENOLCK Too many segment locks open, lock table is full.
+
+CONFORMING TO
+       SYSV
+
+SEE ALSO
+       fcntl(2), flock(2)
+       There   are   also   locks.txt   and   mandatory.txt    in
+       /usr/src/linux/Documentation.
+
+
+
+Linux 2.0                   1997-08-06                   LOCKF(3)

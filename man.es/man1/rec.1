@@ -1,0 +1,80 @@
+NAME(SECTION)                                       NAME(SECTION)
+
+
+
+NAME
+       play - play any sound file to audio device
+
+       rec  - record audio to any sound file format
+
+SYNOPSIS
+       play [fopts] infile [effect]
+
+       rec [fopts] outfile [effect]
+
+DESCRIPTION
+       This  manual  page documents briefly the play and rec com­
+       mand.
+
+       play and rec are programs that  allows  you  to  play  and
+       record different types of sound files. It is a frontend to
+       the more general sox package. Normally  the  play  command
+       will  detect  the  type and other parameters of the sound­
+       file. If it can't do so, the  parameters  can  be  changed
+       through options.
+
+OPTIONS
+       A  summary  of  common  options are included below.  For a
+       complete description of options and thier values, see  the
+       sox(1) man page.
+
+       -c [channels], --channels=[channels]
+              Define the number of channels of the file.
+
+       -d [device], --device=[device]
+              Specify  a  different device to play the sound file
+              to.
+
+       -f [format], --format=[format]
+              Specifies bit format of sample. One of s, u, U,  A,
+              a, or g.
+
+       -r [rate], --rate=[rate]
+              Define the samplerate of the audio data.
+
+       -s [size], --size=[size]
+              interpret size of sample.  One of b, w, l, f, d, or
+              D.
+
+       -t [type], --type=[type]
+              Specifies audio file format to use.  Useful  if  it
+              can not be determined on its own.
+
+       -v [volume], --volume=[volume]
+              Change the audio volume
+
+       -x , --xinu
+              Reverse  the  byte  order of the sample (only works
+              with 16 and 32-bit data).
+
+       -h, --help
+              Show summary of options.
+
+       --version
+              Show version of play/rec.
+
+
+       Description of effects are described in the sox man  page.
+
+
+SEE ALSO
+        sox(1)
+
+
+AUTHOR
+       This  manual  page   was   written   by   Guenter   Geiger
+       <geiger@iem.mhsg.ac.at>,  for the Debian GNU/Linux system.
+
+
+
+                                                    NAME(SECTION)

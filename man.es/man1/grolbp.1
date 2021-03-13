@@ -1,0 +1,226 @@
+GROLBP(1)                                               GROLBP(1)
+
+
+
+NAME
+       grolbp  - groff driver for Canon CAPSL printers (LBP-4 and
+       LBP-8 series laser printers).
+
+SYNOPSIS
+       grolpb [ -l ] [ --landscape ] [ -v ] [ --version ] [ -cn ]
+              [ --copies=numcopies ] [ -ppaper_size ] [ --paper­
+              size=paper_size ] [ -oorientation ] [ --orienta­
+              tion=orientation ] [ -Fdir ] [ --fontdir=dir ]
+              [ -h ] [ --help ] [ files... ]
+
+DESCRIPTION
+       grolbp is a driver for groff that produces output in CAPSL
+       and  VDM  format suitable for Canon LBP-4 and LBP-8 print­
+       ers.
+
+       For compatibility with grolj4 there is an additional draw­
+       ing command available:
+
+       \D'R dh dv'
+              Draw  a  rule  (i.e. a solid black rectangle), with
+              one corner at the current position, and the  diago­
+              nally  opposite  corner  at  the  current  position
+              +(dh,dv).
+
+OPTIONS
+       Note that there can be  whitespace  between  a  one-letter
+       option  and its argument; on the other hand, there must be
+       whitespace and/or an equal sign (`=') between a  long-name
+       option and its argument.
+
+       -cnumcopies
+       --copies=numcopies
+              Print numcopies copies of each page.
+
+       -l
+       --landscape
+              Print the document with a landscape orientation.
+
+       -ppaper_size
+       --papersize=paper_size
+              Set  the  paper size to paper_size, which must be a
+              valid paper size description as  indicated  in  the
+              section PAPER SIZES.
+
+       -oorientation
+       --orientation=orientation
+              Print  the  document  with orientation orientation,
+              which must be `portrait' or `landscape'.
+
+       -v
+       --version
+              Print the version number.
+
+       -Fdir
+       --fontdir=dir
+              Prepend directory dir/devlbp to the search path for
+              font and device description files.
+
+       -h
+       --help Print a short help text.
+
+TYPEFACES
+       The  driver  supports  the  Dutch,  Swiss and Swiss-Narrow
+       scalable typefaces, each one in the Regular, Bold,  Italic
+       and  Bold-Italic  styles.   Additionally,  the Courier and
+       Elite monospaced typefaces at the sizes 8  and  12  points
+       (for  Courier)  resp. 8 and 10 points (for Elite) are sup­
+       ported, each one in the Regular, Bold and Italic styles.
+
+       The following chart summarizes the font names you can  use
+       to access these fonts:
+
+    +----------------+-----------+--------+----------+--------------+
+    |   Typeface     |  Regular  |  Bold  |  Italic  |  Bold-Italic |
+    +----------------+-----------+--------+----------+--------------+
+    | Dutch          |    TR     |   TB   |    TI    |      TBI     |
+    +----------------+-----------+--------+----------+--------------+
+    | Swiss          |    HR     |   HB   |    HI    |      HBI     |
+    +----------------+-----------+--------+----------+--------------+
+    | Swiss Narrow   |    HNR    |  HNB   |   HNI    |     HNBI     |
+    +----------------+-----------+--------+----------+--------------+
+    | Courier        |    CR     |   CB   |    CI    |              |
+    +----------------+-----------+--------+----------+--------------+
+    | Elite          |    ER     |   EB   |    EI    |              |
+    +----------------+-----------+--------+----------+--------------+
+
+PAPER SIZES
+       The paper size can be set in the DESC file or with command
+       line options to grolbp.  If the paper  size  is  specified
+       both  ways,  the command line options take precedence over
+       the contents of the DESC file (this applies  to  the  page
+       orientation too).
+
+       To  set  the  paper  size in the DESC file, insert in that
+       file a line containing papersize desired_papersize,  where
+       desired_papersize is:
+
+       ·   One  of  the  recognized  paper sizes: `a4', `letter',
+           `legal' or `executive'.
+
+       ·   A custom defined paper size, as described in the  CUS­
+           TOM PAPER SIZES subsection below.
+
+       ·   The  name of a file (e.g.  /etc/papersize) whose first
+           line must be the desired paper  size  in  one  of  the
+           above formats.
+
+       If  there  are  various  papersize lines in the DESC file,
+       only the first valid one is used.
+
+       To set the paper size in the command line, add
+
+         -p desired_papersize
+
+       or
+
+         --papersize=desired_papersize
+
+       to the other grolbp options, where desired_papersize is in
+       the same format as in the DESC file.
+
+       Paper  sizes  are case insensitive (i.e., `A4' is the same
+       as `a4').
+
+       If no paper size is specified in the DESC file or the com­
+       mand line, a default size of A4 is used.
+
+
+       CUSTOM PAPER SIZES
+              Custom   defined   paper  sizes  are  in  the  form
+              custlengthxwidth where length  and  width  are  the
+              dimensions  of the paper you want to to use, speci­
+              fied in printer units  (1/300  of  an  inch).   For
+              instance,  to print in a postcard sized paper which
+              is two inches long and four  inches  wide  you  can
+              insert a line containing
+
+                papersize cust600x1200
+
+              at the beginning of the DESC file.
+
+PAGE ORIENTATION
+       As with the page size, the orientation of the printed page
+       (portrait or landscape) can be set in  the  DESC  file  or
+       with command line options.  It is also case insensitive.
+
+       To  set  the  orientation  in the DESC file, insert a line
+       with the following content:
+
+         orientation [portrait|landscape]
+
+       As with paper sizes, only the first valid orientation com­
+       mand in the DESC file is used.
+
+       To  set the page orientation with command line options you
+       can use the -o  or  --orientation  option  with  the  same
+       parameters  (portrait  or  landscape) as in the DESC file.
+       Or you can use the -l option to  force  the  pages  to  be
+       printed in landscape.
+
+FONT FILE FORMAT
+       In   addition   to   the   usual   commands  described  in
+       groff_font(5), grolbp provides the command  lbpname  which
+       sets  the  font  name  sent to the printer when requesting
+       this font.  The syntax of this command is:
+
+         lbpname printer_font_name
+
+       ·      For bitmapped fonts, printer_font_name has the form
+
+                N<base_fontname><font_style>
+
+              base_fontname is the font name as it appears in the
+              printers font listings without the first letter, up
+              to  (but  not including) the font size.  font_style
+              can be one of the letters R, I,  or  B,  indicating
+              the  font  styles  Roman,  Italic  and Bold respec­
+              tively.
+
+              For instance, if the printer's font listing A shows
+              font  `Nelite12I.ISO_USA',  the corresponding entry
+              in the font description file is
+
+                lbpname NeliteI
+
+              Note that you may need to modify grolbp to add sup­
+              port  for  new bitmapped fonts, since the available
+              font names and font sizes of  bitmapped  fonts  (as
+              documented  above) are hard-coded into the program.
+
+       ·      For scalable fonts, printer_font_name is  identical
+              to  the  font  name  as it appears in the printer's
+              font listing A.
+
+              For instance, to select the `Swiss'  font  in  bold
+              style,  which appears in the printer's font listing
+              A as `Swiss-Bold',  the  required  lbpname  command
+              line is
+
+                lbpname Swiss-Bold
+
+
+       The argument of lbpname is case sensitive.
+
+FILES
+       /usr/share/groff/1.17.2/font/devlbp/DESC
+              Device description file.
+
+       /usr/share/groff/1.17.2/font/devlbp/F
+              Font description file for font F.
+
+       /usr/share/groff/1.17.2/tmac/lbp.tmac
+              Macros for use with grolbp.
+
+SEE ALSO
+       groff(1),     troff(1),    groff_out(5),    groff_font(5),
+       groff_char(7)
+
+
+
+Groff Version 1.17.2     22 November 2000               GROLBP(1)

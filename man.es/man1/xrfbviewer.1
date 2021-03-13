@@ -1,0 +1,60 @@
+XRFBVIEWER(1)             User's Manual             XRFBVIEWER(1)
+
+
+
+NAME
+       xrfbviewer - a VNC viewer
+
+SYNOPSIS
+       xrfbviewer [OPTIONS] [[host]:display]
+
+       xrfbviewer [OPTIONS] -listen display
+
+       xrfbviewer [OPTIONS] -stdio
+
+       xrfbviewer { -about | -help }
+
+DESCRIPTION
+       This  is  a  full-featured  VNC viewer that supports macro
+       recording and session capturing.
+
+       The first form is for normal VNC viewing.  If no  host  is
+       specified,  a dialog box prompts for one. (It is this dia­
+       log box that allows macro recording and session  capturing
+       to be specified.)
+
+       The  second  form, with -listen, is for listen mode; a VNC
+       server can make a connection to the viewer in listen mode.
+
+       The  third  form,  with  -stdio,  causes xrfbviewer to use
+       stdin and  stdout  for  RFB  communications  (for  use  in
+       inetd-type situations).
+
+       The  fourth  form  is  for getting information about xrfb­
+       viewer.
+
+OPTIONS
+       -shared
+              Allow the session to be shared.
+
+       -viewonly
+              Don't send keystrokes or mouse movements.
+
+       -bgr233
+              Use BGR233 pixel format.
+
+       -spf   Use the server's pixel format.
+
+       -scale fact/div
+              Scale by the specified factor and divisor.
+
+SEE ALSO
+       x0rfbserver(1), xplayfbs(1)
+
+AUTHOR
+       Jens Wagner <jwagner@hexonet.de>
+       Man page by Tim Waugh <twaugh@redhat.com>
+
+
+
+Linux                      21 Nov 2000              XRFBVIEWER(1)

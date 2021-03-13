@@ -1,0 +1,38 @@
+FAILLOG(5)                                             FAILLOG(5)
+
+
+
+NAME
+       faillog - Login failure logging file
+
+DESCRIPTION
+       faillog maintains a count of login failures and the limits
+       for each  account.   The  file  is  fixed  length  record,
+       indexed  by numerical UID.  Each record contains the count
+       of login failures since the  last  successful  login;  the
+       maximum number of failures before the account is disabled;
+       the line the last login failure occured on; and  the  date
+       the last login failure occured.
+
+       The structure of the file is
+
+               struct faillog {
+                       short   fail_cnt;
+                       short   fail_max;
+                       char    fail_line[12];
+                       time_t  fail_time;
+               };
+
+
+FILES
+       /var/log/faillog - login failure log
+
+SEE ALSO
+       faillog(8)
+
+AUTHOR
+       Julianne Frances Haugh (jfh@austin.ibm.com)
+
+
+
+                                                       FAILLOG(5)

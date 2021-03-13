@@ -1,0 +1,42 @@
+USERDEL(8)                                             USERDEL(8)
+
+
+
+NAME
+       userdel - Delete a user account and related files
+
+SYNOPSIS
+       userdel [-r] login
+
+DESCRIPTION
+       The  userdel  command  modifies  the system account files,
+       deleting all entries that refer to login.  The named  user
+       must exist.
+
+       -r     Files  in the user's home directory will be removed
+              along with the home directory itself and the user's
+              mail  spool.   Files  located in other file systems
+              will have to be searched for and deleted  manually.
+
+FILES
+       /etc/passwd - user account information
+       /etc/shadow - secure user account information
+       /etc/group - group information
+
+CAVEATS
+       userdel  will  not  allow  you to remove an account if the
+       user is currently logged in.  You must  kill  any  running
+       processes  which  belong to an account that you are delet­
+       ing.  You may not remove any  NIS  attributes  on  an  NIS
+       client.  This must be performed on the NIS server.
+
+SEE ALSO
+       chfn(1),  chsh(1),  groupadd(8), groupdel(8), groupmod(8),
+       passwd(1), useradd(8), usermod(8)
+
+AUTHOR
+       Julianne Frances Haugh (jfh@austin.ibm.com)
+
+
+
+                                                       USERDEL(8)

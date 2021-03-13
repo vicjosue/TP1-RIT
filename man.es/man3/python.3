@@ -1,0 +1,643 @@
+PYTHON.(3)                                             PYTHON.(3)
+
+
+
+NAME
+       PYTHON. -
+
+   Files
+       file hash.c
+       file hash.h
+       file rpmmodule.c
+       file upgrade.c
+       file upgrade.h
+
+   Data Structures
+       struct hdrObject_s
+       struct hdrObject_s
+       class header
+           A python header object represents an RPM package
+           header.
+       class rpmdb
+           A python rpmdb object represents an RPM database.
+       class rpmdbMatchIterator
+           A python rpmdbMatchIterator object represents the
+           result of an RPM database query.
+       struct rpmdbMIObject_s
+       struct rpmdbObject_s
+       struct rpmdbObject_s
+       class rpmtrans
+           A python rpmtrans object represents an RPM transaction
+           set.
+       struct rpmtransObject_s
+       struct rpmtransObject_s
+       struct tsCallbackType
+
+   Class: header
+       PyObject * hdrKeyList (hdrObject *s, PyObject *args)
+       PyObject * hdrUnload (hdrObject *s, PyObject *args,
+           PyObject *keywords)
+       PyObject * hdrVerifyFile (hdrObject *s, PyObject *args)
+       PyObject * hdrExpandFilelist (hdrObject *s, PyObject
+           *args)
+       PyObject * hdrCompressFilelist (hdrObject *s, PyObject
+           *args)
+       void mungeFilelist (Header h)
+       PyObject * hdrFullFilelist (hdrObject *s, PyObject *args)
+       PyObject * hdrGetAttr (hdrObject *s, char *name)
+       void hdrDealloc (hdrObject *s)
+       long tagNumFromPyObject (PyObject *item)
+       PyObject * hdrSubscript (hdrObject *s, PyObject *item)
+       PyObject * rhnUnload (hdrObject *s, PyObject *args)
+       PyMethodDef hdrMethods []
+       PyMappingMethods hdrAsMapping
+       PyTypeObject hdrType
+
+   Class: rpmdbMatchIterator
+       PyObject * rpmdbMINext (rpmdbMIObject *s, PyObject *args)
+       PyObject * rpmdbMIGetAttr (rpmdbObject *s, char *name)
+       void rpmdbMIDealloc (rpmdbMIObject *s)
+       PyMethodDef rpmdbMIMethods []
+       PyTypeObject rpmdbMIType
+
+   Class: rpmdb
+       PyObject * rpmdbFirst (rpmdbObject *s, PyObject *args)
+       PyObject * rpmdbNext (rpmdbObject *s, PyObject *args)
+       PyObject * handleDbResult (rpmdbMatchIterator mi)
+       PyObject * rpmdbByFile (rpmdbObject *s, PyObject *args)
+       PyObject * rpmdbByName (rpmdbObject *s, PyObject *args)
+       PyObject * rpmdbByProvides (rpmdbObject *s, PyObject
+           *args)
+       rpmdbMIObject * py_rpmdbInitIterator (rpmdbObject *s,
+           PyObject *args)
+       PyObject * rpmdbGetAttr (rpmdbObject *s, char *name)
+       void rpmdbDealloc (rpmdbObject *s)
+       int rpmdbLength (rpmdbObject *s)
+       hdrObject * rpmdbSubscript (rpmdbObject *s, PyObject *key)
+       PyMethodDef rpmdbMethods []
+       PyMappingMethods rpmdbAsMapping
+       PyTypeObject rpmdbType
+
+   Class: rpmtrans
+       PyObject * rpmtransAdd (rpmtransObject *s, PyObject *args)
+       PyObject * rpmtransRemove (rpmtransObject *s, PyObject
+           *args)
+       PyObject * rpmtransDepCheck (rpmtransObject *s, PyObject
+           *args)
+       PyObject * rpmtransOrder (rpmtransObject *s, PyObject
+           *args)
+       PyObject * py_rpmtransGetKeys (rpmtransObject *s, PyObject
+           *args)
+       void * tsCallback (const void *hd, const rpmCallbackType
+           what, const unsigned long amount, const unsigned long
+           total, const void *pkgKey, rpmCallbackData data)
+       PyObject * rpmtransRun (rpmtransObject *s, PyObject *args)
+       PyObject * rpmtransGetAttr (rpmtransObject *o, char *name)
+       void rpmtransDealloc (PyObject *o)
+       int rpmtransSetAttr (rpmtransObject *o, char *name,
+           PyObject *val)
+       Header transactionSetHeader = NULL
+       PyMethodDef rpmtransMethods []
+       PyTypeObject rpmtransType
+
+   Module: rpm
+       PyObject * rpmtransCreate (PyObject *self, PyObject *args)
+
+   Typedefs
+       typedef rpmdbObject_s rpmdbObject
+       typedef rpmdbMIObject_s rpmdbMIObject
+       typedef rpmtransObject_s rpmtransObject
+       typedef hdrObject_s hdrObject
+
+   Variables
+       PyObject * pyrpmError
+
+TYPEDEF DOCUMENTATION
+   typedef struct hdrObject_s hdrObject
+       Definition at line 58 of file rpmmodule.c.
+
+   typedef struct rpmdbMIObject_s rpmdbMIObject
+       Definition at line 50 of file rpmmodule.c.
+
+   typedef struct rpmdbObject_s rpmdbObject
+       Definition at line 46 of file rpmmodule.c.
+
+   typedef struct rpmtransObject_s rpmtransObject
+       Definition at line 54 of file rpmmodule.c.
+
+FUNCTION DOCUMENTATION
+   PyObject* handleDbResult (rpmdbMatchIterator mi) [static]
+       Definition at line 981 of file rpmmodule.c.
+
+       References rpmdbFreeIterator, rpmdbGetIteratorOffset, and
+       rpmdbNextIterator.
+
+       Referenced by rpmdbByFile, rpmdbByName, and
+       rpmdbByProvides.
+
+   PyObject* hdrCompressFilelist (hdrObject * s, PyObject * args)
+       [static]
+       Definition at line 416 of file rpmmodule.c.
+
+       References compressFilelist, and hdrObject_s::h.
+
+   void hdrDealloc (hdrObject * s) [static]
+       Definition at line 538 of file rpmmodule.c.
+
+       References hdrObject_s::fileList, hdrObject_s::h,
+       headerFree, hdrObject_s::linkList, hdrObject_s::md5list,
+       and hdrObject_s::sigs.
+
+   PyObject* hdrExpandFilelist (hdrObject * s, PyObject * args)
+       [static]
+       Definition at line 407 of file rpmmodule.c.
+
+       References expandFilelist, and hdrObject_s::h.
+
+   PyObject* hdrFullFilelist (hdrObject * s, PyObject * args)
+       [static]
+       Definition at line 510 of file rpmmodule.c.
+
+       References hdrObject_s::h, and mungeFilelist.
+
+   PyObject* hdrGetAttr (hdrObject * s, char * name) [static]
+       Definition at line 532 of file rpmmodule.c.
+
+       References hdrMethods.
+
+   PyObject* hdrKeyList (hdrObject * s, PyObject * args) [static]
+       Definition at line 132 of file rpmmodule.c.
+
+       References hdrObject_s::h, HEADER_I18NTABLE,
+       headerFreeIterator, headerInitIterator,
+       headerNextIterator, RPM_BIN_TYPE, RPM_CHAR_TYPE,
+       RPM_INT16_TYPE, RPM_INT32_TYPE, RPM_INT8_TYPE,
+       RPM_STRING_ARRAY_TYPE, and RPM_STRING_TYPE.
+
+   PyObject* hdrSubscript (hdrObject * s, PyObject * item)
+       [static]
+       Definition at line 567 of file rpmmodule.c.
+
+       References hdrObject_s::h, HEADER_EXT_TAG,
+       headerSprintfExtension_s::name, RPM_BIN_TYPE,
+       RPM_CHAR_TYPE, RPM_INT16_TYPE, RPM_INT32_TYPE,
+       RPM_INT8_TYPE, RPM_STRING_ARRAY_TYPE, RPM_STRING_TYPE,
+       rpmPackageGetEntry, RPMTAG_DESCRIPTION, RPMTAG_FILEFLAGS,
+       RPMTAG_FILEGIDS, RPMTAG_FILEGROUPNAME, RPMTAG_FILELINKTOS,
+       RPMTAG_FILEMD5S, RPMTAG_FILEMODES, RPMTAG_FILEMTIMES,
+       RPMTAG_FILERDEVS, RPMTAG_FILESIZES, RPMTAG_FILESTATES,
+       RPMTAG_FILEUIDS, RPMTAG_FILEUSERNAME, RPMTAG_GROUP,
+       RPMTAG_OLDFILENAMES, RPMTAG_ROOT, RPMTAG_SUMMARY,
+       hdrObject_s::sigs, tagNumFromPyObject,
+       headerSprintfExtension_s::type,
+       headerSprintfExtension_s::u, and xstrcasecmp.
+
+   PyObject* hdrUnload (hdrObject * s, PyObject * args, PyObject
+       * keywords) [static]
+       Definition at line 165 of file rpmmodule.c.
+
+       References hdrObject_s::h, headerCopy, headerFree,
+       headerLink, headerSizeof, headerUnload, and pyrpmError.
+
+   PyObject* hdrVerifyFile (hdrObject * s, PyObject * args)
+       [static]
+       Returns a list of these tuples for each item that failed:
+       (attr_name, correctValue, currentValue) It should be
+       passed the file number to verify.
+
+       Definition at line 201 of file rpmmodule.c.
+
+       References hdrObject_s::fileList, hdrObject_s::fileSizes,
+       hdrObject_s::gids, hdrObject_s::h, headerGetEntry,
+       hdrObject_s::linkList, hdrObject_s::md5list, mdfile,
+       hdrObject_s::modes, hdrObject_s::mtimes,
+       hdrObject_s::rdevs, RPMTAG_FILEGIDS, RPMTAG_FILELINKTOS,
+       RPMTAG_FILEMD5S, RPMTAG_FILEMODES, RPMTAG_FILEMTIMES,
+       RPMTAG_FILERDEVS, RPMTAG_FILESIZES, RPMTAG_FILEUIDS,
+       RPMTAG_OLDFILENAMES, and hdrObject_s::uids.
+
+   void mungeFilelist (Header h) [static]
+       Definition at line 426 of file rpmmodule.c.
+
+       References compressFilelist, headerAddEntry,
+       headerIsEntry, RPM_STRING_ARRAY_TYPE, rpmBuildFileList,
+       RPMTAG_BASENAMES, RPMTAG_DIRINDEXES, RPMTAG_DIRNAMES, and
+       RPMTAG_OLDFILENAMES.
+
+       Referenced by hdrFullFilelist.
+
+   rpmdbMIObject* py_rpmdbInitIterator (rpmdbObject * s, PyObject
+       * args) [static]
+       Definition at line 1031 of file rpmmodule.c.
+
+       References rpmdbMIObject_s::db, rpmdbObject_s::db,
+       rpmdbMIObject_s::mi, pyrpmError, rpmdbInitIterator,
+       rpmdbMIType, and tagNumFromPyObject.
+
+   PyObject* py_rpmtransGetKeys (rpmtransObject * s, PyObject *
+       args) [static]
+       Definition at line 1408 of file rpmmodule.c.
+
+       References rpmtransGetKeys, and rpmtransObject_s::ts.
+
+   PyObject* rhnUnload (hdrObject * s, PyObject * args) [static]
+       Definition at line 450 of file rpmmodule.c.
+
+       References _free, hdrObject_s::h, headerAddEntry,
+       headerAllocated, headerFree, headerFreeData,
+       headerGetEntry, headerIsEntry, headerLink, headerLoad,
+       headerReload, headerSizeof, headerUnload, int_32,
+       RPM_STRING_TYPE, RPMDIGEST_SHA1, rpmDigestFinal,
+       rpmDigestInit, rpmDigestUpdate, RPMTAG_ARCH,
+       RPMTAG_HEADERIMMUTABLE, RPMTAG_RHNPLATFORM,
+       RPMTAG_SHA1HEADER, and RPMTAG_SHA1RHN.
+
+   PyObject* rpmdbByFile (rpmdbObject * s, PyObject * args)
+       [static]
+       Definition at line 1000 of file rpmmodule.c.
+
+       References rpmdbObject_s::db, handleDbResult,
+       rpmdbInitIterator, and RPMTAG_BASENAMES.
+
+   PyObject* rpmdbByName (rpmdbObject * s, PyObject * args)
+       [static]
+       Definition at line 1010 of file rpmmodule.c.
+
+       References rpmdbObject_s::db, handleDbResult,
+       rpmdbInitIterator, and RPMTAG_NAME.
+
+   PyObject* rpmdbByProvides (rpmdbObject * s, PyObject * args)
+       [static]
+       Definition at line 1020 of file rpmmodule.c.
+
+       References rpmdbObject_s::db, handleDbResult,
+       rpmdbInitIterator, and RPMTAG_PROVIDENAME.
+
+   void rpmdbDealloc (rpmdbObject * s) [static]
+       Definition at line 1080 of file rpmmodule.c.
+
+       References rpmdbObject_s::db, rpmdbObject_s::offsets, and
+       rpmdbClose.
+
+   PyObject* rpmdbFirst (rpmdbObject * s, PyObject * args)
+       [static]
+       Definition at line 920 of file rpmmodule.c.
+
+       References rpmdbObject_s::db, rpmdbObject_s::noffs,
+       rpmdbObject_s::offsets, rpmdbObject_s::offx, pyrpmError,
+       rpmdbFreeIterator, rpmdbGetIteratorOffset,
+       RPMDBI_PACKAGES, rpmdbInitIterator, and rpmdbNextIterator.
+
+   PyObject* rpmdbGetAttr (rpmdbObject * s, char * name) [static]
+       Definition at line 1074 of file rpmmodule.c.
+
+       References rpmdbMethods.
+
+   int rpmdbLength (rpmdbObject * s) [static]
+       Definition at line 1094 of file rpmmodule.c.
+
+       References rpmdbObject_s::db, rpmdbFreeIterator,
+       RPMDBI_PACKAGES, rpmdbInitIterator, and rpmdbNextIterator.
+
+   void rpmdbMIDealloc (rpmdbMIObject * s) [static]
+       Definition at line 822 of file rpmmodule.c.
+
+       References rpmdbMIObject_s::db, rpmdbMIObject_s::mi, and
+       rpmdbFreeIterator.
+
+   PyObject* rpmdbMIGetAttr (rpmdbObject * s, char * name)
+       [static]
+       Definition at line 816 of file rpmmodule.c.
+
+       References rpmdbMIMethods.
+
+   PyObject* rpmdbMINext (rpmdbMIObject * s, PyObject * args)
+       [static]
+       Definition at line 785 of file rpmmodule.c.
+
+       References hdrObject_s::fileList, hdrObject_s::fileSizes,
+       hdrObject_s::gids, hdrObject_s::h, hdrType, headerLink,
+       hdrObject_s::linkList, hdrObject_s::md5list,
+       rpmdbMIObject_s::mi, hdrObject_s::modes,
+       hdrObject_s::mtimes, hdrObject_s::rdevs,
+       rpmdbNextIterator, hdrObject_s::sigs, and
+       hdrObject_s::uids.
+
+   PyObject* rpmdbNext (rpmdbObject * s, PyObject * args)
+       [static]
+       Definition at line 959 of file rpmmodule.c.
+
+       References rpmdbObject_s::noffs, rpmdbObject_s::offsets,
+       and rpmdbObject_s::offx.
+
+   hdrObject* rpmdbSubscript (rpmdbObject * s, PyObject * key)
+       [static]
+       Definition at line 1112 of file rpmmodule.c.
+
+       References rpmdbObject_s::db, hdrObject_s::fileList,
+       hdrObject_s::fileSizes, hdrObject_s::gids, hdrObject_s::h,
+       hdrType, headerLink, hdrObject_s::linkList,
+       hdrObject_s::md5list, hdrObject_s::modes,
+       hdrObject_s::mtimes, pyrpmError, hdrObject_s::rdevs,
+       rpmdbFreeIterator, RPMDBI_PACKAGES, rpmdbInitIterator,
+       rpmdbNextIterator, hdrObject_s::sigs, and
+       hdrObject_s::uids.
+
+   PyObject* rpmtransAdd (rpmtransObject * s, PyObject * args)
+       [static]
+       Definition at line 1293 of file rpmmodule.c.
+
+       References hdrObject_s::h, hdrType,
+       rpmtransObject_s::keyList, rpmtransAddPackage,
+       rpmtransAvailablePackage, and rpmtransObject_s::ts.
+
+   PyObject* rpmtransCreate (PyObject * self, PyObject * args)
+       [static]
+       Definition at line 1623 of file rpmmodule.c.
+
+       References rpmdbObject_s::db, rpmtransObject_s::dbo,
+       rpmtransObject_s::keyList, rpmdbType, rpmtransCreateSet,
+       rpmtransType, rpmtransObject_s::scriptFd, and
+       rpmtransObject_s::ts.
+
+   void rpmtransDealloc (PyObject * o) [static]
+       Definition at line 1558 of file rpmmodule.c.
+
+       References rpmtransObject_s::dbo, Fclose,
+       rpmtransObject_s::keyList, rpmtransFree,
+       rpmtransObject_s::scriptFd, and rpmtransObject_s::ts.
+
+   PyObject* rpmtransDepCheck (rpmtransObject * s, PyObject *
+       args) [static]
+       Definition at line 1358 of file rpmmodule.c.
+
+       References rpmdepCheck, rpmdepFreeConflicts, and
+       rpmtransObject_s::ts.
+
+   PyObject* rpmtransGetAttr (rpmtransObject * o, char * name)
+       [static]
+       Definition at line 1552 of file rpmmodule.c.
+
+       References rpmtransMethods.
+
+   PyObject* rpmtransOrder (rpmtransObject * s, PyObject * args)
+       [static]
+       Definition at line 1397 of file rpmmodule.c.
+
+       References rpmdepOrder, and rpmtransObject_s::ts.
+
+   PyObject* rpmtransRemove (rpmtransObject * s, PyObject * args)
+       [static]
+       Definition at line 1327 of file rpmmodule.c.
+
+       References rpmdbObject_s::db, rpmtransObject_s::dbo,
+       pyrpmError, rpmdbFreeIterator, rpmdbGetIteratorCount,
+       rpmdbGetIteratorOffset, RPMDBI_LABEL, rpmdbInitIterator,
+       rpmdbNextIterator, rpmtransRemovePackage, and
+       rpmtransObject_s::ts.
+
+   PyObject* rpmtransRun (rpmtransObject * s, PyObject * args)
+       [static]
+       Definition at line 1492 of file rpmmodule.c.
+
+       References tsCallbackType::cb, tsCallbackType::data,
+       rpmProblemSet_s::numProblems, rpmProblemSet_s::probs,
+       tsCallbackType::pythonError, rpmProblemSetFree,
+       rpmProblemString, rpmRunTransactions, rpmProblem_s::str1,
+       rpmtransObject_s::ts, tsCallback, rpmProblem_s::type, and
+       rpmProblem_s::ulong1.
+
+   int rpmtransSetAttr (rpmtransObject * o, char * name, PyObject
+       * val) [static]
+       Definition at line 1574 of file rpmmodule.c.
+
+       References fdDup, rpmtransSetScriptFd,
+       rpmtransObject_s::scriptFd, and rpmtransObject_s::ts.
+
+   long tagNumFromPyObject (PyObject * item) [static]
+       Definition at line 549 of file rpmmodule.c.
+
+       References rpmTagTable, rpmTagTableSize,
+       headerTagTableEntry_s::val, and xstrcasecmp.
+
+       Referenced by hdrSubscript, and py_rpmdbInitIterator.
+
+   void* tsCallback (const void * hd, const rpmCallbackType what,
+       const unsigned long amount, const unsigned long total,
+       const void * pkgKey, rpmCallbackData data) [static]
+       Definition at line 1447 of file rpmmodule.c.
+
+       References tsCallbackType::cb, tsCallbackType::data,
+       Fclose, fdDup, and tsCallbackType::pythonError.
+
+       Referenced by rpmtransRun.
+
+VARIABLE DOCUMENTATION
+   PyMappingMethods hdrAsMapping [static]
+       Initial value:
+
+        {
+               (inquiry) 0,
+               (binaryfunc) hdrSubscript,
+               (objobjargproc)0,
+       }
+
+       Definition at line 726 of file rpmmodule.c.
+
+   struct PyMethodDef hdrMethods[] [static]
+       Initial value:
+
+        {
+               {'keys',        (PyCFunction) hdrKeyList,       1 },
+               {'unload',      (PyCFunction) hdrUnload,        METH_VARARGS|METH_KEYWORDS },
+               {'verifyFile',  (PyCFunction) hdrVerifyFile,    1 },
+               {'expandFilelist',      (PyCFunction) hdrExpandFilelist,        1 },
+               {'compressFilelist',    (PyCFunction) hdrCompressFilelist,      1 },
+               {'fullFilelist',        (PyCFunction) hdrFullFilelist,  1 },
+               {'rhnUnload',   (PyCFunction) rhnUnload, METH_VARARGS },
+               {NULL,          NULL}
+       }
+
+       Definition at line 519 of file rpmmodule.c.
+
+       Referenced by hdrGetAttr.
+
+   PyTypeObject hdrType [static]
+       Initial value:
+
+        {
+               PyObject_HEAD_INIT(NULL)
+               0,
+               'header',
+               sizeof(hdrObject),
+               0,
+               (destructor) hdrDealloc,
+               0,
+               (getattrfunc) hdrGetAttr,
+               0,
+               0,
+               0,
+               0,
+               0,
+               &hdrAsMapping,
+       }
+
+       Definition at line 734 of file rpmmodule.c.
+
+       Referenced by findUpgradeSet, getTsHeader, hdrLoad,
+       initrpm, rhnLoad, rpmdbMINext, rpmdbSubscript,
+       rpmHeaderFromPackage, rpmReadHeaders, rpmtransAdd, and
+       versionCompare.
+
+   PyObject* pyrpmError [static]
+       Definition at line 62 of file rpmmodule.c.
+
+       Referenced by doFopen, findUpgradeSet, hdrLoad, hdrUnload,
+       initrpm, py_rpmdbInitIterator, rhnLoad, rpmdbFirst,
+       rpmdbSubscript, rpmHeaderFromFile, rpmHeaderFromPackage,
+       rpmInitDB, rpmMergeHeaders, rpmOpenDB, rpmReadHeaders, and
+       rpmtransRemove.
+
+   PyMappingMethods rpmdbAsMapping [static]
+       Initial value:
+
+        {
+               (inquiry) rpmdbLength,
+               (binaryfunc) rpmdbSubscript,
+               (objobjargproc)0,
+       }
+
+       Definition at line 1146 of file rpmmodule.c.
+
+   struct PyMethodDef rpmdbMethods[] [static]
+       Initial value:
+
+        {
+               {'firstkey',        (PyCFunction) rpmdbFirst,   1 },
+               {'nextkey',         (PyCFunction) rpmdbNext,    1 },
+               {'findbyfile',      (PyCFunction) rpmdbByFile, 1 },
+               {'findbyname',      (PyCFunction) rpmdbByName, 1 },
+               {'findbyprovides',  (PyCFunction) rpmdbByProvides, 1 },
+               {'match',           (PyCFunction) py_rpmdbInitIterator, 1 },
+               {NULL,          NULL}
+       }
+
+       Definition at line 1062 of file rpmmodule.c.
+
+       Referenced by rpmdbGetAttr.
+
+   struct PyMethodDef rpmdbMIMethods[] [static]
+       Initial value:
+
+        {
+               {'next',            (PyCFunction) rpmdbMINext,  1 },
+               {NULL,          NULL}
+       }
+
+       Definition at line 809 of file rpmmodule.c.
+
+       Referenced by rpmdbMIGetAttr.
+
+   PyTypeObject rpmdbMIType [static]
+       Initial value:
+
+        {
+               PyObject_HEAD_INIT(NULL)
+               0,
+               'rpmdbMatchIterator',
+               sizeof(rpmdbMIObject),
+               0,
+               (destructor) rpmdbMIDealloc,
+               0,
+               (getattrfunc) rpmdbMIGetAttr,
+               0,
+               0,
+               0,
+               0,
+               0,
+               0,
+       }
+
+       Definition at line 832 of file rpmmodule.c.
+
+       Referenced by initrpm, and py_rpmdbInitIterator.
+
+   PyTypeObject rpmdbType [static]
+       Initial value:
+
+        {
+               PyObject_HEAD_INIT(NULL)
+               0,
+               'rpmdb',
+               sizeof(rpmdbObject),
+               0,
+               (destructor) rpmdbDealloc,
+               0,
+               (getattrfunc) rpmdbGetAttr,
+               0,
+               0,
+               0,
+               0,
+               0,
+
+               &rpmdbAsMapping,
+
+
+
+       }
+
+       Definition at line 1155 of file rpmmodule.c.
+
+       Referenced by initrpm, rpmOpenDB, and rpmtransCreate.
+
+   struct PyMethodDef rpmtransMethods[] [static]
+       Initial value:
+
+        {
+               {'add',         (PyCFunction) rpmtransAdd,      1 },
+               {'remove',      (PyCFunction) rpmtransRemove,   1 },
+               {'depcheck',    (PyCFunction) rpmtransDepCheck, 1 },
+               {'order',       (PyCFunction) rpmtransOrder,    1 },
+               {'getKeys',     (PyCFunction) py_rpmtransGetKeys, 1 },
+               {'run',         (PyCFunction) rpmtransRun, 1 },
+               {NULL,          NULL}
+       }
+
+       Definition at line 1540 of file rpmmodule.c.
+
+       Referenced by rpmtransGetAttr.
+
+   PyTypeObject rpmtransType [static]
+       Initial value:
+
+        {
+               PyObject_HEAD_INIT(NULL)
+               0,
+               'rpmtrans',
+               sizeof(rpmtransObject),
+               0,
+               (destructor) rpmtransDealloc,
+               0,
+               (getattrfunc) rpmtransGetAttr,
+               (setattrfunc) rpmtransSetAttr,
+               0,
+               0,
+               0,
+               0,
+               0,
+       }
+
+       Definition at line 1597 of file rpmmodule.c.
+
+       Referenced by initrpm, and rpmtransCreate.
+
+   Header transactionSetHeader = NULL [static]
+       Todo:
+            Remove, there's no headerLink refcount on the
+           pointer.
+
+       Definition at line 1443 of file rpmmodule.c.
+
+
+
+rpm                        13 Mar 2002                 PYTHON.(3)

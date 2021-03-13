@@ -1,0 +1,48 @@
+CLEARENV(3)                                           CLEARENV(3)
+
+
+
+NAME
+       clearenv - clear the environment
+
+SYNOPSIS
+       #include <stdlib.h>
+
+       int clearenv(void);
+
+DESCRIPTION
+       The  clearenv()  function  clears  the  environment of all
+       name-value pairs.
+
+
+RETURN VALUE
+       The clearenv() function returns zero  on  success,  and  a
+       non-zero value on failure.
+
+
+AVAILABILITY
+       Not in libc4, libc5. In glibc since glibc 2.0.
+
+
+CONFORMING TO
+       Various  Unix  variants  (DGUX,  HPUX, QNX, ...).  POSIX.9
+       (bindings for FORTRAN77).   POSIX.1-1996  did  not  accept
+       clearenv()  and  putenv(), but changed its mind and sched­
+       uled these functions for some later issue of this standard
+       (cf.  B.4.6.1).  However,  SUSv3  only  adds putenv(), and
+       rejected clearenv().
+
+
+NOTES
+       Used in security-conscious applications. If it is unavail­
+       able the assignment
+                   environ = NULL;
+       will probably do.
+
+SEE ALSO
+       getenv(3), putenv(3), setenv(3), unsetenv(3), environ(5)
+
+
+
+
+Linux Programmer's Manual   2001-10-17                CLEARENV(3)

@@ -1,0 +1,392 @@
+PG_RESTORE(1)     PostgreSQL Client Applications    PG_RESTORE(1)
+
+
+
+NAME
+       pg_restore - restore a PostgreSQL database from an archive
+       file created by pg_dump
+
+SYNOPSIS
+       pg_restore [  -a  ] [  -c  ] [  -C  ] [  -d  dbname   ]  [
+       -f  output-file  ] [  -F format  ] [  -i index  ] [  -l  ]
+       [  -L contents-file  ] [  -N  |  -o  |  -r  ] [  -O   ]  [
+       -P function-name  ] [  -R  ] [  -s  ] [  -S  ] [  -t table
+       ] [  -T trigger  ] [  -v  ] [  -x  ] [  -X keyword ] [  -h
+       host   ]  [   -p  port   ]  [   -U  username  ] [  -W  ] [
+       archive-file  ]
+
+DESCRIPTION
+       pg_restore  is  a  utility  for  restoring  a   PostgreSQL
+       database  from  an archive created by pg_dump(1) in one of
+       the non-plain-text formats. It  will  issue  the  commands
+       necessary  to  re-generate  all  user-defined types, func­
+       tions, tables, indexes, aggregates, and operators, as well
+       as the data in the tables.
+
+       The  archive  files  contain information for pg_restore to
+       rebuild the database, but  also  allow  pg_restore  to  be
+       selective  about  what is restored, or even to reorder the
+       items prior to  being  restored.  The  archive  files  are
+       designed to be portable across architectures.
+
+       pg_restore can operate in two modes: If a database name is
+       specified, the  archive  is  restored  directly  into  the
+       database.  Otherwise, a script containing the SQL commands
+       necessary to rebuild the database is created (and  written
+       to a file or standard output), similar to the ones created
+       by the pg_dump plain text format. Some of the options con­
+       trolling  the  script  output  are  therefore analogous to
+       pg_dump options.
+
+       Obviously, pg_restore cannot restore information  that  is
+       not  present  in  the  archive  file; for instance, if the
+       archive was  made  using  the  ``dump  data  as  INSERTs''
+       option, pg_restore will not be able to load the data using
+       COPY statements.
+
+   OPTIONS
+       pg_restore accepts the following command  line  arguments.
+       (Long  option forms are only available on some platforms.)
+
+       archive-name
+              Specifies the location of the archive  file  to  be
+              restored.   If not specified, the standard input is
+              used.
+
+       -a
+
+       --data-only
+              Restore only the data, no schema (definitions).
+
+       -c
+
+       --clean
+              Clean (drop)  database  objects  before  recreating
+              them.
+
+       -C
+
+       --create
+              Create  the  database  before  restoring  into  it.
+              (When this switch appears, the database named  with
+              -d  is  used  only  to  issue  the  initial  CREATE
+              DATABASE command. All data  is  restored  into  the
+              database name that appears in the archive.)
+
+       -d dbname
+
+       --dbname=dbname
+              Connect  to  database  dbname  and restore directly
+              into  the  database.  Large  objects  can  only  be
+              restored by using a direct database connection.
+
+       -f filename
+
+       --file=filename
+              Specify  output  file  for generated script, or for
+              the listing when used with -l. Default is the stan­
+              dard output.
+
+       -F format
+
+       --format=format
+              Specify format of the archive.  It is not necessary
+              to specify the format, since pg_restore will deter­
+              mine the format automatically. If specified, it can
+              be one of the following:
+
+              t      Archive is a tar archive. Using this archive
+                     format allows reordering and/or exclusion of
+                     schema elements at the time the database  is
+                     restored. It is also possible to limit which
+                     data is reloaded at restore time.
+
+              c      Archive is in the custom format of  pg_dump.
+                     This  is the most flexible format in that it
+                     allows reordering of data load  as  well  as
+                     schema  elements.   This format is also com­
+                     pressed by default.
+
+
+       -i index
+
+       --index=index
+              Restore definition for named index only.
+
+       -l
+
+       --list List the contents of the  archive.  The  output  of
+              this  command  can  be  used  with the -L option to
+              restrict and reorder the items that are restored.
+
+       -L list-file
+
+       --use-list=list-file
+              Restore elements in  list-file  only,  and  in  the
+              order  they  appear in the file. Lines can be moved
+              and may also be commented out by placing a ; at the
+              start of the line.
+
+       -N
+
+       --orig-order
+              Restore  items  in  the  original  dump  order.  By
+              default pg_dump will dump items in an order  conve­
+              nient  to pg_dump, then save the archive in a modi­
+              fied OID  order.  This  option  overrides  the  OID
+              ordering.
+
+       -o
+
+       --oid-order
+              Restore  items in the OID order. By default pg_dump
+              will dump items in an order convenient to  pg_dump,
+              then save the archive in a modified OID order. This
+              option enforces strict OID ordering.
+
+       -O
+
+       --no-owner
+              Prevent any attempt to restore original object own­
+              ership. Objects will be owned by the user name used
+              to attach to the database.
+
+       -P function-name
+
+       --function=function-name
+              Specify a procedure or function to be restored.
+
+       -r
+
+       --rearrange
+              Restore items in modified  OID  order.  By  default
+              pg_dump  will  dump items in an order convenient to
+              pg_dump, then save the archive in  a  modified  OID
+              order.  Most objects will be restored in OID order,
+              but some things (e.g., rules and indexes)  will  be
+              restored  at the end of the process irrespective of
+              their OIDs. This option is the default.
+
+       -R
+
+       --no-reconnect
+              While restoring an  archive,  pg_restore  typically
+              has to reconnect to the database several times with
+              different user names to set the  correct  ownership
+              of  the  created  objects.  If  this is undesirable
+              (e.g., because manual interaction (passwords) would
+              be  necessary  for  each reconnection), this option
+              prevents pg_restore from issuing  any  reconnection
+              requests. (A connection request while in plain text
+              mode, not connected  to  a  database,  is  made  by
+              putting  out a psql(1) \connect command.)  However,
+              this option is a rather blunt instrument because it
+              makes pg_restore lose all object ownership informa­
+              tion, unless you use the -X  use-set-session-autho­
+              rization option.
+
+       -s
+
+       --schema-only
+              Restore the schema (definitions), no data. Sequence
+              values will be reset.
+
+       -S username
+
+       --superuser=username
+              Specify the superuser user name to  use  when  dis­
+              abling  triggers and/or setting ownership of schema
+              elements.  By default, pg_restore will use the cur­
+              rent user name if it is a superuser.
+
+       -t table
+
+       --table=table
+              Restore schema/data for table only.
+
+       -T trigger
+
+       --trigger=trigger
+              Restore definition of trigger only.
+
+       -v
+
+       --verbose
+              Specifies verbose mode.
+
+       -x
+
+       --no-privileges
+
+       --no-acl
+              Prevent    restoration    of    access   privileges
+              (grant/revoke commands).
+
+       -X use-set-session-authorization
+
+       --use-set-session-authorization
+              Normally, if restoring an archive requires altering
+              the  current  database  user  (e.g., to set correct
+              object  ownerships),  a  new  connection   to   the
+              database must be opened, which might require manual
+              interaction (e.g., passwords). If you  use  the  -X
+              use-set-session-authorization      option,     then
+              pg_restore will instead use the  set_session_autho­
+              rization(7)  command. This has the same effect, but
+              it requires that the user restoring the archive  is
+              a database superuser. This option effectively over­
+              rides the -R option.
+
+
+       pg_restore also accepts the following command  line  argu­
+       ments for connection parameters:
+
+       -h host
+
+       --host=host
+              Specifies the host name of the machine on which the
+              server is running. If host begins with a slash,  it
+              is  used  as  the  directory  for  the  Unix domain
+              socket.
+
+       -p port
+
+       --port=port
+              Specifies the Internet TCP/IP port  or  local  Unix
+              domain socket file extension on which the server is
+              listening for connections. The port number defaults
+              to  5432,  or  the  value of the PGPORT environment
+              variable (if set).
+
+       -U username
+              Connect as the given user.
+
+       -W     Force  a  password  prompt.  This   should   happen
+              automatically   if  the  server  requires  password
+              authentication.
+
+
+DIAGNOSTICS
+       Connection to database 'template1' failed.
+       connectDBStart() -- connect() failed: No such file or directory
+               Is the postmaster running locally
+               and accepting connections on Unix socket '/tmp/.s.PGSQL.5432'?
+
+
+       pg_restore could not attach to the postmaster  process  on
+       the  specified  host  and  port.  If you see this message,
+       ensure that the server is running on the proper  host  and
+       that you have specified the proper port. If your site uses
+       an authentication system, ensure that  you  have  obtained
+       the required authentication credentials.
+
+              Note:  When  a direct database connection is speci­
+              fied using the  -d  option,  pg_restore  internally
+              executes  SQL statements. If you have problems run­
+              ning pg_restore, make sure you are able  to  select
+              information  from  the database using, for example,
+              psql.
+
+
+NOTES
+       The limitations of pg_restore are detailed below.
+
+       · When restoring data to a table, pg_restore emits queries
+         to  disable triggers on user tables before inserting the
+         data then emits queries to re-enable them after the data
+         has been inserted. If the restore is stopped in the mid­
+         dle, the system catalogs may be left in the wrong state.
+
+       · pg_restore  will  not restore large objects for a single
+         table. If an archive contains large  objects,  then  all
+         large objects will be restored.
+
+
+       See the pg_dump(1) documentation for details on limitation
+       of pg_dump.
+
+EXAMPLES
+       To dump a database:
+
+       $ pg_dump mydb > db.out
+
+
+       To reload this database:
+
+       $ psql -d database -f db.out
+
+
+       To dump a database called mydb that contains large objects
+       to a tar file:
+
+       $ pg_dump -Ft -b mydb > db.tar
+
+
+       To  reload this database (with large objects) to an exist­
+       ing database called newdb:
+
+       $ pg_restore -d newdb db.tar
+
+
+       To reorder database items, it is first necessary  to  dump
+       the table of contents of the archive:
+
+       $ pg_restore -l archive.file > archive.list
+
+       The  listing  file  consists  of a header and one line for
+       each item, e.g.,
+
+       ;
+       ; Archive created at Fri Jul 28 22:28:36 2000
+       ;     dbname: birds
+       ;     TOC Entries: 74
+       ;     Compression: 0
+       ;     Dump Version: 1.4-0
+       ;     Format: CUSTOM
+       ;
+       ;
+       ; Selected TOC Entries:
+       ;
+       2; 145344 TABLE species postgres
+       3; 145344 ACL species
+       4; 145359 TABLE nt_header postgres
+       5; 145359 ACL nt_header
+       6; 145402 TABLE species_records postgres
+       7; 145402 ACL species_records
+       8; 145416 TABLE ss_old postgres
+       9; 145416 ACL ss_old
+       10; 145433 TABLE map_resolutions postgres
+       11; 145433 ACL map_resolutions
+       12; 145443 TABLE hs_old postgres
+       13; 145443 ACL hs_old
+
+       Semi-colons are comment delimiters, and the numbers at the
+       start  of  lines refer to the internal archive ID assigned
+       to each item.
+
+       Lines in the file  can  be  commented  out,  deleted,  and
+       reordered. For example,
+
+       10; 145433 TABLE map_resolutions postgres
+       ;2; 145344 TABLE species postgres
+       ;4; 145359 TABLE nt_header postgres
+       6; 145402 TABLE species_records postgres
+       ;8; 145416 TABLE ss_old postgres
+
+       could  be  used  as  input  to  pg_restore  and would only
+       restore items 10 and 6, in that order.
+
+       $ pg_restore -L archive.list archive.file
+
+
+HISTORY
+       The pg_restore utility first appeared in PostgreSQL 7.1.
+
+SEE ALSO
+       pg_dump(1), pg_dumpall(1), psql(1), PostgreSQL Administra­
+       tor's Guide
+
+
+
+
+Application                 2001-03-06              PG_RESTORE(1)

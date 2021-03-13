@@ -1,0 +1,57 @@
+rpmOption(3)                                         rpmOption(3)
+
+
+
+NAME
+       rpmOption -
+
+SYNOPSIS
+   Data Fields
+       const char * name
+       int var
+       int archSpecific
+       int required
+       int macroize
+       int localize
+       rpmOptionValue * value
+
+FIELD DOCUMENTATION
+   int rpmOption::archSpecific
+       Definition at line 58 of file rpmrc.c.
+
+       Referenced by doReadRC.
+
+   int rpmOption::localize
+       Definition at line 61 of file rpmrc.c.
+
+       Referenced by doReadRC.
+
+   int rpmOption::macroize
+       Definition at line 60 of file rpmrc.c.
+
+       Referenced by doReadRC.
+
+   const char* rpmOption::name
+       Definition at line 56 of file rpmrc.c.
+
+       Referenced by doReadRC, and rpmShowRC.
+
+   int rpmOption::required
+       Definition at line 59 of file rpmrc.c.
+
+   struct rpmOptionValue* rpmOption::value
+       Definition at line 62 of file rpmrc.c.
+
+   int rpmOption::var
+       Definition at line 57 of file rpmrc.c.
+
+       Referenced by doReadRC, and rpmShowRC.
+
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002               rpmOption(3)

@@ -1,0 +1,83 @@
+STRTOD(3)               Library functions               STRTOD(3)
+
+
+
+NAME
+       strtod, strtof, strtold - convert ASCII string to floating
+       point number
+
+SYNOPSIS
+       #include <stdlib.h>
+
+       double strtod(const char *nptr, char **endptr);
+       float strtof(const char *nptr, char **endptr);
+       long double strtold(const char *nptr, char **endptr);
+
+DESCRIPTION
+       The strtod, strtof, and strtold functions convert the ini­
+       tial  portion  of the string pointed to by nptr to double,
+       float, and long double representation, respectively.
+
+       The expected form of the (initial portion of  the)  string
+       is  optional  leading  white  space  as  recognized by is­
+       space(3), an optional plus (``+'') or minus  sign  (``-'')
+       and  then either (i) a decimal number, or (ii) a hexadeci­
+       mal number, or (iii) an infinity, or (iv)  a  NAN  (not-a-
+       number).
+
+       A  decimal number consists of a nonempty sequence of deci­
+       mal digits possibly containing a radix character  (decimal
+       point,  locale  dependent, usually ``.''), optionally fol­
+       lowed by a decimal exponent.  A decimal exponent  consists
+       of  an  ``E''  or  ``e'',  followed by an optional plus or
+       minus sign, followed by a non-empty  sequence  of  decimal
+       digits, and indicates multiplication by a power of 10.
+
+       A  hexadecimal  number consists of a ``0x'' or ``0X'' fol­
+       lowed by a nonempty sequence of hexadecimal digits  possi­
+       bly containing a radix character, optionally followed by a
+       binary exponent. A binary exponent consists of a ``P''  or
+       ``p'',  followed  by  an optional plus or minus sign, fol­
+       lowed by a non-empty sequence of decimal digits, and indi­
+       cates  multiplication  by  a  power of 2.  At least one of
+       radix character and binary exponent must be present.
+
+       An infinity is either ``INF'' or ``INFINITY'',  disregard­
+       ing case.
+
+       A  NAN  is ``NAN'' (disregarding case) optionally followed
+       by `(', a sequence of characters, followed  by  ')'.   The
+       character  string specifies in an implementation-dependent
+       way the type of NAN.
+
+
+RETURN VALUE
+       These functions return the converted value, if any.
+
+       If endptr is not NULL, a pointer to  the  character  after
+       the last character used in the conversion is stored in the
+       location referenced by endptr.
+
+       If no conversion is performed, zero is  returned  and  the
+       value  of  nptr  is  stored  in the location referenced by
+       endptr.
+
+       If the correct value would cause overflow, plus  or  minus
+       HUGE_VAL  (HUGE_VALF, HUGE_VALL) is returned (according to
+       the sign of the value), and ERANGE is stored in errno.  If
+       the  correct value would cause underflow, zero is returned
+       and ERANGE is stored in errno.
+
+ERRORS
+       ERANGE Overflow or underflow occurred.
+
+CONFORMING TO
+       ANSI C describes strtod, C99 describes the other two func­
+       tions.
+
+SEE ALSO
+       atof(3), atoi(3), atol(3), strtol(3), strtoul(3)
+
+
+
+Linux                       2001-06-07                  STRTOD(3)

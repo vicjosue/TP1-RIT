@@ -1,0 +1,67 @@
+QT2KDOC(1)          KDOC Documentation System          QT2KDOC(1)
+
+
+
+NNAAMMEE
+       qt2kdoc -- Generates cross-reference file suitable for use
+       with KKDDOOCC from Qt Toolkit HTML documentation.
+
+SSYYNNOOPPSSIISS
+               qt2kdoc [-u URL] [-o <destdir>] [-z] <path to qt html>
+
+
+DDEESSCCRRIIPPTTIIOONN
+       qqtt22kkddoocc generates a kdoc(1) cross-reference file from  the
+       classes.html file that is included with the Qt GUI Toolkit
+       HTML documentation.
+
+       The resulting file can be used to cross-reference documen­
+       tation generated with KDOC for other classes with the Qt
+       HTML documentation.
+
+OOPPTTIIOONNSS
+       ----uurrll <url>, --uu <url>
+           The URL  by  which  the  Qt  documentation  can  be
+           accessed.  This  will allow other libraries to link to
+           the Qt documentation.
+
+       ----oouuttddiirr <path>, --oo <path>
+           The directory where the generated index file will be
+           written.
+
+       ----ccoommpprreessss, --zz
+           Compress the generated index with gzip. KDOC can read
+           these compressed index files.
+
+EEXXAAMMPPLLEESS
+               qt2kdoc -u "http://www.mydomain/src/qthtml/" \
+                       $HOME/web/src/qthtml
+
+
+EENNVVIIRROONNMMEENNTT
+       KKDDOOCCLLIIBBSS
+           If set, it is used as the default output path. It is
+           overridden by the ----oouuttddiirr option.
+
+FFIILLEESS
+       ccllaasssseess..hhttmmll, ffuunnccttiioonnss..hhttmmll
+           The files from which information about the Qt library
+           is read. They are parsed by qt2kdoc.
+
+       qqtt..kkddoocc
+           A kdoc(1) cross-reference file that will be  generated
+           by qt2kdoc and can be used to link documentation gen­
+           erated by kdoc with the Qt documentation.
+
+SSEEEE AALLSSOO
+       This script is a utility for kdoc(1).
+
+BBUUGGSS
+       Dependent on format of Qt documentation.
+
+AAUUTTHHOORR
+       Sirtaj S. Kang <taj@kde.org>, 1998.
+
+
+
+2000-09-24                    2.0a53                   QT2KDOC(1)

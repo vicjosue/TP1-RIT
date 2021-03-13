@@ -1,0 +1,289 @@
+ISAPNP(8)                                               ISAPNP(8)
+
+
+
+NAME
+       isapnp - Configure ISA Plug-and-Play devices.
+
+SYNOPSIS
+       isapnp [ --help ] [ --version ] conffile
+
+DESCRIPTION
+       isapnp  will  carry  out  the instructions provided in the
+       conffile to configure ISA PnP cards.  isapnp must read  in
+       the  entire configuration file successfully before it will
+       execute the commands: this is to ensure  the  instructions
+       are consistent and valid.
+       The  format  of  the  configuration  file  is described in
+       isapnp.conf(5).
+
+       In version 1.16 and later of  isapnptools,  isapnp  checks
+       resources are available as the devices are configured.  If
+       there is a conflict, a diagnostic message  is  given,  and
+       the  program  can  be made to abort if required by placing
+       the appropriate settings in the configuration file.
+
+       In version 1.18 and later of isapnptools, conffile may  be
+       '-', meaning read the configuration file from stdin.
+
+       isapnp  will  run with real-time scheduling if possible to
+       achieve the required IO timings. This will  lock  out  all
+       normal  programs  while  it  executes. In version 1.19 and
+       later of isapnptools, isapnp will only run  in  this  mode
+       for 5 seconds, it then reverts to standard scheduling like
+       any other program. Previous versions should  only  be  run
+       from  a standard console as ^C will kill it from there. If
+       you run the command remotely (and X counts as remote), you
+       will  not be able to kill it as no other programs can run.
+
+
+   Options
+       -h, --help
+              Show a help summary.
+
+       -v, --version
+              Print the isapnptools version number on stderr.
+
+
+ERRORS
+       If the configuration file cannot be  opened,  the  program
+       aborts immediately with a suitable message.
+
+       If an error occurs later, a message is printed to standard
+       error in the form:
+
+       file:lineno -- Warning/Fatal - message
+
+       where
+
+       file   The configuration file being read ('-') for  stdin.
+
+       lineno The  line  number  that  the  error  occured at (or
+              noticed).
+
+       Warning/Fatal
+              Warning if the error was not serious and  execution
+              can  continue, Fatal if the program cannot proceed.
+
+       message
+              The error message, hopefully meaningful, see below.
+
+
+       Unable to allocate memory for action list processing
+
+              The  program  has run out of memory and will abort.
+              Fit more memory, or add more swap  space.  This  is
+              extremely unlikely as isapnp is normally run during
+              boot up, when there are no users logged on.
+
+
+       ISOLATE called twice, or after CSN - clearing board count
+
+              You had an (ISOLATE..) after a  previous  occurance
+              of (ISOLATE..) or (CSN..).  The program will rescan
+              for boards. You should fix your script to only scan
+              for  boards  once,  by  removing  one  of the above
+              statements.
+
+       IRQ2 is not a valid selection, changing it  to  IRQ9  (See
+       clarifications 4.6.2)
+
+              Your configuration file attempted  to  configure  a
+              board to use IRQ2. This is invalid according to the
+              clarifications to  the  PnP  ISA  spec  v1.0a,  and
+              should be changed to use IRQ9, which has been done.
+              You should change your configuration  file  to  use
+              IRQ9 in the first place.
+
+       resource conflict allocating IRQx (see ...)
+
+              Your  configuration file has attempted to program a
+              board to use an IRQ line which is already  used  by
+              something else. The see ... bit tells you where the
+              IRQ line was first flagged as being in use.  Change
+              the  script to use a different IRQ line, or fix the
+              information being provided if the line really isn't
+              already used.
+
+       resource  conflict allocating n bytes of IO at x (see ...)
+
+              Your  configuration file has attempted to program a
+              board to use IO ports which  are  already  used  by
+              something else. The see ... bit tells you where the
+              ports were first flagged as being  in  use.  Change
+              the  script  to  use  different  ports,  or fix the
+              information being  provided  if  the  ports  really
+              aren't already used.
+
+       IO range check attempted while device activated
+
+              Your  configuration file has attempted to carry out
+              an IO range check on a  device  which  has  already
+              been  configured and activated. You must either not
+              attempt the check, or deactivate the device  before
+              the  check.  This  error  is a sign that you are on
+              shakey ground. If the device is already  activated,
+              and you are running isapnp for the first time, then
+              some other program has already activated the device
+              (may  be  the  BIOS, or some of the cleverer kernel
+              drivers). You probably shouldn't be  attempting  to
+              configure the device at all. There could already be
+              drivers accessing the card.
+
+       IO range check failed for n bytes of IO at x
+
+              The IO range check failed.  This  is  a  sign  that
+              there  is  a  conflict  of port addresses with some
+              other device. Reassign the IO ports for this device
+              (or the other one if you know what is is and how to
+              do it).
+
+       resource conflict allocating DMAx (see ...)
+
+              Your configuration file has attempted to program  a
+              board  to  use  a DMA line which is already used by
+              something else. The see ... bit tells you where the
+              DMA  line was first flagged as being in use. Change
+              the script to use a different DMA line, or fix  the
+              information being provided if the line really isn't
+              already used.
+
+       resource conflict allocating Memory at a (see ...)
+
+              Your configuration file has attempted to program  a
+              board  to  use  memory  addresses which are already
+              used by something else. The see ... bit  tells  you
+              where  the addresses were first flagged as being in
+              use. Change the script to use different  addresses,
+              or  fix  the  information  being  provided  if  the
+              addresses really aren't already used.
+
+              The following messages may also occur:
+
+       REALTIME operation timeout exceeded - Switching to  normal
+       scheduling
+
+              The program has been running for more than  5  sec­
+              onds,  so  something is probably wrong. Rather than
+              lock up your machine, it is switching out of  real-
+              time mode so that other programs can run again. The
+              program will now probably run slower. If this  mes­
+              sage occurs, you may want to kill isapnp.
+
+       Couldn't  clear  real-time scheduling, may continue to use
+       all CPU for a while
+
+              The  program  has been running for more than 5 sec­
+              onds, but  the  attempt  to  leave  real-time  mode
+              failed (impossible !), so there will be a further 5
+              second delay, then if it hasn't  finished  by  then
+              the program will kill itself.
+
+       Time expired - aborting program
+
+              The above happened (even though it's impossible !).
+              The program is killing itself.
+
+       Port address xx (0x..) out of range 0x203..0x3ff
+
+              You have provided an invalid READPORT address - fix
+              it.
+
+       READPORT not set
+
+              You  have not specified a READPORT, and not done an
+              (ISOLATE..) which would find one,  so  the  program
+              cannot  proceed. Either specify a READPORT or carry
+              out an (ISOLATE..).
+
+       Read port x cannot be allocated - resource  conflict  (see
+       ...)
+
+              The READPORT is already in use. Choose another.
+
+       Timeout attempting to read resource  data  -  is  READPORT
+       correct ?
+
+              The status bit to  signal  the  resource  data  was
+              valid  never  got  set, this could be due to a con­
+              flict with your choice  of  READPORT  address,  try
+              another.
+
+       LD  setting  verify failed, this may not be a problem. Try
+       adding (VERIFYLD N) to the top of your script
+
+              Reading  back the logical device selection register
+              failed. It appears  some  boards  do  this  if  you
+              access  the  devices in the wrong order. Do like it
+              says, and add (VERIFYLD  N)  to  the  top  of  your
+              script and see if the board configures ok.
+
+       Can only poke bytes
+
+              You've  tried  to  poke  a  value outside the range
+              0..255. Fix your script.
+
+       Don't know what to do with ... on or around line x
+
+              You've got a syntax error somewhere. If the word is
+              a  valid  command,  you've  probably got braces not
+              matching. Fix your script.
+
+       Unable to get io permission for WRITE_DATA
+
+              You are  not  superuser.  Only  superuser  has  the
+              required permissions to run isapnp.
+
+       nanosleep failed
+
+              Impossible ! If it happens, the program will to run
+              in real-time mode.
+
+
+FILES
+       /sbin/isapnp
+              The executable.
+
+       /etc/isapnp.conf
+              The standard place for the conffile.
+
+       /etc/isapnp.gone
+              The standard place for  describing  resources  that
+              are unavailable, but not flagged as such in /proc/*
+              etc. The format of this file is  explained  in  the
+              example provided with isapnptools.
+
+BUGS
+       Check   http://www.roestock.demon.co.uk/isapnptools/   for
+       latest information and FAQ.
+
+       If you think you have found one not mentioned in the  lat­
+       est   version,   please   send  a  report  to  isapnp@roe­
+       stock.demon.co.uk.
+
+WARNING
+       This program can reset all your Plug-and-Play devices.  It
+       can also lock up your machine.  Use at your own risk.
+
+AUTHOR
+       isapnp   has   been   written   by   Peter  Fox  <fox@roe­
+       stock.demon.co.uk>, the creator and  maintainer  of  isap­
+       nptools.
+
+AVAILABILITY
+       The  latest  version of the sources may be obtained by ftp
+       from ftp://ftp.demon.co.uk/pub/unix/linux/utils
+       Or follow the pointer from my web page at  http://www.roe­
+       stock.demon.co.uk/
+
+REFERENCES
+       Plug  and  Play  ISA  Specification,  Version 1.0a, May 5,
+       1994.    Available   from   ftp://ftp.microsoft.com/devel­
+       opr/drg/Plug-and-Play/Pnpspecs
+
+SEE ALSO
+       pnpdump(8), isapnp.conf(5)
+
+
+
+isapnptools                05 Jan 2001                  ISAPNP(8)

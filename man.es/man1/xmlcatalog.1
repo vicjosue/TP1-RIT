@@ -1,0 +1,155 @@
+xmlcatalog(1)           xmlcatalog Manual           xmlcatalog(1)
+
+
+
+NAME
+       xmlcatalog - Command line tool to parse and manipulate XML
+       or
+             SGML catalog files.
+
+SYNOPSIS
+       xmlcatalog [--shell | --create | --add  type          orig
+       replace  | --del  values  | --noout | --verbose] [catalog­
+       file] [entities]
+
+INTRODUCTION
+       xmlcatalog is a command line application allowing users to
+       monitor  and  manipulate  XML  and  SGML  catalogs.  It is
+       included in libxml2.
+
+
+       Its functions can be invoked from a  single  command  from
+       the  command line, or it can perform multiple functions in
+       interactive mode. It can operate  on  both  XML  and  SGML
+       files.
+
+
+COMMAND LINE OPTIONS
+       --shell filename
+
+              Run a shell allowing interactive queries on catalog
+              file filename.
+
+
+       --create filename
+
+              Create a new XML catalog. Outputs to stdout, ignor­
+              ing  filename unless --noout is used, in which case
+              it creates a new catalog file filename.
+
+
+       --add 'type' 'orig' 'replace' filename
+
+              Add an entry to catalog file filename.  type  indi­
+              cates  the  type of entry. Possible types are 'pub­
+              lic', 'system',  'rewriteSystem',  'delegatePublic'
+              and 'delegateSystem'. 'orig' is the original refer­
+              ence to be replaced, and 'replace' is  the  URI  of
+              the replacement entity to be used. The --add option
+              will not overwrite filename, outputing  to  stdout,
+              unless  --noout is used. The --add will always take
+              three parameters even if some of  the  XML  catalog
+              constructs will have only a single argument.
+
+
+              If  the  --add  option is used following the --sgml
+              option, only a  single  argument,  a  filename,  is
+              used.  This  is  used  to add the name of a catalog
+              file to an SGML supercatalog, a file that  contains
+              references to other included SGML catalog files.
+
+
+       --del 'values' filename
+
+              Remove  entries  from  the  catalog  file  filename
+              matching 'values'. The --del option will not  over­
+              write filename, outputing to stdout, unless --noout
+              is used.
+
+
+       --noout
+
+              Save output to the named file rather than outputing
+              to stdout.
+
+
+       -v or --verbose
+
+              output debugging information.
+
+
+SHELL COMMANDS
+       Invoking xmlcatalog with the --shell filename option opens
+       a command line shell allowing interactive  access  to  the
+       catalog  file  identified  by filename. Invoking the shell
+       provides a command line prompt after which commands can be
+       entered.
+
+
+       public 'PublicID'
+
+              Execute  a  public identifier lookup of the catalog
+              entry for 'PublicID'. The corresponding entry  will
+              be output to the command line.
+
+
+       system 'SystemID'
+
+              Execute  a  public identifier lookup of the catalog
+              entry for 'SystemID'. The corresponding entry  will
+              be output to the command line.
+
+
+       add  'type' 'orig' 'replace'
+
+              Add  an  entry  to the catalog file. type indicates
+              the type of entry.  Possible  types  are  'public',
+              'system',   'rewriteSystem',  'delegatePublic'  and
+              'delegateSystem'. 'orig' is the original  reference
+              to  be  replaced,  and  'replace' is the URI of the
+              replacement entity to be used.
+
+
+       del 'values'
+
+              Remove the catalog entry corresponding to 'values'.
+
+
+       dump    Print the current catalog.
+
+
+       debug    Print debugging statements showing the steps xml­
+              catalog is executing.
+
+
+       quiet   Stop printing debugging statements.
+
+
+       exit    Quit the shell.
+
+
+REFERENCES
+       libxml web page: http://www.xmlsoft.org/
+
+
+       libxml  catalog   support   web   page::   http://www.xml­
+       soft.org/catalog.html
+
+
+       James        Clark's       SGML       catalog       page::
+       http://www.jclark.com/sp/catalog.htm
+
+
+       OASIS  XML  catalog  specification:  :   http://www.oasis-
+       open.org/committees/entity/spec.html
+
+
+AUTHOR
+       Copyright 2001
+
+       John  Fleck   <jfleck@inkstain.net>This  is release 0.2 of
+       the xmlcatalog Manual.
+
+
+
+                                                    xmlcatalog(1)

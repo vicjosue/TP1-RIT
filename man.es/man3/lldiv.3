@@ -1,0 +1,32 @@
+LDIV(3)             Linux Programmer's Manual             LDIV(3)
+
+
+
+NAME
+       ldiv - computes the quotient and remainder of long integer
+       division.
+
+SYNOPSIS
+       #include <stdlib.h>
+
+       ldiv_t ldiv(long int numer, long int denom);
+       lldiv_t lldiv(long long int numer, long long int denom);
+
+DESCRIPTION
+       The ldiv() function divides numer by denom and returns the
+       quotient  and  remainder  in a structure named ldiv_t that
+       contains two long integer members named quot and rem.  The
+       quotient is rounded towards zero.
+
+RETURN VALUE
+       The ldiv_t structure.
+
+CONFORMING TO
+       SVID  3, BSD 4.3, ISO 9899.  lldiv() was added in ISO C99.
+
+SEE ALSO
+       div(3)
+
+
+
+GNU                         1993-03-29                    LDIV(3)

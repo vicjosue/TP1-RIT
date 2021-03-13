@@ -1,0 +1,97 @@
+LOSETUP(8)             MAINTENANCE COMMANDS            LOSETUP(8)
+
+
+
+NAME
+       losetup - set up and control loop devices
+
+SYNOPSIS
+       losetup [ -e encryption ] [options] loop_device file
+       losetup [ -d ] loop_device
+
+DESCRIPTION
+       losetup  is  used  to  associate loop devices with regular
+       files or block devices, to  detach  loop  devices  and  to
+       query the status of a loop device. If only the loop_device
+       argument is given, the status of  the  corresponding  loop
+       device is shown.
+
+OPTIONS
+       -d     detach the file or device associated with the spec­
+              ified loop device.
+
+       -e encryption
+              enable data encryption. The following keywords  are
+              recognized:
+
+              NONE   use no encryption (default).
+              XOR    use a simple XOR encryption.
+              AES128 use  128  bit  AES  encryption.  Password is
+                     hashed with SHA-256.
+              AES192 use 192  bit  AES  encryption.  Password  is
+                     hashed with SHA-384.
+              AES256 use  256  bit  AES  encryption.  Password is
+                     hashed with SHA-512.
+              AES    use AES encryption. Password is fed directly
+                     to  AES  cipher.   Length  of  the  password
+                     determines encryption key length.
+
+       -o offset
+              the data start is moved offset bytes into the spec­
+              ified file or device.
+
+       -p num read   the  passphrase  from  file  descriptor  num
+              instead of the terminal.
+
+       -S pseed
+              sets  encryption  password  seed  pseed  which   is
+              appended  to user supplied password before hashing.
+              Using  different  seeds  for  different  partitions
+              makes  dictionary  attacks slower but does not pre­
+              vent them if user supplied password is guessable.
+
+RETURN VALUE
+       losetup returns 0 on success,  nonzero  on  failure.  When
+       losetup displays the status of a loop device, it returns 1
+       if the device is not configured and 2 if an error occurred
+       which prevented losetup from determining the status of the
+       device.
+
+
+FILES
+       /dev/loop0,/dev/loop1,...   loop devices (major=7)
+
+EXAMPLE
+       If you are using the loadable module  you  must  have  the
+       module loaded first with the command
+
+              # insmod loop.o
+
+       The  following commands can be used as an example of using
+       the loop device.
+
+              dd if=/dev/zero of=/file bs=1k count=100
+              losetup -e AES128 /dev/loop0 /file
+              Password:
+              mkfs -t ext2 /dev/loop0 100
+              mount -t ext2 /dev/loop0 /mnt
+               ...
+              umount /dev/loop0
+              losetup -d /dev/loop0
+
+       If you are using the loadable module you  may  remove  the
+       module with the command
+
+              # rmmod loop
+
+
+RESTRICTION
+       XOR encryption is terribly weak.
+
+AUTHORS
+       Original version: Theodore Ts'o <tytso@athena.mit.edu>
+       AES support: Jari Ruusu <jari.ruusu@pp.inet.fi>
+
+
+
+Linux                      May 23 2001                 LOSETUP(8)

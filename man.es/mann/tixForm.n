@@ -1,0 +1,381 @@
+tixForm(n)            Tix Built-In Commands            tixForm(n)
+
+
+
+_________________________________________________________________
+
+NAME
+       tixForm - Geometry manager based on attachment rules
+
+SYNOPSIS
+       tixForm option arg ?arg ...?
+_________________________________________________________________
+
+DESCRIPTION
+       The  tixForm  command is used to communicate with the tix­
+       Form Geometry Manager, a geometry  manager  that  arranges
+       the  geometry of the children in a parent window according
+       to attachment rules. The tixForm geometry manager is  very
+       flexible  and  powerful; it can be used to emulate all the
+       existing features of the Tk  packer  and  placer  geometry
+       managers (see pack(n), place(n)).  The tixForm command can
+       have any of several forms, depending on the  option  argu­
+       ment:
+
+       tixForm slave ?options?
+              If  the  first argument to tixForm is a window name
+              (any value starting with ``.''), then  the  command
+              is  processed in the same way as tixForm configure.
+
+       tixForm check master
+              This  command  checks  whether  there  is  circular
+              dependency  in  the  attachments  of  the  master's
+              slaves (see the section CIRCULAR DEPENDENCY below).
+              It  returns  the  Boolean value TRUE if it discover
+              circular dependency and FALSE otherwise.
+
+       tixForm configure slave ?-option value ...?
+              Sets or adjusts the attachment values of the  slave
+              window  according  to  the  -option  value argument
+              pairs.
+
+              -b attachment
+                     Abbreviation for the -bottom option.
+
+              -bottom attachment
+                     Specifies an attachment for the bottom  edge
+                     of  the  slave  window.  The attachment must
+                     specied according to the section  SPECIFYING
+                     ATTACHMENTS below.
+
+              -bottomspring weight
+                     Specifies  the  weight  of the spring at the
+                     bottom edge of the  slave  window.  See  the
+                     section USING SPRINGS below.
+
+              -bp value
+                     Abbreviation for the -padbottom option.
+
+              -bs weight
+                     Abbreviation for the -bottomspring option.
+
+              -fill master
+                     Specifies the fillings when springs are used
+                     for this widget. The value  must  be  x,  y,
+                     both or none.
+
+              -in master
+                     Places  the  slave window into the specified
+                     master window. If the slave  was  originally
+                     in  another  master  window,  all attachment
+                     values with respect to the  original  master
+                     window are discarded. Even if the attachment
+                     values are the same as in the original  mas­
+                     ter window, they need to be specified again.
+                     The -in flag, when needed,  must  appear  as
+                     the  first flag after the name of the slave.
+                     Otherwise an error is generated.
+
+              -l attachment
+                     Abbreviation for the -left option.
+
+              -left attachment
+                     Specifies an attachment for the left edge of
+                     the   slave   window.  The  attachment  must
+                     specied according to the section  SPECIFYING
+                     ATTACHMENTS below.
+
+              -leftspring weight
+                     Specifies  the  weight  of the spring at the
+                     left edge of the slave window. See the  sec­
+                     tion USING SPRINGS below.
+
+              -lp value
+                     Abbreviation for the -padleft option.
+
+              -ls weight
+                     Abbreviation for the -leftspring option.
+
+              -padbottom value
+                     Specifies  the amount of external padding to
+                     leave on the bottom side of the  slave.  The
+                     value  may  have any of the forms acceptable
+                     to Tk_GetPixels(3).
+
+              -padleft value
+                     Specifies the amount of external padding  to
+                     leave on the left side of the slave.
+
+              -padright value
+                     Specifies  the amount of external padding to
+                     leave on the right side of the slave.
+
+              -padtop value
+                     Specifies the amount of external padding  to
+                     leave on the top side of the slave.
+
+              -padx value
+                     Specifies  the amount of external padding to
+                     leave on both the left and the  right  sides
+                     of the slave.
+
+              -pady value
+                     Specifies  the amount of external padding to
+                     leave on both the top and the  bottom  sides
+                     of the slave.
+
+              -r attachment
+                     Abbreviation for the -right option.
+
+              -right attachment
+                     Specifies  an  attachment for the right edge
+                     of the slave  window.  The  attachment  must
+                     specied  according to the section SPECIFYING
+                     ATTACHMENTS below.
+
+              -rightspring weight
+                     Specifies the weight of the  spring  at  the
+                     right edge of the slave window. See the sec­
+                     tion USING SPRINGS below.
+
+              -rp value
+                     Abbreviation for the -padright option.
+
+              -rs weight
+                     Abbreviation for the -rightspring option.
+
+              -t attachment
+                     Abbreviation for the -top option.
+
+              -top attachment
+                     Specifies an attachment for the top edge  of
+                     the   slave   window.  The  attachment  must
+                     specied according to the section  SPECIFYING
+                     ATTACHMENTS below.
+
+              -topspring weight
+                     Specifies  the  weight  of the spring at the
+                     top edge of the slave window. See  the  sec­
+                     tion USING SPRINGS below.
+
+              -tp value
+                     Abbreviation for the -padtop option.
+
+              -ts weight
+                     Abbreviation for the -topspring option.
+
+       tixForm forget slave ?slave ...?
+              Removes  each  of  the  slaves  from its master and
+              unmaps their windows.  The slaves will no longer be
+              managed  by  tixForm.  All  attachment  values with
+              respect to their master windows are  discarded.  If
+              another  slave  is attached to this slave, then the
+              attachment of the other slave will  be  changed  to
+              grid attachment based on its geometry.
+
+       tixForm grid master ?x_size y_size?
+              When  x_size  and  y_size  are  given, this command
+              returns the number of grids of the master window in
+              a  pair  of  integers  of the form {x_size y_size}.
+              When both x_size and y_size are given, this command
+              changes the number of horizontal and vertical grids
+              on the master window.
+
+       tixForm info slave ?option?
+              Queries the attachment options of a  slave  window.
+              option  can  be  any of the options accepted by the
+              tixForm configure command. If option is given, only
+              the  value  of that option is returned.  Otherwise,
+              this command returns a list whose elements are  the
+              current  configuration  state of the slave given in
+              the same option-value form that might be  specified
+              to  tixForm  configure.  The  first two elements in
+              this list list are "-in master" where master is the
+              slave's master window.
+
+       tixForm slaves master
+              Returns  a list of all of the slaves for the master
+              window. The order of the slaves in the list is  the
+              same as their order in the packing order. If master
+              has no slaves then an empty string is returned.
+
+
+SPECIFYING ATTACHMENTS
+       One can specify an attachment for each  side  of  a  slave
+       window  managed  by tixForm. An attachment is specified in
+       the the form "-side {anchor_point offset}". -side  can  be
+       one of -top, -bottom, -left or -right.
+
+       Offset  is  given  in  screen units (i.e. any of the forms
+       acceptable to Tk_GetPixels).  A positive offset  indicates
+       shifting to a position to the right or bottom of an anchor
+       point. A negative offset indicates shifting to a  position
+       to the left or top of an anchor point.
+
+       Anchor_point can be given in one of the following forms:
+
+              Grid Attachment
+                     The  master  window is divided into a number
+                     of horizontal and vertical grids. By default
+                     the  master  window  is divided into 100x100
+                     grids; the number of grids can  be  adjusted
+                     by  the tixForm grid command. A grid attach­
+                     ment anchor point is given by a % sign  fol­
+                     lowed  by  an integer value. For example, %0
+                     spceifies the first grid line  (the  top  or
+                     left edge of the master window). %100 spcei­
+                     fies the last grid line (the bottom or right
+                     edge of the master window).
+
+              Opposite Side Attachment
+                     Opposite   attachment  specifies  an  anchor
+                     point  located  on  the  opposite  side   of
+                     another  slave widget, which must be managed
+                     by tixForm in the  same  master  window.  An
+                     opposite attachment anchor point is given by
+                     the name of  another  widget.  For  example,
+                     "tixForm  .b  -top  {.a 0}" attaches the top
+                     side of the widget .b to the bottom  of  the
+                     widget .a.
+
+              Parallel Side Attachment
+                     Opposite   attachment  specifies  an  anchor
+                     point located on the same  side  of  another
+                     slave  widget, which must be managed by tix­
+                     Form in the same master window. An  parallel
+                     attachment anchor point is given by the sign
+                     & follwed by the  name  of  another  widget.
+                     For  example,  "tixForm  .b  -top  {&.a  0}"
+                     attaches the top side of the  widget  .b  to
+                     the  top  of  the  widget .a, making the top
+                     sides of these two widgets at the same  ver­
+                     tical position in their parent window.
+
+              No Attachment
+                     Specifies a side of the slave to be attached
+                     to nothing, indicated by the  keyword  none.
+                     When  the  none  anchor  point is given, the
+                     offser must be zero.
+
+                     When a side of a slave is attached to  {none
+                     0},  the position of this side is calculated
+                     by the position of the other  side  and  the
+                     natural size of the slave. For example, if a
+                     the left side of a widget is attached to {%0
+                     100},  its  right side attached to {none 0},
+                     and the natural size of  the  widget  is  50
+                     pixels, the right side of the widget will be
+                     positioned at pixel {%0 149}.
+
+                     When both -top and -bottom are  attached  to
+                     none,  then by default -top will be attached
+                     to {%0 0}. When both -left  and  -right  are
+                     attached to none, then by default -left will
+                     be attached to {%0 0}.
+
+       Shifting effects can be achieved by specifying a  non-zero
+       offset with an anchor point. In the following example, the
+       top side of widget .b is attached to  the  bottom  of  .a;
+       hence  .b always appears below .a.  Also, the left edge of
+       .b is attached to the left side of  .a  with  a  10  pixel
+       offest.   Therefore, the left edge of .b is always shifted
+       10 pixels to the right of .a's left edge:
+
+              tixForm .b -left {.a 10} -top {.a 0}
+
+       ABBREVIATIONS: Certain abbreviations can be  made  on  the
+       attachment  specifications: First an offset of zero can be
+       omitted.  Thus, the following two lines are equivalent:
+
+              tixForm .b -top {.a 0} -right {%100 0}
+              tixForm .b -top {.a}   -right {%100}
+
+       Also, because of the way TCL handles lists, when you  omit
+       the  offset, you can also leave out the braces. So you can
+       further simplify the above to:
+
+              tixForm .b -top .a -right %100
+
+       In the second case, when the anchor point is omitted,  the
+       offset  must  be  given.  A default anchor point is chosen
+       according to the value of the offset. If the anchor  point
+       is  0  or  positive,  the default anchor point %0 is used;
+       thus, "tixForm .b -top 15" attaches the top edge of .b  to
+       a position 15 pixels below the top edge of the master win­
+       dow. If the anchor point is "-0" or negative, the  default
+       anchor  point  %100  is used; thus, "tixForm .a -right -2"
+       attaches the right edge of .a to a position  2  pixels  to
+       the  left  of  the master window's right edge.  An further
+       example below shows a command with its equivalent abbrevi­
+       ation.
+              tixForm .b -top {%0 10} -bottom {%100 0}
+              tixForm .b -top 10      -bottom -0
+
+
+USING SPRINGS
+       To be written.
+
+
+ALGORITHM OF TIXFORM
+       TixForm starts with any slave in the list of slaves of the
+       master window. Then it tries to determine the position  of
+       each side of the slave.
+
+       If  the  attachment of a side of the slave is grid attach­
+       ment, the position of the side is readily determined.
+
+       If the attachment of this side is none, then tixForm tries
+       to  determine the position of the opposite side first, and
+       then use the position of the opposite side and the natural
+       size  of the slave to determine the position of this side.
+
+       If the attachment is opposite or parallel  widget  attach­
+       ments,  then  tixForm  tries to determine the positions of
+       the other widget first, and then use the positions of  the
+       other  widget  and the natural size of the slave determine
+       the position of this side. This recursive algorithmis car­
+       ried  on until the positions of all slaves are determined.
+
+
+CIRCULAR DEPENDENCY
+       The algorithm of tixForm will fail if  a  circular  depen­
+       dency  exists  in the attachments of the slaves. For exam­
+       ple:
+
+              tixForm .c -left .b
+              tixForm .b -right .c
+
+       In this example, the position  of  the  left  side  of  .b
+       depends  on the right side of .c, which in turn depends on
+       the left side of .b.
+
+       When a circular dependency is discovered during the execu­
+       tion  of  the  tixForm  algorithm, tixForm will generate a
+       background error and the geometry of the slaves are  unde­
+       fined  (and  will  be arbitrary). Notice that tixForm only
+       executes the  algorithm  when  the  specification  of  the
+       slaves'  attachments  is  complete.   Therefore, it allows
+       intermediate states  of  circular  dependency  during  the
+       specification  of  the  slaves' attachments.  Also, unlike
+       the Motif Form manager widget,  tixForm  defines  circular
+       dependency  as  "dependency in the same dimension". There­
+       fore, the following code fragment will does not have  cir­
+       cular  dependency because the two widgets do not depend on
+       each other in the same dimension (.b  depends  .c  in  the
+       horizontal  dimension and .c depends on .b in the vertical
+       dimension):
+
+              tixForm .b -left .c
+              tixForm .c -top .b
+
+
+BUGS
+       Springs have not been fully implemented yet.
+
+KEYWORDS
+       Tix(n), Form, Geometry Management
+
+
+
+
+Tix                            4.0                     tixForm(n)

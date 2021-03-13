@@ -1,0 +1,44 @@
+rpmProblemSet_s(3)                             rpmProblemSet_s(3)
+
+
+
+NAME
+       rpmProblemSet_s -
+
+SYNOPSIS
+       #include <rpmlib.h>
+
+
+   Data Fields
+       int numProblems
+       int numProblemsAlloced
+       rpmProblem probs
+
+FIELD DOCUMENTATION
+   int rpmProblemSet_s::numProblems
+       Current probs array size.
+
+       Definition at line 941 of file rpmlib.h.
+
+       Referenced by rpmProblemSetPrint, and rpmtransRun.
+
+   int rpmProblemSet_s::numProblemsAlloced
+       Allocated probs array size.
+
+       Definition at line 942 of file rpmlib.h.
+
+   rpmProblem rpmProblemSet_s::probs
+       Array of specific problems.
+
+       Definition at line 943 of file rpmlib.h.
+
+       Referenced by rpmProblemSetPrint, and rpmtransRun.
+
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002         rpmProblemSet_s(3)

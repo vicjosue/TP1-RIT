@@ -1,0 +1,62 @@
+SSL_set_connect_state(3)     OpenSSL     SSL_set_connect_state(3)
+
+
+
+NNAAMMEE
+       SSL_set_connect_state, SSL_get_accept_state - prepare SSL
+       object to work in client or server mode
+
+SSYYNNOOPPSSIISS
+        #include <openssl/ssl.h>
+
+        void SSL_set_connect_state(SSL *ssl);
+
+        void SSL_set_accept_state(SSL *ssl);
+
+
+DDEESSCCRRIIPPTTIIOONN
+       SSL_set_connect_state() sets ssssll to work in client mode.
+
+       SSL_set_accept_state() sets ssssll to work in server mode.
+
+NNOOTTEESS
+       When the SSL_CTX object was created with SSL_CTX_new(3),
+       it was either assigned a dedicated client method, a
+       dedicated server method, or a generic method, that can be
+       used for both client and server connections. (The method
+       might have been changed with SSL_CTX_set_ssl_version(3) or
+       SSL_set_ssl_method().)
+
+       When beginning a new handshake, the SSL engine must know
+       whether it must call the connect (client) or accept
+       (server) routines. Even though it may be clear from the
+       method chosen, whether client or server mode was
+       requested, the handshake routines must be explicitly set.
+
+       When using the SSL_connect(3) or SSL_accept(3) routines,
+       the correct handshake routines are automatically set. When
+       performing a transparent negotiation using SSL_write(3) or
+       SSL_read(3), the handshake routines must be explicitly set
+       in advance using either SSL_set_connect_state() or
+       SSL_set_accept_state().
+
+RREETTUURRNN VVAALLUUEESS
+       SSL_set_connect_state() and SSL_set_accept_state() do not
+       return diagnostic information.
+
+SSEEEE AALLSSOO
+       ssl(3), SSL_new(3), SSL_CTX_new(3), SSL_connect(3),
+       SSL_accept(3), SSL_write(3), SSL_read(3),
+       SSL_CTX_set_ssl_version(3)
+
+
+
+
+
+
+
+
+
+
+
+13/Sep/2001                   0.9.6c     SSL_set_connect_state(3)

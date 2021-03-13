@@ -1,0 +1,64 @@
+PWCONV(8)                                               PWCONV(8)
+
+
+
+NAME
+       pwconv, pwunconv, grpconv, grpunconv - convert to and from
+       shadow passwords and groups.
+
+SYNOPSIS
+       pwconv
+       pwunconv
+       grpconv
+       grpunconv
+
+DESCRIPTION
+       These four programs all operate on the normal  and  shadow
+       password   and   group   files:  /etc/passwd,  /etc/group,
+       /etc/shadow, and /etc/gshadow.
+
+       pwconv creates shadow from passwd and an optionally exist­
+       ing  shadow.   pwunconv  creates  passwd  from  passwd and
+       shadow and then removes shadow.  grpconv  creates  gshadow
+       from  group and an optionally existing gshadow.  grpunconv
+       creates group from group  and  gshadow  and  then  removes
+       gshadow.
+
+       Each  program  acquires the necessary locks before conver­
+       sion.
+
+       pwconv and grpconv are similiar.  First,  entries  in  the
+       shadowed  file  which  don't  exist  in  the main file are
+       removed.  Then, shadowed entries which don't have  `x'  as
+       the  password  in  the main file are updated.  Any missing
+       shadowed entries are added.   Finally,  passwords  in  the
+       main  file  are  replaced with `x'.  These programs can be
+       used for initial conversion as well to update the shadowed
+       file if the main file is edited by hand.
+
+       pwconv    will    use   the   values   of   PASS_MIN_DAYS,
+       PASS_MAX_DAYS, and PASS_WARN_AGE from /etc/login.defs when
+       adding new entries to /etc/shadow.
+
+       Likewise,  pwunconv and grpunconv are similiar.  Passwords
+       in the main file  are  updated  from  the  shadowed  file.
+       Entries  which exist in the main file but not in the shad­
+       owed file are left alone.  Finally, the shadowed  file  is
+       removed.
+
+       Some  password  aging information is lost by pwunconv.  It
+       will convert what it can.
+
+BUGS
+       Errors in the password or group files (such as invalid  or
+       duplicate  entries)  may cause these programs to loop for­
+       ever or fail in other strange ways.  Please run  pwck  and
+       grpck  to  correct any such errors before converting to or
+       from shadow passwords or groups.
+
+SEE ALSO
+       login.defs(5), pwck(8), grpck(8), shadowconfig(8)
+
+
+
+                           26 Sep 1997                  PWCONV(8)

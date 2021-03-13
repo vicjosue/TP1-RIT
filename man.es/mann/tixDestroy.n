@@ -1,0 +1,27 @@
+tixDestroy(n)         Tix Built-In Commands         tixDestroy(n)
+
+
+
+_________________________________________________________________
+
+NAME
+       tixDestroy - Destroy Tix Objects
+
+SYNOPSIS
+       tixDestroy objectName
+_________________________________________________________________
+
+
+DESCRIPTION
+       The  tixDestroy  destroys  a  Tix  object  whose  class is
+       declared by the  tixClass  keyword.  When  the  object  is
+       destroyed,  its Destructor function is called and the mem­
+       ory allocated for this object is freed.
+
+KEYWORDS
+       Tix, Object
+
+
+
+
+Tix                            4.0                  tixDestroy(n)

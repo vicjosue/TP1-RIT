@@ -1,0 +1,56 @@
+TriggerFileEntry(3)                           TriggerFileEntry(3)
+
+
+
+NAME
+       TriggerFileEntry -
+
+SYNOPSIS
+       #include <rpmspec.h>
+
+
+   Data Fields
+       int index
+       char * fileName
+       char * script
+       char * prog
+       TriggerFileEntry * next
+
+FIELD DOCUMENTATION
+   char* TriggerFileEntry::fileName
+       Definition at line 19 of file rpmspec.h.
+
+       Referenced by addTriggerIndex, freeTriggerFiles, and
+       processScriptFiles.
+
+   int TriggerFileEntry::index
+       Definition at line 18 of file rpmspec.h.
+
+       Referenced by addTriggerIndex.
+
+   struct TriggerFileEntry* TriggerFileEntry::next
+       Definition at line 22 of file rpmspec.h.
+
+       Referenced by addTriggerIndex, freeTriggerFiles, and
+       processScriptFiles.
+
+   char* TriggerFileEntry::prog
+       Definition at line 21 of file rpmspec.h.
+
+       Referenced by addTriggerIndex, freeTriggerFiles, and
+       processScriptFiles.
+
+   char* TriggerFileEntry::script
+       Definition at line 20 of file rpmspec.h.
+
+       Referenced by addTriggerIndex, freeTriggerFiles, and
+       processScriptFiles.
+
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002        TriggerFileEntry(3)

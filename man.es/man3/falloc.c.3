@@ -1,0 +1,79 @@
+rpmdb/falloc.c(3)                               rpmdb/falloc.c(3)
+
+
+
+NAME
+       rpmdb/falloc.c - The entire file space is thus divided
+       into blocks with a 'struct fablock' at the header of each.
+
+SYNOPSIS
+       #include 'system.h'
+       #include <rpmio_internal.h>
+       #include <rpmmessages.h>
+       #include <rpmerr.h>
+       #include 'falloc.h'
+       #include 'debug.h'
+
+   Data Structures
+       struct faFileHeader
+       struct faFooter
+       struct faHeader
+
+   Defines
+       #define FA_MAGIC   0x02050920
+
+   Functions
+       FD_t fadOpen (const char *path, int flags, mode_t perms)
+       unsigned int fadAlloc (FD_t fd, unsigned int size)
+       void fadFree (FD_t fd, unsigned int offset)
+       int fadSanity (FD_t fd, int offset, const struct faHeader
+           *fh, int printit)
+       int fadFirstOffset (FD_t fd)
+       int fadNextOffset (FD_t fd, unsigned int lastOffset)
+
+   Variables
+       FDIO_s fadio_s
+       FDIO_t fadio = &fadio_s
+
+DETAILED DESCRIPTION
+       The entire file space is thus divided into blocks with a
+       'struct fablock' at the header of each.
+
+        The size fields doubly link this block list.
+
+       There is an additional free list weaved through the block
+       list, which  keeps new allocations fast.
+
+       Much of this was inspired by Knuth vol 1.
+
+
+       Definition in file falloc.c.
+
+FUNCTION DOCUMENTATION
+   int fadSanity (FD_t fd, int offset, const struct faHeader *
+       fh, int printit) [static]
+       Definition at line 385 of file falloc.c.
+
+       Referenced by fadNextOffset.
+
+VARIABLE DOCUMENTATION
+   FDIO_t fadio = &fadio_s
+       Definition at line 51 of file falloc.c.
+
+   struct FDIO_s fadio_s [static]
+       Initial value:
+
+        {
+         NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+         fadOpen, NULL, NULL,  NULL, NULL, NULL, NULL, NULL, NULL
+       }
+
+       Definition at line 46 of file falloc.c.
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002          rpmdb/falloc.c(3)

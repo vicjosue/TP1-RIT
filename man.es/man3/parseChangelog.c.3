@@ -1,0 +1,77 @@
+build/parseChangelog.c(3)               build/parseChangelog.c(3)
+
+
+
+NAME
+       build/parseChangelog.c - Parse changelog section from spec
+       file.
+
+SYNOPSIS
+       #include 'system.h'
+       #include 'rpmbuild.h'
+       #include 'debug.h'
+
+   Functions
+       void addChangelogEntry (Header h, time_t time, const char
+           *name, const char *text)
+       int dateToTimet (const char *datestr, time_t *secs)
+           Parse date string to seconds.
+       int addChangelog (Header h, StringBuf sb)
+           Add changelog section to header.
+       int parseChangelog (Spec spec)
+
+DETAILED DESCRIPTION
+       Parse changelog section from spec file.
+
+
+
+       Definition in file parseChangelog.c.
+
+FUNCTION DOCUMENTATION
+   int addChangelog (Header h, StringBuf sb) [static]
+       Add changelog section to header.
+
+       Parameters:
+
+       h      header
+
+       sb     changelog strings
+
+       Returns:
+           0 on success
+
+       Definition at line 108 of file parseChangelog.c.
+
+       References _, addChangelogEntry, dateToTimet,
+       getStringBuf, SKIPNONSPACE, SKIPSPACE, and xisspace.
+
+       Referenced by parseChangelog.
+
+   int dateToTimet (const char * datestr, time_t * secs) [static]
+       Parse date string to seconds.
+
+       Parameters:
+
+       datestr
+              date string (e.g. 'Wed Jan 1 1997')
+
+       Return values:
+
+       secs   secs since the unix epoch
+
+       Returns:
+           0 on success, -1 on error
+
+       Definition at line 37 of file parseChangelog.c.
+
+       References alloca, SKIPNONSPACE, and SKIPSPACE.
+
+       Referenced by addChangelog.
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002  build/parseChangelog.c(3)

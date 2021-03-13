@@ -1,0 +1,42 @@
+ASPRINTF(3)         Linux Programmer's Manual         ASPRINTF(3)
+
+
+
+NAME
+       asprintf, vasprintf - print to allocated string
+
+SYNOPSIS
+       #define _GNU_SOURCE
+       #include <stdio.h>
+
+       int asprintf(char **strp, const char *fmt, ...);
+
+       int vasprintf(char **strp, const char *fmt, va_list ap);
+
+DESCRIPTION
+       The  functions  asprintf  and  vasprintf  are analogues of
+       sprintf and vsprintf, except that they allocate  a  string
+       large  enough to hold the output including the terminating
+       NUL, and return a pointer to it via the  first  parameter.
+       This  pointer  should  be passed to free(3) to release the
+       allocated storage when it is no longer needed.
+
+RETURN VALUE
+       When successful, these  functions  return  the  number  of
+       bytes printed, just like sprintf(3).  If memory allocation
+       wasn't possible, or some other error occurs,  these  func­
+       tions  will  return  -1, and the contents of strp is unde­
+       fined.
+
+NOTES
+       These functions are GNU extensions, not  in  C  or  POSIX.
+       They are also available under *BSD.  The FreeBSD implemen­
+       tation sets strp to NULL on error.
+
+SEE ALSO
+       free(3), malloc(3), printf(3)
+
+
+
+
+GNU                         2001-12-18                ASPRINTF(3)

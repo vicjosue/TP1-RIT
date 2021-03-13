@@ -1,0 +1,137 @@
+LDAPFILTER.CONF(5)                             LDAPFILTER.CONF(5)
+
+
+
+NAME
+       ldapfilter.conf  -  configuration file for LDAP get filter
+       routines
+
+SYNOPSIS
+       /etc/openldap/ldapfilter.conf
+
+DESCRIPTION
+       The file /etc/openldap/ldapfilter.conf  contains  informa­
+       tion  used  by the LDAP get filter routines (see ldap-get­
+       filter(3)).  Blank lines and lines that have a first char­
+       acter  of  `#'  are  treated as comments and ignored.  The
+       configuration information consists of lines  that  contain
+       one,  two,  three, four, or five tokens.  Tokens are sepa­
+       rated by white space, and double quotes `"' can be used to
+       include white space inside a token.
+
+       The  file  consists  of  a  sequence of one or more filter
+       sets.  A filter set begins with a line containing a single
+       token called a tag.  The tag is used in the ldap_getfirst­
+       filter(3) call to select the filter set.
+
+       The filter set consists of a sequence of one or more  fil­
+       ter  lists.   The first line in a filter list must contain
+       four or five tokens:  the  value  pattern,  the  delimiter
+       list,  a  filter  template,  a  match  description, and an
+       optional search scope.  The value  pattern  is  a  regular
+       expression that is matched against the value passed to the
+       ldap_getfirstfilter(3) call to select the filter list.
+
+       The delimiter list is a list of characters (in the form of
+       a  single  string)  that  are used to break the value into
+       distinct words.
+
+       The filter template is used to construct  an  LDAP  filter
+       (it is described further below)
+
+       The match description is returned to the called along with
+       a filter as a piece of text that can be used  to  describe
+       the  sort  of LDAP search that took place.  It should cor­
+       rectly compete both of the following phrases:  "One  match
+       description  match  was  found  for..."   and "Three match
+       description matches were found for...."
+
+       The search scope is optional, and should be one of "base",
+       "onelevel",  or  "subtree".   If  search scope is not pro­
+       vided, the default is "subtree".
+
+       The remaining lines of the filter list should contain  two
+       or  three  tokens,  a filter template, a match description
+       and an optional search scope (as described above).
+
+       The filter template is similar in concept to  a  printf(3)
+       style format string.  Everything is taken literally except
+       for the character sequences:
+           %v
+           %v$
+           %vN
+           %vM-N
+           %vN-
+       A plain %v means to substitute the entire value string  in
+       place  of  the  %v.  %v$ means substitute the last word in
+       this spot.  A %vN, where N is a single  digit  1-9,  means
+       substitute  word  N  in  this spot.  Words are number from
+       left to right within the value starting at  1.   A  %vM-N,
+       where M and N are both single digits 1-9, means substitute
+       the indicated sequence of words.  A %vN-, where N is again
+       a  single  digit  1-9, means substitute word N through the
+       last word in value.
+
+EXAMPLE
+       The following ldap filter configuration file contains  two
+       filter  sets  (finger and go500gw onelevel), each of which
+       contains four filter lists.
+
+         # ldap filter file
+         #
+         finger
+           "="                " "     "%v"                    "arbitrary filter"
+
+           "[0-9][0-9-]*"    " "     "(telephoneNumber=*%v)" "phone number"
+
+           "@"                " "     "(mail=%v)"             "email address"
+
+           "^.[. _].*"       ". _"   "(cn=%v1* %v2-)"        "first initial"
+
+           ".*[. _].$"        ". _"   "(cn=%v1-*)"            "last initial"
+
+           "[. _]"            ". _"   "(|(sn=%v1-)(cn=%v1-))"        "exact"
+                                      "(|(sn~=%v1-)(cn~=%v1-))"      "approximate"
+
+           ".*"               ". "    "(|(cn=%v1)(sn=%v1)(uid=%v1))" "exact"
+                                      "(|(cn~=%v1)(sn~=%v1))"        "approximate"
+
+         "go500gw onelevel"
+           "^..$"  " "   "(|(o=%v)(c=%v)(l=%v)(co=%v))"       "exact" "onelevel"
+                         "(|(o~=%v)(c~=%v)(l~=%v)(co~=%v))"   "approximate" "onelevel"
+
+           " "     " "   "(|(o=%v)(l=%v)(co=%v)"       "exact"        "onelevel"
+                         "(|(o~=%v)(l~=%v)(co~=%v)"    "approximate"  "onelevel"
+
+           "."    " "   "(associatedDomain=%v)"       "exact"        "onelevel"
+
+           ".*"    " "   "(|(o=%v)(l=%v)(co=%v)"       "exact"        "onelevel"
+                         "(|(o~=%v)(l~=%v)(co~=%v)"    "approximate"  "onelevel"
+
+       The call ldap_getfirstfilter( lfdp, "finger", "m.smith" );
+       will  return an LDAPFiltInfo structure with the lfi_filter
+       member  containing  the  string  (cn=m*  smith)  with  the
+       lfi_desc  member  containing the string first initial, and
+       lfi_scope containing the value LDAP_SCOPE_SUBTREE.
+
+       The call ldap_getfirstfilter(  lfdp,  "go500gw  onelevel",
+       "umich"  ); will return an LDAPFiltInfo structure with the
+       lfi_filter     member      containing      the      string
+       (|(o=umich)(l=umich)(co=umich)  with  the  lfi_desc member
+       containing the string exact, and lfi_scope containing  the
+       value LDAP_SCOPE_ONELEVEL.
+
+FILES
+       /etc/openldap/ldapfilter.conf
+
+SEE ALSO
+       ldap(3), ldap_getfilter(3)
+
+ACKNOWLEDGEMENTS
+       OpenLDAP  is developed and maintained by The OpenLDAP Pro­
+       ject (http://www.openldap.org/).  OpenLDAP is derived from
+       University of Michigan LDAP 3.3 Release.
+
+
+
+OpenLDAP 2.0.21-Release   20 August 2000       LDAPFILTER.CONF(5)

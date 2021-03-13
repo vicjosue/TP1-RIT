@@ -1,0 +1,158 @@
+getipnodebyname(3)  Linux Programmer's Manual  getipnodebyname(3)
+
+
+
+NAME
+       getipnodebyname,  getipnodebyaddr,  freehostent - get net­
+       work host names and addresses
+
+SYNOPSIS
+       #include <sys/types.h>
+       #include <sys/socket.h>
+       #include <netdb.h>
+
+       struct hostent *getipnodebyname(const char *name,
+                                int af, int flags,
+                                int *error_num);
+
+       struct hostent *getipnodebyaddr(const void *addr,
+                                size_t len, int af,
+                                int *error_num);
+
+       void freehostent(struct hostent *ip);
+
+DESCRIPTION
+       The getipnodebyname(3)  and  getipnodebyaddr(3)  functions
+       return  the  names and addresses of a network host.  These
+       functions return a pointer to the following structure:
+
+       struct hostent {
+               char    *h_name;
+               char    **h_aliases;
+               int     h_addrtype;
+               int     h_length;
+               char    **h_addr_list;
+       };
+
+       These functions replace the gethostbyname(3) and  gethost­
+       byaddr(3) functions, which could only access the IPv4 net­
+       work address family.  The getipnodebyname(3)  and  getipn­
+       odebyaddr(3) functions can access multiple network address
+       families.
+
+       Unlike the gethostby  functions,  these  functions  return
+       pointers  to  dynamically  allocated memory.  The freehos­
+       tent(3) function is used to release the dynamically  allo­
+       cated  memory after the caller no longer needs the hostent
+       structure.
+
+   getipnodebyname parameters
+       The getipnodebyname(3) function looks up network addresses
+       for  the  host  specified  by  the name parameter.  The af
+       parameter specifies one of the following values:
+
+       AF_INET
+              The name parameter points  to  a  dotted-quad  IPv4
+              address or a name of an IPv4 network host.
+
+       AF_INET6
+              The  name  parameter  points  to a hexadecimal IPv6
+              address or a name of an IPv6 network host.
+
+       The flags parameter specifies  additional  options.   More
+       than  one option can be specified by logically OR-ing them
+       together.  flags should be set to  0  if  no  options  are
+       desired.
+
+       AI_V4MAPPED
+              This  flag is used with AF_INET6 to request a query
+              for IPv4 addresses instead of IPv6  addresses;  the
+              IPv4 addresses will be mapped to IPv6 addresses.
+
+       AI_ALL This  flag  is  used  with AI_V4MAPPED to request a
+              query for both IPv4 and IPv6 addresses.   Any  IPv4
+              address found will be mapped to an IPv6 address.
+
+       AI_ADDRCONFIG
+              This  flag is used with AF_INET6 to further request
+              that queries for IPv6 addresses should not be  made
+              unless  the  system  has  at least one IPv6 address
+              assigned to a network interface, and  that  queries
+              for  IPv4  addresses  should not be made unless the
+              system has at least one IPv4 address assigned to  a
+              network interface.  This flag may be used by itself
+              or with the AI_V4MAPPED flag.
+
+       AI_ALL This  flag  is  equivalent  to   (AI_ADDRCONFIG   |
+              AI_V4MAPPED).
+
+   getipnodebyaddr parameters
+       The  getipnodebyaddr(3)  function looks up the name of the
+       host whose network address is specified by the addr param­
+       eter.   The  af  parameter  specifies one of the following
+       values:
+
+       AF_INET
+              The addr parameter points to a struct  in_addr  and
+              len must be set to sizeof(struct in_addr).
+
+       AF_INET6
+              The  addr parameter points to a struct in6_addr and
+              len must be set to sizeof(struct in6_addr).
+
+RETURN VALUE
+       A null pointer is  returned  if  an  error  occurred,  and
+       error_num  will  contain  an error code from the following
+       list:
+
+       HOST_NOT_FOUND
+              The host name or network address was not found.
+
+       NO_ADDRESS
+              The  domain  name  server  recognized  the  network
+              address  or name, but no answer was returned.  This
+              can happen  if  the  network  host  has  only  IPv4
+              addresses  and  a  request  has  been made for IPv6
+              information only, or vice versa.
+
+       NO_RECOVERY
+              The domain name server returned a permanent failure
+              response.
+
+       TRY_AGAIN
+              The domain name server returned a temporary failure
+              response.  You might have better luck next time.
+
+       A successful query returns a pointer to a  hostent  struc­
+       ture that contains the following fields:
+
+       h_name This is the official name of this network host.
+
+       h_aliases
+              This  is an array of pointers to unofficial aliases
+              for the same host.  The array is  terminated  by  a
+              null pointer.
+
+       h_addrtype
+              This  is a copy of the af parameter to getipnodeby­
+              name(3)  or  getipnodebyaddr(3).   h_addrtype  will
+              always  be AF_INET if the af parameter was AF_INET.
+              h_addrtype will always be AF_INET6 if the af param­
+              eter was AF_INET6.
+
+       h_length
+              This field will be set to sizeof(struct in_addr) if
+              h_addrtype  is  AF_INET,   and   to   sizeof(struct
+              in6_addr) if h_addrtype is AF_INET6.
+
+       h_addr_list
+              This is an array of one or more pointers to network
+              address structures for the network host.  The array
+              is terminated by a null pointer.
+
+SEE ALSO
+       getaddrinfo(3), inet_ntop(3), inet_pton(3)
+
+
+
+Linux Man Page              2000-12-18         getipnodebyname(3)

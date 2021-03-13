@@ -1,0 +1,59 @@
+TIFFSTRIP(3T)                                       TIFFSTRIP(3T)
+
+
+
+NAME
+       TIFFDefaultStripSize, TIFFStripSize, TIFFVStripSize, TIFF­
+       ComputeStrip, TIFFNumberOfStrips -  strip-related  utility
+       routines
+
+SYNOPSIS
+       #include <tiffio.h>
+       uint32 TIFFDefaultStripSize(TIFF* tif, uint32 estimate)
+       tsize_t TIFFStripSize(TIFF* tif)
+       tsize_t TIFFVStripSize(TIFF* tif, uint32 nrows)
+       tstrip_t TIFFComputeStrip(TIFF* tif, uint32 row, tsample_t sample)
+       tstrip_t TIFFNumberOfStrips(TIFF* tif)
+
+DESCRIPTION
+       TIFFDefaultStripSize returns the number of rows for a rea­
+       sonable-sized strip according to the current  settings  of
+       the  ImageWidth,  BitsPerSample, SamplesPerPixel, tags and
+       any compression-specific requirements.   If  the  estimate
+       parameter, if non-zero, then it is taken as an estimate of
+       the desired strip size and adjusted according to any  com­
+       pression-specific  requirements.   The  value  returned by
+       this function is typically used to define the RowsPerStrip
+       tag.   In  lieu  of  any unusual requirements TIFFDefault­
+       StripSize tries to create strips that have approximately 8
+       kilobytes of uncompressed data.
+
+       TIFFStripSize  returns  the equivalent size for a strip of
+       data as it would be returned in a call to TIFFReadEncoded­
+       Strip or as it would be expected in a call to TIFFWriteEn­
+       codedStrip.
+
+       TIFFVStripSize returns the number of bytes in a strip with
+       nrows rows of data.
+
+       TIFFComputeStrip returns the strip that contains the spec­
+       ified coordinates.  A valid strip is always returned; out-
+       of-range  coordinate  values  are clamped to the bounds of
+       the image.  The row parameter is always used in  calculat­
+       ing  a  strip.   The sample parameter is used only if data
+       are organized in separate planes  (PlanarConfiguration=2).
+
+       TIFFNumberOfStrips  returns  the  number  of strips in the
+       image.
+
+DIAGNOSTICS
+       None.
+
+SEE ALSO
+       libtiff(3T),    TIFFReadEncodedStrip(3T),     TIFFReadRaw­
+       Strip(3T),     TIFFWriteEncodedStrip(3T),    TIFFWriteRaw­
+       Strip(3T)
+
+
+
+                         October 15, 1995           TIFFSTRIP(3T)

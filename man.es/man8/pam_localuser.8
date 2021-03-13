@@ -1,0 +1,50 @@
+pam_localuser(8)  System Administrator's Manual  pam_localuser(8)
+
+
+
+NAME
+       pam_localuser - require users to be listed in /etc/passwd
+
+
+SYNOPSIS
+       account sufficient /lib/security/pam_localuser.so args
+       account required /lib/security/pam_wheel.so group=devel
+
+
+DESCRIPTION
+       pam_localuser.so  exists to help implement site-wide login
+       policies, where they typically include  a  subset  of  the
+       network's  users  and  a  few accounts that are local to a
+       particular  workstation.    Using   pam_localuser.so   and
+       pam_wheel.so  or  pam_listfile.so  is  an effective way to
+       restrict access to either local users and/or a  subset  of
+       the network's users.
+
+       This could also be implemented using pam_listfile.so and a
+       very short awk script invoked by  cron,  but  it's  common
+       enough to have been separated out.
+
+
+ARGUMENTS
+       debug  turns on debugging
+
+       file=FILE
+              uses a file other than /etc/passwd.
+
+
+FILES
+       /etc/passwd
+
+
+BUGS
+       Let's  hope  not,  but if you find any, please report them
+       via  the  "Bug   Track"   link   at   http://bugzilla.red­
+       hat.com/bugzilla/
+
+
+AUTHOR
+       Nalin Dahyabhai <nalin@redhat.com>
+
+
+
+Red Hat                     2000/7/21            pam_localuser(8)

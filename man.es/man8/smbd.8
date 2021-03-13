@@ -1,0 +1,291 @@
+SMBD(8)                                                   SMBD(8)
+
+
+
+NAME
+       smbd - server to provide SMB/CIFS services to clients
+
+SYNOPSIS
+       smbd  [ -D ]  [ -a ]  [ -i ]  [ -o ]  [ -P ]  [ -h ]  [ -V
+       ]  [ -d <debug level> ]  [ -l  <log  directory>  ]   [  -p
+       <port  number> ]  [ -O <socket option> ]  [ -s <configura­
+       tion file> ]
+
+DESCRIPTION
+       This program is part of the Samba suite.
+
+       smbd is the server daemon that  provides  filesharing  and
+       printing services to Windows clients.  The server provides
+       filespace and printer services to clients  using  the  SMB
+       (or CIFS) protocol. This is compatible with the LanManager
+       protocol,  and  can  service  LanManager  clients.   These
+       include MSCLIENT 3.0 for DOS, Windows for Workgroups, Win­
+       dows 95/98/ME, Windows NT, Windows 2000,  OS/2,  DAVE  for
+       Macintosh, and smbfs for Linux.
+
+       An  extensive  description of the services that the server
+       can provide is given in the man page for the configuration
+       file  controlling  the  attributes  of those services (see
+       smb.conf(5) services, but will concentrate on the adminis­
+       trative aspects of running the server.
+
+       Please  note  that there are significant security implica­
+       tions to running this server, and the smb.conf(5)  manpage
+       should  be regarded as mandatory reading before proceeding
+       with installation.
+
+       A session is created whenever a client requests one.  Each
+       client  gets  a  copy of the server for each session. This
+       copy then services all connections made by the client dur­
+       ing that session. When all connections from its client are
+       closed, the copy of the server for that client terminates.
+
+       The  configuration  file,  and any files that it includes,
+       are automatically reloaded every minute, if  they  change.
+       You  can force a reload by sending a SIGHUP to the server.
+       Reloading the configuration file will not  affect  connec­
+       tions  to  any service that is already established. Either
+       the user will have to disconnect from the service, or smbd
+       killed and restarted.
+
+OPTIONS
+       -D     If  specified,  this parameter causes the server to
+              operate as a daemon. That is,  it  detaches  itself
+              and  runs  in  the background, fielding requests on
+              the appropriate port. Operating  the  server  as  a
+              daemon  is  the recommended way of running smbd for
+              servers that provide more than casual use file  and
+              print  services.  This switch is assumed if smbd is
+              executed on the command line of a shell.
+
+       -a     If this parameter is specified, each new connection
+              will  append log messages to the log file.  This is
+              the default.
+
+       -i     If this parameter is specified it causes the server
+              to  run  "interactively",  not as a daemon, even if
+              the server is executed on the  command  line  of  a
+              shell.  Setting this parameter negates the implicit
+              deamon mode when run from the command line.
+
+       -o     If this parameter is specified, the log files  will
+              be  overwritten  when opened. By default, smbd will
+              append entries to the log files.
+
+       -P     Passive option. Causes smbd not to send any network
+              traffic  out.  Used for debugging by the developers
+              only.
+
+       -h     Prints the help information (usage) for smbd.
+
+       -v     Prints the version number for smbd.
+
+       -d <debug level>
+              debuglevel is an integer from 0 to 10. The  default
+              value if this parameter is not specified is zero.
+
+              The  higher  this  value,  the  more detail will be
+              logged to the log files about the activities of the
+              server.  At level 0, only critical errors and seri­
+              ous warnings will be logged. Level 1 is  a  reason­
+              able  level for day to day running - it generates a
+              small amount of information about  operations  car­
+              ried out.
+
+              Levels  above  1 will generate considerable amounts
+              of log data, and should only be used when  investi­
+              gating  a  problem. Levels above 3 are designed for
+              use only by developers and generate HUGE amounts of
+              log data, most of which is extremely cryptic.
+
+              Note that specifying this parameter here will over­
+              ride the log levelfile.
+
+       -l <log directory>
+              If specified, log directory specifies a log  direc­
+              tory  into  which  the  "log.smbd" log file will be
+              created for informational and debug  messages  from
+              the running server. The log file generated is never
+              removed by the server although its size may be con­
+              trolled   by   the  max  log  size  option  in  the
+              smb.conf(5)file.
+
+              The default log directory is specified  at  compile
+              time.
+
+       -O <socket options>
+              See the socket options parameter in the smb.conf(5)
+              file for details.
+
+       -p <port number>
+              port  number  is  a  positive  integer  value.  The
+              default value if this parameter is not specified is
+              139.
+
+              This number is the port number that  will  be  used
+              when  making  connections to the server from client
+              software. The standard (well-known) port number for
+              the  SMB over TCP is 139, hence the default. If you
+              wish to run the server as an ordinary  user  rather
+              than  as root, most systems will require you to use
+              a port number greater than 1024 - ask  your  system
+              administrator   for   help   if  you  are  in  this
+              situation.
+
+              In order for  the  server  to  be  useful  by  most
+              clients,  should  you  configure it on a port other
+              than 139, you will require  port  redirection  ser­
+              vices on port 139, details of which are outlined in
+              rfc1002.txt section 4.3.5.
+
+              This parameter is not normally specified except  in
+              the above situation.
+
+       -s <configuration file>
+              The   file  specified  contains  the  configuration
+              details required by the server. The information  in
+              this file includes server-specific information such
+              as what printcap file to use, as well  as  descrip­
+              tions  of  all  the  services that the server is to
+              provide. See  smb.conf(5)for more information.  The
+              default  configuration  file  name is determined at
+              compile time.
+
+FILES
+       /etc/inetd.conf
+              If the server is to be run by the  inetd  meta-dae­
+              mon, this file must contain suitable startup infor­
+              mation    for    the    meta-daemon.    See     the
+              UNIX_INSTALL.html document for details.
+
+       /etc/rc
+              or   whatever  initialization  script  your  system
+              uses).
+
+              If running the server as a daemon at startup,  this
+              file  will  need  to contain an appropriate startup
+              sequence for the server. See the  UNIX_INSTALL.html
+              document for details.
+
+       /etc/services
+              If  running  the  server via the meta-daemon inetd,
+              this file must contain a mapping  of  service  name
+              (e.g., netbios-ssn) to service port (e.g., 139) and
+              protocol    type    (e.g.,    tcp).     See     the
+              UNIX_INSTALL.html document for details.
+
+       /usr/local/samba/lib/smb.conf
+              This is the default location of the smb.conf server
+              configuration file. Other common places  that  sys­
+              tems  install this file are /usr/samba/lib/smb.conf
+              and /etc/smb.conf.
+
+              This file describes all the services the server  is
+              to  make  available to clients. See  smb.conf(5)for
+              more information.
+
+LIMITATIONS
+       On some systems smbd cannot change uid back to root  after
+       a setuid() call. Such systems are called trapdoor uid sys­
+       tems. If you have such a system, you  will  be  unable  to
+       connect  from  a  client  (such  as a PC) as two different
+       users at once. Attempts to connect the  second  user  will
+       result in access denied or similar.
+
+ENVIRONMENT VARIABLES
+       PRINTER
+              If  no  printer name is specified to printable ser­
+              vices, most systems will  use  the  value  of  this
+              variable (or lp if this variable is not defined) as
+              the name of the printer to use. This  is  not  spe­
+              cific to the server, however.
+
+PAM INTERACTION
+       Samba  uses  PAM for authentication (when presented with a
+       plaintext password), for account checking (is this account
+       disabled?)  and  for  session  management.  The degree too
+       which samba supports PAM is restricted by the  limitations
+       of  the SMB protocol and the obey pam restricions smb.conf
+       paramater. When this is set,  the  following  restrictions
+       apply:
+
+       · Account  Validation: All acccesses to a samba server are
+         checked against PAM to see if the account is vaild,  not
+         disabled  and  is  permitted to login at this time. This
+         also applies to encrypted logins.
+
+       · Session Management: When not using share level secuirty,
+         users  must  pass  PAM's session checks before access is
+         granted. Note however, that this is  bypassed  in  share
+         level  secuirty.  Note also that some older pam configu­
+         ration files may need a line added for session  support.
+
+VERSION
+       This  man  page  is  correct  for version 2.2 of the Samba
+       suite.
+
+DIAGNOSTICS
+       Most diagnostics issued by the  server  are  logged  in  a
+       specified log file. The log file name is specified at com­
+       pile time, but may be overridden on the command line.
+
+       The number and nature of diagnostics available depends  on
+       the  debug level used by the server. If you have problems,
+       set the debug level to 3 and peruse the log files.
+
+       Most messages are  reasonably  self-explanatory.  Unfortu­
+       nately,  at  the time this man page was created, there are
+       too many diagnostics available in the source code to  war­
+       rant  describing  each and every diagnostic. At this stage
+       your best bet is still to grep the source code and inspect
+       the  conditions  that gave rise to the diagnostics you are
+       seeing.
+
+SIGNALS
+       Sending the smbd a SIGHUP will  cause  it  to  reload  its
+       smb.conf configuration file within a short period of time.
+
+       To shut down a user's smbd process it is recommended  that
+       SIGKILL (-9) NOT be used, except as a last resort, as this
+       may leave the shared memory area in an inconsistent state.
+       The  safe way to terminate an smbd is to send it a SIGTERM
+       (-15) signal and wait for it to die on its own.
+
+       The debug log level of smbd may be raised or lowered using
+       smbcontrol(1)  program  (SIGUSR[1|2] signals are no longer
+       used in Samba 2.2). This is to allow transient problems to
+       be  diagnosed,  whilst still running at a normally low log
+       level.
+
+       Note that as the signal handlers send a debug write,  they
+       are  not  re-entrant  in  smbd. This you should wait until
+       smbd is in a state of waiting for an incoming  SMB  before
+       issuing  them.  It is possible to make the signal handlers
+       safe by un-blocking the signals before the select call and
+       re-blocking  them after, however this would affect perfor­
+       mance.
+
+SEE ALSO
+       hosts_access(5), inetd(8),  nmbd(8),  smb.conf(5)  ,  smb­
+       client(1)   ,   and   the   Internet   RFC's  rfc1001.txt,
+       rfc1002.txt.  In addition the CIFS (formerly SMB) specifi­
+       cation   is   available  as  a  link  from  the  Web  page
+       http://samba.org/cifs/ <URL:http://samba.org/cifs/>.
+
+AUTHOR
+       The original Samba software  and  related  utilities  were
+       created  by Andrew Tridgell. Samba is now developed by the
+       Samba Team as an Open Source project similar  to  the  way
+       the Linux kernel is developed.
+
+       The  original  Samba  man pages were written by Karl Auer.
+       The  man  page  sources  were  converted  to  YODL  format
+       (another  excellent  piece of Open Source software, avail­
+       able          at           ftp://ftp.icce.rug.nl/pub/unix/
+       <URL:ftp://ftp.icce.rug.nl/pub/unix/>) and updated for the
+       Samba 2.0 release by Jeremy  Allison.  The  conversion  to
+       DocBook for Samba 2.2 was done by Gerald Carter
+
+
+
+                         24 January 2002                  SMBD(8)

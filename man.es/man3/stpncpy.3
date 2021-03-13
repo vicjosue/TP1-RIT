@@ -1,0 +1,41 @@
+STPNCPY(3)          Linux Programmer's Manual          STPNCPY(3)
+
+
+
+NAME
+       stpncpy - copy a fixed-size string, returning a pointer to
+       its end
+
+SYNOPSIS
+       #include <string.h>
+
+       char *stpncpy(char *dest, const char *src, size_t n);
+
+DESCRIPTION
+       The stpncpy function copies at most n characters from  the
+       string  pointed  to by src, including the terminating '\0'
+       character, to the array pointed  to  by  dest.  Exactly  n
+       characters  are written at dest. If the length strlen(src)
+       is smaller than n, the remaining characters in  the  array
+       pointed to by dest are filled with '\0' characters. If the
+       length strlen(src) is greater or equal to  n,  the  string
+       pointed to by dest will not be '\0' terminated.
+
+       The strings may not overlap.
+
+       The programmer must ensure that there is room for at least
+       n characters at dest.
+
+RETURN VALUE
+       stpncpy returns a pointer to the terminating null in dest,
+       or, if dest is not null-terminated, dest + n.
+
+CONFORMING TO
+       This function is a GNU extension.
+
+SEE ALSO
+       strncpy(3)
+
+
+
+GNU                         1999-07-25                 STPNCPY(3)

@@ -1,0 +1,115 @@
+MAKEKDEDOC(1)       KDOC Documentation System       MAKEKDEDOC(1)
+
+
+
+NNAAMMEE
+       makekdedoc -- Generates HTML documentation for KDE
+       libraries using KKDDOOCC.
+
+SSYYNNOOPPSSIISS
+               makekdedoc [--rule-file=<rulefile>] [--libdir=<libdir>]
+                       [--outputdir=<outputdir>] [--url=<url>]
+                       [--srcdir=<kdelibs src dir>]
+                       [--kdoc=<path to kdoc>] [<library>...]
+
+               makekdedoc --help
+
+
+DDEESSCCRRIIPPTTIIOONN
+       This is a perl script that uses KKDDOOCC to generate documen­
+       tation for kdelibs. A "rule" file is used to figure out
+       the libraries to document, the order in which to document
+       them and the libraries with which each one will be cross-
+       referenced (eg kdeui uses -lkdecore). See the section on
+       "FILES" for more info.
+
+       NOTE: The script assumes that you have already generated a
+       Qt cross-reference using qt2kdoc[1].
+
+OOPPTTIIOONNSS
+       Defaults for each option are in square brackets.
+
+       lliibbrraarryy......
+           Specify the libraries to document.  By default, all
+           libraries defined by the rule file are documented.
+
+       ----oouuttppuuttddiirr <path>, --dd <path>
+           The directory where the output will be writ­
+           ten.   [`cwd`/srcdoc]
+
+       ----uurrll <url>, --uu <url>
+           The base URL by which the generated docs will be
+           accessed. For example, if your web server is config­
+           ured to use $HOME/public_html for your home page, you
+           could set the outputdir to $HOME/public_html/srcdoc
+           and the url to http://myhost/~mylogin/srcdoc. [output
+           dir]
+
+       ----rruullee--ffiillee <path>, --rr <path>
+           The path to the rule file to use for generating the
+           documentation.  [<srcdir>/kdoc.rules]
+
+       ----lliibbddiirr <path>, --LL <path>
+           The directory in which the KDOC cross-reference files
+           are stored. [$KDOCLIBS if set, otherwise $HOME/.kdoc]
+
+       ----kkddoocc <path>, --kk <path>
+           The path to the kdoc program. [kdoc]
+
+       ----kkddooccoopptt <options>, --pp <options>
+           Extra options to be passed to kdoc.
+
+       ----ssrrccddiirr <path>, --bb <path>
+           The path to the kdelibs source, eg "$HOME/base­
+           line/kdelibs". [`cwd`]
+
+
+
+       ----hheellpp, --hh
+           Quit with a usage message.
+
+EEXXAAMMPPLLEESS
+               makekdedoc --srcdir $HOME/baseline/kdelibs
+                       --outputdir $HOME/public_html/src/kdelibs/
+                       --url "http://www.ph.unimelb.edu.au/~ssk/src/kdelibs"
+
+
+FFIILLEESS
+       RRuullee ffiillee
+           This file lists the directories in the source direc­
+           tory to document. It also lists the files to document
+           from each directory, and the libraries with which to
+           cross-reference the generated documentation. Here is a
+           small example that documents two libraries and links
+           the second to the first.
+
+                   # makekdedoc rule file
+                   doc_MODULES = eenie meenie
+
+                   # rules for eenie
+                   eenie_FILES = *.h
+                   eenie_LIBS = -lqt
+
+                   # rules for meenie
+                   meenie_FILES = a.h b.h
+                   meenie_LIBS = -leenie -lqt
+
+           In this example, all files in "eenie/*.h" will be doc­
+           umented then two files from "meenie/" will be docu­
+           mented, in the order declared in "doc_MODULES".
+
+SSEEEE AALLSSOO
+       See the kdoc[1] entry elsewhere in this document and the
+       qt2kdoc[1] entry elsewhere in this document.
+
+VVEERRSSIIOONN
+               makekdedoc $Revision: 1.2 $
+
+
+AAUUTTHHOORR
+       The script and this documentation were written by Sirtaj
+       Singh Kang <taj@kde.org> in April 1999.
+
+
+
+2000-10-10                    2.0a53                MAKEKDEDOC(1)

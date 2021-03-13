@@ -1,0 +1,59 @@
+SCROLLKEEPER-CONFIG(8)                     SCROLLKEEPER-CONFIG(8)
+
+
+
+NAME
+       scrollkeeper-config  -  print  ScrollKeeper  configuration
+       information
+
+SYNOPSIS
+       scrollkeeper-config   [--help]   [--version]    [--prefix]
+       [--localstatedir]    [--pkglocalstatedir]   [--pkgdatadir]
+       [--omfdir]
+
+
+DESCRIPTION
+       This prints out various ScrollKeeper configuration  infor­
+       mation.  It is useful for application building and packag­
+       ing procedures.
+
+
+OPTIONS
+       --help Show usage (help) information.
+
+       --version
+              Show version number.
+
+       --prefix
+              Outputs the prefix used to install Scrollkeeper.
+
+       --localstatedir
+              Outputs the localstatedir used to  install  Scroll­
+              keeper.
+
+       --pkglocalstatedir
+              Outputs  pkglocalstatedir.  This  is  the directory
+              under localstatedir where  ScrollKeeper  keeps  its
+              database.
+
+       --pkgdatadir
+              Outputs  pkgdatadir.  This  is  the directory under
+              datadir where ScrollKeeper keeps  its  non-variable
+              (ie. non-database) files.
+
+       --omfdir
+              Directory where ScrollKeeper looks for OMF files.
+
+
+
+AUTHOR
+       Laszlo Kovacs and Dan Mueth.
+
+
+SEE ALSO
+       scrollkeeper-update(8), scrollkeeper-preinstall(8), scrol­
+       lkeeper-rebuilddb(8)
+
+
+
+scrollkeeper               Nov 08, 2000    SCROLLKEEPER-CONFIG(8)

@@ -1,0 +1,57 @@
+MODINFO(8)             Linux Module Support            MODINFO(8)
+
+
+
+NAME
+       modinfo - display information about a kernel module
+
+SYNOPSIS
+       modinfo [ options ] <module_file>
+
+DESCRIPTION
+       The  modinfo  utility examines the object file module_file
+       associated with a kernel module and displays any  informa­
+       tion that it can glean.
+
+   OPTIONS
+       -a, --author
+              Display the module's author.
+
+       -d, --description
+              Display the module's description.
+
+       -a, --license
+              Display the module's license.
+
+       -n, --filename
+              Display the module's filename.
+
+       -fformat_string, --format format_string
+              Let  the  user  specify  an arbitrary format string
+              which can extract values from the  ELF  section  in
+              module_file  which contains the module information.
+              Replacements consist of a percent sign followed  by
+              a  tag  name in curly braces.  A tagname of %{file­
+              name} is always supported, even if the  module  has
+              no modinfo section.
+
+       -p, --parameters
+              Display the typed parameters that a module may sup­
+              port.
+
+       -h, --help
+              Display a small usage screen.
+
+       -V, --version
+              Display the version of modinfo.
+
+       If no options  are  supplied,  the  default  is  filename,
+       description, author, license and parameters.
+
+SEE ALSO
+       insmod(8),  modprobe(8),  depmod(8),  rmmod(8),  lsmod(8),
+       ksyms(8), modules(2)
+
+
+
+Linux                   26 September 2001              MODINFO(8)

@@ -1,0 +1,153 @@
+urpmi(8)                  Mandrake Linux                 urpmi(8)
+
+
+
+NAME
+       urpmi - rpm wrapper making installs easier for the user
+
+SYNOPSIS
+       urpmi [options] [package_names | rpm_files...]
+
+DESCRIPTION
+       urpmi  authorizes  well-known  rpms  (or  rpm files) to be
+       installed including all their dependencies.  You  can  use
+       it  to install source package dependencies too as root, or
+       source package itself as simple user.
+
+       You can compare rpm vs. urpmi  with  insmod  vs.  modprobe
+       or dpkg vs apt-get
+
+       Just  launch  urpmi followed by what you think is the name
+       of the package(s), and urpmi will:
+       - Propose different package names if availables and  quit.
+       -  If  only  one  corresponding  package  is  found, check
+       whether dependencies are already installed, or not.
+       - If not, propose to install  the  dependencies  and  then
+       install all required dependencies and the package.
+
+       Note  that  urpmi handle installations from various medias
+       (ftp, http, local and nfs volumes, removable  medias  such
+       as  CDROMs)  and  is  able  to install dependencies from a
+       media different from the package's media.   If  necessary,
+       urpmi asks you to insert the required media.
+
+       To add a new media containing rpms run urpmi.addmedia.
+       To remove a media use urpmi.removemedia.
+       To  update  the  packages  list  (for example when the ftp
+       archive changed) use urpmi.update.
+       To automatically install a  package  corresponding  to  an
+       executable you tried to launch, use autoirpm.
+       To  install  all available menu entries of all known pack­
+       ages, use autoirpm-icons.
+
+OPTIONS
+       --help print an help message and exit (this is the same as
+              -h or -?).
+
+       --update
+              use only update media. This means urpmi will search
+              and resolve dependencies only in  media  marked  as
+              update.
+
+       --media
+              select  specific  media to use instead of all media
+              available (or update media is --updtae is used).
+
+       --auto installs all required dependencies without  asking.
+
+       --auto-select
+              automatically  select  all packages that have to be
+              upgraded according to  already  installed  packages
+              and packages listed in various media registered.
+
+       --fuzzy
+              disable  fast  search  on exact package name, ie it
+              will propose all package containing the  name  even
+              if one has the given name (this is the same as -y).
+
+       --src  next package name is a source package and  it  will
+              select  all dependencies if urpmi is run as root or
+              only install source package as simple user (this is
+              the same as -s).
+
+       --noclean
+              do   not   remove   any   package  from  the  cache
+              (/var/cache/urpmi/rpms).
+
+       --complete
+              use parsehdlist server  to  complete  --auto-select
+              selection  (should not be necessary in most cases).
+
+       --force
+              assumes yes on all questions.
+
+       --wget use wget only for  downloading  distant  files.  By
+              default  curl is used if available or wget instead.
+
+       --curl use curl only for  downloading  distant  files.  By
+              default  curl is used if available or wget instead.
+
+       --X    use X interface.
+
+       --best-output
+              try to use X interface  or  if  not  available  the
+              standard text interface (using rpm).
+
+       -a     if  multiple  packages  match  the substring given,
+              take them all
+
+       -p     allow search in provides to find package (default).
+
+       -P     do  not search in provides to find package (this is
+              the opposite of -p).
+
+       -y     this is the same as --fuzzy.
+
+       -s     this is the same as --src.
+
+       -q     proposes a quiet mode when  calling  rpm  where  no
+              upgrade status are printed.
+
+       -v     proposes a verbose mode with various messages.
+
+FILES
+       /usr/sbin/urpmi
+       The urpmi executable (perl script)
+
+       /var/lib/urpmi/list.*
+       Contains the list of all packages known by urpmi and their
+       location.  There is one filelist per media(*).
+
+       /var/lib/urpmi/hdlist.*
+       Contains information about all known packages, it's a sum­
+       mary of rpm headers.  There is one hdlist per media(*).
+
+       /var/lib/urpmi/synthesis.hdlist.*
+       Contains  synthesis  information  about all known packages
+       built from hdlist files that can be used by  minimal  clo­
+       sure  algorithm.  If  these  files  are  not  present  use
+       urpmi.update -a to generate them.
+
+       /etc/urpmi/urpmi.cfg
+       Contains media description,  previous  format  from  older
+       urpmi is accepted.
+
+       /etc/urpmi/skip.list
+       Contains  package  names  that should be not automatically
+       updated.
+
+       /etc/urpmi/inst.list
+       Contains package names that should be installed instead of
+       updated.
+
+SEE ALSO
+       urpmi.addmedia(8),  urpmi.update(8), urpmi.removemedia(8),
+       autoirpm(8), gurpmi(8), urpmf(8), urpmq(8), rpmdrake(8)
+
+AUTHOR
+       Pascal Rigaux, Mandrakesoft <pixel@mandrakesoft.com>
+       Francois Pons, Mandrakesoft <fpons@mandrakesoft.com>
+
+
+
+MandrakeSoft               12 Feb 2002                   urpmi(8)

@@ -1,0 +1,153 @@
+DNSSEC-KEYGEN(8)                                 DNSSEC-KEYGEN(8)
+
+
+
+NAME
+       dnssec-keygen - DNSSEC key generation tool
+
+SYNOPSIS
+       dnssec-keygen  -a  algorithm  -b  keysize -n nametype [ -c
+       class ]  [ -e ]  [ -g generator ]  [ -h ]  [ -p protocol ]
+       [ -r randomdev ]  [ -s strength ]  [ -t type ]  [ -v level
+       ]  name
+
+DESCRIPTION
+       dnssec-keygen generates keys for DNSSEC (Secure  DNS),  as
+       defined  in  RFC  2535.  It can also generate keys for use
+       with TSIG (Transaction  Signatures),  as  defined  in  RFC
+       2845.
+
+OPTIONS
+       -a algorithm
+              Selects  the  cryptographic algorithm. The value of
+              algorithm must be one of RSAMD5  or  RSA,  DSA,  DH
+              (Diffie  Hellman),  or  HMAC-MD5.  These values are
+              case insensitive.
+
+              Note that for DNSSEC, DSA is a mandatory to  imple­
+              ment  algorithm,  and RSA is recommended. For TSIG,
+              HMAC-MD5 is mandatory.
+
+       -b keysize
+              Specifies the number of bits in the key. The choice
+              of key size depends on the algorithm used. RSA keys
+              must be between 512 and 2048 bits.  Diffie  Hellman
+              keys  must  be  between 128 and 4096 bits. DSA keys
+              must be between 512 and 1024 bits and an exact mul­
+              tiple  of  64.  HMAC-MD5 keys must be between 1 and
+              512 bits.
+
+       -n nametype
+              Specifies the owner type of the key. The  value  of
+              nametype  must  either  be  ZONE (for a DNSSEC zone
+              key), HOST or ENTITY (for a key associated  with  a
+              host),  or USER (for a key associated with a user).
+              These values are case insensitive.
+
+       -c class
+              Indicates that the DNS record  containing  the  key
+              should  have the specified class. If not specified,
+              class IN is used.
+
+       -e     If generating an RSA key, use a large exponent.
+
+       -g generator
+              If generating a Diffie Hellman key, use this gener­
+              ator.   Allowed values are 2 and 5. If no generator
+              is specified, a known prime from RFC 2539  will  be
+              used if possible; otherwise the default is 2.
+
+       -h     Prints a short summary of the options and arguments
+              to dnssec-keygen.
+
+       -p protocol
+              Sets the protocol value for the generated key.  The
+              protocol is a number between 0 and 255. The default
+              is 2 (email) for keys of type USER and  3  (DNSSEC)
+              for all other key types.  Other possible values for
+              this argument are listed in RFC 2535 and  its  suc­
+              cessors.
+
+       -r randomdev
+              Specifies  the source of randomness. If the operat­
+              ing system does not provide a /dev/random or equiv­
+              alent  device,  the default source of randomness is
+              keyboard input. randomdev specifies the name  of  a
+              character  device or file containing random data to
+              be used instead of the default. The  special  value
+              keyboard  indicates  that  keyboard input should be
+              used.
+
+       -s strength
+              Specifies  the  strength  value  of  the  key.  The
+              strength  is  a  number  between 0 and 15, and cur­
+              rently has no defined purpose in DNSSEC.
+
+       -t type
+              Indicates the use of the key. type must be  one  of
+              AUTHCONF,   NOAUTHCONF,   NOAUTH,  or  NOCONF.  The
+              default is AUTHCONF. AUTH refers to the ability  to
+              authenticate  data, and CONF the ability to encrypt
+              data.
+
+       -v level
+              Sets the debugging level.
+
+GENERATED KEYS
+       When dnssec-keygen completes  successfully,  it  prints  a
+       string  of  the form Knnnn.+aaa+iiiii to the standard out­
+       put. This is an identification string for the key  it  has
+       generated.  These  strings  can  be  used  as arguments to
+       dnssec-makekeyset.
+
+       · nnnn is the key name.
+
+       · aaa is the numeric representation of the algorithm.
+
+       · iiiii is the key identifier (or footprint).
+
+       dnssec-keygen creates two file, with names  based  on  the
+       printed  string.  Knnnn.+aaa+iiiii.key contains the public
+       key, and  Knnnn.+aaa+iiiii.private  contains  the  private
+       key.
+
+
+       The  .key  file  contains  a  DNS  KEY  record that can be
+       inserted into a zone file (directly  or  with  a  $INCLUDE
+       statement).
+
+
+       The  .private file contains algorithm specific fields. For
+       obvious security reasons, this file does not have  general
+       read permission.
+
+
+       Both  .key  and .private files are generated for symmetric
+       encryption algorithm such as  HMAC-MD5,  even  though  the
+       public and private key are equivalent.
+
+
+EXAMPLE
+       To  generate a 768-bit DSA key for the domain example.com,
+       the following command would be issued:
+
+       dnssec-keygen -a DSA -b 768 -n ZONE example.com
+
+       The command would print a string of the form:
+
+       Kexample.com.+003+26160
+
+       In this example, dnssec-keygen creates  the  files  Kexam­
+       ple.com.+003+26160.key and Kexample.com.+003+26160.private
+
+SEE ALSO
+       dnssec-makekeyset(8),   dnssec-signkey(8),    dnssec-sign­
+       zone(8),  BIND 9 Administrator Reference Manual, RFC 2535,
+       RFC 2845, RFC 2539.
+
+AUTHOR
+       Internet Software Consortium
+
+
+
+BIND9                     June 30, 2000          DNSSEC-KEYGEN(8)

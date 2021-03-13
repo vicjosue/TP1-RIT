@@ -1,0 +1,66 @@
+SSL_get_ex_data_X509_STORE_CTSXOSpLie_dngxSe(St3L_)ex_data_X509_STORE_CTX_idx(3)
+
+
+
+NNAAMMEE
+       SSL_get_ex_data_X509_STORE_CTX_idx - get ex_data index to
+       access SSL structure from X509_STORE_CTX
+
+SSYYNNOOPPSSIISS
+        #include <openssl/ssl.h>
+
+        int SSL_get_ex_data_X509_STORE_CTX_idx(void);
+
+
+DDEESSCCRRIIPPTTIIOONN
+       SSL_get_ex_data_X509_STORE_CTX_idx() returns the index
+       number under which the pointer to the SSL object is stored
+       into the X509_STORE_CTX object.
+
+NNOOTTEESS
+       Whenever a X509_STORE_CTX object is created for the
+       verification of the peers certificate during a handshake,
+       a pointer to the SSL object is stored into the
+       X509_STORE_CTX object to identify the connection affected.
+       To retrieve this pointer the X509_STORE_CTX_get_ex_data()
+       function can be used with the correct index. This index is
+       globally the same for all X509_STORE_CTX objects and can
+       be retrieved using SSL_get_ex_data_X509_STORE_CTX_idx().
+       The index value is set when
+       SSL_get_ex_data_X509_STORE_CTX_idx() is first called
+       either by the application program directly or indirectly
+       during other SSL setup functions or during the handshake.
+
+       The value depends on other index values defined for
+       X509_STORE_CTX objects before the SSL index is created.
+
+RREETTUURRNN VVAALLUUEESS
+       >=0 The index value to access the pointer.
+
+       <0  An error occurred, check the error stack for a
+           detailed error message.
+
+EEXXAAMMPPLLEESS
+       The index returned from
+       SSL_get_ex_data_X509_STORE_CTX_idx() allows to access the
+       SSL object for the connection to be accessed during the
+       verify_callback() when checking the peers certificate.
+       Please check the example in SSL_CTX_set_verify(3),
+
+SSEEEE AALLSSOO
+       ssl(3), SSL_CTX_set_verify(3), CRYPTO_set_ex_data(3)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+28/Jan/2001                 SS0L._9g.e6tc_ex_data_X509_STORE_CTX_idx(3)

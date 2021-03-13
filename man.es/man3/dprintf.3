@@ -1,0 +1,45 @@
+DPRINTF(3)          Linux Programmer's Manual          DPRINTF(3)
+
+
+
+NAME
+       dprintf, vdprintf - print to a file descriptor
+
+SYNOPSIS
+       #define _GNU_SOURCE
+       #include <stdio.h>
+
+       int dprintf(int fd, const char *format, ...);
+
+       int vdprintf(int fd, const char *format, va_list ap);
+
+DESCRIPTION
+       The functions dprintf and vdprintf (as found in the glibc2
+       library) are exact  analogues  of  fprintf  and  vfprintf,
+       except that they output to a file descriptor fd instead of
+       to a given stream.
+
+NOTES
+       These functions are GNU extensions, not  in  C  or  POSIX.
+       Clearly,  the names were badly chosen.  Many systems (like
+       MacOS) have incompatible functions called dprintf, usually
+       some debugging version of printf, perhaps with a prototype
+       like
+
+       void dprintf (int level, const char *format, ...);
+
+       where the first parameter is a debugging level (and output
+       is  to  stderr).  Moreover, dprintf (or DPRINTF) is also a
+       popular macro name for a debugging printf.  So,  probably,
+       it  is  better to avoid this function in programs intended
+       to be portable.
+
+       A better name would have been fdprintf.
+
+SEE ALSO
+       printf(3)
+
+
+
+
+GNU                         2001-12-18                 DPRINTF(3)

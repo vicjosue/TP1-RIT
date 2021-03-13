@@ -1,0 +1,78 @@
+SSL_connect(3)               OpenSSL               SSL_connect(3)
+
+
+
+NNAAMMEE
+       SSL_connect - initiate the TLS/SSL handshake with an
+       TLS/SSL server
+
+SSYYNNOOPPSSIISS
+        #include <openssl/ssl.h>
+
+        int SSL_connect(SSL *ssl);
+
+
+DDEESSCCRRIIPPTTIIOONN
+       SSL_connect() initiates the TLS/SSL handshake with a
+       server. The communication channel must already have been
+       set and assigned to the ssssll by setting an underlying BBIIOO.
+
+NNOOTTEESS
+       The behaviour of SSL_connect() depends on the underlying
+       BIO.
+
+       If the underlying BIO is bblloocckkiinngg, SSL_connect() will only
+       return once the handshake has been finished or an error
+       occurred.
+
+       If the underlying BIO is nnoonn--bblloocckkiinngg, SSL_connect() will
+       also return when the underlying BIO could not satisfy the
+       needs of SSL_connect() to continue the handshake. In this
+       case a call to SSL_get_error() with the return value of
+       SSL_connect() will yield SSSSLL_EERRRROORR_WWAANNTT_RREEAADD or
+       SSSSLL_EERRRROORR_WWAANNTT_WWRRIITTEE. The calling process then must repeat
+       the call after taking appropriate action to satisfy the
+       needs of SSL_connect().  The action depends on the
+       underlying BIO. When using a non-blocking socket, nothing
+       is to be done, but select() can be used to check for the
+       required condition. When using a buffering BIO, like a BIO
+       pair, data must be written into or retrieved out of the
+       BIO before being able to continue.
+
+RREETTUURRNN VVAALLUUEESS
+       The following return values can occur:
+
+       1   The TLS/SSL handshake was successfully completed, a
+           TLS/SSL connection has been established.
+
+       0   The TLS/SSL handshake was not successful but was shut
+           down controlled and by the specifications of the
+           TLS/SSL protocol. Call SSL_get_error() with the return
+           value rreett to find out the reason.
+
+       <0  The TLS/SSL handshake was not successful, because a
+           fatal error occurred either at the protocol level or a
+           connection failure occurred. The shutdown was not
+           clean. It can also occur of action is need to continue
+           the operation for non-blocking BIOs. Call
+           SSL_get_error() with the return value rreett to find out
+           the reason.
+
+SSEEEE AALLSSOO
+       SSL_get_error(3), SSL_accept(3), SSL_shutdown(3), ssl(3),
+       bio(3), SSL_set_connect_state(3), SSL_CTX_new(3)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+25/Jul/2001                   0.9.6c               SSL_connect(3)

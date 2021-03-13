@@ -1,0 +1,207 @@
+tixOptionMenu(n)      Tix Built-In Commands      tixOptionMenu(n)
+
+
+
+_________________________________________________________________
+
+NAME
+       tixOptionMenu  -  Create and manipulate tixOptionMenu wid­
+       gets
+
+SYNOPSIS
+       tixOptionMenu pathName ?options?
+
+SUPER-CLASS
+       The TixOptionMenu class is derived from the TixLabelWidget
+       class  and  inherits all the commands, options and subwid­
+       gets of its super-class.
+
+STANDARD OPTIONS
+       The OptionMenu widget supports all the standard Tix widget
+       options.  See  the Tix-Options(n) manual entry for details
+       on the standard Tix widget options.
+
+WIDGET-SPECIFIC OPTIONS
+       Command-Line Name:-command
+       Database Name:  command
+       Database Class: Command
+
+              Specifies the command to be called when the  -value
+              option  of  the  OptionMenu is changed. The command
+              will be called with one arguments -- the new  value
+              of the OptionMenu widget.
+
+       Command-Line Name:-disablecallback
+       Database Name:  disableCallback
+       Database Class: DisableCallback
+
+              A boolean value indicating whether callbacks should
+              be disabled. When set  to  true,  the  TCL  command
+              specified  by  the  -command option is not executed
+              when the -value of the OptionMenu widget changes.
+
+       Command-Line Name:-dynamicgeometry
+       Database Name:  dynamicGeometry
+       Database Class: DynamicGeometry
+
+              A boolean value indicating whether the size of  the
+              menubutton  subwidget  should change dynamically to
+              match the width  of  the  currently  selected  menu
+              entry.  If set to false (the default), the the size
+              of the menubutton subwidget will be wide enough  to
+              display  every menu entry fully and does not change
+              when the user selects different entries.
+
+       Command-Line Name:-label
+       Database Name:  label
+       Database Class: Label
+
+              Specifies the string to display  as  the  label  of
+              this OptionMenu widget.
+
+       Command-Line Name:-labelside
+       Database Name:  labelSide
+       Database Class: LabelSide
+
+              Specifies  where  the  label  should  be  displayed
+              relative to the entry subwidget. Valid options are:
+              top, left, right, bottom, none or acrosstop.
+
+       Command-Line Name:-state
+       Database Name:  state
+       Database Class: State
+
+              Specifies the whether the OptionMenu widget is nor­
+              mal or disabled. Only the values "normal" and "dis­
+              abled" are recognized.
+
+       Command-Line Name:-value
+       Database Name:  value
+       Database Class: Value
+
+              Specifies the value of the OptionMenu. The value of
+              the OptionMenu widget is the name of the item  cur­
+              rently displayed by its menubutton subwidget.
+
+       Command-Line Name:-variable
+       Database Name:  variable
+       Database Class: Variable
+
+              Specifies the global variable in which the value of
+              the OptionMenu should be stored. The value  of  the
+              OptionMenu  will be automatically updated when this
+              variable is changed.
+
+SUBWIDGETS
+       Name:           menu
+       Class:          Menu
+
+              The menu subwidget, which is  popped  up  when  the
+              user press the menubutton subwidget.
+
+       Name:           menubutton
+       Class:          Menubutton
+
+              The menubutton subwidget.
+_________________________________________________________________
+
+DESCRIPTION
+       The  tixOptionMenu  command creates a new window (given by
+       the pathName argument) and makes it into a OptionMenu wid­
+       get. Additional options, described above, may be specified
+       on the command line or in the option database to configure
+       aspects of the OptionMenu such as its cursor and relief.
+
+WIDGET COMMANDS
+       The  tixOptionMenu command creates a new Tcl command whose
+       name is the same as the path name of the OptionMenu's win­
+       dow. This command may be used to invoke various operations
+       on the widget. It has the following general form:
+                     pathName option ?arg arg ...?
+       PathName is the name of the command, which is the same  as
+       the  OptionMenu  widget's  path  name. Option and the args
+       determine the exact behavior of the command. The following
+       commands are possible for OptionMenu widgets:
+
+       pathName add type name ?option value ...?
+              Adds  a  new  item into the OptionMenu widget. type
+              must be either command or  separator.  The  options
+              may  be any of the valid options for the command or
+              separator menu entry types for the TK  menu  widget
+              class, except -command.
+
+       pathName cget option
+              Returns  the  current  value  of  the configuration
+              option given by option. Option may have any of  the
+              values accepted by the tixOptionMenu command.
+
+       pathName configure ?option? ?value option value ...?
+              Query  or  modify  the configuration options of the
+              widget.  If no option is specified, returns a  list
+              describing  all  of the available options for path­
+              Name (see Tk_ConfigureInfo for information  on  the
+              format  of this list).  If option is specified with
+              no value, then the command returns a list  describ­
+              ing the one named option (this list will be identi­
+              cal to  the  corresponding  sublist  of  the  value
+              returned  if  no  option  is specified).  If one or
+              more option-value pairs  are  specified,  then  the
+              command modifies the given widget option(s) to have
+              the  given  value(s);  in  this  case  the  command
+              returns an empty string. Option may have any of the
+              values accepted by the tixOptionMenu command.
+
+       pathName delete name
+              Deletes the menu entry identified by name.
+
+       pathName disable name
+              Disables the menu entry identified by name.
+
+       pathName enable name
+              Enables the menu entry identified by name.
+
+       pathName entrycget name option
+              Returns the  current  value  of  the  configuration
+              option given by option in the menu entry identified
+              by name. Option may have any of the values accepted
+              by the add widget command.
+
+       pathName  entryconfigure name ?option? ?value option value
+       ...?
+              Query  or  modify  the configuration options of the
+              menu entry identified by  name.  If  no  option  is
+              specified,  returns  a  list  describing all of the
+              available options for the menu entry  (see  Tk_Con­
+              figureInfo  for  information  on the format of this
+              list).  If option is specified with no value,  then
+              the command returns a list describing the one named
+              option (this list will be identical to  the  corre­
+              sponding sublist of the value returned if no option
+              is specified). If one or  more  option-value  pairs
+              are  specified, then the command modifies the given
+              option(s) to have the given value(s); in this  case
+              the  command  returns  an  empty string. Option may
+              have any of the values accepted by the  add  widget
+              command.
+
+       pathName entries
+              Returns  the  names of all the entries currently in
+              the OptionMenu widget.
+
+       pathName subwidget name ?args?
+              When no options are given, this command returns the
+              pathname of the subwidget of the specified name.
+
+              When  options  are given, the widget command of the
+              specified  subwidget  will  be  called  with  these
+              options.
+
+KEYWORDS
+       Tix(n)
+
+
+
+
+
+
+Tix                            4.0               tixOptionMenu(n)

@@ -1,0 +1,141 @@
+MEDUSA-SEARCH-URI(7)                         MEDUSA-SEARCH-URI(7)
+
+
+
+NAME
+       medusa-search-uri - syntax for medusa searches
+
+SYNOPSIS
+       gnome-search:[file:///] criterion [ & criterion ...  ]
+
+DESCRIPTION
+       medusa-indexd  produces file system indices which can then
+       be queried with msearch or with the libmedusa libraries  .
+       This manual page documents the syntax used to specify what
+       to search for.
+
+       WARNING: This  manual  page  is  mostly  cloned  from  the
+       search_uri_rfc document in the medusa distribution and has
+       been put into manual  page  form  by  someone  who  really
+       doesn't know how it all works.  It also documents what the
+       aforementioned document says works at the  moment,  rather
+       than how it ought to work eventually.
+
+   Search method and root
+       Search URIs begin with a search method:
+
+              gnome-search:
+
+       followed by a bracketed file system root:
+
+              [file:///]
+
+       At  the  moment  medusa:  or search: will also be accepted
+       instead of gnome-search:.  You are supposed to be able  to
+       specify multiple bracketed roots, which are supposed to be
+       able to have protocols other than file:, and  roots  other
+       than  /,  but I believe at the moment it has to be exactly
+       as above.
+
+   Criteria
+       The search method and root are followed  by  one  or  more
+       criteria.   If  there is more than one, they are separated
+       by ampersands:
+
+              criterion
+              criterion & criterion
+              criterion & criterion & criterion
+              ...
+
+       According to the specification, vertical bars (|)  can  be
+       used  to specify an or relation, and parentheses (( and ))
+       can be used to group criteria, but I  believe  neither  of
+       these features is currently implemented.
+
+       Below is the list of criteria that are understood:
+
+              file_name is string
+              file_name contains string
+              file_name does_not_contain string
+              file_name begins_with string
+              file_name matches glob-pattern
+              file_name regexp_matches regexp-pattern
+
+              directory_name is string
+              directory_name contains string
+              directory_name regexp_matches regexp-pattern
+              directory_name does_not_regexp_match regexp-pattern
+
+       (I think is_in means ``is a subdirectory of.''   Directory
+       searches don't seem to work for me, though.)
+
+              file_type is application
+              file_type is_not application
+              file_type is music
+              file_type is_not music
+              file_type is text_file
+              file_type is_not text_file
+              file_type is file
+              file_type is_not file
+              file_type is directory
+              file_type is_not directory
+
+              modified is MM/DD/YYYY
+              modified is_not MM/DD/YYYY
+              modified is_before MM/DD/YYYY
+              modified is_after MM/DD/YYYY
+              modified is today
+              modified is yesterday
+              modified is_within_a_week_of MM/DD/YYYY
+              modified is_within_a_month_of MM/DD/YYYY
+              mtime is_before time_t
+              mtime is_after time_t
+
+              owner is login
+              owner has_uid uid
+              owner is_not login
+              owner does_not_have_uid uid
+
+              group is groupname
+              group has_gid gid
+              group is_not groupname
+              group does_not_have_gid gid
+
+              size larger_than byte-count
+              size smaller_than byte-count
+              size is byte-count
+
+              permissions_to_read include_uid uid
+
+              content includes_all_of string
+              content includes_any_of string
+              content does_not_include_all_of string
+              content does_not_include_any_of string
+
+       (This  syntax  is  wrong  for  the content searches, but I
+       don't know what the real syntax is, because even when I do
+       a search from inside Nautilus I get the error message that
+       the URI is invalid.)
+
+              keywords include keyword
+              keywords do_not_include keyword
+
+       I leave out the other search criteria that  search_uri_rfc
+       documents but says are unimplemented now.
+
+EXAMPLES
+       msearch 'gnome-search:[file:///]file_name is etc'
+       msearch    'gnome-search:[file:///]file_name   begins_with
+       gnome-s'
+       msearch     'gnome-search:[file:///]file_name      matches
+       gnome*.png'
+       msearch  'gnome-search:[file:///]file_name  regexp_matches
+       ^k[st]e'
+       msearch 'gnome-search:[file:///]modified is 02/01/2001'
+
+SEE ALSO
+       msearch(1), medusa-indexd(1)
+
+
+
+Eazel                    February 8, 2001    MEDUSA-SEARCH-URI(7)

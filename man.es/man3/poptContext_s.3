@@ -1,0 +1,107 @@
+poptContext_s(3)                                 poptContext_s(3)
+
+
+
+NAME
+       poptContext_s -
+
+SYNOPSIS
+       #include <poptint.h>
+
+
+   Data Fields
+       optionStackEntry optionStack [POPT_OPTION_DEPTH]
+       optionStackEntry * os
+       const char ** leftovers
+       int numLeftovers
+       int nextLeftover
+       const struct poptOption * options
+       int restLeftover
+       const char * appName
+       poptItem aliases
+       int numAliases
+       int flags
+       poptItem execs
+       int numExecs
+       const char ** finalArgv
+       int finalArgvCount
+       int finalArgvAlloced
+       poptItem doExec
+       const char * execPath
+       int execAbsolute
+       const char * otherHelp
+       pbm_set * arg_strip
+
+FIELD DOCUMENTATION
+   poptItem poptContext_s::aliases
+       Definition at line 61 of file poptint.h.
+
+   const char* poptContext_s::appName
+       Definition at line 60 of file poptint.h.
+
+   pbm_set* poptContext_s::arg_strip
+       Definition at line 73 of file poptint.h.
+
+   poptItem poptContext_s::doExec
+       Definition at line 69 of file poptint.h.
+
+   int poptContext_s::execAbsolute
+       Definition at line 71 of file poptint.h.
+
+   const char* poptContext_s::execPath
+       Definition at line 70 of file poptint.h.
+
+   poptItem poptContext_s::execs
+       Definition at line 64 of file poptint.h.
+
+   const char** poptContext_s::finalArgv
+       Definition at line 66 of file poptint.h.
+
+   int poptContext_s::finalArgvAlloced
+       Definition at line 68 of file poptint.h.
+
+   int poptContext_s::finalArgvCount
+       Definition at line 67 of file poptint.h.
+
+   int poptContext_s::flags
+       Definition at line 63 of file poptint.h.
+
+   const char** poptContext_s::leftovers
+       Definition at line 55 of file poptint.h.
+
+   int poptContext_s::nextLeftover
+       Definition at line 57 of file poptint.h.
+
+   int poptContext_s::numAliases
+       Definition at line 62 of file poptint.h.
+
+   int poptContext_s::numExecs
+       Definition at line 65 of file poptint.h.
+
+   int poptContext_s::numLeftovers
+       Definition at line 56 of file poptint.h.
+
+   const struct poptOption* poptContext_s::options
+       Definition at line 58 of file poptint.h.
+
+   struct optionStackEntry
+       poptContext_s::optionStack[POPT_OPTION_DEPTH]
+       Definition at line 53 of file poptint.h.
+
+   struct optionStackEntry* poptContext_s::os
+       Definition at line 54 of file poptint.h.
+
+   const char* poptContext_s::otherHelp
+       Definition at line 72 of file poptint.h.
+
+   int poptContext_s::restLeftover
+       Definition at line 59 of file poptint.h.
+
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002           poptContext_s(3)

@@ -1,0 +1,86 @@
+SSL_want(3)                  OpenSSL                  SSL_want(3)
+
+
+
+NNAAMMEE
+       SSL_want, SSL_want_nothing, SSL_want_read, SSL_want_write,
+       SSL_want_x509_lookup - obtain state information TLS/SSL
+       I/O operation
+
+SSYYNNOOPPSSIISS
+        #include <openssl/ssl.h>
+
+        int SSL_want(SSL *ssl);
+        int SSL_want_nothing(SSL *ssl);
+        int SSL_want_read(SSL *ssl);
+        int SSL_want_write(SSL *ssl);
+        int SSL_want_x509_lookup(SSL *ssl);
+
+
+DDEESSCCRRIIPPTTIIOONN
+       SSL_want() returns state information for the SSL object
+       ssssll.
+
+       The other SSL_want_*() calls are shortcuts for the
+       possible states returned by SSL_want().
+
+NNOOTTEESS
+       SSL_want() examines the internal state information of the
+       SSL object. Its return values are similar to that of
+       SSL_get_error(3).  Unlike SSL_get_error(3), which also
+       evaluates the error queue, the results are obtained by
+       examining an internal state flag only. The information
+       must therefore only be used for normal operation under
+       non-blocking I/O. Error conditions are not handled and
+       must be treated using SSL_get_error(3).
+
+       The result returned by SSL_want() should always be
+       consistent with the result of SSL_get_error(3).
+
+RREETTUURRNN VVAALLUUEESS
+       The following return values can currently occur for
+       SSL_want():
+
+       SSL_NOTHING
+           There is no data to be written or to be read.
+
+       SSL_WRITING
+           There are data in the SSL buffer that must be written
+           to the underlying BBIIOO layer in order to complete the
+           actual SSL_*() operation.  A call to SSL_get_error(3)
+           should return SSL_ERROR_WANT_WRITE.
+
+       SSL_READING
+           More data must be read from the underlying BBIIOO layer
+           in order to complete the actual SSL_*() operation.  A
+           call to SSL_get_error(3) should return
+           SSL_ERROR_WANT_READ.
+
+       SSL_X509_LOOKUP
+           The operation did not complete because an application
+           callback set by SSL_CTX_set_client_cert_cb() has asked
+           to be called again.  A call to SSL_get_error(3) should
+           return SSL_ERROR_WANT_X509_LOOKUP.
+
+       SSL_want_nothing(), SSL_want_read(), SSL_want_write(),
+       SSL_want_x509_lookup() return 1, when the corresponding
+       condition is true or 0 otherwise.
+
+SSEEEE AALLSSOO
+       ssl(3), err(3), SSL_get_error(3)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+17/Aug/2001                   0.9.6c                  SSL_want(3)

@@ -1,0 +1,42 @@
+SGMLCHECK(1)                                         SGMLCHECK(1)
+
+
+
+NAME
+       sgmlcheck  -  check  the  syntax of an SGML-Tools document
+       file
+
+SYNOPSIS
+       sgmlcheck file[.sgml]
+
+DESCRIPTION
+       sgmlcheck runs an SGML parse  on  the  specified  document
+       source.   Any  errors are reported to standard output.  No
+       formatted version of the source is produced.
+
+       Note that sgmlcheck preprocesses the  SGML  source,  doing
+       the  conditionalization  described  by  any  <if></if> and
+       <unless></unless> tags.  SGML-Tools document sources  con­
+       taining  these tags will confuse a standalone SGML parser.
+
+OPTIONS
+       None.  The generic options described in  sgmltools(1)  are
+       accepted, but have no effect (except for -D).
+
+FILES
+       Many  files  and  executables  in $LINUXDOCLIB and $LINUX­
+       DOCBIN are used.
+
+BUGS
+       None known.
+
+AUTHOR
+       Cees de Groot <cg@pobox.com>.
+
+SEE ALSO
+       sgmltools(1), sgml2html(1),  sgml2info(1),  sgml2latex(1),
+       sgml2rtf(1), sgml2txt(1).
+
+
+
+                           10 Nov 1997               SGMLCHECK(1)

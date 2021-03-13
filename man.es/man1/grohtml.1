@@ -1,0 +1,78 @@
+GROHTML(1)                                             GROHTML(1)
+
+
+
+NAME
+       grohtml - html driver for groff
+
+SYNOPSIS
+       grohtml [ -v?lrn ] [ -Ddir ] [ -Fdir ] [ -iresolution ]
+               [ -Iimage ] [ -oimage ] [ files... ]
+
+DESCRIPTION
+       grohtml translates the output of GNU troff to html.  Users
+       should  always invoke grohtml via the groff command with a
+       -Thtml option.  If no files are given, grohtml  will  read
+       the  standard input.  A filename of - will also cause gro­
+       html to read the standard input.  Html output  is  written
+       to  the  standard  output.   When  grohtml is run by groff
+       options can be passed to grohtml using groff's -P  option.
+
+OPTIONS
+       -v     Displays the version.
+
+       -?     Emits a usage synopsis.
+
+       -l     Turns off the production of automatic section links
+              at the top of the document.
+
+       -r     Turns off the  automatic  header  and  footer  line
+              (html rule).
+
+       -n     Generate  simple  heading  anchors  whenever a sec­
+              tion/number heading is found.  Without  the  option
+              the  anchor value is the textual heading.  This can
+              cause problems when a heading  contains  a  `?'  on
+              some  brousers  (netscape).  This flag is automati­
+              cally turned on if a heading contains an image.
+
+       -Fdir  Prepend directory dir/devname to  the  search  path
+              for  font and device description files; name is the
+              name of the device, usually html.
+
+       -iresolution
+              Select the resolution for all images.   By  default
+              this  is  80 pixels per inch.  Example: -i100 indi­
+              cates 100 pixels per inch.
+
+       -Istem Determine the image stem name.  If omitted  grohtml
+              uses grohtml-XXX (XXX is the process ID).
+
+       -Ddir  Inform grohtml to place all image files into direc­
+              tory dir.
+
+       -v     Print the version number.
+
+       -?     Display usage.
+
+USAGE
+       There are styles called R, I, B, and BI  mounted  at  font
+       positions 1 to 4.
+
+DEPENDENCIES
+       grohtml    is    dependent    upon   the   png   utilities
+       (pnmcut, pnmtopng) and GhostScript (gs).  Images are  gen­
+       erated  whenever  a  table,  picture,  equation or line is
+       encountered.
+
+BUGS
+       Grohtml has been completely redesigned and rewritten.   It
+       is still alpha code.
+
+SEE ALSO
+       afmtodit(1),  groff(1),  troff(1),  psbb(1), groff_out(5),
+       groff_font(5), groff_char(7)
+
+
+
+Groff Version 1.17.2       27 June 2001                GROHTML(1)

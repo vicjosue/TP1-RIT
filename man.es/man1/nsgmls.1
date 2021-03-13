@@ -1,0 +1,293 @@
+ONSGMLS(1)                   onsgmls                   ONSGMLS(1)
+
+
+
+NAME
+       onsgmls - An SGML System Conforming to International Stan­
+       dard ISO 8879 -- Standard Generalized Markup Language
+
+SYNOPSIS
+       onsgmls [-BCdeglprsuv] [-alinktype] [-bbctf] [-csysid...]
+               [-Ddirectory] [-Emax_errors] [-ffile]
+               [-iname] [-ooutput_option...] [-tfile]
+               [-wwarning_type...] [sysid...]
+
+
+DESCRIPTION
+       onsgmls parses and validates the SGML document whose docu­
+       ment   entity  is  specified  by  the  system  identifiers
+       [sysid...] and prints on the standard output a simple text
+       representation  of  its Element Structure Information Set.
+       (This is the information set which a  structure-controlled
+       conforming SGML application should act upon.) If more than
+       one system identifier is specified, then the corresponding
+       entities will be concatenated to form the document entity.
+       Thus the document  entity  may  be  spread  among  several
+       files; for example, the SGML declaration, prolog and docu­
+       ment instance set could each be in a separate file. If  no
+       system  identifiers  are specified, then onsgmls will read
+       the document entity from the  standard  input.  A  command
+       line  system  identifier  of - can be used to refer to the
+       standard input. (Normally in a system identifier,  <OSFD>0
+       is used to refer to standard input.)
+
+
+       The following options are available:
+
+
+       -alinktype
+              Make link type linktype active. Not all ESIS infor­
+              mation is output in this case: the active LPDs  are
+              not   explicitly   reported,   although  each  link
+              attribute is qualified with  its  link  type  name;
+              there is no information about result elements; when
+              there are multiple link  rules  applicable  to  the
+              current  element, onsgmls always chooses the first.
+
+
+       -bbctf, -bencoding
+              This determines the encoding used for output. If in
+              fixed  character  set mode it specifies the name of
+              an encoding; if not, it specifies  the  name  of  a
+              BCTF.
+
+
+       -B     Batch  mode.  Parse  each sysid... specified on the
+              command line separately, rather than  concatenating
+              them. This is useful mainly with -s.
+
+              If -tfilename is also specified, then the specified
+              filename will be prefixed to the sysid to make  the
+              filename for the RAST result for each sysid.
+
+
+       -csysid
+              Map  public  identifiers and entity names to system
+              identifiers using  the  catalog  entry  file  whose
+              system identifier is sysid. Multiple -c options are
+              allowed. If there is a catalog  entry  file  called
+              catalog  in  the same place as the document entity,
+              it will be searched  for  immediately  after  those
+              specified by -c.
+
+
+       -C     The  [filename...]  arguments specify catalog files
+              rather  than  the  document  entity.  The  document
+              entity  is specified by the first DOCUMENT entry in
+              the catalog files.
+
+
+       -Ddirectory
+              Search directory  for  files  specified  in  system
+              identifiers.  Multiple  -D options are allowed. See
+              the description of the osfile storage  manager  for
+              more information about file searching.
+
+
+       -e     Describe  open  entities  in  error messages. Error
+              messages always include the position  of  the  most
+              recently opened external entity.
+
+
+       -Emax_errors
+              onsgmls  will  exit  after  max_errors  errors.  If
+              max_errors is 0, there is no limit on the number of
+              errors. The default is 200.
+
+
+       -ffile Redirect errors to file. This is useful mainly with
+              shells that do not support redirection of stderr.
+
+
+       -g     Show the generic identifiers of  open  elements  in
+              error messages.
+
+
+       -iname Pretend that
+
+              <!ENTITY % name "INCLUDE">
+
+              occurs  at  the start of the document type declara­
+              tion subset in  the  SGML  document  entity.  Since
+              repeated definitions of an entity are ignored, this
+              definition will take precedence over any other def­
+              initions of this entity in the document type decla­
+              ration. Multiple -i options  are  allowed.  If  the
+              SGML declaration replaces the reserved name INCLUDE
+              then the new reserved name will be the  replacement
+              text  of  the  entity.  Typically the document type
+              declaration will contain
+
+              <!ENTITY % name "IGNORE">
+
+              and will use %name; in the status keyword  specifi­
+              cation  of  a  marked  section declaration. In this
+              case the effect of the option will be to cause  the
+              marked section not to be ignored.
+
+
+       -ooutput_option
+              Output  additional  information  according  to out­
+              put_option:
+
+              entity Output definitions of all  general  entities
+              not  just for data or subdoc entities that are ref­
+              erenced  or  named  in  an   ENTITY   or   ENTITIES
+              attribute.
+
+              id  Distinguish  attributes whose declared value is
+              ID.
+
+              line Output L commands giving the current line num­
+              ber and filename.
+
+              included  Output an i command for included sub-ele­
+              ments.
+
+              empty Output an e command for  elements  which  are
+              not  allowed to have an end-tag, that is those with
+              a declared content of empty or with a content  ref­
+              erence attribute.
+
+              notation-sysid Output an f command before an N com­
+              mand, if a system identifier could be generated for
+              that notation.
+
+              nonsgml In fixed character set mode, output  escape
+              sequences for non-SGML  data  characters.  Non-SGML
+              data  characters  can result from numeric character
+              references.
+
+              Multiple -o options are allowed.
+
+
+       -p     Parse only the  prolog.  onsgmls  will  exit  after
+              parsing  the document type declaration. Implies -s.
+
+
+       -s     Suppress  output.  Error  messages  will  still  be
+              printed.
+
+
+       -tfile Output  to  file  the  RAST  result  as  defined by
+              ISO/IEC 13673:1995 (actually this isn't quite an IS
+              yet;  this  implements  the  Intermediate  Editor's
+              Draft of  1994/08/29,  with  changes  to  implement
+              ISO/IEC  JTC1/SC18/WG8 N1777). The normal output is
+              not produced.
+
+
+       -v     Print the version number.
+
+
+       -wtype Control warnings and errors.  Multiple  -w  options
+              are  allowed.  The  following values of type enable
+              warnings:
+
+              xml Warn about constructs that are not  allowed  by
+              XML.
+
+              mixed  Warn  about mixed content models that do not
+              allow #pcdata anywhere.
+
+              sgmldecl Warn about various  dubious  constructions
+              in the SGML declaration.
+
+              should  Warn  about various recommendations made in
+              ISO 8879 that the document does  not  comply  with.
+              (Recommendations  are expressed with ``should'', as
+              distinct  from  requirements  which   are   usually
+              expressed with ``shall''.)
+
+              default Warn about defaulted references.
+
+              duplicate Warn about duplicate entity declarations.
+
+              undefined Warn about undefined  elements:  elements
+              used in the DTD but not defined.
+
+              unclosed Warn about unclosed start and end-tags.
+
+              empty Warn about empty start and end-tags.
+
+              net  Warn  about  net-enabling  start-tags and null
+              end-tags.
+
+              min-tag Warn about minimized  start  and  end-tags.
+              Equivalent  to  combination  of unclosed, empty and
+              net warnings.
+
+              unused-map Warn about unused short reference  maps:
+              maps  that are declared with a short reference map­
+              ping declaration but never used in a  short  refer­
+              ence use declaration in the DTD.
+
+              unused-param Warn about parameter entities that are
+              defined but not used  in  a  DTD.  Unused  internal
+              parameter  entities whose text is INCLUDE or IGNORE
+              won't get the warning.
+
+              notation-sysid Warn about notations  for  which  no
+              system identifier could be generated.
+
+              all  Warn  about  conditions that should usually be
+              avoided (in the opinion of the author).  Equivalent
+              to:  mixed,  should,  default, undefined, sgmldecl,
+              unused-map, unused-param, empty and unclosed.
+
+              A warning can be disabled by using  its  name  pre­
+              fixed  with  no-.  Thus  -wall  -wno-duplicate will
+              enable all warnings except  those  about  duplicate
+              entity declarations.
+
+              The   following  values  for  warning_type  disable
+              errors:
+
+              no-idref Do not give an error for an  ID  reference
+              value  which  no  element has as its ID. The effect
+              will be as if each attribute declared as an ID ref­
+              erence value had been declared as a name.
+
+              no-significant  Do not give an error when a charac­
+              ter that is not a significant character in the ref­
+              erence  concrete  syntax occurs in a literal in the
+              SGML declaration. This may be useful in conjunction
+              with certain buggy test suites.
+
+              no-valid  Do  not  require the document to be type-
+              valid. This has the effect  of  changing  the  SGML
+              declaration to specify VALIDITY NOASSERT and IMPLY­
+              DEF ATTLIST YES ELEMENT YES. An option  of  -wvalid
+              has  the effect of changing the SGML declaration to
+              specify VALIDITY TYPE and IMPLYDEF ATTLIST NO  ELE­
+              MENT  NO.  If  neither  -wvalid  nor -wno-valid are
+              specified, then the VALIDITY and IMPLYDEF specified
+              in the SGML declaration will be used.
+
+
+       The following options are also supported for backward com­
+       patibility with sgmls:
+
+
+       -d     Same as -wduplicate.
+
+
+       -l     Same as -oline.
+
+
+       -msysid
+              Same as -c.
+
+
+       -r     Same as -wdefault.
+
+
+       -u     Same as -wundef.
+
+
+AUTHORS
+       James Clark, Ian Castle <ian.castle@looksystems.co.uk>.
+
+
+
+OpenJade                   January 2002                ONSGMLS(1)

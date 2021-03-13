@@ -1,0 +1,138 @@
+rpmdb_s(3)                                             rpmdb_s(3)
+
+
+
+NAME
+       rpmdb_s -
+
+SYNOPSIS
+       #include <rpmdb.h>
+
+
+   Data Fields
+       const char * db_root
+       const char * db_home
+       int db_flags
+       int db_mode
+       int db_perms
+       int db_api
+       const char * db_errpfx
+       int db_remove_env
+       int db_filter_dups
+       int db_chrootDone
+       void(* db_errcall )(const char *db_errpfx, char *buffer)
+       FILE * db_errfile
+       void *(* db_malloc )(size_t nbytes)
+       void *(* db_realloc )(void *ptr, size_t nbytes)
+       void(* db_free )(void *ptr)
+       int db_ndbi
+       dbiIndex * _dbi
+
+DETAILED DESCRIPTION
+       Describes the collection of index databases used by rpm.
+
+       Definition at line 308 of file rpmdb.h.
+
+FIELD DOCUMENTATION
+   dbiIndex* rpmdb_s::_dbi
+       Tag indices.
+
+       Definition at line 330 of file rpmdb.h.
+
+       Referenced by dbiOpen, newRpmdb, rpmdbClose, rpmdbOpenAll,
+       rpmdbSync, and rpmdbVerify.
+
+   int rpmdb_s::db_api
+       Berkeley API type
+
+       Definition at line 314 of file rpmdb.h.
+
+       Referenced by dbiOpen, openDatabase, and rpmdbRebuild.
+
+   int rpmdb_s::db_chrootDone
+       If chroot(2) done, ignore db_root.
+
+       Definition at line 318 of file rpmdb.h.
+
+       Referenced by db3close, and db_init.
+
+   void(* rpmdb_s::db_errcall)(const char *db_errpfx, char
+       *buffer)
+       Referenced by db3close, and db_init.
+
+   FILE* rpmdb_s::db_errfile
+       Definition at line 321 of file rpmdb.h.
+
+       Referenced by db3close, and db_init.
+
+   const char* rpmdb_s::db_errpfx
+       Definition at line 315 of file rpmdb.h.
+
+       Referenced by db3close, db_init, newRpmdb, and rpmdbClose.
+
+   int rpmdb_s::db_filter_dups
+       Definition at line 317 of file rpmdb.h.
+
+       Referenced by newRpmdb, and rpmdbRebuild.
+
+   int rpmdb_s::db_flags
+       Definition at line 311 of file rpmdb.h.
+
+       Referenced by newRpmdb, and rpmdbOpenAll.
+
+   void(* rpmdb_s::db_free)( void * ptr)
+       Referenced by db3New.
+
+   const char* rpmdb_s::db_home
+       directory path
+
+       Definition at line 310 of file rpmdb.h.
+
+       Referenced by db1close, db3close, newRpmdb, and
+       rpmdbClose.
+
+   void*(* rpmdb_s::db_malloc)(size_t nbytes)
+   int rpmdb_s::db_mode
+       open mode
+
+       Definition at line 312 of file rpmdb.h.
+
+       Referenced by db3New, and newRpmdb.
+
+   int rpmdb_s::db_ndbi
+       No. of tag indices.
+
+       Definition at line 329 of file rpmdb.h.
+
+       Referenced by newRpmdb, rpmdbClose, rpmdbSync, and
+       rpmdbVerify.
+
+   int rpmdb_s::db_perms
+       open permissions
+
+       Definition at line 313 of file rpmdb.h.
+
+       Referenced by dbiOpen, and newRpmdb.
+
+   void*(* rpmdb_s::db_realloc)( void * ptr, size_t nbytes)
+   int rpmdb_s::db_remove_env
+       Definition at line 316 of file rpmdb.h.
+
+       Referenced by db_fini, newRpmdb, and rpmdbRebuild.
+
+   const char* rpmdb_s::db_root
+       path prefix
+
+       Definition at line 309 of file rpmdb.h.
+
+       Referenced by db1close, db3close, db_init, newRpmdb, and
+       rpmdbClose.
+
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002                 rpmdb_s(3)

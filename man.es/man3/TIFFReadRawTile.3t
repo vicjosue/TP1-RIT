@@ -1,0 +1,40 @@
+TIFFReadRawTile(3T)                           TIFFReadRawTile(3T)
+
+
+
+NAME
+       TIFFReadRawTile - return an undecoded tile of data from an
+       open TIFF file
+
+SYNOPSIS
+       #include <tiffio.h>
+       tsize_t TIFFReadRawTile(TIFF* tif, ttile_t  tile,  tdata_t
+       buf, tsize_t size)
+
+DESCRIPTION
+       Read  the  contents  of  the specified tile into the (user
+       supplied) data buffer.  Note that the value of tile  is  a
+       ``raw  tile  number.''  That is, the caller must take into
+       account whether or not the data is organized  in  separate
+       planes (PlanarConfiguration=2).  TIFFComputeTile automati­
+       cally does this when converting an (x,y,z,sample)  coordi­
+       nate  quadruple  to a tile number.  To read a full tile of
+       data the data buffer should typically be at least as large
+       as the value returned by TIFFTileSize.
+
+RETURN VALUES
+       The actual number of bytes of data that were placed in buf
+       is returned; TIFFReadEncodedTile returns -1  if  an  error
+       was encountered.
+
+DIAGNOSTICS
+       All  error messages are directed to the TIFFError(3T) rou­
+       tine.
+
+SEE ALSO
+       libtiff(3T), TIFFOpen(3T), TIFFReadEncodedTile(3T),  TIFF­
+       ReadTile(3T), TIFFTileSize(3T)
+
+
+
+                         October 15, 1995     TIFFReadRawTile(3T)

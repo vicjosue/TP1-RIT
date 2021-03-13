@@ -1,0 +1,105 @@
+Tcl_CreateMathFunc(3) Tcl Library ProceduresTcl_CreateMathFunc(3)
+
+
+
+_________________________________________________________________
+
+NAME
+       Tcl_CreateMathFunc  -  Define  a  new  math  function  for
+       expressions
+
+SYNOPSIS
+       #include <tcl.h>
+
+       Tcl_CreateMathFunc(interp, name, numArgs, argTypes, proc, clientData)
+
+ARGUMENTS
+       Tcl_Interp      *interp      (in)      Interpreter      in
+                                              which  new function
+                                              will be defined.
+
+       char            *name        (in)      Name for new  func­
+                                              tion.
+
+       int             numArgs      (in)      Number of arguments
+                                              to  new   function;
+                                              also  gives size of
+                                              argTypes array.
+
+       Tcl_ValueType   *argTypes    (in)      Points to an  array
+                                              giving  the permis­
+                                              sible   types   for
+                                              each   argument  to
+                                              function.
+
+       Tcl_MathProc    *proc        (in)      Procedure      that
+                                              implements      the
+                                              function.
+
+       ClientData      clientData   (in)      Arbitrary  one-word
+                                              value  to  pass  to
+                                              proc  when  it   is
+                                              invoked.
+_________________________________________________________________
+
+
+DESCRIPTION
+       Tcl  allows  a number of mathematical functions to be used
+       in expressions, such as sin,  cos,  and  hypot.   Tcl_Cre­
+       ateMathFunc  allows  applications  to add additional func­
+       tions to those already  provided  by  Tcl  or  to  replace
+       existing  functions.   Name is the name of the function as
+       it will appear in expressions.  If  name  doesn't  already
+       exist as a function then a new function is created.  If it
+       does  exist,  then  the  existing  function  is  replaced.
+       NumArgs  and  argTypes describe the arguments to the func­
+       tion.  Each entry in the argTypes  array  must  be  either
+       TCL_INT, TCL_DOUBLE, or TCL_EITHER to indicate whether the
+       corresponding argument must be an integer, a double-preci­
+       sion floating value, or either, respectively.
+
+       Whenever the function is invoked in an expression Tcl will
+       invoke proc.  Proc should have arguments and  result  that
+       match the type Tcl_MathProc:
+              typedef int Tcl_MathProc(
+                ClientData clientData,
+                Tcl_Interp *interp,
+                Tcl_Value *args,
+                Tcl_Value *resultPtr);
+
+       When  proc  is invoked the clientData and interp arguments
+       will be the same as those  passed  to  Tcl_CreateMathFunc.
+       Args  will  point  to an array of numArgs Tcl_Value struc­
+       tures, which describe the actual arguments  to  the  func­
+       tion:
+              typedef struct Tcl_Value {
+                Tcl_ValueType type;
+                long intValue;
+                double doubleValue;
+              } Tcl_Value;
+
+       The  type  field indicates the type of the argument and is
+       either TCL_INT or TCL_DOUBLE.  It will match the  argTypes
+       value specified for the function unless the argTypes value
+       was TCL_EITHER. Tcl converts the argument supplied in  the
+       expression  to  the type requested in argTypes, if that is
+       necessary.  Depending on the value of the type field,  the
+       intValue  or  doubleValue  field  will  contain the actual
+       value of the argument.
+
+       Proc should compute its result and store it either  as  an
+       integer  in  resultPtr->intValue or as a floating value in
+       resultPtr->doubleValue.     It     should     set     also
+       resultPtr->type  to  either TCL_INT or TCL_DOUBLE to indi­
+       cate which value was set.  Under normal circumstances proc
+       should  return TCL_OK.  If an error occurs while executing
+       the function, proc should return TCL_ERROR  and  leave  an
+       error message in the interpreter's result.
+
+
+KEYWORDS
+       expression, mathematical function
+
+
+
+Tcl                            7.0          Tcl_CreateMathFunc(3)

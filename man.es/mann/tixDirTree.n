@@ -1,0 +1,180 @@
+tixDirTree(n)         Tix Built-In Commands         tixDirTree(n)
+
+
+
+_________________________________________________________________
+
+NAME
+       tixDirTree - Create and manipulate tixDirTree widgets
+
+SYNOPSIS
+       tixDirTree pathName ?options?
+
+SUPER-CLASS
+       The  TixDirTree class is derived from the TixScrolledHList
+       class and inherits all the commands, options  and  subwid­
+       gets of its super-class.
+
+STANDARD OPTIONS
+       TixDirTree  supports  all  the standard options of a frame
+       widget.  See the options(n) manual entry  for  details  on
+       the standard options.
+
+WIDGET-SPECIFIC OPTIONS
+       Command-Line Name:-browsecmd
+       Database Name:  browseCmd
+       Database Class: BrowseCmd
+
+              Specifies  a  command  to  call  whenever  the user
+              browses on a directory (usually by  single-clicking
+              on  the  name  of  the  directory).  The command is
+              called with one argument, the complete pathname  of
+              the directory.
+
+       Command-Line Name:-command
+       Database Name:  command
+       Database Class: Command
+
+              Specifies  the  command  to be called when the user
+              activates on a directory (usually by  double-click­
+              ing  on  the name of the directory). The command is
+              called with one argument, the complete pathname  of
+              the directory.
+
+       Command-Line Name:-dircmd
+       Database Name:  dircmd
+       Database Class: DirCmd
+
+              Specifies  the  TCL  command  to  be  called when a
+              directory listing is needed for a particular direc­
+              tory.  If  this option is not specified, by default
+              the DirTree widget will attempt to read the  direc­
+              tory as a Unix directory. On special occasions, the
+              application programmer may want to supply a special
+              method  for  reading directories: for example, when
+              he needs to list remote directories. In this  case,
+              the  -dircmd option can be used. The specified com­
+              mand accepts two arguments: the first is  the  name
+              of  the  directory  to  be  listed; the second is a
+              Boolean value indicating whether hidden  sub-direc­
+              tories  should  be  listed.  This command returns a
+              list of names of the sub-directories of this direc­
+              tory. For example:
+              proc read_dir {dir show_hidden} {
+                  if {$dir == "C:\"} {
+                      return {DOS NORTON WINDOWS}
+                  } else {
+                      return {}
+                  }
+              }
+
+       Command-Line Name:-disablecallback
+       Database Name:  disableCallback
+       Database Class: DisableCallback
+
+              A boolean value indicating whether callbacks should
+              be disabled. When set  to  true,  the  TCL  command
+              specified  by  the  -command option is not executed
+              when the -value of the DirTree widget changes.
+
+       Command-Line Name:-showhidden
+       Database Name:  showHidden
+       Database Class: ShowHidden
+
+              Specifies  whether  hidden  directories  should  be
+              shown. By default, a directory name starting with a
+              period "." is considered  as  a  hidden  directory.
+              This  rule can be overridden by supplying an alter­
+              native -dircmd option.
+
+       Name:           value
+       Class:          Value
+       Switch:         -value
+       Alias:          -directory
+
+              Specifies the name of the current directory  to  be
+              displayed in the DirTree widget.
+
+SUBWIDGETS
+       Name:           hlist
+       Class:          TixHList
+
+              The  hierarchical  listbox that displays the direc­
+              tory listing.
+
+       Name:           hsb
+       Class:          Scrollbar
+
+              The horizontal scrollbar subwidget.
+
+       Name:           vsb
+       Class:          Scrollbar
+
+              The vertical scrollbar subwidget.
+_________________________________________________________________
+
+DESCRIPTION
+       The tixDirTree command creates a new window (given by  the
+       pathName  argument)  and  makes  it into a DirTree widget.
+       Additional options, described above, may be  specified  on
+       the  command  line  or in the option database to configure
+       aspects of the DirTree such as its cursor and relief.
+
+       The DirTree widget displays a list view  of  a  directory,
+       its previous directories and its sub-directories. The user
+       can choose one of the directories displayed in the list or
+       change to another directory.
+
+WIDGET COMMANDS
+       The  tixDirTree  command  creates  a new Tcl command whose
+       name is the same as the path name of the DirTree's window.
+       This  command  may be used to invoke various operations on
+       the widget. It has the following general form:
+                     pathName option ?arg arg ...?
+       PathName is the name of the command, which is the same  as
+       the DirTree widget's path name. Option and the args deter­
+       mine the exact behavior of the command. The following com­
+       mands are possible for DirTree widgets:
+
+       pathName cget option
+              Returns  the  current  value  of  the configuration
+              option given by option. Option may have any of  the
+              values accepted by the tixDirTree command.
+
+       pathName chdir dir
+              Change the current directory to dir.
+
+       pathName configure ?option? ?value option value ...?
+              Query  or  modify  the configuration options of the
+              widget.  If no option is specified, returns a  list
+              describing  all  of the available options for path­
+              Name (see Tk_ConfigureInfo for information  on  the
+              format  of  this list). If option is specified with
+              no value, then the command returns a list  describ­
+              ing the one named option (this list will be identi­
+              cal to  the  corresponding  sublist  of  the  value
+              returned  if  no  option  is specified).  If one or
+              more option-value pairs  are  specified,  then  the
+              command modifies the given widget option(s) to have
+              the  given  value(s);  in  this  case  the  command
+              returns  an  empty  string.  Option may have any of
+              the values accepted by the tixDirTree command.
+
+       pathName subwidget  name ?args?
+              When no options are given, this command returns the
+              pathname of the subwidget of the specified name.
+
+              When  options  are given, the widget command of the
+              specified  subwidget  will  be  called  with  these
+              options.
+
+BINDINGS
+       The  mouse and keyboard bindings of the DirTree widget are
+       the same as the bindings of the HList widget.
+
+KEYWORDS
+       Tix(n)
+
+
+
+Tix                            4.0                  tixDirTree(n)

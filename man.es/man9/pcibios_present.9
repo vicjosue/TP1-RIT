@@ -1,0 +1,36 @@
+pcibios_present(9)       BIOS32 Functions      pcibios_present(9)
+
+
+
+NAME
+       pcibios_present - determine whether a PCI bus is available
+
+SYNOPSIS
+       #include <linux/bios32.h>
+
+       int pcibios_present(void);
+
+DESCRIPTION
+       The pcibios_present tests for the presence of PCI  support
+       on  the  local  host.  It returns true (!0) if PCI support
+       exists, false otherwise.
+
+RETURN VALUE
+       Zero if PCI support is NOT present.
+
+AVAILABILITY
+       Linux 1.0+
+
+SEE ALSO
+       /usr/include/linux/bios32.h,
+       /usr/src/linux/arch/*/kernel/bios32.c
+
+AUTHOR
+       Kirk Petersen (kirk@speakeasy.org)
+
+BUGS
+       Bugs?! This is way to trivial to have bugs.
+
+
+
+Linux DDI                 August 5, 1997       pcibios_present(9)

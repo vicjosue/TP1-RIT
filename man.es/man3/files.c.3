@@ -1,0 +1,607 @@
+build/files.c(3)                                 build/files.c(3)
+
+
+
+NAME
+       build/files.c - The post-build, pre-packaging file tree
+       walk to assemble the package manifest.
+
+SYNOPSIS
+       #include 'system.h'
+       #include <regex.h>
+       #include <signal.h>
+       #include <rpmio_internal.h>
+       #include <rpmbuild.h>
+       #include <rpmmacro.h>
+       #include 'buildio.h'
+       #include 'myftw.h'
+       #include 'md5.h'
+       #include 'debug.h'
+
+   Data Structures
+       struct AttrRec_s
+       struct DepMsg_t
+       struct FileList_s
+           Package file tree walk data.
+       struct FileListRec_s
+       struct VFA
+
+   Defines
+       #define MYALLPERMS   07777
+       #define SKIPWHITE(_x)   {while(*(_x) && (xisspace(*_x) ||
+           *(_x) == ',')) (_x)++;}
+       #define SKIPNONWHITE(_x)   {while(*(_x) &&!(xisspace(*_x)
+           || *(_x) == ',')) (_x)++;}
+       #define MAXDOCDIR   1024
+       #define fl_dev   fl_st.st_dev
+       #define fl_ino   fl_st.st_ino
+       #define fl_mode   fl_st.st_mode
+       #define fl_nlink   fl_st.st_nlink
+       #define fl_uid   fl_st.st_uid
+       #define fl_gid   fl_st.st_gid
+       #define fl_rdev   fl_st.st_rdev
+       #define fl_size   fl_st.st_size
+       #define fl_mtime   fl_st.st_mtime
+       #define isAttrDefault(_ars)   ((_ars)[0] == '-' &&
+           (_ars)[1] == ' ')
+
+   Typedefs
+       typedef enum specdFlags_e specdFlags
+       typedef FileListRec_s * FileListRec
+       typedef AttrRec_s * AttrRec
+       typedef FileList_s * FileList
+           Package file tree walk data.
+       typedef VFA VFA_t
+
+   Enumerations
+       enum specdFlags_e { SPECD_DEFFILEMODE =  (1 << 0),
+           SPECD_DEFDIRMODE =  (1 << 1), SPECD_DEFUID =  (1 <<
+           2), SPECD_DEFGID =  (1 << 3), SPECD_DEFVERIFY =  (1 <<
+           4), SPECD_FILEMODE =  (1 << 8), SPECD_DIRMODE =  (1 <<
+           9), SPECD_UID =  (1 << 10), SPECD_GID =  (1 << 11),
+           SPECD_VERIFY =  (1 << 12) }
+
+   Functions
+       void nullAttrRec (AttrRec ar)
+       void freeAttrRec (AttrRec ar)
+       void dupAttrRec (const AttrRec oar, AttrRec nar)
+       char * strtokWithQuotes (char *s, char *delim)
+       void timeCheck (int tc, Header h)
+       int parseForVerify (char *buf, FileList fl)
+       int parseForDev (char *buf, FileList fl)
+           Parse dev from file manifest.
+       int parseForAttr (char *buf, FileList fl)
+           Parse attr and defattr from file manifest.
+       int parseForConfig (char *buf, FileList fl)
+       int langCmp (const void *ap, const void *bp)
+       int parseForLang (char *buf, FileList fl)
+       int parseForRegexLang (const char *fileName, char **lang)
+       int parseForRegexMultiLib (const char *fileName)
+       int parseForSimple (Spec spec, Package pkg, char *buf,
+           FileList fl, const char **fileName)
+       int compareFileListRecs (const void *ap, const void *bp)
+       int isDoc (FileList fl, const char *fileName)
+       void checkHardLinks (FileList fl)
+           Verify that file attributes scope over hardlinks
+           correctly.
+       void genCpioListAndHeader (FileList fl, TFI_t *cpioList,
+           Header h, int isSrc)
+       FileListRec freeFileList (FileListRec fileList, int count)
+       int addFile (FileList fl, const char *diskURL, struct stat
+           *statp)
+       int processBinaryFile (Package pkg, FileList fl, const
+           char *fileURL)
+       int processPackageFiles (Spec spec, Package pkg, int
+           installSpecialDoc, int test)
+       void initSourceHeader (Spec spec)
+       int processSourceFiles (Spec spec)
+       StringBuf getOutputFrom (char *dir, char *argv[], const
+           char *writePtr, int writeBytesLeft, int failNonZero)
+       int generateDepends (Spec spec, Package pkg, TFI_t
+           cpioList, int multiLib)
+       void printDepMsg (DepMsg_t *dm, int count, const char
+           **names, const char **versions, int *flags)
+       void printDeps (Header h)
+       int processBinaryFiles (Spec spec, int installSpecialDoc,
+           int test)
+
+   Variables
+       int _noDirTokens
+       int multiLib = 0
+       VFA_t verifyAttrs []
+       VFA_t virtualFileAttributes []
+       DepMsg_t depMsgs []
+
+DETAILED DESCRIPTION
+       The post-build, pre-packaging file tree walk to assemble
+       the package manifest.
+
+
+
+       Definition in file files.c.
+
+DEFINE DOCUMENTATION
+   #define fl_dev   fl_st.st_dev
+       Definition at line 58 of file files.c.
+
+   #define fl_gid   fl_st.st_gid
+       Definition at line 63 of file files.c.
+
+   #define fl_ino   fl_st.st_ino
+       Definition at line 59 of file files.c.
+
+   #define fl_mode   fl_st.st_mode
+       Definition at line 60 of file files.c.
+
+   #define fl_mtime   fl_st.st_mtime
+       Definition at line 66 of file files.c.
+
+   #define fl_nlink   fl_st.st_nlink
+       Definition at line 61 of file files.c.
+
+   #define fl_rdev   fl_st.st_rdev
+       Definition at line 64 of file files.c.
+
+   #define fl_size   fl_st.st_size
+       Definition at line 65 of file files.c.
+
+   #define fl_uid   fl_st.st_uid
+       Definition at line 62 of file files.c.
+
+   #define isAttrDefault(_ars)   ((_ars)[0] == '-' && (_ars)[1]
+       == ' ')
+       Definition at line 387 of file files.c.
+
+       Referenced by parseForAttr.
+
+   #define MAXDOCDIR   1024
+       Definition at line 32 of file files.c.
+
+       Referenced by parseForSimple.
+
+   #define MYALLPERMS   07777
+       Definition at line 9 of file files.c.
+
+       Referenced by parseForAttr.
+
+   #define SKIPNONWHITE(_x)   {while(*(_x) &&!(xisspace(*_x) ||
+       *(_x) == ',')) (_x)++;}
+       Definition at line 30 of file files.c.
+
+       Referenced by parseForAttr, parseForConfig, parseForDev,
+       parseForLang, parseForVerify, parseNoSource, and
+       parseRCPOT.
+
+   #define SKIPWHITE(_x)   {while(*(_x) && (xisspace(*_x) ||
+       *(_x) == ',')) (_x)++;}
+       Definition at line 29 of file files.c.
+
+       Referenced by parseForAttr, parseForConfig, parseForDev,
+       parseForLang, parseForVerify, parseNoSource, and
+       parseRCPOT.
+
+TYPEDEF DOCUMENTATION
+   typedef struct AttrRec_s *  AttrRec
+   typedef struct FileList_s *  FileList
+       Package file tree walk data.
+
+
+   typedef struct FileListRec_s *  FileListRec
+   typedef enum specdFlags_e  specdFlags
+       Referenced by parseForAttr, and parseForVerify.
+
+   typedef struct VFA  VFA_t
+ENUMERATION TYPE DOCUMENTATION
+   enum specdFlags_e
+       Enumeration values:
+
+       SPECD_DEFFILEMODE
+
+       SPECD_DEFDIRMODE
+
+       SPECD_DEFUID
+
+       SPECD_DEFGID
+
+       SPECD_DEFVERIFY
+
+       SPECD_FILEMODE
+
+       SPECD_DIRMODE
+
+       SPECD_UID
+
+       SPECD_GID
+
+       SPECD_VERIFY
+
+
+       Definition at line 40 of file files.c.
+
+FUNCTION DOCUMENTATION
+   int addFile (FileList fl, const char * diskURL, struct stat *
+       statp) [static]
+       Parameters:
+
+       fl     package file tree walk data
+
+       Definition at line 1428 of file files.c.
+
+       References _, addFile, FileListRec_s::diskURL,
+       FileListRec_s::fileURL, FileListRec_s::fl_st,
+       FileListRec_s::flags, getGname, getGnameS, getUname,
+       getUnameS, FileListRec_s::gname, FileListRec_s::langs,
+       Lstat, multiLib, myftw, myftwFunc, parseForRegexLang,
+       parseForRegexMultiLib, RPMFILE_MULTILIB_MASK,
+       FileListRec_s::specdFlags, FileListRec_s::uname, urlPath,
+       FileListRec_s::verifyFlags, xmalloc, xrealloc, and
+       xstrdup.
+
+       Referenced by addFile, and processBinaryFile.
+
+   void checkHardLinks (FileList fl) [static]
+       Verify that file attributes scope over hardlinks
+       correctly.
+
+       Todo:
+           only lang for now, finish other attributes later.
+
+       Parameters:
+
+       fl     package file tree walk data
+
+       Definition at line 1025 of file files.c.
+
+       References _free, FileListRec_s::flags,
+       FileListRec_s::langs, RPMFILE_SPECFILE, stpcpy, and
+       xstrdup.
+
+       Referenced by processPackageFiles.
+
+   int compareFileListRecs (const void * ap, const void * bp)
+       [static]
+       Definition at line 999 of file files.c.
+
+       Referenced by genCpioListAndHeader.
+
+   void dupAttrRec (const AttrRec oar, AttrRec nar) [static]
+       Definition at line 162 of file files.c.
+
+       References freeAttrRec, and xstrdup.
+
+       Referenced by parseForAttr, and processPackageFiles.
+
+   void freeAttrRec (AttrRec ar) [static]
+       Definition at line 148 of file files.c.
+
+       References _free.
+
+       Referenced by dupAttrRec, and processPackageFiles.
+
+   FileListRec freeFileList (FileListRec fileList, int count)
+       [static]
+       Definition at line 1412 of file files.c.
+
+       References _free, and FileListRec_s::diskURL.
+
+       Referenced by processPackageFiles, and processSourceFiles.
+
+   void genCpioListAndHeader (FileList fl, TFI_t * cpioList,
+       Header h, int isSrc) [static]
+       Todo:
+           Should directories have doc/config attributes?
+           (#14531)
+
+       Remove RPMTAG_OLDFILENAMES, add dirname/basename instead.
+
+       Parameters:
+
+       fl     package file tree walk data
+
+       Definition at line 1097 of file files.c.
+
+       References _, _free, compareFileListRecs,
+       compressFilelist, CPIO_FOLLOW_SYMLINKS, CPIO_MAP_GID,
+       CPIO_MAP_MODE, CPIO_MAP_PATH, CPIO_MAP_TYPE, CPIO_MAP_UID,
+       CPIO_MULTILIB, FileListRec_s::diskURL, expandFilelist,
+       FA_COPYOUT, FA_SKIP, FileListRec_s::fileURL,
+       FileListRec_s::flags, getGidS, getUidS,
+       FileListRec_s::gname, headerAddEntry,
+       headerAddOrAppendEntry, isDoc, FileListRec_s::langs,
+       mdfile, Readlink, RPM_INT16_TYPE, RPM_INT32_TYPE,
+       RPM_STRING_ARRAY_TYPE, rpmExpandNumeric, RPMFILE_CONFIG,
+       RPMFILE_DOC, RPMFILE_EXCLUDE, RPMFILE_GHOST,
+       RPMFILE_MULTILIB_MASK, RPMFILE_MULTILIB_SHIFT,
+       rpmlibNeedsFeature, RPMTAG_FILEDEVICES, RPMTAG_FILEFLAGS,
+       RPMTAG_FILEGROUPNAME, RPMTAG_FILEINODES, RPMTAG_FILELANGS,
+       RPMTAG_FILELINKTOS, RPMTAG_FILEMD5S, RPMTAG_FILEMODES,
+       RPMTAG_FILEMTIMES, RPMTAG_FILERDEVS, RPMTAG_FILESIZES,
+       RPMTAG_FILEUSERNAME, RPMTAG_FILEVERIFYFLAGS,
+       RPMTAG_MULTILIBS, RPMTAG_OLDFILENAMES, RPMTAG_SIZE,
+       S_ISLNK, SPECD_DEFDIRMODE, SPECD_DEFFILEMODE,
+       SPECD_DEFGID, SPECD_DEFUID, SPECD_DEFVERIFY,
+       SPECD_DIRMODE, SPECD_FILEMODE, SPECD_GID, SPECD_UID,
+       SPECD_VERIFY, FileListRec_s::specdFlags, stpcpy, TFI_t,
+       uint_16, uint_32, FileListRec_s::uname, urlPath,
+       FileListRec_s::verifyFlags, xcalloc, and xmalloc.
+
+       Referenced by processPackageFiles, and processSourceFiles.
+
+   int generateDepends (Spec spec, Package pkg, TFI_t cpioList,
+       int multiLib) [static]
+       Definition at line 2353 of file files.c.
+
+       References _, _free, appendLineStringBuf, appendStringBuf,
+       DepMsg_t::argv, CPIO_MULTILIB, freeStringBuf,
+       DepMsg_t::ftag, getOutputFrom, getStringBuf,
+       DepMsg_t::msg, multiLib, newStringBuf, DepMsg_t::ntag,
+       parseRCPOT, poptParseArgvString, rpmExpand,
+       RPMSENSE_FIND_PROVIDES, RPMSENSE_FIND_REQUIRES,
+       RPMSENSE_MULTILIB, RPMTAG_PROVIDEFLAGS,
+       RPMTAG_REQUIREFLAGS, TFI_t, xcalloc, xrealloc, and
+       xstrdup.
+
+       Referenced by processBinaryFiles.
+
+   StringBuf getOutputFrom (char * dir, char * argv[], const char
+       * writePtr, int writeBytesLeft, int failNonZero) [static]
+       Definition at line 2162 of file files.c.
+
+       References _, appendStringBuf, errno, EXIT_FAILURE,
+       newStringBuf, and strerror.
+
+       Referenced by generateDepends.
+
+   int isDoc (FileList fl, const char * fileName) [static]
+       Parameters:
+
+       fl     package file tree walk data
+
+       Definition at line 1009 of file files.c.
+
+       Referenced by genCpioListAndHeader.
+
+   int langCmp (const void * ap, const void * bp) [static]
+       Definition at line 679 of file files.c.
+
+       Referenced by parseForLang.
+
+   void nullAttrRec (AttrRec ar) [static]
+       Definition at line 136 of file files.c.
+
+       Referenced by parseForAttr, and processPackageFiles.
+
+   int parseForAttr (char * buf, FileList fl) [static]
+       Parse attr and defattr from file manifest.
+
+       Parameters:
+
+       fl     package file tree walk data
+
+       Definition at line 491 of file files.c.
+
+       References _, alloca, dupAttrRec, isAttrDefault,
+       MYALLPERMS, nullAttrRec, SKIPNONWHITE, SKIPSPACE,
+       SKIPWHITE, SPECD_DIRMODE, SPECD_FILEMODE, SPECD_GID,
+       SPECD_UID, and specdFlags.
+
+       Referenced by processPackageFiles.
+
+   int parseForConfig (char * buf, FileList fl) [static]
+       Parameters:
+
+       fl     package file tree walk data
+
+       Definition at line 619 of file files.c.
+
+       References _, alloca, RPMFILE_CONFIG, RPMFILE_MISSINGOK,
+       RPMFILE_NOREPLACE, SKIPNONWHITE, SKIPSPACE, and SKIPWHITE.
+
+       Referenced by processPackageFiles.
+
+   int parseForDev (char * buf, FileList fl) [static]
+       Parse dev from file manifest.
+
+       Parameters:
+
+       fl     package file tree walk data
+
+       Definition at line 393 of file files.c.
+
+       References _, alloca, SKIPNONWHITE, SKIPSPACE, SKIPWHITE,
+       and xisdigit.
+
+       Referenced by processPackageFiles.
+
+   int parseForLang (char * buf, FileList fl) [static]
+       Parameters:
+
+       fl     package file tree walk data
+
+       Definition at line 687 of file files.c.
+
+       References _, alloca, langCmp, SKIPNONWHITE, SKIPSPACE,
+       SKIPWHITE, xmalloc, and xrealloc.
+
+       Referenced by processPackageFiles.
+
+   int parseForRegexLang (const char * fileName, char ** lang)
+       [static]
+       Definition at line 776 of file files.c.
+
+       References _free, and rpmExpand.
+
+       Referenced by addFile.
+
+   int parseForRegexMultiLib (const char * fileName) [static]
+       Definition at line 819 of file files.c.
+
+       References _free, and rpmExpand.
+
+       Referenced by addFile.
+
+   int parseForSimple (Spec spec, Package pkg, char * buf,
+       FileList fl, const char ** fileName) [static]
+       Parameters:
+
+       fl     package file tree walk data
+
+       Definition at line 874 of file files.c.
+
+       References _, _free, appendLineStringBuf, appendStringBuf,
+       VFA::attribute, VFA::flag, headerNVR, MAXDOCDIR, MKDIR_P,
+       multiLib, newStringBuf, RPMFILE_DOC, rpmGetPath,
+       strtokWithQuotes, and xstrdup.
+
+       Referenced by processPackageFiles.
+
+   int parseForVerify (char * buf, FileList fl) [static]
+       Parameters:
+
+       fl     package file tree walk data
+
+       Definition at line 299 of file files.c.
+
+       References _, alloca, VFA::attribute, VFA::flag,
+       SKIPNONWHITE, SKIPSPACE, SKIPWHITE, SPECD_VERIFY, and
+       specdFlags.
+
+       Referenced by processPackageFiles.
+
+   void printDepMsg (DepMsg_t * dm, int count, const char **
+       names, const char ** versions, int * flags) [static]
+       Definition at line 2496 of file files.c.
+
+       References isDependsMULTILIB, RPMSENSE_EQUAL,
+       RPMSENSE_GREATER, RPMSENSE_LESS, and RPMSENSE_SENSEMASK.
+
+       Referenced by printDeps.
+
+   void printDeps (Header h) [static]
+       Definition at line 2538 of file files.c.
+
+       References DepMsg_t::ftag, HFD_t, HGE_t, DepMsg_t::msg,
+       DepMsg_t::ntag, printDepMsg, rpmTagType, and
+       DepMsg_t::vtag.
+
+       Referenced by processBinaryFiles.
+
+   int processBinaryFile (Package pkg, FileList fl, const char *
+       fileURL) [static]
+       Parameters:
+
+       fl     package file tree walk data
+
+       Definition at line 1638 of file files.c.
+
+       References _, _free, addFile, myGlobPatternP, rpmGenPath,
+       rpmGlob, and urlPath.
+
+       Referenced by processPackageFiles.
+
+   int processPackageFiles (Spec spec, Package pkg, int
+       installSpecialDoc, int test) [static]
+       Definition at line 1708 of file files.c.
+
+       References _, _free, appendStringBuf,
+       FileList_s::buildRootURL, checkHardLinks,
+       FileList_s::cur_ar, FileList_s::currentFlags,
+       FileList_s::currentLangs, FileList_s::currentSpecdFlags,
+       FileList_s::currentVerifyFlags, FileList_s::def_ar,
+       FileList_s::defSpecdFlags, FileList_s::defVerifyFlags,
+       FileList_s::devmajor, FileList_s::devminor,
+       FileList_s::devtype, FileList_s::docDirCount,
+       FileList_s::docDirs, doScript, dupAttrRec, expandMacros,
+       Fclose, fdGetFp, Ferror, FileList_s::fileCount,
+       FileList_s::fileList, FileList_s::fileListRecsAlloced,
+       FileList_s::fileListRecsUsed, Fopen, freeAttrRec,
+       freeFileList, freeSplitString, Fstrerror,
+       genCpioListAndHeader, getStringBuf, handleComments, HGE_t,
+       FileList_s::inFtw, FileList_s::isDir,
+       FileList_s::isSpecialDoc, multiLib, FileList_s::nLangs,
+       FileList_s::noGlob, nullAttrRec, parseForAttr,
+       parseForConfig, parseForDev, parseForLang, parseForSimple,
+       parseForVerify, FileList_s::passedSpecialDoc,
+       FileList_s::prefix, processBinaryFile,
+       FileList_s::processingFailed, RPMBUILD_STRINGBUF,
+       rpmExpandNumeric, RPMFILE_MULTILIB, rpmGenPath,
+       rpmGetPath, RPMTAG_DEFAULTPREFIX, SKIPSPACE, splitString,
+       TFI_t, timeCheck, FileList_s::totalFileSize, and xstrdup.
+
+       Referenced by processBinaryFiles.
+
+   char* strtokWithQuotes (char * s, char * delim) [static]
+       Definition at line 213 of file files.c.
+
+       Referenced by parseForSimple.
+
+   void timeCheck (int tc, Header h) [static]
+       Definition at line 253 of file files.c.
+
+       References _, HFD_t, HGE_t, RPMTAG_FILEMTIMES,
+       RPMTAG_OLDFILENAMES, and rpmTagType.
+
+       Referenced by processPackageFiles.
+
+VARIABLE DOCUMENTATION
+   int _noDirTokens
+       Definition at line 35 of file files.c.
+
+   DepMsg_t depMsgs[]
+       Definition at line 2310 of file files.c.
+
+   int multiLib = 0 [static]
+       Definition at line 91 of file files.c.
+
+       Referenced by addFile, generateDepends, parseForSimple,
+       and processPackageFiles.
+
+   VFA_t verifyAttrs[]
+       Initial value:
+
+        {
+           { 'md5',    RPMVERIFY_MD5 },
+           { 'size',   RPMVERIFY_FILESIZE },
+           { 'link',   RPMVERIFY_LINKTO },
+           { 'user',   RPMVERIFY_USER },
+           { 'group',  RPMVERIFY_GROUP },
+           { 'mtime',  RPMVERIFY_MTIME },
+           { 'mode',   RPMVERIFY_MODE },
+           { 'rdev',   RPMVERIFY_RDEV },
+           { NULL, 0 }
+       }
+
+       Definition at line 283 of file files.c.
+
+   VFA_t virtualFileAttributes[]
+       Initial value:
+
+        {
+               { '%dir',       0 },
+               { '%doc',       RPMFILE_DOC },
+               { '%ghost',     RPMFILE_GHOST },
+               { '%exclude',   RPMFILE_EXCLUDE },
+               { '%readme',    RPMFILE_README },
+               { '%license',   RPMFILE_LICENSE },
+               { '%multilib',  0 },
+
+
+
+
+
+
+
+
+
+               { NULL, 0 }
+       }
+
+       Definition at line 850 of file files.c.
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002           build/files.c(3)

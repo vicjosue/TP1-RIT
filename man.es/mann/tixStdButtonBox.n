@@ -1,0 +1,153 @@
+tixStdButtonBox(n)    Tix Built-In Commands    tixStdButtonBox(n)
+
+
+
+_________________________________________________________________
+
+NAME
+       tixStdButtonBox  -  Create and manipulate Tix StdButtonBox
+       widgets
+
+SYNOPSIS
+       tixStdButtonBox pathName ?options?
+
+STANDARD OPTIONS
+       -anchor         -background    -cursor
+       -relief         -borderWidth
+
+       See the options manual entry for details on  the  standard
+       options.
+
+WIDGET-SPECIFIC OPTIONS
+       Command-Line Name:-orientation
+       Database Name:  orientation
+       Database Class: Orientation
+
+              Static  Option.  Specifies  the  orientation of the
+              button subwidgets. Only the values "horizontal" and
+              "vertical" are recognized.
+
+       Command-Line Name:-padx
+       Database Name:  padx
+       Database Class: Pad
+
+              Specifies the horizontal padding between two neigh­
+              boring button subwidgets in the  StdButtonBox  wid­
+              get.
+
+
+       Command-Line Name:-padx
+       Database Name:  padx
+       Database Class: Pad
+
+              Specifies  the  vertical padding between two neigh­
+              boring button subwidgets in the  StdButtonBox  wid­
+              get.
+
+       Command-Line Name:-state
+       Database Name:  state
+       Database Class: State
+
+              Specifies  the  state of all the buttons inside the
+              StdButtonBox widget.
+
+              Note: Setting this option using the  config  widget
+              command will enable or disable all the buttons sub­
+              widgets. Original states of the individual  buttons
+              are not saved.
+
+SUBWIDGETS
+       Name:           ok
+       Class:          Button
+
+              The  first button subwidget. By default it displays
+              the text string "Ok"
+
+       Name:           apply
+       Class:          Button
+
+              The second button subwidget. By default it displays
+              the text string "Apply"
+
+       Name:           cancel
+       Class:          Button
+
+              The  third button subwidget. By default it displays
+              the text string "Cancel"
+
+       Name:           help
+       Class:          Button
+
+              The fourth button subwidget. By default it displays
+              the text string "Help"
+
+DESCRIPTION
+       The tixStdButtonBox command creates a new window (given by
+       the pathName argument) and makes it  into  a  StdButtonBox
+       widget.  Additional options, described above, may be spec­
+       ified on the command line or in  the  option  database  to
+       configure  aspects  of the StdButtonBox such as its cursor
+       and relief.
+
+       The StdButtonBox widget is a group of Standard buttons for
+       Motif-like dialog boxes.
+
+
+WIDGET COMMAND
+       The  tixStdButtonBox  command  creates  a  new Tcl command
+       whose name is the same as the path name of the  StdButton­
+       Box's  window.  This command may be used to invoke various
+       operations on the widget. It  has  the  following  general
+       form:
+                     pathName option ?arg arg ...?
+       PathName  is the name of the command, which is the same as
+       the StdButtonBox widget's path name.  Option and the  args
+       determine  the exact behavior of the command.  The follow­
+       ing commands are possible for StdButtonBox widgets:
+
+       pathName cget option
+              Returns the  current  value  of  the  configuration
+              option  given by option. Option may have any of the
+              values accepted by the tixStdButtonBox command.
+
+       pathName configure ?option? ?value option value ...?
+              Query or modify the configuration  options  of  the
+              widget.   If no option is specified, returns a list
+              describing all of the available options  for  path­
+              Name  (see  Tk_ConfigureInfo for information on the
+              format of this list). If option is  specified  with
+              no  value, then the command returns a list describ­
+              ing the one named option (this list will be identi­
+              cal  to  the  corresponding  sublist  of  the value
+              returned if no option is  specified).   If  one  or
+              more  option-value  pairs  are  specified, then the
+              command modifies the given widget option(s) to have
+              the  given  value(s);  in  this  case  the  command
+              returns an empty string. Option may have any of the
+              values accepted by the tixStdButtonBox command.
+
+       pathName invoke buttonName
+              Invoke  the  button subwidget with the name button­
+              Name.
+
+       pathName subwidget  name ?args?
+              When no additional arguments are given, returns the
+              pathname of the subwidget of the specified name.
+
+       When no additional arguments are given, the widget command
+       of the specified  subwidget  will  be  called  with  these
+       parameters.
+
+BINDINGS
+       TixStdButtonBox widgets have no default bindings. The but­
+       ton subwidgets retain their default Tk bindings.
+
+KEYWORDS
+       Tix(n), Container Widgets
+
+
+
+
+
+
+Tix                            4.0             tixStdButtonBox(n)

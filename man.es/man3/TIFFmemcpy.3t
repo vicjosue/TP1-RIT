@@ -1,0 +1,46 @@
+MEMORY(3T)                                             MEMORY(3T)
+
+
+
+NAME
+       _TIFFmalloc,    _TIFFrealloc,    _TIFFfree,   _TIFFmemset,
+       _TIFFmemcpy,  _TIFFmemcmp,  -  memory   management-related
+       functions for use with TIFF files
+
+SYNOPSIS
+       #include <tiffio.h>
+       tdata_t _TIFFmalloc(tsize_t);
+       tdata_t _TIFFrealloc(tdata_t, tsize_t);
+       void _TIFFfree(tdata_t);
+       void _TIFFmemset(tdata_t, int, tsize_t);
+       void _TIFFmemcpy(tdata_t, const tdata_t, tsize_t);
+       int _TIFFmemcmp(const tdata_t, const tdata_t, tsize_t);
+
+DESCRIPTION
+       These  routines are provided for writing portable software
+       that uses libtiff; they hide any memory-management related
+       issues, such as dealing with segmented architectures found
+       on 16-bit machines.
+
+       _TIFFmalloc and _TIFFrealloc are used to dynamically allo­
+       cate and reallocate memory used by libtiff; such as memory
+       passed into the I/O routines.   Memory  allocated  through
+       these  interfaces is released back to the system using the
+       _TIFFfree routine.
+
+       Memory allocated through one of the above  interfaces  can
+       be  set  to  a  known  value  using _TIFFmemset, copied to
+       another memory location using _TIFFmemcpy, or compared for
+       equality using _TIFFmemcmp.  These routines conform to the
+       equivalent ANSI C routines: memset,  memcpy,  and  memcmp,
+       repsectively.
+
+DIAGNOSTICS
+       None.
+
+SEE ALSO
+       libtiff(3T), malloc(3C), memory(3C)
+
+
+
+                         October 15, 1995              MEMORY(3T)

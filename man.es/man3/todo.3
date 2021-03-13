@@ -1,0 +1,297 @@
+todo(3)                                                   todo(3)
+
+
+
+NAME
+       todo - Todo List
+
+       File buildio.h
+            Eliminate, merge into rpmlib.
+
+
+       Global checkHardLinks(FileList fl)
+           only lang for now, finish other attributes later.
+
+
+       Global genCpioListAndHeader(FileList fl, TFI_t *cpioList,
+       Header h, int isSrc)
+           Should directories have doc/config attributes?
+           (#14531)
+
+       Remove RPMTAG_OLDFILENAMES, add dirname/basename instead.
+
+
+       Global cpio_doio(FD_t fdo, Header h, CSA_t csa, const char
+       *fmodeMacro)
+            Create transaction set *much* earlier.
+
+
+       Global doSetupMacro(Spec spec, char *line)
+           FIXME: Option -q broken when not immediately after
+           setup.
+
+
+       Global alSatisfiesDepend(const availableList al, const
+       char *keyType, const char *keyDepend, const char *keyName,
+       const char *keyEVR, int keyFlags)
+           Eliminate.
+
+
+       Global unsatisfiedDepend(rpmTransactionSet ts, const char
+       *keyType, const char *keyDepend, const char *keyName,
+       const char *keyEVR, int keyFlags, struct availablePackage
+       ***suggestion)
+           Eliminate rpmrc provides.
+
+
+       Global getFilesystemList(void)
+           determine rdonly for non-linux file systems.
+
+
+       File header.h
+           Document version2 headers.
+
+
+       Global rpmReadPackageManifest(FD_t fd, int *argcPtr, const
+       char ***argvPtr)
+            Infinite loops through manifest files exist, operator
+           error for now.
+
+
+       File md5.c
+            Eliminate, use rpmio version instead.
+
+
+       File md5.h
+            Eliminate, use rpmio version instead.
+
+
+       Global freeSpecVec)(Spec spec)=NULL
+            Eliminate linkage loop into librpmbuild.a
+
+
+       Global parseSpecVec)(Spec *specp, const char *specFile,
+       const char *rootdir, const char *buildRoot, int recursing,
+       const char *passPhrase, char *cookie, int anyarch, int
+       force)=NULL
+            Eliminate linkage loop into librpmbuild.a
+
+
+       Global rpmInstall(const char *rootdir, const char
+       **fileArgv, rpmtransFlags transFlags,
+       rpmInstallInterfaceFlags interfaceFlags,
+       rpmprobFilterFlags probFilter, rpmRelocation *relocations)
+            Generalize --freshen policies.
+
+
+       Global rpmprobFilterFlags_e
+            Generalize filter mechanism.
+
+
+       Global rpmPackageGetEntry(void *leadp, Header sigs, Header
+       h, int_32 tag, int_32 *type, void **p, int_32 *c)
+           Eliminate from API.
+
+
+       Global rpmReadPackageInfo(FD_t fd, Header *sigp, Header
+       *hdrp)
+           Eliminate.
+
+
+       Global checkSize(FD_t fd, int siglen, int pad, int
+       datalen)
+           rpmio: use fdSize rather than fstat(2) to get file
+           size.
+
+
+       Global db3_config_default
+            Set a reasonable 'last gasp' default db config.
+
+
+       Global dbiFindByLabel(dbiIndex dbi, void *dbcursor, const
+       char *arg, dbiIndexSet *matches)
+           Name must be an exact match, as name is a db key.
+
+
+       Global expandMacro(MacroBuf mb)
+           Dynamically reallocate target buffer.
+
+
+       Global grabArgs(MacroBuf mb, const MacroEntry me, const
+       char *se, char lastc)
+           Use popt rather than getopt to parse args.
+
+
+       File rpmerr.h
+            Eliminate from API.
+
+
+       Global fdLink(_fd, _msg)
+            Remove debugging entries from the ABI.
+
+
+       Global expandMacros(void *spec, MacroContext mc, char
+       *sbuf, size_t sbuflen)
+           Eliminate from API.
+
+
+       Global rpmDefineMacro(MacroContext mc, const char *macro,
+       int level)
+            Document.
+
+
+       File rpmmessages.h
+            Eliminate from API.
+
+
+       Global XurlFree(urlinfo u, const char *msg, const char
+       *file, unsigned line)
+            Remove debugging entry from the ABI.
+
+
+       Global XurlLink(urlinfo u, const char *msg, const char
+       *file, unsigned line)
+            Remove debugging entry from the ABI.
+
+
+       Global XurlNew(const char *msg, const char *file, unsigned
+       line)
+            Remove debugging entry from the ABI.
+
+
+       Global transactionSetHeader
+            Remove, there's no headerLink refcount on the
+           pointer.
+
+
+       Global getGidS(const char *gname)
+           Implement using hash.
+
+
+       Global getGname(gid_t gid)
+           Implement using hash.
+
+
+       Global getGnameS(const char *gname)
+           Implement using hash.
+
+
+       Global getUidS(const char *uname)
+           Implement using hash.
+
+
+       Global getUname(uid_t uid)
+           Implement using hash.
+
+
+       Global getUnameS(const char *uname)
+           Implement using hash.
+
+
+       Global rpm_machtable_e
+            Eliminate from API.
+
+
+       Global rpmGetVar(int var)
+            Eliminate from API.
+
+
+       Global rpmSetVar(int var, const char *val)
+            Eliminate from API.
+
+
+       Global rpmGetArchInfo(const char **name, int *num)
+           Generalize to extract arch component from
+           target_platform macro.
+
+
+       Global rpmGetOsInfo(const char **name, int *num)
+           Generalize to extract os component from
+           target_platform macro.
+
+
+       Global rpmMachineScore(int type, const char *name)
+           Rewrite to use RE's against config.guess target
+           platform output.
+
+
+       Global rpmSetTables(int archTable, int osTable)
+           Eliminate from API. #
+
+       Note:
+           Only used by build code.
+
+       Global rpmSetMachine(const char *arch, const char *os)
+           Eliminate from API.
+
+
+       Global rpmGetMachine(const char **arch, const char **os)
+           Eliminate from API.
+
+
+       Global rpmFreeRpmrc(void)
+            Eliminate from API.
+
+
+       Global rpmtransGetKeys(const rpmTransactionSet ts, const
+       void ***ep, int *nep)
+           Removed packages have no keys, returned as interleaved
+           NULL pointers.
+
+
+       Global rpmdbSetIteratorVersion(rpmdbMatchIterator mi,
+       const char *version)
+           Eliminate from API.
+
+
+       Global rpmdbSetIteratorRelease(rpmdbMatchIterator mi,
+       const char *release)
+           Eliminate from API.
+
+
+       Global XrpmdbNextIterator(rpmdbMatchIterator mi, const
+       char *f, unsigned int l)
+            Remove debugging entry from the ABI.
+
+
+       Global HDRaddorappend)(Header h, int_32 tag, int_32 type,
+       const void *p, int_32 c)
+           Arg 'p' should have const.
+
+
+       Global HDRsort)(Header h)
+           Eliminate from API.
+
+
+       Global HDRunsort)(Header h)
+           Eliminate from API.
+
+
+       Global copyEntry(const indexEntry entry, hTYP_t type,
+       hPTR_t *p, hCNT_t c, int minMem)
+           Permit retrieval of regions other than
+           HEADER_IMUTABLE.
+
+
+       Global headerAddOrAppendEntry(Header h, int_32 tag, int_32
+       type, const void *p, int_32 c)
+           Arg 'p' should have const.
+
+
+       Global headerFreeData(const void *data, rpmTagType type)
+           Remove from API.
+
+
+       Page Dependencies
+           per-interpreter dependency generators are not located
+           in subdiretories.
+
+
+       Page Immutable header regions in rpm-4.0.1 and later
+           Either concatenated/nested regions may be used to
+           implement a metarpm, aka a package of packages, dunno
+           how, when, or even if, yet.
+
+
+
+rpm                        13 Mar 2002                    todo(3)

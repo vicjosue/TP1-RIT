@@ -1,0 +1,98 @@
+Tcl_BooleanObj(3)     Tcl Library Procedures    Tcl_BooleanObj(3)
+
+
+
+_________________________________________________________________
+
+NAME
+       Tcl_NewBooleanObj,  Tcl_SetBooleanObj,  Tcl_GetBooleanFro­
+       mObj - manipulate Tcl objects as boolean values
+
+SYNOPSIS
+       #include <tcl.h>
+
+       Tcl_Obj *
+       Tcl_NewBooleanObj(boolValue)
+
+       Tcl_SetBooleanObj(objPtr, boolValue)
+
+       int
+       Tcl_GetBooleanFromObj(interp, objPtr, boolPtr)
+
+ARGUMENTS
+       int          boolValue (in)      Integer  value  used   to
+                                        initialize   or   set   a
+                                        boolean object.   If  the
+                                        integer  is  nonzero, the
+                                        boolean object is set  to
+                                        1;  otherwise the boolean
+                                        object is set to 0.
+
+       Tcl_Obj      *objPtr   (in/out)  For    Tcl_SetBooleanObj,
+                                        this points to the object
+                                        to   be   converted    to
+                                        boolean     type.     For
+                                        Tcl_GetBooleanFromObj,
+                                        this refers to the object
+                                        from  which  to   get   a
+                                        boolean  value; if objPtr
+                                        does not already point to
+                                        a   boolean   object,  an
+                                        attempt will be  made  to
+                                        convert it to one.
+
+       Tcl_Interp   *interp   (in/out)  If an error occurs during
+                                        conversion, an error mes­
+                                        sage   is   left  in  the
+                                        interpreter's      result
+                                        object  unless  interp is
+                                        NULL.
+
+       int          *boolPtr  (out)     Points  to  place   where
+                                        Tcl_GetBooleanFromObj
+                                        stores the boolean  value
+                                        (0  or  1)  obtained from
+                                        objPtr.
+_________________________________________________________________
+
+
+DESCRIPTION
+       These procedures are used  to  create,  modify,  and  read
+       boolean  Tcl  objects  from C code.  Tcl_NewBooleanObj and
+       Tcl_SetBooleanObj will create a new object of boolean type
+       or  modify  an existing object to have boolean type.  Both
+       of these procedures set the object  to  have  the  boolean
+       value  (0  or  1)  specified by boolValue; if boolValue is
+       nonzero,  the  object  is  set  to  1,  otherwise  to   0.
+       Tcl_NewBooleanObj  returns  a  pointer  to a newly created
+       object with reference count zero.  Both procedures set the
+       object's  type  to be boolean and assign the boolean value
+       to the object's internal representation longValue  member.
+       Tcl_SetBooleanObj  invalidates  any old string representa­
+       tion and, if the object is not already a  boolean  object,
+       frees any old internal representation.
+
+       Tcl_GetBooleanFromObj  attempts  to return a boolean value
+       from the Tcl object objPtr.  If the object is not  already
+       a  boolean  object,  it will attempt to convert it to one.
+       If an error occurs during conversion, it returns TCL_ERROR
+       and  leaves  an  error message in the interpreter's result
+       object unless interp is NULL.  Otherwise,  Tcl_GetBoolean­
+       FromObj returns TCL_OK and stores the boolean value in the
+       address given by boolPtr.  If the object is not already  a
+       boolean  object, the conversion will free any old internal
+       representation.
+
+
+SEE ALSO
+       Tcl_NewObj, Tcl_DecrRefCount, Tcl_IncrRefCount, Tcl_GetOb­
+       jResult
+
+
+KEYWORDS
+       boolean,  boolean object, boolean type, internal represen­
+       tation, object, object type, string representation
+
+
+
+Tcl                            8.0              Tcl_BooleanObj(3)

@@ -1,0 +1,37 @@
+tools/dumpdb.c(3)                               tools/dumpdb.c(3)
+
+
+
+NAME
+       tools/dumpdb.c -
+
+SYNOPSIS
+       #include 'system.h'
+       #include <rpmlib.h>
+       #include 'header_internal.h'
+       #include 'debug.h'
+
+   Defines
+       #define _RECNUM   rpmdbGetIteratorOffset(mi)
+
+   Functions
+       int main (int argc, char **argv)
+
+DEFINE DOCUMENTATION
+   #define _RECNUM   rpmdbGetIteratorOffset(mi)
+FUNCTION DOCUMENTATION
+   int main (int argc, char ** argv)
+       Definition at line 7 of file dumpdb.c.
+
+       References _, HEADER_DUMP_INLINE, headerDump, rpmdbClose,
+       rpmdbFreeIterator, RPMDBI_PACKAGES, rpmdbInitIterator,
+       rpmdbNextIterator, rpmdbOpen, rpmReadConfigFiles,
+       rpmTagTable, and setprogname.
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002          tools/dumpdb.c(3)

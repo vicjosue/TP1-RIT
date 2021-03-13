@@ -1,0 +1,285 @@
+man(1)                                                     man(1)
+
+
+
+NOMBRE
+       man - formatar y mostrar las páginas de manual en-linea
+       manpath - determinar el camino de búsqueda inicial para el
+       utilizador
+
+SINOPSIS
+       man [-acdfhktw] [-m sistema] [-p string] [-C  fich_config]
+       [-M  path]  [-P paginador] [-S lista_sec] [sección] nombre
+       ...
+
+DESCRIPCIÓN
+       man formata y muestra las páginas del  manual  `en-linea'.
+       Esta  versión reconoce las variables de ambiente (environ­
+       ment) MANPATH y (MAN)PAGER (vea más lejos).  Si la sección
+       es indicada, man busca solamente en ella.  Es posible tam­
+       bién indicar el ordem de búsqueda en las secciones  y  que
+       preprocessamiento  efectuar con los manuales, por medio de
+       opciones en la linea de comando o variables  de  ambiente.
+       Si  nombre  contiene  el  carácter  `/' tratará primero un
+       fichero con ese nombre, permitiendo hacer  man  ./foo.5  o
+       mismo  man /cd/foo/bar.1.gz para formatar y ver un fichero
+       en particular.
+
+OPCIONES
+       -C  fich_config
+              Indica el fichero  de  configuración  a  usar;  por
+              omissión   será  usado  /usr//etc/man.config.  (Vea
+              man.conf(5).)
+
+       -M  path
+              Indica la lista de  directórios  donde  buscar  los
+              manuales.  Sin esta opción será consultada la vari­
+              able MANPATH.  Si tampoco esta  variable  estuviera
+              definida,  una  lista será obtenida por consulta de
+              /usr//etc/man.config. Un directório vacio  en  MAN­
+              PATH representa la lista anterior.
+
+       -P  paginador
+              Indica  cual  paginador/visualisador usar. Sin esta
+              opción tratará  de  consultar  la  variable  PAGER.
+              Normalmente, man usará /usr/bin/less -isr.
+
+       -S  lista_sec
+              Da  la lista de secciones (separadas por `:') donde
+              buscar y en que orden. Esta opción tiene  prioridad
+              sobre la variable MANSECT.
+
+       -a     Normalmente   man  muestra  el  primer  manual  que
+              encuentra. Esta opción le permite afichar todas las
+              páginas  de manual encontradas para la entrada nom­
+              bre.
+
+       -d     No muestra el manual, afichando  varia  información
+              para debugging.
+
+       -f     Equivalente a whatis.
+
+       -h     Aficha un breve mensaje de ayuda.
+
+       -k     Equivalente a apropos.
+
+       -m  sistema
+              Indica  um  conjunto de manuales diferentes aplica­
+              bles al sistema indicado.
+
+       -p  string
+              Especifica uma sequencia de preprocesadores a  usar
+              antes  de nroff o troff (los formatadores). Algumas
+              instalaciones Linux pueden no tener todos los  pre­
+              procesadores.  Algunos preprocesadores y las letras
+              a usar para indicarlos son: eqn (e), grap (g),  pic
+              (p),  tbl  (t), vgrind (v), refer (r).  Esta opción
+              tiene proridad sobre la variable MANROFFSEQ.
+
+       -t     Usar /usr/bin/groff -Tps -mandoc para formatar  las
+              páginas  de manual, la salida efectuándose por std­
+              out La salida de este comando puede  necesitar  ser
+              processada  por  otros  filtros  antes de poder ser
+              visualisada o imprimida.
+
+       -w o --path
+              No aficha las páginas de manual, pero muestra la(s)
+              localización(es)  de  los  ficheros que se hubieran
+              formatado y mostrado, para  la  entrada  de  nombre
+              indicado.  Si  no se da ninguna otra opción muestra
+              la lista de directórios que serian  recorridos  por
+              man durante la búsqueda. Si manpath es un lazo haci
+              man,  entonces  "manpath"  es  equivalente  a  "man
+              --path".   -W  Como  -w, pero aficha los nombres de
+              ficheros, uno por linea, sin ninguna otra  informa­
+              ción.  Muy  útil  en comandos shell del estilo: man
+              -aW man | xargs ls -l
+
+PÁGINAS FORMATADAS
+       Afin de ganar tiempo, man trata  de  guardar  les  páginas
+       formatadas  en  vez  de interpretarlas cada vez que se las
+       pide.  Tradicionalmente, las versiones formatadas  de  las
+       páginas  de REP/manX son guardadas en REP/catX, pero otras
+       correspondencias entre los directórios man  y  los  direc­
+       tórios   cat   pueden   ser   indicadas   en   el  fichero
+       /usr//etc/man.config. Si el directório «cat»  correspondi­
+       ente no existe, les páginas formatadas no serán guardadas.
+
+       Es posible de hacer man suid utilisador man. En ese  caso,
+       si  un directório cat pertenece a man y tiene el modo 0755
+       (solo  man  puede  escribir),  y  que  los  ficheros   cat
+       pertenecen  también  a  man  y  tienen el modo 0644 o 0444
+       (solo man puede escrir en ellos, o  nadie),  ningún  util­
+       isador normal podrá cambiar las páginas formatadas o poner
+       otros ficheros en el directório correspondiente. Si man no
+       es  suid,  los  directórios  cat debrán tener el modo 0777
+       afin que todo utilisador pueda dejar el resultado  de  los
+       formatajes  efectuados durante las consultaciones del man­
+       ual.
+
+       La opción -c fuerza el reformataje de una página, mismo si
+       un  fichero cat más reciente que el fichero fuente existe.
+
+
+AMBIENTE
+       MANPATH
+              Si MANPATH está definido, su valor será usado  como
+              lista  de  directórios (manpath) donde pueden estar
+              las entradas del manual.
+
+       MANROFFSEQ
+              Si MANROFFSEQ está definido, su valor determina los
+              preprocesamientos a aplicar antes de nroff o troff.
+              Normalmente, las páginas de manual,  son  preproce­
+              sadas por tbl antes de nroff.
+
+       MANSECT
+              Si  MANSECT existe, su valor indica las secciones a
+              recorrer.
+
+       PAGER  Si PAGER está definido, indicará el programa a usar
+              para   mostrar   el   manual.    Normalmente  usará
+              /usr/bin/less -isr.
+
+       LANG   Si LANG está definido, su valor  indica  el  nombre
+              del  sub-directório donde man comenzará la búsqueda
+              de las páginas de manual. Por ejemplo,  el  comando
+              «LANG=es  man  1  pepe» tendrá como efecto de hacer
+              una    búsqueda    de    la    página    pepe    en
+              .../es/man1/pepe.1,  y si ese fichero no existe, en
+              .../man1/pepe.1, ( ...  indica  un  directório  del
+              camino de búsqueda).
+
+       NLSPATH, LC_MESSAGES, LANG
+              Las  variables de ambiente NLSPATH y LC_MESSAGES (o
+              LANG cuando LC_MESSAGES no existe) juegan un  papel
+              en   la  localisación  del  catálogo  de  mensajes.
+              Notese que los programas como col(1) que son llama­
+              dos por man, también utilizan LC_CTYPE.
+
+       PATH   PATH  es  utilizado para la construcción del camino
+              de búsqueda por omisión.
+
+       SYSTEM SYSTEM empleado para obtener los sistemas  alterna­
+              tivos por omisión (en vista de la utilisación de la
+              opción -m ).
+
+VEA TAMBIÉN
+       apropos(1), whatis(1), less(1), groff(1).
+
+BUGS
+       -t solo funciona si existe un  programa  troff  o  equiva­
+       lente.
+
+TRADUCCIÓN
+       Pablo  Saratxaga, 1996. A partir de la página en portugués
+       de Vitor Duarte y la página en francés de René Cougnenc.
+
+
+
+                            15/3/1994                      man(1)
+pcimodules(8)          Linux PCI Utilities          pcimodules(8)
+
+
+
+NAME
+       pcimodules  - List kernel driver modules available for all
+       currently plugged in PCI devices
+
+SYNOPSIS
+       pcimodules [--classclass_id] [--classmaskmask] [--help]
+
+DESCRIPTION
+       pcimodules lists all  driver  modules  for  all  currently
+       plugged  in PCI devices.  pcimodules should be run at boot
+       time, and whenever a PCI device is "hot plugged" into  the
+       system.   This  can  be done by the following Bourne shell
+       syntax:
+
+                   for module in $(pcimodules) ; do
+
+                        modprobe -s -k "$module"
+
+                   done
+
+       When a PCI device is removed from the  system,  the  Linux
+       kernel  will decrement a usage count on PCI driver module.
+       If this count drops  to  zero  (i.e.,  there  are  no  PCI
+       drivers),  then  the  modprobe -r process that is normally
+       configured to run from cron every few minutes will eventu­
+       ally remove the unneeded module.
+
+       The --class and --classmask arguments can be used to limit
+       the search to certain classes of  PCI  devices.   This  is
+       useful,  for  example, to generate a list of ethernet card
+       drivers to be loaded when the kernel has indicated that it
+       is trying to resolve an unknown network interface.
+
+       Modules  are  listed in the order in which the PCI devices
+       are physically arranged so that  the  computer  owner  can
+       arrange  things  like  having  scsi  device 0 be on a con­
+       troller that is not alphabetically  the  first  scsi  con­
+       troller.
+
+OPTIONS
+       --class class --classmask mask
+
+       --class  and  --classmask limit the search to PCI cards in
+       particular  classes.   These  arguments  are  always  used
+       together.  The arguments to --class and --classmask can be
+       given as hexadecimal numbers by prefixing a leading  "0x".
+       Note  that  the  classes used by pcimodules are in "Linux"
+       format, meaning the class value that you  see  with  lspci
+       would  be  shifted left eight bits, with the new low eight
+       bits programming interface ID.  An examples of how to  use
+       class and classmask is provided below.  --help, -h Print a
+       help message and exit.
+
+EXAMPLES
+       pcimodules
+              lists  all  modules  corresponding   to   currently
+              plugged in PCI devices.
+
+       pcimodules --class 0x200000 --classmask 0xffff00
+              lists   all   modules  corresponding  to  currently
+              plugged in ethernet PCI devices.
+
+FILES
+       /lib/modules/<kernel-version>/modules.pcimap
+              This file is automatically generated by depmod, and
+              used  by pcimodules to determine which modules cor­
+              respond to which PCI ID's.
+
+       /proc/bus/pci
+              An interface to PCI bus  configuration  space  pro­
+              vided  by  the  post-2.1.82 Linux kernels. Contains
+              per-bus subdirectories with per-card  config  space
+              files  and  a devices file containing a list of all
+              PCI devices.
+
+
+SEE ALSO
+       lspci(8)
+
+
+MAINTAINER
+       The Linux PCI Utilities are  maintained  by  Martin  Mares
+       <mj@suse.cz>.
+
+
+AUTHOR
+       pcimodules    was    written    by    Adam    J.   Richter
+       <adam@yggdrasil.com>, based on public domain example  code
+       by Martin Mares <mj@suse.cz>.
+
+
+COPYRIGHT
+       pcimodules  is copyright 2000, Yggdrasil Computing, Incor­
+       porated, and may be copied under the terms and  conditions
+       of  version  2  of  the GNU General Public License as pub­
+       lished by the Free  Software  Foundation  (Cambrige,  Mas­
+       sachusetts, United States of America).
+
+
+
+@VERSION@                    @TODAY@                pcimodules(8)

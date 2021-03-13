@@ -1,0 +1,191 @@
+lib/query.c(3)                                     lib/query.c(3)
+
+
+
+NAME
+       lib/query.c - Display tag values from package metadata.
+
+SYNOPSIS
+       #include 'system.h'
+       #include <rpmcli.h>
+       #include <rpmbuild.h>
+       #include 'manifest.h'
+       #include 'debug.h'
+
+   Defines
+       #define PATH_MAX   255
+
+   Functions
+       void printFileInfo (char *te, const char *name, unsigned
+           int size, unsigned short mode, unsigned int mtime,
+           unsigned short rdev, unsigned int nlink, const char
+           *owner, const char *group, int uid, int gid, const
+           char *linkto)
+       const char * queryHeader (Header h, const char *qfmt)
+       int countLinks (int_16 *fileRdevList, int_32
+           *fileInodeList, int nfiles, int xfile)
+       int showQueryPackage (QVA_t qva, rpmdb rpmdb, Header h)
+       void printNewSpecfile (Spec spec)
+       void rpmDisplayQueryTags (FILE *fp)
+       int showMatches (QVA_t qva, rpmdbMatchIterator mi, QVF_t
+           showPackage)
+       int rpmQueryVerify (QVA_t qva, rpmQVSources source, const
+           char *arg, rpmdb rpmdb, QVF_t showPackage)
+       int rpmQuery (QVA_t qva, rpmQVSources source, const char
+           *arg)
+
+   Variables
+       int(* parseSpecVec )(Spec *specp, const char *specFile,
+           const char *rootdir, const char *buildRoot, int
+           recursing, const char *passPhrase, char *cookie, int
+           anyarch, int force)=NULL
+       Spec(* freeSpecVec )(Spec spec)=NULL
+
+DETAILED DESCRIPTION
+       Display tag values from package metadata.
+
+
+
+       Definition in file query.c.
+
+DEFINE DOCUMENTATION
+   #define PATH_MAX   255
+       Definition at line 10 of file query.c.
+
+       Referenced by rpmQueryVerify.
+
+FUNCTION DOCUMENTATION
+   int countLinks (int_16 * fileRdevList, int_32 * fileInodeList,
+       int nfiles, int xfile) [static]
+       Definition at line 123 of file query.c.
+
+       References int_16, and int_32.
+
+       Referenced by showQueryPackage.
+
+   void printFileInfo (char * te, const char * name, unsigned int
+       size, unsigned short mode, unsigned int mtime, unsigned
+       short rdev, unsigned int nlink, const char * owner, const
+       char * group, int uid, int gid, const char * linkto)
+       [static]
+       Definition at line 26 of file query.c.
+
+       References _free, alloca, rpmPermsString, and S_ISLNK.
+
+       Referenced by showQueryPackage.
+
+   void printNewSpecfile (Spec spec) [static]
+       Definition at line 391 of file query.c.
+
+       References _, _free, PackageStruct::header, headerNVR,
+       headerSprintf, PackageStruct::next, SpecStruct::packages,
+       RPMBUILD_DEFAULT_LANG, RPMTAG_DESCRIPTION, RPMTAG_GROUP,
+       RPMTAG_SUMMARY, rpmTagTable, SpecStruct::sl,
+       speclines_s::sl_lines, speclines_s::sl_nlines,
+       SpecStruct::st, spectags_s::st_ntags, spectags_s::st_t,
+       stpcpy, spectag_s::t_lang, spectag_s::t_msgid,
+       spectag_s::t_nlines, spectag_s::t_startx,
+       spectag_s::t_tag, tagName, xmalloc, and xstrdup.
+
+       Referenced by rpmQueryVerify.
+
+   const char* queryHeader (Header h, const char * qfmt) [inline,
+       static]
+       Definition at line 110 of file query.c.
+
+       References _, headerSprintf, and rpmTagTable.
+
+       Referenced by showQueryPackage.
+
+   void rpmDisplayQueryTags (FILE * fp)
+       Definition at line 488 of file query.c.
+
+       References HEADER_EXT_MORE, HEADER_EXT_TAG,
+       headerSprintfExtension_s::name,
+       headerTagTableEntry_s::name, rpmTagTable, rpmTagTableSize,
+       headerSprintfExtension_s::type, and
+       headerSprintfExtension_s::u.
+
+       Referenced by main.
+
+   int rpmQuery (QVA_t qva, rpmQVSources source, const char *
+       arg)
+       Definition at line 829 of file query.c.
+
+       References rpmdbClose, rpmdbOpen, rpmQueryVerify, and
+       showQueryPackage.
+
+       Referenced by main.
+
+   int rpmQueryVerify (QVA_t qva, rpmQVSources source, const char
+       * arg, rpmdb rpmdb, QVF_t showPackage)
+       Definition at line 544 of file query.c.
+
+       References _, _free, errno, F_OK, Fclose, Ferror, Fopen,
+       freeSpecVec, Fstrerror, PackageStruct::header, headerFree,
+       PackageStruct::next, SpecStruct::packages, parseSpecVec,
+       PATH_MAX, printNewSpecfile, realpath, rpmCleanPath,
+       rpmdbFreeIterator, RPMDBI_LABEL, RPMDBI_PACKAGES,
+       rpmdbInitIterator, rpmdbSetIteratorRE, rpmGlob,
+       RPMMIRE_DEFAULT, rpmRC, RPMRC_BADMAGIC, RPMRC_OK,
+       rpmReadPackageHeader, rpmReadPackageManifest,
+       RPMTAG_BASENAMES, RPMTAG_GROUP, RPMTAG_NAME,
+       RPMTAG_PROVIDENAME, RPMTAG_REQUIRENAME,
+       RPMTAG_TRIGGERNAME, showMatches, showQueryPackage,
+       strerror, and xstrdup.
+
+       Referenced by rpmQuery.
+
+   int showMatches (QVA_t qva, rpmdbMatchIterator mi, QVF_t
+       showPackage)
+       Definition at line 515 of file query.c.
+
+       References rpmdbFreeIterator, rpmdbGetIteratorRpmDB, and
+       rpmdbNextIterator.
+
+       Referenced by rpmQueryVerify.
+
+   int showQueryPackage (QVA_t qva, rpmdb rpmdb, Header h)
+       Definition at line 147 of file query.c.
+
+       References _, _free, countLinks, headerNVR, HFD_t, HGE_t,
+       int_32, printFileInfo, queryHeader, RPMFILE_CONFIG,
+       RPMFILE_DOC, RPMFILE_GHOST, RPMFILE_STATE_NETSHARED,
+       RPMFILE_STATE_NORMAL, RPMFILE_STATE_NOTINSTALLED,
+       RPMFILE_STATE_REPLACED, rpmfileState, RPMTAG_BASENAMES,
+       RPMTAG_DIRINDEXES, RPMTAG_DIRNAMES, RPMTAG_FILEFLAGS,
+       RPMTAG_FILEGIDS, RPMTAG_FILEGROUPNAME, RPMTAG_FILEINODES,
+       RPMTAG_FILELINKTOS, RPMTAG_FILEMD5S, RPMTAG_FILEMODES,
+       RPMTAG_FILEMTIMES, RPMTAG_FILERDEVS, RPMTAG_FILESIZES,
+       RPMTAG_FILESTATES, RPMTAG_FILEUIDS, RPMTAG_FILEUSERNAME,
+       rpmTagType, stpcpy, uint_16, xmalloc, and xrealloc.
+
+       Referenced by rpmQuery, and rpmQueryVerify.
+
+VARIABLE DOCUMENTATION
+   Spec(* freeSpecVec)(Spec spec) = NULL
+       Todo:
+            Eliminate linkage loop into librpmbuild.a
+
+       Definition at line 541 of file query.c.
+
+       Referenced by rpmQueryVerify.
+
+   int(* parseSpecVec)(Spec *specp, const char *specFile, const
+       char *rootdir, const char *buildRoot, int recursing, const
+       char *passPhrase, char *cookie, int anyarch, int force) =
+       NULL
+       Todo:
+            Eliminate linkage loop into librpmbuild.a
+
+       Definition at line 535 of file query.c.
+
+       Referenced by rpmQueryVerify.
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002             lib/query.c(3)

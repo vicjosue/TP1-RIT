@@ -1,0 +1,64 @@
+dbOption(3)                                           dbOption(3)
+
+
+
+NAME
+       dbOption -
+
+SYNOPSIS
+   Data Fields
+       const char * longName
+       char shortName
+       int argInfo
+       void * arg
+       int val
+       const char * descrip
+       const char * argDescrip
+
+DETAILED DESCRIPTION
+       Analogue to struct poptOption
+
+       Definition at line 29 of file dbconfig.c.
+
+FIELD DOCUMENTATION
+   void* dbOption::arg
+       Definition at line 33 of file dbconfig.c.
+
+       Referenced by db3New, and prDbiOpenFlags.
+
+   const char* dbOption::argDescrip
+       argument description for autohelp
+
+       Definition at line 36 of file dbconfig.c.
+
+   int dbOption::argInfo
+       Definition at line 32 of file dbconfig.c.
+
+       Referenced by db3New, and prDbiOpenFlags.
+
+   const char* dbOption::descrip
+       description for autohelp -- may be NULL
+
+       Definition at line 35 of file dbconfig.c.
+
+   const char* dbOption::longName
+       Definition at line 30 of file dbconfig.c.
+
+       Referenced by db3New, and prDbiOpenFlags.
+
+   char dbOption::shortName
+       Definition at line 31 of file dbconfig.c.
+
+   int dbOption::val
+       Definition at line 34 of file dbconfig.c.
+
+       Referenced by db3New, and prDbiOpenFlags.
+
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002                dbOption(3)

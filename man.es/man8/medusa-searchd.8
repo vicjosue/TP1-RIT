@@ -1,0 +1,71 @@
+MEDUSA-SEARCHD(8)                               MEDUSA-SEARCHD(8)
+
+
+
+NAME
+       medusa-searchd  -  daemon  to  perform  medusa file system
+       searches
+
+SYNOPSIS
+       medusa-searchd [ -d | --debug ] [ -n indexname |  --named-
+       index indexname ]
+
+DESCRIPTION
+       medusa-searchd,  which  is normally run automatically from
+       an init script or crontab, puts itself into the background
+       and  begins  listening  on  the  local socket /tmp/medusa-
+       search-server.  It must be run as root.
+
+       This seems to be the protocol:
+
+       C:     gimme cookie \t uid \t pid \n
+
+       S:     writing new cookie \n
+
+       If the  response  for  the  server  is,  instead,  ``Index
+       Error''  or  ``timeout error'' (with that capitalization),
+       then the session has failed and is closed.
+
+       Otherwise  the  client  then  tries  to  open   the   file
+       /tmp/medusa-cookies/uid_pid   and   reads  a  single  int,
+       encoded in the local binary format, from  it.   The  ASCII
+       representation of that int is the cookie.
+
+       C:     uid space pid space cookie \t search-uri
+
+       where search-uri is as documented in medusa-search-uri(7).
+       It does not seem to be terminated by a newline.
+
+       S:     Search URI OK \n
+
+       If  the  server   instead   responds,   ``Whole   Database
+       Matches'',  ``Query  returned  no  results'', ``Search URI
+       obsoletes index'', or ``Search URI syntax error'' then the
+       session is over.
+
+       Otherwise,  the  server  sends a series of matching patch­
+       names, each terminated by a newline.  After the  last  the
+       server sends
+
+       S:     End \n
+
+       and closes the connection.
+
+OPTIONS
+       --named-index indexname
+              Use  socket /tmp/medusa-search-server-indexname and
+              index   files   /var/lib/medusa-indextype-indexname
+              rather   than   the  normal  versions  without  the
+              ``-indexname'' suffix.
+
+       --debug
+              Stops medusa-searchd  from  going  into  the  back­
+              ground,  and  causes  it to send a SIGINT signal to
+              itself when printing warning messages.
+
+SEE ALSO
+       medusa-search-uri(7), medusa-indexd(8)
+
+
+
+Eazel                    February 9, 2001       MEDUSA-SEARCHD(8)

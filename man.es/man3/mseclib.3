@@ -1,0 +1,224 @@
+mseclib(3)                Mandrake Linux               mseclib(3)
+
+
+
+NAME
+       mseclib
+
+SYNOPSIS
+       from mseclib import *
+       function1()
+       function2(arg1)
+
+DESCRIPTION
+       mseclib is a python library to access the function used by
+       the msec program. This functions can be used in /etc/secu­
+       rity/msec/level.local  to  override  the  behaviour of the
+       msec program or in standalone scripts. The argument of the
+       functions  takes a value of 1 or 0 (or yes/no) except when
+       specified otherwise.
+
+
+       accept_bogus_error_responses(arg)
+           Accept/Refuse bogus IPv4 error messages.
+
+
+       accept_icmp_echo(arg)
+            Accept/Refuse icmp echo.
+
+
+       allow_autologin(arg)
+           Allow/Forbid autologin.
+
+
+       allow_issues(arg)
+           If arg = ALL allow /etc/issue  and  /etc/issue.net  to
+           exist.  If  arg = NONE no issues are allowed else only
+           /etc/issue is allowed.
+
+
+       allow_reboot(arg)
+           Allow/Forbid reboot by the console user.
+
+
+       allow_root_login(arg)
+           Allow/Forbid direct root login.
+
+
+       allow_user_list(arg)
+           Allow/Forbid the list of users on the system  on  dis­
+           play managers (kdm and gdm).
+
+
+       allow_x_connections(arg, listen_tcp)
+           Allow/Forbid  X  connections. First arg specifies what
+           is done on the client side: ALL (all  connections  are
+           allowed),  LOCAL  (only local connection) and NONE (no
+           connection). The second  argument  specifies  what  is
+           authorized  on  the server side: if clients are autho­
+           rized to connect on the tcp port 6000 or not.
+
+
+       authorize_services(arg)
+           Authorize all services controlled by tcp_wrappers (see
+           hosts.deny(5))  if arg = ALL. Only local ones if arg =
+           LOCAL and none if arg = NONE. To  authorize  the  ser­
+           vices    you    need,    use   /etc/hosts.allow   (see
+           hosts.allow(5)).
+
+
+       create_server_link()
+           If SERVER_LEVEL (or SECURE_LEVEL if absent) is greater
+           than  3  in  /etc/security/msec/security.conf, creates
+           the  symlink  /etc/security/msec/server  to  point  to
+           /etc/security/msec/server.<SERVER_LEVEL>.          The
+           /etc/security/msec/server is used by  chkconfig  --add
+           to  decide  to  add  a service if it is present in the
+           file during the installation of packages.
+
+
+       enable_at_crontab(arg)
+           Enable/Disable crontab and at for users.  Put  allowed
+           users  in  /etc/cron.allow  and /etc/at.allow (see man
+           at(1) and crontab(1)).
+
+
+       enable_console_log(arg, expr='*.*')
+           Enable/Disable syslog reports to console 12.  expr  is
+           the  expression  describing  what  to  log  (see  sys­
+           log.conf(5) for more details).
+
+
+       enable_ip_spoofing_protection(arg, alert=1)
+           Enable/Disable IP spoofing  protection.  If  alert  is
+           true, also reports to syslog.
+
+
+       enable_libsafe(arg)
+           Enable/Disable libsafe if libsafe is found on the sys­
+           tem.
+
+
+       enable_log_strange_packets(arg)
+           Enable/Disable the logging of IPv4 strange packets.
+
+
+       enable_msec_cron(arg)
+           Enable/Disable msec hourly security check.
+
+
+       enable_pam_wheel_for_su(arg)
+            Enabling su only from members of the wheel  group  or
+           allow su from any user.
+
+
+       enable_password(arg)
+           Use password to authenticate users.
+
+
+       enable_promisc_check(arg)
+           Activate/Disable ethernet cards promiscuity check.
+
+
+       enable_security_check(arg)
+            Activate/Disable daily security check.
+
+
+       enable_sulogin(arg)
+            Enable/Disable sulogin(8) in single user level.
+
+
+       password_aging(max, inactive=-1)
+            Set password aging to max days and delay to change to
+           inactive.
+
+
+       password_length(length, ndigits=0, nupper=0)
+           Set the password minimum length and minimum number  of
+           digit and minimum number of capitalized letters.
+
+
+       set_root_umask(umask)
+           Set the root umask.
+
+
+       set_security_conf(var, value)
+           Set   the   variable   var   to  the  value  value  in
+           /var/lib/msec/security.conf.  The best way to override
+           the  default  setting  is  to  use  create  /etc/secu­
+           rity/msec/security.conf with the value you want.
+
+           The following variables are currentrly  recognized  by
+           msec:
+
+           CHECK_UNOWNED if set to yes, report unowned files.
+
+           CHECK_SHADOW  if  set  to  yes, check empty passord in
+           /etc/shadow.
+
+           CHECK_SUID_MD5 if set to yes, verify checksum  of  the
+           suid/sgid files.
+
+           CHECK_SECURITY  if  set to yes, run the daily security
+           checks.
+
+           CHECK_PASSWD if set to yes, check for empty  password,
+           or  a  password  while  it should be in /etc/shadow or
+           other users with id 0.
+
+           SYSLOG_WARN if set to yes, report check result to sys­
+           log.
+
+           CHECK_SUID_ROOT   if   set   to   yes,   check   addi­
+           tions/removals of suid root files.
+
+           CHECK_PERMS if set to yes, check permissions of  files
+           in the users' home.
+
+           CHKROOTKIT_CHECK if set to yes, run chkrootkit checks.
+
+           CHECK_PROMISC if set to  yes,  check  if  the  network
+           devices are in promiscuous mode.
+
+           RPM_CHECK  if  set to yes, run some checks against the
+           rpm database.
+
+           TTY_WARN if set to yes, reports check result to tty.
+
+           CHECK_WRITEABLE if set to yes, check files/directories
+           writable by everybody.
+
+           MAIL_WARN  if set to yes, report check result by mail.
+
+           MAIL_USER if set, send the mail report to  this  email
+           address else send it to root.
+
+           CHECK_OPEN_PORT if set to yes, check open ports.
+
+           CHECK_SUID_GROUP     if     set    to    yes,    check
+           additions/removals of sgid files.
+
+
+
+       set_shell_history_size(size)
+           Set shell commands history size. A value of  -1  means
+           unlimited.
+
+
+       set_shell_timeout(val)
+           Set  the shell timeout. A value of zero means no time­
+           out.
+
+
+       set_user_umask(umask)
+           Set the user umask.
+
+SEE ALSO
+       msec(8)
+
+AUTHORS
+       Frederic Lepied <flepied@mandrakesoft.com>
+
+
+
+msec                            V0                     mseclib(3)

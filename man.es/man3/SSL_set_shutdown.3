@@ -1,0 +1,78 @@
+SSL_set_shutdown(3)          OpenSSL          SSL_set_shutdown(3)
+
+
+
+NNAAMMEE
+       SSL_set_shutdown, SSL_get_shutdown - manipulate shutdown
+       state of an SSL connection
+
+SSYYNNOOPPSSIISS
+        #include <openssl/ssl.h>
+
+        void SSL_set_shutdown(SSL *ssl, int mode);
+
+        int SSL_get_shutdown(SSL *ssl);
+
+
+DDEESSCCRRIIPPTTIIOONN
+       SSL_set_shutdown() sets the shutdown state of ssssll to mmooddee.
+
+       SSL_get_shutdown() returns the shutdown mode of ssssll.
+
+NNOOTTEESS
+       The shutdown state of an ssl connection is a bitmask of:
+
+       0   No shutdown setting, yet.
+
+       SSL_SENT_SHUTDOWN
+           A "close notify" shutdown alert was sent to the peer,
+           the connection is being considered closed and the
+           session is closed and correct.
+
+       SSL_RECEIVED_SHUTDOWN
+           A shutdown alert was received form the peer, either a
+           normal "close notify" or a fatal error.
+
+       SSL_SENT_SHUTDOWN and SSL_RECEIVED_SHUTDOWN can be set at
+       the same time.
+
+       The shutdown state of the connection is used to determine
+       the state of the ssl session. If the session is still
+       open, when SSL_clear(3) or SSL_free(3) is called, it is
+       considered bad and removed according to RFC2246.  The
+       actual condition for a correctly closed session is
+       SSL_SENT_SHUTDOWN (according to the TLS RFC, it is
+       acceptable to only send the "close notify" alert but to
+       not wait for the peer's answer, when the underlying
+       connection is closed).  SSL_set_shutdown() can be used to
+       set this state without sending a close alert to the peer
+       (see SSL_shutdown(3)).
+
+       If a "close notify" was received, SSL_RECEIVED_SHUTDOWN
+       will be set, for setting SSL_SENT_SHUTDOWN the application
+       must however still call SSL_shutdown(3) or
+       SSL_set_shutdown() itself.
+
+RREETTUURRNN VVAALLUUEESS
+       SSL_set_shutdown() does not return diagnostic information.
+
+       SSL_get_shutdown() returns the current setting.
+
+SSEEEE AALLSSOO
+       ssl(3), SSL_shutdown(3), SSL_CTX_set_quiet_shutdown(3),
+       SSL_clear(3), SSL_free(3)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+20/Aug/2001                   0.9.6c          SSL_set_shutdown(3)

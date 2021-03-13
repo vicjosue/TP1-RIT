@@ -1,0 +1,115 @@
+httpd(8)                                                 httpd(8)
+
+
+
+NAME
+       httpd - Apache hypertext transfer protocol server
+
+SYNOPSIS
+       httpd [ -X ] [ -R libexecdir ] [ -d serverroot ] [ -f con­
+       fig ] [ -C directive ] [ -c directive ] [ -D parameter ]
+
+       httpd [ -h ] [ -l ] [ -L ] [ -v ] [ -V ] [ -S ] [ -t  ]  [
+       -T ]
+
+
+DESCRIPTION
+       httpd  is  the  Apache  HyperText Transfer Protocol (HTTP)
+       server program. It is designed to be run as  a  standalone
+       daemon  process. When used like this it will create a pool
+       of child processes to handle requests. To stop it, send  a
+       TERM  signal  to  the initial (parent) process. The PID of
+       this process is written to a file as given in the configu­
+       ration  file.   Alternatively  httpd may be invoked by the
+       Internet daemon xinetd(8) each time a  connection  to  the
+       HTTP service is made.
+
+       This  manual  page  only lists the command line arguments.
+       For details of the directives necessary to configure httpd
+       see the Apache manual, which is part of the Apache distri­
+       bution or can be found at http://httpd.apache.org/.  Paths
+       in  this manual may not reflect those compiled into httpd.
+
+OPTIONS
+       -R libexecdir
+                   This option is only available  if  Apache  was
+                   built  with the SHARED_CORE rule enabled which
+                   forces the Apache core code to be placed  into
+                   a  dynamic shared object (DSO) file. This file
+                   is searched in a hardcoded path under  Server­
+                   Root  per default. Use this option if you want
+                   to override it.
+
+       -d serverroot
+                   Set  the  initial  value  for  the  ServerRoot
+                   directive  to serverroot. This can be overrid­
+                   den by the ServerRoot command in the  configu­
+                   ration file. The default is /usr/local/apache.
+
+       -f config   Execute the commands in  the  file  config  on
+                   startup.  If  config  does not begin with a /,
+                   then it is taken to be a path relative to  the
+                   ServerRoot. The default is conf/httpd.conf.
+
+       -C directive
+                   Process  the  configuration  directive  before
+                   reading config files.
+
+       -c directive
+                   Process  the  configuration  directive   after
+                   reading config files.
+
+       -D parameter
+                   Sets  a  configuration  parameter which can be
+                   used with <IfDefine>...</IfDefine> sections in
+                   the  configuration files to conditionally skip
+                   or process commands.
+
+       -h          Output a short summary  of  available  command
+                   line options.
+
+       -l          Output  a  list  of  modules compiled into the
+                   server.
+
+       -L          Output a  list  of  directives  together  with
+                   expected arguments and places where the direc­
+                   tive is valid.
+
+       -S          Show the settings as parsed  from  the  config
+                   file  (currently  only  shows  the virtualhost
+                   settings).
+
+       -t          Run syntax tests for configuration files only.
+                   The program immediately exits after these syn­
+                   tax parsing with either a  return  code  of  0
+                   (Syntax  OK)  or  return  code  not equal to 0
+                   (Syntax Error).
+
+       -T          Same as option -t but does not check the  con­
+                   figured document roots.
+
+       -X          Run   in  single-process  mode,  for  internal
+                   debugging purposes only; the daemon  does  not
+                   detach from the terminal or fork any children.
+                   Do NOT use this mode to provide  ordinary  web
+                   service.
+
+       -v          Print the version of httpd , and then exit.
+
+       -V          Print  the  version  and  build  parameters of
+                   httpd , and then exit.
+
+FILES
+       /etc/httpd/conf/httpd.conf
+       /etc/httpd/conf/apache-mime.types
+       /etc/httpd/conf/magic
+       /var/log/httpd/error_log
+       /var/log/httpd/access_log
+       /var/run/httpd.pid
+
+SEE ALSO
+       xinetd(8).
+
+
+
+                          February 1997                  httpd(8)

@@ -1,0 +1,22 @@
+SLN(8)              Linux Programmer's Manual              SLN(8)
+
+
+
+NAME
+       sln - static ln
+
+SYNOPSIS
+       sln source dest
+
+DESCRIPTION
+       sln  symbolically  links dest to source.  It is statically
+       linked, needing no dynamic linking at all.   Thus  sln  is
+       useful  to make symbolic links to dynamic libraries if the
+       dynamic linking system for some reason is nonfunctional.
+
+SEE ALSO
+       ln(1) ldconfig(8) ld.so(8)
+
+
+
+Linux 2.0                  20 June 1997                    SLN(8)

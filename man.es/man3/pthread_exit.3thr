@@ -1,0 +1,44 @@
+PTHREAD_EXIT(3)                                   PTHREAD_EXIT(3)
+
+
+
+NAME
+       pthread_exit - terminate the calling thread
+
+
+SYNOPSIS
+       #include <pthread.h>
+
+       void pthread_exit(void *retval);
+
+
+DESCRIPTION
+       pthread_exit  terminates  the  execution  of  the  calling
+       thread.  All cleanup handlers that have been set  for  the
+       calling  thread  with pthread_cleanup_push(3) are executed
+       in reverse order (the most recently pushed handler is exe­
+       cuted  first).  Finalization functions for thread-specific
+       data are then called for all keys that have non- NULL val­
+       ues  associated  with  them  in  the  calling  thread (see
+       pthread_key_create(3)).  Finally, execution of the calling
+       thread is stopped.
+
+       The  retval argument is the return value of the thread. It
+       can   be   consulted    from    another    thread    using
+       pthread_join(3).
+
+
+RETURN VALUE
+       The pthread_exit function never returns.
+
+
+AUTHOR
+       Xavier Leroy <Xavier.Leroy@inria.fr>
+
+
+SEE ALSO
+       pthread_create(3), pthread_join(3).
+
+
+
+                           LinuxThreads           PTHREAD_EXIT(3)

@@ -1,0 +1,40 @@
+SCROLLKEEPER-PREINSTALL(8)             SCROLLKEEPER-PREINSTALL(8)
+
+
+
+NAME
+       scrollkeeper-preinstall  -  generate on OMF file, based on
+       an existing OMF file, which has the correct URL for a doc­
+       ument
+
+SYNOPSIS
+       scrollkeeper-preinstall url input-omf-file output-omf-file
+
+DESCRIPTION
+       scrollkeeper-preinstall creates the OMF  file  output-omf-
+       file by reading the given existing OMF file input-omf-file
+       and replacing the URL for a resource  (typically  a  docu­
+       ment)  with  the URL given by url.  This is typically done
+       as part of the build process for an application, since the
+       actual  location that a document is installed is not known
+       until the application is built.
+
+       If output-omf-file is specified with a path, and that path
+       does not exist, the path is created.
+
+       The url is typically the "file:" URI followed by the abso­
+       lute path to a document which is (or will  be)  installed.
+       (eg. "file:/usr/doc/scrollkeeper/scrollkeeper.sgml")
+
+
+AUTHOR
+       Laszlo Kovacs and Dan Mueth.
+
+
+SEE ALSO
+       scrollkeeper-update(8), scrollkeeper-rebuilddb(8), scroll­
+       keeper-config(8)
+
+
+
+scrollkeeper               Nov 07, 2000SCROLLKEEPER-PREINSTALL(8)

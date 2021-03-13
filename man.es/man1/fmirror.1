@@ -1,0 +1,555 @@
+FMIRROR(1)                                             FMIRROR(1)
+
+
+
+NAME
+       fmirror - Mirror directories from ftp servers
+
+SYNOPSIS
+       fmirror  [-A and-mask]  [-O or-mask] [-C config-line] [-N]
+       [-c dircommand]    [-D timezone-dircmd]     [-d log-level]
+       [-e exclude-entry]   [-i include-entry]   [-f config-file]
+       [-F pidfile]  [-h]   [-k]   [-l local dir]   [-M use-MDTM]
+       [-m dirmode]  [-P port] [-p password] [-r remote dir] [-R]
+       [-s hostname]  [-S]   [-T remote-timezone]   [-t timefuzz]
+       [-u username]   [-v]   [-V   verbosity]  [-x decompressor]
+       [-o option] [-z]
+
+DESCRIPTION
+       fmirror is a program for  mirroring  a  directory  from  a
+       remote ftp server. It allows regex-matching for files that
+       are to be included and excluded. It uses a combination  of
+       timestamp,  file  size and file permissions to decide what
+       files to transfer from the ftp server.
+
+       The primary goal of fmirror is to use as little memory  as
+       possible,  but  still  be  able to do its job efficiently.
+       fmirror can delete any  files  not  found  on  the  remote
+       server.
+
+
+OPTIONS
+       -A mask
+              Remote  file  permissions  will  be binary anded by
+              mask before being compared.  The same mask is  also
+              used  when  creating  files. Default value is 0111,
+              which results in only executable  bits  being  mir­
+              rored.   The  or mask will be ored in after the and
+              mask is anded in.
+
+
+       -O mask
+              Remote file permissions will be binary ored by mask
+              before  being  compared. The same mask is also used
+              when creating files. Default value is  0444,  which
+              results  in  all files being readable for everyone.
+              This mask will be ored in after the  and  mask  has
+              been anded in.
+
+
+       -C line
+              Parses line as if it was a line in a config-file.
+
+
+       -N     Don't  delete  files  that are missing from the ftp
+              server. Files that are replaced by files  of  other
+              types will still be deleted and updated.
+
+
+       -c command
+              Use  command as a dir-command. To read a ls-lR file
+              instead of performing a heavy ls-operation  on  the
+              ftp-server,  use "RETR ls-lR". The default value is
+              "LIST -lRa".
+
+
+       -D command
+              Use command as a dir-command for finding the remote
+              timezone.   See also the equivalent dircmd_tz: con­
+              figuration file keyword.
+
+
+       -d debug-level
+              The  level  of  debugging  (spam)  output  that  is
+              wanted. The default debug-level is 3.
+
+
+       -e exclude-opt exclude-pattern
+              Add  an  exclude-entry. See discussion for exclude:
+              in the configuration files section. The option  and
+              pattern  must  be one word to the shell, so enclose
+              both in a single "-pair, ie <fmirror -e "p  old/">.
+
+
+       -i include-opt include-pattern
+              Add  an  include-entry. See discussion for include:
+              in the configuration files section.
+
+
+       -f config-file
+              Reads options from config-file.   See  the  section
+              CONFIGURATION  FILES for more information about the
+              contents of a config-file.
+
+
+       -F pid-file
+              Write the pid (process id) of the  fmirror  process
+              to pid-file.  This is useful when you want to avoid
+              running more than one copy of fmirror from cron  or
+              similar.
+
+
+       -h     Display brief option-summary.
+
+
+       -k     Only  download  files that are newer than the local
+              copy.
+
+
+       -l local-dir
+              Change directory to local-dir (locally) before mir­
+              roring.
+
+
+       -M use-MDTM
+              set  the  flag for using MDTM exension.  Equivalent
+              to the use_mdtm: keyword,  which  is  described  in
+              detail in the configuration file section.
+
+              mode.  Default value is 0755 (octal).
+
+
+
+       -m mode
+              All  local directories will be made with mode mode.
+              Default value is 0755 (octal).
+
+
+       -P port
+              Connect to port port on the remote ftp server.
+
+
+       -p password
+              The password you want to use  on  the  ftp  server.
+              When doing anonymous ftp, this should be your email
+              address. If password is not specified, it be set to
+              'username@',  where username is the username corre­
+              sponding to the real UID of fmirror.
+
+
+       -r remote-dir
+              Change directory to remote-dir (on the ftp  server)
+              before mirroring.
+
+
+       -R     Set  timestamp of local files to the same as remote
+              files (for resyncing the timestamps if you are sure
+              the files are correct). Only sets the timestamps if
+              file lengths and modes match according to the  nor­
+              mal rules.
+
+
+       -s hostname
+              Use hostname as the ftp server to connect to.
+
+
+       -S     Use  passive  mode  for  the ftp transfers. This is
+              often necessary to get through some firewalls.
+
+
+       -T remote-timezone
+              The remote-timezone value  (in  minutes)  overrides
+              the  guess  fmirror  will  do  on  the timezone the
+              remote FTP server operates in.  Equivalent  to  the
+              remotetz:  keyword, which is described in detail in
+              the configuration file section.
+
+
+       -t timefuzz
+              Allow timestamps to differ by up to  timefuzz  sec­
+              onds.  The default value is 59. No matter what this
+              value is set to, files that differ by exactly  3600
+              seconds  will always considered equal to compensate
+              for buggy timezone-handling. Also, files older than
+              60 days can differ by up to a day to compensate for
+              lack of  precision  in  ls  listings  for  previous
+              years.
+
+
+       -u username
+              Sets  your  username on the ftp server to username.
+              For anonymous ftp, this should be ftp or anonymous.
+              The default value is anonymous.
+
+
+       -v     Show version.
+
+
+       -V verbosity
+              Verbosity  level, 1 is suitable for cron jobs and 3
+              is suitable for interactive use. Default is 3.
+
+
+       -x program
+              Run program as a decompressor for the  ls  listing.
+              This  will only be used if compressed dirlisting is
+              on. This should ONLY be the name of the executable,
+              it  must not contain any options. The default value
+              is "gzip".
+
+
+       -o option
+              Give option as  option  to  the  decompressor.  The
+              default value is "-dc".
+
+
+       -z     Enable decompression of dir-listing.
+
+
+CONFIGURATION FILES
+       Unless  you are just using this program to mirror a direc­
+       tory once, you'll probably want to  make  a  configuration
+       file to make the job easier.
+
+       The  syntax  of the configuration file is very simple. Any
+       line not starting with an alphabetical letter  is  consid­
+       ered  a comment line (blank lines are also considered com­
+       ments).
+
+       The first option of a particular kind has the highest pri­
+       ority,  and  configuration  file  and command line options
+       have the same priority. You can have any number of include
+       and exclude options, the first one that matches a particu­
+       lar file will be used.
+
+       You can also include  multiple  configuration  files,  the
+       first  configuration  file has precedence over later ones.
+       The debug-level can be changed between every single option
+       on the command-line to debug specific configuration files.
+
+       NOTE: All numerical values can be written in octal  (lead­
+       ing  0),  decimal  (default)  or hexadecimal (leading 0x).
+       Modes are usually written in octal, so make sure you write
+       0755 and not 755 (for example).
+
+
+       username: username
+              Sets the username (same as -u command line option).
+              Any whitespace before the username will be ignored.
+              This will typically be "ftp" or "anonymous".
+
+
+       password: password
+              Sets the password (same as -p command line option).
+              Any whitespace before the password will be ignored.
+              This   will  typically  be  "user@some.domain",  ie
+              "finnag@fast.no"
+
+
+       host: remote hostname
+              Specifies the remote hostname (same as  -s  command
+              line  option).  Any  whitespace before the hostname
+              will be ignored.
+
+
+       remotedir: remote directory
+              Specifies the remote directory that is to  be  mir­
+              rored.  (same  as  -r  command  line  option).  Any
+              whitespace before the name will be ignored.
+
+
+       localdir: local directory
+              Specifies the local directory that you are  mirror­
+              ing  to  (same  as  -l  command  line  option). Any
+              whitespace before the name will be ignored.
+
+
+       dircmd: directory list command
+              Specifies what command should be sent to  the  ftp-
+              server to get a directory listing. Normally this is
+              "LIST -lRa". If  you  want  to  get  a  ls-lR  file
+              instead, you can put "RETR ls-lR" here. This option
+              is equivalent to the -c command line option.
+
+
+       dircmd_tz: directory list command
+              Specifies what command should be sent to  the  ftp-
+              server  to  get  a directory listing when trying to
+              find the remote timezone.   The  default  value  is
+              "LIST  -ltra".   Should not be set to any recursive
+              command.  Equivalent to the -D command line option.
+
+
+       decompressor:
+              If  you are getting a compressed file-listing, this
+              should be the  name  of  the  decompressor  program
+              without  any  options. This is set to "gzip" if you
+              only enable compressed dir-listings without  speci­
+              fying a decompressor. Equivalent to -x command line
+              option.
+
+
+       decompressor_opt:
+              The option string that is to be sent to the  decom­
+              pressor.  This  defaults to "-dc". Equivalent to -o
+              command line option.
+
+
+       port: port
+              Connect to port port  on  the  remote  ftp  server.
+              Equivalent to -P command line option.
+
+
+       pidfile: pid-file
+              Store  the  PID  (process id) of the process to the
+              file  pid-file.   Equivalent  to  -F  command  line
+              option.
+
+
+
+       dirmode: mode
+              All  local  directories  will  be created with mode
+              mode.  Equivalent to -m command line option.
+
+
+       loglevel: level
+              Specifies the logging level (debug level).  Equiva­
+              lent to -l command line option.
+
+
+       compressed: val
+              Takes  an integer argument, will enable decompress­
+              ing of the file listing if val is non-zero. With  a
+              non-zero value this is equivalent to the -z command
+              line option.
+
+
+       timefuzz: fuzz
+              The maximum number of seconds files can  differ  by
+              and  still  be  considered  equal. Equivalent to -t
+              command line option.
+
+
+       file_and_mask: mask
+              File permissions will be anded by mask before being
+              compared and created. Equivalent to -A command line
+              option.
+
+
+       file_or_mask: mask
+              File  permissions  will  be  ored  by  file_or_mask
+              before being created. Equivalent to -O command line
+              option.
+
+
+       passive: val
+              Use passive mode if val is non-zero, or normal mode
+              if it is zero.
+
+
+       nodel: val
+              Don't delete local files if val is non-zero (equiv­
+              alent to -N command line option). Normal  operation
+              if val is zero.
+
+
+       log_timestamp: val
+              Only  prepend  timestamp on each line output if val
+              is non-zero. Default value is 1.
+
+
+       verbosity: verbosity
+              Chose verbosity value. The  only  supported  values
+              are 1, which is suitable for non-interactive opera­
+              tion, and 3,  which  is  suitable  for  interactive
+              operation.
+
+
+       keep_newer: val
+              Takes  an integer argument, will keep newer file if
+              val is non-zero. This means that remote files  that
+              have  older  timestamps  than  local files will not
+              cause that file to be retrieved. Equivalent  to  -k
+              command line option.
+
+
+       reset_times: val
+              Takes  an  integer  argument,  will  reset times of
+              files if val is non-zero.  This  means  that  files
+              thay  only  differ in time-stamp, but match in size
+              and mode, will get their local  timestamp  adjusted
+              to  that  of  the  remote  files  instead  of being
+              retrieved again.  Equivalent  to  -R  command  line
+              option.
+
+
+       remotetz: val
+              Takes  an  integer argument.  The val is the remote
+              timezone in minutes.  Typical values would  be  -60
+              for  most  of Europe, -540 for Japan, anywhere from
+              300 to 480 for the  continental  US,  and  600  for
+              Hawaii.   Normally,  fmirror will only try to guess
+              the timezone when use_mdtm is in effect, and assume
+              GMT  in  all other cases.  Overriding the time zone
+              guess is particularly important when you are fetch­
+              ing  a  ls-lR  file  with  RETR instead of actually
+              doing a LIST, since the guess  is  based  on  doing
+              LIST and MDTM and comparing the results.
+
+
+       use_mdtm: val
+              Takes an integer argument.  The val decides whether
+              to try using the MDTM extension for getting  remote
+              modification  times.  To avoid constantly regetting
+              files, this also needs to figure out what  timezone
+              the  remote server is running in, by doing a remote
+              "LIST -ltra", picking a file with time information,
+              sending  an  MDTM command for it, and comparing the
+              results.  See also  the  dircmd_tz:  and  remotetz:
+              keywords.
+
+              A  value  of  0 turns off trying MDTM, a value of 1
+              means to use it if  it  is  available  and  we  can
+              determine  the  remote  timezone,  while  any other
+              value (preferably 2) means  to  use  it  if  it  is
+              available  and  assume  that the remote timezone is
+              GMT if we can't determine it normally.  In the last
+              case,  using a large value for timefuzz (like 50000
+              for a bit more than 12 hours) may also  be  useful.
+              The default value is 1.
+
+
+       input_timeout: num
+              Will  wait  num  seconds before forcing a read of a
+              file  to  time  out.  No  equivalent  command  line
+              option, default value is 240 seconds.
+
+
+       connect_timeout: num
+              The  timeout  before  retrying  a connect operation
+              (not the initial connect, but the connects that are
+              required  to  transfer files after the control con­
+              nection is up). Will wait num seconds before timing
+              out  on  connects  (or  accepts for non-passive ftp
+              transfers).  No  equivalent  command  line  option,
+              default value is 120 seconds.
+
+
+       connect_retries: num
+              The  number  of  times to retry a connect operation
+              (not the initial connect, but the connects that are
+              required  to  transfer files after the control con­
+              nection is up). Will try to connect up to num times
+              before   giving  up.  No  equivalent  command  line
+              option, default value is 3.
+
+
+       reconnect_timeout: num
+              Will wait num seconds  before  retrying  a  connect
+              operation  to  a ftp server, either if there was no
+              reply from the ftp server at  all  at  the  initial
+              connect,  or if the username/password combo was not
+              allowed (usually happens on full ftp  servers).  No
+              equivalent  command  line  option, default value is
+              120 seconds.
+
+
+       reconnect_retries: num
+              Will try to connect up to num times  before  giving
+              up if initial connection cannot be made. This means
+              that eitehr the ftp servre does not reply  at  all,
+              or  fmirror is kicked out because the ftp server is
+              full. No equivalent command  line  option,  default
+              value is 15;
+
+
+
+
+       exclude:  [i][x][n]{p|f} pattern
+              A  regex  pattern  that, if matched in a particular
+              file/path-name, should not be mirrored.  This  will
+              override  any  include-patterns  encountered  after
+              this. Equivalent to -e command line option.
+
+              NOTE: An exclude-rule doesn't differ between  files
+              or  directories.  p  or  f  only decide whether the
+              entire  path-name  or  just   the   name   of   the
+              file/directory  itself  should be matched. Directo­
+              ries get  "/"  appended  before  they  are  matched
+              against   the   regex,  so  "exclude f ^old/"  will
+              exclude a directory named "old" (but not  necessar­
+              ily its contents), but not a file named "old".
+
+              Directories are created "on demand", so if you have
+              excluded "old/" but not "\.gif$", a file with  path
+              "old/bill.gif" will cause the "old"-directory to be
+              made and the "bill.gif"-file to  be  retrieved.  To
+              exclude  any directory named "old" and all its con­
+              tents, use "p (^|/)old/".
+
+              i means case insensitive match.
+
+              x means to  match  anything  EXCEPT  the  following
+              regex, effectively inverting the rule.
+
+              n means that the file/directory will not be deleted
+              if it exists locally, matches this rule, and  would
+              otherwise be deleted.
+
+              p means match full path-name (eg "pub/foo.bar").
+
+              f means match filename only (eg "foo.bar")
+
+              pattern is an extended POSIX regular expression.
+
+
+       include:  [i][x][n]{p|f} pattern
+              A  regex  pattern  that, if matched in a particular
+              file/path-name, should be mirrored. This will over­
+              ride  any  exclude-patterns encountered after this.
+              Equivalent to -i command line option.
+
+              The options are identical with the exclude options.
+
+
+EXAMPLE CONFIGURATION FILES
+       There  should  be  several sample configuration files with
+       your copy of fmirror in the configs directory.
+
+
+BUGS
+       Transient errors are not handled well. If one file  cannot
+       be  transferred  for  some reason, such as 'Failed to make
+       data socket', it doesn't try to get that  file  again,  so
+       you effectively lose the file.
+
+
+COPYING
+       Copyright 1995-2000  Finn Arne Gangstad and Tor Egge.
+
+       Permission  is  granted  to  make  and distribute verbatim
+       copies of this manual provided the  copyright  notice  and
+       this permission notice are preserved on all copies.
+
+       Permission is granted to copy and distribute modified ver­
+       sions of this manual under  the  conditions  for  verbatim
+       copying,  provided  that the entire resulting derived work
+       is distributed under the  terms  of  a  permission  notice
+       identical to this one.
+
+       Permission  is granted to copy and distribute translations
+       of this manual into another language, under the above con­
+       ditions for modified versions, except that this permission
+       notice may be included in  translations  approved  by  the
+       Free  Software  Foundation  instead  of  in  the  original
+       English.
+
+AUTHORS
+       fmirror was written by
+       Finn Arne Gangstad <finnag@fast.no>
+
+
+
+
+
+                           09 Mar 2000                 FMIRROR(1)

@@ -1,0 +1,144 @@
+tixLabelFrame(n)      Tix Built-In Commands      tixLabelFrame(n)
+
+
+
+_________________________________________________________________
+
+NAME
+       tixLabelFrame  -  Create and manipulate tixLabelFrame wid­
+       gets
+
+SYNOPSIS
+       tixLabelFrame pathName ?options?
+
+SUPER-CLASS
+       The TixLabelFrame class is derived from the TixLabelWidget
+       class  and  inherits all the commands, options and subwid­
+       gets of its super-class.
+
+STANDARD OPTIONS
+       The LabelFrame widget supports all the standard options of
+       a  frame  widget.  See  the  options(n)  manual  entry for
+       details on the standard options.
+
+WIDGET-SPECIFIC OPTIONS
+       Command-Line Name:-label
+       Database Name:  label
+       Database Class: Label
+
+              Specifies the string to display  as  the  label  of
+              this LabelFrame widget.
+
+       Command-Line Name:-labelside
+       Database Name:  labelSide
+       Database Class: LabelSide
+
+              Specifies where the label should be displayed rela­
+              tive to the entry  subwidget.  Valid  options  are:
+              top, left, right, bottom, none or acrosstop.
+
+       Command-Line Name:-padx
+       Database Name:  padX
+       Database Class: Pad
+
+              Specifies  the  amount  of  the  horizontal padding
+              around the frame subwidget. Must be  a  valid  non-
+              negative integer number.
+
+       Command-Line Name:-pady
+       Database Name:  padY
+       Database Class: Pad
+
+              Specifies the amount of the vertical padding around
+              the frame subwidget.
+
+SUBWIDGETS
+       Name:           frame
+       Class:          Frame
+
+              The frame subwidget.
+
+       Name:           label
+       Class:          Label
+
+              The label subwidget.
+_________________________________________________________________
+
+DESCRIPTION
+       The tixLabelFrame command creates a new window  (given  by
+       the pathName argument) and makes it into a LabelFrame wid­
+       get. Additional options, described above, may be specified
+       on the command line or in the option database to configure
+       aspects of the LabelFrame such as its cursor and relief.
+
+CREATING WIDGETS INSIDE A LABELFRAME
+       The LabelFrame widget packages a frame widget and a  label
+       into  one  mega  widget. To create widgets inside a Label­
+       Frame widget, one must create the new widgets relative  to
+       the  frame subwidget and manage them inside the frame sub­
+       widget. An error will be generated if one tries to  create
+       widgets as immediate children of the LabelFrame. For exam­
+       ple: the following is correct code, which creates new wid­
+       gets inside the frame subwidget:
+
+              tixLabelFrame .f
+              set f [.f subwidget frame]
+              button $f.b -text hi
+              pack $f.b
+
+       The  following  example code is incorrect because it tries
+       to create immediate children of the LabelFrame .f:
+
+              tixLabelFrame .f
+              # wrong!
+              button .f.b -text hi
+              pack .f.b
+
+WIDGET COMMANDS
+       The tixLabelFrame command creates a new Tcl command  whose
+       name is the same as the path name of the LabelFrame's win­
+       dow. This command may be used to invoke various operations
+       on the widget. It has the following general form:
+                     pathName option ?arg arg ...?
+       PathName  is the name of the command, which is the same as
+       the LabelFrame widget's path name.  Option  and  the  args
+       determine the exact behavior of the command. The following
+       commands are possible for LabelFrame widgets:
+
+       pathName cget option
+              Returns the  current  value  of  the  configuration
+              option  given by option. Option may have any of the
+              values accepted by the tixLabelFrame command.
+
+       pathName configure ?option? ?value option value ...?
+              Query or modify the configuration  options  of  the
+              widget.   If no option is specified, returns a list
+              describing all of the available options  for  path­
+              Name  (see  Tk_ConfigureInfo for information on the
+              format of this list).  If option is specified  with
+              no  value, then the command returns a list describ­
+              ing the one named option (this list will be identi­
+              cal  to  the  corresponding  sublist  of  the value
+              returned if no option is  specified).   If  one  or
+              more  option-value  pairs  are  specified, then the
+              command modifies the given widget option(s) to have
+              the  given  value(s);  in  this  case  the  command
+              returns an empty string.  Option may  have  any  of
+              the values accepted by the tixLabelFrame command.
+
+       pathName subwidget name ?args?
+              When no options are given, this command returns the
+              pathname of the subwidget of the specified name.
+
+       When options are given, the widget command of  the  speci­
+       fied subwidget will be called with these options.
+
+KEYWORDS
+       Tix(n)
+
+
+
+
+
+
+Tix                            4.0               tixLabelFrame(n)

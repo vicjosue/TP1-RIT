@@ -1,0 +1,51 @@
+MD5Context(3)                                       MD5Context(3)
+
+
+
+NAME
+       MD5Context - MD5 private data.
+
+SYNOPSIS
+       #include <md5.h>
+
+
+   Data Fields
+       uint32 buf [4]
+       uint32 bits [2]
+       unsigned char in [64]
+       int doByteReverse
+
+DETAILED DESCRIPTION
+       MD5 private data.
+
+       Definition at line 16 of file md5.h.
+
+FIELD DOCUMENTATION
+   uint32 MD5Context::bits[2]
+       Definition at line 18 of file md5.h.
+
+       Referenced by rpmMD5Init, and rpmMD5Update.
+
+   uint32 MD5Context::buf[4]
+       Definition at line 17 of file md5.h.
+
+       Referenced by rpmMD5Init, and rpmMD5Update.
+
+   int MD5Context::doByteReverse
+       Definition at line 20 of file md5.h.
+
+       Referenced by rpmMD5Init, and rpmMD5Update.
+
+   unsigned char MD5Context::in[64]
+       Definition at line 19 of file md5.h.
+
+       Referenced by rpmMD5Update.
+
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002              MD5Context(3)

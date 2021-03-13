@@ -1,0 +1,133 @@
+lib/poptQV.c(3)                                   lib/poptQV.c(3)
+
+
+
+NAME
+       lib/poptQV.c - Popt tables for query/verify modes.
+
+SYNOPSIS
+       #include 'system.h'
+       #include <rpmcli.h>
+       #include <rpmbuild.h>
+       #include 'debug.h'
+
+   Defines
+       #define POPT_QUERYFORMAT   1000
+       #define POPT_WHATREQUIRES   1001
+       #define POPT_WHATPROVIDES   1002
+       #define POPT_QUERYBYNUMBER   1003
+       #define POPT_TRIGGEREDBY   1004
+       #define POPT_DUMP   1005
+       #define POPT_SPECFILE   1006
+
+   Functions
+       void rpmQVSourceArgCallback (poptContext con, enum
+           poptCallbackReason reason, const struct poptOption
+           *opt, const char *arg, const void *data)
+       void queryArgCallback (poptContext con, enum
+           poptCallbackReason reason, const struct poptOption
+           *opt, const char *arg, const void *data)
+
+   Variables
+       rpmQVArguments_s rpmQVArgs
+       int specedit = 0
+       poptOption rpmQVSourcePoptTable []
+           Common query/verify mode options.
+       poptOption rpmQueryPoptTable []
+           Query mode options.
+       poptOption rpmVerifyPoptTable []
+           Verify mode options.
+
+DETAILED DESCRIPTION
+       Popt tables for query/verify modes.
+
+
+
+       Definition in file poptQV.c.
+
+DEFINE DOCUMENTATION
+   #define POPT_DUMP   1005
+       Definition at line 21 of file poptQV.c.
+
+       Referenced by queryArgCallback.
+
+   #define POPT_QUERYBYNUMBER   1003
+       Definition at line 19 of file poptQV.c.
+
+       Referenced by rpmQVSourceArgCallback.
+
+   #define POPT_QUERYFORMAT   1000
+       Definition at line 16 of file poptQV.c.
+
+       Referenced by queryArgCallback.
+
+   #define POPT_SPECFILE   1006
+       Definition at line 22 of file poptQV.c.
+
+       Referenced by rpmQVSourceArgCallback.
+
+   #define POPT_TRIGGEREDBY   1004
+       Definition at line 20 of file poptQV.c.
+
+       Referenced by rpmQVSourceArgCallback.
+
+   #define POPT_WHATPROVIDES   1002
+       Definition at line 18 of file poptQV.c.
+
+       Referenced by rpmQVSourceArgCallback.
+
+   #define POPT_WHATREQUIRES   1001
+       Definition at line 17 of file poptQV.c.
+
+       Referenced by rpmQVSourceArgCallback.
+
+FUNCTION DOCUMENTATION
+   void queryArgCallback (poptContext con, enum
+       poptCallbackReason reason, const struct poptOption * opt,
+       const char * arg, const void * data) [static]
+       Definition at line 102 of file poptQV.c.
+
+       References POPT_DUMP, POPT_QUERYFORMAT, rpmQVArgs,
+       xmalloc, and xrealloc.
+
+   void rpmQVSourceArgCallback (poptContext con, enum
+       poptCallbackReason reason, const struct poptOption * opt,
+       const char * arg, const void * data) [static]
+       Definition at line 25 of file poptQV.c.
+
+       References POPT_QUERYBYNUMBER, POPT_SPECFILE,
+       POPT_TRIGGEREDBY, POPT_WHATPROVIDES, POPT_WHATREQUIRES,
+       and rpmQVArgs.
+
+VARIABLE DOCUMENTATION
+   struct poptOption rpmQueryPoptTable[]
+       Query mode options.
+
+       Definition at line 140 of file poptQV.c.
+
+   struct rpmQVArguments_s rpmQVArgs
+       Definition at line 13 of file poptQV.c.
+
+       Referenced by main, queryArgCallback, and
+       rpmQVSourceArgCallback.
+
+   struct poptOption rpmQVSourcePoptTable[]
+       Common query/verify mode options.
+
+       Definition at line 68 of file poptQV.c.
+
+   struct poptOption rpmVerifyPoptTable[]
+       Verify mode options.
+
+       Definition at line 183 of file poptQV.c.
+
+   int specedit = 0
+       Definition at line 14 of file poptQV.c.
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002            lib/poptQV.c(3)

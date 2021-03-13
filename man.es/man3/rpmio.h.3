@@ -1,0 +1,411 @@
+rpmio/rpmio.h(3)                                 rpmio/rpmio.h(3)
+
+
+
+NAME
+       rpmio/rpmio.h -
+
+SYNOPSIS
+       #include <sys/types.h>
+       #include <sys/stat.h>
+       #include <dirent.h>
+       #include <glob.h>
+       #include <stdio.h>
+       #include <stdlib.h>
+       #include <unistd.h>
+
+   Data Structures
+       struct FDIO_s
+
+   RPMIO Utilities.
+       #define fdFileno(_fd)   fdio->_fileno(_fd)
+       #define fdOpen(_path, _flags, _mode)
+           fdio->_open((_path), (_flags), (_mode))
+       #define fdRead(_fd, _buf, _count)   fdio->read((_fd),
+           (_buf), (_count))
+       #define fdWrite(_fd, _buf, _count)   fdio->write((_fd),
+           (_buf), (_count))
+       #define fdCLose(_fd)   fdio->close(_fd)
+       #define fdLink(_fd, _msg)   fdio->_fdref(_fd, _msg,
+           __FILE__, __LINE__)
+           FD_t reference count debugging wrappers.
+       #define fdFree(_fd, _msg)   fdio->_fdderef(_fd, _msg,
+           __FILE__, __LINE__)
+       #define fdNew(_msg)   fdio->_fdnew(_msg, __FILE__,
+           __LINE__)
+       #define timedRead   ufdio->read
+       typedef enum ftperrCode_e ftperrCode
+           FTP and HTTP error codes.
+       enum ftperrCode_e { FTPERR_BAD_SERVER_RESPONSE =  -1,
+           FTPERR_SERVER_IO_ERROR =  -2, FTPERR_SERVER_TIMEOUT =
+           -3, FTPERR_BAD_HOST_ADDR =  -4, FTPERR_BAD_HOSTNAME =
+           -5, FTPERR_FAILED_CONNECT =  -6, FTPERR_FILE_IO_ERROR
+           =  -7, FTPERR_PASSIVE_ERROR =  -8,
+           FTPERR_FAILED_DATA_CONNECT =  -9,
+           FTPERR_FILE_NOT_FOUND =  -10,
+           FTPERR_NIC_ABORT_IN_PROGRESS =  -11, FTPERR_UNKNOWN =
+           -100 }
+           FTP and HTTP error codes.
+       off_t fdSize (FD_t fd)
+       FD_t fdDup (int fdno)
+       int fdFileno (void *cookie)
+       FD_t fdOpen (const char *path, int flags, mode_t mode)
+       ssize_t fdRead (void *cookie, char *buf, size_t count)
+       ssize_t fdWrite (void *cookie, const char *buf, size_t
+           count)
+       int fdClose (void *cookie)
+       int fdWritable (FD_t fd, int secs)
+       int fdReadable (FD_t fd, int secs)
+       const char *const ftpStrerror (int errorNumber)
+       void * ufdGetUrlinfo (FD_t fd)
+       const char * urlStrerror (const char *url)
+       int ufdCopy (FD_t sfd, FD_t tfd)
+       int ufdGetFile (FD_t sfd, FD_t tfd)
+       int timedRead (FD_t fd, void *bufptr, int length)
+       FDIO_t fdio
+       FDIO_t fpio
+       FDIO_t ufdio
+       FDIO_t gzdio
+       FDIO_t bzdio
+       FDIO_t fadio
+
+   RPMIO Vectors.
+       typedef ssize_t fdio_read_function_t (void *cookie, char
+           *buf, size_t nbytes)
+       typedef ssize_t fdio_write_function_t (void *cookie, const
+           char *buf, size_t nbytes)
+       typedef int fdio_seek_function_t (void *cookie,
+           _libio_pos_t pos, int whence)
+       typedef int fdio_close_function_t (void *cookie)
+       typedef FD_t fdio_ref_function_t (void *cookie, const char
+           *msg, const char *file, unsigned line)
+       typedef FD_t fdio_deref_function_t (FD_t fd, const char
+           *msg, const char *file, unsigned line)
+       typedef FD_t fdio_new_function_t (const char *msg, const
+           char *file, unsigned line)
+       typedef int fdio_fileno_function_t (void *cookie)
+       typedef FD_t fdio_open_function_t (const char *path, int
+           flags, mode_t mode)
+       typedef FD_t fdio_fopen_function_t (const char *path,
+           const char *fmode)
+       typedef void * fdio_ffileno_function_t (FD_t fd)
+       typedef int fdio_fflush_function_t (FD_t fd)
+
+   RPMRPC Vectors.
+       typedef int fdio_mkdir_function_t (const char *path,
+           mode_t mode)
+       typedef int fdio_chdir_function_t (const char *path)
+       typedef int fdio_rmdir_function_t (const char *path)
+       typedef int fdio_rename_function_t (const char *oldpath,
+           const char *newpath)
+       typedef int fdio_unlink_function_t (const char *path)
+       typedef int fdio_stat_function_t (const char *path, struct
+           stat *st)
+       typedef int fdio_lstat_function_t (const char *path,
+           struct stat *st)
+       typedef int fdio_access_function_t (const char *path, int
+           amode)
+
+   RPMIO Interface.
+       const char * Fstrerror (FD_t fd)
+           strerror(3) clone.
+       size_t Fread (void *buf, size_t size, size_t nmemb, FD_t
+           fd)
+           fread(3) clone.
+       size_t Fwrite (const void *buf, size_t size, size_t nmemb,
+           FD_t fd)
+           fwrite(3) clone.
+       int Fseek (FD_t fd, _libio_off_t offset, int whence)
+           fseek(3) clone.
+       int Fclose (FD_t fd)
+           fclose(3) clone.
+       FD_t Fdopen (FD_t fd, const char *fmode)
+       FD_t Fopen (const char *path, const char *fmode)
+           fopen(3) clone.
+       int Fflush (FD_t fd)
+           fflush(3) clone.
+       int Ferror (FD_t fd)
+           ferror(3) clone.
+       int Fileno (FD_t fd)
+           fileno(3) clone.
+       int Fcntl (FD_t fd, int op, void *lip)
+           fcntl(2) clone.
+       ssize_t Pread (FD_t fd, void *buf, size_t count,
+           _libio_off_t offset)
+           pread(2) clone.
+       ssize_t Pwrite (FD_t fd, const void *buf, size_t count,
+           _libio_off_t offset)
+           pwrite(2) clone.
+
+   RPMRPC Interface.
+       int Mkdir (const char *path, mode_t mode)
+           mkdir(2) clone.
+       int Chdir (const char *path)
+           chdir(2) clone.
+       int Rmdir (const char *path)
+           rmdir(2) clone.
+       int Rename (const char *oldpath, const char *newpath)
+           rename(2) clone.
+       int Link (const char *oldpath, const char *newpath)
+           link(2) clone.
+       int Unlink (const char *path)
+           unlink(2) clone.
+       int Readlink (const char *path, char *buf, size_t bufsiz)
+           readlink(2) clone.
+       int Stat (const char *path, struct stat *st)
+           stat(2) clone.
+       int Lstat (const char *path, struct stat *st)
+           lstat(2) clone.
+       int Access (const char *path, int amode)
+           access(2) clone.
+       int Glob (const char *pattern, int flags, int
+           errfunc(const char *epath, int eerrno), glob_t *pglob)
+           glob(3) clone.
+       void Globfree (glob_t *pglob)
+           globfree(3) clone.
+       DIR * Opendir (const char *name)
+           opendir(3) clone.
+       dirent * Readdir (DIR *dir)
+           readdir(3) clone.
+       int Closedir (DIR *dir)
+           closedir(3) clone.
+
+   Typedefs
+       typedef _FD_s * FD_t
+       typedef FDIO_s * FDIO_t
+
+   Functions
+       int xislower (int c)
+       int xisupper (int c)
+       int xisalpha (int c)
+       int xisdigit (int c)
+       int xisalnum (int c)
+       int xisblank (int c)
+       int xisspace (int c)
+       int xtolower (int c)
+       int xtoupper (int c)
+       int xstrcasecmp (const char *s1, const char *s2)
+       int xstrncasecmp (const char *s1, const char *s2, size_t
+           n)
+
+DETAILED DESCRIPTION
+       Definition in file rpmio.h.
+
+DEFINE DOCUMENTATION
+   #define fdCLose(_fd)   fdio->close(_fd)
+       Definition at line 392 of file rpmio.h.
+
+   #define fdFileno(_fd)   fdio->_fileno(_fd)
+       Definition at line 368 of file rpmio.h.
+
+   #define fdFree(_fd, _msg)   fdio->_fdderef(_fd, _msg,
+       __FILE__, __LINE__)
+       Definition at line 399 of file rpmio.h.
+
+       Referenced by alFree, closeCallback, manageFile,
+       packageBinaries, packageSources, rpmShowProgress, and
+       rpmtransFree.
+
+   #define fdLink(_fd, _msg)   fdio->_fdref(_fd, _msg, __FILE__,
+       __LINE__)
+       FD_t reference count debugging wrappers.
+
+       Todo:
+            Remove debugging entries from the ABI.
+
+       Definition at line 398 of file rpmio.h.
+
+       Referenced by alAddPackage, closeCallback, doFopen,
+       ftpNLST, manageFile, and rpmShowProgress.
+
+   #define fdNew(_msg)   fdio->_fdnew(_msg, __FILE__, __LINE__)
+       Definition at line 400 of file rpmio.h.
+
+       Referenced by packageBinaries, packageSources, and
+       rewriteRPM.
+
+   #define fdOpen(_path, _flags, _mode)   fdio->_open((_path),
+       (_flags), (_mode))
+       Definition at line 374 of file rpmio.h.
+
+   #define fdRead(_fd, _buf, _count)   fdio->read((_fd), (_buf),
+       (_count))
+       Definition at line 380 of file rpmio.h.
+
+   #define fdWrite(_fd, _buf, _count)   fdio->write((_fd),
+       (_buf), (_count))
+       Definition at line 386 of file rpmio.h.
+
+   #define timedRead   ufdio->read
+       Definition at line 468 of file rpmio.h.
+
+       Referenced by headerRead, makeGPGSignature,
+       makePGPSignature, readLead, and rpmReadSignature.
+
+TYPEDEF DOCUMENTATION
+   typedef enum ftperrCode_e  ftperrCode
+       FTP and HTTP error codes.
+
+
+ENUMERATION TYPE DOCUMENTATION
+   enum ftperrCode_e
+       FTP and HTTP error codes.
+
+       Enumeration values:
+
+       FTPERR_BAD_SERVER_RESPONSE
+              Bad server response
+
+       FTPERR_SERVER_IO_ERROR
+              Server I/O error
+
+       FTPERR_SERVER_TIMEOUT
+              Server timeout
+
+       FTPERR_BAD_HOST_ADDR
+              Unable to lookup server host address
+
+       FTPERR_BAD_HOSTNAME
+              Unable to lookup server host name
+
+       FTPERR_FAILED_CONNECT
+              Failed to connect to server
+
+       FTPERR_FILE_IO_ERROR
+              Failed to establish data connection to server
+
+       FTPERR_PASSIVE_ERROR
+              I/O error to local file
+
+       FTPERR_FAILED_DATA_CONNECT
+              Error setting remote server to passive mode
+
+       FTPERR_FILE_NOT_FOUND
+              File not found on server
+
+       FTPERR_NIC_ABORT_IN_PROGRESS
+              Abort in progress
+
+       FTPERR_UNKNOWN
+              Unknown or unexpected error
+
+       Definition at line 417 of file rpmio.h.
+
+FUNCTION DOCUMENTATION
+   int fdClose (void * cookie)
+   FD_t fdDup (int fdno)
+       Referenced by cpio_doio, main, readRPM, rpmHeaderFromFD,
+       rpmHeaderFromPackage, rpmMergeHeadersFromFD,
+       rpmtransSetAttr, and tsCallback.
+
+   FD_t fdOpen (const char * path, int flags, mode_t mode)
+   ssize_t fdRead (void * cookie, char * buf, size_t count)
+   int fdReadable (FD_t fd, int secs)
+   int fdWritable (FD_t fd, int secs)
+   ssize_t fdWrite (void * cookie, const char * buf, size_t
+       count)
+   const char* const ftpStrerror (int errorNumber)
+       Referenced by doUntar, and rpmInstall.
+
+   int timedRead (FD_t fd, void * bufptr, int length)
+   int ufdCopy (FD_t sfd, FD_t tfd)
+       Referenced by main.
+
+   int ufdGetFile (FD_t sfd, FD_t tfd)
+       Referenced by urlGetFile.
+
+   void* ufdGetUrlinfo (FD_t fd)
+   const char* urlStrerror (const char * url)
+   int xisalnum (int c) [inline, static]
+       Definition at line 510 of file rpmio.h.
+
+       References xisalpha, and xisdigit.
+
+       Referenced by expandMacro, parseRCPOT, rdToken, and
+       rpmvercmp.
+
+   int xisalpha (int c) [inline, static]
+       Definition at line 504 of file rpmio.h.
+
+       References xislower, and xisupper.
+
+       Referenced by doDefine, doUndefine, parseBits, rdToken,
+       rpmvercmp, and xisalnum.
+
+   int xisblank (int c) [inline, static]
+       Definition at line 513 of file rpmio.h.
+
+       Referenced by xisspace.
+
+   int xisdigit (int c) [inline, static]
+       Definition at line 507 of file rpmio.h.
+
+       Referenced by defaultMachine, doFoo, parseEVR,
+       parseForDev, parseFormat, rdToken, rpmvercmp, and
+       xisalnum.
+
+   int xislower (int c) [inline, static]
+       Definition at line 498 of file rpmio.h.
+
+       Referenced by xisalpha, and xtoupper.
+
+   int xisspace (int c) [inline, static]
+       Definition at line 516 of file rpmio.h.
+
+       References xisblank.
+
+       Referenced by addChangelog, copyNextLine, db3New,
+       dbiTagsInit, doReadRC, findLastChar, findPreambleTag,
+       isPart, machCompatCacheAdd, parseBits, rdToken, readLine,
+       stripTrailingBlanksStringBuf, and unsatisfiedDepend.
+
+   int xisupper (int c) [inline, static]
+       Definition at line 501 of file rpmio.h.
+
+       Referenced by xisalpha, and xtolower.
+
+   int xtolower (int c) [inline, static]
+       Definition at line 520 of file rpmio.h.
+
+       References xisupper.
+
+       Referenced by rpmRebuildTargetVars, tagName, xstrcasecmp,
+       and xstrncasecmp.
+
+   int xtoupper (int c) [inline, static]
+       Definition at line 523 of file rpmio.h.
+
+       References xislower.
+
+VARIABLE DOCUMENTATION
+   FDIO_t bzdio
+       Definition at line 490 of file rpmio.h.
+
+   FDIO_t fadio
+       Definition at line 494 of file rpmio.h.
+
+   FDIO_t fdio
+       Definition at line 474 of file rpmio.h.
+
+       Referenced by fadOpen, and XurlFree.
+
+   FDIO_t fpio
+       Definition at line 478 of file rpmio.h.
+
+       Referenced by XurlFree.
+
+   FDIO_t gzdio
+       Definition at line 486 of file rpmio.h.
+
+   FDIO_t ufdio
+       Definition at line 482 of file rpmio.h.
+
+       Referenced by fadOpen.
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002           rpmio/rpmio.h(3)

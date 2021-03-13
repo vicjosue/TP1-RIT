@@ -1,0 +1,193 @@
+TREE(1)                                                   TREE(1)
+
+
+
+NAME
+       tree - list contents of directories in a tree-like format.
+
+SYNOPSIS
+       tree [ -adfgilnopqstuxACDFNS ] [ -L level [  -R  ]]  [  -H
+       baseHREF ] [ -P pattern ] [ -I pattern ] [ directory ... ]
+
+DESCRIPTION
+       Tree is a recursive directory listing  program  that  pro­
+       duces  a  depth  indented  listing of files, which is col­
+       orized ala dircolors if the LS_COLORS environment variable
+       is  set  and  output  is  to tty.  With no arguments, tree
+       lists the files in the current directory.  When  directory
+       arguments  are  given,  tree  lists  all  the files and/or
+       directories found in the given directories each  in  turn.
+       Upon  completion  of  listing all files/directories found,
+       tree returns the total number of files and/or  directories
+       listed.
+
+       By  default, when a symbolic link is encountered, the path
+       that the symbolic link refers to is printed after the name
+       of the link in the format:
+
+           name -> real-path
+
+       If  the  `-l' option is given and the symbolic link refers
+       to an actual directory, then tree will follow the path  of
+       the symbolic link as if it were a real directory.
+
+
+OPTIONS
+       Tree understands the following command line switches:
+
+
+       --help Outputs a verbose usage listing.
+
+
+       --version
+              Outputs the version of tree.
+
+
+       -a     All  files  are  printed.  By default tree does not
+              print hidden files  (those  beginning  with  a  dot
+              `.').   In no event does tree print the file system
+              constructs `.' (current directory) and `..' (previ­
+              ous directory).
+
+
+       -d     List directories only.
+
+
+       -f     Prints the full path prefix for each file.
+
+
+       -i     Makes  tree not print the indentation lines, useful
+              when used in conjunction with the -f option.
+
+
+       -l     Follows symbolic links if they  point  to  directo­
+              ries,  as  if they were directories. Symbolic links
+              that will result  in  recursion  are  avoided  when
+              detected.
+
+
+       -x     Stay  on  the  current  file-system only.  Ala find
+              -xdev.
+
+
+       -P pattern
+              List only those files that match the wild-card pat­
+              tern.   Note:  you  must  use the -a option to also
+              consider those files beginning with a dot  `.'  for
+              matching.   Valid  wildcard  operators are `*' (any
+              zero or more characters), `?' (any  single  charac­
+              ter),  `[...]' (any single character listed between
+              brackets (optional - (dash) for character range may
+              be used: ex: [A-Z]), and `[^...]' (any single char­
+              acter not listed in brackets).
+
+
+       -I pattern
+              Do not list those files that  match  the  wild-card
+              pattern.
+
+
+       -p     Print the protections for each file (as per ls -l).
+
+
+       -o filename
+              Send output to filename.
+
+
+       -s     Print the size of each file along with the name.
+
+
+       -u     Print the username, or UID  #  if  no  username  is
+              available, of the file.
+
+
+       -g     Print  the group name, or GID # if no group name is
+              available, of the file.
+
+
+       -D     Print the date of the last  modification  time  for
+              the file listed.
+
+
+       -F     Append  a  `/'  for  directories,  a `=' for socket
+              files, a `*' for executable files  and  a  `|'  for
+              FIFO's, as per ls -F
+
+
+       -q     Print  non-printable  characters  in  filenames  as
+              question marks instead of the default carrot  nota­
+              tion.
+
+
+       -N     Print non-printable characters as is instead of the
+              default carrot notation.
+
+
+       -t     Sort the output by last modification  time  instead
+              of alphabetically.
+
+
+       -n     Turn colorization off always, over-ridden by the -C
+              option.
+
+
+       -C     Turn colorization on always, using  built-in  color
+              defaults  if  the LS_COLORS environment variable is
+              not set.  Useful to colorize output to a pipe.
+
+
+       -A     Turn on ANSI line graphics hack when  printing  the
+              indentation lines.
+
+
+       -S     Turn  on  ASCII  line  graphics  (useful when using
+              linux console mode fonts).
+
+
+       -L level
+              Max display depth of the directory tree.
+
+
+       -R     Recursively cross down the tree each level directo­
+              ries  (see  -L option), and at each of them execute
+              tree again adding `-o 00Tree.html' as a new option.
+
+
+       -H baseHREF
+              Turn  on  HTML  output,  including HTTP references.
+              Useful for ftp sites.  baseHREF gives the base  ftp
+              location when using HTML output. That is, the local
+              directory may be `/local/ftp/pub', but it  must  be
+              referenced       as       `ftp://hostname.organiza­
+              tion.domain/pub' (baseHREF should  be  `ftp://host­
+              name.organization.domain/').  Hint:  don't use col­
+              orization and/or ANSI lines with this  option,  and
+              don't give more than one directory in the directory
+              list.
+
+
+FILES
+       /etc/DIR_COLORS          System color database.
+       ~/.dircolors             Users color database.
+
+
+ENVIRONMENT
+       LS_COLORS      Color information created by dircolors
+
+
+AUTHOR
+       Steve Baker (ice@mama.indstate.edu)
+       HTML output hacked by Francesc Rocher (rocher@econ.udg.es)
+
+
+BUGS
+       None  known.   Not  heavily  tested.  Could use a few more
+       options, ala ls.
+
+
+SEE ALSO
+       dircolors(1L), ls(1L), find(1L)
+
+
+
+UNIX Programmer's Manual                                  TREE(1)

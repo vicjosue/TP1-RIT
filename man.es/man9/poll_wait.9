@@ -1,0 +1,47 @@
+poll_wait(9)             Kernel Functions            poll_wait(9)
+
+
+
+NAME
+       poll_wait - wait for selectable event to be ready
+
+SYNOPSIS
+       #include <linux/poll.h>
+
+       void poll_wait(structwait_queue**sync, poll_table*pt)
+
+
+DESCRIPTION
+       This function is used in support of the poll device driver
+       entry point. The intent is for a device driver to put sync
+       into  the  poll table immediately entering the device poll
+       routine, then returning a bit mask of events that are cur­
+       rently  ready.  The  kernel looks at the mask of events to
+       see if something it needs is ready, and suspends the  pro­
+       cess if not.
+
+       static unsigned int xxpoll(struct file*file, poll_table*pt)
+       {
+           poll_wait(&data_in_sync, pt);
+           if (data_in.cnt > 0) return POLLIN | POLLRDNORM;
+           else return 0;
+       }
+
+       This  example  shows  the  basic  use of poll_wait(9) in a
+       device driver poll function.
+
+AVAILABILITY
+       Linux kernel 2.1.34+
+
+SEE ALSO
+       intro(9)
+
+AUTHOR
+       Stephen Williams <steve@icarus.com>
+
+BUGS
+       To early to say.
+
+
+
+Linux DDI                    $Date:$                 poll_wait(9)

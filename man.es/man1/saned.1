@@ -1,0 +1,160 @@
+saned(1)                                                 saned(1)
+
+
+
+NAME
+       saned - SANE network daemon
+
+SYNOPSIS
+       saned [-d|-s [n]]
+
+DESCRIPTION
+       saned  is  the  SANE (Scanner Access Now Easy) daemon that
+       allows remote clients to access image acquisition  devices
+       available on the local host.
+
+OPTIONS
+       The  -d  and -s flags request that saned run in debug mode
+       (as opposed  to  inetd(8)  mode).   In  this  mode,  saned
+       explicitly  waits for a connection request.  When compiled
+       with debugging enabled, these flags may be followed  by  a
+       number  to  request debug info. The larger the number, the
+       more verbose the debug output.  E.g., -d128  will  request
+       printing  of  all debug info. Debug level 0 means no debug
+       output at all. The default value is 2. If flag -d is used,
+       the  debug  messages  will  be  printed to stderr while -s
+       requests using syslog.
+
+CONFIGURATION
+       First and foremost: please do not install saned as  setuid
+       root  without  due  consideration.   Especially when using
+       dynamic linking, there  is  a  potential  for  introducing
+       security holes when running this program as root.
+
+       The  contents  of  the  saned.conf  file is a list of host
+       names or IP addresses that are permitted to use local SANE
+       devices.  Connections from localhost are always permitted.
+       Empty lines and lines starting with a hash  mark  (#)  are
+       ignored.   A line containing the single character ``+'' is
+       interpreted to match any hostname.  This allows any remote
+       machine  to  use  your  scanner and may present a security
+       risk, so this shouldn't  be  used  unless  you  know  what
+       you're doing.  A sample configuration file is shown below:
+
+              scan-client.somedomain.firm
+              # this is a comment
+              192.168.0.1
+
+       The case of the host names does not matter,  so  AHost.COM
+       is considered identical to ahost.com.
+
+       For  saned to work properly, it is also necessary to add a
+       configuration line to /etc/inetd.conf.  The  configuration
+       line normally looks like this:
+
+              sane  stream tcp nowait saned.saned /usr/sbin/saned
+              saned
+
+       However, if your system uses tcpd(8) for additional  secu­
+       rity  screening, you may want to disable saned access con­
+       trol by putting ``+'' in saned.conf and use a line of  the
+       following form in /etc/inetd.conf instead:
+
+              sane  stream  tcp nowait saned.saned /usr/sbin/tcpd
+              saned
+
+       Note that both examples assume that there is a saned group
+       and a saned user.  If you follow this example, please make
+       sure that the access permissions on the special device are
+       set  such  that  saned can access the scanner (the program
+       generally needs read and write access to scanner devices).
+
+       If xinetd is installed on your system instead of inetd the
+       following example for xinetd.conf may be helpful:
+
+              # default: off
+              # description: The sane server accepts requests
+              # for network access to a local scanner via the
+              # network.
+              service sane
+              {
+                 port        = 6566
+                 socket_type = stream
+                 wait        = no
+                 user        = saned
+                 group       = saned
+                 server      = /usr/local/sbin/saned
+              }
+
+       Finally, it is also necessary to add a line of the follow­
+       ing form to /etc/services:
+
+              sane 6566/tcp # SANE network scanner daemon
+
+       Note  that  port  number  6566  has  not  been  officially
+       assigned to the SANE network protocol and may thus  change
+       in the future.
+
+
+
+RESTRICTIONS
+       In  addition  to  the control connection (port 6566) saned
+       also uses a data connection. The port of  this  socket  is
+       selected by the operating system and can't be specified by
+       the user currently. This may be a problem if  the  connec­
+       tion must go through a firewall (packet filter).
+
+
+FILES
+       /etc/hosts.equiv
+              The  hosts  listed  in  this  file are permitted to
+              access all local SANE devices.  Caveat:  this  file
+              imposes  serious  security risks and its use is not
+              recommended.
+
+       /etc/sane.d/saned.conf
+              Contains a list of hosts permitted to access  local
+              SANE  devices  (see  also  description of SANE_CON­
+              FIG_DIR below).
+
+       /etc/sane.d/saned.users
+              If this file contains lines of the form
+
+              user:password:backend
+
+              access to the  listed  backends  is  restricted.  A
+              backend  may be listed multiple times for different
+              user/password combinations.  The  server  uses  MD5
+              encryption if supported by the client.
+
+ENVIRONMENT
+       SANE_CONFIG_DIR
+              This  environment  variable  specifies  the list of
+              directories  that  may  contain  the  configuration
+              file.  Under UNIX, the directories are separated by
+              a colon (`:'), under OS/2, they are separated by  a
+              semi-colon (`;').  If this variable is not set, the
+              configuration  file  is  searched  in  two  default
+              directories:  first,  the current working directory
+              (".") and then in /etc/sane.d.  If the value of the
+              environment  variable ends with the directory sepa­
+              rator character, then the default  directories  are
+              searched  after  the  explicitly specified directo­
+              ries.   For  example,  setting  SANE_CONFIG_DIR  to
+              "/tmp/config:"    would   result   in   directories
+              "tmp/config", ".", and "/etc/sane.d" being searched
+              (in this order).
+
+
+SEE ALSO
+       sane(7),     scanimage(1),     xscanimage(1),     xcam(1),
+       sane-dll(5), sane-net(5), sane-"backendname"(5)
+
+       http://home.nexgo.de/jochen.eisinger/saned/
+
+AUTHOR
+       David Mosberger
+
+
+
+                           07 Jan 2002                   saned(1)

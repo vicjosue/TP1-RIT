@@ -1,0 +1,45 @@
+lppasswd(1)           Easy Software Products          lppasswd(1)
+
+
+
+NAME
+       lppasswd - add, change, or delete digest passwords.
+
+SYNOPSIS
+       lppasswd [ -a ] [ -g groupname ] [ -x ] [ username ]
+
+DESCRIPTION
+       lppasswd  adds,  changes, or deletes passwords in the CUPS
+       digest password file, passwd.md5. When  run  by  a  normal
+       user,  lppasswd will prompt for the old and new passwords.
+       When run by the super-user, lppasswd can add new  accounts
+       (-a  username),  change  existing  accounts (username), or
+       delete accounts (-x username) in the digest password file.
+       Digest  usernames  do  not  have to match local UNIX user­
+       names, but only UNIX usernames are supported by  the  CUPS
+       client programs (lp(1), lpr(1), etc.)
+
+       The  -g  option  specifies  a  group other than the system
+       group - "sys", "system", or "root", depending on the oper­
+       ating system.
+
+SECURITY ISSUES
+       The  lppasswd  command  is installed setuid to root. While
+       every attempt has been made  to  make  it  secure  against
+       exploits   that  could  grant  super-user  priviledges  to
+       unpriviledged users, paranoid  system  administrators  may
+       wish  to disable or change the ownership of the program to
+       an unpriviledged account.
+
+SEE ALSO
+       lp(1), lpr(1), CUPS Software Administrators  Manual,  CUPS
+       Software   Users  Manual,  http://localhost:631/documenta­
+       tion.html
+
+COPYRIGHT
+       Copyright 1993-2002 by Easy Software Products, All  Rights
+       Reserved.
+
+
+
+7 June 2001        Common UNIX Printing System        lppasswd(1)

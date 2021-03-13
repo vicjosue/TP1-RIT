@@ -1,0 +1,191 @@
+lib/md5.c(3)                                         lib/md5.c(3)
+
+
+
+NAME
+       lib/md5.c - This code implements the MD5 message-digest
+       algorithm.
+
+SYNOPSIS
+       #include 'system.h'
+       #include 'md5.h'
+       #include 'debug.h'
+
+   Data Structures
+       union _mendian
+
+   Defines
+       #define IS_BIG_ENDIAN()   (_endian->b[0] == '4')
+       #define IS_LITTLE_ENDIAN()   (_endian->b[0] == '1')
+       #define F1(x, y, z)   (z ^ (x & (y ^ z)))
+       #define F2(x, y, z)   F1(z, x, y)
+       #define F3(x, y, z)   (x ^ y ^ z)
+       #define F4(x, y, z)   (y ^ (x | ~z))
+       #define MD5STEP(f, w, x, y, z, data, s)   ( w += f(x, y,
+           z) + data,  w = w<<s | w>>(32-s),  w += x )
+
+   Functions
+       void byteReverse (unsigned char *buf, unsigned longs)
+       void rpmMD5Init (struct MD5Context *ctx, int brokenEndian)
+           Initialize MD5 hash.
+       void rpmMD5Update (struct MD5Context *ctx, unsigned char
+           const *buf, unsigned len)
+           Update context to reflect the concatenation of another
+           buffer full.
+       void rpmMD5Final (unsigned char digest[16], struct
+           MD5Context *ctx)
+           Return MD5 digest, and reset context.
+       void rpmMD5Transform (uint32 buf[4], uint32 const in[16])
+           The core of the MD5 algorithm.
+
+   Variables
+       int _ie = 0x44332211
+       _mendian * _endian
+
+DETAILED DESCRIPTION
+       This code implements the MD5 message-digest algorithm.
+
+        The algorithm is due to Ron Rivest. This code was written
+       by Colin Plumb in 1993, no copyright is claimed. This code
+       is in the public domain; do with it what you wish.
+
+       Equivalent code is available from RSA Data Security, Inc.
+       This code has been tested against that, and is equivalent,
+       except that you don't need to include two pages of
+       legalese with every copy.
+
+       To compute the message digest of a chunk of bytes, declare
+       an MD5Context structure, pass it to rpmMD5Init, call
+       rpmMD5Update as needed on buffers full of bytes, and then
+       call rpmMD5Final, which will fill a supplied 16-byte array
+       with the digest.
+
+       Todo:
+            Eliminate, use rpmio version instead.
+
+
+       Definition in file md5.c.
+
+DEFINE DOCUMENTATION
+   #define F1(x, y, z)   (z ^ (x & (y ^ z)))
+       Definition at line 176 of file md5.c.
+
+       Referenced by rpmMD5Transform.
+
+   #define F2(x, y, z)   F1(z, x, y)
+       Definition at line 177 of file md5.c.
+
+       Referenced by rpmMD5Transform.
+
+   #define F3(x, y, z)   (x ^ y ^ z)
+       Definition at line 178 of file md5.c.
+
+       Referenced by rpmMD5Transform.
+
+   #define F4(x, y, z)   (y ^ (x | ~z))
+       Definition at line 179 of file md5.c.
+
+       Referenced by rpmMD5Transform.
+
+   #define IS_BIG_ENDIAN()   (_endian->b[0] == '4')
+       Definition at line 30 of file md5.c.
+
+       Referenced by byteReverse, rpmDigestInit, and rpmMD5Init.
+
+   #define IS_LITTLE_ENDIAN()   (_endian->b[0] == '1')
+       Definition at line 31 of file md5.c.
+
+   #define MD5STEP(f, w, x, y, z, data, s)   ( w += f(x, y, z) +
+       data,  w = w<<s | w>>(32-s),  w += x )
+       Definition at line 182 of file md5.c.
+
+       Referenced by MD5Transform, and rpmMD5Transform.
+
+FUNCTION DOCUMENTATION
+   void byteReverse (unsigned char * buf, unsigned longs)
+       [static]
+       Definition at line 36 of file md5.c.
+
+   void rpmMD5Final (unsigned char digest[16], struct MD5Context
+       * ctx)
+       Return MD5 digest, and reset context.
+
+       Return values:
+
+       MD5    digest
+
+       Parameters:
+
+       ctx    MD5 private data
+
+       Definition at line 128 of file md5.c.
+
+       References byteReverse, and rpmMD5Transform.
+
+   void rpmMD5Init (struct MD5Context * ctx, int brokenEndian)
+       Initialize MD5 hash.
+
+       Set bit count to 0 and buffer to mysterious initialization
+       constants.
+
+       Parameters:
+
+       ctx    MD5 private data
+
+       brokenEndian
+              calculate broken MD5 sum?
+
+       Definition at line 52 of file md5.c.
+
+       References MD5Context::bits, MD5Context::buf,
+       MD5Context::doByteReverse, and IS_BIG_ENDIAN.
+
+   void rpmMD5Transform (uint32 buf[4], uint32 const in[16])
+       The core of the MD5 algorithm.
+
+       This alters an existing MD5 hash to reflect the addition
+       of 16 longwords of new data.
+
+       Parameters:
+
+       buf    current MD5 variables
+
+       in     next block of data to add
+
+       Definition at line 191 of file md5.c.
+
+       References F1, F2, F3, F4, and MD5STEP.
+
+   void rpmMD5Update (struct MD5Context * ctx, unsigned char
+       const * buf, unsigned len)
+       Update context to reflect the concatenation of another
+       buffer full.
+
+       of bytes.
+
+       Parameters:
+
+       ctx    MD5 private data
+
+       data   next data buffer
+
+       len    no. bytes of data
+
+       Definition at line 77 of file md5.c.
+
+       References MD5Context::bits, MD5Context::buf, byteReverse,
+       MD5Context::doByteReverse, MD5Context::in, and
+       rpmMD5Transform.
+
+VARIABLE DOCUMENTATION
+   union _mendian * _endian [static]
+   int _ie = 0x44332211 [static]
+       Definition at line 25 of file md5.c.
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002               lib/md5.c(3)

@@ -1,0 +1,216 @@
+tix(n)                Tix Built-In Commands                tix(n)
+
+
+
+_________________________________________________________________
+
+NAME
+       tix - Manipulate internal states of the Tix library
+
+SYNOPSIS
+       tix option ?arg arg ...?
+
+CONFIGURATION OPTIONS
+       This  manual page descripts the tix command, which manipu­
+       lates the internal states of the Tix  library.  If  you're
+       looking  for  a  general  introduction to the Tix library,
+       please refer to the TixIntro manual page.
+
+       The Tix application context supports the following config­
+       uration  options. Usually, these options are set using the
+       X resource database, i.e., in the user's  .Xdefault  file.
+       For  example,  to  choose a different color scheme for the
+       Tix widgets, these two lines can be added  to  the  user's
+       .Xdefault file:
+                     *TixScheme:  Gray
+                     *TixFontSet: 14Point
+
+       Command-Line Name:-binding
+       Database Name:  binding
+       Database Class: Binding
+
+              This is an obsolete option.
+
+       Command-Line Name:-debug
+       Database Name:  debug
+       Database Class: Debug
+
+              Specifies  whether  the  Tix  widgets should run in
+              debug mode.
+
+       Command-Line Name:-fontset
+       Database Name:  tixFontSet
+       Database Class: TixFontSet
+
+              Specifies the fontset to use for the  Tix  widgets.
+              Valid options are WmDefault, TK, TkWin, 12Point and
+              14Point. TK specifies that the  standard  TK  fonts
+              should be used. The default value is WmDefault.
+
+       Command-Line Name:-scheme
+       Database Name:  tixScheme
+       Database Class: TixScheme
+
+              Specifies  the color scheme to use for the Tix wid­
+              gets. Valid options are WmDefault, TK, TkWin, Gray,
+              Blue,  Bisque, SGIGray and TixGray. If you want the
+              standard TK color scheme, you can use the value TK.
+              The default value is WmDefault.
+               '
+
+       Command-Line Name:-schemepriority
+       Database Name:  tixSchemePriority
+       Database Class: TixSchemePriority
+
+              Specifies  the priority level of the TK options set
+              by th Tix schemes. Please refer to the TK option(n)
+              manual  page for a discussion of the priority level
+              of Tix options. The  default  value  is  79,  which
+              makes the Tix schemes at a higher priority than the
+              settings in the .Xdefaults file.  If  you  want  to
+              allow  the Tix schemes to be overridden by the set­
+              tings in the .Xdefaults file, you can set the  fol­
+              lowing line in you .Xdefaults file:
+              *TixSchemePriority: 21
+_________________________________________________________________
+
+DESCRIPTION
+       The  tix command provides access to miscellaneous elements
+       of Tix's internal state and the Tix  application  context.
+       Most  of  the information manipulated by this command per­
+       tains to the application as a whole, or  to  a  screen  or
+       display,  rather than to a particular window.  The command
+       can take any of a number of different forms  depending  on
+       the option argument.  The legal forms are:
+
+       tix addbitmapdir directory
+              Tix maintains a list of directory under which which
+              the tix getimage and tix  getbitmap  commands  will
+              search  for image files. The standard bitmap direc­
+              tory is $TIX_LIBRARY/bitmaps. The addbitmapdir com­
+              mand  adds  directory into this list. By using this
+              command, the image files  of  an  applications  can
+              also  be located using the tix getimage ot tix get­
+              bitmap command.
+
+       tix cget option
+              Returns the  current  value  of  the  configuration
+              option  given  by  option. Option may be any of the
+              options described in the CONFIGURATION OPTIONS sec­
+              tion.
+
+       tix configure ?option? ?value option value ...?
+              Query  or  modify  the configuration options of the
+              Tix application context. If no option is specified,
+              returns  a  list  describing  all  of the available
+              options (see Tk_ConfigureInfo  for  information  on
+              the  format  of this list).  If option is specified
+              with no value, then  the  command  returns  a  list
+              describing  the one named option (this list will be
+              identical to the corresponding sublist of the value
+              returned  if  no  option  is specified).  If one or
+              more option-value pairs  are  specified,  then  the
+              command  modifies  the  given option(s) to have the
+              given value(s); in this case the command returns an
+              empty  string.  Option  may  be  any of the options
+              described in the CONFIGURATION OPTIONS section.
+
+       tix filedialog ?class?
+              Returns the  file  selection  dialog  that  may  be
+              shared among different modules of this application.
+              This command will create a  file  selection  dialog
+              widget  when it is called the first time. This dia­
+              log will be returned by all subsequent calls to tix
+              filedialog.  An  optional  class  parameter  can be
+              passed to specified what  type  of  file  selection
+              dialog widget is desired. Possible options are tix­
+              FileSelectDialog or tixExFileSelectDialog.
+
+       tix getbitmap name
+              Locates a bitmap file of the name name.xpm or  name
+              in   one   of   the  bitmap  directories  (see  the
+              addbitmapdir   command   above).   By   using   tix
+              getbitmap, you can advoid hard coding the pathnames
+              of the bitmap files in your application. When  suc­
+              cessful,  it  returns  the complete pathname of the
+              bitmap file, prefixed with the  character  @.   The
+              returned value can be used to configure the -bitmap
+              option of the TK and Tix widgets.
+
+       tix getimage name
+              Locates  an  image  file  of  the  name   name.xpm,
+              name.xbm  or name.ppm in one of the bitmap directo­
+              ries (see the addbitmapdir command above). If  more
+              than  one  file  with  the same name (but different
+              extensions) exist, then the image  type  is  chosen
+              according to the depth of the X display: xbm images
+              are chosen on monochrome displays and color  images
+              are  chosen  on color displays. By using tix getim­
+              age, you can advoid hard coding  the  pathnames  of
+              the  image files in your application. When success­
+              ful, this command returns the  name  of  the  newly
+              created  image,  which can be used to configure the
+              -image option of the TK and Tix widgets.
+
+       tix option ?args ...?
+              Manipulates  the  options  manitained  by  the  Tix
+              scheme mechanism. Available options are:
+              active_bg   active_fg   bg
+              bold_font   dark1_bg    dark1_fg
+              dark2_bg    dark2_fg    disabled_fg
+              fg          fixed_font  font
+              inactive_bg inactive_fg input1_bg
+              input2_bg   italic_font light1_bg
+              light1_fg   light2_bg   light2_fg
+              menu_font   output1_bg  output2_bg
+              select_bg   select_fg   selector
+       The  arguments to the tix option command can take the fol­
+       lowing form(s):
+
+              tix option get option
+                     Returns the current value of option.
+
+       tix resetoptions newScheme newFontSet ?newScmPrio?
+              Resets the scheme and fontset of the  Tix  applica­
+              tion  to  newScheme  and  newFontSet, respectively.
+              This affects only those widgets created after  this
+              call.  Therefore,  it  is best to call the resetop­
+              tions command before the creation of any widgets in
+              a Tix application.
+
+              The  optional  parameter newScmPrio can be given to
+              reset the priority level of the TK options  set  by
+              the Tix schemes.
+
+BUGS
+       [1]    In this release of Tix, the following configuration
+              options have been  disabled.  Assigning  values  to
+              them will cause no effect:
+              -binding
+              -debug
+              -fontset
+              -scheme
+              -schemepriority
+       In addition, the following options to the tix command have
+       been disabled. Invoking the tix command with these options
+       will cause no effect:
+              resetoptions
+
+       [2]    Because   of  the  way  TK  handles  the  X  option
+              database, after tixwish has started up, it  is  not
+              possible  to  reset the color schemes and font sets
+              using the tix  config  command.  Instead,  the  tix
+              resetoptions command must be used.
+
+       The  tk_setPalette  command  does not work very well under
+       Tix. To use it, one must follow these steps:
+                     tix resetoptions TK TK
+                     tk_setPalette lightblue
+
+KEYWORDS
+       file selection dialog
+
+
+
+
+Tix                            8.0                         tix(n)

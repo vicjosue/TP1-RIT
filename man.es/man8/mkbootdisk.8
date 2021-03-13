@@ -1,0 +1,67 @@
+MKBOOTDISK(8)                                       MKBOOTDISK(8)
+
+
+
+NAME
+       mkbootdisk  -  creates  a  stand-alone boot floppy for the
+       running system
+
+SYNOPSIS
+       mkbootdisk [--version] [--noprompt] [--verbose]
+                  [--mkinitrdargs <args>] [--device <devicefile>]
+                  [--compact] <kernel>
+
+
+DESCRIPTION
+       mkbootdisk  creates a boot floppy appropriate for the run­
+       ning system. The boot disk is entirely self-contained, and
+       includes  an  initial ramdisk image which loads any neces­
+       sary SCSI modules for the system. The  created  boot  disk
+       looks  for  the root filesystem on the device suggested by
+       /etc/fstab.  The only required argument is the kernel ver­
+       sion to put onto the boot floppy.
+
+
+OPTIONS
+       --device <devicefile>
+              The  boot  image  is  created on <devicefile>fR. If
+              --device is not specified, /dev/fd0 is used.
+
+
+       --mkinitrdargs <args>
+              Passes <args>fR to mkinitrd (which is used to  cre­
+              ate the initial ramdisk image for the boot floppy).
+              Any mkinitrd arguments may be specified.
+
+
+       --noprompt
+              Normally, mkbootdisk instructs the user to insert a
+              floppy  and  waits for confirmation before continu­
+              ing. If --noprompt is specified, no prompt is  dis­
+              played.
+
+
+       --verbose
+              Instructs  mkbootdisk to talk about what it's doing
+              as it's doing it. Normally, there is no output from
+              mkbootdisk.
+
+
+       --version
+              Displays the version of mkbootdisk and exits.
+
+
+       --compact
+              Use the "compact" LILO option.
+
+
+SEE ALSO
+       mkinitrd(1),
+
+
+AUTHOR
+       Erik Troan <ewt@redhat.com>
+
+
+
+                         Tue Mar 31 1998            MKBOOTDISK(8)

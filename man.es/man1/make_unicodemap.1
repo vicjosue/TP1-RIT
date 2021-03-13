@@ -1,0 +1,95 @@
+MAKE_UNICODEMAP(1)                             MAKE_UNICODEMAP(1)
+
+
+
+NAME
+       make_unicodemap - construct a unicode map file for Samba
+
+SYNOPSIS
+       make_unicodemap codepage inputfile outputfile
+
+DESCRIPTION
+       This tool is part of the Samba suite.
+
+       make_unicodemap  compiles  text  unicode  map  files  into
+       binary unicode map files for use with  the  international­
+       ization features of Samba 2.2.
+
+OPTIONS
+       codepage
+              This  is  the codepage or UNIX character set we are
+              processing (a number, e.g. 850).
+
+       inputfile
+              This is the input file to process. This is  a  text
+              unicode  map  file  such  as  the ones found in the
+              Samba source/codepages directory.
+
+       outputfile
+              This is the binary output file to produce.
+
+SAMBA UNICODE MAP FILES
+       A text Samba unicode map file is a description that  tells
+       Samba how to map characters from a specified DOS code page
+       or UNIX character set to 16 bit unicode.
+
+       A binary Samba unicode map file is a binary representation
+       of  the same information, including a value that specifies
+       what codepage or UNIX character set this file is  describ­
+       ing.
+
+FILES
+       CP<codepage>.TXT
+
+       These  are  the input (text) unicode map files provided in
+       the Samba source/codepages directory.
+
+       A text unicode map file consists of  multiple  lines  con­
+       taining two fields. These fields are :
+
+       · character  - which is the (hex) character mapped on this
+         line.
+
+       · unicode - which is the (hex) 16  bit  unicode  character
+         that the character will map to.
+
+       unicode_map.<codepage>  -  These  are  the output (binary)
+       unicode map files produced and placed in the Samba  desti­
+       nation lib/codepage directory.
+
+
+INSTALLATION
+       The location of the server and its support files is a mat­
+       ter for individual system  administrators.  The  following
+       are thus suggestions only.
+
+       It  is  recommended  that  the  make_unicodemap program be
+       installed under the $prefix/samba hierarchy, in  a  direc­
+       tory  readable by all, writeable only by root. The program
+       itself should be executable by all. The program should NOT
+       be setuid or setgid!
+
+VERSION
+       This  man  page  is  correct  for version 2.2 of the Samba
+       suite.
+
+SEE ALSO
+       smbd(8), smb.conf(5)
+
+AUTHOR
+       The original Samba software  and  related  utilities  were
+       created  by Andrew Tridgell. Samba is now developed by the
+       Samba Team as an Open Source project similar  to  the  way
+       the Linux kernel is developed.
+
+       The  original  Samba  man pages were written by Karl Auer.
+       The  man  page  sources  were  converted  to  YODL  format
+       (another  excellent  piece of Open Source software, avail­
+       able          at           ftp://ftp.icce.rug.nl/pub/unix/
+       <URL:ftp://ftp.icce.rug.nl/pub/unix/>) and updated for the
+       Samba 2.0 release by Jeremy  Allison.  The  conversion  to
+       DocBook for Samba 2.2 was done by Gerald Carter
+
+
+
+                         06 December 2001      MAKE_UNICODEMAP(1)

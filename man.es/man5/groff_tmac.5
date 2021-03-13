@@ -1,0 +1,222 @@
+GROFF_TMAC(5)                                       GROFF_TMAC(5)
+
+
+
+NAME
+       groff_tmac - macro files in the roff typesetting system
+
+DESCRIPTION
+       The  roff(7)  type-setting  system provides a set of macro
+       packages suitable for special kinds  of  documents.   Each
+       macro  package stores its macros and definitions in a file
+       called the package's tmac file.  The name is deduced  from
+       `Troff MACros'.
+
+       The  tmac  files  are normal roff source documents, except
+       that they usually contain only definitions and setup  com­
+       mands,  but  no text.  All tmac files are kept in a single
+       or a small number of directories, the tmac directories.
+
+NAMING
+       In classical  roff  systems,  there  was  a  funny  naming
+       scheme.   If  the name of a macro package started with `m'
+       this letter was omitted, e.g., the macro package  for  the
+       man  pages  man  was  called an and its macro file tmac.an
+       (note that in recent versions of groff this file is called
+       an.tmac instead).
+
+       By  a similar reasoning, macro packages that did not start
+       with an `m' were often referred to by adding an `m', e.g.,
+       the  package  corresponding  to  tmac.doc  was called mdoc
+       because the command-line for activating it reads
+
+              troff -mdoc.
+
+       Actual versions of groff(1) provide  both  naming  schemes
+       for  the  inflicted  macro  packages, with and without the
+       leading `m'. So in groff, the man  macro  package  may  be
+       specified as
+
+              groff -m man,
+              groff -man,
+              groff -mman, or
+              groff -m an.
+
+       The  easiest  way  to  find  out  which macro packages are
+       available on a system is to check the contents of the tmac
+       directories.   For example, a file called tmac.anything or
+       anything.tmac determines a macro package named anything.
+
+       In groff, most macro packages are described in  man  pages
+       called groff_<name>(7), with a leading `m' for the classi­
+       cal packages.
+
+INCLUSION
+       There are several ways to use a  macro  package  in  docu­
+       ments.   At  run-time,  the groff option -m name makes the
+       definitions in  the  macro  file  name.tmac  available  as
+       described  in  the  section  NAMING.   If  this file isn't
+       found, tmac.name will be searched.
+
+       It is also possible to include the  macro  file  into  the
+       document  by using the groff requests .so or .mso. For .so
+       the full filename of the macro file must be  specified  --
+       including  the  directory  where it is kept.  If the macro
+       file is stored in one of the tmac directories it  is  more
+       convenient  to  use  .mso  instead because it searches the
+       tmac path for the filename.   Additionally,  if  the  file
+       name  to  be  included has the form name.tmac and it isn't
+       found, .mso will try to open tmac.name  instead  and  vice
+       versa.
+
+       Note  that  in  order to resolve the .so and .mso requests
+       the roff preprocessor soelim must be called if  the  files
+       to  be  included  needs  preprocessing.   This can be done
+       either directly by a pipeline on the command  line  or  by
+       using the -s option of groff.
+
+       You  can  also  supply  the letter `s' in the preprocessor
+       word as described in section CONVENTION.
+
+       For  example,  suppose  a  macro   file   is   stored   as
+       /usr/share/groff/1.17.2/tmac/macros.tmac  and  is  used in
+       some document called docu.roff.
+
+       At run-time, the formatter call for this is
+
+              groff -m macros docu.roff
+
+       To include the macro file directly in the document either
+              .mso macros.tmac
+       is used or
+              .so /usr/share/groff/1.17.2/tmac/macros.tmac
+
+       In both cases, the formatter is called with
+              groff -s docu.roff
+
+CONVENTION
+       There is a convention that is  supported  by  many  modern
+       roff  type-setters: the preprocessor word described in the
+       following.
+
+       If the first line in a document is a  comment,  the  first
+       word  (after  the  comment characters and a blank) consti­
+       tutes the preprocessor word.  That means that the  letters
+       of  this  word  are interpreted as abbreviations for those
+       preprocessor commands that should be run  when  formatting
+       the  document.   Mostly, only the letters corresponding to
+       the options for the  preprocessors  are  recognized,  `e',
+       `G', `g', `p', `R', `s', and `t' (see roff(7)).
+
+       Besides  being  a good reminder for the user, some format­
+       ters (like the man(1) program) are even able to  automati­
+       cally  start the preprocessors specified in the preproces­
+       sor word, but do not bet on this.
+
+WRITING A MACRO FILE
+       Writing a groff macro file  is  easy.   Design  a  set  of
+       macros,  strings,  registers, etc.  Store them in a single
+       file.  Documents that use the macros  include  this  macro
+       file  with  the  .so request as described in the INCLUSION
+       section.
+
+       To use the tmac functionality, call the macro  file  what­
+       ever.tmac  (or tmac.whatever) and put it in some directory
+       of the tmac path, cf. section FILES.  Then  documents  can
+       include it with the .mso request or the groff -m option as
+       described in the INCLUSION section.
+
+       If your macros might be of general usage contact the groff
+       maintainers  to  have  them  included in the groff contrib
+       source directory.
+
+       Some  general  guidelines  might  be  helpful  in  writing
+       macros.
+
+       · Double all functional backslashes, `\' -> `\\'.
+
+       · All printable backslashes must be written as `\e'.
+
+       · Escape all dots, `.' -> `\.'.
+
+       · Make  ample  use  of the non-printable character `\&' in
+         text parts, esp. before `\' and at the  beginning  of  a
+         line, but not before a delayed command.
+
+       · Use the character `@' in temporary variable names.
+
+       · Test  your  macros for text and graphical devices, e.g.,
+         latin1 and ps.
+
+FILES
+       All macro names must be named name.tmac  or  tmac.name  to
+       use the tmac mechanism.
+
+       The  macro  files are kept in the tmac directories, all of
+       which constitute the tmac path.
+
+       The elements of the search path for macro  files  are  (in
+       that order):
+
+       ·   the  directories  specified with troff's resp. groff's
+           -M command line option
+
+       ·   the directories given in the GROFF_TMAC_PATH  environ­
+           ment variable
+
+       ·   the  current  directory  (only if in unsafe mode using
+           the -U command line switch)
+
+       ·   the home directory
+
+       ·   a site-specific  (platform-independent)  directory,  a
+           platform-specific  directory, and the main tmac direc­
+           tory:
+
+             /usr/share/groff/site-tmac
+             /usr/lib/groff/site-tmac
+             /usr/share/groff/1.17.2/tmac
+
+ENVIRONMENT
+       GROFF_TMAC_PATH
+              A colon separated list of additional tmac  directo­
+              ries  in  which to search for macro files.  See the
+              previous section for a detailed description.
+
+BUGS
+       The groff documentation is in evolution at the moment.  It
+       is  possible  that small inconsistencies between different
+       documents exist temporarily.
+
+AUTHOR
+       This document is part of groff, the GNU roff distribution.
+       It was written by Bernd Warken <bwarken@mayn.de>.
+
+       It  is  distributed  under  the terms of the FDL (GNU Free
+       Documentation License) version 1.1 or later.   You  should
+       have received a copy of the FDL on your system, it is also
+       available on-line under
+
+              <http://www.gnu.org/copyleft/fdl.html>.
+
+SEE ALSO
+       The authoritative source of information for all details of
+       the groff system is the groff info(1) file.
+
+       For  a  groff overview, see roff(7) and the file README in
+       the groff source package.
+
+       The  groff   tmac   macro   packages   are   groff_man(7),
+       groff_mwww(7),    groff_mdoc(7),    groff_mdoc.samples(7),
+       groff_me(7),     groff_mm(7),     groff_mmroff(7),     and
+       groff_ms(7).
+
+       The  groff  language is described in groff(7) and the for­
+       matters in groff(1), troff(1).
+
+       The Filesystem Hierarchy Standard (FHS)  is  available  at
+       http://www.pathname.com/fhs/.
+
+
+
+Groff Version 1.17.2       27 June 2001             GROFF_TMAC(5)

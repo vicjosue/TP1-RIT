@@ -1,0 +1,118 @@
+CREATEUSER(1)     PostgreSQL Client Applications    CREATEUSER(1)
+
+
+
+NAME
+       createuser - define a new PostgreSQL user account
+
+SYNOPSIS
+       createuser [ options... ] [ username ]
+
+   INPUTS
+       -h, --host host
+              Specifies the host name of the machine on which the
+              server is running. If host begins with a slash,  it
+              is  used  as  the  directory  for  the  Unix domain
+              socket.
+
+       -p, --port port
+              Specifies the Internet TCP/IP port  or  local  Unix
+              domain socket file extension on which the server is
+              listening for connections.
+
+       -e, --echo
+              Echo the  queries  that  createuser  generates  and
+              sends to the server.
+
+       -q, --quiet
+              Do not display a response.
+
+       -d, --createdb
+              Allows the new user to create databases.
+
+       -D, --no-createdb
+              Forbids the new user to create databases.
+
+       -a, --adduser
+              Allows the new user to create other users.
+
+       -A, --no-adduser
+              Forbids the new user to create other users.
+
+       -P, --pwprompt
+              If  given,  createuser  will issue a prompt for the
+              password of the new user. This is not necessary  if
+              you do not plan on using password authentication.
+
+       -i, --sysid uid
+              Allows  you  to  pick a non-default user id for the
+              new user. This is not necessary,  but  some  people
+              like it.
+
+       -E, --encrypted
+              Encrypts   the   user's   password  stored  in  the
+              database. If not specified, the default is used.
+
+       -N, --unencrypted
+              Does not encrypt the user's password stored in  the
+              database. If not specified, the default is used.
+
+       username
+              Specifies  the  name  of  the PostgreSQL user to be
+              created.  This name must be unique among all  Post­
+              greSQL users.
+
+       You will be prompted for a name and other missing informa­
+       tion if it is not specified on the command line.
+
+       The options -h, -p, and -e, are  passed  on  literally  to
+       psql(1). The psql options -U and -W are available as well,
+       but their use can be confusing in this context.
+
+   OUTPUTS
+       CREATE USER
+              All is well.
+
+       createuser: creation of user "username" failed
+              Something went wrong. The user was not created.
+
+       If there is an error condition, the backend error  message
+       will  be  displayed.  See CREATE USER [create_user(7)] and
+       psql(1) for possibilities.
+
+DESCRIPTION
+       createuser creates a new PostgreSQL user.  Only users with
+       usesuper  set  in the pg_shadow table can create new Post­
+       greSQL users.
+
+       createuser is a shell script wrapper around the  SQL  com­
+       mand  CREATE  USER  [create_user(7)]  via  the  PostgreSQL
+       interactive terminal psql(1). Thus, there is nothing  spe­
+       cial  about creating users via this or other methods. This
+       means that the psql must be found by the script and that a
+       database server is running at the targeted host. Also, any
+       default settings and environment  variables  available  to
+       psql and the libpq front-end library do apply.
+
+USAGE
+       To create a user joe on the default database server:
+
+       $ createuser joe
+       Is the new user allowed to create databases? (y/n) n
+       Shall the new user be allowed to create more new users? (y/n) n
+       CREATE USER
+
+
+
+       To create the same user joe using the server on host eden,
+       port 5000, avoiding the prompts and taking a look  at  the
+       underlying query:
+
+       $ createuser -p 5000 -h eden -D -A -e joe
+       CREATE USER "joe" NOCREATEDB NOCREATEUSER
+       CREATE USER
+
+
+
+
+Application                 2000-11-11              CREATEUSER(1)

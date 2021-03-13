@@ -1,0 +1,137 @@
+GROTTY(1)                                               GROTTY(1)
+
+
+
+NAME
+       grotty - groff driver for typewriter-like devices
+
+SYNOPSIS
+       grotty [ -hfbuodBUv ] [ -Fdir ] [ files...  ]
+
+       It  is  possible  to have whitespace between the -F option
+       and its parameter.
+
+DESCRIPTION
+       grotty translates the output of  GNU  troff  into  a  form
+       suitable  for  typewriter-like  devices.   Normally grotty
+       should be invoked  by  using  the  groff  command  with  a
+       -Tascii,  -Tkoi8-r,  -Tlatin1  or  -Tutf8  option on ASCII
+       based systems, and with -Tcp1047 on  EBCDIC  based  hosts.
+       If  no  files  are  given,  grotty  will read the standard
+       input.  A filename of - will also cause grotty to read the
+       standard input.  Output is written to the standard output.
+
+       Normally grotty  prints  a  bold  character  c  using  the
+       sequence  `c  BACKSPACE c' and a italic character c by the
+       sequence `_ BACKSPACE c'.  These  sequences  can  be  dis­
+       played on a terminal by piping through ul(1).  Pagers such
+       as more(1) or less(1)  are  also  able  to  display  these
+       sequences.   Use either -B or -U when piping into less(1);
+       use -b when piping into more(1).  There is no need to fil­
+       ter  the  output through col(1) since grotty never outputs
+       reverse line feeds.
+
+       The font description file may contain a command
+
+              internalname n
+
+       where n is a decimal integer.  If the 01 bit in n is  set,
+       then the font will be treated as an italic font; if the 02
+       bit is set, then it will be treated as a bold  font.   The
+       code  field  in  the font description field gives the code
+       which will be used to output the character.  This code can
+       also be used in the \N escape sequence in troff.
+
+OPTIONS
+       -Fdir  Prepend  directory  dir/devname  to the search path
+              for font and device description files; name is  the
+              name  of the device, usually ascii, koi8-r, latin1,
+              utf8, or cp1047.
+
+       -h     Use  horizontal  tabs  in  the  output.   Tabs  are
+              assumed to be set every 8 columns.
+
+       -f     Use  form feeds in the output.  A form feed will be
+              output at the end of each page that has  no  output
+              on its last line.
+
+       -b     Suppress  the  use of overstriking for bold charac­
+              ters.
+
+       -u     Suppress the use of underlining for italic  charac­
+              ters.
+
+       -B     Use only overstriking for bold-italic characters.
+
+       -U     Use only underlining for bold-italic characters.
+
+       -o     Suppress  overstriking  (other  than  for  bold  or
+              underlined characters).
+
+       -d     Ignore all \D commands.  Without this  grotty  will
+              render  \D'l...'   commands  that  have at least at
+              least one zero argument (and so are either horizon­
+              tal or vertical) using -, | and + characters.
+
+       -v     Print the version number.
+
+FILES
+       /usr/share/groff/1.17.2/font/devascii/DESC
+              Device description file for ascii device.
+
+       /usr/share/groff/1.17.2/font/devascii/F
+              Font description file for font F of ascii device.
+
+       /usr/share/groff/1.17.2/font/devkoi8-r/DESC
+              Device description file for koi8-r device.
+
+       /usr/share/groff/1.17.2/font/devkoi8-r/F
+              Font  description file for font F of koi8-r device.
+
+       /usr/share/groff/1.17.2/font/devlatin1/DESC
+              Device description file for latin1 device.
+
+       /usr/share/groff/1.17.2/font/devlatin1/F
+              Font description file for font F of latin1  device.
+
+       /usr/share/groff/1.17.2/font/devutf8/DESC
+              Device description file for utf8 device.
+
+       /usr/share/groff/1.17.2/font/devutf8/F
+              Font description file for font F of utf8 device.
+
+       /usr/share/groff/1.17.2/font/devcp1047/DESC
+              Device description file for cp1047 device.
+
+       /usr/share/groff/1.17.2/font/devcp1047/F
+              Font  description file for font F of cp1047 device.
+
+       /usr/share/groff/1.17.2/tmac/tty.tmac
+              Macros for use with grotty.
+
+       /usr/share/groff/1.17.2/tmac/tty-char.tmac
+              Additional klugdey character  definitions  for  use
+              with grotty.
+
+       Note  that  on  EBCDIC  hosts,  only  files for the cp1047
+       device will be installed.
+
+BUGS
+       grotty is intended only for simple documents.
+
+       There is no support for fractional horizontal or  vertical
+       motions.
+
+       There  is no support for \D commands other than horizontal
+       and vertical lines.
+
+       Characters above the first line (ie with a vertical  posi­
+       tion of 0) cannot be printed.
+
+SEE ALSO
+       groff(1),     troff(1),    groff_out(5),    groff_font(5),
+       groff_char(7), ul(1), more(1), less(1)
+
+
+
+Groff Version 1.17.2       6 March 2002                 GROTTY(1)

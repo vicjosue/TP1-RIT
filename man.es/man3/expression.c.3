@@ -1,0 +1,344 @@
+build/expression.c(3)                       build/expression.c(3)
+
+
+
+NAME
+       build/expression.c - Simple logical expression parser.
+
+SYNOPSIS
+       #include 'system.h'
+       #include <rpmbuild.h>
+       #include <rpmlib.h>
+       #include 'debug.h'
+
+   Data Structures
+       struct _parseState
+           Parser state.
+       struct _value
+           Encapsulation of a 'value'.
+
+   Parser tokens
+       #define TOK_EOF   1
+       #define TOK_INTEGER   2
+       #define TOK_STRING   3
+       #define TOK_IDENTIFIER   4
+       #define TOK_ADD   5
+       #define TOK_MINUS   6
+       #define TOK_MULTIPLY   7
+       #define TOK_DIVIDE   8
+       #define TOK_OPEN_P   9
+       #define TOK_CLOSE_P   10
+       #define TOK_EQ   11
+       #define TOK_NEQ   12
+       #define TOK_LT   13
+       #define TOK_LE   14
+       #define TOK_GT   15
+       #define TOK_GE   16
+       #define TOK_NOT   17
+       #define TOK_LOGICAL_AND   18
+       #define TOK_LOGICAL_OR   19
+
+   Defines
+       #define DEBUG(x)
+       #define valueIsInteger(v)   ((v)->type ==
+           VALUE_TYPE_INTEGER)
+       #define valueIsString(v)   ((v)->type ==
+           VALUE_TYPE_STRING)
+       #define valueSameType(v1, v2)   ((v1)->type == (v2)->type)
+       #define EXPRBUFSIZ   BUFSIZ
+
+   Typedefs
+       typedef _value * Value
+           Encapsulation of a 'value'.
+       typedef _parseState * ParseState
+           Parser state.
+
+   Functions
+       Value valueMakeInteger (int i)
+       Value valueMakeString (const char *s)
+       void valueFree (Value v)
+       int rdToken (ParseState state)
+       Value doLogical (ParseState state)
+       Value doPrimary (ParseState state)
+       Value doMultiplyDivide (ParseState state)
+       Value doAddSubtract (ParseState state)
+       Value doRelational (ParseState state)
+       int parseExpressionBoolean (Spec spec, const char *expr)
+       char * parseExpressionString (Spec spec, const char *expr)
+
+DETAILED DESCRIPTION
+       Simple logical expression parser.
+
+        This module implements a basic expression parser with
+       support for integer and string datatypes. For ease of
+       programming, we use the top-down 'recursive descent'
+       method of parsing. While a table-driven bottom-up parser
+       might be faster, it does not really matter for the
+       expressions we will be parsing.
+
+       Copyright (C) 1998 Tom Dyas <tdyas@eden.rutgers.edu> This
+       work is provided under the GPL or LGPL at your choice.
+
+
+       Definition in file expression.c.
+
+DEFINE DOCUMENTATION
+   #define DEBUG(x)
+       Definition at line 27 of file expression.c.
+
+       Referenced by compareFileList, doAddSubtract, doLogical,
+       doMultiplyDivide, doPrimary, doRelational,
+       findPackagesWithRelocatedFiles, findUpgradePackages,
+       parseExpressionBoolean, parseExpressionString, rdToken,
+       removeMovedFilesAlreadyHandled, and
+       unmarkPackagesAlreadyInstalled.
+
+   #define EXPRBUFSIZ   BUFSIZ
+       Definition at line 133 of file expression.c.
+
+       Referenced by rdToken.
+
+   #define TOK_ADD   5
+       Definition at line 116 of file expression.c.
+
+       Referenced by doAddSubtract, and rdToken.
+
+   #define TOK_CLOSE_P   10
+       Definition at line 121 of file expression.c.
+
+       Referenced by doPrimary, and rdToken.
+
+   #define TOK_DIVIDE   8
+       Definition at line 119 of file expression.c.
+
+       Referenced by doMultiplyDivide, and rdToken.
+
+   #define TOK_EOF   1
+       Definition at line 112 of file expression.c.
+
+       Referenced by parseExpressionBoolean,
+       parseExpressionString, and rdToken.
+
+   #define TOK_EQ   11
+       Definition at line 122 of file expression.c.
+
+       Referenced by doRelational, and rdToken.
+
+   #define TOK_GE   16
+       Definition at line 127 of file expression.c.
+
+       Referenced by doRelational, and rdToken.
+
+   #define TOK_GT   15
+       Definition at line 126 of file expression.c.
+
+       Referenced by doRelational, and rdToken.
+
+   #define TOK_IDENTIFIER   4
+       Definition at line 115 of file expression.c.
+
+       Referenced by doPrimary, and rdToken.
+
+   #define TOK_INTEGER   2
+       Definition at line 113 of file expression.c.
+
+       Referenced by doPrimary, and rdToken.
+
+   #define TOK_LE   14
+       Definition at line 125 of file expression.c.
+
+       Referenced by doRelational, and rdToken.
+
+   #define TOK_LOGICAL_AND   18
+       Definition at line 129 of file expression.c.
+
+       Referenced by doLogical, and rdToken.
+
+   #define TOK_LOGICAL_OR   19
+       Definition at line 130 of file expression.c.
+
+       Referenced by doLogical, and rdToken.
+
+   #define TOK_LT   13
+       Definition at line 124 of file expression.c.
+
+       Referenced by doRelational, and rdToken.
+
+   #define TOK_MINUS   6
+       Definition at line 117 of file expression.c.
+
+       Referenced by doAddSubtract, doPrimary, and rdToken.
+
+   #define TOK_MULTIPLY   7
+       Definition at line 118 of file expression.c.
+
+       Referenced by doMultiplyDivide, and rdToken.
+
+   #define TOK_NEQ   12
+       Definition at line 123 of file expression.c.
+
+       Referenced by doRelational, and rdToken.
+
+   #define TOK_NOT   17
+       Definition at line 128 of file expression.c.
+
+       Referenced by doPrimary, and rdToken.
+
+   #define TOK_OPEN_P   9
+       Definition at line 120 of file expression.c.
+
+       Referenced by doPrimary, and rdToken.
+
+   #define TOK_STRING   3
+       Definition at line 114 of file expression.c.
+
+       Referenced by doPrimary, and rdToken.
+
+   #define valueIsInteger(v)   ((v)->type == VALUE_TYPE_INTEGER)
+       Definition at line 91 of file expression.c.
+
+       Referenced by doAddSubtract, doLogical, doMultiplyDivide,
+       doPrimary, and doRelational.
+
+   #define valueIsString(v)   ((v)->type == VALUE_TYPE_STRING)
+       Definition at line 92 of file expression.c.
+
+   #define valueSameType(v1, v2)   ((v1)->type == (v2)->type)
+       Definition at line 93 of file expression.c.
+
+       Referenced by doAddSubtract, doLogical, doMultiplyDivide,
+       and doRelational.
+
+TYPEDEF DOCUMENTATION
+   typedef struct _parseState * ParseState
+       Parser state.
+
+
+   typedef struct _value * Value
+       Encapsulation of a 'value'.
+
+
+FUNCTION DOCUMENTATION
+   Value doAddSubtract (ParseState state) [static]
+       Parameters:
+
+       state  expression parser state
+
+       Definition at line 443 of file expression.c.
+
+       References _, _value::data, DEBUG, doMultiplyDivide,
+       _parseState::nextToken, rdToken, stpcpy, TOK_ADD,
+       TOK_MINUS, valueFree, valueIsInteger, valueMakeInteger,
+       valueMakeString, valueSameType, and xmalloc.
+
+       Referenced by doRelational.
+
+   Value doLogical (ParseState state) [static]
+       Parameters:
+
+       state  expression parser state
+
+       Definition at line 592 of file expression.c.
+
+       References _, _value::data, DEBUG, doRelational,
+       _parseState::nextToken, rdToken, TOK_LOGICAL_AND,
+       TOK_LOGICAL_OR, valueFree, valueIsInteger,
+       valueMakeInteger, and valueSameType.
+
+       Referenced by doPrimary, parseExpressionBoolean, and
+       parseExpressionString.
+
+   Value doMultiplyDivide (ParseState state) [static]
+       Parameters:
+
+       state  expression parser state
+
+       Definition at line 394 of file expression.c.
+
+       References _, _value::data, DEBUG, doPrimary,
+       _parseState::nextToken, rdToken, TOK_DIVIDE, TOK_MULTIPLY,
+       valueFree, valueIsInteger, valueMakeInteger, and
+       valueSameType.
+
+       Referenced by doAddSubtract.
+
+   Value doPrimary (ParseState state) [static]
+       Parameters:
+
+       state  expression parser state
+
+       Definition at line 318 of file expression.c.
+
+       References _, _value::data, DEBUG, doLogical,
+       _parseState::nextToken, rdToken, rpmExpand, TOK_CLOSE_P,
+       TOK_IDENTIFIER, TOK_INTEGER, TOK_MINUS, TOK_NOT,
+       TOK_OPEN_P, TOK_STRING, _parseState::tokenValue,
+       valueIsInteger, valueMakeInteger, and valueMakeString.
+
+       Referenced by doMultiplyDivide.
+
+   Value doRelational (ParseState state) [static]
+       Parameters:
+
+       state  expression parser state
+
+       Definition at line 501 of file expression.c.
+
+       References _, _value::data, DEBUG, doAddSubtract,
+       _parseState::nextToken, rdToken, TOK_EQ, TOK_GE, TOK_GT,
+       TOK_LE, TOK_LT, TOK_NEQ, valueFree, valueIsInteger,
+       valueMakeInteger, and valueSameType.
+
+       Referenced by doLogical.
+
+   int rdToken (ParseState state) [static]
+       Parameters:
+
+       state  expression parser state
+
+       Definition at line 179 of file expression.c.
+
+       References _, DEBUG, EXPRBUFSIZ, _parseState::nextToken,
+       _parseState::p, rpmExpand, TOK_ADD, TOK_CLOSE_P,
+       TOK_DIVIDE, TOK_EOF, TOK_EQ, TOK_GE, TOK_GT,
+       TOK_IDENTIFIER, TOK_INTEGER, TOK_LE, TOK_LOGICAL_AND,
+       TOK_LOGICAL_OR, TOK_LT, TOK_MINUS, TOK_MULTIPLY, TOK_NEQ,
+       TOK_NOT, TOK_OPEN_P, TOK_STRING, _parseState::tokenValue,
+       valueMakeInteger, valueMakeString, xisalnum, xisalpha,
+       xisdigit, xisspace, and xstrdup.
+
+       Referenced by doAddSubtract, doLogical, doMultiplyDivide,
+       doPrimary, doRelational, parseExpressionBoolean, and
+       parseExpressionString.
+
+   void valueFree (Value v) [static]
+       Definition at line 67 of file expression.c.
+
+       References _free, _value::data, and _value::type.
+
+       Referenced by doAddSubtract, doLogical, doMultiplyDivide,
+       doRelational, parseExpressionBoolean, and
+       parseExpressionString.
+
+   Value valueMakeInteger (int i) [static]
+       Definition at line 43 of file expression.c.
+
+       References _value::data, _value::type, and xmalloc.
+
+       Referenced by doAddSubtract, doLogical, doMultiplyDivide,
+       doPrimary, doRelational, and rdToken.
+
+   Value valueMakeString (const char * s) [static]
+       Definition at line 55 of file expression.c.
+
+       References _value::data, _value::type, and xmalloc.
+
+       Referenced by doAddSubtract, doPrimary, and rdToken.
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002      build/expression.c(3)

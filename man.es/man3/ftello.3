@@ -1,0 +1,39 @@
+FSEEKO(3)           Linux Programmer's Manual           FSEEKO(3)
+
+
+
+NAME
+       fseeko, ftello - seek to or report file position
+
+SYNOPSIS
+       #include <stdio.h>
+
+       int fseeko(FILE *stream, off_t offset, int whence);
+
+       off_t ftello(FILE *stream);
+
+DESCRIPTION
+       The  fseeko()  and  ftello()  functions  are  identical to
+       fseek() and ftell() (see fseek(3)),  respectively,  except
+       that  the offset argument of fseeko() and the return value
+       of ftello() is of type off_t instead of long.
+
+       On many architectures  both  off_t  and  long  are  32-bit
+       types, but compilation with
+              #define _FILE_OFFSET_BITS 64
+       will turn off_t into a 64-bit type.
+
+NOTES
+       These  functions are found on SysV-like systems.  They are
+       not present in libc4, libc5, glibc 2.0 but available since
+       glibc 2.1.
+
+CONFORMING TO
+       The fseeko and ftello functions conform to SUSv2.
+
+SEE ALSO
+       fseek(3)
+
+
+
+                            2001-11-05                  FSEEKO(3)

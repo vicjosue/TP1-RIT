@@ -1,0 +1,56 @@
+lib/depends.h(3)                                 lib/depends.h(3)
+
+
+
+NAME
+       lib/depends.h - Structures used for dependency checking.
+
+SYNOPSIS
+       #include <header.h>
+
+   Data Structures
+       struct problemsSet_s
+       struct rpmTransactionSet_s
+       struct availableIndex
+       struct availableIndexEntry
+       struct availableList_s
+       struct availablePackage
+       struct dirInfo_s
+       struct fileIndexEntry
+       struct transactionElement
+       struct tsortInfo
+
+   Defines
+       #define tsi_count   tsi_u.count
+       #define tsi_suc   tsi_u.suc
+
+   Typedefs
+       typedef dirInfo_s * dirInfo
+       typedef availableList_s * availableList
+       typedef problemsSet_s * problemsSet
+
+   Functions
+       int headerMatchesDepFlags (Header h, const char *reqName,
+           const char *reqEVR, int reqFlags)
+
+DETAILED DESCRIPTION
+       Structures used for dependency checking.
+
+
+
+       Definition in file depends.h.
+
+DEFINE DOCUMENTATION
+   #define tsi_count   tsi_u.count
+       Definition at line 19 of file depends.h.
+
+   #define tsi_suc   tsi_u.suc
+       Definition at line 20 of file depends.h.
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002           lib/depends.h(3)

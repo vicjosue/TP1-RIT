@@ -1,0 +1,120 @@
+dbiHStats_s(3)                                     dbiHStats_s(3)
+
+
+
+NAME
+       dbiHStats_s -
+
+SYNOPSIS
+   Data Fields
+       unsigned int hash_magic
+       unsigned int hash_version
+       unsigned int hash_nkeys
+       unsigned int hash_ndata
+       unsigned int hash_pagesize
+       unsigned int hash_nelem
+       unsigned int hash_ffactor
+       unsigned int hash_buckets
+       unsigned int hash_free
+       unsigned int hash_bfree
+       unsigned int hash_bigpages
+       unsigned int hash_big_bfree
+       unsigned int hash_overflows
+       unsigned int hash_ovfl_free
+       unsigned int hash_dup
+       unsigned int hash_dup_free
+
+DETAILED DESCRIPTION
+       Hash database statistics.
+
+       Definition at line 31 of file db3.c.
+
+FIELD DOCUMENTATION
+   unsigned int dbiHStats_s::hash_bfree
+       no. of bytes free on bucket pages.
+
+       Definition at line 41 of file db3.c.
+
+   unsigned int dbiHStats_s::hash_big_bfree
+       no. of bytes free on big item pages.
+
+       Definition at line 43 of file db3.c.
+
+   unsigned int dbiHStats_s::hash_bigpages
+       no. of big key/data pages.
+
+       Definition at line 42 of file db3.c.
+
+   unsigned int dbiHStats_s::hash_buckets
+       no. of hash buckets.
+
+       Definition at line 39 of file db3.c.
+
+   unsigned int dbiHStats_s::hash_dup
+       no. of duplicate pages.
+
+       Definition at line 46 of file db3.c.
+
+   unsigned int dbiHStats_s::hash_dup_free
+       no. bytes free on duplicate pages.
+
+       Definition at line 47 of file db3.c.
+
+   unsigned int dbiHStats_s::hash_ffactor
+       no. of items per bucket.
+
+       Definition at line 38 of file db3.c.
+
+   unsigned int dbiHStats_s::hash_free
+       no. of pages on the free list.
+
+       Definition at line 40 of file db3.c.
+
+   unsigned int dbiHStats_s::hash_magic
+       hash database magic number.
+
+       Definition at line 32 of file db3.c.
+
+   unsigned int dbiHStats_s::hash_ndata
+       no. of key/data pairs in the database.
+
+       Definition at line 35 of file db3.c.
+
+   unsigned int dbiHStats_s::hash_nelem
+       estimated size of the hash table.
+
+       Definition at line 37 of file db3.c.
+
+   unsigned int dbiHStats_s::hash_nkeys
+       no. of unique keys in the database.
+
+       Definition at line 34 of file db3.c.
+
+   unsigned int dbiHStats_s::hash_overflows
+       no. of overflow pages.
+
+       Definition at line 44 of file db3.c.
+
+   unsigned int dbiHStats_s::hash_ovfl_free
+       no. of bytes free on overflow pages.
+
+       Definition at line 45 of file db3.c.
+
+   unsigned int dbiHStats_s::hash_pagesize
+       db page (and bucket) size, in bytes.
+
+       Definition at line 36 of file db3.c.
+
+   unsigned int dbiHStats_s::hash_version
+       version of the hash database.
+
+       Definition at line 33 of file db3.c.
+
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002             dbiHStats_s(3)

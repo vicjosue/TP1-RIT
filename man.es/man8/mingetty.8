@@ -1,0 +1,76 @@
+MINGETTY(8)         Linux Programmer's Manual         MINGETTY(8)
+
+
+
+NAME
+       mingetty - minimal getty for consoles
+
+SYNOPSIS
+       mingetty [--noclear] [--long-hostname] tty
+
+
+DESCRIPTION
+       mingetty  is  a minimal getty for use on virtual consoles.
+       Unlike agetty(8), mingetty  is  not  suitable  for  serial
+       lines.  I recommend using mgetty(8) for this purpose.
+
+
+OPTIONS
+       --noclear
+              Do  not  clear  the screen before prompting for the
+              login name (the screen is normally cleared).
+
+       --long-hostname
+              By default the hostname is only printed  until  the
+              first dot.  With this option enabled, the full text
+              from gethostname() is shown.
+
+
+ISSUE ESCAPES
+       mingetty recognizes the following escapes sequences  which
+       might be embedded in the /etc/issue file:
+
+       \d     insert current day (localtime),
+
+       \l     insert line on which mingetty is running,
+
+       \m     inserts machine architecture (uname -m),
+
+       \n     inserts machine's network node hostname (uname -n),
+
+       \o     inserts domain name,
+
+       \r     inserts operating system release (uname -r),
+
+       \t     insert current time (localtime),
+
+       \s     inserts operating system name,
+
+       \u     resp. \U the current number of users which are cur­
+              rently  logged  in.  \U inserts "n users", where as
+              \u only inserts "n".
+
+       \v     inserts operating system version (uname -v).
+
+
+EXAMPLE
+       "Linux eos i386 #1 Tue Mar 19 21:54:09 MET 1996" was  pro­
+       duced by putting "\s \n \m \v" into /etc/issue.
+
+
+FILES
+       /etc/issue, /var/run/utmp.
+
+
+SEE ALSO
+       mgetty(8), agetty(8).
+
+
+AUTHOR
+       Copyright  ©  1996  Florian  La Roche <florian@suse.de> or
+       <florian@jurix.jura.uni-sb.de>.  Man-page written by David
+       Frey <David.Frey@eos.lugs.ch> and Florian La Roche.
+
+
+
+Debian-Local                6 Apr 1996                MINGETTY(8)

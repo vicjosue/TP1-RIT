@@ -1,0 +1,170 @@
+fam(1M)                                                   fam(1M)
+
+
+
+NAME
+       fam - file alteration monitor
+
+SYNOPSIS
+       /usr/etc/fam [ -f | -v | -d ] [ -l | -t NFS_polling_interval ]
+            [ -T idle_timeout ] [ -p program.version ] [ -L ] [ -C ]
+            [ -c config_file ]
+
+DESCRIPTION
+       fam  is a server that tracks changes to the filesystem and
+       relays these changes to interested applications.  Applica­
+       tions  such as fm(1G) and mailbox(1) present an up-to-date
+       view of the filesystem.  In  the  absence  of  fam,  these
+       applications  and  others like them are forced to poll the
+       filesystem to detect changes.  fam is more efficient.
+
+       Applications can request  fam  to  monitor  any  files  or
+       directories  in  any filesystem.  When fam detects changes
+       to monitored files, it notifies the  appropriate  applica­
+       tion.   The  FAM  API provides a programmatic interface to
+       fam; see fam(3X).
+
+       fam is informed of filesystem changes as  they  happen  by
+       the  kernel through the imon(7M) pseudo device driver.  If
+       asked to monitor files on an NFS mounted  filesystem,  fam
+       tries  to  use fam on the NFS server to monitor files.  If
+       fam cannot contact  a  remote  fam,  it  polls  the  files
+       instead.  fam also polls special files.
+
+       Normally,  fam  is started by inetd(1M).  It is registered
+       with portmap(1M) as performing the sgi_fam service.
+
+OPTIONS
+       -l                        Disable polling  of  NFS  files.
+                                 It   does  not  disable  use  of
+                                 remote fam on NFS  servers,  nor
+                                 does it disable polling of local
+                                 files.
+
+       -t NFS_polling_interval   Set  the  interval  for  polling
+                                 files   to  NFS_polling_interval
+                                 seconds.   The  default  is  six
+                                 seconds.
+
+       -T idle_timeout           Set the idle timeout interval to
+                                 idle_timeout.      fam     exits
+                                 idle_timeout  seconds  after its
+                                 last  client   disconnects.    A
+                                 value  of  0  causes fam to wait
+                                 indefinitely  for  new   connec­
+                                 tions.  The default is five sec­
+                                 onds.
+
+       -f                        Remain in the foreground instead
+                                 of spawning a child and exiting.
+                                 This option is ignored if fam is
+                                 started by inetd.
+
+       -v                        Turn on verbose messages.
+
+       -d                        Enable   verbose   messages  and
+                                 debug messages.
+
+       -p program.version        Use the  specified  RPC  program
+                                 and version numbers.
+
+       -L                        Local-only  mode.  fam will only
+                                 accept  requests  from   clients
+                                 running  on  the  local machine.
+                                 This  overrides  the  local_only
+                                 flag  in the configuration file.
+                                 This option is ignored if fam is
+                                 started by inetd.
+
+       -C                        Compatibility  mode.   This dis­
+                                 ables authentication and reduces
+                                 access   security  as  described
+                                 under  SECURITY   below.    This
+                                 overrides  the insecure_compati­
+                                 bility flag in the configuration
+                                 file.
+
+       -c config_file            Read  configuration  information
+                                 from the given file rather  than
+                                 the     default,     which    is
+                                 /etc/fam.conf.
+
+CONFIGURATION FILE
+       In addition to its command-line  options,  fam's  behavior
+       can also be controlled through its configuration file.  By
+       default, this is /etc/fam.conf; the -c command-line option
+       can  be  used to specify an alternate file.  Configuration
+       lines are in the  format  option=value.   Lines  beginning
+       with  #  or  !  are ignored.  fam recognizes the following
+       options:
+
+       insecure_compatibility    If set to  true,  this  disables
+                                 authentication    and    reduces
+                                 access  security  as   described
+                                 under  SECURITY  below.  This is
+                                 false by default.  Setting  this
+                                 option  to  true  is the same as
+                                 using   the   -C    command-line
+                                 option.
+
+       untrusted_user            This  is the user name or UID of
+                                 the user account which fam  will
+                                 use for unauthenticated clients.
+                                 If a file can't  be  stat'ed  by
+                                 this  user,  fam  will  not tell
+                                 unauthenticated  clients   about
+                                 the  file's  existence.   If  an
+                                 untrusted user is not  given  in
+                                 the configuration file, fam will
+                                 write an error  message  to  the
+                                 system log and terminate.
+
+       local_only                If  set to true, fam will ignore
+                                 requests from remote fams.  This
+                                 is  false  by  default.  Setting
+                                 this option to true is the  same
+                                 as  using  the  -L  command-line
+                                 option.  This option is  ignored
+                                 if fam is started by inetd.
+
+       xtab_verification         If  set  to true, fam will check
+                                 the list of exported filesystems
+                                 when    remote    requests   are
+                                 received  to  verify  that   the
+                                 requests   fall  on  filesystems
+                                 which  are   exported   to   the
+                                 requesting  hosts.  This is true
+                                 by default.  If this  option  is
+                                 set  to  false, fam will service
+                                 remote requests without attempt­
+                                 ing to perform the verification.
+                                 If the local_only  configuration
+                                 option or -L command-line option
+                                 is used,  xtab_verification  has
+                                 no effect.
+
+SECURITY
+       For backward compatibility, the -C command-line option and
+       insecure_compatibility configuration option can be used to
+       disable  authentication.  Configuring fam this way opens a
+       publically  known  security  weakness  whereby  a   "rogue
+       client" can obtain the names of all the files and directo­
+       ries on the system.
+
+       Note that fam never opens the files it's  monitoring,  and
+       cannot  be  used by a rogue client to read the contents of
+       any file on the system.  fam only gives out the  names  of
+       monitored  files, and only monitors files which the client
+       can stat(1M).  Users can stat a file without  having  read
+       permission on it as long as they have search permission on
+       the directory containing it.
+
+FILES
+       /etc/fam.conf
+
+SEE ALSO
+       inetd(1M), portmap(1M), fam(3X), imon(7M), stat(1M).
+
+
+
+                         Silicon Graphics                      0a

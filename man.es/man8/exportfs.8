@@ -1,0 +1,155 @@
+exportfs(8)                                           exportfs(8)
+
+
+
+NAME
+       exportfs - maintain list of NFS exported file systems
+
+SYNOPSIS
+       /usr/sbin/exportfs  [-avi]  [-o  options,..] [client:/path
+       ..]
+       /usr/sbin/exportfs -r [-v]
+       /usr/sbin/exportfs [-av] -u [client:/path ..]
+       /usr/sbin/exportfs [-v]
+
+DESCRIPTION
+       The exportfs command is used to maintain the current table
+       of  exported  file systems for NFS. This list is kept in a
+       separate file named /var/lib/nfs/xtab  which  is  read  by
+       mountd  when a remote host requests access to mount a file
+       tree, and parts of the list which are active are  kept  in
+       the kernel's export table.
+
+       Normally  this  xtab  file is initialized with the list of
+       all  file  systems  named  in  /etc/exports  by   invoking
+       exportfs -a.
+
+       However, administrators can choose to add and delete indi­
+       vidual file systems without modifying  /etc/exports  using
+       exportfs.
+
+       Any export requests which identify a specific host (rather
+       than a subnet or netgroup etc) are entered  directly  into
+       the  kernel's  export  table  as  well as being written to
+       /var/lib/nfs/xtab.  Further, any mount  points  listed  in
+       /var/lib/nfs/rmtab  which match a non host-specific export
+       request will cause an appropriate  export  entry  for  the
+       host given in rmtab to be entered into the kernel's export
+       table.
+
+OPTIONS
+       -a     Export or unexport all directories.
+
+       -o options,...
+              Specify a list of export options in the same manner
+              as in exports(5).
+
+       -i     Ignore  the /etc/exports file, so that only default
+              options and options given on the command  line  are
+              used.
+
+       -r     Reexport    all    directories.   It   synchronizes
+              /var/lib/nfs/xtab  with  /etc/exports.  It  removes
+              entries in /var/lib/nfs/xtab which are deleted from
+              /etc/exports, and remove any entries from the  ker­
+              nel export table which are no longer valid.
+
+
+       -u     Unexport one or more directories.
+
+       -v     Be  verbose.  When exporting or unexporting,
+              show what's going on.  When  displaying  the
+              current  export  list, also display the list
+              of export options.
+
+DISCUSSION
+   Exporting Directories
+       The first synopsis shows how to invoke the  command
+       when  adding new entries to the export table.  When
+       using exportfs -a, all  directories  in  exports(5)
+       are  added to xtab and the resulting list is pushed
+       into the kernel.
+
+       The host:/path argument specifies the directory  to
+       export  along  with  the host or hosts to export it
+       to. All formats described in  exports(5)  are  sup­
+       ported;  to export a directory to the world, simply
+       specify :/path.
+
+       The export options for a particular  host/directory
+       pair  derive  from several sources.  There is a set
+       of default  options  which  can  be  overridden  by
+       entries  in  /etc/exports  (unless the -i option is
+       given).  In addition, the administrator may overide
+       any  options  from these sources using the -o argu­
+       ment which takes a comma-separated list of  options
+       in  the  same  fashion as one would specify them in
+       exports(5).  Thus, exportfs can  also  be  used  to
+       modify  the  export  options of an already exported
+       directory.
+
+       Modifications of the kernel export  table  used  by
+       nfsd(8)  take  place  immediately after parsing the
+       command line and updating the xtab file.
+
+       The      default      export      options       are
+       async,ro,root_squash,no_delay.
+
+   Unexporting Directories
+       The  third  synopsis shows how to unexported a cur­
+       rently exported  directory.   When  using  exportfs
+       -ua,  all  entries  listed in xtab are removed from
+       the kernel export tables, and the file is  cleared.
+       This effectively shuts down all NFS activity.
+
+       To  remove individial export entries, one can spec­
+       ify a host:/path pair. This deletes  the  specified
+       entry  from xtab and removes the corresponding ker­
+       nel entry (if any).
+
+
+   Dumping the Export Table
+       Invoking exportfs without further options shows the
+       current list of exported file systems.  When giving
+       the -v option, the list of flags pertaining to each
+       export are shown in addition.
+
+EXAMPLES
+       The   following  adds  all  directories  listed  in
+       /etc/exports to /var/lib/nfs/xtab  and  pushes  the
+       resulting export entries into the kernel:
+
+       # exportfs -a
+
+       To  export  the  /usr/tmp directory to host djando,
+       allowing asynchronous writes, one would do this:
+
+       # exportfs -o async django:/usr/tmp
+
+DEPENDENCIES
+       Exporting to IP networks, DNS and NIS domains  does
+       not  enable clients from these groups to access NFS
+       immediately; rather, these  sorts  of  exports  are
+       hints to mountd(8) to grant any mount requests from
+       these clients.  This is usually not a big  problem,
+       because  any existing mounts are preserved in rmtab
+       across reboots.
+
+       When unexporting a network  or  domain  entry,  any
+       current  exports  to  members of this group will be
+       checked against the remaining valid exports and  if
+       they  themselves  are  nolonger  valid they will be
+       removed.
+
+
+SEE ALSO
+       exports(5), mountd(8)
+
+AUTHORS
+       Olaf Kirch, <okir@monad.swb.de>
+       Neil Brown, <neilb@cse.unsw.edu.au>
+
+
+
+
+                            7 Sep 1999                exportfs(8)

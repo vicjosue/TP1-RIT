@@ -1,0 +1,75 @@
+pcibios_find_class(9)    BIOS32 Functions   pcibios_find_class(9)
+
+
+
+NAME
+       pcibios_find_class, pcibios_find_device - find a PCI class
+       or device
+
+SYNOPSIS
+       #include <linux/bios32.h>
+
+
+       int pcibios_find_class(unsigned int class_code, unsigned
+       short index, unsigned char* bus, unsigned char*
+       device_fn);
+
+       int pcibios_find_device(unsigned short  vendor,
+       unsigned short device_id ",unsigned short "index,
+       unsigned char* bus, unsigned char* device_fn);
+
+DESCRIPTION
+       The pcibios_find_class function  searches  for  a  certain
+       class  of  device on the PCI bus.  In this instance, class
+       is  used  to  represent  a  few  different  categories  of
+       devices.  Some examples are storage, network, display, and
+       memory classes. The classes are defined by the PCI  Speci­
+       fication,  and the class_code is matched with the dword in
+       the configuration space of the device at offset 0x08.
+
+       The pcibios_find_device function finds a device on the PCI
+       bus  that has the matching device and vendor ids. The ven­
+       dor ids are assigned to the PCI Sig  to  vendors,  who  in
+       turn  assign  device  ids to the devices they develop. The
+       vendor and device ids are encoded in  dword  0x00  of  the
+       configuration space.
+
+       Both pcibios_find_class and pcibios_find_device include an
+       extra index parameter, which is used to  select  the  spe­
+       cific  device if there are multiple matches. An index of 0
+       matches the firts located board, 1 the second, and so  on.
+
+       The  bus and device_fn parameters are PCI specific cookies
+       that are passed to other pcibios functions to  access  the
+       configuration space of the located device.
+
+RETURN VALUE
+       On success, the functions return PCIBIOS_SUCCESSFUL.  Oth­
+       erwise, one of the following error codes is returned:
+
+              PCIBIOS_DEVICE_NOT_FOUND
+                     There is no device that matches  the  search
+                     criteria,
+
+              PCIBIOS_BAD_VENDOR_ID
+                     The  vendor  id is invalid. (0xffff is not a
+                     valid id.)
+
+              PCIBIOS_FUNC_NOT_SUPPRTED
+                     The PCI subsystem is not available
+
+AVAILABILITY
+       Linux 1.0+
+
+SEE ALSO
+       pcibios_present(9)
+
+       /usr/include/linux/pci.h, /usr/include/linux/bios32.h
+
+       PCI Local Bus Specification
+
+AUTHOR
+       Kirk Petersen (kirk@speakeasy.org)
+
+BUGS
+Linux DDI                 August 5, 1997    pcibios_find_class(9)

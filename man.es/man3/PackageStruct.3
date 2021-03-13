@@ -1,0 +1,139 @@
+PackageStruct(3)                                 PackageStruct(3)
+
+
+
+NAME
+       PackageStruct -
+
+SYNOPSIS
+       #include <rpmspec.h>
+
+
+   Data Fields
+       Header header
+       void * cpioList
+       Source * icon
+       int autoReq
+       int autoProv
+       const char * preInFile
+       const char * postInFile
+       const char * preUnFile
+       const char * postUnFile
+       const char * verifyFile
+       StringBuf specialDoc
+       TriggerFileEntry * triggerFiles
+       const char * fileFile
+       StringBuf fileList
+       PackageStruct * next
+
+DETAILED DESCRIPTION
+       The structure used to store values for a package.
+
+       Definition at line 145 of file rpmspec.h.
+
+FIELD DOCUMENTATION
+   int PackageStruct::autoProv
+       Definition at line 153 of file rpmspec.h.
+
+       Referenced by newPackage.
+
+   int PackageStruct::autoReq
+       Definition at line 152 of file rpmspec.h.
+
+       Referenced by newPackage.
+
+   void* PackageStruct::cpioList
+       Definition at line 148 of file rpmspec.h.
+
+       Referenced by freePackage, newPackage, packageBinaries,
+       and processBinaryFiles.
+
+   const char* PackageStruct::fileFile
+       Definition at line 165 of file rpmspec.h.
+
+       Referenced by freePackage, newPackage, and parseFiles.
+
+   StringBuf PackageStruct::fileList
+       Definition at line 166 of file rpmspec.h.
+
+       Referenced by freePackage, newPackage, packageBinaries,
+       parseFiles, and processBinaryFiles.
+
+   Header PackageStruct::header
+       Definition at line 146 of file rpmspec.h.
+
+       Referenced by freePackage, initSourceHeader,
+       lookupPackage, newPackage, packageBinaries,
+       parseChangelog, parseDescription, parsePreamble,
+       parseRCPOT, parseScript, parseSpec, printNewSpecfile,
+       processBinaryFiles, readRPM, rewriteRPM, and
+       rpmQueryVerify.
+
+   struct Source* PackageStruct::icon
+       Definition at line 150 of file rpmspec.h.
+
+       Referenced by addSource, freePackage, newPackage, and
+       processSourceFiles.
+
+   struct PackageStruct* PackageStruct::next
+       Definition at line 168 of file rpmspec.h.
+
+       Referenced by freePackages, lookupPackage, newPackage,
+       packageBinaries, parseSpec, printNewSpecfile,
+       processBinaryFiles, processSourceFiles, and
+       rpmQueryVerify.
+
+   const char* PackageStruct::postInFile
+       post scriptlet.
+
+       Definition at line 156 of file rpmspec.h.
+
+       Referenced by freePackage, newPackage, and parseScript.
+
+   const char* PackageStruct::postUnFile
+       postun scriptlet.
+
+       Definition at line 158 of file rpmspec.h.
+
+       Referenced by freePackage, newPackage, and parseScript.
+
+   const char* PackageStruct::preInFile
+       pre scriptlet.
+
+       Definition at line 155 of file rpmspec.h.
+
+       Referenced by freePackage, newPackage, and parseScript.
+
+   const char* PackageStruct::preUnFile
+       preun scriptlet.
+
+       Definition at line 157 of file rpmspec.h.
+
+       Referenced by freePackage, newPackage, and parseScript.
+
+   StringBuf PackageStruct::specialDoc
+       Definition at line 161 of file rpmspec.h.
+
+       Referenced by freePackage, and newPackage.
+
+   struct TriggerFileEntry* PackageStruct::triggerFiles
+       Definition at line 163 of file rpmspec.h.
+
+       Referenced by addTriggerIndex, freePackage, and
+       newPackage.
+
+   const char* PackageStruct::verifyFile
+       verifyscript scriptlet.
+
+       Definition at line 159 of file rpmspec.h.
+
+       Referenced by freePackage, newPackage, and parseScript.
+
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002           PackageStruct(3)

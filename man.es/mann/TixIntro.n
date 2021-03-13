@@ -1,0 +1,270 @@
+TixIntro(n)           Tix Built-In Commands           TixIntro(n)
+
+
+
+_________________________________________________________________
+
+NAME
+       TixIntro - Introduction to the Tix library
+_________________________________________________________________
+
+DESCRIPTION
+       Tix, which stands for Tk Interface Extension, is an exten­
+       sion library for Tcl/Tk. Tix adds many new widgets,  image
+       types  and  other  commands that allows you to create com­
+       pelling Tcl/Tk-based GUI applications.
+
+       One advantage of Tix over other  Tk  widget  libraries  is
+       many of the Tix standard widgets are implemented in native
+       code. This enhances performance and provides native  look-
+       and-feel for your applications.
+
+       This  version  of  Tix  works  with  Tcl/Tk version 8.0 or
+       above.  If Tix has been installed properly on your system,
+       you  can  load  the package into any Tk script by invoking
+       the command
+              package require Tix
+       After this command  has  successfully  returned,  you  can
+       start  using  the  functionalities of the Tix library. See
+       the EXAMPLES section below for example  scripts  that  use
+       Tix.
+
+       If  the  "package require Tix" command fails, you probably
+       need to install a new copy of Tix on your system. You  can
+       download  the  latest  version  of  Tix  from the web site
+       http://tix.sourceforge.net/.
+
+
+STANDARD WIDGETS
+       Tix includes the following standard  widgets  which,  like
+       their  counterparts  in Tk, are implemented in native code
+       to achieve high performance and native look-and-feel.
+
+       tixGrid
+              The tixGrid widget displays items in a spread-sheet
+              format.
+
+       tixHList
+              Hierarchical  listbox  widget.  This widget display
+              entries in a tree-like format.
+
+       tixInputOnly
+              A transparent window that  can  be  used  to  cover
+              another widget so as to disable mouse input.
+
+       tixNBFrame
+              The  tixNBFrame  widget  is  used internally by the
+              tixNoteBook widget to display choices among  a  set
+              of overlapping pages.
+
+       tixTList
+              Tabular  listbox  widget. This widget is similar to
+              the built-in Tk listbox widget  but  provides  more
+              flexibility in displaying the list entries.
+
+MEGA WIDGETS
+       Tix  provides  many  new  types of mega widgets: these are
+       widgets that are composed of built-in Tk widgets  and  the
+       Tix standard widgets mentioned above.
+
+       tixBalloon
+              The  tixBalloon  widget  provides context-sensitive
+              on-screen help.
+
+       tixButtonBox
+              A convenience class for creating a  box  of  button
+              widgets.
+
+       tixCheckList
+              A subclass of tixTree that presents single- or mul­
+              tiple choices to the user in a tree-like format.
+
+       tixComboBox
+              A combination of the listbox and entry widgets that
+              allows  the  user  to input an item by typing or by
+              selecting from a list of items.
+
+       tixControl
+              The tixControl widget allows the user to  adjust  a
+              value using arrow buttons.
+
+       tixDirList
+              A directory selection widget that displays the file
+              system as a cascading list.
+
+       tixDirSelectDialog
+              A dialog for selecting a directory. This widget  is
+              deprecated. Use tk_chooseDirectory instead.
+
+       tixDirTree
+              A directory selection widget that displays the file
+              system in a tree format.
+
+       tixExFileSelectBox
+              A widget for selecting a file. This widget is  dep­
+              recated. Use tk_getOpenFile instead.
+
+       tixExFileSelectDialog
+              A  dialog for selecting a file. This widget is dep­
+              recated. Use tk_getOpenFile instead.
+
+       tixFileEntry
+              A special entry widget  that  allows  the  user  to
+              choose a file by typing in its name or by selecting
+              from a file dialog.
+
+       tixFileSelectBox
+              A widget for selecting a file. This widget is  dep­
+              recated. Use tk_getOpenFile instead.
+
+       tixFileSelectDialog
+              A  dialog for selecting a file. This widget is dep­
+              recated. Use tk_getOpenFile instead.
+
+       tixLabelEntry
+              A convenience class for creating an entry  with  an
+              associated label widget.
+
+       tixLabelFrame
+              A labelled frame widget for grouping together a set
+              of related widgets.
+
+       tixListNoteBook
+              The  tixListNoteBook  widget  allows  the  user  to
+              choose  from a set of over-lapping pages by select­
+              ing from a list box.
+
+       tixMeter
+              The tixMeter widget displays a bar graph  to  indi­
+              cate progress.
+
+       tixNoteBook
+              The  tixNoteBook  widget  allows the user to choose
+              from a set of  over-lapping  pages  with  a  tabbed
+              notebook metaphore.
+
+       tixOptionMenu
+              The  tixOptionMenu widget allows the user to choose
+              a value from a pop-up menu.
+
+       tixPanedWindow
+              The  tixPanedWindow  widgets  allows  the  user  to
+              adjust  the  visible  size of several frame widgets
+              with handle bars.
+
+       tixPopupMenu
+              The tixPopupMenu widget can be  used  to  implement
+              context-sensitive pop-up menu.
+
+       tixScrolledHList
+              A tixHList widget with smart scrollbars. Like other
+              Tix scrolled widgets, the scroll bars can  be  dis­
+              played on an as-needed basis.
+
+       tixScrolledListBox
+              A Tk listbox widget with smart scrollbars.
+
+       tixScrolledText
+              A Tk text widget with smart scrollbars.
+
+       tixScrolledWindow
+              A Tk frame widget with smart scrollbars.
+
+       tixSelect
+              The  tixSelect widget uses a set of buttons to pre­
+              sent single- or multiple selection options  to  the
+              user.
+
+       tixStdButtonBox
+              A subclass of tixButtonBox that provides four stan­
+              dard  buttons  (OK,   Apply,   Cancel   Help)   for
+              Motif(TM)-like dialog boxes.
+
+       tixTree
+              A   subclass   of  tixScrolledHList  that  supports
+              expanding and collapsing of entries in a hierarchi­
+              cal list.
+
+DISPLAY ITEMS
+       Three  Tix standard widgets tixGrid, tixHList and tixTList
+       support the Display Items  mechanism.  Display  items  are
+       created  by  the widget command of these standard widgets.
+       You can customize the items using styles objects.
+
+       tixDisplayStyle
+              Create style objects to customize display items.
+
+IMAGE TYPES
+       Tix provides two additional image types to  the  Tk  image
+       framework.
+
+       compound
+              The  compound  image  type  allows  you  to combine
+              images, widgets, and text strings into a single  Tk
+              image object.
+
+       pixmap The pixmap image type supports the XPM format.
+
+OTHER COMMANDS
+       The  following  Tcl  command  are also included in the Tix
+       library to perform various functions.
+
+       tixDestroy
+              Destroy Tix objects instances of classes defined by
+              tixClass construct.
+
+       tixForm
+              A  geometry manager based on attachment rules. This
+              geometry manager is deprecated.  Use  the  Tk  grid
+              geometry manager instead.
+
+       tixMwm A   command   to  communicate  with  the  Mwm,  the
+              Motif(TM) Window Manager. Works on Unix only.
+
+       tix    The tix command controls the Tix  application  con­
+              text.
+
+       tixGetBoolean
+              The  tixGetBoolean  command  converts a string to a
+              boolean value.
+
+       tixGetInt
+              The tixGetInt command converts a string to a  inte­
+              ger value.
+
+       tixUtils
+              The tixUtils manual page describes some utility Tix
+              commands.
+
+EXECUTABLE PROGRAM
+       tixwish
+              The tixwish program can be  used  to  execute  Tix-
+              based  applications.  tixwish  is  deprecated.  You
+              shuld use the standard wish  program  from  Tk  and
+              access Tix via the "package require Tix" command.
+
+EXAMPLES
+       The  following  is  an  example script that uses a tixTree
+       widget.
+
+              set tree [tixTree .t]
+              pack $tree -expand yes -fill both
+              for {set i 0} {$i < 2} {incr i} {
+                  $tree subwidget hlist add $i -itemtype imagetext \
+                      -text "Folder $i" -image [tix getimage folder]
+                  for {set j 0} {$j < 5} {incr j} {
+                      $tree subwidget hlist add $i.$j -itemtype imagetext \
+                          -text "File $i.$j" -image [tix getimage textfile]
+                  }
+              }
+              $tree autosetmode
+
+KEYWORDS
+       Tix, mega widgets
+
+
+
+
+
+
+Tix                            8.0                    TixIntro(n)

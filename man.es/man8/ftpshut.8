@@ -1,0 +1,90 @@
+ftpshut(8)                                             ftpshut(8)
+
+
+
+NAME
+       ftpshut - shut down all proftpd servers at a given time
+
+SYNOPSIS
+       ftpshut [ -l min ] [ -d min ] time [ warning-message ]
+
+DESCRIPTION
+       The  ftpshut command provides an automated shutdown proce­
+       dure that a superuser can use to automagically  disconnect
+       current  proftpd  connections,  and  deny new connections.
+       The command creates a  control  file  as  /etc/shutmsg  to
+       inform proftpd processes about an impending shutdown.
+
+OPTIONS
+       time      The  time  at  which  the  ftp  servers  will be
+                 brought down.  It may be the word  `now',  indi­
+                 cating  an  immediate shutdown, or a future time
+                 in one of two formats:  +number  or  HHMM.   The
+                 first  form  brings  the  servers down in number
+                 minutes, while  the  second  form  indicates  an
+                 exact time of day, using a 24-hour clock format.
+
+       -l min    Specifies the number of minutes before  shutdown
+                 that new ftp access will be disabled.  If the -l
+                 option is not specified, a default of 10 minutes
+                 (or immediately, if less than 10 minutes remains
+                 until shutdown) is used.
+
+       -d min    Specifies the number of minutes before  shutdown
+                 that  existing  ftp  connections will be discon­
+                 nected.  If the -d option is  not  specified,  a
+                 default  of  5  minutes (or immediately, if less
+                 than 5 minutes remains until shutdown) is  used.
+
+       warning-message
+                 Optionally  provide a message which will be sent
+                 to new connections (if denied) and existing con­
+                 nections  (when  disconnected).  The message can
+                 contain the following magic cookies, which  will
+                 be  replaced as follows before being sent to new
+                 or existing connections:
+
+                 %s  time proftpd is being shut down
+                 %r  time new connections will be denied
+                 %d  time current connections will be dropped
+                 %C  current working directory (where applicable)
+                 %L  local host name (of virtualhost name)
+                 %R  remote host name
+                 %T  local time (format Thu Nov 15 17:12:42 1990)
+                 %U  username given at login time
+
+CAVEATS
+       Proftpd servers can only be shutdown via ftpshut if a mas­
+       ter daemon is running in standalone mode.  Servers running
+       in inetd mode will honor the shutdown message file created
+       by  ftpshut,  however  currently  running  servers  may be
+       chroot(2)ed, and unable to read the shutdown message  con­
+       trol file.
+
+       It  is  possible to set an absolute shutdown time which is
+       earlier than the current  time.   If  this  is  the  case,
+       proftpd  will not shutdown until the indicated time on the
+       following day.
+
+FILES
+       /usr/sbin/ftpshut
+       /etc/shutmsg
+
+AUTHORS
+       ProFTPD is written and maintained by a number  of  people,
+       full  credits can be found on http://www.proftpd.org/cred­
+       its.html
+
+SEE ALSO
+       inetd(8),ftp(1),proftpd(8),ftpwho(1),ftpcount(1)
+
+       Full documentation on ProFTPD, including configuration and
+       FAQs is available at http://www.proftpd.org/
+
+       Report  bugs at http://bugs.proftpd.org/ For help/support,
+       try   the   ProFTPD    mailing    lists,    detailed    on
+       http://www.proftpd.org/lists.html
+
+
+
+                            March 2000                 ftpshut(8)

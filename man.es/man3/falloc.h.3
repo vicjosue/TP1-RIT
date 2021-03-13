@@ -1,0 +1,61 @@
+rpmdb/falloc.h(3)                               rpmdb/falloc.h(3)
+
+
+
+NAME
+       rpmdb/falloc.h - File space allocation routines.
+
+SYNOPSIS
+   Functions
+       long int fadGetFileSize (FD_t fd)
+       void fadSetFileSize (FD_t fd, long int fileSize)
+       unsigned int fadGetFirstFree (FD_t fd)
+       void fadSetFirstFree (FD_t fd, unsigned int firstFree)
+       FD_t fadOpen (const char *path, int flags, mode_t perms)
+       unsigned int fadAlloc (FD_t fd, unsigned int size)
+       void fadFree (FD_t fd, unsigned int offset)
+       int fadFirstOffset (FD_t fd)
+       int fadNextOffset (FD_t fd, unsigned int lastoff)
+
+DETAILED DESCRIPTION
+       File space allocation routines.
+
+         Best fit allocation is used, free blocks are compacted.
+       Minimal fragmentation is more important then speed. This
+       uses 32 bit offsets on all platforms and should be byte
+       order independent.
+
+
+       Definition in file falloc.h.
+
+FUNCTION DOCUMENTATION
+   long int fadGetFileSize (FD_t fd) [inline, static]
+       Definition at line 19 of file falloc.h.
+
+       Referenced by doGetRecord, fadAlloc, fadNextOffset, and
+       fadOpen.
+
+   unsigned int fadGetFirstFree (FD_t fd) [inline, static]
+       Definition at line 29 of file falloc.h.
+
+       Referenced by fadAlloc, and fadFree.
+
+   void fadSetFileSize (FD_t fd, long int fileSize) [inline,
+       static]
+       Definition at line 23 of file falloc.h.
+
+       Referenced by fadAlloc, and fadOpen.
+
+   void fadSetFirstFree (FD_t fd, unsigned int firstFree)
+       [inline, static]
+       Definition at line 33 of file falloc.h.
+
+       Referenced by fadAlloc, fadFree, and fadOpen.
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002          rpmdb/falloc.h(3)

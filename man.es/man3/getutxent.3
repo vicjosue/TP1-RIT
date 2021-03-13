@@ -1,0 +1,151 @@
+GETUTENT(3)             Library functions             GETUTENT(3)
+
+
+
+NAME
+       getutent,  getutid,  getutline, pututline, setutent, endu­
+       tent, utmpname - access utmp file entries
+
+SYNOPSIS
+       #include <utmp.h>
+
+       struct utmp *getutent(void);
+       struct utmp *getutid(struct utmp *ut);
+       struct utmp *getutline(struct utmp *ut);
+
+       struct utmp *pututline(struct utmp *ut);
+
+       void setutent(void);
+       void endutent(void);
+
+       void utmpname(const char *file);
+
+DESCRIPTION
+       utmpname() sets the name of the utmp-format file  for  the
+       other utmp functions to access.  If utmpname() is not used
+       to set the filename before the other functions  are  used,
+       they assume _PATH_UTMP, as defined in <paths.h>.
+
+       setutent()  rewinds  the  file pointer to the beginning of
+       the utmp file.  It is generally a Good  Idea  to  call  it
+       before any of the other functions.
+
+       endutent() closes the utmp file.  It should be called when
+       the user code is done accessing the file  with  the  other
+       functions.
+
+       getutent()  reads a line from the current file position in
+       the utmp file.  It returns a pointer to a  structure  con­
+       taining the fields of the line.
+
+       getutid()  searches forward from the current file position
+       in the  utmp  file  based  upon  ut.   If  ut->ut_type  is
+       RUN_LVL,  BOOT_TIME, NEW_TIME, or OLD_TIME, getutid() will
+       find  the  first  entry  whose   ut_type   field   matches
+       ut->ut_type.   If  ut->ut_type  is  one  of  INIT_PROCESS,
+       LOGIN_PROCESS, USER_PROCESS,  or  DEAD_PROCESS,  getutid()
+       will  find  the  first  entry  whose  ut_id  field matches
+       ut->ut_id.
+
+       getutline() searches forward from the current  file  posi­
+       tion  in the utmp file.  It scans entries whose ut_type is
+       USER_PROCESS or LOGIN_PROCESS and returns  the  first  one
+       whose ut_line field matches ut->ut_line.
+
+       pututline()  writes  the  utmp  structure ut into the utmp
+       file.  It uses getutid() to search for the proper place in
+       the  file  to  insert the new entry.  If it cannot find an
+       appropriate slot for ut, pututline() will append  the  new
+       entry to the end of the file.
+
+RETURN VALUE
+       getutent(),  getutid(), getutline() and pututline() return
+       a pointer to a static struct utmp on success, and NULL  on
+       failure.
+
+EXAMPLE
+       The  following  example  adds  and  removes a utmp record,
+       assuming it is run from within  a  pseudo  terminal.   For
+       usage  in  a real application, you should check the return
+       values of getpwuid() and ttyname().
+
+       #include <string.h>
+       #include <stdlib.h>
+       #include <pwd.h>
+       #include <unistd.h>
+       #include <utmp.h>
+
+       int main(int argc, char *argv[])
+       {
+         struct utmp entry;
+
+         system("echo before adding entry:;who");
+
+         entry.ut_type=USER_PROCESS;
+         entry.ut_pid=getpid();
+         strcpy(entry.ut_line,ttyname(0)+strlen("/dev/"));
+         /* only correct for ptys named /dev/tty[pqr][0-9a-z] */
+         strcpy(entry.ut_id,ttyname(0)+strlen("/dev/tty"));
+         time(&entry.ut_time);
+         strcpy(entry.ut_user,getpwuid(getuid())->pw_name);
+         memset(entry.ut_host,0,UT_HOSTSIZE);
+         entry.ut_addr=0;
+         setutent();
+         pututline(&entry);
+
+         system("echo after adding entry:;who");
+
+         entry.ut_type=DEAD_PROCESS;
+         memset(entry.ut_line,0,UT_LINESIZE);
+         entry.ut_time=0;
+         memset(entry.ut_user,0,UT_NAMESIZE);
+         setutent();
+         pututline(&entry);
+
+         system("echo after removing entry:;who");
+
+         endutent();
+         return 0;
+       }
+
+FILES
+       /var/run/utmp  database of currently logged-in users
+       /var/log/wtmp  database of past user logins
+
+CONFORMING TO
+       XPG 2, SVID 2, Linux FSSTND 1.2
+
+       In XPG2 and SVID2  the function pututline() is  documented
+       to  return  void, and that is what it does on many systems
+       (AIX, HPUX, Linux libc5).  HPUX introduces a new  function
+       _pututline()  with  the  prototype  given above for putut­
+       line() (also found in Linux libc5).
+
+       All these functions are obsolete now on non-Linux systems.
+       POSIX  1003.1-2001, following XPG4.2, does not have any of
+       these functions, but instead uses
+
+       #include <utmpx.h>
+
+       struct utmpx *getutxent(void);
+       struct utmpx *getutxid(const struct utmpx *);
+       struct utmpx *getutxline(const struct utmpx *);
+       struct utmpx *pututxline(const struct utmpx *);
+       void setutxent(void);
+       void endutxent(void);
+
+       The utmpx structure is a superset of the  utmp  structure,
+       with  additional fields, and larger versions of the exist­
+       ing   fields.    The   corresponding   files   are   often
+       /var/*/utmpx and /var/*/wtmpx.
+
+       Linux glibc on the other hand does not use utmpx since its
+       utmp structure is  already  large  enough.  The  functions
+       getutxent etc. are aliases for getutent etc.
+
+SEE ALSO
+       utmp(5)
+
+
+
+                            1996-07-25                GETUTENT(3)

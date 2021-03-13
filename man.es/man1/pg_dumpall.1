@@ -1,0 +1,102 @@
+PG_DUMPALL(1)     PostgreSQL Client Applications    PG_DUMPALL(1)
+
+
+
+NAME
+       pg_dumpall  -  extract  all  PostgreSQL  databases  into a
+       script file
+
+SYNOPSIS
+       pg_dumpall [ -c | --clean ] [ -g | --globals-only ]  [  -h
+       host ] [ -p port ] [ -U username ] [ -W ]
+
+DESCRIPTION
+       pg_dumpall  is a utility for writing out (``dumping'') all
+       PostgreSQL databases of a cluster into  one  script  file.
+       The  script file contains SQL commands that can be used as
+       input to psql(1) to restore the databases. It does this by
+       calling   pg_dump(1)  for  each  database  in  a  cluster.
+       pg_dumpall also dumps global objects that  are  common  to
+       all  databases.   (pg_dump  does  not save these objects.)
+       This currently includes  the  information  about  database
+       users and groups.
+
+       Thus,  pg_dumpall is an integrated solution for backing up
+       your databases. But note  a  limitation:  it  cannot  dump
+       ``large  objects'', since pg_dump cannot dump such objects
+       into text files. If you have  databases  containing  large
+       objects, they should be dumped using one of pg_dump's non-
+       text output modes.
+
+       Since pg_dumpall reads tables from all databases you  will
+       most  likely  have  to  connect as a database superuser in
+       order to produce a complete dump. Also you will need supe­
+       ruser  privileges  to execute the saved script in order to
+       be  allowed  to  add  users  and  groups,  and  to  create
+       databases.
+
+       The  SQL  script  will  be written to the standard output.
+       Shell operators should be used to redirect it into a file.
+
+   OPTIONS
+       pg_dumpall accepts the following command line arguments:
+
+       -c, --clean
+              Include  SQL  commands  to  clean  (drop)  database
+              objects before recreating  them.  (This  option  is
+              fairly  useless, since the output script expects to
+              create the databases themselves; they would  always
+              be empty upon creation.)
+
+       -g, --globals-only
+              Only  dump  global  objects  (users and groups), no
+              databases.
+
+       -h host
+              Specifies the host name of the machine on which the
+              database  server  is running. If host begins with a
+              slash, it is used as the  directory  for  the  Unix
+              domain socket. The default is taken from the PGHOST
+              environment variable, if set, else  a  Unix  domain
+              socket connection is attempted.
+
+       -p port
+              The  port  number on which the server is listening.
+              Defaults to the  PGPORT  environment  variable,  if
+              set, or a compiled-in default.
+
+       -U username
+              Connect as the given user.
+
+       -W     Force  a  password prompt. This should happen auto­
+              matically if the server requires password authenti­
+              cation.
+
+
+       Any other command line parameters are passed to the under­
+       lying pg_dump(1) calls. This is  useful  to  control  some
+       aspects of the output format, but some options such as -f,
+       -t, and dbname should be avoided.
+
+EXAMPLES
+       To dump all databases:
+
+       $ pg_dumpall > db.out
+
+
+       To reload this database use, for example:
+
+       $ psql -f db.out template1
+
+       (It is not important to which database  you  connect  here
+       since  the  script file created by pg_dumpall will contain
+       the appropriate commands to  create  and  connect  to  the
+       saved databases.)
+
+SEE ALSO
+       pg_dump(1),  psql(1).  Check there for details on possible
+       error conditions.
+
+
+
+Application                 2000-12-19              PG_DUMPALL(1)

@@ -1,0 +1,115 @@
+TMPWATCH(8)                                           TMPWATCH(8)
+
+
+
+NAME
+       tmpwatch - removes files which haven't been accessed for a
+       period of time
+
+SYNOPSIS
+       tmpwatch  [-u|-m|-c]   [-faqstv]   [--verbose]   [--force]
+       [--all] [--test]
+                      [--fuser     ]    [--atime|--mtime|--ctime]
+       [--quiet] <hours> <dirs>
+
+
+DESCRIPTION
+       tmpwatch recursively  removes  files  which  haven't  been
+       accessed  for a given number of hours. Normally, it's used
+       to clean up directories which are used for temporary hold­
+       ing space such as /tmp.
+
+       When  changing  directories, tmpwatch is very sensitive to
+       possible race conditions and will exit with  an  error  if
+       one  is detected. It does not follow symbolic links in the
+       directories it's cleaning (even  if  a  symbolic  link  is
+       given as its argument), will not switch filesystems,
+        and only removes empty directories and regular files.
+
+       By  default,  tmpwatch  dates files by their atime (access
+       time), not  their  mtime  (modification  time).  If  files
+       aren't  being  removed  when ls -l implies they should be,
+       use ls -u to examine their atime to see if  that  explains
+       the problem.
+
+       If  the  --atime,  --ctime  or --mtime options are used in
+       combination, the decision about deleting a  file  will  be
+       based on the maximum of this times.
+
+       The  hours  parameter  defines  the threshold for removing
+       files. If the file has not been accessed for hours  hours,
+       the file is removed.  Following this, one or more directo­
+       ries may be given for tmpwatch to clean up.
+
+
+
+OPTIONS
+       -u, --atime
+              Make the decision about deleting a  file  based  on
+              the   file's  atime  (access  time).  This  is  the
+              default.
+
+
+
+       -m, --mtime
+              Make the decision about deleting a  file  based  on
+              the file's mtime (modification time) instead of the
+              atime.
+
+
+       -c, --ctime
+              Make the decision about deleting a  file  based  on
+              the file's ctime (inode change time) instead of the
+              atime; for directories, make the decision based  on
+              the mtime.
+
+
+       -a, --all
+              Remove  all  file types, not just regular files and
+              directories.
+
+
+       -d, --nodirs
+              Do not attempt to remove directories, even if  they
+              are empty.
+
+
+       -f, --force
+              Remove files even if root doesn't have write access
+              (akin to rm -f).
+
+
+       -t, --test
+              Doesn't remove files, but goes through the  motions
+              of removing them. This implies -v.
+
+
+       -s, --fuser
+              Attempt to use the "fuser" command to see if a file
+              is already open before removing it.  Not enabled by
+              default.   Does help in some circumstances, but not
+              all.  Dependent on fuser being installed in  /sbin.
+
+
+       -v, --verbose
+              Print  a verbose display. Two levels of verboseness
+              are available -- use this option twice to  get  the
+              most verbose output.
+
+
+SEE ALSO
+       cron(1), ls(1), rm(1), fuser(1)
+
+
+WARNINGS
+       GNU-style long options are not supported on HP-UX.
+
+
+AUTHORS
+       Erik Troan <ewt@redhat.com>
+       Preston Brown <pbrown@redhat.com>
+       Nalin Dahyabhai <nalin@redhat.com>
+
+
+
+                         Mon May 05 2000              TMPWATCH(8)

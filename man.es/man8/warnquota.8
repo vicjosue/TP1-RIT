@@ -1,0 +1,35 @@
+WARNQUOTA(8)                                         WARNQUOTA(8)
+
+
+
+NAME
+       warnquota - send mail to users over quota
+
+SYNOPSIS
+       warnquota
+
+DESCRIPTION
+       warnquota  checks  the  disk quota for each filesystem and
+       mails a warning message to those users  who  have  reached
+       their limit.  It is typically run via cron(8).
+
+FILES
+       aquota.user         quota  file  at  the  filesystem  root
+                           (version 2 quota, non-XFS filesystems)
+       quota.user          quota  file  at  the  filesystem  root
+                           (version 1 quota, non-XFS filesystems)
+       /etc/warnquota.conf configuration file
+       /etc/mtab           default filesystems
+       /etc/passwd         default set of users
+
+SEE ALSO
+       quota(1), cron(8), edquota(8).
+
+AUTHORS
+       warnquota(8) was written by Marco van Wieringen <mvw@plan­
+       ets.elm.net>.   This  reference  page  written  by   Heiko
+       Schlittermann <heiko@lotte.sax.de>.
+
+
+
+                                                     WARNQUOTA(8)

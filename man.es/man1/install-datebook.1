@@ -1,0 +1,65 @@
+INSTALL-DATEBOOK(1)                           INSTALL-DATEBOOK(1)
+
+
+
+NAME
+       install-datebook  -  installs  a new datebook entries in a
+       Palm Device
+
+SYNOPSIS
+       install-date /dev/cua? filename [filename filename ...]
+
+DESCRIPTION
+       install-datebook allows the user  to  write  one  or  more
+       datebook  entries  from  one  or  more  source files. Once
+       install-datebook is started, the user must invoke  HotSync
+       on the target device.
+
+       The  format  of source file contains one datebook entry on
+       line, containing four tab separated fields. The fields are
+       start  date/time,  end  date/time, alarm settings, and the
+       description of datebook entry.  This program  doesn't  yet
+       support repeted entries. The date and time must be in for­
+       mat understand by parsedate.y. At least following  formats
+       are understood:
+
+       August 11, 1997 0800 GMT+300
+       1997/08/11 08:22:33 GMT+300
+
+       If the either one of the date and time fields is empty the
+       entry is installed without time. If  the  alarm  field  is
+       entry  the  entry is installed without alarms. Alarm field
+       can contain number followed by "m" (minutes), "h" (hours),
+       or  "d"  (days).  Here  are some complete example lines ("
+       <TAB> "= tab, " <NL> " = newline):
+
+       1997/08/11 0800  GMT+300  <TAB>  1997/08/11  0900  GMT+300
+       <TAB> <TAB> IETF Registration <NL>
+       August  11,  1997  0900 GMT+300 <TAB> August 11, 1997 0930
+       GMT+300 <TAB> 2m <TAB> Introductions <NL>
+
+   OPTIONS
+       none
+
+USEAGE
+       The program will connect to a target, and write  the  file
+       or files given on the command line.
+
+BUGS
+       If  no timezone is given to date the install-datebook will
+       assume the time is in GMT and it will convert it to local­
+       time. If you don't want to write timezone to all begin and
+       end times set the TZ environment variable  to  GMT  before
+       running this program.
+
+AUTHOR
+       install-datebook   was  written  by  Tero  Kivinen  <kivi­
+       nen@iki.fi>. This program was based on install-todos  pro­
+       gram written by Robert A. Kaplan.
+
+SEE ALSO
+       read-ical(1), pilot-xfer(1), ietf2datebook(1).
+
+
+
+FSF                Palm Computing Device ToolsINSTALL-DATEBOOK(1)

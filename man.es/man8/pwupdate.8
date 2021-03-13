@@ -1,0 +1,34 @@
+PWUPDATE(8)           Linux Reference Manual          PWUPDATE(8)
+
+
+
+NAME
+       pwupdate - updates passwd and shadow NIS map
+
+SYNOPSIS
+       /usr/lib/yp/pwupdate [ shadow ]
+
+DESCRIPTION
+       pwupdate is invoked by rpc.yppasswdd(8) after changing the
+       password and it should update the passwd  and  shadow  NIS
+       map.  Never run it by hand.
+
+OPTIONS
+       shadow Normally, only the passwd map will be updated. With
+              this option, pwupdate will update the  shadow  map,
+              too.
+
+FILES
+       /etc/passwd
+       /etc/shadow
+
+SEE ALSO
+       rpc.yppasswdd(8), ypserv(8)
+
+AUTHOR
+       Olaf Kirch <okir@monad.swb.de>,
+       Thorsten Kukuk <kukuk@suse.de>
+
+
+
+NYS YP Server                Jan 1998                 PWUPDATE(8)

@@ -1,0 +1,291 @@
+TUNE2FS(8)                                             TUNE2FS(8)
+
+
+
+NAME
+       tune2fs  -  adjust tunable filesystem parameters on second
+       extended filesystems
+
+SYNOPSIS
+       tune2fs [ -l ] [ -c max-mount-counts ] [ -e  errors-behav­
+       ior  ]  [  -f ] [ -i interval-between-checks ] [ -j ] [ -J
+       journal-options ] [ -m reserved-blocks-percentage ]  [  -r
+       reserved-blocks-count ] [ -s sparse-super-flag ] [ -u user
+       ] [ -g group ] [ -C mount-count ] [ -L volume-name ] [  -M
+       last-mounted-directory  ]  [  -O  [^]feature[,...]  ] [ -T
+       time-last-checked ] [ -U UUID ] device
+
+DESCRIPTION
+       tune2fs adjusts tunable filesystem parameters on  a  Linux
+       second extended filesystem.
+
+OPTIONS
+       -c max-mount-counts
+              Adjust   the   maximal  mounts  count  between  two
+              filesystem checks.  If max-mount-counts is  0  then
+              the  number of times the filesystem is mounted will
+              be disregarded by e2fsck(8) and the kernel.
+
+              Staggering the mount-counts  at  which  filesystems
+              are  forcibly  checked  will  avoid all filesystems
+              being checked at  one  time  when  using  journaled
+              filesystems.
+
+              You  should  strongly  consider the consequences of
+              disabling mount-count-dependent checking  entirely.
+              Bad  disk  drives,  cables, memory, and kernel bugs
+              could all corrupt a filesystem without marking  the
+              filesystem  dirty  or  in  error.  If you are using
+              journaling on your filesystem, your filesystem will
+              never  be  marked dirty, so it will not normally be
+              checked.  A filesystem error detected by the kernel
+              will still force an fsck on the next reboot, but it
+              may already be too late to  prevent  data  loss  at
+              that point.
+
+              See also the -i option for time-dependent checking.
+
+       -C mount-count
+              Set the number of times  the  filesystem  has  been
+              mounted.   Can  be  used  in conjunction with -c to
+              force an fsck on the filesystem at the next reboot.
+
+       -e error-behavior
+              Change  the behavior of the kernel code when errors
+              are detected.  In all  cases,  a  filesystem  error
+              will cause e2fsck(8) to check the filesystem on the
+              next boot.  error-behavior can be one of  the  fol­
+              lowing:
+
+                   continue    Continue normal execution.
+
+                   remount-ro  Remount filesystem read-only.
+
+                   panic       Cause a kernel panic.
+
+       -f     Force the tune2fs operation to complete even in the
+              face of errors.  This option is useful when  remov­
+              ing  the  has_journal  filesystem  feature  from  a
+              filesystem which has an  external  journal  (or  is
+              corrupted  such that it appears to have an external
+              journal), but that external journal is  not  avail­
+              able.
+
+              WARNING:   Removing  an  external  journal  from  a
+              filesystem which was not cleanly unmounted  without
+              first  replaying the external journal can result in
+              severe data loss and filesystem corruption.
+
+       -g group
+              Set the group which  can  use  reserved  filesystem
+              blocks.  The group parameter can be a numerical gid
+              or a group name.  If a group name is given,  it  is
+              converted to a numerical gid before it is stored in
+              the superblock.
+
+       -i  interval-between-checks[d|m|w]
+              Adjust the  maximal  time  between  two  filesystem
+              checks.   No  postfix  or  d  result  in days, m in
+              months, and w in weeks.  A value of zero will  dis­
+              able the time-dependent checking.
+
+              It  is  strongly recommended that either -c (mount-
+              count-dependent) or -i (time-dependent) checking be
+              enabled  to  force periodic full e2fsck(8) checking
+              of the filesystem.  Failure to do so  may  lead  to
+              filesystem  corruption  due  to  bad disks, cables,
+              memory, or kernel bugs to go unnoticed  until  they
+              cause data loss or corruption.
+
+       -j     Add  an  ext3 journal to the filesystem.  If the -J
+              option is not specified, the default journal param­
+              eters will be used to create an appropriately sized
+              journal (given the size of the  filesystem)  stored
+              within the filesystem.  Note that you must be using
+              a kernel which has ext3 support in order  to  actu­
+              ally make use of the journal.
+
+       -J journal-options
+              Override the default ext3 journal parameters. Jour­
+              nal options are comma separated, and  may  take  an
+              argument using the equals ('=')  sign.  The follow­
+              ing journal options are supported:
+
+                   size=journal-size
+                          Create a journal stored in the filesys­
+                          tem  of  size  journal-size  megabytes.
+                          The size of  the  journal  must  be  at
+                          least 1024 filesystem blocks (i.e., 1MB
+                          if using 1k blocks,  4MB  if  using  4k
+                          blocks,  etc.)  and may be no more than
+                          102,400 filesystem blocks.  There  must
+                          be  enough free space in the filesystem
+                          to create a journal of that size.
+
+                   device=external-journal
+                          Attach the filesystem  to  the  journal
+                          block  device located on external-jour­
+                          nal.  The external  journal  must  have
+                          been already created using the command
+
+                          mke2fs -O journal_dev external-journal
+
+                          Note that external-journal must be for­
+                          matted with  the  same  block  size  as
+                          filesystems which will be using it.
+
+                          Instead  of  specifying  a  device name
+                          directly, external-journal can also  be
+                          specified   by  either  LABEL=label  or
+                          UUID=UUID to locate the external  jour­
+                          nal  by either the volume label or UUID
+                          stored in the ext2  superblock  at  the
+                          start  of the journal.  Use dumpe2fs(8)
+                          to display a  journal  device's  volume
+                          label and UUID.  See also the -L option
+                          of tune2fs(8).
+
+              Only one of the size or device options can be given
+              for a filesystem.
+
+       -l     List the contents of the filesystem superblock.
+
+       -L volume-label
+              Set  the  volume  label  of  the  filesystem.  Ext2
+              filesystem labels can  be  at  most  16  characters
+              long; if volume-label is longer than 16 characters,
+              tune2fs will truncate it and print a warning.   The
+              volume  label can be used by mount(8), fsck(8), and
+              /etc/fstab(5) (and possibly others)  by  specifying
+              LABEL=volume_label   instead  of  a  block  special
+              device name like /dev/hda5.
+
+       -m reserved-blocks-percentage
+              Set the percentage of reserved filesystem blocks.
+
+       -M last-mounted-directory
+              Set the last-mounted directory for the  filesystem.
+
+       -O [^]feature[,...]
+              Set  or  clear  the  indicated  filesystem features
+              (options)  in  the  filesystem.   More   than   one
+              filesystem  feature  can be cleared or set by sepa­
+              rating features with commas.   Filesystem  features
+              prefixed  with  a  caret  character  ('^')  will be
+              cleared in the filesystem's superblock;  filesystem
+              features  without  a  prefix  character or prefixed
+              with a plus character ('+') will be  added  to  the
+              filesystem.
+
+              The  following  filesystem  features  can be set or
+              cleared using tune2fs:
+
+                   sparse_super
+                          Limit the number of backup  superblocks
+                          to save space on large filesystems.
+
+                   filetype
+                          Store  file  type information in direc­
+                          tory entries.
+
+                   has_journal
+                          Create an ext3 journal (as if using the
+                          -j option).
+
+              After setting or clearing sparse_super and filetype
+              filesystem features, e2fsck(8) must be run  on  the
+              filesystem to return the filesystem to a consistent
+              state.  Tune2fs will  print  a  message  requesting
+              that the system administrator run e2fsck(8) if nec­
+              essary.
+
+              Warning: Linux kernels before 2.0.39 and  many  2.1
+              series  kernels do not support the filesystems that
+              use  any  of  these  features.   Enabling   certain
+              filesystem features may prevent the filesystem from
+              being mounted by kernels which do not support those
+              features.
+
+       -r reserved-blocks-count
+              Set the number of reserved filesystem blocks.
+
+       -s [0|1]
+              Turn  the  sparse super feature off or on.  Turning
+              this feature on saves space on really big  filesys­
+              tems.    This   is   the   same  as  using  the  -O
+              sparse_super option.
+
+              Warning: Linux kernels before 2.0.39 do not support
+              this  feature.   Neither  do all Linux 2.1 kernels;
+              please don't use this unless you know  what  you're
+              doing!  You need to run e2fsck(8) on the filesystem
+              after changing this feature  in  order  to  have  a
+              valid filesystem.
+
+       -T time-last-checked
+              Set  the time the filesystem was last checked using
+              e2fsck.  This can be useful in scripts which use  a
+              Logical  Volume  Manager to make a consistent snap­
+              shot of a filesystem, and then check the filesystem
+              during  off  hours to make sure it hasn't been cor­
+              rupted due  to  hardware  problems,  etc.   If  the
+              filesystem  was clean, then this option can be used
+              to set  the  last  checked  time  on  the  original
+              filesystem.  The format of time-last-checked is the
+              international date format, with  an  optional  time
+              specifier,  i.e.  YYYYMMDD[[HHMM]SS].   The keyword
+              now is  also  accepted,  in  which  case  the  last
+              checked time will be set to the current time.
+
+       -u user
+              Set  the  user  who can use the reserved filesystem
+              blocks.  user can be a  numerical  uid  or  a  user
+              name.   If a user name is given, it is converted to
+              a  numerical  uid  before  it  is  stored  in   the
+              superblock.
+
+       -U UUID
+              Set the universally unique identifier (UUID) of the
+              filesystem to UUID.  The format of the  UUID  is  a
+              series  of  hex  digits separated by hypthens, like
+              this: "c1b9d5a2-f162-11cf-9ece-0020afc76f16".   The
+              UUID parameter may also be one of the following:
+
+                   clear  clear the filesystem UUID
+
+                   random generate a new randomly-generated UUID
+
+                   time   generate a new time-based UUID
+
+              The  UUID  may  be  used  by mount(8), fsck(8), and
+              /etc/fstab(5) (and possibly others)  by  specifying
+              UUID=uuid  instead  of  a block special device name
+              like /dev/hda1.
+
+              See uuidgen(8) for more information.  If the system
+              does  not  have a good random number generator such
+              as /dev/random or /dev/urandom, tune2fs will  auto­
+              matically  use  a time-based UUID instead of a ran­
+              domly-generated UUID.
+
+BUGS
+       We haven't found any bugs yet.  That  doesn't  mean  there
+       aren't any...
+
+AUTHOR
+       tune2fs  was  written  by Remy Card <Remy.Card@linux.org>.
+       tune2fs uses the ext2fs library written by  Theodore  Ts'o
+       <tytso@mit.edu>.   This  manual page was written by Chris­
+       tian Kuhtz <chk@data-hh.Hanse.DE>.  Time-dependent  check­
+       ing was added by Uwe Ohse <uwe@tirka.gun.de>.
+
+AVAILABILITY
+       tune2fs  is part of the e2fsprogs package and is available
+       from http://e2fsprogs.sourceforge.net.
+
+SEE ALSO
+       dumpe2fs(8), e2fsck(8), mke2fs(8)
+
+
+
+E2fsprogs version 1.26    February 2002                TUNE2FS(8)

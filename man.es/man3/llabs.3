@@ -1,0 +1,57 @@
+ABS(3)              Linux Programmer's Manual              ABS(3)
+
+
+
+NAME
+       abs,  labs, llabs, imaxabs - compute the absolute value of
+       an integer.
+
+SYNOPSIS
+       #include <stdlib.h>
+
+       int abs(int j);
+       long int labs(long int j);
+       long long int llabs(long long int j);
+
+       #include <inttypes.h>
+
+       intmax_t imaxabs(intmax_t j);
+
+DESCRIPTION
+       The abs() function computes  the  absolute  value  of  the
+       integer  argument  j.   The  labs(), llabs() and imaxabs()
+       functions compute the absolute value of the argument j  of
+       the appropriate integer type for the function.
+
+RETURN VALUE
+       Returns the absolute value of the integer argument, of the
+       appropriate integer type for the function.
+
+CONFORMING TO
+       SVID 3, POSIX.1, BSD 4.3,  ISO/IEC  9899  (C99).   POSIX.1
+       (1996  edition) only requires the abs() function.  ISO/IEC
+       9899:1990 (C89) only includes the abs() and  labs()  func­
+       tions;  the  functions llabs() and imaxabs() were added in
+       C99.
+
+NOTES
+       Trying to take the absolute value  of  the  most  negative
+       integer is not defined.
+
+       The  llabs()  function  is included in glibc since version
+       2.0, but is not in libc5 or libc4.  The imaxabs() function
+       is included in glibc since version 2.1.1.
+
+       For  llabs() to be declared, it may be necessary to define
+       _ISOC99_SOURCE or _ISOC9X_SOURCE (depending on the version
+       of glibc) before including any standard headers.
+
+       GCC  handles  abs()  and labs() as builtin functions.  GCC
+       3.0 also handles llabs() and imaxabs() as builtins.
+
+SEE ALSO
+       ceil(3), floor(3), fabs(3), rint(3)
+
+
+
+GNU                         2000-12-17                     ABS(3)

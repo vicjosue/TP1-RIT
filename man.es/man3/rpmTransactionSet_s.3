@@ -1,0 +1,224 @@
+rpmTransactionSet_s(3)                     rpmTransactionSet_s(3)
+
+
+
+NAME
+       rpmTransactionSet_s -
+
+SYNOPSIS
+       #include <depends.h>
+
+
+   Data Fields
+       rpmtransFlags transFlags
+       rpmCallbackFunction notify
+       rpmCallbackData notifyData
+       rpmProblemSet probs
+       rpmprobFilterFlags ignoreSet
+       int filesystemCount
+       const char ** filesystems
+       diskspaceInfo * di
+       rpmdb rpmdb
+       int * removedPackages
+       int numRemovedPackages
+       int allocedRemovedPackages
+       availableList_s addedPackages
+       availableList_s availablePackages
+       transactionElement * order
+       int orderCount
+       int orderAlloced
+       TFI_t flList
+       int flEntries
+       int chrootDone
+       const char * rootDir
+       const char * currDir
+       FD_t scriptFd
+       int delta
+       int id
+
+DETAILED DESCRIPTION
+       The set of packages to be installed/removed atomically.
+
+       Definition at line 128 of file depends.h.
+
+FIELD DOCUMENTATION
+   struct availableList_s rpmTransactionSet_s::addedPackages
+       Set of packages being installed.
+
+       Definition at line 142 of file depends.h.
+
+       Referenced by rpmdepCheck, rpmdepOrder,
+       rpmtransAddPackage, rpmtransCreateSet, and rpmtransFree.
+
+   int rpmTransactionSet_s::allocedRemovedPackages
+       Size of removed packages array.
+
+       Definition at line 141 of file depends.h.
+
+       Referenced by rpmtransCreateSet.
+
+   struct availableList_s rpmTransactionSet_s::availablePackages
+       Universe of possible packages.
+
+       Definition at line 144 of file depends.h.
+
+       Referenced by rpmdepCheck, rpmdepOrder,
+       rpmtransAvailablePackage, rpmtransCreateSet, and
+       rpmtransFree.
+
+   int rpmTransactionSet_s::chrootDone
+       Has chroot(2) been been done?
+
+       Definition at line 152 of file depends.h.
+
+       Referenced by rpmtransCreateSet.
+
+   const char* rpmTransactionSet_s::currDir
+       Current working directory.
+
+       Definition at line 154 of file depends.h.
+
+       Referenced by rpmtransCreateSet, and rpmtransFree.
+
+   int rpmTransactionSet_s::delta
+       Delta for reallocation.
+
+       Definition at line 156 of file depends.h.
+
+       Referenced by rpmtransAddPackage, and rpmtransCreateSet.
+
+   struct diskspaceInfo* rpmTransactionSet_s::di
+       Per filesystem disk/inode usage.
+
+       Definition at line 137 of file depends.h.
+
+       Referenced by rpmtransCreateSet, and rpmtransFree.
+
+   int rpmTransactionSet_s::filesystemCount
+       No. of mounted filesystems.
+
+       Definition at line 135 of file depends.h.
+
+       Referenced by rpmtransCreateSet.
+
+   const char** rpmTransactionSet_s::filesystems
+       Mounted filesystem names.
+
+       Definition at line 136 of file depends.h.
+
+       Referenced by rpmtransCreateSet.
+
+   int rpmTransactionSet_s::flEntries
+       No. of transaction elements.
+
+       Definition at line 151 of file depends.h.
+
+   TFI_t rpmTransactionSet_s::flList
+       Transaction element(s) file info.
+
+       Definition at line 150 of file depends.h.
+
+   int rpmTransactionSet_s::id
+       Transaction id.
+
+       Definition at line 157 of file depends.h.
+
+       Referenced by rpmtransCreateSet.
+
+   rpmprobFilterFlags rpmTransactionSet_s::ignoreSet
+       Bits to filter current problems.
+
+       Definition at line 134 of file depends.h.
+
+   rpmCallbackFunction rpmTransactionSet_s::notify
+       Callback function.
+
+       Definition at line 130 of file depends.h.
+
+   rpmCallbackData rpmTransactionSet_s::notifyData
+       Callback private data.
+
+       Definition at line 132 of file depends.h.
+
+   int rpmTransactionSet_s::numRemovedPackages
+       No. removed rpmdb instances.
+
+       Definition at line 140 of file depends.h.
+
+       Referenced by rpmdepCheck, rpmtransAddPackage, and
+       rpmtransCreateSet.
+
+   struct transactionElement* rpmTransactionSet_s::order
+       Packages sorted by dependencies.
+
+       Definition at line 146 of file depends.h.
+
+       Referenced by rpmdepOrder, rpmtransAddPackage,
+       rpmtransCreateSet, and rpmtransFree.
+
+   int rpmTransactionSet_s::orderAlloced
+       No. of allocated transaction elements.
+
+       Definition at line 149 of file depends.h.
+
+       Referenced by rpmdepOrder, rpmtransAddPackage, and
+       rpmtransCreateSet.
+
+   int rpmTransactionSet_s::orderCount
+       No. of transaction elements.
+
+       Definition at line 148 of file depends.h.
+
+       Referenced by rpmdepOrder, rpmtransAddPackage, and
+       rpmtransCreateSet.
+
+   rpmProblemSet rpmTransactionSet_s::probs
+       Current problems in transaction.
+
+       Definition at line 133 of file depends.h.
+
+   int* rpmTransactionSet_s::removedPackages
+       Set of packages being removed.
+
+       Definition at line 139 of file depends.h.
+
+       Referenced by rpmdepCheck, rpmtransAddPackage,
+       rpmtransCreateSet, and rpmtransFree.
+
+   const char* rpmTransactionSet_s::rootDir
+       Path to top of install tree.
+
+       Definition at line 153 of file depends.h.
+
+       Referenced by rpmtransCreateSet, and rpmtransFree.
+
+   rpmdb rpmTransactionSet_s::rpmdb
+       Database handle.
+
+       Definition at line 138 of file depends.h.
+
+       Referenced by rpmdepCheck, rpmtransAddPackage, and
+       rpmtransCreateSet.
+
+   FD_t rpmTransactionSet_s::scriptFd
+       Scriptlet stdout/stderr.
+
+       Definition at line 155 of file depends.h.
+
+       Referenced by rpmtransCreateSet, and rpmtransFree.
+
+   rpmtransFlags rpmTransactionSet_s::transFlags
+       Bit(s) to control operation.
+
+       Definition at line 129 of file depends.h.
+
+       Referenced by rpmdepOrder.
+
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002     rpmTransactionSet_s(3)

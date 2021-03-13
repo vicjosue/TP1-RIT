@@ -1,0 +1,63 @@
+ERR_GET_LIB(3)               OpenSSL               ERR_GET_LIB(3)
+
+
+
+NNAAMMEE
+       ERR_GET_LIB, ERR_GET_FUNC, ERR_GET_REASON - get library,
+       function and reason code
+
+SSYYNNOOPPSSIISS
+        #include <openssl/err.h>
+
+        int ERR_GET_LIB(unsigned long e);
+
+        int ERR_GET_FUNC(unsigned long e);
+
+        int ERR_GET_REASON(unsigned long e);
+
+
+DDEESSCCRRIIPPTTIIOONN
+       The error code returned by ERR_get_error() consists of a
+       library number, function code and reason code.
+       ERR_GET_LIB(), ERR_GET_FUNC() and ERR_GET_REASON() can be
+       used to extract these.
+
+       The library number and function code describe where the
+       error occurred, the reason code is the information about
+       what went wrong.
+
+       Each sub-library of OpenSSL has a unique library number;
+       function and reason codes are unique within each sub-
+       library.  Note that different libraries may use the same
+       value to signal different functions and reasons.
+
+       EERRRR_RR_...... reason codes such as EERRRR_RR_MMAALLLLOOCC_FFAAIILLUURREE are
+       globally unique. However, when checking for sub-library
+       specific reason codes, be sure to also compare the library
+       number.
+
+       ERR_GET_LIB(), ERR_GET_FUNC() and ERR_GET_REASON() are
+       macros.
+
+RREETTUURRNN VVAALLUUEESS
+       The library number, function code and reason code
+       respectively.
+
+SSEEEE AALLSSOO
+       err(3), ERR_get_error(3)
+
+HHIISSTTOORRYY
+       ERR_GET_LIB(), ERR_GET_FUNC() and ERR_GET_REASON() are
+       available in all versions of SSLeay and OpenSSL.
+
+
+
+
+
+
+
+
+
+
+
+31/Jan/2000                   0.9.6c               ERR_GET_LIB(3)

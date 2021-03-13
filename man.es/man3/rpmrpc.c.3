@@ -1,0 +1,474 @@
+rpmio/rpmrpc.c(3)                               rpmio/rpmrpc.c(3)
+
+
+
+NAME
+       rpmio/rpmrpc.c -
+
+SYNOPSIS
+       #include 'system.h'
+       #include <rpmio_internal.h>
+       #include <popt.h>
+       #include 'ugid.h'
+       #include 'debug.h'
+
+   Defines
+       #define g_strdup   xstrdup
+       #define g_free   free
+       #define MAXCOLS   30
+       #define alloca_strdup(_s)   strcpy(alloca(strlen(_s)+1),
+           (_s))
+
+   Enumerations
+       enum ftpSysCall_t { DO_FTP_STAT =  1, DO_FTP_LSTAT =  2,
+           DO_FTP_READLINK =  3, DO_FTP_ACCESS =  4, DO_FTP_GLOB
+           =  5 }
+
+   Functions
+       int ftpMkdir (const char *path, mode_t mode)
+       int ftpChdir (const char *path)
+       int ftpRmdir (const char *path)
+       int ftpRename (const char *oldpath, const char *newpath)
+       int ftpUnlink (const char *path)
+       int Mkdir (const char *path, mode_t mode)
+           mkdir(2) clone.
+       int Chdir (const char *path)
+           chdir(2) clone.
+       int Rmdir (const char *path)
+           rmdir(2) clone.
+       int Rename (const char *oldpath, const char *newpath)
+           rename(2) clone.
+       int Link (const char *oldpath, const char *newpath)
+           link(2) clone.
+       int Unlink (const char *path)
+           unlink(2) clone.
+       int vfs_split_text (char *p)
+       int is_num (int idx)
+       int is_dos_date (const char *str)
+       int is_week (const char *str, struct tm *tim)
+       int is_month (const char *str, struct tm *tim)
+       int is_time (const char *str, struct tm *tim)
+       int is_year (const char *str, struct tm *tim)
+       int vfs_parse_filetype (char c)
+       int vfs_parse_filemode (const char *p)
+       int vfs_parse_filedate (int idx, time_t *t)
+       int vfs_parse_ls_lga (char *p, struct stat *st, const char
+           **filename, const char **linkname)
+       int ftpNLST (const char *url, ftpSysCall_t ftpSysCall,
+           struct stat *st, char *rlbuf, size_t rlbufsiz)
+       int ftpStat (const char *path, struct stat *st)
+       int ftpLstat (const char *path, struct stat *st)
+       int ftpReadlink (const char *path, char *buf, size_t
+           bufsiz)
+       int ftpGlob (const char *path, int flags, int
+           errfunc(const char *epath, int eerno), glob_t *pglob)
+       void ftpGlobfree (glob_t *pglob)
+       int Stat (const char *path, struct stat *st)
+           stat(2) clone.
+       int Lstat (const char *path, struct stat *st)
+           lstat(2) clone.
+       int Readlink (const char *path, char *buf, size_t bufsiz)
+           readlink(2) clone.
+       int Access (const char *path, int amode)
+           access(2) clone.
+       int Glob (const char *path, int flags, int errfunc(const
+           char *epath, int eerrno), glob_t *pglob)
+           glob(3) clone.
+       void Globfree (glob_t *pglob)
+           globfree(3) clone.
+       DIR * Opendir (const char *path)
+           opendir(3) clone.
+       direct * Readdir (DIR *dir)
+           readdir(3) clone.
+       int Closedir (DIR *dir)
+           closedir(3) clone.
+
+   Variables
+       int _rpmio_debug
+       int current_mday
+       int current_mon
+       int current_year
+       char * columns [30]
+       int column_ptr [30]
+       size_t ftpBufAlloced = 0
+       char * ftpBuf = NULL
+
+DETAILED DESCRIPTION
+       Definition in file rpmrpc.c.
+
+DEFINE DOCUMENTATION
+   #define alloca_strdup(_s)   strcpy(alloca(strlen(_s)+1), (_s))
+       Definition at line 789 of file rpmrpc.c.
+
+   #define g_free   free
+       Definition at line 250 of file rpmrpc.c.
+
+       Referenced by vfs_parse_ls_lga.
+
+   #define g_strdup   xstrdup
+       Definition at line 249 of file rpmrpc.c.
+
+       Referenced by vfs_parse_ls_lga.
+
+   #define MAXCOLS   30
+       Definition at line 260 of file rpmrpc.c.
+
+       Referenced by vfs_split_text.
+
+ENUMERATION TYPE DOCUMENTATION
+   enum ftpSysCall_t
+       Enumeration values:
+
+       DO_FTP_STAT
+
+       DO_FTP_LSTAT
+
+       DO_FTP_READLINK
+
+       DO_FTP_ACCESS
+
+       DO_FTP_GLOB
+
+
+       Definition at line 779 of file rpmrpc.c.
+
+       Referenced by ftpNLST.
+
+FUNCTION DOCUMENTATION
+   int Access (const char * path, int amode)
+       access(2) clone.
+
+       Definition at line 1101 of file rpmrpc.c.
+
+       References URL_IS_DASH, URL_IS_FTP, URL_IS_HTTP,
+       URL_IS_PATH, URL_IS_UNKNOWN, and urlPath.
+
+   int Chdir (const char * path)
+       chdir(2) clone.
+
+       Definition at line 86 of file rpmrpc.c.
+
+       References ftpChdir, URL_IS_DASH, URL_IS_FTP, URL_IS_HTTP,
+       URL_IS_PATH, URL_IS_UNKNOWN, and urlPath.
+
+   int Closedir (DIR * dir)
+       closedir(3) clone.
+
+       Definition at line 1193 of file rpmrpc.c.
+
+       Referenced by myftw, and myftw_dir.
+
+   int ftpChdir (const char * path) [static]
+       Definition at line 34 of file rpmrpc.c.
+
+       References ftpCmd.
+
+       Referenced by Chdir, and ftpNLST.
+
+   int ftpGlob (const char * path, int flags, int errfunc(const
+       char *epath, int eerno), glob_t * pglob) [static]
+       Definition at line 996 of file rpmrpc.c.
+
+       References DO_FTP_GLOB, ftpBuf, ftpNLST, and
+       poptParseArgvString.
+
+       Referenced by Glob.
+
+   void ftpGlobfree (glob_t * pglob) [static]
+       Definition at line 1017 of file rpmrpc.c.
+
+       Referenced by Globfree.
+
+   int ftpLstat (const char * path, struct stat * st) [static]
+       Definition at line 980 of file rpmrpc.c.
+
+       References DO_FTP_LSTAT, and ftpNLST.
+
+       Referenced by Lstat.
+
+   int ftpMkdir (const char * path, mode_t mode) [static]
+       Definition at line 19 of file rpmrpc.c.
+
+       References ftpCmd.
+
+       Referenced by Mkdir.
+
+   int ftpNLST (const char * url, ftpSysCall_t ftpSysCall, struct
+       stat * st, char * rlbuf, size_t rlbufsiz) [static]
+       Definition at line 791 of file rpmrpc.c.
+
+       References alloca_strdup, DO_FTP_ACCESS, DO_FTP_GLOB,
+       DO_FTP_LSTAT, DO_FTP_READLINK, DO_FTP_STAT, fdFgets,
+       fdLink, ftpBuf, ftpBufAlloced, ftpChdir, ftpOpen, ftpReq,
+       ftpSysCall_t, urlinfo::openError, ufdClose, urlPath,
+       vfs_parse_ls_lga, xcalloc, and xrealloc.
+
+       Referenced by ftpGlob, ftpLstat, ftpReadlink, and ftpStat.
+
+   int ftpReadlink (const char * path, char * buf, size_t bufsiz)
+       [static]
+       Definition at line 990 of file rpmrpc.c.
+
+       References DO_FTP_READLINK, and ftpNLST.
+
+       Referenced by Readlink.
+
+   int ftpRename (const char * oldpath, const char * newpath)
+       [static]
+       Definition at line 46 of file rpmrpc.c.
+
+       References ftpCmd.
+
+       Referenced by Rename.
+
+   int ftpRmdir (const char * path) [static]
+       Definition at line 40 of file rpmrpc.c.
+
+       References ftpCmd.
+
+       Referenced by Rmdir.
+
+   int ftpStat (const char * path, struct stat * st) [static]
+       Definition at line 974 of file rpmrpc.c.
+
+       References DO_FTP_STAT, and ftpNLST.
+
+       Referenced by Stat.
+
+   int ftpUnlink (const char * path) [static]
+       Definition at line 55 of file rpmrpc.c.
+
+       References ftpCmd.
+
+       Referenced by Unlink.
+
+   int Glob (const char * path, int flags, int errfunc(const char
+       *epath, int eerrno), glob_t * pglob)
+       glob(3) clone.
+
+       Definition at line 1124 of file rpmrpc.c.
+
+       References ftpGlob, URL_IS_DASH, URL_IS_FTP, URL_IS_HTTP,
+       URL_IS_PATH, URL_IS_UNKNOWN, and urlPath.
+
+       Referenced by rpmGlob.
+
+   void Globfree (glob_t * pglob)
+       globfree(3) clone.
+
+       Definition at line 1152 of file rpmrpc.c.
+
+       References ftpGlobfree.
+
+       Referenced by rpmGlob.
+
+   int is_dos_date (const char * str) [static]
+       Definition at line 296 of file rpmrpc.c.
+
+       Referenced by vfs_parse_filedate, and vfs_parse_ls_lga.
+
+   int is_month (const char * str, struct tm * tim) [static]
+       Definition at line 323 of file rpmrpc.c.
+
+       Referenced by vfs_parse_filedate, and vfs_parse_ls_lga.
+
+   int is_num (int idx) [static]
+       Definition at line 287 of file rpmrpc.c.
+
+       References columns.
+
+       Referenced by vfs_parse_filedate, and vfs_parse_ls_lga.
+
+   int is_time (const char * str, struct tm * tim) [static]
+       Definition at line 340 of file rpmrpc.c.
+
+       Referenced by vfs_parse_filedate.
+
+   int is_week (const char * str, struct tm * tim) [static]
+       Definition at line 306 of file rpmrpc.c.
+
+       Referenced by vfs_parse_filedate, and vfs_parse_ls_lga.
+
+   int is_year (const char * str, struct tm * tim) [static]
+       Definition at line 359 of file rpmrpc.c.
+
+       Referenced by vfs_parse_filedate.
+
+   int Link (const char * oldpath, const char * newpath)
+       link(2) clone.
+
+       Definition at line 181 of file rpmrpc.c.
+
+       References URL_IS_DASH, URL_IS_FTP, URL_IS_HTTP,
+       URL_IS_PATH, URL_IS_UNKNOWN, urlPath, and xstrncasecmp.
+
+   int Lstat (const char * path, struct stat * st)
+       lstat(2) clone.
+
+       Definition at line 1053 of file rpmrpc.c.
+
+       References ftpLstat, URL_IS_DASH, URL_IS_FTP, URL_IS_HTTP,
+       URL_IS_PATH, URL_IS_UNKNOWN, and urlPath.
+
+       Referenced by addFile, checkOwners, doUntar, myftw, and
+       myftw_dir.
+
+   DIR* Opendir (const char * path)
+       opendir(3) clone.
+
+       Definition at line 1162 of file rpmrpc.c.
+
+       References URL_IS_DASH, URL_IS_FTP, URL_IS_HTTP,
+       URL_IS_PATH, URL_IS_UNKNOWN, and urlPath.
+
+       Referenced by myftw, and myftw_dir.
+
+   struct direct* Readdir (DIR * dir)
+       readdir(3) clone.
+
+       Definition at line 1186 of file rpmrpc.c.
+
+       References dirent, and Readdir.
+
+       Referenced by myftw_dir.
+
+   int Readlink (const char * path, char * buf, size_t bufsiz)
+       readlink(2) clone.
+
+       Definition at line 1078 of file rpmrpc.c.
+
+       References ftpReadlink, URL_IS_DASH, URL_IS_FTP,
+       URL_IS_HTTP, URL_IS_PATH, URL_IS_UNKNOWN, and urlPath.
+
+       Referenced by genCpioListAndHeader.
+
+   int Rename (const char * oldpath, const char * newpath)
+       rename(2) clone.
+
+       Definition at line 134 of file rpmrpc.c.
+
+       References ftpRename, URL_IS_DASH, URL_IS_FTP,
+       URL_IS_HTTP, URL_IS_PATH, URL_IS_UNKNOWN, urlPath, and
+       xstrncasecmp.
+
+       Referenced by rpmdbMoveDatabase.
+
+   int Rmdir (const char * path)
+       rmdir(2) clone.
+
+       Definition at line 109 of file rpmrpc.c.
+
+       References ftpRmdir, URL_IS_DASH, URL_IS_FTP, URL_IS_HTTP,
+       URL_IS_PATH, URL_IS_UNKNOWN, and urlPath.
+
+       Referenced by rpmdbRebuild.
+
+   int Stat (const char * path, struct stat * st)
+       stat(2) clone.
+
+       Definition at line 1028 of file rpmrpc.c.
+
+       References ftpStat, URL_IS_DASH, URL_IS_FTP, URL_IS_HTTP,
+       URL_IS_PATH, URL_IS_UNKNOWN, and urlPath.
+
+       Referenced by buildForTarget, packageBinaries,
+       processSourceFiles, and rpmfileexists.
+
+   int Unlink (const char * path)
+       unlink(2) clone.
+
+       Definition at line 225 of file rpmrpc.c.
+
+       References ftpUnlink, URL_IS_DASH, URL_IS_FTP,
+       URL_IS_HTTP, URL_IS_PATH, URL_IS_UNKNOWN, and urlPath.
+
+       Referenced by buildForTarget, buildSpec, doRmSource,
+       doScript, rpmInstall, urlGetFile, and writeRPM.
+
+   int vfs_parse_filedate (int idx, time_t * t) [static]
+       Definition at line 469 of file rpmrpc.c.
+
+       References columns, current_mday, current_mon,
+       current_year, is_dos_date, is_month, is_num, is_time,
+       is_week, and is_year.
+
+       Referenced by vfs_parse_ls_lga.
+
+   int vfs_parse_filemode (const char * p) [static]
+       Definition at line 410 of file rpmrpc.c.
+
+       Referenced by vfs_parse_ls_lga.
+
+   int vfs_parse_filetype (char c) [static]
+       Definition at line 391 of file rpmrpc.c.
+
+       References S_IFSOCK.
+
+       Referenced by vfs_parse_ls_lga.
+
+   int vfs_parse_ls_lga (char * p, struct stat * st, const char
+       ** filename, const char ** linkname) [static]
+       Definition at line 576 of file rpmrpc.c.
+
+       References column_ptr, columns, g_free, g_strdup,
+       gnameToGid, is_dos_date, is_month, is_num, is_week,
+       S_ISLNK, unameToUid, vfs_parse_filedate,
+       vfs_parse_filemode, vfs_parse_filetype, vfs_split_text,
+       and xmalloc.
+
+       Referenced by ftpNLST.
+
+   int vfs_split_text (char * p) [static]
+       Definition at line 266 of file rpmrpc.c.
+
+       References column_ptr, columns, and MAXCOLS.
+
+       Referenced by vfs_parse_ls_lga.
+
+VARIABLE DOCUMENTATION
+   int _rpmio_debug
+       Definition at line 15 of file rpmrpc.c.
+
+   int column_ptr[ 30 ] [static]
+       Definition at line 263 of file rpmrpc.c.
+
+       Referenced by vfs_parse_ls_lga, and vfs_split_text.
+
+   char* columns[ 30 ] [static]
+       Definition at line 262 of file rpmrpc.c.
+
+       Referenced by is_num, vfs_parse_filedate,
+       vfs_parse_ls_lga, and vfs_split_text.
+
+   int current_mday [static]
+       Definition at line 255 of file rpmrpc.c.
+
+       Referenced by vfs_parse_filedate.
+
+   int current_mon [static]
+       Definition at line 256 of file rpmrpc.c.
+
+       Referenced by vfs_parse_filedate.
+
+   int current_year [static]
+       Definition at line 257 of file rpmrpc.c.
+
+       Referenced by vfs_parse_filedate.
+
+   char* ftpBuf = NULL [static]
+       Definition at line 787 of file rpmrpc.c.
+
+       Referenced by ftpGlob, and ftpNLST.
+
+   size_t ftpBufAlloced = 0 [static]
+       Definition at line 786 of file rpmrpc.c.
+
+       Referenced by ftpNLST.
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002          rpmio/rpmrpc.c(3)

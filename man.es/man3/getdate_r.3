@@ -1,0 +1,124 @@
+GETDATE(3)          Linux Programmer's Manual          GETDATE(3)
+
+
+
+NAME
+       getdate() - convert a string to struct tm
+
+SYNOPSIS
+       #define _XOPEN_SOURCE
+       #define _XOPEN_SOURCE_EXTENDED
+       #include <time.h>
+
+       struct tm *getdate (const char *string);
+
+       extern int getdate_err;
+
+
+       #define _GNU_SOURCE
+       #include <time.h>
+
+       int getdate_r (const char *string, struct tm *res);
+
+DESCRIPTION
+       The  function  getdate()  converts  a string pointed to by
+       string into the tm structure that  it  returns.   This  tm
+       structure  may be found in static storage, so that it will
+       be overwritten by the next call.
+
+       In contrast to strptime(3), (which has a format argument),
+       getdate()  uses the formats found in the file of which the
+       full path  name  is  given  in  the  environment  variable
+       DATEMSK.   The  first  line  in  the file that matches the
+       given input string is used for the conversion.
+
+       The matching  is  done  case  insensitively.   Superfluous
+       whitespace,  either  in the pattern or in the string to be
+       converted, is ignored.
+
+       The conversion specifications that a pattern  can  contain
+       are  those  given  for  strptime(3).   One more conversion
+       specification is accepted:
+
+       %Z     Timezone name.
+
+       When %Z is given, the value to be returned is  initialised
+       to  the broken-down time corresponding to the current time
+       in the given time zone.  Otherwise, it is  initialised  to
+       the  broken-down  time  corresponding to the current local
+       time.
+
+       When only the weekday is given, the day is taken to be the
+       first such day on or after today.
+
+       When  only  the month is given (and no year), the month is
+       taken to be the first such month equal  to  or  after  the
+       current month.  If no day is given, it is the first day of
+       the month.
+
+       When no hour, minute and second  are  given,  the  current
+       hour, minute and second are taken.
+
+       If  no date is given, but we know the hour, then that hour
+       is taken to be the first such hour equal to or  after  the
+       current hour.
+
+RETURN VALUE
+       When  successful,  this  function  returns  a pointer to a
+       struct tm.  Otherwise, it returns NULL and sets the global
+       variable  getdate_err.   Changes to errno are unspecified.
+       The following values for getdate_err are defined:
+
+       1   The DATEMSK environment variable is null or undefined.
+
+       2   The template file cannot be opened for reading.
+
+       3   Failed to get file status information.
+
+       4   The template file is not a regular file.
+
+       5   An  error  is  encountered  while reading the template
+           file.
+
+       6   Memory allocation failed  (not  enough  memory  avail­
+           able).
+
+       7   There is no line in the file that matches the input.
+
+       8   Invalid input specification.
+
+NOTES
+       Since  getdate()  is  not  reentrant because of the use of
+       getdate_err and the static buffer to return the result in,
+       glibc  provides  a thread-safe variant.  The functionality
+       is the same.  The result is returned in the buffer pointed
+       to  by  res  and  in  case of an error the return value is
+       nonzero with the same  values  as  given  above  for  get­
+       date_err.
+
+       The  POSIX  1003.1-2001  specification for strptime() con­
+       tains conversion specifications using the %E or  %O  modi­
+       fier,  while  such  specifications  are not given for get­
+       date().  The  glibc  implementation  implements  getdate()
+       using  strptime() so that automatically precisely the same
+       conversions are supported by both.
+
+       The glibc implementation does not support the  %Z  conver­
+       sion specification.
+
+ENVIRONMENT
+       DATEMSK
+              File containing format patterns.
+
+       TZ, LC_TIME
+              Variables used by strptime().
+
+CONFORMING TO
+       ISO 9899, POSIX 1003.1-2001
+
+SEE ALSO
+       localtime(3), strftime(3), strptime(3), time(3)
+
+
+
+                            2001-12-26                 GETDATE(3)

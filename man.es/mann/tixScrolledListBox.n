@@ -1,0 +1,189 @@
+tixScrolledListBox(n) Tix Built-In Commands tixScrolledListBox(n)
+
+
+
+_________________________________________________________________
+
+NAME
+       tixScrolledListBox    -    Create   and   manipulate   Tix
+       ScrolledListBox widgets
+
+SYNOPSIS
+       tixScrolledListBox pathName ?options?
+
+STANDARD OPTIONS
+       -anchor         -background    -cursor
+       -relief         -borderWidth
+
+       See the options manual entry for details on  the  standard
+       options.
+
+WIDGET-SPECIFIC OPTIONS
+       Command-Line Name:-anchor
+       Database Name:  anchor
+       Database Class: Anchor
+
+              Specifies  the  alignment  of  the items inside the
+              listbox subwidget.  Only the values  w  and  e  are
+              allowed.  When  set  to w, the listbox is automati­
+              cally aligned to the beginning of the items.   When
+              set  to  e, the listbox is automatically aligned to
+              the end of the items.  Automatically alignment only
+              happens when the ScrolledListBox widget changes its
+              size.
+
+       Command-Line Name:-browsecmd
+       Database Name:  browsecmd
+       Database Class: BrowseCmd
+
+              Specifies the command to be called  when  the  user
+              browses  the  elements inside the listbox subwidget
+              (see the BINDINGS section below).
+
+       Command-Line Name:-command
+       Database Name:  command
+       Database Class: Command
+
+              Specifies the command to be called  when  the  user
+              invokes  the  listbox  subwidget  (see the BINDINGS
+              section below).
+
+       Command-Line Name:-height
+       Database Name:  height
+       Database Class: Height
+
+              Specifies the desired height  for  the  window,  in
+              pixels.
+
+       Command-Line Name:-scrollbar
+       Database Name:  scrollbar
+       Database Class: Scrollbar
+
+              Specifies the display policy of the scrollbars. The
+              following values are recognized:
+
+              auto ?+x? ?-x? ?+y? ?-y?
+                     When  -scrollbar  is  set  to  "auto",   the
+                     scrollbars are shown only when needed. Addi­
+                     tional modifiers can  be  used  to  force  a
+                     scrollbar  to  be shown or hidden. For exam­
+                     ple, "auto -y" means the horizontal  scroll­
+                     bar should be shown when needed but the ver­
+                     tical scrollbar  should  always  be  hidden;
+                     "auto   +x"  means  the  vertical  scrollbar
+                     should be shown when needed but the horizon­
+                     tal scrollbar should always be shown, and so
+                     on.
+
+              both   Both scrollbars are shown
+
+              none   The scrollbars are never shown.
+
+              x      Only the horizontal scrollbar is shown;
+
+              y      Only the vertical scrollbar is shown.
+
+       Command-Line Name:-width
+       Database Name:  width
+       Database Class: Width
+
+              Specifies the desired width for the window, in pix­
+              els.
+
+SUBWIDGETS
+       Name:           hsb
+       Class:          Scrollbar
+
+              The horizontal scrollbar subwidget.
+
+       Name:           listbox
+       Class:          Listbox
+
+              The  listbox  subwidget  inside the ScrolledListBox
+              widget.
+
+       Name:           vsb
+       Class:          Scrollbar
+
+              The vertical scrollbar subwidget.
+_________________________________________________________________
+
+DESCRIPTION
+       The tixScrolledListBox command creates a new window (given
+       by   the   pathName   argument)   and   makes  it  into  a
+       ScrolledListBox  widget.   Additional  options,  described
+       above,  may  be  specified  on  the command line or in the
+       option database to configure aspects of the  ScrolledList­
+       Box widget such as its cursor and relief.
+
+WIDGET COMMANDS
+       The  tixScrolledListBox  command creates a new Tcl command
+       whose  name  is  the  same  as  the  path  name   of   the
+       ScrolledListBox  widget's window. This command may be used
+       to invoke various operations on the  widget.  It  has  the
+       following general form:
+                     pathName option ?arg arg ...?
+
+       PathName  is the name of the command, which is the same as
+       the ScrolledListBox widget's path  name.  Option  and  the
+       args  determine  the  exact  behavior of the command.  The
+       following commands are possible for  ScrolledListBox  wid­
+       gets:
+
+       pathName cget option
+              Returns  the  current  value  of  the configuration
+              option given by option. Option may have any of  the
+              values  accepted by the tixScrolledListBox command.
+
+       pathName configure ?option? ?value option value ...?
+              Query or modify the configuration  options  of  the
+              widget.   If no option is specified, returns a list
+              describing all of the available options  for  path­
+              Name  (see  Tk_ConfigureInfo for information on the
+              format of this list).  If option is specified  with
+              no  value, then the command returns a list describ­
+              ing the one named option (this list will be identi­
+              cal  to  the  corresponding  sublist  of  the value
+              returned if no option is  specified).   If  one  or
+              more  option-value  pairs  are  specified, then the
+              command modifies the given widget option(s) to have
+              the  given  value(s);  in  this  case  the  command
+              returns an empty string.  Option may  have  any  of
+              the  values accepted by the tixScrolledListBox com­
+              mand.
+
+       pathName subwidget  name ?args?
+              When no additional arguments are given, returns the
+              pathname of the subwidget of the specified name.
+
+              When  no additional arguments are given, the widget
+              command of the specified subwidget will  be  called
+              with these parameters.
+
+BINDINGS
+       [1]    If  the -browsecmd option is set, the command which
+              it referes to is called whenever a  <ButtonPress-1>
+              or  a  <Motion-1>  event occurrs inside the listbox
+              subwidget.
+
+
+       [2]    The command specified by  the  -command  option  is
+              invoked  when a <Double-1> event occurrs inside the
+              listbox subwidget.
+
+BUGS
+       The capitalization of some of the commands  names  in  Tix
+       3.x  has  been changed in Tix 4.0. All commands that ended
+       with box have been changed to a  capitalized  Box.  Hence,
+       the command tixScrolledListbox in Tix 3.x has been changed
+       to tixScrolledListBox in Tix 4.0
+
+KEYWORDS
+       Tix(n)
+
+
+
+
+
+
+Tix                            4.0          tixScrolledListBox(n)

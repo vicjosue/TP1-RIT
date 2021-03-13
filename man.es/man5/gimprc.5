@@ -1,0 +1,455 @@
+GIMPRC(5)               GIMP Manual Pages               GIMPRC(5)
+
+
+
+NAME
+       gimprc - gimp configuration file
+
+DESCRIPTION
+       The  gimprc  file  is a configuation file read by the gimp
+       when it starts up.  There are two of  these:  one  system-
+       wide  one  stored  in  /etc/gimp/1.2/gimprc and a per-user
+       $HOME/.gimp-1.2/gimprc which may override system settings.
+
+       Comments  are  introduced by a hash sign (#), and continue
+       until the end of the line.  Blank lines are ignored.
+
+       The gimprc file associates values with properties.   These
+       properties  may  be  set  by  lisp-like assignments of the
+       form:
+
+              (property-name   value)
+
+       where:
+
+       property-name
+                 is one of the property names described below.
+
+       value     is the value the property is to be set to.
+
+
+       Either spaces or tabs may be used  to  separate  the  name
+       from the value.
+
+       The values have an associated type, described below:
+
+       STRING A  sequence  of  characters  surrounded  by double-
+              quotes (").  A backslash (\) may be used to  escape
+              either double-quote or itself to generate a literal
+              double-quote or a literal backslash.
+
+       PATH   Same as STRING, but path-expansion (see  below)  is
+              also performed.
+
+       DOUBLE An optional minus sign (-) followed by zero or more
+              decimal digits, and optionally a decimal-point  (.)
+              followed by zero or more decimal digits.
+
+       FLOAT  Same as DOUBLE.
+
+       INT    Same  as DOUBLE, except the value is rounded to the
+              next lowest integer.
+
+       BOOLEAN
+              One of true, on, yes, false, off, or no.   Alterna­
+              tively,  the  empty  string  is interpreted to mean
+              true.
+
+       POSITION
+              Same as two INTs separated by whitespace.
+
+       MEMSIZE
+              An INT followed by a size specifier.  A size speci­
+              fier is one of m, M, k, K, b, or B.  The size spec­
+              ified may be omitted, in which case it defaults  to
+              k.
+
+       IMAGETYPE
+              One of rgb, grey, or gray.
+
+       COLORCUBE
+              Four  whitespace  separated INTs, giving the number
+              of shades of red, green,  blue  and  grey  (respec­
+              tively) in the color cube.
+
+       PREVIEWSIZE
+              One of none, tiny, small, medium, large or huge, or
+              an INT.  tiny is 24x24, small is 32x32,  medium  is
+              48x48, large is 64x64 and huge is 128x128.
+
+       UNIT   One of inches, millimeters, picas, or points or the
+              identifier of one of the units you have defined  in
+              your user units database.
+
+
+PROPERTIES
+       Valid properties and their types:
+
+       temp-path PATH
+              Set  the  temporary  storage  directory. Files will
+              appear here during the course of running the  gimp.
+              Most  files will disappear when the gimp exits, but
+              some files are likely to remain,  such  as  working
+              palette  files, so it is best if this directory not
+              be one that is shared by other users or is  cleared
+              on machine reboot such as /tmp.
+
+       swap-path PATH
+              Set  the  swap  file location. The gimp uses a tile
+              based memory allocation scheme. The  swap  file  is
+              used  to  quickly and easily swap tiles out to disk
+              and back in. Be aware that the swap file can easily
+              get  very  large  if  the  gimp  is used with large
+              images.  Also, things can get horribly slow if  the
+              swap file is created on a directory that is mounted
+              over NFS.  For these reasons, it may  be  desirable
+              to put your swap file in "/tmp".
+
+       brush-path PATH
+              Set  the  brush  search path. This is a colon-sepa­
+              rated  list  of  directories  to  be  searched  for
+              brushes.
+
+       pattern-path PATH
+              Set the pattern search path.  This is a colon-sepa­
+              rated list of directories to be searched  for  pat­
+              terns.
+
+       plug-in-path PATH
+              Set  the plug-in search path. This is a colon-sepa­
+              rated list of directories which will be scanned  at
+              startup to register new plugins.
+
+       palette-path PATH
+              Set the palette search path.  This is a colon-sepa­
+              rated  list  of  directories  to  be  searched  for
+              palettes.
+
+       gradient-path PATH
+              Set the gradient search path.  This is a colon-sep­
+              arated list of directories to be searched for  gra­
+              dients.
+
+       module-path PATH
+              Set  the  module search path. This is a colon-sepa­
+              rated list of directories which will be scanned  at
+              startup for modules to be loaded.
+
+       default-brush STRING
+              Specify  a default brush.  This doesn't actually do
+              anything any more, since the default brush  is  set
+              as part of the saved device status.
+
+       default-pattern STRING
+              Specify  a default pattern. The pattern is searched
+              for in the specified pattern path.
+
+       default-palette STRING
+              Specify a default palette.  The palette is searched
+              for in the specified palette path.
+
+       default-gradient STRING
+              Specify   a   default  gradient.  The  gradient  is
+              searched for in the specified gradient path.
+
+       gamma-correction DOUBLE
+              Set the gamma correction  value  for  the  display.
+              1.0  corresponds  to no gamma correction.  For most
+              displays, gamma correction should be set to between
+              2.0  and  2.6  Run  the  utility "gamma_correct" to
+              determine appropriate values for your display.  XXX
+              is  this valid info?  One important item to keep in
+              mind: Many images that you might get  from  outside
+              sources  will  in  all likelihood already be gamma-
+              corrected.  In these cases,  the  image  will  look
+              washed-out  if the gimp has gamma-correction turned
+              on.  If you are going to work with images  of  this
+              sort,  turn  gamma  correction  off  by setting the
+              value to 1.0.
+
+       color-cube COLORCUBE
+              Set the displays color cube.   No  longer  used  in
+              gimp-1.2.x since the introduction of GdkRgb.
+
+       install-colormap BOOLEAN
+              Install  a  private colormap by default - not actu­
+              ally used anymore since the introduction of GdkRgb.
+
+       tile-cache-size MEMSIZE
+              The  tile  cache  is  used  to  make  sure the gimp
+              doesn't thrash tiles between memory and disk.  Set­
+              ting  this  value higher will cause the gimp to use
+              less swap space, but will also cause  the  gimp  to
+              use  more  memory. Conversely, a smaller cache size
+              causes the gimp to use more  swap  space  and  less
+              memory.   Note:  the  gimp  will  still run even if
+              `tile-cache-size' is set to 0. The actual size  can
+              contain  a suffix of 'm', 'M', size as being speci­
+              fied in  megabytes,  kilobytes  and  bytes  respec­
+              tively. If no suffix is specified the size defaults
+              to being specified in kilobytes.
+
+       marching-ants-speed INT
+              Speed of marching ants in  the  selection  outline.
+              This  value is in milliseconds (less time indicates
+              faster marching).
+
+       last-opened-size INT
+              How many recently opened image filenames to keep on
+              the File menu.
+
+       undo-levels INT
+              Set  the  number  of  operations  kept  on the undo
+              stack.
+
+       transparency-type INT
+              Set the manner in which transparency  is  displayed
+              in  images.   Transparency  type  can be one of 0 -
+              Light Checks, 1 - Mid-Tone Checks, 2 - Dark Checks,
+              3 - White Only, 4 - Gray Only, or 5 - Black Only.
+
+       transparency-size INT
+              Check  size can be one of 0 - Small, 1 - Medium, or
+              2 - Large
+
+       perfect-mouse BOOLEAN
+              If set to true, the X server  is  queried  for  the
+              mouse's  current  position  on  each  motion event,
+              rather than relying on  the  position  hint.   This
+              means  painting  with  large brushes should be more
+              accurate, but it may  be  slower.   Perversely,  on
+              some  X  servers  turning on this option results in
+              faster painting.
+
+       colormap-cycling BOOLEAN
+              Specify that marching  ants  for  selected  regions
+              will  be  drawn  with colormap cycling as oposed to
+              redrawing with different stipple masks.  This color
+              cycling option works only with 8-bit displays.
+
+       default-threshold INT
+              Tools  such  as  fuzzy-select  and bucket fill find
+              regions based on a seed-fill algorithm.   The  seed
+              fill starts at the intially selected pixel and pro­
+              gresses in all directions until the  difference  of
+              pixel intensity from the original is greater than a
+              specified threshold.   This  value  represents  the
+              default threshold.
+
+       stingy-memory-use BOOLEAN
+              There is always a tradeoff between memory usage and
+              speed.  In most cases, the GIMP opts for speed over
+              memory.   However,  if  memory  is a big issue, set
+              stingy-memory-use.
+
+       allow-resize-windows BOOLEAN
+              When zooming into and out of  images,  this  option
+              enables the automatic resizing of windows.
+
+       dont-allow-resize-windows BOOLEAN
+              Negated version of allow-resize-windows.
+
+       cursor-updating BOOLEAN
+              Context-dependent   cursors  are  cool.   They  are
+              enabled by default.  However, they require overhead
+              that you may want to do without.
+
+       no-cursor-updating BOOLEAN
+              Negated version of cursor-updating.
+
+       preview-size PREVIEWSIZE
+              Set the layer preview size.
+
+       show-rulers BOOLEAN
+              Set  the  ruler visibility. The default behavior is
+              for rulers to be on.  This can also be toggled with
+              the View->Toggle Rulers command or shift+control+r.
+
+       dont-show-rulers BOOLEAN
+              Negated version of show-rulers.
+
+       show-statusbar BOOLEAN
+              Controlling  statusbar  visibility.   The   default
+              behavior  is  to show the statusbar.  This can also
+              be toggled with the View->Toggle Statusbar  command
+              or shift+control+s.
+
+       dont-show-statusbar BOOLEAN
+              Negated version of show-statusbar.
+
+       auto-save BOOLEAN
+              Auto saving is not yet implemented! Nothing will be
+              auto-saved, no matter how you set this.
+
+       dont-auto-save BOOLEAN
+              Negated version of auto-save.
+
+       cubic-interpolation BOOLEAN
+              Set the  level  of  interpolation.   If  set,  this
+              option  enables cubic interpolation when scaling or
+              transforming.  By default, GIMP uses linear  inter­
+              polation,  which is faster, but has poorer quality.
+
+       confirm-on-close BOOLEAN
+              Ask for confirmation before closing an image  with­
+              out saving. This is the default.
+
+       dont-confirm-on-close BOOLEAN
+              Negated version of confirm-on-close.
+
+       save-session-info BOOLEAN
+              Remember  the  positions  and  sizes  of  the  main
+              dialogs and asks your window-manager to place  them
+              there again the next time you use the GIMP.
+
+       dont-save-session-info BOOLEAN
+              Negated version of save-session-info.
+
+       save-device-status BOOLEAN
+              Remember  the  current  tool,  pattern,  color, and
+              brush across GIMP sessions.
+
+       dont-save-device-status BOOLEAN
+              Negated version of save-device-status.
+
+       always-restore-session BOOLEAN
+              Let GIMP try to restore your last saved session.
+
+       show-tips BOOLEAN
+              Set to display a handy GIMP tip on startup.
+
+       dont-show-tips BOOLEAN
+              Negated version of show-tips.
+
+       show-tool-tips BOOLEAN
+              Set to display tooltips in the toolbox.
+
+       dont-show-tool-tips BOOLEAN
+              Negated version of show-tool-tips.
+
+       default-image-size POSITION
+              Set the default image size in the File/New  dialog.
+
+       default-image-type IMAGETYPE
+              Set  the default image type in the File/New dialog.
+
+       default-units UNIT
+              Set the default units for new images  and  for  the
+              File/New dialog.  This units will be used for coor­
+              dinate display when not in  dot-for-dot  mode.  The
+              default  units  can be one of inches , millimeters,
+              points or picas or the identifier  of  one  of  the
+              units  defined  in  your  user  units database. The
+              default is inches.
+
+       default-xresolution FLOAT
+              Set  the  default  horizontal  resolution  for  new
+              images  and  for the File/New dialog. This value is
+              always in dpi (dots per inch).
+
+       default-yresolution FLOAT
+              Set the default vertical resolution for new  images
+              and  for  the File/New dialog. This value is always
+              in dpi (dots per inch).
+
+       default-resolution-units UNIT
+              Set the units for the display of the default  reso­
+              lution  in the File/New dialog. The default resolu­
+              tion units  can  be  one  of  inches,  millimeters,
+              points  or  picas  or  the identifier of one of the
+              units defined  in  your  user  unit  database.  The
+              default is inches.
+
+       monitor-xresolution FLOAT
+              Set  the  monitor's  horizontal resolution, in dots
+              per inch.  If set to 0, forces the X server  to  be
+              queried for both horizontal and vertical resolution
+              information.
+
+       monitor-yresolution FLOAT
+              Set the monitor's vertical resolution, in dots  per
+              inch.   If  set  to  0,  forces  the X server to be
+              queried for both horizontal and vertical resolution
+              information.
+
+       num-processors INT
+              On  multiprocessor  machines, if GIMP has been com­
+              piled with --enable-mp this sets how  many  proces­
+              sors GIMP should use simultaneously.
+
+       image-title-format STRING
+              Set  the  text  to  appear  in image window titles.
+              Certain % character sequences  are  recognised  and
+              expanded as follows:
+
+              %%  literal percent sign
+              %f  bare filename, or "Untitled"
+              %F  full path to file, or "Untitled"
+              %p  PDB image id
+              %i  view instance number
+              %t  image type (RGB, indexed, greyscale)
+              %z  zoom factor as a percentage
+              %s  source scale factor
+              %d  destination scale factor
+              %Dx  expands  to x if the image is dirty, the empty
+              string otherwise.  The x can be any  character,  eg
+              %D*.
+
+              The default format string is "%f-%p.%i (%t)".
+
+
+
+PATH EXPANSION
+       Strings  of  type PATH are expanded in a manner similar to
+       bash(1).  Specifically:  tilde  (~)  is  expanded  to  the
+       user's  home directory, and ${variable} is expanded to the
+       current value of the variable.  Note that the bash feature
+       of being able to refer to other user's home directories by
+       writing ~userid/ is not valid in this file.
+
+       The only variable initially defined is gimp_dir , which is
+       set to either the interned value .gimp-1.2 or the environ­
+       ment variable GIMP_DIRECTORY.  If the path in  GIMP_DIREC­
+       TORY  is  relative, it is considered relative to your home
+       directory.  The same variable expansion syntax can be used
+       to  refer  to environment variables.  New variables may be
+       defined so long as their name does not shadow one  of  the
+       property  names  given in the previous section.  Variables
+       are set using the following syntax:
+
+              (variable-name   PATH)
+
+       Note that the right hand side of this assignment is itself
+       path expanded before setting the value of the variable.
+
+       Typically, the system-wide gimprc file will set a few con­
+       venience variables:
+
+       prefix The installation prefix for this build, /usr.
+
+       exec_prefix
+              The  path  to  architecture-specific   executables,
+              ${prefix}.
+
+       gimp_data_dir
+              Path to sharable data, ${prefix}/share/gimp/1.2.
+
+       gimp_plugin_dir
+              Base for paths to architecture-specific plugins and
+              modules, ${exec_prefix}/lib/gimp/1.2.
+
+
+
+FILES
+       /etc/gimp/1.2/gimprc
+              System-wide configuration file
+
+       $HOME/.gimp-1.2/gimprc
+              Per-user configuration file
+
+SEE ALSO
+       gimp(1), gimptool(1), gimp-remote(1)
+
+
+
+Version 1.2.3              14 Oct 2000                  GIMPRC(5)

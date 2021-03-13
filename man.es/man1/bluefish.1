@@ -1,0 +1,60 @@
+BLUEFISH(1)             Bluefish man page             BLUEFISH(1)
+
+
+
+NAME
+       bluefish - a programmer's HTML editor
+
+SYNOPSIS
+       bluefish [-svh] [-p project_file] [html_files]
+
+DESCRIPTION
+       Bluefish is a HTML editor designed for the experienced web
+       designer.  Its features include nice wizards; a fully fea­
+       tured image insert dialog; thumbnail creation and automat­
+       ically linking of the thumbnail with the  original  image;
+       lots  of  dialogs;  a  configurable menu; PHP support; WML
+       support; CSS support and more.  Bluefish uses the GTK wid­
+       get set and requires the X Windowing System.
+
+       Bluefish  refuses to run as root.  This can be overridden;
+       see below.
+
+OPTIONS
+       -s     Disable the  check  for  non-rootness.   With  this
+              option,  bluefish  will  not refuse to run as root.
+              Please note that you should never use  any  complex
+              programs as root if you can avoid it.
+
+       -v     Show bluefish version number and exit.
+
+       -h     Show commandline options and exit
+
+       -p FILENAME
+              Load  FILENAME  as project file (usually located in
+              $HOME/.bluefish/projects/ )
+
+BUGS
+       Yes, there are bugs.  Bluefish is under development.   For
+       a  list  of  known  bugs,  see the file BUGS in the source
+       directory, or in /usr/share/doc/bluefish if  Bluefish  was
+       installed from the Debian package.
+
+FILES
+       Bluefish  files are located in $HOME/.bluefish/ The config
+       file  is  rcfile.   php3_functions,   rxml_functions   and
+       ssi_functions contain the functions shown by the reference
+       dialog. The files in $HOME/.bluefish/menu/ define the cus­
+       tom menu.
+
+AUTHORS
+       Bluefish  is being written by a team of volunteer program­
+       mers lead by Olivier Sessink.  This manual page was  writ­
+       ten by Antti-Juhani Kaijanaho.
+
+SEE ALSO
+       Bluefish website at http://bluefish.openoffice.nl/
+
+
+
+Bluefish team               2000-01-14                BLUEFISH(1)

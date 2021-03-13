@@ -1,0 +1,280 @@
+POSTMASTER(1)     PostgreSQL Server Applications    POSTMASTER(1)
+
+
+
+NAME
+       postmaster - PostgreSQL multiuser database server
+
+SYNOPSIS
+       postmaster  [ -A   0 | 1 ] [ -B nbuffers ] [ -c name=value
+       ] [ -d debug-level ] [ -D datadir ] [ -F ] [ -h hostname ]
+       [ -i ] [ -k directory ] [ -l ] [ -N max-connections ] [ -o
+       extra-options ] [ -p port ] [ -S ] [ --name=value ] [ -n |
+       -s ]
+
+DESCRIPTION
+       postmaster  is  the  PostgreSQL multiuser database server.
+       In order for a client application to access a database  it
+       connects (over a network or locally) to a running postmas­
+       ter. The postmaster then starts a separate server  process
+       (``postgres(1)'') to handle the connection. The postmaster
+       also manages the communication among server processes.
+
+       By default the postmaster starts  in  the  foreground  and
+       prints  log  messages to the standard output. In practical
+       applications the postmaster should be started as  a  back­
+       ground process, perhaps at boot time.
+
+       One  postmaster  always  manages the data from exactly one
+       database cluster. A database cluster is  a  collection  of
+       databases that is stored at a common file system location.
+       When the postmaster starts it needs to know  the  location
+       of  the  database  cluster  files (``data area''). This is
+       done with the -D invocation option or the PGDATA  environ­
+       ment  variable;  there is no default.  More than one post­
+       master process can run on a system at one time, as long as
+       they  use different data areas and different communication
+       ports (see below). A data area is created with  initdb(1).
+
+   OPTIONS
+       postmaster  accepts  the following command line arguments.
+       For a detailed  discussion  of  the  options  consult  the
+       Administrator's  Guide.  You  can also save typing most of
+       these options by setting up a configuration file.
+
+       -A 0|1 Enables run-time assert checks, which is  a  debug­
+              ging  aid  to  detect programming mistakes. This is
+              only available if it was  enabled  during  compila­
+              tion. If so, the default is on.
+
+       -B nbuffers
+              Sets  the  number  of shared buffers for use by the
+              server  processes.  This  value  defaults   to   64
+              buffers, where each buffer is 8 kB.
+
+       -c name=value
+              Sets a named run-time parameter. Consult the Admin­
+              istrator's Guide for a list and descriptions.  Most
+              of the other command line options are in fact short
+              forms of such a parameter assignment. -c can appear
+              multiple times to set multiple parameters.
+
+       -d debug-level
+              Sets the debug level. The higher this value is set,
+              the more debugging output is written to the  server
+              log.  The  default  is 0, which means no debugging.
+              Values up to 4 are useful; higher  numbers  produce
+              no additional output.
+
+       -D datadir
+              Specifies  the  file  system  location  of the data
+              directory. See discussion above.
+
+       -F     Disables fsync calls for  performance  improvement,
+              at the risk of data corruption in event of a system
+              crash. Read the detailed documentation before using
+              this!
+
+       -h hostname
+              Specifies  the TCP/IP host name or address on which
+              the postmaster is to listen  for  connections  from
+              client  applications.  Defaults to listening on all
+              configured addresses (including localhost).
+
+       -i     Allows clients  to  connect  via  TCP/IP  (Internet
+              domain)  connections.  Without  this  option,  only
+              local Unix domain socket connections are  accepted.
+
+       -k directory
+              Specifies  the  directory of the Unix-domain socket
+              on which the postmaster is to  listen  for  connec­
+              tions from client applications. The default is nor­
+              mally /tmp, but can be changed at build time.
+
+       -l     Enables secure connections using SSL. The -i option
+              is  also  required. You must have compiled with SSL
+              enabled to use this option.
+
+       -N max-connections
+              Sets the maximum number of client connections  that
+              this postmaster will accept. By default, this value
+              is 32, but it can be set as  high  as  your  system
+              will  support.  (Note  that -B is required to be at
+              least twice -N. See the Administrator's Guide for a
+              discussion  of  system  resource  requirements  for
+              large numbers of client connections.)
+
+       -o extra-options
+              The command line-style options specified in  extra-
+              options  are passed to all backend server processes
+              started by this  postmaster.  See  postgres(1)  for
+              possibilities.  If  the  option string contains any
+              spaces, the entire string must be quoted.
+
+       -p port
+              Specifies the TCP/IP  port  or  local  Unix  domain
+              socket file extension on which the postmaster is to
+              listen for connections  from  client  applications.
+              Defaults  to  the  value  of the PGPORT environment
+              variable, or if PGPORT is not set, then defaults to
+              the  value established during compilation (normally
+              5432). If you specify a port other than the default
+              port, then all client applications must specify the
+              same port  using  either  command-line  options  or
+              PGPORT.
+
+       -S     Specifies  that the postmaster process should start
+              up in silent mode. That is,  it  will  disassociate
+              from  the  user's (controlling) terminal, start its
+              own process group, and redirect its standard output
+              and standard error to /dev/null.
+
+              Using  this  switch  discards  all  logging output,
+              which is probably not what you want, since it makes
+              it  very  difficult  to  troubleshoot problems. See
+              below for a better way to start the  postmaster  in
+              the background.
+
+       --name=value
+              Sets  a named run-time parameter; a shorter form of
+              -c.
+
+
+       Two additional command  line  options  are  available  for
+       debugging problems that cause a backend to die abnormally.
+       These options control the behavior of  the  postmaster  in
+       this  situation, and neither option is intended for use in
+       ordinary operation.
+
+       The ordinary strategy for this situation is to notify  all
+       other  backends  that  they must terminate and then reini­
+       tialize the shared memory and semaphores. This is  because
+       an  errant  backend could have corrupted some shared state
+       before terminating.
+
+       These special-case options are:
+
+       -n     postmaster will not reinitialize shared data struc­
+              tures.  A  knowledgeable system programmer can then
+              use  a  debugger  to  examine  shared  memory   and
+              semaphore state.
+
+       -s     postmaster will stop all other backend processes by
+              sending the signal SIGSTOP, but will not cause them
+              to  terminate.  This  permits system programmers to
+              collect core dumps from all  backend  processes  by
+              hand.
+
+
+   OUTPUTS
+       semget: No space left on device
+              If  you  see  this message, you should run the ipc­
+              clean command. After doing so, try  starting  post­
+              master again. If this still doesn't work, you prob­
+              ably need to configure your kernel for shared  mem­
+              ory and semaphores as described in the installation
+              notes. If you run multiple instances of  postmaster
+              on  a  single  host, or have a kernel with particu­
+              larly small shared memory and/or semaphore  limits,
+              you may have to reconfigure your kernel to increase
+              its shared memory or semaphore parameters.
+
+              Tip: You may be able to postpone reconfiguring your
+              kernel by decreasing -B to reduce the shared memory
+              consumption of PostgreSQL, and/or by reducing -N to
+              reduce the semaphore consumption.
+
+
+       StreamServerPort: cannot bind to port
+              If  you  see  this message, you should make certain
+              that there is no other postmaster  process  already
+              running on the same port number. The easiest way to
+              determine this is by using the command
+
+              $ ps ax | grep postmaster
+
+              or
+
+              $ ps -e | grep postmaster
+
+              depending on your system.
+
+              If you are sure that no other postmaster  processes
+              are running and you still get this error, try spec­
+              ifying a different port using the  -p  option.  You
+              may  also get this error if you terminate the post­
+              master and immediately restart it  using  the  same
+              port; in this case, you must simply wait a few sec­
+              onds until the operating  system  closes  the  port
+              before  trying  again.  Finally,  you  may get this
+              error if you specify a port number that your  oper­
+              ating  system  considers to be reserved.  For exam­
+              ple, many versions of Unix  consider  port  numbers
+              under  1024  to be trusted and only permit the Unix
+              superuser to access them.
+
+
+NOTES
+       If at all possible, do not use SIGKILL to kill  the  post­
+       master. This will prevent postmaster from freeing the sys­
+       tem resources (e.g., shared memory and semaphores) that it
+       holds before terminating.
+
+       To terminate the postmaster normally, the signals SIGTERM,
+       SIGINT, or SIGQUIT can be used. The first  will  wait  for
+       all  clients to terminate before quitting, the second will
+       forcefully disconnect all clients, and the third will quit
+       immediately without proper shutdown, resulting in a recov­
+       ery run during restart.
+
+       The utility command pg_ctl(1) can be  used  to  start  and
+       shut down the postmaster safely and comfortably.
+
+       The  --  options will not work on FreeBSD or OpenBSD.  Use
+       -c instead. This is a bug in the affected  operating  sys­
+       tems;  a  future  release  of  PostgreSQL  will  provide a
+       workaround if this is not fixed.
+
+USAGE
+       To start postmaster in the background using  default  val­
+       ues, type:
+
+       $ nohup postmaster >logfile 2>&1 </dev/null &
+
+
+       To start postmaster with a specific port:
+
+       $ postmaster -p 1234
+
+       This   command  will  start  up  postmaster  communicating
+       through the port 1234. In order to connect to  this  post­
+       master using psql, you would need to run it as
+
+       $ psql -p 1234
+
+       or set the environment variable PGPORT:
+
+       $ export PGPORT=1234
+       $ psql
+
+
+       Named  runtime  parameters  can  be set in either of these
+       styles:
+
+       $ postmaster -c sort_mem=1234
+       $ postmaster --sort-mem=1234
+
+       Either form overrides whatever  setting  might  exist  for
+       sort_mem  in  postgresql.conf.  Notice that underscores in
+       parameter names can be written  as  either  underscore  or
+       dash on the command line.
+
+              Tip: Except for short-term experiments, it's proba­
+              bly better practice to edit the  setting  in  post­
+              gresql.conf  than  to rely on a command-line switch
+              to set a parameter.
+
+
+
+
+Application                 2000-12-25              POSTMASTER(1)

@@ -1,0 +1,848 @@
+rpmdb/rpmdb.c(3)                                 rpmdb/rpmdb.c(3)
+
+
+
+NAME
+       rpmdb/rpmdb.c -
+
+SYNOPSIS
+       #include 'system.h'
+       #include <sys/file.h>
+       #include <signal.h>
+       #include <sys/signal.h>
+       #include <fnmatch.h>
+       #include <regex.h>
+       #include <rpmcli.h>
+       #include 'rpmdb.h'
+       #include 'fprint.h'
+       #include 'misc.h'
+       #include 'debug.h'
+
+   Data Structures
+       union _dbswap
+       struct _rpmdbMatchIterator
+       struct miRE_s
+
+   Defines
+       #define INLINE
+       #define _DBI_FLAGS   0
+       #define _DBI_PERMS   0644
+       #define _DBI_MAJOR   -1
+       #define DB1vec   NULL
+       #define DB2vec   NULL
+       #define DB3vec   NULL
+       #define _DBSWAP(_a)
+       #define _DB_ROOT   '/'
+       #define _DB_HOME   '%{_dbpath}'
+       #define _DB_FLAGS   0
+       #define _DB_MODE   0
+       #define _DB_PERMS   0644
+       #define _DB_MAJOR   -1
+       #define _DB_ERRPFX   'rpmdb'
+       #define _RECNUM   rpmdbGetIteratorOffset(mi)
+
+   Typedefs
+       typedef miRE_s * miRE
+
+   Functions
+       int dbiTagToDbix (int rpmtag)
+           Return dbi index used for rpm tag.
+       void dbiTagsInit (void)
+           Initialize database (index, tag) tuple from
+           configuration.
+       int dbiSync (dbiIndex dbi, unsigned int flags)
+       int dbiByteSwapped (dbiIndex dbi)
+       int dbiCopen (dbiIndex dbi, void **dbcp, unsigned int
+           flags)
+       int dbiCclose (dbiIndex dbi, void *dbcursor, unsigned int
+           flags)
+       int printable (const void *ptr, size_t len)
+       int dbiDel (dbiIndex dbi, void *dbcursor, const void
+           *keyp, size_t keylen, unsigned int flags)
+       int dbiGet (dbiIndex dbi, void *dbcursor, void **keypp,
+           size_t *keylenp, void **datapp, size_t *datalenp,
+           unsigned int flags)
+       int dbiPut (dbiIndex dbi, void *dbcursor, const void
+           *keyp, size_t keylen, const void *datap, size_t
+           datalen, unsigned int flags)
+       int dbiCount (dbiIndex dbi, void *dbcursor, unsigned int
+           *countp, unsigned int flags)
+       int dbiVerify (dbiIndex dbi, unsigned int flags)
+       int dbiClose (dbiIndex dbi, unsigned int flags)
+       dbiIndex dbiOpen (rpmdb db, int rpmtag, unsigned int
+           flags)
+       dbiIndexItem dbiIndexNewItem (unsigned int hdrNum,
+           unsigned int tagNum)
+           Create and initialize item for index database set.
+       int dbiSearch (dbiIndex dbi, void *dbcursor, const char
+           *keyp, size_t keylen, dbiIndexSet *setp)
+           Return items that match criteria.
+       int dbiUpdateIndex (dbiIndex dbi, void *dbcursor, const
+           void *keyp, size_t keylen, dbiIndexSet set)
+           Change/delete items that match criteria.
+       int hdrNumCmp (const void *one, const void *two)
+       int dbiAppendSet (dbiIndexSet set, const void *recs, int
+           nrecs, size_t recsize, int sortset)
+           Append element(s) to set of index database items.
+       int dbiPruneSet (dbiIndexSet set, void *recs, int nrecs,
+           size_t recsize, int sorted)
+           Remove element(s) from set of index database items.
+       unsigned int dbiIndexSetCount (dbiIndexSet set)
+       unsigned int dbiIndexRecordOffset (dbiIndexSet set, int
+           recno)
+       unsigned int dbiIndexRecordFileNumber (dbiIndexSet set,
+           int recno)
+       dbiIndexSet dbiFreeIndexSet (dbiIndexSet set)
+       int blockSignals (rpmdb db, sigset_t *oldMask)
+           Disable all signals, returning previous signal mask.
+       int unblockSignals (rpmdb db, sigset_t *oldMask)
+           Restore signal mask.
+       int rpmdbOpenAll (rpmdb db)
+       int rpmdbClose (rpmdb db)
+       int rpmdbSync (rpmdb db)
+       rpmdb newRpmdb (const char *root, const char *home, int
+           mode, int perms, int flags)
+       int openDatabase (const char *prefix, const char *dbpath,
+           int _dbapi, rpmdb *dbp, int mode, int perms, int
+           flags)
+       int rpmdbOpen (const char *prefix, rpmdb *dbp, int mode,
+           int perms)
+       int rpmdbInit (const char *prefix, int perms)
+       int rpmdbVerify (const char *prefix)
+       int rpmdbFindByFile (rpmdb db, const char *filespec,
+           dbiIndexSet *matches)
+       int rpmdbCountPackages (rpmdb db, const char *name)
+       int dbiFindMatches (dbiIndex dbi, void *dbcursor, const
+           char *name, const char *version, const char *release,
+           dbiIndexSet *matches)
+           Attempt partial matches on name[-version[-release]]
+           strings.
+       int dbiFindByLabel (dbiIndex dbi, void *dbcursor, const
+           char *arg, dbiIndexSet *matches)
+           Lookup by name, name-version, and finally by name-
+           version-release.
+       int dbiUpdateRecord (dbiIndex dbi, void *dbcursor, int
+           offset, Header h)
+           Rewrite a header in the database.
+       rpmdbMatchIterator rpmdbFreeIterator (rpmdbMatchIterator
+           mi)
+       rpmdb rpmdbGetIteratorRpmDB (rpmdbMatchIterator mi)
+       unsigned int rpmdbGetIteratorOffset (rpmdbMatchIterator
+           mi)
+       unsigned int rpmdbGetIteratorFileNum (rpmdbMatchIterator
+           mi)
+       int rpmdbGetIteratorCount (rpmdbMatchIterator mi)
+       int miregexec (miRE mire, const char *val)
+           Return pattern match.
+       int mireCmp (const void *a, const void *b)
+           Compare iterator selctors by rpm tag (qsort/bsearch).
+       char * mireDup (rpmTag tag, rpmMireMode *modep, const char
+           *pattern)
+           Copy pattern, escaping for appropriate mode.
+       int rpmdbSetIteratorRE (rpmdbMatchIterator mi, rpmTag tag,
+           rpmMireMode mode, const char *pattern)
+       int mireSkip (const rpmdbMatchIterator mi)
+           Return iterator selector match.
+       int rpmdbSetIteratorRelease (rpmdbMatchIterator mi, const
+           char *release)
+       int rpmdbSetIteratorVersion (rpmdbMatchIterator mi, const
+           char *version)
+       int rpmdbSetIteratorRewrite (rpmdbMatchIterator mi, int
+           rewrite)
+       int rpmdbSetIteratorModified (rpmdbMatchIterator mi, int
+           modified)
+       Header XrpmdbNextIterator (rpmdbMatchIterator mi, const
+           char *f, unsigned int l)
+       Header rpmdbNextIterator (rpmdbMatchIterator mi)
+       void rpmdbSortIterator (rpmdbMatchIterator mi)
+       int rpmdbGrowIterator (rpmdbMatchIterator mi, const void
+           *keyp, size_t keylen, int fpNum)
+       int rpmdbPruneIterator (rpmdbMatchIterator mi, int
+           *hdrNums, int nHdrNums, int sorted)
+       int rpmdbAppendIterator (rpmdbMatchIterator mi, const int
+           *hdrNums, int nHdrNums)
+       rpmdbMatchIterator rpmdbInitIterator (rpmdb rpmdb, int
+           rpmtag, const void *keyp, size_t keylen)
+       int removeIndexEntry (dbiIndex dbi, void *dbcursor, const
+           void *keyp, size_t keylen, dbiIndexItem rec)
+           Remove entry from database index.
+       int rpmdbRemove (rpmdb rpmdb, int rid, unsigned int
+           hdrNum)
+       int addIndexEntry (dbiIndex dbi, void *dbcursor, const
+           char *keyp, size_t keylen, dbiIndexItem rec)
+           Add entry to database index.
+       int rpmdbAdd (rpmdb rpmdb, int iid, Header h)
+       int rpmdbFindFpList (rpmdb rpmdb, fingerPrint *fpList,
+           dbiIndexSet *matchList, int numItems)
+       char * db1basename (int rpmtag)
+       int rpmdbRemoveDatabase (const char *rootdir, const char
+           *dbpath, int _dbapi)
+       int rpmdbMoveDatabase (const char *rootdir, const char
+           *olddbpath, int _olddbapi, const char *newdbpath, int
+           _newdbapi)
+       int rpmdbRebuild (const char *rootdir)
+
+   Variables
+       int _debug = 0
+       int _noDirTokens
+       int _rebuildinprogress = 0
+       int _db_filter_dups = 0
+       int * dbiTags = NULL
+       int dbiTagsMax = 0
+       _dbiVec * mydbvecs []
+       rpmdb_s dbTemplate
+
+DETAILED DESCRIPTION
+       Definition in file rpmdb.c.
+
+DEFINE DOCUMENTATION
+   #define _DB_ERRPFX   'rpmdb'
+       Definition at line 745 of file rpmdb.c.
+
+       Referenced by newRpmdb.
+
+   #define _DB_FLAGS   0
+       Definition at line 740 of file rpmdb.c.
+
+   #define _DB_HOME   '%{_dbpath}'
+       Definition at line 739 of file rpmdb.c.
+
+       Referenced by newRpmdb.
+
+   #define _DB_MAJOR   -1
+       Definition at line 744 of file rpmdb.c.
+
+   #define _DB_MODE   0
+       Definition at line 741 of file rpmdb.c.
+
+   #define _DB_PERMS   0644
+       Definition at line 742 of file rpmdb.c.
+
+   #define _DB_ROOT   '/'
+       Definition at line 738 of file rpmdb.c.
+
+       Referenced by newRpmdb.
+
+   #define _DBI_FLAGS   0
+       Definition at line 35 of file rpmdb.c.
+
+   #define _DBI_MAJOR   -1
+       Definition at line 37 of file rpmdb.c.
+
+   #define _DBI_PERMS   0644
+       Definition at line 36 of file rpmdb.c.
+
+   #define _DBSWAP(_a)
+       Value:
+
+       { unsigned char _b, *_c = (_a).uc;     _b = _c[3]; _c[3] = _c[0]; _c[0] = _b;     _b = _c[2]; _c[2] = _c[1]; _c[1] = _b;   }
+
+       Definition at line 426 of file rpmdb.c.
+
+       Referenced by dbiSearch, and dbiUpdateIndex.
+
+   #define _RECNUM   rpmdbGetIteratorOffset(mi)
+   #define DB1vec   NULL
+       Definition at line 122 of file rpmdb.c.
+
+   #define DB2vec   NULL
+       Definition at line 129 of file rpmdb.c.
+
+   #define DB3vec   NULL
+       Definition at line 136 of file rpmdb.c.
+
+   #define INLINE
+       Definition at line 8 of file rpmdb.c.
+
+       Referenced by addIndexEntry, dbiAppendSet, dbiByteSwapped,
+       dbiCclose, dbiClose, dbiCopen, dbiCount, dbiDel, dbiGet,
+       dbiIndexNewItem, dbiPruneSet, dbiPut, dbiSync, dbiVerify,
+       and removeIndexEntry.
+
+TYPEDEF DOCUMENTATION
+   typedef struct miRE_s *  miRE
+FUNCTION DOCUMENTATION
+   int addIndexEntry (dbiIndex dbi, void * dbcursor, const char *
+       keyp, size_t keylen, dbiIndexItem rec) [static]
+       Add entry to database index.
+
+       Parameters:
+
+       dbi    index database handle
+
+       dbcursor
+              index database cursor
+
+       keyp   search key
+
+       keylen search key length
+
+       rec    record to add
+
+       Returns:
+           0 on success
+
+       Definition at line 2414 of file rpmdb.c.
+
+       References DBC, dbiAppendSet, dbiFreeIndexSet, dbiSearch,
+       dbiUpdateIndex, INLINE, and xcalloc.
+
+       Referenced by rpmdbAdd.
+
+   int blockSignals (rpmdb db, sigset_t * oldMask) [static]
+       Disable all signals, returning previous signal mask.
+
+       Definition at line 720 of file rpmdb.c.
+
+       Referenced by dbiUpdateRecord, rpmdbAdd, and rpmdbRemove.
+
+   int dbiAppendSet (dbiIndexSet set, const void * recs, int
+       nrecs, size_t recsize, int sortset) [static]
+       Append element(s) to set of index database items.
+
+       Parameters:
+
+       set    set of index database items
+
+       recs   array of items to append to set
+
+       nrecs  number of items
+
+       recsize
+              size of an array item
+
+       sortset
+              should resulting set be sorted?
+
+       Returns:
+           0 success, 1 failure (bad args)
+
+       Definition at line 625 of file rpmdb.c.
+
+       References hdrNumCmp, INLINE, xmalloc, and xrealloc.
+
+       Referenced by addIndexEntry, rpmdbAppendIterator,
+       rpmdbFindByFile, and rpmdbFindFpList.
+
+   int dbiFindByLabel (dbiIndex dbi, void * dbcursor, const char
+       * arg, dbiIndexSet * matches) [static]
+       Lookup by name, name-version, and finally by name-version-
+       release.
+
+       Both version and release can be patterns.
+
+       Todo:
+           Name must be an exact match, as name is a db key.
+
+       Parameters:
+
+       dbi    index database handle (always RPMTAG_NAME)
+
+       dbcursor
+              index database cursor
+
+       arg    name[-version[-release]] string
+
+       Return values:
+
+       matches
+              set of header instances that match
+
+       Returns:
+           0 on match, 1 on no match, 2 on error
+
+       Definition at line 1319 of file rpmdb.c.
+
+       References alloca, DBC, dbiFindMatches, dbiFreeIndexSet,
+       and stpcpy.
+
+       Referenced by rpmdbInitIterator.
+
+   int dbiFindMatches (dbiIndex dbi, void * dbcursor, const char
+       * name, const char * version, const char * release,
+       dbiIndexSet * matches) [static]
+       Attempt partial matches on name[-version[-release]]
+       strings.
+
+       Parameters:
+
+       dbi    index database handle (always RPMTAG_NAME)
+
+       dbcursor
+              index database cursor
+
+       name   package name
+
+       version
+              package version (can be a pattern)
+
+       release
+              package release (can be a pattern)
+
+       Return values:
+
+       matches
+              set of header instances that match
+
+       Returns:
+           0 on match, 1 on no match, 2 on error
+
+       Definition at line 1229 of file rpmdb.c.
+
+       References DBC, dbiFreeIndexSet, dbiIndexRecordOffset,
+       dbiIndexSetCount, dbiSearch, headerFree, headerLink,
+       rpmdbFreeIterator, RPMDBI_PACKAGES, rpmdbInitIterator,
+       rpmdbNextIterator, rpmdbSetIteratorRE, RPMMIRE_DEFAULT,
+       RPMTAG_RELEASE, and RPMTAG_VERSION.
+
+       Referenced by dbiFindByLabel.
+
+   dbiIndexItem dbiIndexNewItem (unsigned int hdrNum, unsigned
+       int tagNum) [static]
+       Create and initialize item for index database set.
+
+       Parameters:
+
+       hdrNum header instance in db
+
+       tagNum tag index in header
+
+       Returns:
+           new item
+
+       Definition at line 412 of file rpmdb.c.
+
+       References _dbiIndexItem::hdrNum, INLINE,
+       _dbiIndexItem::tagNum, and xcalloc.
+
+       Referenced by rpmdbAdd, rpmdbFindByFile, and rpmdbRemove.
+
+   int dbiPruneSet (dbiIndexSet set, void * recs, int nrecs,
+       size_t recsize, int sorted) [static]
+       Remove element(s) from set of index database items.
+
+       Parameters:
+
+       set    set of index database items
+
+       recs   array of items to remove from set
+
+       nrecs  number of items
+
+       recsize
+              size of an array item
+
+       sorted array is already sorted?
+
+       Returns:
+           0 success, 1 failure (no items found)
+
+       Definition at line 667 of file rpmdb.c.
+
+       References hdrNumCmp, and INLINE.
+
+       Referenced by removeIndexEntry, and rpmdbPruneIterator.
+
+   int dbiSearch (dbiIndex dbi, void * dbcursor, const char *
+       keyp, size_t keylen, dbiIndexSet * setp) [static]
+       Return items that match criteria.
+
+       Parameters:
+
+       dbi    index database handle
+
+       dbcursor
+              index database cursor
+
+       keyp   search key
+
+       keylen search key length (0 will use strlen(key))
+
+       Return values:
+
+       setp   address of items retrieved from index database
+
+       Returns:
+           -1 error, 0 success, 1 not found
+
+       Definition at line 441 of file rpmdb.c.
+
+       References _, _DBSWAP, _dbiIndexSet::count, DBC,
+       dbiByteSwapped, dbiGet, _dbiIndexItem::dbNum,
+       _dbiIndexItem::fpNum, _dbiIndexItem::hdrNum,
+       _dbiIndexSet::recs, tagName, _dbiIndexItem::tagNum,
+       _dbswap::ui, and xmalloc.
+
+       Referenced by addIndexEntry, dbiFindMatches,
+       removeIndexEntry, rpmdbCountPackages, rpmdbFindByFile,
+       rpmdbGrowIterator, and rpmdbInitIterator.
+
+   void dbiTagsInit (void) [static]
+       Initialize database (index, tag) tuple from configuration.
+
+       Definition at line 63 of file rpmdb.c.
+
+       References _, _free, dbiTags, dbiTagsMax, dbiTagToDbix,
+       RPMDBI_PACKAGES, rpmExpand, tagValue, xcalloc, xisspace,
+       xrealloc, and xstrdup.
+
+       Referenced by openDatabase.
+
+   int dbiTagToDbix (int rpmtag) [static]
+       Return dbi index used for rpm tag.
+
+       Parameters:
+
+       rpmtag rpm header tag
+
+       Returns:
+           dbi index, -1 on error
+
+       Definition at line 47 of file rpmdb.c.
+
+       References dbiTags, and dbiTagsMax.
+
+       Referenced by dbiOpen, and dbiTagsInit.
+
+   int dbiUpdateIndex (dbiIndex dbi, void * dbcursor, const void
+       * keyp, size_t keylen, dbiIndexSet set) [static]
+       Change/delete items that match criteria.
+
+       Parameters:
+
+       dbi    index database handle
+
+       dbcursor
+              index database cursor
+
+       keyp   update key
+
+       keylen update key length
+
+       set    items to update in index database
+
+       Returns:
+           0 success, 1 not found
+
+       Definition at line 528 of file rpmdb.c.
+
+       References _, _DBSWAP, alloca, DBC, dbiByteSwapped,
+       dbiDel, dbiPut, tagName, and _dbswap::ui.
+
+       Referenced by addIndexEntry, and removeIndexEntry.
+
+   int dbiUpdateRecord (dbiIndex dbi, void * dbcursor, int
+       offset, Header h) [static]
+       Rewrite a header in the database.
+
+       Note: this is called from a markReplacedFiles iteration,
+       and *must* preserve the 'join key' (i.e. offset) for the
+       header.
+
+       Parameters:
+
+       dbi    index database handle (always RPMDBI_PACKAGES)
+
+       dbcursor
+              index database cursor
+
+       offset join key
+
+       h      rpm header
+
+       Returns:
+           0 on success
+
+       Definition at line 1400 of file rpmdb.c.
+
+       References _free, blockSignals, DBC, dbiPut, dbiSync,
+       expandFilelist, HEADER_MAGIC_NO, headerSizeof,
+       headerUnload, and unblockSignals.
+
+       Referenced by rpmdbAdd, rpmdbFreeIterator, and
+       rpmdbNextIterator.
+
+   int hdrNumCmp (const void * one, const void * two) [static]
+       Definition at line 609 of file rpmdb.c.
+
+       Referenced by dbiAppendSet, dbiPruneSet, and
+       rpmdbSortIterator.
+
+   int mireCmp (const void * a, const void * b) [static]
+       Compare iterator selctors by rpm tag (qsort/bsearch).
+
+       Parameters:
+
+       a      1st iterator selector
+
+       b      2nd iterator selector
+
+       Returns:
+           result of comparison
+
+       Definition at line 1577 of file rpmdb.c.
+
+       References miRE_s::tag.
+
+       Referenced by rpmdbSetIteratorRE.
+
+   char* mireDup (rpmTag tag, rpmMireMode * modep, const char *
+       pattern) [static]
+       Copy pattern, escaping for appropriate mode.
+
+       Parameters:
+
+       tag    rpm tag
+
+       Return values:
+
+       modep  type of pattern match
+
+       Parameters:
+
+       pattern
+              pattern to duplicate
+
+       Returns:
+           duplicated pattern
+
+       Definition at line 1591 of file rpmdb.c.
+
+       References RPMMIRE_DEFAULT, RPMMIRE_GLOB, RPMMIRE_REGEX,
+       RPMMIRE_STRCMP, rpmMireMode, rpmTag, RPMTAG_BASENAMES,
+       RPMTAG_DIRNAMES, xmalloc, and xstrdup.
+
+       Referenced by rpmdbSetIteratorRE.
+
+   int miregexec (miRE mire, const char * val) [static]
+       Return pattern match.
+
+       Parameters:
+
+       mi     rpm database iterator
+
+       Returns:
+           0 if pattern matches
+
+       Definition at line 1537 of file rpmdb.c.
+
+       References RPMMIRE_DEFAULT, RPMMIRE_GLOB, RPMMIRE_REGEX,
+       and RPMMIRE_STRCMP.
+
+       Referenced by mireSkip.
+
+   int mireSkip (const rpmdbMatchIterator mi) [static]
+       Return iterator selector match.
+
+       Parameters:
+
+       mi     rpm database iterator
+
+       Returns:
+           1 if header should be skipped
+
+       Definition at line 1762 of file rpmdb.c.
+
+       References HFD_t, HGE_t, int_16, int_32, int_8, miregexec,
+       miRE_s::notmatch, RPM_BIN_TYPE, RPM_CHAR_TYPE,
+       RPM_I18NSTRING_TYPE, RPM_INT16_TYPE, RPM_INT32_TYPE,
+       RPM_INT8_TYPE, RPM_NULL_TYPE, RPM_STRING_ARRAY_TYPE,
+       RPM_STRING_TYPE, rpmTagType, and miRE_s::tag.
+
+       Referenced by rpmdbNextIterator.
+
+   rpmdb newRpmdb (const char * root, const char * home, int
+       mode, int perms, int flags) [static]
+       Definition at line 813 of file rpmdb.c.
+
+       References _, _DB_ERRPFX, _db_filter_dups, _DB_HOME,
+       _DB_ROOT, rpmdb_s::_dbi, rpmdb_s::db_errpfx,
+       rpmdb_s::db_filter_dups, rpmdb_s::db_flags,
+       rpmdb_s::db_home, rpmdb_s::db_mode, rpmdb_s::db_ndbi,
+       rpmdb_s::db_perms, rpmdb_s::db_remove_env,
+       rpmdb_s::db_root, dbiTagsMax, rpmdbClose, rpmExpand,
+       rpmExpandNumeric, rpmGetPath, and xcalloc.
+
+       Referenced by openDatabase.
+
+   int openDatabase (const char * prefix, const char * dbpath,
+       int _dbapi, rpmdb * dbp, int mode, int perms, int flags)
+       [static]
+       Definition at line 856 of file rpmdb.c.
+
+       References _, alloca, rpmdb_s::db_api, DBC, dbiCclose,
+       dbiCopen, dbiGet, dbiOpen, dbiTags, dbiTagsInit,
+       dbiTagsMax, newRpmdb, rpmCleanPath, RPMDB_FLAG_JUSTCHECK,
+       RPMDB_FLAG_MINIMAL, rpmdbClose, RPMDBI_ADDED,
+       RPMDBI_AVAILABLE, RPMDBI_DEPENDS, RPMDBI_PACKAGES,
+       RPMDBI_REMOVED, rpmExpandNumeric, RPMTAG_BASENAMES, and
+       RPMTAG_NAME.
+
+       Referenced by rpmdbInit, rpmdbOpen, rpmdbRebuild, and
+       rpmdbVerify.
+
+   int printable (const void * ptr, size_t len) [static]
+       Definition at line 172 of file rpmdb.c.
+
+       Referenced by dbiGet, and dbiPut.
+
+   int removeIndexEntry (dbiIndex dbi, void * dbcursor, const
+       void * keyp, size_t keylen, dbiIndexItem rec) [static]
+       Remove entry from database index.
+
+       Parameters:
+
+       dbi    index database handle
+
+       dbcursor
+              index database cursor
+
+       keyp   search key
+
+       keylen search key length
+
+       rec    record to remove
+
+       Returns:
+           0 on success
+
+       Definition at line 2210 of file rpmdb.c.
+
+       References DBC, dbiFreeIndexSet, dbiPruneSet, dbiSearch,
+       dbiUpdateIndex, and INLINE.
+
+       Referenced by rpmdbRemove.
+
+   int rpmdbFindByFile (rpmdb db, const char * filespec,
+       dbiIndexSet * matches) [static]
+       Definition at line 1055 of file rpmdb.c.
+
+       References _free, alloca, _dbiIndexSet::count, DBC,
+       dbiAppendSet, dbiCclose, dbiCopen, dbiFreeIndexSet,
+       dbiIndexNewItem, dbiIndexRecordFileNumber,
+       dbiIndexRecordOffset, dbiOpen, dbiSearch, FP_EQUAL,
+       fpCacheCreate, fpCacheFree, fpLookup,
+       _dbiIndexItem::hdrNum, headerFree, headerLink, HFD_t,
+       HGE_t, int_32, rpmdbFreeIterator, RPMDBI_PACKAGES,
+       rpmdbInitIterator, rpmdbNextIterator, RPMTAG_BASENAMES,
+       RPMTAG_DIRINDEXES, RPMTAG_DIRNAMES, rpmTagType,
+       _dbiIndexItem::tagNum, and xcalloc.
+
+       Referenced by rpmdbInitIterator.
+
+   int rpmdbGrowIterator (rpmdbMatchIterator mi, const void *
+       keyp, size_t keylen, int fpNum) [static]
+       Definition at line 2033 of file rpmdb.c.
+
+       References _dbiIndexSet::count, DBC, dbiCclose, dbiCopen,
+       dbiFreeIndexSet, dbiOpen, dbiSearch, _dbiIndexItem::fpNum,
+       _dbiIndexSet::recs, and xrealloc.
+
+       Referenced by rpmdbFindFpList.
+
+   int rpmdbMoveDatabase (const char * rootdir, const char *
+       olddbpath, int _olddbapi, const char * newdbpath, int
+       _newdbapi) [static]
+       Definition at line 2890 of file rpmdb.c.
+
+       References _, _free, alloca, db1basename, dbiTags,
+       dbiTagsMax, Rename, rpmCleanPath, RPMDBI_ADDED,
+       RPMDBI_AVAILABLE, RPMDBI_DEPENDS, RPMDBI_REMOVED,
+       rpmdbRemoveDatabase, rpmfileexists, and tagName.
+
+       Referenced by rpmdbRebuild.
+
+   int rpmdbRemoveDatabase (const char * rootdir, const char *
+       dbpath, int _dbapi) [static]
+       Definition at line 2829 of file rpmdb.c.
+
+       References _free, alloca, db1basename, dbiTags,
+       dbiTagsMax, rpmCleanPath, rpmfileexists, and tagName.
+
+       Referenced by rpmdbMoveDatabase, and rpmdbRebuild.
+
+   void rpmdbSortIterator (rpmdbMatchIterator mi) [static]
+       Definition at line 2023 of file rpmdb.c.
+
+       References hdrNumCmp.
+
+       Referenced by rpmdbFindFpList.
+
+   int unblockSignals (rpmdb db, sigset_t * oldMask) [static]
+       Restore signal mask.
+
+       Definition at line 732 of file rpmdb.c.
+
+       Referenced by dbiUpdateRecord, rpmdbAdd, and rpmdbRemove.
+
+   Header XrpmdbNextIterator (rpmdbMatchIterator mi, const char *
+       f, unsigned int l)
+       Todo:
+            Remove debugging entry from the ABI.
+
+       Definition at line 1889 of file rpmdb.c.
+
+       References rpmdbNextIterator.
+
+VARIABLE DOCUMENTATION
+   int _db_filter_dups = 0 [static]
+       Definition at line 33 of file rpmdb.c.
+
+       Referenced by newRpmdb, and rpmdbRebuild.
+
+   int _debug = 0 [static]
+       Definition at line 7 of file rpmdb.c.
+
+       Referenced by dbiCclose, dbiClose, dbiCopen, dbiDel,
+       dbiGet, dbiPut, dbiSync, and dbiVerify.
+
+   int _noDirTokens
+       Definition at line 30 of file rpmdb.c.
+
+   int _rebuildinprogress = 0 [static]
+       Definition at line 32 of file rpmdb.c.
+
+       Referenced by dbiOpen, and rpmdbRebuild.
+
+   int* dbiTags = NULL
+       Tags for which rpmdb indices will be built.
+
+       Definition at line 39 of file rpmdb.c.
+
+       Referenced by dbiTagsInit, dbiTagToDbix, openDatabase,
+       rpmdbAdd, rpmdbMoveDatabase, rpmdbOpenAll, rpmdbRemove,
+       and rpmdbRemoveDatabase.
+
+   int dbiTagsMax = 0
+       Definition at line 40 of file rpmdb.c.
+
+       Referenced by dbiOpen, dbiTagsInit, dbiTagToDbix,
+       newRpmdb, openDatabase, rpmdbAdd, rpmdbMoveDatabase,
+       rpmdbOpenAll, rpmdbRemove, and rpmdbRemoveDatabase.
+
+   struct rpmdb_s dbTemplate [static]
+       Initial value:
+
+        {
+            '/' ,       '%{_dbpath}' ,  0 ,  0 ,  0644 ,
+            -1 ,        'rpmdb'
+       }
+
+       Definition at line 748 of file rpmdb.c.
+
+   struct _dbiVec* mydbvecs[] [static]
+       Initial value:
+
+        {
+            NULL ,  NULL ,  NULL ,  NULL , NULL
+       }
+
+       Definition at line 141 of file rpmdb.c.
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002           rpmdb/rpmdb.c(3)

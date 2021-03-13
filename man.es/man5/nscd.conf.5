@@ -1,0 +1,77 @@
+nscd.conf(5)                                         nscd.conf(5)
+
+
+
+NAME
+       /etc/nscd.conf  -  name service cache daemon configuration
+       file
+
+DESCRIPTION
+       The file /etc/nscd.conf is read from nscd(8)  at  startup.
+       Each line specifies either an attribute and a value, or an
+       attribute, service, and  a  value.  Fields  are  separated
+       either  by  SPACE  or  TAB characters. A `#' (number sign)
+       indicates the beginning of a  comment;  following  charac­
+       ters,  up  to  the end of the line, are not interpreted by
+       nscd.
+
+
+       Valid services are passwd, group, or hosts.
+
+       logfile debug-file-name
+              Specifies name of the  file  to  which  debug  info
+              should be written.
+
+       debug-level value
+              Sets the desired debug level.
+
+       threads number
+              This  is  the number of threads that are started to
+              wait for  requests.  At  least  five  threads  will
+              always be created.
+
+       server-user user
+              If  this  option is set, nscd will run as this user
+              and not as root.  If a  separate  cache  for  every
+              user   is  used  (-S  parameter),  this  option  is
+              ignored.
+
+       enable-cache service <yes|no>
+              Enables or disables the specified service cache.
+
+       positive-time-to-live service value
+              Sets the TTL (time-to-live)  for  positive  entries
+              (successful  queries)  in  the  specified cache for
+              service.   Value  is  in  seconds.  Larger   values
+              increase  cache  hit rates and reduce mean response
+              times, but increase problems with cache  coherence.
+
+       negative-time-to-live service value
+              Sets  the  TTL  (time-to-live) for negative entries
+              (unsuccessful queries) in the specified  cache  for
+              service.   Value  is in seconds. Can result in sig­
+              nificant performance improvements if there are sev­
+              eral  files  owned by uids (user IDs) not in system
+              databases (for example untarring the  linux  kernel
+              sources  as  root);  should be kept small to reduce
+              cache coherency problems.
+
+       suggested-size service value
+              This is the internal hash table size, value  should
+              remain a prime number for optimum efficiency.
+
+       check-files service <yes|no>
+              Enables  or disables checking the file belonging to
+              the specified service for changes.  The  files  are
+              /etc/passwd, /etc/group, and /etc/hosts.
+
+
+SEE ALSO
+       nscd(8)
+
+AUTHOR
+       nscd was written by Thorsten Kukuk and Ulrich Drepper.
+
+
+
+GNU C Library                1999-10                 nscd.conf(5)

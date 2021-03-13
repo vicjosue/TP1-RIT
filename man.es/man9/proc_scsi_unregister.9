@@ -1,0 +1,46 @@
+proc_scsi_register(9)    /proc Functions    proc_scsi_register(9)
+
+
+
+NAME
+       proc_scsi_register, proc_scsi_unregister - register SCSI
+       entries in the /proc filesystem
+
+SYNOPSIS
+       #include <linux/proc_fs.h>
+
+       int proc_scsi_register(struct proc_dir_entry * driver,
+       struct proc_dir_entry * child);
+
+       int proc_scsi_unregister(struct proc_dir_entry * driver,
+       int inode);
+
+
+DESCRIPTION
+       These  are  wrapper  functions  around  proc_register  and
+       proc_unregister.
+
+       proc_scsi_register  always  sets the ops field of child to
+       proc_scsi_inode_operations.  If the child inode number  is
+       less  than  PROC_SCSI_FILE, the child is registered with a
+       parent of proc_scsi and driver is ignored.  Otherwise  the
+       child is registered with a parent of driver.
+
+       proc_scsi_unregister.   If  the child inode number is less
+       than PROC_SCSI_FILE, the  child  is  unregistered  with  a
+       parent  of proc_scsi and driver is ignored.  Otherwise the
+       child  is  unregistered  with  a  parent  of  driver   and
+       scsi_init_free is called on the child.
+
+RETURN VALUE
+       As for proc_register and proc_unregister.
+
+SEE ALSO
+       proc_register(9), proc_unregister(9)
+
+AUTHOR
+       Keith Owens <kaos@ocs.com.au>
+
+
+
+Linux 2.0.30                July 1997       proc_scsi_register(9)

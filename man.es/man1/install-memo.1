@@ -1,0 +1,50 @@
+INSTALL-USER(1)                                   INSTALL-USER(1)
+
+
+
+NAME
+       install-memo  -  installs  a  new memo in a Palm Computing
+       Device
+
+SYNOPSIS
+       install-memo [-c category ] -p <port>  filename  [filename
+       filename ...]
+
+
+DESCRIPTION
+       This  manual page documents the small application install-
+       memo.  install-memo allows the user to write one  or  more
+       files  as  a new memo or memos, respectively, on the Pilot
+       connected to the specified callout device.  Once  install-
+       memo  is started, the user must invoke HotSync on the tar­
+       get device.
+
+   OPTIONS
+       -c category
+              Install memo(s) to category  category  by  default.
+              Normally  install-memo  uses Unfiled as the default
+              category.
+
+       -q     Causes install-memo to be quiet and not prompt  you
+              to press the HotSync button.
+
+       -r     Replace  all memos in the category specified by the
+              -c category option.
+
+       -t     Use the filename as the title for  the  memo.  (The
+              title is the first line of a memo.)
+
+
+USEAGE
+       The  program  will connect to a target, and write the file
+       or files given on the command line.
+
+BUGS
+       The Palm Device may have a maximum length on memo sizes.
+
+AUTHOR
+       install-memo was written by Damien P. Neil
+
+
+
+FSF                Palm Computing Device Tools    INSTALL-USER(1)

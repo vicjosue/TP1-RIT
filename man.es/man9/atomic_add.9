@@ -1,0 +1,58 @@
+atomic_add(9)            Kernel Functions           atomic_add(9)
+
+
+
+NAME
+       atomic_add, atomic_sub, atomic_inc, atomic_dec -
+       thread/SMP safe arithmetic on atomic data
+
+SYNOPSIS
+       #include <asm/atomic.h>
+
+       void atomic_add(int i, volatile atomic_t*v)
+       void atomic_sub(int i, volatile atomic_t*v)
+       void atomic_inc(volatile atomic_t*v)
+       void atomic_dec(volatile atomic_t*v)
+       int atomic_read(volatile atomic_t*v)
+       void atomic_set(volatile atomic_t*v, int i)
+       int atomic_dec_and_test(volatile atomic_t*v)
+
+
+DESCRIPTION
+       These functions manipulate variables of type  atomic_t  is
+       SMP  and  interrupt safe ways. These variables can be used
+       to hold spin locks or SMP-safe reference  counters.  These
+       functions guarantee that the operation that they represent
+       is performed correctly. If necessary, hardware bus locking
+       is  performed  to protect the operation.  Usually, the CPU
+       has some sort of  atomic  instructions  that  allow  these
+       operations to be performed quickly and safely.
+
+       The  atomic_dec_and_test  decrements  the atomic variable,
+       and returns true if the result is zero. This  function  is
+       particularly useful in implementing spin locks on SMP sys­
+       tems.
+
+RETURN VALUE
+       The atomic_read function returns the integer value of  the
+       atomic variable.
+
+       The  atomic_dec_and_test returns TRUE if the value becomes
+       zero after the decrement.
+
+AVAILABILITY
+       Linux 2.0+
+
+SEE ALSO
+       intro(9)
+
+AUTHOR
+       Stephen Williams <steve@icarus.com>
+
+BUGS
+       The read and set operations generally have no special pro­
+       tections.
+
+
+
+Linux DDI                    $Date:$                atomic_add(9)

@@ -1,0 +1,135 @@
+python/hash.c(3)                                 python/hash.c(3)
+
+
+
+NAME
+       python/hash.c -
+
+SYNOPSIS
+       #include <stdlib.h>
+       #include <unistd.h>
+       #include <stdio.h>
+       #include <string.h>
+       #include 'hash.h'
+
+   Data Structures
+       struct bucket
+       struct filePath
+       struct hash_table
+
+   Defines
+       #define CHUNK   1
+
+   Functions
+       hash_table * htNewTable (int size)
+       void htFreeHashTable (struct hash_table *ht)
+       void htHashStats (const struct hash_table *t)
+       unsigned int htHashStrings (const char *s, const char *t)
+       int in_table_aux (struct hash_table *t, int hash, const
+           char *dir, const char *base)
+       int htInTable (struct hash_table *t, const char *dir,
+           const char *base)
+       void htAddToTable (struct hash_table *t, const char *dir,
+           const char *base)
+       void htRemoveFromTable (struct hash_table *t, const char
+           *dir, const char *base)
+       int htNumEntries (struct hash_table *t)
+       void htIterStart (htIterator *iter)
+       int htIterGetNext (struct hash_table *t, htIterator *iter,
+           const char **dir, const char **base)
+
+DETAILED DESCRIPTION
+       Definition in file hash.c.
+
+DEFINE DOCUMENTATION
+   #define CHUNK   1
+       Definition at line 12 of file hash.c.
+
+       Referenced by htAddToTable.
+
+FUNCTION DOCUMENTATION
+   void htAddToTable (struct hash_table * t, const char * dir,
+       const char * base)
+       Definition at line 133 of file hash.c.
+
+       References bucket::allocated, hash_table::bucket, CHUNK,
+       bucket::data, hash_table::entries, bucket::firstFree,
+       htHashStrings, in_table_aux, hash_table::overHead, and
+       hash_table::size.
+
+   void htFreeHashTable (struct hash_table * ht)
+       Definition at line 53 of file hash.c.
+
+       References filePath::base, hash_table::bucket,
+       bucket::data, filePath::dir, bucket::firstFree, and
+       hash_table::size.
+
+   void htHashStats (const struct hash_table * t)
+       Definition at line 71 of file hash.c.
+
+       References hash_table::bucket, hash_table::entries,
+       bucket::firstFree, hash_table::overHead, and
+       hash_table::size.
+
+   unsigned int htHashStrings (const char * s, const char * t)
+       [static]
+       Definition at line 92 of file hash.c.
+
+       Referenced by htAddToTable, htInTable, and
+       htRemoveFromTable.
+
+   int htInTable (struct hash_table * t, const char * dir, const
+       char * base)
+       Definition at line 122 of file hash.c.
+
+       References htHashStrings, in_table_aux, and
+       hash_table::size.
+
+   int htIterGetNext (struct hash_table * t, htIterator * iter,
+       const char ** dir, const char ** base)
+       Definition at line 185 of file hash.c.
+
+       References hash_table::bucket, ht_iterator::bucket,
+       ht_iterator::item, and hash_table::size.
+
+   void htIterStart (htIterator * iter)
+       Definition at line 180 of file hash.c.
+
+       References ht_iterator::bucket, and ht_iterator::item.
+
+   struct hash_table* htNewTable (int size)
+       Definition at line 32 of file hash.c.
+
+       References bucket::allocated, hash_table::bucket,
+       bucket::data, hash_table::entries, bucket::firstFree,
+       hash_table::overHead, and hash_table::size.
+
+   int htNumEntries (struct hash_table * t)
+       Definition at line 176 of file hash.c.
+
+       References hash_table::entries.
+
+   void htRemoveFromTable (struct hash_table * t, const char *
+       dir, const char * base)
+       Definition at line 158 of file hash.c.
+
+       References filePath::base, hash_table::bucket,
+       bucket::data, filePath::dir, bucket::firstFree,
+       htHashStrings, in_table_aux, and hash_table::size.
+
+   int in_table_aux (struct hash_table * t, int hash, const char
+       * dir, const char * base) [static]
+       Definition at line 105 of file hash.c.
+
+       References filePath::base, hash_table::bucket,
+       bucket::data, filePath::dir, and bucket::firstFree.
+
+       Referenced by htAddToTable, htInTable, and
+       htRemoveFromTable.
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+

@@ -1,0 +1,30 @@
+pbmtolps(1)                                           pbmtolps(1)
+
+
+
+NAME
+       pbmtolps - convert portable bitmap to PostScript
+
+SYNOPSIS
+       pbmtolps [ -dpi n ] [ pbmfile ]
+
+DESCRIPTION
+       Reads  a portable bitmap as input, and outputs PostScript.
+       The output Postscript uses  lines  instead  of  the  image
+       operator  to  generate  a (device dependent) picture which
+       will be imaged much faster.
+
+       The Postscript path length is constrained to be less  that
+       1000  points  so  that  no limits are overrun on the Apple
+       Laserwriter and (presumably) no other printers.
+
+SEE ALSO
+       pbm(5),  pnmtops(1),   pstopnm(1),   pbmtoepsi(1),   psid­
+       topgm(1), gs(1)
+
+AUTHOR
+       George Phillips <phillips@cs.ubc.ca>
+
+
+
+                           12 Dec 1990                pbmtolps(1)

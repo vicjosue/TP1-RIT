@@ -1,0 +1,248 @@
+PILOT-LINK(7)                                       PILOT-LINK(7)
+
+
+
+NAME
+       pilot-link  - a suite of tools for communicating with Palm
+       Computing, Inc.  Palm Devices as well  as  the  Handspring
+       Visor,  TRGPro,  and  other  devices which conform to this
+       standard (PalmOS licensed devices).
+
+DESCRIPTION
+       The pilot-link suite of tools contains a  series  of  con­
+       duits  for moving information to and from your Palm device
+       and your desktop or workstation system.
+
+TARGET DEVICE
+       All of the pilot-link programs will default to  /dev/pilot
+       as  the  default  serial device used to communicate with a
+       Palm. In general, if the environment  variable  $PILOTPORT
+       is  set,  its  value  will  override the default. A serial
+       device specified on the command-line will be used  regard­
+       less of any $PILOTPORT setting.
+
+       The  default connection rate is 9600 baud. You are welcome
+       to try higher baud rates (19200, 38400, 57600  or  higher)
+       by  setting the $PILOTRATE environment variable, but vari­
+       ous machines have various limitations. (Be  careful  about
+       values  higher  than  115200 on Linux boxes if you've been
+       using setserial to change the multiplier.)
+
+USAGE
+       Here is a list  of  programs  available  from  within  the
+       pilot-link package as of the date of this manpage.
+
+       addresses
+              dump the Palm address book into a generic text-out­
+              put format
+
+
+       debugsh
+              command-line interface to a Palm debug monitor
+
+
+       dlpsh  command-line interface to  Palm  HotSync  protocol.
+              This  is  very useful for debugging potential prob­
+              lems with your serial port. Query the RAM/ROM, list
+              databases, change your UserID or Username, and many
+              more functions.
+
+
+       getrom program  to   fetch   ROM   using   getrom.prc   or
+              getrom2.prc
+
+
+       getrom.prc
+              Palm program to help dump a 512K ROM
+
+
+       getrom2.prc
+              Palm  program  to  help  dump a 1024K ROM (used for
+              PalmOS 2.x)
+
+
+       ietf2datebook
+              convert IETF calendar to format  used  by  install-
+              datebook
+
+
+       install-datebook
+              import datebook records from a text format into the
+              Palm
+
+
+       install-memo
+              import Memo records from a  text  format  into  the
+              Palm
+
+
+       install-todos
+              import  ToDo  records  from  a text format into the
+              Palm
+
+
+       install-user
+              modify User Preference settings  and  report  addi­
+              tional intormation about the Palm, such as the Net­
+              work Hotsync ID and Username/UserID
+
+
+       memos  export memos from the Palm in mailbox  format  into
+              one  file,  or  one  of  two formats: one-file-per-
+              record or one-directory-per-category
+
+
+       pi-csd this must be running to accept Network  HotSync(tm)
+              connects
+
+
+       pi-getram
+              program that retrieves the RAM from Palm
+
+
+       pi-getrom
+              program  that  retrieves  ROM  from  Palm  (without
+              getrom.prc)
+
+
+       pi-nredir
+              program that accepts connections and redirects them
+              via the Network HotSync(tm) protocol
+
+
+       pi-port
+              experimental  program  to abstract the serial layer
+              from pilot-link
+
+
+       pilot-addresses
+              import and export records  from  the  Address  Book
+              (AddressDB.pdb) on your Palm
+
+
+       pilot-clip
+              experimental program to import and export data from
+              Palm clipboard
+
+
+       pilot-debug
+              graphical and  command-line  program  to  interface
+              with Palm debug monitor
+
+
+       pilot-dedupe
+              strips duplicate records from Palm databases
+
+
+       pilot-file
+              dissect   .prc  and  .pdb  files  to  view  header,
+              app_info, and record information
+
+
+       pilot-mail
+              import mail from POP3 mailbox into  Palm's  default
+              Mail  application, and send mail via sendmail. This
+              has been replaced  by  pilot-mailsync  from  Hollis
+              Blanchard.  Please  see  the CREDITS file for addi­
+              tional information on how to obtain this package.
+
+
+       pilot-schlep
+              stores a single file of any data type (such as .zip
+              or .mp3) on the Palm or retrieves one from the Palm
+
+
+       pilot-undelete
+              turn  previously  archived  records   into   normal
+              records by resetting the Dirty bit
+
+
+       pilot-xfer
+              back  up, restore, install & delete Palm databases.
+              The Swiss Army Chainsaw of pilot-link
+
+
+       read-expenses
+              export Palm expense database into text format
+
+
+       read-ical
+              export Palm  Datebook  and  ToDo  databases  (Date­
+              bookDB.pdb  and  ToDoDB.pdb  respectively)  into an
+              Ical calendar (ical is required)
+
+
+       read-todos
+              export Palm ToDo database into generic text format
+
+
+       reminders
+              export Palm Datebook into a 'remind' data file
+
+
+       sync-plan
+              completely synchronize the Palm datebook  with  the
+              Plan calendar via netplan, including authenticating
+              to the netplan server
+
+
+ADVANCED PROGRAMS
+       Some of these programs are not intended for  general  end-
+       users.  More  detailed documentation on their usage can be
+       obtained by reading the source of the application.
+
+       ccexample
+              test program demonstrating C++ interface
+
+       iambicexample
+              test program demonstrating C++ interface
+
+       validate
+              experimental program to test C++ features
+
+
+OBTAINING
+       The  most  current  version of  the  pilot-link  suite  of
+       tools can be found at the following web site:
+
+              http://www.gnu-designs.com/pilot-link/
+
+MAILING LIST
+       The  pilot-unix  mailing  list  is  maintained  by Matthew
+       Cravit. Its mandate is:
+
+              The pilot-unix mailing list is for  discussion  and
+              idea-sharing  for  those  interested  in using your
+              Palm PDA with UNIX systems.  This  includes  people
+              who  are  interested in helping to develop tools to
+              allow the Palm to operate with UNIX,  and  possibly
+              to develop an SDK for the Palm for Unix.
+
+       For  more  information,  including how to subscribe to the
+       list, send mail containing the word 'INFO' to  pilot-unix-
+       request@hcirisc.cs.binghamton.edu.   The subject line does
+       not matter.
+
+SEE ALSO
+       dlpsh(1), ietf2datebook(1), install-datebook(1),  install-
+       hinote(1),    install-memo(1),   install-user(1),   pilot-
+       xfer(1), read-ical(1),
+
+       Pilot-HOWTO(http://www.orbits.com/Pilot/Pilot-HOWTO.html).
+
+AUTHOR
+       Most  of  the  pilot-link  tools  were  written by Kenneth
+       Albanowski.  This manual page was written by David H. Sil­
+       ber,  and  updated for this version of pilot-link by David
+       A. Desrosiers.
+
+       Current maintainer of pilot-link as of  the  authoring  of
+       this manpage is David A. Desrosiers.
+
+       Any  questions  or  problems  with  pilot-link  should  be
+       directed at  the  pilot-unix  mailing  list.  All  patches
+       should be sent to pilot-link@gnu-designs.com directly.
+
+
+
+FSF                Palm Computing Device Tools      PILOT-LINK(7)

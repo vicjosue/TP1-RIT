@@ -1,0 +1,36 @@
+DVIPDF(1)                  Ghostscript                  DVIPDF(1)
+
+
+
+NAME
+       dvipdf - Convert TeX DVI file to PDF using ghostscript and
+       dvips
+
+SYNOPSIS
+       dvipdf [ options ] input.dvi [ output.pdf ] ...
+
+DESCRIPTION
+       This script invokes dvips(1) with the -q option, and pipes
+       its output into gs(1) with the following options:
+
+                 -q -dNOPAUSE -dBATCH -sDEVICE=pdfwrite
+
+       as  well as -sOutputFile and any options from the command-
+       line.
+
+SEE ALSO
+       gs(1), dvips(1)
+
+VERSION
+       This document was last  revised  for  Ghostscript  version
+       6.53.
+
+AUTHOR
+       L.  Peter  Deutsch  <ghost@aladdin.com>  is  the principal
+       author of Ghostscript.  Russell J. Lang  <rjl@aladdin.com>
+       is   the  author  of  most  of  the  MS  Windows  code  in
+       Ghostscript.  This manpage by George Ferguson.
+
+
+
+6.53                     5 February 2002                DVIPDF(1)

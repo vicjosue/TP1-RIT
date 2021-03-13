@@ -1,0 +1,35 @@
+logresolve(8)                                       logresolve(8)
+
+
+
+NAME
+       logresolve  -  resolve hostnames for IP-adresses in Apache
+       logfiles
+
+SYNOPSIS
+       logresolve  [  -s  filename  ]  [  -c  ]  <  access_log  >
+       access_log.new
+
+
+DESCRIPTION
+       logresolve  is  a  post-processing  program to resolve IP-
+       adresses in Apache's access logfiles.  To minimize  impact
+       on  your  nameserver, logresolve has its very own internal
+       hash-table cache. This means that each IP number will only
+       be looked up the first time it is found in the log file.
+
+OPTIONS
+       -s filename Specifies a filename to record statistics.
+
+       -c          This  causes  logresolve  to  apply  some  DNS
+                   checks: after finding the hostname from the IP
+                   address,  it looks up the IP addresses for the
+                   hostname and checks that one of these  matches
+                   the original address.
+
+SEE ALSO
+       httpd(8)
+
+
+
+                            March 1998              logresolve(8)

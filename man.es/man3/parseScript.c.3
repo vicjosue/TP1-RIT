@@ -1,0 +1,80 @@
+build/parseScript.c(3)                     build/parseScript.c(3)
+
+
+
+NAME
+       build/parseScript.c - Parse install-time script section
+       from spec file.
+
+SYNOPSIS
+       #include 'system.h'
+       #include 'rpmbuild.h'
+       #include 'debug.h'
+
+   Functions
+       int addTriggerIndex (Package pkg, const char *file, const
+           char *script, const char *prog)
+       int parseScript (Spec spec, int parsePart)
+
+   Variables
+       const char * name = NULL
+       const char * prog = NULL
+       const char * file = NULL
+       poptOption optionsTable []
+
+DETAILED DESCRIPTION
+       Parse install-time script section from spec file.
+
+
+
+       Definition in file parseScript.c.
+
+FUNCTION DOCUMENTATION
+   int addTriggerIndex (Package pkg, const char * file, const
+       char * script, const char * prog) [static]
+       Definition at line 16 of file parseScript.c.
+
+       References file, TriggerFileEntry::fileName,
+       TriggerFileEntry::index, TriggerFileEntry::next,
+       TriggerFileEntry::prog, prog, TriggerFileEntry::script,
+       PackageStruct::triggerFiles, xmalloc, and xstrdup.
+
+       Referenced by parseScript.
+
+VARIABLE DOCUMENTATION
+   const char* file = NULL [static]
+       Definition at line 53 of file parseScript.c.
+
+       Referenced by addTriggerIndex, and parseScript.
+
+   const char* name = NULL [static]
+       Definition at line 51 of file parseScript.c.
+
+       Referenced by parseScript.
+
+   struct poptOption optionsTable[] [static]
+       Initial value:
+
+        {
+               { NULL, 'p', POPT_ARG_STRING, &prog, 'p',       NULL, NULL},
+               { NULL, 'n', POPT_ARG_STRING, &name, 'n',       NULL, NULL},
+               { NULL, 'f', POPT_ARG_STRING, &file, 'f',       NULL, NULL},
+               { 0, 0, 0, 0, 0,        NULL, NULL}
+           }
+
+       Definition at line 54 of file parseScript.c.
+
+       Referenced by parseScript.
+
+   const char* prog = NULL [static]
+       Definition at line 52 of file parseScript.c.
+
+       Referenced by addTriggerIndex, and parseScript.
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002     build/parseScript.c(3)

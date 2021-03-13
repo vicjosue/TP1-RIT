@@ -1,0 +1,55 @@
+RSA_blinding_on(3)           OpenSSL           RSA_blinding_on(3)
+
+
+
+NNAAMMEE
+       RSA_blinding_on, RSA_blinding_off - protect the RSA
+       operation from timing attacks
+
+SSYYNNOOPPSSIISS
+        #include <openssl/rsa.h>
+
+        int RSA_blinding_on(RSA *rsa, BN_CTX *ctx);
+
+        void RSA_blinding_off(RSA *rsa);
+
+
+DDEESSCCRRIIPPTTIIOONN
+       RSA is vulnerable to timing attacks. In a setup where
+       attackers can measure the time of RSA decryption or
+       signature operations, blinding must be used to protect the
+       RSA operation from that attack.
+
+       RSA_blinding_on() turns blinding on for key rrssaa and
+       generates a random blinding factor. ccttxx is NNUULLLL or a pre-
+       allocated and initialized BBNN_CCTTXX. The random number
+       generator must be seeded prior to calling
+       RSA_blinding_on().
+
+       RSA_blinding_off() turns blinding off and frees the memory
+       used for the blinding factor.
+
+RREETTUURRNN VVAALLUUEESS
+       RSA_blinding_on() returns 1 on success, and 0 if an error
+       occurred.
+
+       RSA_blinding_off() returns no value.
+
+SSEEEE AALLSSOO
+       rsa(3), rand(3)
+
+HHIISSTTOORRYY
+       RSA_blinding_on() and RSA_blinding_off() appeared in
+       SSLeay 0.9.0.
+
+
+
+
+
+
+
+
+
+
+
+24/Feb/2000                   0.9.6c           RSA_blinding_on(3)

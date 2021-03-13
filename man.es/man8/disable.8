@@ -1,0 +1,48 @@
+enable(8)             Easy Software Products            enable(8)
+
+
+
+NAME
+       disable, enable - stop/start printers and classes
+
+SYNOPSIS
+       disable [ -E ] [ -c ] [ -h server ] [ -r reason ] destina­
+       tion(s)
+       enable [ -E ] destination(s)
+
+DESCRIPTION
+       enable starts the named printers or classes.
+
+       disable stops the named printers or classes.  The  follow­
+       ing options may be used:
+
+       -c
+            Cancels all jobs on the named destination.
+
+       -r [ reason ]
+            Sets  the  message associated with the stopped state.
+            If no reason is specified then the message is set  to
+            "Reason Unknown".
+
+       The  -E  option  forces  encryption when connecting to the
+       server.
+
+COMPATIBILITY
+       The CUPS versions of disable and enable may ask  the  user
+       for  an  access  password depending on the printing system
+       configuration.  This differs from the  System  V  versions
+       which require the root user to execute these commands.
+
+SEE ALSO
+       accept(8),   cancel(1),   lp(1),   lpadmin(8),  lpstat(1),
+       reject(8),   CUPS    Software    Administrators    Manual,
+       http://localhost:631/documentation.html
+
+COPYRIGHT
+       Copyright  1993-2002 by Easy Software Products, All Rights
+       Reserved.
+
+
+
+
+23 January 2001    Common UNIX Printing System          enable(8)

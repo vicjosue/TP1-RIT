@@ -1,0 +1,1395 @@
+PSQL(1)           PostgreSQL Client Applications          PSQL(1)
+
+
+
+NAME
+       psql - PostgreSQL interactive terminal
+
+SYNOPSIS
+       psql [ options ] [ dbname [ user ] ]
+
+
+   SUMMARY
+       psql  is  a  terminal-based  front-end  to  PostgreSQL. It
+       enables you to type in queries interactively,  issue  them
+       to  PostgreSQL,  and see the query results. Alternatively,
+       input can be from a file.  In addition, it provides a num­
+       ber  of  meta-commands  and various shell-like features to
+       facilitate writing scripts and automating a  wide  variety
+       of tasks.
+
+DESCRIPTION
+   CONNECTING TO A DATABASE
+       psql  is a regular PostgreSQL client application. In order
+       to connect to a database you need to know the name of your
+       target  database,  the  hostname  and  port  number of the
+       server and what user name you want to connect as. psql can
+       be  told  about those parameters via command line options,
+       namely -d, -h, -p, and -U respectively.  If an argument is
+       found that does not belong to any option it will be inter­
+       preted as the database name (or  the  user  name,  if  the
+       database  name  is  also given). Not all these options are
+       required, defaults do apply.  If you omit  the  host  name
+       psql  will connect via a Unix domain socket to a server on
+       the local host. The default port  number  is  compile-time
+       determined.  Since  the  database  server  uses  the  same
+       default, you will not have to specify  the  port  in  most
+       cases.  The default user name is your Unix username, as is
+       the default database name.  Note that you can't just  con­
+       nect  to  any  database  under any username. Your database
+       administrator should have informed you about  your  access
+       rights. To save you some typing you can also set the envi­
+       ronment variables PGDATABASE, PGHOST, PGPORT and PGUSER to
+       appropriate values.
+
+       If  the connection could not be made for any reason (e.g.,
+       insufficient privileges, postmaster is not running on  the
+       server, etc.), psql will return an error and terminate.
+
+   ENTERING QUERIES
+       In  normal operation, psql provides a prompt with the name
+       of the database to which psql is currently connected, fol­
+       lowed by the string =>. For example,
+
+       $ psql testdb
+       Welcome to psql, the PostgreSQL interactive terminal.
+
+       Type:  \copyright for distribution terms
+              \h for help with SQL commands
+              \? for help on internal slash commands
+              \g or terminate with semicolon to execute query
+              \q to quit
+
+       testdb=>
+
+
+       At   the  prompt,  the  user  may  type  in  SQL  queries.
+       Ordinarily, input lines are sent to  the  backend  when  a
+       query-terminating  semicolon  is  reached.  An end of line
+       does not terminate a query! Thus  queries  can  be  spread
+       over  several lines for clarity. If the query was sent and
+       without error, the query  results  are  displayed  on  the
+       screen.
+
+       Whenever  a  query  is executed, psql also polls for asyn­
+       chronous notification events  generated  by  LISTEN  [lis­
+       ten(7)] and NOTIFY [notify(7)].
+
+PSQL META-COMMANDS
+       Anything  you  enter  in psql that begins with an unquoted
+       backslash is a psql meta-command that is processed by psql
+       itself.   These  commands  are what makes psql interesting
+       for administration or scripting.  Meta-commands  are  more
+       commonly called slash or backslash commands.
+
+       The  format  of  a psql command is the backslash, followed
+       immediately by a command verb,  then  any  arguments.  The
+       arguments  are  separated  from  the command verb and each
+       other by any number of whitespace characters.
+
+       To include whitespace into an argument you must  quote  it
+       with  a  single quote. To include a single quote into such
+       an argument, precede it by a backslash. Anything contained
+       in  single quotes is furthermore subject to C-like substi­
+       tutions for \n (new line), \t  (tab),  \digits,  \0digits,
+       and  \0xdigits  (the  character  with  the  given decimal,
+       octal, or hexadecimal code).
+
+       If an unquoted argument begins with a  colon  (:),  it  is
+       taken as a variable and the value of the variable is taken
+       as the argument instead.
+
+       Arguments that are quoted in ``backticks'' (`)  are  taken
+       as  a command line that is passed to the shell. The output
+       of the command (with a trailing newline removed) is  taken
+       as  the  argument  value.  The above escape sequences also
+       apply in backticks.
+
+       Some commands take the name of an SQL identifier (such  as
+       a table name) as argument. These arguments follow the syn­
+       tax rules of SQL regarding double  quotes:  an  identifier
+       without  double  quotes  is coerced to lower-case. For all
+       other commands double quotes  are  not  special  and  will
+       become part of the argument.
+
+       Parsing  for  arguments  stops when another unquoted back­
+       slash occurs. This is taken as  the  beginning  of  a  new
+       meta-command.  The  special  sequence \\ (two backslashes)
+       marks the end  of  arguments  and  continues  parsing  SQL
+       queries,  if  any.  That  way SQL and psql commands can be
+       freely mixed on a line.  But in any case, the arguments of
+       a meta-command cannot continue beyond the end of the line.
+
+       The following meta-commands are defined:
+
+       \a     If the current table output  format  is  unaligned,
+              switch  to aligned.  If it is not unaligned, set it
+              to unaligned. This command is  kept  for  backwards
+              compatibility. See \pset for a general solution.
+
+       \cd [directory]
+              Change  the current working directory to directory.
+              Without argument, change to the current user's home
+              directory.
+
+              Tip:  To  print your current working directory, use
+              \!pwd.
+
+
+       \C [ title ]
+              Set the title of any tables being  printed  as  the
+              result  of  a  query  or unset any such title. This
+              command is equivalent to \pset title  title.   (The
+              name  of  this command derives from ``caption'', as
+              it was previously only used to set the  caption  in
+              an HTML table.)
+
+       \connect (or \c) [ dbname [ username ] ]
+              Establishes  a  connection to a new database and/or
+              under a  user  name.  The  previous  connection  is
+              closed.   If  dbname is - the current database name
+              is assumed.
+
+              If username is omitted the  current  user  name  is
+              assumed.
+
+              As  a  special rule, \connect without any arguments
+              will connect to the default database as the default
+              user  (as  you  would  have gotten by starting psql
+              without any arguments).
+
+              If the connection attempt failed  (wrong  username,
+              access  denied, etc.), the previous connection will
+              be kept if and only if psql is in interactive mode.
+              When executing a non-interactive script, processing
+              will immediately stop with an error. This  distinc­
+              tion was chosen as a user convenience against typos
+              on the  one  hand,  and  a  safety  mechanism  that
+              scripts  are  not  accidentally acting on the wrong
+              database on the other hand.
+
+       \copy table
+              Performs a frontend (client) copy. This is an oper­
+              ation  that runs an SQL COPY [copy(7)] command, but
+              instead of the backend's  reading  or  writing  the
+              specified  file, and consequently requiring backend
+              access and special user privilege, as well as being
+              bound to the file system accessible by the backend,
+              psql reads or writes the file and routes  the  data
+              between the backend and the local file system.
+
+              The syntax of the command is similar to that of the
+              SQL COPY  command  (see  its  description  for  the
+              details).   Note  that,  because  of  this, special
+              parsing rules apply to the \copy command.  In  par­
+              ticular,  the variable substitution rules and back­
+              slash escapes do not apply.
+
+              Tip: This operation is not as efficient as the  SQL
+              COPY command because all data must pass through the
+              client/server IP or socket  connection.  For  large
+              amounts  of data the other technique may be prefer­
+              able.
+
+
+              Note: Note  the  difference  in  interpretation  of
+              stdin  and  stdout  between  frontend  and  backend
+              copies: in a frontend copy these  always  refer  to
+              psql's  input  and output stream. On a backend copy
+              stdin comes from wherever the COPY itself came from
+              (for example, a script run with the -f option), and
+              stdout refers to the query output  stream  (see  \o
+              meta-command below).
+
+
+       \copyright
+              Shows the copyright and distribution terms of Post­
+              greSQL.
+
+       \d relation
+              Shows all columns of relation  (which  could  be  a
+              table,  view, index, or sequence), their types, and
+              any  special  attributes  such  as  NOT   NULL   or
+              defaults,  if  any.  If the relation is, in fact, a
+              table, any defined indices,  primary  keys,  unique
+              constraints  and check constraints are also listed.
+              If the relation is a view, the view  definition  is
+              also shown.
+
+              The command form \d+ is identical, but any comments
+              associated with the  table  columns  are  shown  as
+              well.
+
+              Note:  If \d is called without any arguments, it is
+              equivalent to \dtvs which will show a list  of  all
+              tables, views, and sequences. This is purely a con­
+              venience measure.
+
+
+       \da [ pattern ]
+              Lists all available aggregate  functions,  together
+              with  the data type they operate on.  If pattern (a
+              regular expression)  is  specified,  only  matching
+              aggregates are shown.
+
+       \dd [ object ]
+              Shows  the  descriptions  of object (which can be a
+              regular expression), or of all objects if no  argu­
+              ment  is  given.   (``Object''  covers  aggregates,
+              functions,  operators,  types,  relations  (tables,
+              views,  indexes,  sequences, large objects), rules,
+              and triggers.) For example:
+
+              => \dd version
+                            Object descriptions
+                Name   |   What   |        Description
+              ---------+----------+---------------------------
+               version | function | PostgreSQL version string
+              (1 row)
+
+
+              Descriptions for objects can be generated with  the
+              COMMENT ON SQL command.
+
+              Note:  PostgreSQL stores the object descriptions in
+              the pg_description system table.
+
+
+       \df [ pattern ]
+              Lists  available  functions,  together  with  their
+              argument  and  return types.  If pattern (a regular
+              expression) is specified, only  matching  functions
+              are  shown.   If  the form \df+ is used, additional
+              information about each function, including language
+              and description, is shown.
+
+       \distvS [ pattern ]
+              This is not the actual command name: The letters i,
+              s, t, v, S stand for index, sequence, table,  view,
+              and system table, respectively. You can specify any
+              or all of them in any order to obtain a listing  of
+              them, together with who the owner is.
+
+              If pattern is specified, it is a regular expression
+              that restricts the listing to those  objects  whose
+              name matches. If one appends a ``+'' to the command
+              name, each object is  listed  with  its  associated
+              description, if any.
+
+       \dl    This  is  an alias for \lo_list, which shows a list
+              of large objects.
+
+       \do [ name ]
+              Lists available operators with  their  operand  and
+              return types.  If name is specified, only operators
+              with that name will be shown.
+
+       \dp [ pattern ]
+              This is an alias for \z which was included for  its
+              greater mnemonic value (``display permissions'').
+
+       \dT [ pattern ]
+              Lists  all data types or only those that match pat­
+              tern.  The command form \dT+ shows  extra  informa­
+              tion.
+
+       \du [ pattern ]
+              Lists all configured users or only those that match
+              pattern.
+
+       \edit (or \e) [ filename ]
+              If filename is specified, the file is edited; after
+              the editor exits, its content is copied back to the
+              query buffer. If no argument is given, the  current
+              query buffer is copied to a temporary file which is
+              then edited in the same fashion.
+
+              The new query buffer is then re-parsed according to
+              the normal rules of psql, where the whole buffer is
+              treated as a single line.  (Thus  you  cannot  make
+              scripts  this  way.   Use  \i for that.) This means
+              also that if the query ends with  (or  rather  con­
+              tains)  a semicolon, it is immediately executed. In
+              other cases  it  will  merely  wait  in  the  query
+              buffer.
+
+              Tip:   psql   searches  the  environment  variables
+              PSQL_EDITOR, EDITOR, and VISUAL (in that order) for
+              an editor to use. If all of them are unset, /bin/vi
+              is run.
+
+
+       \echo text [ ... ]
+              Prints the arguments to the standard output,  sepa­
+              rated  by one space and followed by a newline. This
+              can be useful to  intersperse  information  in  the
+              output of scripts. For example:
+
+              => \echo `date`
+              Tue Oct 26 21:40:57 CEST 1999
+
+              If  the  first  argument  is an unquoted -n the the
+              trailing newline is not written.
+
+              Tip: If you use the \o  command  to  redirect  your
+              query  output you may wish to use \qecho instead of
+              this command.
+
+
+       \encoding [ encoding ]
+              Sets the client encoding, if you are  using  multi­
+              byte  encodings.  Without an argument, this command
+              shows the current encoding.
+
+       \f [ string ]
+              Sets the field separator for unaligned  query  out­
+              put.  The default is pipe (|). See also \pset for a
+              generic way of setting output options.
+
+       \g [ { filename | |command } ]
+              Sends the current query input buffer to the backend
+              and  optionally  saves  the  output  in filename or
+              pipes the output into a separate Unix shell to exe­
+              cute  command. A bare \g is virtually equivalent to
+              a semicolon. A \g with argument is  a  ``one-shot''
+              alternative to the \o command.
+
+       \help (or \h) [ command ]
+              Give  syntax help on the specified SQL command.  If
+              command is not specified, then psql will  list  all
+              the commands for which syntax help is available. If
+              command is an asterisk (``*''), then syntax help on
+              all SQL commands is shown.
+
+              Note: To simplify typing, commands that consists of
+              several words do not have to be quoted.  Thus it is
+              fine to type \help alter table.
+
+
+       \H     Turns on HTML query output format. If the HTML for­
+              mat is already on,  it  is  switched  back  to  the
+              default  aligned  text  format. This command is for
+              compatibility and convenience, but see \pset  about
+              setting other output options.
+
+       \i filename
+              Reads  input from the file filename and executes it
+              as though it had been typed on the keyboard.
+
+              Note: If you want to see the lines on the screen as
+              they  are  read  you  must set the variable ECHO to
+              all.
+
+
+       \l (or \list)
+              List all the databases in the  server  as  well  as
+              their owners. Append a ``+'' to the command name to
+              see any descriptions for the databases as well.  If
+              your  PostgreSQL  installation  was  compiled  with
+              multibyte encoding support, the encoding scheme  of
+              each database is shown as well.
+
+       \lo_export loid filename
+              Reads  the  large  object  with  OID  loid from the
+              database and writes it to filename.  Note that this
+              is   subtly  different  from  the  server  function
+              lo_export, which acts with the permissions  of  the
+              user  that  the  database server runs as and on the
+              server's file system.
+
+              Tip: Use \lo_list to find out  the  large  object's
+              OID.
+
+
+              Note:  See  the  description  of the LO_TRANSACTION
+              variable for important information  concerning  all
+              large object operations.
+
+
+       \lo_import filename [ comment ]
+              Stores the file into a PostgreSQL ``large object''.
+              Optionally, it associates the  given  comment  with
+              the object. Example:
+
+              foo=> \lo_import '/home/peter/pictures/photo.xcf' 'a picture of me'
+              lo_import 152801
+
+              The   response  indicates  that  the  large  object
+              received object id 152801 which one ought to remem­
+              ber  if  one wants to access the object ever again.
+              For that reason it is recommended to always associ­
+              ate  a  human-readable  comment  with every object.
+              Those can then be seen with the \lo_list command.
+
+              Note that this command is subtly different from the
+              server-side  lo_import because it acts as the local
+              user on the local  file  system,  rather  than  the
+              server's user and file system.
+
+              Note:  See  the  description  of the LO_TRANSACTION
+              variable for important information  concerning  all
+              large object operations.
+
+
+       \lo_list
+              Shows  a  list  of all PostgreSQL ``large objects''
+              currently stored in the database,  along  with  any
+              comments provided for them.
+
+       \lo_unlink loid
+              Deletes  the  large  object  with OID loid from the
+              database.
+
+              Tip: Use \lo_list to find out  the  large  object's
+              OID.
+
+
+              Note:  See  the  description  of the LO_TRANSACTION
+              variable for important information  concerning  all
+              large object operations.
+
+
+       \o [ {filename | |command} ]
+              Saves  future query results to the file filename or
+              pipes future results into a separate Unix shell  to
+              execute  command.   If  no arguments are specified,
+              the query output will be reset to stdout.
+
+              ``Query  results''  includes  all  tables,  command
+              responses,  and  notices obtained from the database
+              server, as well as output of various backslash com­
+              mands that query the database (such as \d), but not
+              error messages.
+
+              Tip: To intersperse text output  in  between  query
+              results, use \qecho.
+
+
+       \p     Print the current query buffer to the standard out­
+              put.
+
+       \pset parameter [ value ]
+              This command sets options affecting the  output  of
+              query  result  tables.   parameter  describes which
+              option is to be set. The semantics of value  depend
+              thereon.
+
+              Adjustable printing options are:
+
+              format Sets  the output format to one of unaligned,
+                     aligned, html, or latex.   Unique  abbrevia­
+                     tions are allowed. (That would mean one let­
+                     ter is enough.)
+
+                     ``Unaligned'' writes all fields of  a  tuple
+                     on a line, separated by the currently active
+                     field separator. This is intended to  create
+                     output  that might be intended to be read in
+                     by other programs (tab-separated, comma-sep­
+                     arated).   ``Aligned'' mode is the standard,
+                     human-readable, nicely formatted text output
+                     that is default.  The ``HTML'' and ``LaTeX''
+                     modes put out tables that are intended to be
+                     included  in  documents using the respective
+                     mark-up language. They are not complete doc­
+                     uments!  (This  might  not be so dramatic in
+                     HTML, but in LaTeX you must have a  complete
+                     document wrapper.)
+
+              border The  second  argument  must  be a number. In
+                     general, the higher the number the more bor­
+                     ders  and  lines  the  tables will have, but
+                     this depends on the  particular  format.  In
+                     HTML mode, this will translate directly into
+                     the border=... attribute, in the others only
+                     values  0  (no border), 1 (internal dividing
+                     lines), and 2 (table frame) make sense.
+
+              expanded (or x)
+                     Toggles between regular and expanded format.
+                     When  expanded format is enabled, all output
+                     has two columns with the field name  on  the
+                     left and the data on the right. This mode is
+                     useful if  the  data  wouldn't  fit  on  the
+                     screen in the normal ``horizontal'' mode.
+
+                     Expanded  mode is supported by all four out­
+                     put modes.
+
+              null   The second argument is a string that  should
+                     be  printed  whenever  a  field is null. The
+                     default is not to print anything, which  can
+                     easily   be  mistaken  for,  say,  an  empty
+                     string. Thus,  one  might  choose  to  write
+                     \pset null '(null)'.
+
+              fieldsep
+                     Specifies  the field separator to be used in
+                     unaligned output  mode.  That  way  one  can
+                     create, for example, tab- or comma-separated
+                     output, which other programs  might  prefer.
+                     To  set a tab as field separator, type \pset
+                     fieldsep '\t'. The default  field  separator
+                     is '|' (a ``pipe'' symbol).
+
+              footer Toggles the display of the default footer (x
+                     rows).
+
+              recordsep
+                     Specifies the record (line) separator to use
+                     in  unaligned  output mode. The default is a
+                     newline character.
+
+              tuples_only (or t)
+                     Toggles between tuples only  and  full  dis­
+                     play.  Full  display may show extra informa­
+                     tion such as  column  headers,  titles,  and
+                     various  footers.  In tuples only mode, only
+                     actual table data is shown.
+
+              title [ text ]
+                     Sets the table title  for  any  subsequently
+                     printed  tables.  This  can  be used to give
+                     your output descriptive tags. If no argument
+                     is given, the title is unset.
+
+                     Note: This formerly only affected HTML mode.
+                     You can now set titles in any output format.
+
+
+              tableattr (or T) [ text ]
+                     Allows  you  to specify any attributes to be
+                     placed inside the HTML table tag. This could
+                     for  example be cellpadding or bgcolor. Note
+                     that you probably don't want to specify bor­
+                     der  here,  as that is already taken care of
+                     by \pset border.
+
+              pager  Toggles the list of a pager to do table out­
+                     put.  If  the  environment variable PAGER is
+                     set, the output is piped  to  the  specified
+                     program.  Otherwise more is used.
+
+                     In  any case, psql only uses the pager if it
+                     seems appropriate. That  means  among  other
+                     things  that the output is to a terminal and
+                     that the table would normally not fit on the
+                     screen.   Because  of  the modular nature of
+                     the printing routines it is not always  pos­
+                     sible  to  predict  the number of lines that
+                     will actually be printed.  For  that  reason
+                     psql  might  not  appear very discriminating
+                     about when to use the pager and when not to.
+
+       Illustrations  on  how these different formats look can be
+       seen in the Examples [psql(1)] section.
+
+              Tip: There are various shortcut commands for \pset.
+              See \a, \C, \H, \t, \T, and \x.
+
+
+              Note:  It  is  an error to call \pset without argu­
+              ments. In the future this call might show the  cur­
+              rent status of all printing options.
+
+
+       \q     Quit the psql program.
+
+       \qecho text [ ... ]
+              This  command is identical to \echo except that all
+              output will be written to the query output channel,
+              as set by \o.
+
+       \r     Resets (clears) the query buffer.
+
+       \s [ filename ]
+              Print or save the command line history to filename.
+              If filename is omitted, the history is  written  to
+              the standard output.  This option is only available
+              if psql  is  configured  to  use  the  GNU  history
+              library.
+
+              Note:  In the current version, it is no longer nec­
+              essary to save the command history, since that will
+              be  done  automatically on program termination. The
+              history is also  loaded  automatically  every  time
+              psql starts up.
+
+
+       \set [ name [ value [ ... ]]]
+              Sets  the  internal  variable  name to value or, if
+              more than one value is given, to the  concatenation
+              of all of them. If no second argument is given, the
+              variable is just set with  no  value.  To  unset  a
+              variable, use the \unset command.
+
+              Valid  variable  names can contain characters, dig­
+              its, and underscores.  See the section  about  psql
+              variables for details.
+
+              Although  you  are  welcome  to set any variable to
+              anything you want, psql treats several variables as
+              special.   They are documented in the section about
+              variables.
+
+              Note: This command is totally separate from the SQL
+              command SET [set(7)].
+
+
+       \t     Toggles  the display of output column name headings
+              and row count footer.  This command  is  equivalent
+              to  \pset  tuples_only  and  is provided for conve­
+              nience.
+
+       \T table_options
+              Allows you to specify options to be  placed  within
+              the  table  tag  in  HTML tabular output mode. This
+              command   is   equivalent   to   \pset    tableattr
+              table_options.
+
+       \w {filename | |command}
+              Outputs  the current query buffer to the file file­
+              name or pipes it to the Unix command command.
+
+       \x     Toggles extended row format mode.  As  such  it  is
+              equivalent to \pset expanded.
+
+       \z [ pattern ]
+              Produces  a list of all tables in the database with
+              their appropriate access permissions listed. If  an
+              argument   is  given  it  is  taken  as  a  regular
+              expression which limits the listing to those tables
+              which match it.
+
+
+              test=> \z
+              Access permissions for database "test"
+               Relation |           Access permissions
+              ----------+-------------------------------------
+               my_table | {"=r","joe=arwR", "group staff=ar"}
+              (1 row )
+
+              Read this as follows:
+
+              · "=r":  PUBLIC has read (SELECT) permission on the
+                table.
+
+              · "joe=arwR": User joe  has  read,  write  (UPDATE,
+                DELETE),  ``append''  (INSERT)  permissions,  and
+                permission to create rules on the table.
+
+              · "group staff=ar":  Group  staff  has  SELECT  and
+                INSERT permission.
+
+
+       The commands grant(7) and revoke(7) are used to set access
+       permissions.
+
+       \! [ command ]
+              Escapes to a separate Unix shell  or  executes  the
+              Unix command command. The arguments are not further
+              interpreted, the shell will see them as is.
+
+       \?     Get help information about  the  backslash  (``\'')
+              commands.
+
+
+COMMAND-LINE OPTIONS
+       If  so  configured,  psql  understands  both standard Unix
+       short options, and GNU-style long options. The latter  are
+       not available on all systems.
+
+
+       -a, --echo-all
+              Print all the lines to the screen as they are read.
+              This is more useful for  script  processing  rather
+              than  interactive mode.  This is equivalent to set­
+              ting the variable ECHO to all.
+
+       -A, --no-align
+              Switches to unaligned  output  mode.  (The  default
+              output mode is otherwise aligned.)
+
+       -c, --command query
+              Specifies that psql is to execute one query string,
+              query, and then  exit.  This  is  useful  in  shell
+              scripts.
+
+              query  must  be  either a query string that is com­
+              pletely parseable by the backend (i.e., it contains
+              no psql specific features), or it is a single back­
+              slash command. Thus you cannot  mix  SQL  and  psql
+              meta-commands.  To achieve that, you could pipe the
+              string into psql, like this: echo "\x \\  select  *
+              from foo;" | psql.
+
+       -d, --dbname dbname
+              Specifies  the  name of the database to connect to.
+              This is equivalent  to  specifying  dbname  as  the
+              first non-option argument on the command line.
+
+       -e, --echo-queries
+              Show  all  queries  that  are  sent to the backend.
+              This is equivalent to setting the variable ECHO  to
+              queries.
+
+       -E, --echo-hidden
+              Echoes the actual queries generated by \d and other
+              backslash commands.  You can use this if  you  wish
+              to include similar functionality into your own pro­
+              grams. This is equivalent to setting  the  variable
+              ECHO_HIDDEN from within psql.
+
+       -f, --file filename
+              Use  the  file  filename  as  the source of queries
+              instead of reading  queries  interactively.   After
+              the file is processed, psql terminates.  This is in
+              many ways equivalent to the internal command \i.
+
+              If filename is - (hyphen), then standard  input  is
+              read.
+
+              Using  this option is subtly different from writing
+              psql < filename.  In general, both will do what you
+              expect,  but  using  -f  enables some nice features
+              such as error messages with line numbers.  There is
+              also  a  slight  chance that using this option will
+              reduce the start-up overhead. On  the  other  hand,
+              the  variant using the shell's input redirection is
+              (in theory) guaranteed to yield  exactly  the  same
+              output  that  you would have gotten had you entered
+              everything by hand.
+
+       -F, --field-separator separator
+              Use separator as  the  field  separator.   This  is
+              equivalent to \pset fieldsep or \f.
+
+       -h, --host hostname
+              Specifies the host name of the machine on which the
+              postmaster is  running.   If  host  begins  with  a
+              slash,  it  is  used  as the directory for the unix
+              domain socket.
+
+       -H, --html
+              Turns on HTML tabular output. This is equivalent to
+              \pset format html or the \H command.
+
+       -l, --list
+              Lists  all  available  databases, then exits. Other
+              non-connection options are ignored. This is similar
+              to the internal command \list.
+
+       -o, --output filename
+              Put  all  query output into file filename.  This is
+              equivalent to the command \o.
+
+       -p, --port port
+              Specifies the TCP/IP  port  or,  by  omission,  the
+              local  Unix  domain  socket file extension on which
+              the  postmaster  is  listening   for   connections.
+              Defaults  to  the  value  of the PGPORT environment
+              variable or, if not set, to the port  specified  at
+              compile time, usually 5432.
+
+       -P, --pset assignment
+              Allows you to specify printing options in the style
+              of \pset on the command line. Note  that  here  you
+              have  to separate name and value with an equal sign
+              instead of a space. Thus to set the  output  format
+              to LaTeX, you could write -P format=latex.
+
+       -q     Specifies that psql should do its work quietly.  By
+              default, it prints  welcome  messages  and  various
+              informational output.  If this option is used, none
+              of this happens. This is useful with the -c option.
+              Within  psql you can also set the QUIET variable to
+              achieve the same effect.
+
+       -R, --record-separator separator
+              Use separator as the  record  separator.   This  is
+              equivalent to the \pset recordsep command.
+
+       -s, --single-step
+              Run  in  single-step  mode.  That means the user is
+              prompted before each query is sent to the  backend,
+              with  the  option to cancel execution as well.  Use
+              this to debug scripts.
+
+       -S, --single-line
+              Runs in single-line mode where a newline terminates
+              a query, as a semicolon does.
+
+              Note: This mode is provided for those who insist on
+              it, but you are not necessarily encouraged  to  use
+              it. In particular, if you mix SQL and meta-commands
+              on a line the order of execution might  not  always
+              be clear to the inexperienced user.
+
+
+       -t, --tuples-only
+              Turn  off  printing  of column names and result row
+              count footers, etc.  It is completely equivalent to
+              the \t meta-command.
+
+       -T, --table-attr table_options
+              Allows  you  to specify options to be placed within
+              the HTML table tag. See \pset for details.
+
+       -u     Makes psql prompt for the user  name  and  password
+              before connecting to the database.
+
+              This  option  is  deprecated, as it is conceptually
+              flawed. (Prompting for a non-default user name  and
+              prompting   for  a  password  because  the  backend
+              requires it are really two different  things.)  You
+              are  encouraged  to  look  at the -U and -W options
+              instead.
+
+       -U, --username username
+              Connects to  the  database  as  the  user  username
+              instead  of  the default. (You must have permission
+              to do so, of course.)
+
+       -v, --variable, --set assignment
+              Performs  a  variable  assignment,  like  the  \set
+              internal  command. Note that you must separate name
+              and value, if any, by an equal sign on the  command
+              line.  To  unset  a  variable,  leave off the equal
+              sign. To just set a variable without a  value,  use
+              the  equal  sign  but  leave  off the value.  These
+              assignments are done during a very early  stage  of
+              start-up,  so  variables reserved for internal pur­
+              poses might get overwritten later.
+
+       -V, --version
+              Shows the psql version.
+
+       -W, --password
+              Requests that psql should  prompt  for  a  password
+              before  connecting  to a database. This will remain
+              set for the entire session, even if you change  the
+              database connection with the meta-command \connect.
+
+              In the current version, psql automatically issues a
+              password prompt whenever the backend requests pass­
+              word authentication.   Because  this  is  currently
+              based  on  a  hack, the automatic recognition might
+              mysteriously fail, hence this  option  to  force  a
+              prompt.   If  no  password prompt is issued and the
+              backend requires password authentication  the  con­
+              nection attempt will fail.
+
+       -x, --expanded
+              Turns  on extended row format mode. This is equiva­
+              lent to the command \x.
+
+       -X, --no-psqlrc
+              Do not read the start-up file ~/.psqlrc.
+
+       -?, --help
+              Shows help about psql command line arguments.
+
+
+ADVANCED FEATURES
+   VARIABLES
+       psql provides variable substitution  features  similar  to
+       common  Unix  command  shells. This feature is new and not
+       very sophisticated, yet, but there are plans to expand  it
+       in  the  future.   Variables  are simply name/value pairs,
+       where the value can be any string of any  length.  To  set
+       variables, use the psql meta-command \set:
+
+       testdb=> \set foo bar
+
+       sets  the  variable  ``foo''  to  the  value  ``bar''.  To
+       retrieve the content of the  variable,  precede  the  name
+       with  a colon and use it as the argument of any slash com­
+       mand:
+
+       testdb=> \echo :foo
+       bar
+
+
+              Note: The arguments of \set are subject to the same
+              substitution rules as with other commands. Thus you
+              can construct interesting references such  as  \set
+              :foo  'something' and get ``soft links'' or ``vari­
+              able variables'' of Perl or PHP fame, respectively.
+              Unfortunately (or fortunately?), there is no way to
+              do anything useful with these  constructs.  On  the
+              other  hand, \set bar :foo is a perfectly valid way
+              to copy a variable.
+
+
+       If you call \set without a second argument,  the  variable
+       is  simply  set,  but has no value. To unset (or delete) a
+       variable, use the command \unset.
+
+       psql's internal variable names  can  consist  of  letters,
+       numbers,  and  underscores  in any order and any number of
+       them.  A number of regular variables are treated specially
+       by  psql.   They indicate certain option settings that can
+       be changed at runtime by altering the value of  the  vari­
+       able or represent some state of the application.  Although
+       you can use these variables for any other purpose, this is
+       not recommended, as the program behavior might grow really
+       strange really  quickly.   By  convention,  all  specially
+       treated  variables  consist of all upper-case letters (and
+       possibly numbers and underscores). To ensure maximum  com­
+       patibility in the future, avoid such variables.  A list of
+       all specially treated variables follows.
+
+       DBNAME The name of the database  you  are  currently  con­
+              nected  to. This is set every time you connect to a
+              database (including program start-up), but  can  be
+              unset.
+
+       ECHO   If  set  to  ``all'',  all  lines entered or from a
+              script are written to the  standard  output  before
+              they  are  parsed  or  executed. To specify this on
+              program start-up, use the  switch  -a.  If  set  to
+              ``queries'', psql merely prints all queries as they
+              are sent to the backend. The option for this is -e.
+
+       ECHO_HIDDEN
+              When  this  variable is set and a backslash command
+              queries the database, the  query  is  first  shown.
+              This way you can study the PostgreSQL internals and
+              provide similar functionality in your own programs.
+              If  you  set  the variable to the value ``noexec'',
+              the queries are just shown  but  are  not  actually
+              sent to the backend and executed.
+
+       ENCODING
+              The  current  client multibyte encoding. If you are
+              not set up to use multibyte characters, this  vari­
+              able will always contain ``SQL_ASCII''.
+
+       HISTCONTROL
+              If this variable is set to ignorespace, lines which
+              begin with a space are not entered into the history
+              list. If set to a value of ignoredups, lines match­
+              ing the previous history line are  not  entered.  A
+              value  of  ignoreboth  combines the two options. If
+              unset, or if set to  any  other  value  than  those
+              above, all lines read in interactive mode are saved
+              on the history list.
+
+              Note: This feature was shamelessly plagiarized from
+              bash.
+
+
+       HISTSIZE
+              The number of commands to store in the command his­
+              tory.  The default value is 500.
+
+              Note: This feature was shamelessly plagiarized from
+              bash.
+
+
+       HOST   The   database   server   host  you  are  currently
+              connected to. This is set every time you connect to
+              a database (including program start-up), but can be
+              unset.
+
+       IGNOREEOF
+              If unset, sending an EOF  character  (usually  Con­
+              trol-D) to an interactive session of psql will ter­
+              minate the application.  If set to a numeric value,
+              that  many  EOF  characters  are ignored before the
+              application terminates. If the variable is set  but
+              has no numeric value, the default is 10.
+
+              Note: This feature was shamelessly plagiarized from
+              bash.
+
+
+       LASTOID
+              The value of the last  affected  oid,  as  returned
+              from  an INSERT or lo_insert command. This variable
+              is only guaranteed to  be  valid  until  after  the
+              result  of the next SQL command has been displayed.
+
+       LO_TRANSACTION
+              If you use the PostgreSQL large object interface to
+              specially  store  data  that  does not fit into one
+              tuple, all the operations must be  contained  in  a
+              transaction  block.  (See  the documentation of the
+              large object interface for more information.) Since
+              psql  has  no  way  to  tell  if you already have a
+              transaction in progress when you call  one  of  its
+              internal    commands    (\lo_export,    \lo_import,
+              \lo_unlink) it must  take  some  arbitrary  action.
+              This action could either be to roll back any trans­
+              action that might already be  in  progress,  or  to
+              commit  any  such  transaction, or to do nothing at
+              all. In the last case you  must  provide  your  own
+              BEGIN  TRANSACTION/COMMIT block or the results will
+              be unpredictable (usually resulting in the  desired
+              action's not being performed in any case).
+
+              To choose what you want to do you set this variable
+              to one of ``rollback'', ``commit'', or ``nothing''.
+              The default is to roll back the transaction. If you
+              just want to load one or  a  few  objects  this  is
+              fine. However, if you intend to transfer many large
+              objects, it  might  be  advisable  to  provide  one
+              explicit transaction block around all commands.
+
+       ON_ERROR_STOP
+              By default, if non-interactive scripts encounter an
+              error, such as a malformed SQL  query  or  internal
+              meta-command,  processing  continues. This has been
+              the traditional behavior of psql but  it  is  some­
+              times  not  desirable.  If  this  variable  is set,
+              script processing will  immediately  terminate.  If
+              the  script  was called from another script it will
+              terminate in the same fashion.   If  the  outermost
+              script was not called from an interactive psql ses­
+              sion but rather using  the  -f  option,  psql  will
+              return  error code 3, to distinguish this case from
+              fatal error conditions (error code 1).
+
+       PORT   The database server port to which you are currently
+              connected.  This is set every time you connect to a
+              database (including program start-up), but  can  be
+              unset.
+
+       PROMPT1, PROMPT2, PROMPT3
+              These  specify  what the prompt psql issues is sup­
+              posed to look  like.  See  ``Prompting  [psql(1)]''
+              below.
+
+       QUIET  This  variable  is  equivalent  to the command line
+              option -q.  It is probably not too useful in inter­
+              active mode.
+
+       SINGLELINE
+              This variable is set by the command line option -S.
+              You can unset or reset it at run time.
+
+       SINGLESTEP
+              This variable is equivalent  to  the  command  line
+              option -s.
+
+       USER   The  database  user you are currently connected as.
+              This is set every time you connect  to  a  database
+              (including program start-up), but can be unset.
+
+
+   SQL INTERPOLATION
+       An additional useful feature of psql variables is that you
+       can substitute (``interpolate'')  them  into  regular  SQL
+       statements.  The  syntax  for this is again to prepend the
+       variable name with a colon (:).
+
+       testdb=> \set foo 'my_table'
+       testdb=> SELECT * FROM :foo;
+
+       would then query the table  my_table.  The  value  of  the
+       variable  is  copied  literally,  so  it  can even contain
+       unbalanced quotes or backslash  commands.  You  must  make
+       sure  that  it  makes  sense  where  you put it.  Variable
+       interpolation will not be performed into quoted SQL  enti­
+       ties.
+
+       A  popular application of this facility is to refer to the
+       last inserted OID in subsequent statements to build a for­
+       eign key scenario.  Another possible use of this mechanism
+       is to copy the contents of a file into a field. First load
+       the file into a variable and then proceed as above.
+
+       testdb=> \set content '\'' `cat my_file.txt` '\''
+       testdb=> INSERT INTO my_table VALUES (:content);
+
+       One   possible   problem   with   this  approach  is  that
+       my_file.txt might contain single quotes. These need to  be
+       escaped  so  that they don't cause a syntax error when the
+       third line is processed. This could be done with the  pro­
+       gram sed:
+
+       testdb=> \set content '\'' `sed -e "s/'/\\\\\\'/g" < my_file.txt` '\''
+
+       Observe  the  correct  number  of backslashes (6)! You can
+       resolve it this way: After psql has parsed this  line,  it
+       passes sed -e "s/'/\\\'/g" < my_file.txt to the shell. The
+       shell will do its own thing inside the double  quotes  and
+       execute sed with the arguments -e and s/'/\\'/g.  When sed
+       parses this it will replace the  two  backslashes  with  a
+       single  one  and  then do the substitution. Perhaps at one
+       point you thought it was great that all Unix commands  use
+       the  same  escape character. And this is ignoring the fact
+       that you might have to  escape  all  backslashes  as  well
+       because  SQL  text  constants  are also subject to certain
+       interpretations. In that case  you  might  be  better  off
+       preparing the file externally.
+
+       Since  colons may legally appear in queries, the following
+       rule applies: If the variable is not  set,  the  character
+       sequence  ``colon+name''  is  not changed. In any case you
+       can escape a colon with a backslash  to  protect  it  from
+       interpretation.   (The colon syntax for variables is stan­
+       dard SQL for embedded query languages, such as  ecpg.  The
+       colon  syntax  for  array  slices and type casts are Post­
+       greSQL extensions, hence the conflict.)
+
+   PROMPTING
+       The prompts psql issues can be customized to your  prefer­
+       ence.  The  three  variables PROMPT1, PROMPT2, and PROMPT3
+       contain strings and special escape sequences that describe
+       the  appearance  of  the  prompt.  Prompt  1 is the normal
+       prompt that is issued when  psql  requests  a  new  query.
+       Prompt  2  is  issued  when  more input is expected during
+       query input because the query was not  terminated  with  a
+       semicolon  or  a quote was not closed.  Prompt 3 is issued
+       when you run an SQL COPY command and you are  expected  to
+       type in the tuples on the terminal.
+
+       The  value  of  the  respective prompt variable is printed
+       literally, except where a percent sign (``%'') is  encoun­
+       tered. Depending on the next character, certain other text
+       is substituted instead. Defined substitutions are:
+
+       %M     The  full  hostname  (with  domain  name)  of   the
+              database  server,  or  [local] if the connection is
+              over a Unix domain socket, or [local:/dir/name], if
+              the  Unix  domain  socket is not at the compiled in
+              default location.
+
+       %m     The hostname  of  the  database  server,  truncated
+              after  the  first dot, or [local] if the connection
+              is over a Unix domain socket.
+
+       %>     The port number at which  the  database  server  is
+              listening.
+
+       %n     The  username  you are connected as (not your local
+              system user name).
+
+       %/     The name of the current database.
+
+       %~     Like %/, but the output is  ``~''  (tilde)  if  the
+              database is your default database.
+
+       %#     If the current user is a database superuser, then a
+              ``#'', otherwise a ``>''.
+
+       %R     In prompt 1 normally ``='', but ``^'' if in single-
+              line mode, and ``!'' if the session is disconnected
+              from the database (which  can  happen  if  \connect
+              fails).  In  prompt  2  the sequence is replaced by
+              ``-'', ``*'', a single quote, or  a  double  quote,
+              depending   on  whether  psql  expects  more  input
+              because the query wasn't  terminated  yet,  because
+              you  are inside a /* ... */ comment, or because you
+              are inside  a  quote.  In  prompt  3  the  sequence
+              doesn't resolve to anything.
+
+       %digits
+              If digits starts with 0x the rest of the characters
+              are interpreted as  a  hexadecimal  digit  and  the
+              character  with  the  corresponding code is substi­
+              tuted. If the first digit is 0 the  characters  are
+              interpreted  as on octal number and the correspond­
+              ing character is substituted. Otherwise  a  decimal
+              number is assumed.
+
+       %:name:
+              The  value of the psql, variable name. See the sec­
+              tion ``Variables [psql(1)]'' for details.
+
+       %`command`
+              The output of command, similar to ordinary  ``back-
+              tick'' substitution.
+
+       To  insert  a percent sign into your prompt, write %%. The
+       default prompts are equivalent to '%/%R%# ' for prompts  1
+       and 2, and '>> ' for prompt 3.
+
+              Note: This feature was shamelessly plagiarized from
+              tcsh.
+
+
+   MISCELLANEOUS
+       psql returns 0 to the shell if it finished normally, 1  if
+       a  fatal  error of its own (out of memory, file not found)
+       occurs, 2 if the connection to the backend  went  bad  and
+       the session is not interactive, and 3 if an error occurred
+       in a script and the variable ON_ERROR_STOP was set.
+
+       Before starting up, psql attempts to read and execute com­
+       mands from the file $HOME/.psqlrc. It could be used to set
+       up the client or the server to taste (using the  \set  and
+       SET commands).
+
+   GNU READLINE
+       psql  supports the readline and history libraries for con­
+       venient line editing and retrieval. The command history is
+       stored  in  a file named .psql_history in your home direc­
+       tory and is reloaded when psql starts up.   Tab-completion
+       is  also supported, although the completion logic makes no
+       claim to be an SQL parser.  When available, psql is  auto­
+       matically  built to use these features. If for some reason
+       you do not like the tab completion, you can turn if off by
+       putting  this in a file named .inputrc in your home direc­
+       tory:
+
+       $if psql
+       set disable-completion on
+       $endif
+
+       (This is not a psql but a readline feature. Read its docu­
+       mentation for further details.)
+
+       If  you  have the readline library installed but psql does
+       not seem to use it, you must make sure  that  PostgreSQL's
+       top-level  configure  script  finds it. configure needs to
+       find both the library libreadline.a (or a  shared  library
+       equivalent)  and the header files readline.h and history.h
+       (or readline/readline.h and readline/history.h) in  appro­
+       priate  directories.  If  you  have the library and header
+       files installed in an obscure place you must tell  config­
+       ure about them, for example:
+
+       $ ./configure --with-includes=/opt/gnu/include --with-libs=/opt/gnu/lib  ...
+
+       Then  you  have  to  recompile  psql  (not necessarily the
+       entire code tree).
+
+       The GNU readline library can be obtained from the GNU pro­
+       ject's      FTP      server      at      ftp://ftp.gnu.org
+       <URL:ftp://ftp.gnu.org>.
+
+EXAMPLES
+              Note: This section only shows a few  examples  spe­
+              cific  to  psql.   If  you want to learn SQL or get
+              familiar with PostgreSQL, you might  wish  to  read
+              the  Tutorial that is included in the distribution.
+
+
+       The first example shows how to spread a query over several
+       lines of input.  Notice the changing prompt:
+
+       testdb=> CREATE TABLE my_table (
+       testdb(>  first integer not null default 0,
+       testdb(>  second text
+       testdb-> );
+       CREATE
+
+       Now look at the table definition again:
+
+       testdb=> \d my_table
+                    Table "my_table"
+        Attribute |  Type   |      Modifier
+       -----------+---------+--------------------
+        first     | integer | not null default 0
+        second    | text    |
+
+       At this point you decide to change the prompt to something
+       more interesting:
+
+       testdb=> \set PROMPT1 '%n@%m %~%R%# '
+       peter@localhost testdb=>
+
+       Let's assume you have filled the table with data and  want
+       to take a look at it:
+
+       peter@localhost testdb=> SELECT * FROM my_table;
+        first | second
+       -------+--------
+            1 | one
+            2 | two
+            3 | three
+            4 | four
+       (4 rows)
+
+       You  can  make  this  table  look differently by using the
+       \pset command:
+
+       peter@localhost testdb=> \pset border 2
+       Border style is 2.
+       peter@localhost testdb=> SELECT * FROM my_table;
+       +-------+--------+
+       | first | second |
+       +-------+--------+
+       |     1 | one    |
+       |     2 | two    |
+       |     3 | three  |
+       |     4 | four   |
+       +-------+--------+
+       (4 rows)
+
+       peter@localhost testdb=> \pset border 0
+       Border style is 0.
+       peter@localhost testdb=> SELECT * FROM my_table;
+       first second
+       ----- ------
+           1 one
+           2 two
+           3 three
+           4 four
+       (4 rows)
+
+       peter@localhost testdb=> \pset border 1
+       Border style is 1.
+       peter@localhost testdb=> \pset format unaligned
+       Output format is unaligned.
+       peter@localhost testdb=> \pset fieldsep ","
+       Field separator is ",".
+       peter@localhost testdb=> \pset tuples_only
+       Showing only tuples.
+       peter@localhost testdb=> SELECT second, first FROM my_table;
+       one,1
+       two,2
+       three,3
+       four,4
+
+       Alternatively, use the short commands:
+
+       peter@localhost testdb=> \a \t \x
+       Output format is aligned.
+       Tuples only is off.
+       Expanded display is on.
+       peter@localhost testdb=> SELECT * FROM my_table;
+       -[ RECORD 1 ]-
+       first  | 1
+       second | one
+       -[ RECORD 2 ]-
+       first  | 2
+       second | two
+       -[ RECORD 3 ]-
+       first  | 3
+       second | three
+       -[ RECORD 4 ]-
+       first  | 4
+       second | four
+
+
+APPENDIX
+   BUGS AND ISSUES
+       · In some earlier life psql allowed the first argument  to
+         start  directly  after  the (single-letter) command. For
+         compatibility this is still supported to some extent but
+         I  am  not going to explain the details here as this use
+         is discouraged. But if you get  strange  messages,  keep
+         this in mind. For example
+
+         testdb=> \foo
+         Field separator is "oo",
+
+         which is perhaps not what one would expect.
+
+       · psql  only  works smoothly with servers of the same ver­
+         sion. That does not mean other  combinations  will  fail
+         outright,  but  subtle  and not-so-subtle problems might
+         come up.
+
+       · Pressing Control-C during a ``copy in''  (data  sent  to
+         the server) doesn't show the most ideal of behaviors. If
+         you get a message such as ``COPY state  must  be  termi­
+         nated  first'',  simply reset the connection by entering
+         \c - -.
+
+
+
+Application                 2000-12-25                    PSQL(1)

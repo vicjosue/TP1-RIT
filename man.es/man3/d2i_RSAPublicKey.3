@@ -1,0 +1,48 @@
+d2i_RSAPublicKey(3)          OpenSSL          d2i_RSAPublicKey(3)
+
+
+
+NNAAMMEE
+       d2i_RSAPublicKey, i2d_RSAPublicKey, d2i_RSAPrivateKey,
+       i2d_RSAPrivateKey, i2d_Netscape_RSA, d2i_Netscape_RSA -
+       ...
+
+SSYYNNOOPPSSIISS
+        #include <openssl/rsa.h>
+
+        RSA * d2i_RSAPublicKey(RSA **a, unsigned char **pp, long length);
+
+        int i2d_RSAPublicKey(RSA *a, unsigned char **pp);
+
+        RSA * d2i_RSAPrivateKey(RSA **a, unsigned char **pp, long length);
+
+        int i2d_RSAPrivateKey(RSA *a, unsigned char **pp);
+
+        int i2d_Netscape_RSA(RSA *a, unsigned char **pp, int (*cb)());
+
+        RSA * d2i_Netscape_RSA(RSA **a, unsigned char **pp, long length, int (*cb)());
+
+
+DDEESSCCRRIIPPTTIIOONN
+       ...
+
+RREETTUURRNN VVAALLUUEESS
+       ...
+
+SSEEEE AALLSSOO
+       ...
+
+HHIISSTTOORRYY
+       ...
+
+
+
+
+
+
+
+
+
+
+
+26/Jan/2000                   0.9.6c          d2i_RSAPublicKey(3)

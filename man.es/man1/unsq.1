@@ -1,0 +1,40 @@
+SQ(1)                                                       SQ(1)
+
+
+
+NAME
+       sq  - squeeze a sorted word list unsq - unsqueeze a sorted
+       word list
+
+SYNOPSIS
+       sq < infile > outfile
+
+       unsq < infile > outfile
+
+DESCRIPTION
+       sq compresses a sorted list of words (a dictionary).   For
+       example:
+              sort   /usr/share/dict/words  |  sq  |  compress  >
+              words.sq.Z
+       will compress dict by about a factor of 4.
+
+       unsq uncompress the output of sq.  For example:
+              compress -d < words.sq.Z | unsq | sort -f -o words
+       will uncompress a dictionary compressed with sq.
+
+       The squeezing is achieved by eliminating common  prefixes,
+       and  replacing  them with a single character which encodes
+       the number of characters shared with the  preceding  word.
+       The  prefix  size is encoded as a single printable charac­
+       ter: 0-9 represent 0-9, A-Z represent 10-35, and a-z  rep­
+       resent 36-61.
+
+AUTHOR
+       Mike Wexler
+
+SEE ALSO
+       compress(1), sort(1).
+
+
+
+                              LOCAL                         SQ(1)

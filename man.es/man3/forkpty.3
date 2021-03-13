@@ -1,0 +1,74 @@
+OPENPTY(3)          Linux Programmer's Manual          OPENPTY(3)
+
+
+
+NAME
+       openpty, login_tty, forkpty - tty utility functions
+
+SYNOPSIS
+       #include <pty.h>  /* for openpty and forkpty */
+       #include <utmp.h> /* for login_tty */
+
+       int  openpty(int *amaster, int *aslave, char *name, struct
+       termios *termp, struct winsize * winp);
+
+       int login_tty(int fd);
+
+       pid_t forkpty(int *amaster,  char  *name,  struct  termios
+       *termp, struct winsize *winp);
+
+DESCRIPTION
+       The  openpty()  function finds an available pseudo-tty and
+       returns file descriptors for the master and slave in amas­
+       ter  and aslave.  If name is not NULL, the filename of the
+       slave is returned in name.  If termp is not NULL, the ter­
+       minal parameters of the slave will be set to the values in
+       termp.  If winp is not NULL, the window size of the  slave
+       will be set to the values in winp.
+
+       The  login_tty()  function prepares for a login on the tty
+       fd (which may be a real tty device,  or  the  slave  of  a
+       pseudo-tty  as  returned  by  openpty()) by creating a new
+       session, making fd the controlling terminal for  the  cur­
+       rent process, setting fd to be the standard input, output,
+       and error streams of the current process, and closing  fd.
+
+       The  forkpty()  function  combines  openpty(), fork(), and
+       login_tty() to create a new process operating in a pseudo-
+       tty.   The  file  descriptor  of  the  master  side of the
+       pseudo-tty is returned in amaster, and the filename of the
+       slave  in  name  if  it  is  not NULL.  The termp and winp
+       parameters, if  not  NULL,  will  determine  the  terminal
+       attributes  and  window  size  of  the  slave  side of the
+       pseudo-tty.
+
+RETURN VALUES
+       If a call to openpty(), login_tty(), or forkpty()  is  not
+       successful,  -1  is  returned and errno is set to indicate
+       the error.  Otherwise,  openpty(),  login_tty(),  and  the
+       child  process  of forkpty() return 0, and the parent pro­
+       cess of forkpty() returns the process ID of the child pro­
+       cess.
+
+ERRORS
+       openpty() will fail if:
+
+       ENOENT There are no available ttys.
+
+       login_pty()  will  fail  if ioctl() fails to set fd to the
+       controlling terminal of the current process.
+
+       forkpty() will fail if either openpty() or fork() fails.
+
+FILES
+       /dev/[pt]ty[pqrstuwxyzabcdePQRST][0123456789abcdef]
+
+CONFORMING TO
+       These are BSD functions, present in libc5 and glibc2.
+
+SEE ALSO
+       fork(2)
+
+
+
+BSD MANPAGE                 2001-12-13                 OPENPTY(3)

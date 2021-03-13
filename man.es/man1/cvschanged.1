@@ -1,0 +1,46 @@
+CVSCHANGED(1)         K Desktop Environment         CVSCHANGED(1)
+
+
+
+NNAAMMEE
+       cvschanged -- Lists all files in checked out CVS modules
+       that have been edited or changed locally. No connection is
+       required to the CVS server.
+
+SSYYNNOOPPSSIISS
+       When the current directory is a CVS module:
+
+               cvschanged
+
+       Checking checked out subdirectories:
+
+               cvschanged [<dir>...]
+
+
+DDEESSCCRRIIPPTTIIOONN
+       cvschanged will list all files in each checked-out module
+       (and subdirectories) that have been edited or merged. This
+       is done without needing to contact the CVS server, which
+       greatly increases the speed for people who have a slow
+       connection.
+
+EEXXAAMMPPLLEESS
+               cd baseline/kdelibs; cvschanged
+               cd baseline; cvschanged kdelibs kdebase
+
+
+AAUUTTHHOORR
+       Sirtaj Singh Kang <taj@kde.org>
+
+       edited or changed locally. No connection is required to
+       the CVS server."
+
+
+
+
+
+
+
+
+
+12/Apr/99              perl 5.004, patch 04         CVSCHANGED(1)

@@ -1,0 +1,59 @@
+EXPAND(1)                      FSF                      EXPAND(1)
+
+
+
+NAME
+       expand - convert tabs to spaces
+
+SYNOPSIS
+       expand [OPTION]... [FILE]...
+
+DESCRIPTION
+       Convert  tabs  in each FILE to spaces, writing to standard
+       output.  With no FILE, or when FILE is  -,  read  standard
+       input.
+
+       Mandatory  arguments  to  long  options  are mandatory for
+       short options too.
+
+       -i, --initial
+              do not convert TABs after non whitespace
+
+       -t, --tabs=NUMBER
+              have tabs NUMBER characters apart, not 8
+
+       -t, --tabs=LIST
+              use comma separated list of explicit tab positions
+
+       --help display this help and exit
+
+       --version
+              output version information and exit
+
+       Instead of -t NUMBER or -t LIST, -NUMBER or -LIST  may  be
+       used.
+
+AUTHOR
+       Written by David MacKenzie.
+
+REPORTING BUGS
+       Report bugs to <bug-textutils@gnu.org>.
+
+COPYRIGHT
+       Copyright © 2001 Free Software Foundation, Inc.
+       This  is  free software; see the source for copying condi­
+       tions.  There is NO warranty; not even for MERCHANTABILITY
+       or FITNESS FOR A PARTICULAR PURPOSE.
+
+SEE ALSO
+       The  full documentation for expand is maintained as a Tex­
+       info manual.  If the info and expand programs are properly
+       installed at your site, the command
+
+              info expand
+
+       should give you access to the complete manual.
+
+
+
+expand (textutils) 2.0.17 November 2001                 EXPAND(1)

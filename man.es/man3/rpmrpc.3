@@ -1,0 +1,171 @@
+RPMRPC.(3)                                             RPMRPC.(3)
+
+
+
+NAME
+       RPMRPC. -
+
+   RPMRPC Vectors.
+       typedef int fdio_mkdir_function_t (const char *path,
+           mode_t mode)
+       typedef int fdio_chdir_function_t (const char *path)
+       typedef int fdio_rmdir_function_t (const char *path)
+       typedef int fdio_rename_function_t (const char *oldpath,
+           const char *newpath)
+       typedef int fdio_unlink_function_t (const char *path)
+       typedef int fdio_stat_function_t (const char *path, struct
+           stat *st)
+       typedef int fdio_lstat_function_t (const char *path,
+           struct stat *st)
+       typedef int fdio_access_function_t (const char *path, int
+           amode)
+
+   RPMRPC Interface.
+       int Mkdir (const char *path, mode_t mode)
+           mkdir(2) clone.
+       int Chdir (const char *path)
+           chdir(2) clone.
+       int Rmdir (const char *path)
+           rmdir(2) clone.
+       int Rename (const char *oldpath, const char *newpath)
+           rename(2) clone.
+       int Link (const char *oldpath, const char *newpath)
+           link(2) clone.
+       int Unlink (const char *path)
+           unlink(2) clone.
+       int Readlink (const char *path, char *buf, size_t bufsiz)
+           readlink(2) clone.
+       int Stat (const char *path, struct stat *st)
+           stat(2) clone.
+       int Lstat (const char *path, struct stat *st)
+           lstat(2) clone.
+       int Access (const char *path, int amode)
+           access(2) clone.
+       int Glob (const char *pattern, int flags, int
+           errfunc(const char *epath, int eerrno), glob_t *pglob)
+           glob(3) clone.
+       void Globfree (glob_t *pglob)
+           globfree(3) clone.
+       DIR * Opendir (const char *name)
+           opendir(3) clone.
+       dirent * Readdir (DIR *dir)
+           readdir(3) clone.
+       int Closedir (DIR *dir)
+           closedir(3) clone.
+
+TYPEDEF DOCUMENTATION
+   typedef int fdio_access_function_t(const char * path, int
+       amode)
+       Definition at line 121 of file rpmio.h.
+
+   typedef int fdio_chdir_function_t(const char * path)
+       Definition at line 114 of file rpmio.h.
+
+   typedef int fdio_lstat_function_t(const char * path, struct
+       stat * st)
+       Definition at line 120 of file rpmio.h.
+
+   typedef int fdio_mkdir_function_t(const char * path, mode_t
+       mode)
+       Definition at line 113 of file rpmio.h.
+
+   typedef int fdio_rename_function_t(const char * oldpath, const
+       char * newpath)
+       Definition at line 116 of file rpmio.h.
+
+   typedef int fdio_rmdir_function_t(const char * path)
+       Definition at line 115 of file rpmio.h.
+
+   typedef int fdio_stat_function_t(const char * path, struct
+       stat * st)
+       Definition at line 119 of file rpmio.h.
+
+   typedef int fdio_unlink_function_t(const char * path)
+       Definition at line 117 of file rpmio.h.
+
+FUNCTION DOCUMENTATION
+   int Access (const char * path, int amode)
+       access(2) clone.
+
+       Definition at line 1101 of file rpmrpc.c.
+
+   int Chdir (const char * path)
+       chdir(2) clone.
+
+       Definition at line 86 of file rpmrpc.c.
+
+   int Closedir (DIR * dir)
+       closedir(3) clone.
+
+       Definition at line 1193 of file rpmrpc.c.
+
+   int Glob (const char * pattern, int flags, int errfunc(const
+       char *epath, int eerrno), glob_t * pglob)
+       glob(3) clone.
+
+       Definition at line 1124 of file rpmrpc.c.
+
+   void Globfree (glob_t * pglob)
+       globfree(3) clone.
+
+       Definition at line 1152 of file rpmrpc.c.
+
+   int Link (const char * oldpath, const char * newpath)
+       link(2) clone.
+
+       Definition at line 181 of file rpmrpc.c.
+
+   int Lstat (const char * path, struct stat * st)
+       lstat(2) clone.
+
+       Definition at line 1053 of file rpmrpc.c.
+
+   int Mkdir (const char * path, mode_t mode)
+       mkdir(2) clone.
+
+       Definition at line 63 of file rpmrpc.c.
+
+   DIR* Opendir (const char * name)
+       opendir(3) clone.
+
+       Definition at line 1162 of file rpmrpc.c.
+
+   struct dirent* Readdir (DIR * dir)
+       readdir(3) clone.
+
+       Definition at line 1186 of file rpmrpc.c.
+
+       Referenced by Readdir.
+
+   int Readlink (const char * path, char * buf, size_t bufsiz)
+       readlink(2) clone.
+
+       Definition at line 1078 of file rpmrpc.c.
+
+   int Rename (const char * oldpath, const char * newpath)
+       rename(2) clone.
+
+       Definition at line 134 of file rpmrpc.c.
+
+       References FDIO_s::_fdref.
+
+   int Rmdir (const char * path)
+       rmdir(2) clone.
+
+       Definition at line 109 of file rpmrpc.c.
+
+   int Stat (const char * path, struct stat * st)
+       stat(2) clone.
+
+       Definition at line 1028 of file rpmrpc.c.
+
+   int Unlink (const char * path)
+       unlink(2) clone.
+
+       Definition at line 225 of file rpmrpc.c.
+
+       References _libio_off_t, and dirent.
+
+
+
+rpm                        13 Mar 2002                 RPMRPC.(3)

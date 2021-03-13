@@ -1,0 +1,46 @@
+install-menu(1)      Debian GNU/Linux manual      install-menu(1)
+
+
+
+NAME
+       install-menu  - Used internally by the Debian menu system.
+       It is a program  to  facilitate  the  generate  the  menu-
+       related startup files for the various window managers etc.
+
+
+DESCRIPTION
+       When update-menus(1) reads the menu-information, for  each
+       installed window manager it will run /etc/menu-methods/wm.
+       Update-menus sends  all menu-information of all  installed
+       packages  to  the stdin of those programmes, and it is the
+       task of each respective /etc/menu-methods/wm  to  generate
+       the  window-manager  startup files that contain the Debian
+       Menu structure.  install-menu  is  written  to  facilitate
+       this  task.  For more information, see the menu documenta­
+       tion (see below).
+
+
+BUGS
+       Once processing starts, and translation  in  various  lan­
+       guages  is  requested, error messages will be printed in a
+       `random' language. This is due to the fact that it doesn't
+       seem possible to locally change the language with GNU get­
+       text. Fortunately nearly all errors  are  reported  before
+       processing starts, so usually the messages are reported in
+       the current LANGUAGE.
+
+
+COPYING
+       install-menu is distributed under the GNU  General  Public
+       License.  (GPL 2.0 or greater).
+
+AUTHOR
+       joost witteveen <joostje@debian.org> less
+
+SEE ALSO
+       update-menus(1), menufile(5), /usr/doc/menu/html
+
+
+
+
+Debian Project           20 October 1998          install-menu(1)

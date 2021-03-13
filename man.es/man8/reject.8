@@ -1,0 +1,41 @@
+accept(8)             Easy Software Products            accept(8)
+
+
+
+NAME
+       accept/reject - accept/reject jobs sent to a destination
+
+SYNOPSIS
+       accept destination(s)
+       reject [ -E ] [ -h server ] [ -r reason ] destination(s)
+
+DESCRIPTION
+       accept  instructs the printing system to accept print jobs
+       to the specified destinations.
+
+       reject instructs the printing system to reject print  jobs
+       to the specified destinations. The -r option sets the rea­
+       son for rejecting print jobs. If not specified the  reason
+       defaults to "Reason Unknown".
+
+       The  -E  option  forces  encryption when connecting to the
+       server.
+
+COMPATIBILITY
+       The CUPS versions of accept and reject may  ask  the  user
+       for  an  access  password depending on the printing system
+       configuration.  This differs from the  System  V  versions
+       which require the root user to execute these commands.
+
+SEE ALSO
+       cancel(1),   disable(8),   enable(8),  lp(1),  lpadmin(8),
+       lpstat(1),   CUPS    Software    Administrators    Manual,
+       http://localhost:631/documentation.html
+
+COPYRIGHT
+       Copyright  1993-2002 by Easy Software Products, All Rights
+       Reserved.
+
+
+
+23 January 2001    Common UNIX Printing System          accept(8)

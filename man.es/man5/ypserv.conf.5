@@ -1,0 +1,101 @@
+YPSERV.CONF(5)     NIS Server Reference Manual     YPSERV.CONF(5)
+
+
+
+NAME
+       ypserv.conf - configuration file for ypserv and rpc.ypxfrd
+
+DESCRIPTION
+       ypserv.conf is an ASCII file which contains  some  options
+       for  ypserv.  It also contains a list of rules for special
+       host and map access for ypserv and rpc.ypxfrd.  This  file
+       will  be read by ypserv and rpc.ypxfrd at startup, or when
+       receiving a SIGHUP signal.
+
+       There is one entry per line. If the line is a option line,
+       the format is:
+
+              option: [yes|no]
+
+       The line for an access rule has the format:
+
+              host:map:security:mangle[:field]
+
+       All  rules  are  tried  one  by one. If no match is found,
+       access to a map is allowed.
+
+       Following options exist:
+
+       dns    the NIS server will query the nameserver for  host­
+              names, which are not found in the hosts.* maps. The
+              default is "no". You could overwrite  it  with  the
+              "-dns"  commandline  option.  A "no" will not over­
+              write the "-dns" option.
+
+       sunos_kludge
+              This is not longer supported, since ypserv supports
+              the most YP version 1 functions.
+
+       xfr_check_port
+              With  this  option  enabled,  the NIS master server
+              have to run on a port < 1024. The default is  "yes"
+              (enabled).
+
+       The field descriptions for the access rule lines are:
+
+       host   IP address. Wildcards are allowed.
+              Examples:
+              131.234. = 131.234.0.0/255.255.0.0
+              131.234.214.0/255.255.254.0
+
+       map    name of the map, or asterisk for all maps.
+
+       security
+              one of none, port, deny, des:
+
+       none   always  allow access. Mangle the passwd field if so
+              configured, default is not.
+
+       port   allow access if from port < 1024. Otherwise if man­
+              gle  is  not set, do not allow access. If mangle is
+              set to "yes", allow access, but mangle  the  passwd
+              field.
+
+       deny   deny access to this map.
+
+       des    requires  DES authentication. Not supported by most
+              libc's in the moment.  You could mangle the  passwd
+              field if so configured, default is not.
+
+       mangle possible  values  are  "yes" or "no". If "yes", the
+              field entry will be mangled.  Mangling  means  that
+              the  field  is  replaced  by  'x' if the port check
+              reveals  the  request  originated   from   somebody
+              unprivileged.
+
+       field  Which  field  should be mangled. The default is the
+              2nd field.
+
+
+FILES
+       /etc/ypserv.conf
+
+SEE ALSO
+       ypserv(8), rpc.ypxfrd(8)
+
+WARNINGS
+       The access rules for special maps are no real  improvement
+       in  security,  but  they make the life a little bit harder
+       for a potential hacker.
+
+BUGS
+       Solaris clients don't use privileged ports.  All  security
+       options  which  depend on privileged ports cause big prob­
+       lems on Solaris clients.
+
+AUTHOR
+       Thorsten Kukuk <kukuk@suse.de>
+
+
+
+NYS YP Server              January 1999            YPSERV.CONF(5)

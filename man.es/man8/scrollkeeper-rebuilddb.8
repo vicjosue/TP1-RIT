@@ -1,0 +1,37 @@
+SCROLLKEEPER-REBUILDDB(8)               SCROLLKEEPER-REBUILDDB(8)
+
+
+
+NAME
+       scrollkeeper-rebuilddb - rebuild the scrollkeeper document
+       catalog database
+
+SYNOPSIS
+       scrollkeeper-rebuilddb [-p path]
+
+
+DESCRIPTION
+       This rebuilds the scrollkeeper database from the  original
+       OMF  metadata  files  and  documents.  Under normal situa­
+       tions, this tool is not necessary.  It is  useful  however
+       if  the  database become corrupt, which could be caused by
+       interruption of  scrollkeeper  during  an  update  of  the
+       database.
+
+
+OPTIONS
+       -p path
+              Use path as the scrollkeeper database directory.
+
+
+AUTHOR
+       Laszlo Kovacs and Dan Mueth.
+
+
+SEE ALSO
+       scrollkeeper-update(8), scrollkeeper-preinstall(8), scrol­
+       lkeeper-config(8)
+
+
+
+scrollkeeper               Nov 07, 2000 SCROLLKEEPER-REBUILDDB(8)

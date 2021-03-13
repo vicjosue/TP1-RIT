@@ -1,0 +1,255 @@
+GPHOTO2(1)                                             GPHOTO2(1)
+
+
+
+NAME
+       gphoto2 - command-line gPhoto2 client
+
+SYNOPSIS
+       gphoto2 [--debug] [-q | --quiet] [-v | --verbose] [-h | --help]
+               [--list-cameras] [--print-usb-usermap] [--list-ports]
+               [--stdout] [--stdout-size] [--auto-detect] [--port PATH]
+               [--speed SPEED] [--camera MODEL] [--filename FILENAME]
+               [--usbid USBID] [-a | --abilities] [--folder FOLDER]
+               [[-R | --recurse] | --norecurse] [-l | --list-folders]
+               [-L | --list-files] [-m NAME | --mkdir NAME]
+               [-r NAME | --rmdir NAME] [-n | --num-files]
+               [-p RANGE | --get-file RANGE] [-P | --get-all-files]
+               [-t RANGE | --get-thumbnail RANGE]
+               [-T | --get-all-thumbnails]
+               [-r RANGE | --get-raw-data RANGE] [--get-all-raw-data]
+               [--get-audio-data RANGE] [--get-all-audio-data]
+               [-d RANGE | --delete-file RANGE] [-D | --delete-all-files]
+               [-u FILENAME | --upload-file FILENAME] [--capture-preview]
+               [--capture-image] [--capture-movie] [--capture-sound]
+               [--capture-show-info RANGE]
+               [--summary] [--manual] [--about] [--shell]
+
+
+DESCRIPTION
+       gPhoto2  is  a  cross-platform digital camera library, and
+       gphoto2 is a command-line client for it.
+
+
+       In the following options, picture numbers begin at 1.
+
+
+       --debug
+              Turn on debugging.
+
+
+       -q, --quiet
+              Quiet output (default=verbose).
+
+
+       -v, --version
+              Display version and exit.
+
+
+       -h, --help
+              Display a short usage message.
+
+
+       --list-cameras
+              List supported camera models.
+
+
+       --print-usb-usermap
+              Create output for usb.usermap.
+
+
+       --list-ports
+              List supported port devices.
+
+
+       --stdout
+              Send file to stdout.
+
+
+       --stdout-size
+              Print filesize before data.
+
+
+       --auto-detect
+              List auto-detected cameras.
+
+
+       --port PATH
+              Specify port device.
+
+
+       --speed SPEED
+              Specify serial transfer speed.
+
+
+       --camera MODEL
+              Specify camera  model.  Most  model  names  contain
+              spaces:  remember  to enclose the name in quotes so
+              that the shell knows it is one parameter. For exam­
+              ple: --camera "Kodak DC240".
+
+
+       --filename FILENAME
+              Specify a filename.
+
+
+       --usbid USBID
+              (Expert only) Override USB IDs.
+
+
+       -a, --abilities
+              Display camera abilities.
+
+
+       -f, --folder FOLDER
+              Specify camera folder (default="/").
+
+
+       -R, --recurse
+              Recursion (default for download).
+
+
+       --no-recurse
+              No recursion (default for deletion).
+
+
+       -l, --list-folders
+              List folders in folder.
+
+
+       -L, --list-files
+              List files in folder.
+
+
+       -m, --mkdir NAME
+              Create a directory.
+
+
+       -r, --rmdir NAME
+              Remove a directory.
+
+
+       -n, --num-files
+              Display number of files.
+
+
+       -p, --get-file RANGE
+              Get files given in range.
+
+
+       -P, --get-all-files
+              Get all files from folder.
+
+
+       -t, --get-thumbnail RANGE
+              Get thumbnails given in range.
+
+
+       -T, --get-all-thumbnails
+              Get all thumbnails from folder.
+
+
+       -r, --get-raw-data RANGE
+              Get raw data given in range.
+
+
+       --get-all-raw-data
+              Get all raw data from folder.
+
+
+       --get-audio-data RANGE
+              Get audio data given in range.
+
+
+       --get-all-audio-data
+              Get all audio data from folder.
+
+
+       --delete-files RANGE
+              Delete files given in range.
+
+
+       --delete-all-files
+              Delete all files in folder.
+
+
+       -u, --upload-file FILENAME
+              Upload a file to camera.
+
+
+       --capture-preview
+              Capture a quick preview.
+
+
+       --capture-image
+              Capture an image.
+
+
+       --capture-movie
+              Capture a movie.
+
+
+       --capture-sound
+              Capture an audio clip.
+
+
+       --show-info RANGE
+              Show info.
+
+
+       --summary
+              Summary of camera status.
+
+
+       --manual
+              Camera driver manual.
+
+
+       --about
+              About the camera driver.
+
+
+       --shell
+              gPhoto  shell. In this interactive environment, the
+              following commands are available:
+
+
+
+              cd     Change to a directory on the camera.
+
+
+              lcd    Change to a directory on the local  machine.
+
+
+              exit, quit, q
+                     Exit the gPhoto shell.
+
+
+              get    Download  the file to the current directory.
+
+
+              get-thumbnail
+                     Download the thumbnail to the current direc­
+                     tory.
+
+
+              get-raw
+                     Download  raw data to the current directory.
+
+
+              help, ?
+                     Displays command usage.
+
+
+              ls     List the contents of the  current  directory
+                     on the camera.
+
+
+
+AUTHOR
+       The gPhoto2 team.
+       Man page edited by Tim Waugh <twaugh@redhat.com>.
+
+
+
+                          February 2002                GPHOTO2(1)

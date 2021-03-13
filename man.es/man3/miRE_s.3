@@ -1,0 +1,83 @@
+miRE_s(3)                                               miRE_s(3)
+
+
+
+NAME
+       miRE_s -
+
+SYNOPSIS
+   Data Fields
+       rpmTag tag
+       rpmMireMode mode
+       const char * pattern
+       int notmatch
+       regex_t * preg
+       int cflags
+       int eflags
+       int fnflags
+
+FIELD DOCUMENTATION
+   int miRE_s::cflags
+       regcomp(3) flags
+
+       Definition at line 1431 of file rpmdb.c.
+
+       Referenced by rpmdbSetIteratorRE.
+
+   int miRE_s::eflags
+       regexec(3) flags
+
+       Definition at line 1432 of file rpmdb.c.
+
+       Referenced by rpmdbSetIteratorRE.
+
+   int miRE_s::fnflags
+       fnmatch(3) flags
+
+       Definition at line 1433 of file rpmdb.c.
+
+       Referenced by rpmdbSetIteratorRE.
+
+   rpmMireMode miRE_s::mode
+       pattern match mode
+
+       Definition at line 1427 of file rpmdb.c.
+
+       Referenced by rpmdbSetIteratorRE.
+
+   int miRE_s::notmatch
+       like 'grep -v'
+
+       Definition at line 1429 of file rpmdb.c.
+
+       Referenced by mireSkip, and rpmdbSetIteratorRE.
+
+   const char* miRE_s::pattern
+       pattern string
+
+       Definition at line 1428 of file rpmdb.c.
+
+       Referenced by rpmdbFreeIterator, and rpmdbSetIteratorRE.
+
+   regex_t* miRE_s::preg
+       regex compiled pattern buffer
+
+       Definition at line 1430 of file rpmdb.c.
+
+       Referenced by rpmdbFreeIterator, and rpmdbSetIteratorRE.
+
+   rpmTag miRE_s::tag
+       header tag
+
+       Definition at line 1426 of file rpmdb.c.
+
+       Referenced by mireCmp, mireSkip, and rpmdbSetIteratorRE.
+
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002                  miRE_s(3)

@@ -1,0 +1,55 @@
+save_flags(9)         Linux Kernel Functions        save_flags(9)
+
+
+
+NAME
+       save_flags,  restore_flags  - save/restore processor state
+       and irq mask
+
+SYNOPSIS
+       #include <asm/system.h>
+
+       unsigned long flags;
+       void save_flags(flags)
+       void restore_flags(flags)
+
+DESCRIPTION
+       The save_flags and restore_flags macros cooperate with the
+       cli  function  to provide interrupt protection to critical
+       sections of code. The save_flags function saves  the  cur­
+       rent processor state, most specifically the interrupt pri­
+       ority level, in the flags  value  (which  must  be  an  l-
+       value).  The  flags must be passed to a subsequent call to
+       restore_flags to restore the processor state.
+
+       The save_flags macro does not affect the processor  state,
+       but  drivers  may use the cli(9) and sti functions to dis­
+       able and enable interrupts after saving the current flags.
+       When   the   critical  section  of  code  is  passed,  the
+       restore_flags returns the processor to its  state  at  the
+       point where the matching save_flags was called.
+
+       Only  values  returned  by  save_flags  can  be  passed to
+       restore_flags.  Any other values may  cause  unpredictable
+       results, and are certainly not portable.
+
+RETURN VALUE
+       The  restore_flags  macro saves the processor state in the
+       flags parameter, which must be a non-const l-value.
+
+AVAILABILITY
+       Linux 1.0+
+
+SEE ALSO
+       cli(9)
+
+AUTHOR
+       Stephen Williams (steve@icarus.com)
+
+BUGS
+       How does all  this  react  with  symmetric  multiprocessor
+       machines?
+
+
+
+Linux DDI                    $Date:$                save_flags(9)

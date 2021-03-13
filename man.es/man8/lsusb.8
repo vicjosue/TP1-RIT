@@ -1,0 +1,69 @@
+lsusb(8)               Linux USB Utilities               lsusb(8)
+
+
+
+NAME
+       lsusb - list all USB devices
+
+SYNOPSIS
+       lsusb [options]
+
+DESCRIPTION
+       lsusb  is  a  utility for displaying information about all
+       USB buses in the system and all devices connected to them.
+
+       To  make use of all the features of this program, you need
+       to have Linux kernel 2.3.15 or newer  which  supports  the
+       /proc/bus/usb interface.
+
+
+OPTIONS
+       -v     Tells  lsusb  to  be  verbose  and display detailed
+              information about all devices.
+
+       -vv    Tells lsusb to be very  verbose  and  display  even
+              more   information  (actually  everything  the  PCI
+              device is able to tell).
+
+       -s [[<bus>]:][<devnum>]]
+              Show only devices in specified bus and devnum.
+
+       -d [<vendor>]:[<product>]
+              Show only devices with specified vendor and product
+              ID.  Both  ID's are given in hexadecimal and may be
+              omitted.
+
+       -p <procpath>
+              Use another path instead of /proc/bus/usb.
+
+       -D <device>
+              Do not scan the  /proc/bus/usb  directory,  instead
+              display only information if the device whose device
+              file is given.
+
+       -t     Tells lsusb to dump the physical USB device hierar­
+              chy as a tree.
+
+
+FILES
+       /usr/share/usb.ids
+              A  list  of  all known USB ID's (vendors, products,
+              classes, subclasses and protocols).
+
+       /proc/bus/usb
+              An  interface  to  USB  devices  provided  by   the
+              post-2.3.15  Linux kernels. Contains per-bus subdi­
+              rectories with per-device files and a devices  file
+              containing a list of all USB devices.
+
+
+SEE ALSO
+       lspci(8)
+
+
+AUTHOR
+       Thomas Sailer, <sailer@ife.ee.ethz.ch>.
+
+
+
+usbutils-0.2            14 September 1999                lsusb(8)

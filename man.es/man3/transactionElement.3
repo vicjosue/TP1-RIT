@@ -1,0 +1,71 @@
+transactionElement(3)                       transactionElement(3)
+
+
+
+NAME
+       transactionElement -
+
+SYNOPSIS
+       #include <depends.h>
+
+
+   Public Types
+       enum rpmTransactionType { TR_ADDED, TR_REMOVED }
+
+   Data Fields
+       enum transactionElement::rpmTransactionType type
+       union {
+          int addedIndex
+          struct {
+             int dboffset
+             int dependsOnIndex
+          } removed
+       } u
+
+
+DETAILED DESCRIPTION
+       A single package instance to be installed/removed
+       atomically.
+
+       Definition at line 111 of file depends.h.
+
+MEMBER ENUMERATION DOCUMENTATION
+   enum transactionElement::rpmTransactionType
+       Enumeration values:
+
+       TR_ADDED
+              Package will be installed.
+
+       TR_REMOVED
+              Package will be removed.
+
+       Definition at line 112 of file depends.h.
+
+FIELD DOCUMENTATION
+   int transactionElement::addedIndex
+       Definition at line 117 of file depends.h.
+
+   int transactionElement::dboffset
+       Definition at line 119 of file depends.h.
+
+   int transactionElement::dependsOnIndex
+       Definition at line 120 of file depends.h.
+
+   struct { ... }   transactionElement::removed
+   enum transactionElement::rpmTransactionType
+       transactionElement::type
+       Package disposition (installed/removed).
+
+       Referenced by rpmdepOrder.
+
+   union { ... }   transactionElement::u
+       Referenced by rpmdepOrder.
+
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002      transactionElement(3)

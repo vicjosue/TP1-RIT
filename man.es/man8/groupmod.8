@@ -1,0 +1,40 @@
+GROUPMOD(8)                                           GROUPMOD(8)
+
+
+
+NAME
+       groupmod - Modify a group
+
+SYNOPSIS
+       groupmod [-g gid [-o]] [-n group_name ] group
+
+DESCRIPTION
+       The  groupmod command modifies the system account files to
+       reflect the changes that  are  specified  on  the  command
+       line.  The options which apply to the groupmod command are
+
+       -g gid The numerical value of the group's ID.  This  value
+              must  be unique, unless the -o option is used.  The
+              value must be non-negative.  Values between  0  and
+              99  are  typically reserved for system groups.  Any
+              files which the old group ID is the file  group  ID
+              must have the file group ID changed manually.
+
+       -n group_name
+              The name of the group will be changed from group to
+              group_name.
+
+FILES
+       /etc/group - group information
+       /etc/gshadow - secure group information
+
+SEE ALSO
+       chfn(1),  chsh(1),  useradd(8),  userdel(8),   usermod(8),
+       passwd(1), groupadd(8), groupdel(8)
+
+AUTHOR
+       Julianne Frances Haugh (jfh@austin.ibm.com)
+
+
+
+                                                      GROUPMOD(8)

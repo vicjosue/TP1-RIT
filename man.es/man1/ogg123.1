@@ -1,0 +1,255 @@
+ogg123(1)                  Vorbis Tools                 ogg123(1)
+
+
+
+NAME
+       ogg123 - plays Ogg Vorbis files
+
+
+SYNOPSIS
+       ogg123  [ -vqzVh ] [ -k seconds ] [ -x nth ] [ -y ntimes ]
+       [ -b buffer_size ] [ -d driver [ -o option:value  ]  [  -f
+       filename ] ] file ...  | URL ...
+
+
+DESCRIPTION
+       ogg123  reads  Ogg  Vorbis audio files and decodes them to
+       the devices specified on the command  line.   By  default,
+       ogg123 writes to the standard sound device, but output can
+       be sent to any number of devices.  Files can be read  from
+       the file system, or URLs can be streamed via HTTP.
+
+
+OPTIONS
+       -b n, --buffer n
+              Use an input buffer of approximately 'n' kilobytes.
+
+       -p n, --prebuffer n
+              Prebuffer 'n' percent of the input  buffer.   Play­
+              back  won't begin until this prebuffer is complete.
+
+       -d device, --device device
+              Specify output device.  See DEVICES section  for  a
+              list  of  devices.   Any  number  of devices may be
+              specified.
+
+       -f filename, --file filename
+              Specify output file for file devices.  The filename
+              "-"  writes  to  standard out.  If the file already
+              exists, ogg123 will overwrite it.
+
+       -h, --help
+              Show command help.
+
+       -k n, --skip n
+              Skip the first 'n' seconds
+
+       -o option:value, --device-option option:value
+              Assigns the option option to value for the  preced­
+              ing  device.   See  DEVICES  for  a  list  of valid
+              options for each device.
+
+       -q, --quiet
+              Quiet mode.  No messages are displayed.
+
+       -V, --version
+              Display version information.
+
+       -v, --verbose
+              Increase verbosity.
+
+       -x n, --nth
+              Play every 'n'th decoded block.  Has the effect  of
+              playing  audio  at  'n'  times  faster  than normal
+              speed.
+
+       -y n, --ntimes
+              Repeat every  played  block  'n'  times.   Has  the
+              effect  of playing audio 'n' times slower than nor­
+              mal speed.  May be with -x  for  interesting  frac­
+              tional speeds.
+
+       -z, --shuffle
+              Play files in pseudo-random order.
+
+
+DEVICES
+       ogg123  supports a variety of audio output devices through
+       libao.  Only those devices supported by the  target  plat­
+       form  will  be  available.  The -f option may only be used
+       with devices that write to files.
+
+
+       null   Null driver.  All audio data is discarded.   (Note:
+              Audio  data  is  not  written  to /dev/null !)  You
+              could use this driver to test  raw  decoding  speed
+              without output overhead.
+
+
+       oss    Open Sound System driver for Linux and FreeBSD.
+              Options:
+
+                      dsp    DSP  device for soundcard.  Defaults
+                             to /dev/dsp.
+
+
+       sun    Sun Audio driver for NetBSD, OpenBSD, and  Solaris.
+              Options:
+
+                      dev    Audio    device    for    soundcard.
+                             Defaults to /dev/audio.
+
+
+       alsa   Advanced Linux Sound Architecture.
+              Options:
+
+                      card   Sound card number.  (Default = 0)
+
+                      dev    Device number  on  the  sound  card.
+                             (Default = 0)
+
+                     buf_size
+                             Override the default buffer size (in
+                             bytes).
+
+
+       irix   IRIX audio driver.  Note that this driver  has  not
+              been tested!
+
+
+       arts   aRts Sound Daemon.
+
+
+       esd    Enlightened Sound Daemon.
+              Options:
+
+                      host   The  hostname  where esd is running.
+                             This can include a port number after
+                             a  colon,  as in "whizbang.com:555".
+                             (Default = localhost)
+
+
+       au     Sun audio file output.  Writes the audio samples in
+              AU  format.   The  AU  format  supports  writing to
+              unseekable files, like standard out.  In such  cir­
+              cumstances,  the  AU header will specify the sample
+              format, but not the length of the recording.
+
+
+       raw    Raw sample output.  Writes raw audio samples  to  a
+              file.
+              Options:
+
+                     byteorder
+                             Choose big endian, little endian, or
+                             native  byte  order.    (Default   =
+                             "native")
+
+
+       wav    WAV  file output.  Writes the sound data to disk in
+              uncompressed form.  If multiple files  are  played,
+              all  of them will be concatenated into the same WAV
+              file.  WAV files cannot be  written  to  unseekable
+              files,  such  as  standard  out.  Use the AU format
+              instead.
+
+
+
+EXAMPLES
+       The ogg123 command line is fairly flexible,  perhaps  con­
+       fusingly  so.   Here  are some sample command lines and an
+       explanation of what they do.
+
+
+       Play on the default soundcard:
+              ogg123 test.ogg
+
+
+       Play using the OSS driver:
+              ogg123 -d oss test.ogg
+
+
+       Pass the "dsp" option to the OSS driver:
+              ogg123 -d oss -o dsp:/dev/mydsp
+
+
+       Use the ESD driver
+              ogg123 -d esd test.ogg
+
+
+       Use the WAV driver with the output file, "test.wav":
+              ogg123 -d wav -f test.wav test.ogg
+
+
+       Listen to a file while you write it to a WAV file:
+              ogg123 -d oss -d wav -f test.wav test.ogg
+
+
+       Note that options apply to  the  device  declared  to  the
+       left:
+              ogg123 -d oss -o dsp:/dev/mydsp -d raw -f test2.raw
+              -o byteorder:big test.ogg
+
+
+       Stress test your harddrive:
+              ogg123 -d oss -d wav -f 1.wav -d wav  -f  2.wav  -d
+              wav  -f  3.wav  -d  wav  -f  4.wav  -d wav -f 5.wav
+              test.ogg
+
+
+       Create an echo effect with esd and a slow computer:
+              ogg123 -d esd -d esd test.ogg
+
+
+
+INTERRUPT
+       You can abort ogg123 at any time by pressing  Ctrl-C.   If
+       you are playing multiple files, this will stop the current
+       file and begin playing the next one.  If you want to abort
+       playing  immediately instead of skipping to the next file,
+       press Ctrl-C within the first second of the playback of  a
+       new file.
+
+       Note that the result of pressing Ctrl-C might not be audi­
+       ble immediately, due to audio data buffering in the  audio
+       device.  This delay is system dependent, but it is usually
+       not more than one or two seconds.
+
+
+FILES
+       /etc/libao.conf
+              Can be used to set the default  output  device  for
+              all libao programs.
+
+
+       ~/.libao
+              Per-user  config  file  to override the system wide
+              output device settings.
+
+
+
+BUGS
+       Piped WAV files may cause strange behavior in  other  pro­
+       grams.  This is because WAV files store the data length in
+       the header.  However, the output driver does not know  the
+       length  when  it  writes the header, and there is no value
+       that means "length unknown".  Use the  raw  or  au  output
+       driver if you need to use ogg123 in a pipe.
+
+
+SEE ALSO
+       libao.conf(5)
+
+
+AUTHORS
+       Program Authors:
+              Kenneth Arnold <kcarnold@yahoo.com>
+              Stan Seibert <indigo@aztec.asu.edu>
+
+
+       Manpage Author:
+              Stan Seibert <indigo@aztec.asu.edu>
+
+
+
+                          July 22, 2001                 ogg123(1)

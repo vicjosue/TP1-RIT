@@ -1,0 +1,92 @@
+DB3.(3)                                                   DB3.(3)
+
+
+
+NAME
+       DB3. -
+
+   Files
+       file db3.c
+       file rpmdb.h
+           Access RPM indices using Berkeley DB interface(s).
+
+
+
+   Data Structures
+       struct dbOption
+
+   Functions
+       dbiIndex db3New (rpmdb rpmdb, int rpmtag)
+       dbiIndex db3Free (dbiIndex dbi)
+       const char *const prDbiOpenFlags (int dbflags, int
+           print_dbenv_flags)
+
+   Variables
+       _dbiVec db3vec
+       dbOption rdbOptions []
+
+FUNCTION DOCUMENTATION
+   dbiIndex db3Free (dbiIndex dbi)
+       Destroy index database handle instance.
+
+       Parameters:
+
+       dbi    index database handle
+
+       Returns:
+           NULL always
+
+       Definition at line 303 of file dbconfig.c.
+
+       Referenced by db1close, db3close, and dbiOpen.
+
+   dbiIndex db3New (rpmdb rpmdb, int rpmtag)
+       Return new configured index database handle instance.
+
+       Parameters:
+
+       rpmdb  rpm database
+
+       Definition at line 325 of file dbconfig.c.
+
+       References rpmdb_s::db_free.
+
+       Referenced by db1open, and db3open.
+
+   const char* const prDbiOpenFlags (int dbflags, int
+       print_dbenv_flags)
+       Format db3 open flags for debugging print.
+
+       Parameters:
+
+       dbflags
+              db open flags
+
+       print_dbenv_flags
+              format db env flags instead?
+
+       Returns:
+           formatted flags (static buffer)
+
+       Definition at line 502 of file dbconfig.c.
+
+       Referenced by db_init.
+
+VARIABLE DOCUMENTATION
+   struct _dbiVec db3vec
+       Initial value:
+
+        {
+            3 ,  3 ,  11 ,
+           db3open, db3close, db3sync, db3copen, db3cclose, db3cdel, db3cget, db3cput,
+           db3ccount, db3byteswapped, db3stat
+       }
+
+       Definition at line 1178 of file db3.c.
+
+   struct dbOption rdbOptions[]
+       Definition at line 42 of file dbconfig.c.
+
+
+
+rpm                        13 Mar 2002                    DB3.(3)

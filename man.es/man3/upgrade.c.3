@@ -1,0 +1,182 @@
+python/upgrade.c(3)                           python/upgrade.c(3)
+
+
+
+NAME
+       python/upgrade.c -
+
+SYNOPSIS
+       #include <stdio.h>
+       #include <stdlib.h>
+       #include <unistd.h>
+       #include <fcntl.h>
+       #include <string.h>
+       #include <glob.h>
+       #include <dirent.h>
+       #include <rpmlib.h>
+       #include 'hash.h'
+       #include 'upgrade.h'
+
+   Defines
+       #define MAXPKGS   1024
+       #define USEDEBUG   0
+       #define DEBUG(x)
+
+   Functions
+       int pkgCompare (void *first, void *second)
+       void compareFileList (int availFileCount, char
+           **availBaseNames, char **availDirNames, int
+           *availDirIndexes, int instFileCount, char
+           **instBaseNames, char **instDirNames, int
+           *instDirIndexes, struct hash_table *ht)
+       void addLostFiles (rpmdb db, struct pkgSet *psp, struct
+           hash_table *ht)
+       int findPackagesWithObsoletes (rpmdb db, struct pkgSet
+           *psp)
+       void errorFunction (void)
+       int findUpgradePackages (rpmdb db, struct pkgSet *psp,
+           struct hash_table *ht)
+       int removeMovedFilesAlreadyHandled (struct pkgSet *psp,
+           struct hash_table *ht)
+       int findPackagesWithRelocatedFiles (struct pkgSet *psp,
+           struct hash_table *ht)
+       int unmarkPackagesAlreadyInstalled (rpmdb db, struct
+           pkgSet *psp)
+       void emptyErrorCallback (void)
+       int ugFindUpgradePackages (struct pkgSet *psp, char
+           *installRoot)
+
+DETAILED DESCRIPTION
+       Definition in file upgrade.c.
+
+DEFINE DOCUMENTATION
+   #define DEBUG(x)
+       Value:
+
+       {        if (USEDEBUG)            printf x;      }
+
+       Definition at line 23 of file upgrade.c.
+
+   #define MAXPKGS   1024
+       Definition at line 19 of file upgrade.c.
+
+   #define USEDEBUG   0
+       Definition at line 21 of file upgrade.c.
+
+FUNCTION DOCUMENTATION
+   void addLostFiles (rpmdb db, struct pkgSet * psp, struct
+       hash_table * ht) [static]
+       Definition at line 105 of file upgrade.c.
+
+       References compareFileList, headerGetEntry,
+       headerGetEntryMinMemory, int_32, packageInfo::name,
+       pkgSet::numPackages, pkgSet::packages, pkgCompare,
+       rpmdbFreeIterator, RPMDBI_PACKAGES, rpmdbInitIterator,
+       rpmdbNextIterator, RPMTAG_BASENAMES, RPMTAG_DIRINDEXES,
+       RPMTAG_DIRNAMES, and RPMTAG_NAME.
+
+       Referenced by ugFindUpgradePackages.
+
+   void compareFileList (int availFileCount, char **
+       availBaseNames, char ** availDirNames, int *
+       availDirIndexes, int instFileCount, char ** instBaseNames,
+       char ** instDirNames, int * instDirIndexes, struct
+       hash_table * ht) [static]
+       Definition at line 56 of file upgrade.c.
+
+       References DEBUG, and htAddToTable.
+
+       Referenced by addLostFiles, and findUpgradePackages.
+
+   void emptyErrorCallback (void) [static]
+       Definition at line 462 of file upgrade.c.
+
+       Referenced by ugFindUpgradePackages.
+
+   void errorFunction (void) [static]
+       Definition at line 185 of file upgrade.c.
+
+       Referenced by findUpgradePackages, and
+       unmarkPackagesAlreadyInstalled.
+
+   int findPackagesWithObsoletes (rpmdb db, struct pkgSet * psp)
+       [static]
+       Definition at line 153 of file upgrade.c.
+
+       References headerGetEntryMinMemory, pkgSet::numPackages,
+       pkgSet::packages, rpmdbCountPackages, RPMTAG_OBSOLETENAME,
+       and packageInfo::selected.
+
+       Referenced by ugFindUpgradePackages.
+
+   int findPackagesWithRelocatedFiles (struct pkgSet * psp,
+       struct hash_table * ht) [static]
+       Definition at line 346 of file upgrade.c.
+
+       References DEBUG, headerGetEntry, headerGetEntryMinMemory,
+       htInTable, htRemoveFromTable, int_16, int_32,
+       pkgSet::numPackages, pkgSet::packages, RPMTAG_BASENAMES,
+       RPMTAG_DIRINDEXES, RPMTAG_DIRNAMES, RPMTAG_FILEMODES, and
+       RPMTAG_NAME.
+
+       Referenced by ugFindUpgradePackages.
+
+   int findUpgradePackages (rpmdb db, struct pkgSet * psp, struct
+       hash_table * ht) [static]
+       Definition at line 189 of file upgrade.c.
+
+       References compareFileList, DEBUG, errorFunction,
+       headerGetEntry, headerGetEntryMinMemory, int_32,
+       pkgSet::numPackages, pkgSet::packages, rpmdbFreeIterator,
+       rpmdbInitIterator, rpmdbNextIterator, RPMTAG_BASENAMES,
+       RPMTAG_DIRINDEXES, RPMTAG_DIRNAMES, RPMTAG_NAME, and
+       rpmVersionCompare.
+
+       Referenced by ugFindUpgradePackages.
+
+   int pkgCompare (void * first, void * second)
+       Definition at line 42 of file upgrade.c.
+
+       References xstrcasecmp.
+
+       Referenced by addLostFiles.
+
+   int removeMovedFilesAlreadyHandled (struct pkgSet * psp,
+       struct hash_table * ht) [static]
+       Definition at line 296 of file upgrade.c.
+
+       References DEBUG, headerGetEntry, headerGetEntryMinMemory,
+       htInTable, htRemoveFromTable, int_32, pkgSet::numPackages,
+       pkgSet::packages, RPMTAG_BASENAMES, RPMTAG_DIRINDEXES,
+       RPMTAG_DIRNAMES, and RPMTAG_NAME.
+
+       Referenced by ugFindUpgradePackages.
+
+   int ugFindUpgradePackages (struct pkgSet * psp, char *
+       installRoot)
+       Definition at line 465 of file upgrade.c.
+
+       References addLostFiles, emptyErrorCallback,
+       findPackagesWithObsoletes, findPackagesWithRelocatedFiles,
+       findUpgradePackages, htFreeHashTable, htNewTable,
+       removeMovedFilesAlreadyHandled, rpmdbClose, rpmdbOpen, and
+       unmarkPackagesAlreadyInstalled.
+
+   int unmarkPackagesAlreadyInstalled (rpmdb db, struct pkgSet *
+       psp) [static]
+       Definition at line 418 of file upgrade.c.
+
+       References DEBUG, errorFunction, headerGetEntry,
+       pkgSet::numPackages, pkgSet::packages, rpmdbFreeIterator,
+       rpmdbInitIterator, rpmdbNextIterator, RPMTAG_NAME, and
+       rpmVersionCompare.
+
+       Referenced by ugFindUpgradePackages.
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002        python/upgrade.c(3)

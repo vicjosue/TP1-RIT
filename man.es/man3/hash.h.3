@@ -1,0 +1,93 @@
+python/hash.h(3)                                 python/hash.h(3)
+
+
+
+NAME
+       python/hash.h -
+
+SYNOPSIS
+   Data Structures
+       struct ht_iterator
+
+   Typedefs
+       typedef hash_table * hashTable
+       typedef ht_iterator htIterator
+
+   Functions
+       hash_table * htNewTable (int size)
+       void htFreeHashTable (struct hash_table *ht)
+       void htHashStats (const struct hash_table *t)
+       int htInTable (struct hash_table *t, const char *dir,
+           const char *base)
+       void htAddToTable (struct hash_table *t, const char *dir,
+           const char *base)
+       void htPrintHashStats (struct hash_table *t)
+       int htNumEntries (struct hash_table *t)
+       void htRemoveFromTable (struct hash_table *t, const char
+           *dir, const char *base)
+       void htIterStart (htIterator *iter)
+       int htIterGetNext (struct hash_table *t, htIterator *iter,
+           const char **dir, const char **base)
+
+DETAILED DESCRIPTION
+       Definition in file hash.h.
+
+TYPEDEF DOCUMENTATION
+   typedef struct hash_table* hashTable
+       Definition at line 9 of file hash.h.
+
+   typedef struct ht_iterator htIterator
+       Definition at line 16 of file hash.h.
+
+FUNCTION DOCUMENTATION
+   void htAddToTable (struct hash_table * t, const char * dir,
+       const char * base)
+       Definition at line 133 of file hash.c.
+
+       Referenced by compareFileList.
+
+   void htFreeHashTable (struct hash_table * ht)
+       Definition at line 53 of file hash.c.
+
+       Referenced by ugFindUpgradePackages.
+
+   void htHashStats (const struct hash_table * t)
+       Definition at line 71 of file hash.c.
+
+   int htInTable (struct hash_table * t, const char * dir, const
+       char * base)
+       Definition at line 122 of file hash.c.
+
+       Referenced by findPackagesWithRelocatedFiles, and
+       removeMovedFilesAlreadyHandled.
+
+   int htIterGetNext (struct hash_table * t, htIterator * iter,
+       const char ** dir, const char ** base)
+       Definition at line 185 of file hash.c.
+
+   void htIterStart (htIterator * iter)
+       Definition at line 180 of file hash.c.
+
+   struct hash_table* htNewTable (int size)
+       Definition at line 32 of file hash.c.
+
+       Referenced by ugFindUpgradePackages.
+
+   int htNumEntries (struct hash_table * t)
+       Definition at line 176 of file hash.c.
+
+   void htPrintHashStats (struct hash_table * t)
+   void htRemoveFromTable (struct hash_table * t, const char *
+       dir, const char * base)
+       Definition at line 158 of file hash.c.
+
+       Referenced by findPackagesWithRelocatedFiles, and
+       removeMovedFilesAlreadyHandled.
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002           python/hash.h(3)

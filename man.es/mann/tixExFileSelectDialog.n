@@ -1,0 +1,113 @@
+tixExFileSelectDialog(nT)ix Built-In CommandtsixExFileSelectDialog(n)
+
+
+
+_________________________________________________________________
+
+NAME
+       tixExFileSelectDialog - Create and manipulate tixExFileSe­
+       lectDialog widgets
+
+SYNOPSIS
+       tixExFileSelectDialog pathName ?options?
+
+SUPER-CLASS
+       The TixExFileSelectDialog class does  not  have  a  super-
+       class.
+
+STANDARD OPTIONS
+       TixExFileSelectDialog supports all the standard options of
+       a frame  widget.  See  the  options(n)  manual  entry  for
+       details on the standard options.
+
+WIDGET-SPECIFIC OPTIONS
+       Command-Line Name:-command
+       Database Name:  command
+       Database Class: Command
+
+              Specifies  the  command  to be called when the user
+              chooses on a filename  (usually  by  selecting  the
+              filename  and  clicking  on the "OK" button").  The
+              command is called with one argument,  the  complete
+              pathname of the file.
+
+SUBWIDGETS
+       Name:           fsbox
+       Class:          TixExFileSelectBox
+
+              The  ExFileSelectBox  subwidget embedded inside the
+              ExFileSelectDialog.
+_________________________________________________________________
+
+DESCRIPTION
+       The tixExFileSelectDialog command  creates  a  new  window
+       (given  by  the  pathName  argument)  and  makes it into a
+       ExFileSelectDialog widget. Additional  options,  described
+       above,  may  be  specified  on  the command line or in the
+       option database to configure aspects of the  ExFileSelect­
+       Dialog such as its cursor and relief.
+
+       The   ExFileSelectDialog  widget  provides  an  convenient
+       method for the user to select  files.  The  style  of  the
+       ExFileSelectDialog  widget is very similar to the standard
+       file dialog in MS Windows 3.1.
+
+WIDGET COMMANDS
+       The tixExFileSelectDialog command creates a new  Tcl  com­
+       mand  whose  name  is  the  same  as  the path name of the
+       ExFileSelectDialog's window. This command may be  used  to
+       invoke  various  operations on the widget. It has the fol­
+       lowing general form:
+                     pathName option ?arg arg ...?
+       PathName is the name of the command, which is the same  as
+       the  ExFileSelectDialog widget's path name. Option and the
+       args determine the exact behavior of the command. The fol­
+       lowing  commands  are possible for ExFileSelectDialog wid­
+       gets:
+
+       pathName cget option
+              Returns the  current  value  of  the  configuration
+              option  given by option. Option may have any of the
+              values accepted by the  tixExFileSelectDialog  com­
+              mand.
+
+       pathName configure ?option? ?value option value ...?
+              Query  or  modify  the configuration options of the
+              widget.  If no option is specified, returns a  list
+              describing  all  of the available options for path­
+              Name (see Tk_ConfigureInfo for information  on  the
+              format  of this list).  If option is specified with
+              no value, then the command returns a list  describ­
+              ing the one named option (this list will be identi­
+              cal to  the  corresponding  sublist  of  the  value
+              returned  if  no  option  is specified).  If one or
+              more option-value pairs  are  specified,  then  the
+              command modifies the given widget option(s) to have
+              the  given  value(s);  in  this  case  the  command
+              returns  an  empty  string.  Option may have any of
+              the values accepted  by  the  tixExFileSelectDialog
+              command.
+
+       pathName popdown
+              Withdraws the ExFileSelectDialog from the screen.
+
+       pathName popup
+              Pops up the ExFileSelectDialog on the screen.
+
+       pathName subwidget name ?args?
+              When no options are given, this command returns the
+              pathname of the subwidget of the specified name.
+
+              When options are given, the widget command  of  the
+              specified  subwidget  will  be  called  with  these
+              options.
+
+KEYWORDS
+       Tix(n)
+
+
+
+
+
+
+Tix                            4.0       tixExFileSelectDialog(n)

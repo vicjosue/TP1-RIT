@@ -1,0 +1,538 @@
+Tcl_CreateSlave(3)    Tcl Library Procedures   Tcl_CreateSlave(3)
+
+
+
+_________________________________________________________________
+
+NAME
+       Tcl_IsSafe,  Tcl_MakeSafe,  Tcl_CreateSlave, Tcl_GetSlave,
+       Tcl_GetMaster,     Tcl_GetInterpPath,     Tcl_CreateAlias,
+       Tcl_CreateAliasObj,     Tcl_GetAlias,     Tcl_GetAliasObj,
+       Tcl_ExposeCommand, Tcl_HideCommand - manage  multiple  Tcl
+       interpreters, aliases and hidden commands.
+
+SYNOPSIS
+       #include <tcl.h>
+
+       int
+       Tcl_IsSafe(interp)
+
+       int
+       Tcl_MakeSafe(interp)
+
+       Tcl_Interp *
+       Tcl_CreateSlave(interp, slaveName, isSafe)
+
+       Tcl_Interp *
+       Tcl_GetSlave(interp, slaveName)
+
+       Tcl_Interp *
+       Tcl_GetMaster(interp)
+
+       int
+       Tcl_GetInterpPath(askingInterp, slaveInterp)
+
+       int                                                        |
+       Tcl_CreateAlias(slaveInterp, srcCmd, targetInterp, targetCmd, argc, argv)|
+
+       int                                                        |
+       Tcl_CreateAliasObj(slaveInterp, srcCmd, targetInterp, targetCmd, objc, objv)|
+
+       int
+       Tcl_GetAlias(interp, srcCmd, targetInterpPtr, targetCmdPtr, argcPtr, argvPtr)
+
+       int                                                        |
+       Tcl_GetAliasObj(interp, srcCmd, targetInterpPtr, targetCmdPtr, objcPtr, objvPtr)|
+
+       int                                                        |
+       Tcl_ExposeCommand(interp, hiddenCmdName, cmdName)          |
+
+       int                                                        |
+       Tcl_HideCommand(interp, cmdName, hiddenCmdName)            |
+
+ARGUMENTS                                                         |
+       Tcl_Interp             *interp           (in)              ||
+                                                          Inter­  |
+                                                          preter  |
+                                                          in      |
+                                                          which   |
+                                                          to exe­ |
+                                                          cute    |
+                                                          the     |
+                                                          speci­  |
+                                                          fied    |
+                                                          com­    |
+                                                          mand.   |
+
+       char                   *slave­                             |
+       Name        (in)              |                            |
+                                                          Name of |
+                                                          slave   |
+                                                          inter­  |
+                                                          preter  |
+                                                          to cre­ |
+                                                          ate  or |
+                                                          manipu­ |
+                                                          late.   |
+
+       int                    isSafe            (in)              ||
+                                                          If non- |
+                                                          zero, a |
+                                                          ``safe''|
+                                                          slave   |
+                                                          that is |
+                                                          suit­   |
+                                                          able    |
+                                                          for     |
+                                                          running |
+                                                          untrusted|
+                                                          code is |
+                                                          cre­    |
+                                                          ated,   |
+                                                          other­  |
+                                                          wise  a |
+                                                          trusted |
+                                                          slave   |
+                                                          is cre­ |
+                                                          ated.   |
+
+       Tcl_Interp             *slaveIn­                           |
+       terp      (in)              |                              |
+                                                          Inter­  |
+                                                          preter  |
+                                                          to  use |
+                                                          for     |
+                                                          creat­  |
+                                                          ing the |
+                                                          source  |
+                                                          command |
+                                                          for  an |
+                                                          alias   |
+                                                          (see    |
+                                                          below). |
+
+       char                   *src­                               |
+       Cmd           (in)              |                          |
+                                                          Name of |
+                                                          source  |
+                                                          command |
+                                                          for     |
+                                                          alias.  |
+
+       Tcl_Interp             *target­                            |
+       Interp     (in)              |                             |
+                                                          Inter­  |
+                                                          preter  |
+                                                          that    |
+                                                          con­    |
+                                                          tains   |
+                                                          the     |
+                                                          target  |
+                                                          command |
+                                                          for  an |
+                                                          alias.  |
+
+       char                   *tar­                               |
+       getCmd        (in)              |                          |
+                                                          Name of |
+                                                          target  |
+                                                          command |
+                                                          for     |
+                                                          alias   |
+                                                          in tar­ |
+                                                          get­    |
+                                                          Interp. |
+
+       int                    argc              (in)              ||
+                                                          Count   |
+                                                          of      |
+                                                          addi­   |
+                                                          tional  |
+                                                          argu­   |
+                                                          ments   |
+                                                          to pass |
+                                                          to  the |
+                                                          alias   |
+                                                          com­    |
+                                                          mand.   |
+
+       char                   **argv            (in)              ||
+                                                          Vector  |
+                                                          of      |
+                                                          strings,|
+                                                          the     |
+                                                          addi­   |
+                                                          tional  |
+                                                          argu­   |
+                                                          ments   |
+                                                          to pass |
+                                                          to  the |
+                                                          alias   |
+                                                          com­    |
+                                                          mand.   |
+                                                          This    |
+                                                          storage |
+                                                          is      |
+                                                          owned   |
+                                                          by  the |
+                                                          caller. |
+
+       int                    objc              (in)              ||
+                                                          Count   |
+                                                          of      |
+                                                          addi­   |
+                                                          tional  |
+                                                          object  |
+                                                          argu­   |
+                                                          ments   |
+                                                          to pass |
+                                                          to  the |
+                                                          alias   |
+                                                          object  |
+                                                          com­    |
+                                                          mand.   |
+
+       Tcl_Object             **objv            (in)              ||
+                                                          Vector  |
+                                                          of      |
+                                                          Tcl_Obj |
+                                                          struc­  |
+                                                          tures,  |
+                                                          the     |
+                                                          addi­   |
+                                                          tional  |
+                                                          object  |
+                                                          argu­   |
+                                                          menst   |
+                                                          to pass |
+                                                          to  the |
+                                                          alias   |
+                                                          object  |
+                                                          com­    |
+                                                          mand.   |
+                                                          This    |
+                                                          storage |
+                                                          is      |
+                                                          owned   |
+                                                          by  the |
+                                                          caller. |
+
+       Tcl_Interp             **target­                           |
+       InterpPtr (in)              |                              |
+                                                          Pointer |
+                                                          to      |
+                                                          loca­   |
+                                                          tion to |
+                                                          store   |
+                                                          the     |
+                                                          address |
+                                                          of  the |
+                                                          inter­  |
+                                                          preter  |
+                                                          where a |
+                                                          target  |
+                                                          command |
+                                                          is      |
+                                                          defined |
+                                                          for  an |
+                                                          alias.  |
+
+       char                   **tar­                              |
+       getCmdPtr    (out)             |                           |
+                                                          Pointer |
+                                                          to      |
+                                                          loca­   |
+                                                          tion to |
+                                                          store   |
+                                                          the     |
+                                                          address |
+                                                          of  the |
+                                                          name of |
+                                                          the     |
+                                                          target  |
+                                                          command |
+                                                          for  an |
+                                                          alias.  |
+
+       int                    *argcPtr          (out)             ||
+                                                          Pointer |
+                                                          to      |
+                                                          loca­   |
+                                                          tion to |
+                                                          store   |
+                                                          count   |
+                                                          of      |
+                                                          addi­   |
+                                                          tional  |
+                                                          argu­   |
+                                                          ments   |
+                                                          to   be |
+                                                          passed  |
+                                                          to  the |
+                                                          alias.  |
+                                                          The     |
+                                                          loca­   |
+                                                          tion is |
+                                                          in      |
+                                                          storage |
+                                                          owned   |
+                                                          by  the |
+                                                          caller. |
+
+       char                   ***argvPtr        (out)             ||
+                                                          Pointer |
+                                                          to      |
+                                                          loca­   |
+                                                          tion to |
+                                                          store a |
+                                                          vector  |
+                                                          of      |
+                                                          strings,|
+                                                          the     |
+                                                          addi­   |
+                                                          tional  |
+                                                          argu­   |
+                                                          ments   |
+                                                          to pass |
+                                                          to   an |
+                                                          alias.  |
+                                                          The     |
+                                                          loca­   |
+                                                          tion is |
+                                                          in      |
+                                                          storage |
+                                                          owned   |
+                                                          by  the |
+                                                          caller, |
+                                                          the     |
+                                                          vector  |
+                                                          of      |
+                                                          strings |
+                                                          is      |
+                                                          owned   |
+                                                          by  the |
+                                                          called  |
+                                                          func­   |
+                                                          tion.   |
+
+       int                    *objcPtr          (out)             ||
+                                                          Pointer |
+                                                          to      |
+                                                          loca­   |
+                                                          tion to |
+                                                          store   |
+                                                          count   |
+                                                          of      |
+                                                          addi­   |
+                                                          tional  |
+                                                          object  |
+                                                          argu­   |
+                                                          ments   |
+                                                          to   be |
+                                                          passed  |
+                                                          to  the |
+                                                          alias.  |
+                                                          The     |
+                                                          loca­   |
+                                                          tion is |
+                                                          in      |
+                                                          storage |
+                                                          owned   |
+                                                          by  the |
+                                                          caller. |
+
+       Tcl_Obj                ***objvPtr        (out)             ||
+                                                          Pointer |
+                                                          to      |
+                                                          loca­   |
+                                                          tion to |
+                                                          store a |
+                                                          vector  |
+                                                          of      |
+                                                          Tcl_Obj |
+                                                          struc­  |
+                                                          tures,  |
+                                                          the     |
+                                                          addi­   |
+                                                          tional  |
+                                                          argu­   |
+                                                          ments   |
+                                                          to pass |
+                                                          to   an |
+                                                          object  |
+                                                          alias   |
+                                                          com­    |
+                                                          mand.   |
+                                                          The     |
+                                                          loca­   |
+                                                          tion is |
+                                                          in      |
+                                                          storage |
+                                                          owned   |
+                                                          by  the |
+                                                          caller, |
+                                                          the     |
+                                                          vector  |
+                                                          of      |
+                                                          Tcl_Obj |
+                                                          struc­  |
+                                                          tures   |
+                                                          is      |
+                                                          owned   |
+                                                          by  the |
+                                                          called  |
+                                                          func­   |
+                                                          tion.   |
+
+       char                   *cmd­                               |
+       Name          (in)              |                          |
+                                                          Name of |
+                                                          an      |
+                                                          exposed |
+                                                          command |
+                                                          to hide |
+                                                          or cre­ |
+                                                          ate.    |
+
+       char                   *hiddenCmd­                         |
+       Name    (in)              |                                |
+                                                          Name    |
+                                                          under   |
+                                                          which a |
+                                                          hidden  |
+                                                          command |
+                                                          is      |
+                                                          stored  |
+                                                          and     |
+                                                          with    |
+                                                          which   |
+                                                          it  can |
+                                                          be      |
+                                                          exposed |
+                                                          or      |
+                                                          invoked.|
+_________________________________________________________________
+
+
+DESCRIPTION
+       These procedures are intended for access to  the  multiple
+       interpreter  facility  from inside C programs. They enable
+       managing multiple interpreters in a hierarchical relation­
+       ship,  and  the  management of aliases, commands that when
+       invoked in one interpreter execute a  command  in  another
+       interpreter.  The  return  value for those procedures that
+       return an int is either TCL_OK or TCL_ERROR. If  TCL_ERROR
+       is  returned then the result field of the interpreter con­
+       tains an error message.
+
+       Tcl_CreateSlave creates a new interpreter as  a  slave  of
+       interp.   It  also creates a slave command named slaveName
+       in interp which allows interp to manipulate the new slave.
+       If  isSafe is zero, the command creates a trusted slave in
+       which Tcl code has access to all the Tcl commands.  If  it
+       is  1,  the  command creates a ``safe'' slave in which Tcl
+       code has access only to set of  Tcl  commands  defined  as
+       ``Safe Tcl''; see the manual entry for the Tcl interp com­
+       mand for details.  If the creation of the new slave inter­
+       preter failed, NULL is returned.
+
+       Tcl_IsSafe  returns  1  if interp is ``safe'' (was created
+       with the TCL_SAFE_INTERPRETER flag  specified),  0  other­
+       wise.
+
+       Tcl_MakeSafe  makes  interp  ``safe'' by removing all non-
+       core and core unsafe functionality. Note that if you  call
+       this  after  adding  some extension to an interpreter, all
+       traces of that extension will be removed from  the  inter­
+       preter.
+
+       Tcl_GetSlave  returns  a pointer to a slave interpreter of
+       interp. The slave interpreter is identified by  slaveName.
+       If no such slave interpreter exists, NULL is returned.
+
+       Tcl_GetMaster  returns a pointer to the master interpreter
+       of interp. If interp has no  master  (it  is  a  top-level
+       interpreter) then NULL is returned.
+
+       Tcl_GetInterpPath sets the result field in askingInterp to
+       the relative path between  askingInterp  and  slaveInterp;
+       slaveInterp must be a slave of askingInterp. If the compu­
+       tation of the relative path succeeds, TCL_OK is  returned,
+       else TCL_ERROR is returned and the result field in asking­
+       Interp contains the error message.
+
+       Tcl_CreateAlias creates an object command named srcCmd  in |
+       slaveInterp that when invoked, will cause the command tar­ |
+       getCmd to be invoked in targetInterp. The arguments speci­ |
+       fied by the strings contained in argv are always prepended |
+       to any arguments supplied in the invocation of srcCmd  and |
+       passed  to targetCmd.  This operation returns TCL_OK if it |
+       succeeds, or TCL_ERROR if it fails; in that case, an error |
+       message is left in the object result of slaveInterp.  Note |
+       that there are no restrictions on the  ancestry  relation­ |
+       ship  (as  created by Tcl_CreateSlave) between slaveInterp |
+       and targetInterp. Any two interpreters can be used,  with­ |
+       out any restrictions on how they are related.              |
+
+       Tcl_CreateAliasObj  is  similar  to Tcl_CreateAlias except |
+       that it takes a vector of objects to  pass  as  additional |
+       arguments instead of a vector of strings.
+
+       Tcl_GetAlias  returns information about an alias aliasName
+       in interp. Any of the result fields can be NULL, in  which
+       case  the corresponding datum is not returned. If a result
+       field is non-NULL, the address indicated  is  set  to  the
+       corresponding  datum.   For  example,  if targetNamePtr is
+       non-NULL it is set to a pointer to the  string  containing
+       the name of the target command.                            |
+
+       Tcl_GetAliasObj  is similar to Tcl_GetAlias except that it |
+       returns a  pointer  to  a  vector  of  Tcl_Obj  structures |
+       instead of a vector of strings.                            |
+
+       Tcl_ExposeCommand  moves  the  command named hiddenCmdName |
+       from the set of hidden commands to the set of exposed com­ |
+       mands,  putting  it under the name cmdName.  HiddenCmdName |
+       must be the name of an existing  hidden  command,  or  the |
+       operation will return TCL_ERROR and leave an error message |
+       in the result field in  interp.   If  an  exposed  command |
+       named   cmdName  already  exists,  the  operation  returns |
+       TCL_ERROR and leaves an error message in the object result |
+       of  interp.  If the operation succeeds, it returns TCL_OK. |
+       After executing this command, attempts to use cmdName in a |
+       call  to  Tcl_Eval or with the Tcl eval command will again |
+       succeed.                                                   |
+
+       Tcl_HideCommand moves the command named cmdName  from  the |
+       set  of  exposed  commands  to the set of hidden commands, |
+       under the name hiddenCmdName.  CmdName must be the name of |
+       an  existing exposed command, or the operation will return |
+       TCL_ERROR and leave an error message in the object  result |
+       of  interp.  Currently both cmdName and hiddenCmdName must |
+       not contain namespace qualifiers, or  the  operation  will |
+       return  TCL_ERROR and leave an error message in the object |
+       result of interp.  The CmdName will be looked  up  in  the |
+       global  namespace,  and not relative to the current names­ |
+       pace, even if the current namespace is not the global one. |
+       If  a  hidden  command whose name is hiddenCmdName already |
+       exists, the  operation  also  returns  TCL_ERROR  and  the |
+       result  field in interp contains an error message.  If the |
+       operation succeeds, it returns  TCL_OK.   After  executing |
+       this  command,  attempts  to  use  cmdName  in  a  call to |
+       Tcl_Eval or with the Tcl eval command will fail.           |
+
+       For a description of the Tcl interface to multiple  inter­ |
+       preters, see interp(n).                                    |
+
+SEE ALSO                                                          |
+       interp                                                     |
+
+
+KEYWORDS                                                          |
+       alias,  command, exposed commands, hidden commands, inter­ |
+       preter, invoke, master, slave,                             |
+
+
+
+
+Tcl                            7.6             Tcl_CreateSlave(3)

@@ -1,0 +1,223 @@
+ECPG(1)           PostgreSQL Client Applications          ECPG(1)
+
+
+
+NAME
+       ecpg - embedded SQL C preprocessor
+
+SYNOPSIS
+       ecpg  [  -v  ]  [  -t ] [ -I include-path ] [ -o outfile ]
+       file...
+
+   INPUTS
+       ecpg accepts the following command line arguments:
+
+       -v     Print version information.
+
+       -t     Turn on auto-commit of transactions. In this  mode,
+              each  query is automatically committed unless it is
+              inside  an  explicit  transaction  block.  In   the
+              default  mode, queries are committed only when exec
+              sql commit is issued.
+
+       -I include-path
+              Specify an additional include path.  Defaults are .
+              (current  directory), /usr/local/include, the Post­
+              greSQL include path which  is  defined  at  compile
+              time   (default:   /usr/local/pgsql/include),   and
+              /usr/include.
+
+       -o outfile
+              Specifies that ecpg should write all its output  to
+              outfile.   If no such option is given the output is
+              written to name.c,  assuming  the  input  file  was
+              named  name.pgc.   If  the input file does have the
+              expected .pgc suffix, then  the  output  file  will
+              have .pgc appended to the input file name.
+
+       file   The files to be processed.
+
+
+   OUTPUTS
+       ecpg will create a file or write to stdout.
+
+       Return value
+              ecpg  returns  0 to the shell on successful comple­
+              tion, non-zero for errors.
+
+
+DESCRIPTION
+       ecpg is an embedded SQL preprocessor for  the  C  language
+       and  the  PostgreSQL. It enables development of C programs
+       with embedded SQL code.
+
+       Linus Tolke (<linus@epact.se>) was the original author  of
+       ecpg    (up    to    version    0.2).     Michael   Meskes
+       (<meskes@debian.org>) is the current author and maintainer
+       of  ecpg.  Thomas Good (<tomg@q8.nrnet.org>) is the author
+       of the last revision of the ecpg man page, on  which  this
+       document is based.
+
+USAGE
+   PREPROCESSING FOR COMPILATION
+       An  embedded  SQL  source file must be preprocessed before
+       compilation:
+
+       ecpg [ -d ] [ -o file ] file.pgc
+
+       where the optional -d flag turns on debugging.   The  .pgc
+       extension is an arbitrary means of denoting ecpg source.
+
+       You  may want to redirect the preprocessor output to a log
+       file.
+
+   COMPILING AND LINKING
+       Assuming the PostgreSQL binaries are in  /usr/local/pgsql,
+       you will need to compile and link your preprocessed source
+       file:
+
+       gcc -g -I /usr/local/pgsql/include [ -o file ] file.c -L /usr/local/pgsql/lib -lecpg -lpq
+
+
+GRAMMAR
+   LIBRARIES
+       The  preprocessor  will  prepend  two  directives  to  the
+       source:
+
+       #include <ecpgtype.h>
+       #include <ecpglib.h>
+
+
+   VARIABLE DECLARATION
+       Variables   declared  within  ecpg  source  code  must  be
+       prepended with:
+
+       EXEC SQL BEGIN DECLARE SECTION;
+
+
+       Similarly, variable declaration  sections  must  terminate
+       with:
+
+       EXEC SQL END DECLARE SECTION;
+
+
+              Note:  Prior to version 2.1.0, each variable had to
+              be declared on a separate line. As of version 2.1.0
+              multiple  variables  may  be  declared  on a single
+              line:
+
+              char  foo[16], bar[16];
+
+
+
+   ERROR HANDLING
+       The SQL communication area is defined with:
+
+       EXEC SQL INCLUDE sqlca;
+
+
+              Note: The sqlca is in lowercase.  While SQL conven­
+              tion may be followed, i.e., using uppercase to sep­
+              arate embedded SQL from C statements, sqlca  (which
+              includes  the  sqlca.h  header file) must be lower­
+              case. This is because the EXEC SQL prefix indicates
+              that  this  inclusion will be parsed by ecpg.  ecpg
+              observes case  sensitivity  (SQLCA.h  will  not  be
+              found).   EXEC  SQL  INCLUDE can be used to include
+              other header files as long as case  sensitivity  is
+              observed.
+
+
+       The  sqlprint  command  is used with the EXEC SQL WHENEVER
+       statement  to  turn  on  error  handling  throughout   the
+       program:
+
+       EXEC SQL WHENEVER sqlerror sqlprint;
+
+       and
+
+       EXEC SQL WHENEVER not found sqlprint;
+
+
+              Note:  This  is  not an exhaustive example of usage
+              for the EXEC SQL WHENEVER statement.  Further exam­
+              ples  of  usage  may be found in SQL manuals (e.g.,
+              The LAN TIMES Guide to SQL by Groff and  Weinberg).
+
+
+   CONNECTING TO THE DATABASE SERVER
+       One connects to a database using the following:
+
+       EXEC SQL CONNECT TO dbname;
+
+       where  the  database  name is not quoted. Prior to version
+       2.1.0, the database name was required to be inside  single
+       quotes.
+
+       Specifying a server and port name in the connect statement
+       is also possible. The syntax is:
+
+       dbname[@server][:port]
+
+       or
+
+       <tcp|unix>:postgresql://server[:port][/dbname][?options]
+
+
+   QUERIES
+       In general, SQL queries acceptable to  other  applications
+       such  as  psql  can be embedded into your C code. Here are
+       some examples of how to do that.
+
+       Create Table:
+
+       EXEC SQL CREATE TABLE foo (number int4, ascii char(16));
+       EXEC SQL CREATE UNIQUE index num1 on foo(number);
+       EXEC SQL COMMIT;
+
+
+       Insert:
+
+       EXEC SQL INSERT INTO foo (number, ascii) VALUES (9999, 'doodad');
+       EXEC SQL COMMIT;
+
+
+       Delete:
+
+       EXEC SQL DELETE FROM foo WHERE number = 9999;
+       EXEC SQL COMMIT;
+
+
+       Singleton Select:
+
+       EXEC SQL SELECT foo INTO :FooBar FROM table1 WHERE ascii = 'doodad';
+
+
+       Select using Cursors:
+
+       EXEC SQL DECLARE foo_bar CURSOR FOR
+           SELECT number, ascii FROM foo
+           ORDER BY ascii;
+       EXEC SQL FETCH foo_bar INTO :FooBar, DooDad;
+       EXEC SQL CLOSE foo_bar;
+       EXEC SQL COMMIT;
+
+
+       Updates:
+
+       EXEC SQL UPDATE foo
+           SET ascii = 'foobar'
+           WHERE number = 9999;
+       EXEC SQL COMMIT;
+
+
+NOTES
+       The complete structure definition MUST  be  listed  inside
+       the declare section.
+
+       See the TODO file in the source for some more missing fea­
+       tures.
+
+
+
+Application                 2002-01-30                    ECPG(1)

@@ -1,0 +1,54 @@
+MacroContext_s(3)                               MacroContext_s(3)
+
+
+
+NAME
+       MacroContext_s -
+
+SYNOPSIS
+       #include <rpmmacro.h>
+
+
+   Data Fields
+       MacroEntry * macroTable
+       int macrosAllocated
+       int firstFree
+
+DETAILED DESCRIPTION
+       The structure used to store the set of macros in a
+       context.
+
+       Definition at line 19 of file rpmmacro.h.
+
+FIELD DOCUMENTATION
+   int MacroContext_s::firstFree
+       No. of macros.
+
+       Definition at line 22 of file rpmmacro.h.
+
+       Referenced by addMacro, freeArgs, rpmDumpMacroTable,
+       rpmFreeMacros, and rpmLoadMacros.
+
+   int MacroContext_s::macrosAllocated
+       No. of allocated macros.
+
+       Definition at line 21 of file rpmmacro.h.
+
+       Referenced by addMacro.
+
+   MacroEntry* MacroContext_s::macroTable
+       Macro entry table for context.
+
+       Definition at line 20 of file rpmmacro.h.
+
+       Referenced by addMacro, freeArgs, rpmDumpMacroTable,
+       rpmFreeMacros, and rpmLoadMacros.
+
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002          MacroContext_s(3)

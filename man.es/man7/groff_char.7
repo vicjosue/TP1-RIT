@@ -1,0 +1,434 @@
+GROFF_CHAR(7)                                       GROFF_CHAR(7)
+
+
+
+NAME
+       groff_char - groff character names
+
+DESCRIPTION
+       This  manual  page  lists the standard groff input charac­
+       ters.  Only the characters  that  are  available  for  the
+       device  that  is  being  used to print or view this manual
+       page will be  displayed  (the  device  currently  used  is
+       `latin1').   The  Input  code column applies to characters
+       which can be input with a single character, and gives  the
+       ISO  Latin-1 code of that input character.  The PostScript
+       name column gives the usual PostScript name of the  output
+       character.
+
+       The ISO Latin-1 no-break space (code 0240 octal) is equiv­
+       alent to \(space).  All other ISO Latin-1 characters print
+       as  themselves  with the following exceptions: ` prints as
+       `, ' prints as '; the corresponding ISO Latin-1 characters
+       can  be  obtained  with  \`  and  \(aq.   The  ISO Latin-1
+       `Hyphen, Minus Sign' (code 45) prints as a hyphen; a minus
+       sign  can  be  obtained  with \-.  The ISO Latin-1 `Tilde'
+       (code 126) prints as ~; the larger glyph can  be  obtained
+       with  \(ti.  The ISO Latin-1 `Circumflex Accent' (code 94)
+       prints as ^; a larger glyph can be obtained with \(ha.
+
+       Output   Input   Input   PostScript       Notes
+                name    code    name
+
+       !        !       33      exclam
+       "        "       34      quotedbl
+       #        #       35      numbersign
+       $        $       36      dollar
+       %        %       37      percent
+       &        &       38      ampersand
+       '        '       39      quoteright
+       (        (       40      parenleft
+       )        )       41      parenright
+       *        *       42      asterisk
+       +        +       43      plus
+       ,        ,       44      comma
+       -        -       45      hyphen
+       .        .       46      period
+       /        /       47      slash
+       :        :       58      colon
+       ;        ;       59      semicolon
+       <        <       60      less
+       =        =       61      equal
+       >        >       62      greater
+       ?        ?       63      question
+       @        @       64      at
+       [        [       91      bracketleft
+       \        \       92      backslash
+       ]        ]       93      bracketright
+       ^        ^       94      circumflex       circumflex accent
+       _        _       95      underscore
+       `        `       96      quoteleft
+       {        {       123     braceleft
+       |        |       124     bar
+       }        }       125     braceright
+       ~        ~       126     tilde            tilde accent
+       ¡        ¡       161     exclamdown
+       ¢        ¢       162     cent
+       £        £       163     sterling
+       ¤        ¤       164     currency
+       ¥        ¥       165     yen
+       ¦        ¦       166     brokenbar
+       §        §       167     section
+       ¨        ¨       168     dieresis
+       ©        ©       169     copyright
+       ª        ª       170     ordfeminine
+       «        «       171     guillemotleft
+       ¬        ¬       172     logicalnot
+       ­        ­       173     hyphen
+       ®        ®       174     registered
+       ¯        ¯       175     macron
+       °        °       176     degree
+       ±        ±       177     plusminus
+       ²        ²       178     twosuperior
+       ³        ³       179     threesuperior
+       ´        ´       180     acute            acute accent
+       µ        µ       181     mu
+       ¶        ¶       182     paragraph
+       ·        ·       183     periodcentered
+       ¸        ¸       184     cedilla
+       ¹        ¹       185     onesuperior
+       º        º       186     ordmasculine
+       »        »       187     guillemotright
+       ¼        ¼       188     onequarter
+       ½        ½       189     onehalf
+       ¾        ¾       190     threequarters
+       ¿        ¿       191     questiondown
+       À        À       192     Agrave
+       Á        Á       193     Aacute
+       Â        Â       194     Acircumflex
+       Ã        Ã       195     Atilde
+       Ä        Ä       196     Adieresis
+       Å        Å       197     Aring
+       Æ        Æ       198     AE
+       Ç        Ç       199     Ccedilla
+       È        È       200     Egrave
+       É        É       201     Eacute
+       Ê        Ê       202     Ecircumflex
+       Ë        Ë       203     Edieresis
+       Ì        Ì       204     Igrave
+       Í        Í       205     Iacute
+       Î        Î       206     Icircumflex
+       Ï        Ï       207     Idieresis
+       Ð        Ð       208     Eth
+       Ñ        Ñ       209     Ntilde
+       Ò        Ò       210     Ograve
+       Ó        Ó       211     Oacute
+       Ô        Ô       212     Ocircumflex
+       Õ        Õ       213     Otilde
+       Ö        Ö       214     Odieresis
+       ×        ×       215     multiply
+       Ø        Ø       216     Oslash
+       Ù        Ù       217     Ugrave
+       Ú        Ú       218     Uacute
+       Û        Û       219     Ucircumflex
+       Ü        Ü       220     Udieresis
+       Ý        Ý       221     Yacute
+       Þ        Þ       222     Thorn
+       ß        ß       223     germandbls
+       à        à       224     agrave
+       á        á       225     aacute
+       â        â       226     acircumflex
+       ã        ã       227     atilde
+       ä        ä       228     adieresis
+       å        å       229     aring
+       æ        æ       230     ae
+       ç        ç       231     ccedilla
+       è        è       232     egrave
+       é        é       233     eacute
+       ê        ê       234     ecircumflex
+       ë        ë       235     edieresis
+       ì        ì       236     igrave
+       í        í       237     iacute
+       î        î       238     icircumflex
+       ï        ï       239     idieresis
+       ð        ð       240     eth
+       ñ        ñ       241     ntilde
+       ò        ò       242     ograve
+       ó        ó       243     oacute
+       ô        ô       244     ocircumflex
+       õ        õ       245     otilde
+       ö        ö       246     odieresis
+       ÷        ÷       247     divide
+       ø        ø       248     oslash
+       ù        ù       249     ugrave
+       ú        ú       250     uacute
+       û        û       251     ucircumflex
+       ü        ü       252     udieresis
+       ý        ý       253     yacute
+       þ        þ       254     thorn
+       ÿ        ÿ       255     ydieresis
+       Ð        \(-D            Eth              Icelandic uppercase eth
+       ð        \(Sd            eth              Icelandic lowercase eth
+       Þ        \(TP            Thorn            Icelandic uppercase thorn
+       þ        \(Tp            thorn            Icelandic lowercase thorn
+       Æ        \(AE            AE
+       æ        \(ae            ae
+       OE       \(OE            OE
+       oe       \(oe            oe
+       ß        \(ss            germandbls
+       Á        \('A            Aacute
+       É        \('E            Eacute
+       Í        \('I            Iacute
+       Ó        \('O            Oacute
+       Ú        \('U            Uacute
+       Ý        \('Y            Yacute
+       á        \('a            aacute
+       é        \('e            eacute
+       í        \('i            iacute
+       ó        \('o            oacute
+       ú        \('u            uacute
+       ý        \('y            yacute
+       Ä        \(:A            Adieresis
+       Ë        \(:E            Edieresis
+       Ï        \(:I            Idieresis
+       Ö        \(:O            Odieresis
+       Ü        \(:U            Udieresis
+       ä        \(:a            adieresis
+       ë        \(:e            edieresis
+       ï        \(:i            idieresis
+       ö        \(:o            odieresis
+       ü        \(:u            udieresis
+       ÿ        \(:y            ydieresis
+       Â        \(^A            Acircumflex
+       Ê        \(^E            Ecircumflex
+       Î        \(^I            Icircumflex
+       Ô        \(^O            Ocircumflex
+       Û        \(^U            Ucircumflex
+       â        \(^a            acircumflex
+       ê        \(^e            ecircumflex
+       î        \(^i            icircumflex
+       ô        \(^o            ocircumflex
+       û        \(^u            ucircumflex
+       À        \(`A            Agrave
+       È        \(`E            Egrave
+       Ì        \(`I            Igrave
+       Ò        \(`O            Ograve
+       Ù        \(`U            Ugrave
+       à        \(`a            agrave
+       è        \(`e            egrave
+       ì        \(`i            igrave
+       ò        \(`o            ograve
+       ù        \(`u            ugrave
+       Ã        \(~A            Atilde
+       Ñ        \(~N            Ntilde
+       Õ        \(~O            Otilde
+       ã        \(~a            atilde
+       ñ        \(~n            ntilde
+       õ        \(~o            otilde
+       Ç        \(,C            Ccedilla
+       ç        \(,c            ccedilla
+       /L        \(/L            Lslash           Polish L with a slash
+       /l        \(/l            lslash           Polish l with a slash
+       Ø        \(/O            Oslash
+       ø        \(/o            oslash
+       Å        \(oA            Aring
+       å        \(oa            aring
+       "        \(a"            hungarumlaut     Hungarian umlaut
+       ¯        \(a-            macron           macron or bar accent
+       ·        \(a.            dotaccent        dot accent
+       ^        \(a^            circumflex       circumflex accent
+       '        \(aa            acute            acute accent
+       `        \(ga            grave            grave accent
+       '`        \(ab            breve            breve accent
+       ¸        \(ac            cedilla          cedilla accent
+       ¨        \(ad            dieresis         umlaut or dieresis
+       v        \(ah            caron            hácvek accent
+       °        \(ao            ring             ring or circle accent
+       ~        \(a~            tilde            tilde accent
+       ¸        \(ho            ogonek           hook or ogonek accent
+       i        \(.i            dotlessi         i without a dot
+       ¤        \(Cs            currency         Scandinavian currency sign
+       $        \(Do            dollar
+       £        \(Po            sterling
+       ¥        \(Ye            yen
+       ,f        \(Fn            florin
+       ¢        \(ct            cent
+       «        \(Fo            guillemotleft
+       »        \(Fc            guillemotright
+       <        \(fo            guilsinglleft
+       >        \(fc            guilsinglright
+       ¡        \(r!            exclamdown
+       ¿        \(r?            questiondown
+       ff       \(ff            ff               ff ligature
+       fi       \(fi            fi               fi ligature
+       fl       \(fl            fl               fl ligature
+       ffi      \(Fi            ffi              ffi ligature
+       ffl      \(Fl            ffl              ffl ligature
+       ª        \(Of            ordfeminine
+       º        \(Om            ordmasculine
+       ·        \(pc            periodcentered
+       ¹        \(S1            onesuperior
+       ²        \(S2            twosuperior
+       ³        \(S3            threesuperior
+       <-       \(<-            arrowleft
+       ->       \(->            arrowright
+       <->      \(<>            arrowboth        horizontal double-headed arrow
+       |v        \(da            arrowdown
+       |^        \(ua            arrowup
+       <=       \(lA            arrowdblleft
+       =>       \(rA            arrowdblright
+       <=>      \(hA            arrowdblboth     horizontal double-headed double arrow
+       =v        \(dA            arrowdbldown
+       =^        \(uA            arrowdblup
+       |        \(ba            bar
+       ¦        \(bb            brokenbar
+       |        \(br            br               box rule with traditional troff metrics
+       _        \(ru            ru               baseline rule
+       _        \(ul            ul               underline with traditional troff metrics
+       |        \(bv            bv               bar vertical
+       O        \(ci            circle
+       ·        \(bu            bullet
+       ©        \(co            copyright
+       ®        \(rg            registered
+       tm       \(tm            trademark
+       |=        \(dd            daggerdbl        double dagger sign
+       |-        \(dg            dagger
+       ¶        \(ps            paragraph
+       §        \(sc            section
+       °        \(de            degree
+       --       \(em            emdash           em dash
+       -        \(en            endash           en dash
+       %o       \(%0            perthousand      per thousand, per mille sign
+       ½        \(12            onehalf
+       ¼        \(14            onequarter
+       ¾        \(34            threequarters
+       /        \(f/            fraction         bar for fractions
+       '        \(fm            minute           footmark, prime
+       ''       \(sd            second
+       ^        \(ha            asciicircum      ASCII circumflex, hat, caret
+       ~        \(ti            asciitilde       ASCII tilde, large tilde
+       -        \(hy            hyphen
+       [        \(lB            bracketleft
+       ]        \(rB            bracketright
+       {        \(lC            braceleft
+       }        \(rC            braceright
+       <        \(la            angleleft        left angle bracket
+       >        \(ra            angleright       right angle bracket
+       <=       \(lh            handleft
+       =>       \(rh            handright
+       ,,       \(Bq            quotedblbase     low double comma quote
+       ,        \(bq            quotesinglbase   low single comma quote
+       "        \(lq            quotedblleft
+       "        \(rq            quotedblright
+       `        \(oq            quoteleft        single open quote
+       '        \(cq            quoteright       single closing quote (ASCII 39)
+       '        \(aq            quotesingle      apostrophe quote
+       "        \(dq            quotedbl         double quote (ASCII 34)
+       |        \(or            bar
+       @        \(at            at
+       -        \-              minus            minus sign from current font
+       #        \(sh            numbersign
+       /        \(sl            slash
+       \        \(rs            backslash
+       []       \(sq            square
+       .·.      \(tf            therefore
+       A        \(*A            Alpha
+       B        \(*B            Beta
+       H        \(*C            Xi
+       /\       \(*D            Delta
+       E        \(*E            Epsilon
+       IO        \(*F            Phi
+       |¯       \(*G            Gamma
+       -O        \(*H            Theta
+       I        \(*I            Iota
+       K        \(*K            Kappa
+       /\       \(*L            Lambda
+       M        \(*M            Mu
+       N        \(*N            Nu
+       O        \(*O            Omicron
+       TT       \(*P            Pi
+       IY        \(*Q            Psi
+       P        \(*R            Rho
+       ¯>        \(*S            Sigma
+       T        \(*T            Tau
+       Y        \(*U            Upsilon
+       O        \(*W            Omega
+       X        \(*X            Chi
+       H        \(*Y            Eta
+       Z        \(*Z            Zeta
+       a        \(*a            alpha
+       ß        \(*b            beta
+       ,E        \(*c            xi
+       d        \(*d            delta
+       e        \(*e            epsilon
+       |o        \(*f            phi
+       |o        \(+f            phi1             variant phi
+       y        \(*g            gamma
+       -0        \(*h            theta
+       -0        \(+h            theta1           variant theta
+       i        \(*i            iota
+       k        \(*k            kappa
+       >\        \(*l            lambda
+       µ        \(*m            mu
+       v        \(*n            nu
+       o        \(*o            omicron
+       -n        \(*p            pi
+       -w        \(+p            omega1           variant pi, looking like omega
+       |u        \(*q            psi
+       p        \(*r            rho
+       -o        \(*s            sigma
+       ~t        \(*t            tau
+       u        \(*u            upsilon
+       w        \(*w            omega
+       x        \(*x            chi
+       n        \(*y            eta
+       ,C        \(*z            zeta
+       s        \(ts            sigma1           terminal sigma
+       ~~       \(~~            approxequal
+       ~=       \(~=            approxequal
+       !=       \(!=            notequal
+       *        \(**            asteriskmath
+       ±        \(+-            plusminus
+       <=       \(<=            lessequal
+       ==       \(==            equivalence
+       =~       \(=~            congruent
+       >=       \(>=            greaterequal
+       ^        \(AN            logicaland
+       v        \(OR            logicalor
+       ¬        \(no            logicalnot
+       3        \(te            existential      there exists, existential quantifier
+       -V        \(fa            universal        for all, universal quantifier
+       N        \(Ah            aleph
+       I        \(Im            Ifraktur         Fraktur I, imaginary
+       R        \(Re            Rfraktur         Fraktur R, real
+       oo       \(if            infinity
+       ·        \(md            dotmath
+       E        \(mo            element
+       ×        \(mu            multiply
+       /E        \(nm            notelement
+       +        \(pl            plusmath         plus sign in special font
+       =        \(eq            equalmath        equals sign in special font
+       oc       \(pt            proportional
+       |        \(pp            perpendicular
+       (=       \(sb            propersubset
+       =)       \(sp            propersuperset
+       (=_       \(ib            reflexsubset
+       =_)       \(ip            reflexsuperset
+       ~        \(ap            similar
+       ',I        \(is            integral
+       \/       \(sr            radical          square root
+       ¯        \(rn                             overline
+       a        \(pd            partialdiff      partial differentiation sign
+       O×        \(c*            circlemultiply   multiply sign in a circle
+       O+        \(c+            circleplus       plus sign in a circle
+       (^)      \(ca            intersection     intersection, cap
+       U        \(cu            union            union, cup
+       ÷        \(di            divide           division sign
+       ¯V        \(gr            gradient
+       {}       \(es            emptyset
+       _|       \(CR            carriagereturn   carriage return symbol
+       -)       \(st            suchthat
+       /        \(/_            angle
+       p        \(wp            weierstrass      Weierstrass p
+       <>       \(lz            lozenge
+       -        \(an            arrowhorizex     horizontal arrow extension
+
+SEE ALSO
+       groff(1)
+       An extension to the troff character set for  Europe,  E.G.
+       Keizer, K.J. Simonsen, J. Akkerhuis, EUUG Newsletter, Vol­
+       ume 9, No. 2, Summer 1989
+
+
+
+Groff Version 1.17.2       27 June 2001             GROFF_CHAR(7)

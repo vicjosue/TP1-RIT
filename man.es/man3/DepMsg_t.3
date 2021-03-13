@@ -1,0 +1,57 @@
+DepMsg_t(3)                                           DepMsg_t(3)
+
+
+
+NAME
+       DepMsg_t -
+
+SYNOPSIS
+   Data Fields
+       const char * msg
+       const char * argv [4]
+       rpmTag ntag
+       rpmTag vtag
+       rpmTag ftag
+       int mask
+       int xor
+
+FIELD DOCUMENTATION
+   const char* DepMsg_t::argv[4]
+       Definition at line 2299 of file files.c.
+
+       Referenced by generateDepends.
+
+   rpmTag DepMsg_t::ftag
+       Definition at line 2302 of file files.c.
+
+       Referenced by generateDepends, and printDeps.
+
+   int DepMsg_t::mask
+       Definition at line 2303 of file files.c.
+
+   const char* DepMsg_t::msg
+       Definition at line 2298 of file files.c.
+
+       Referenced by generateDepends, and printDeps.
+
+   rpmTag DepMsg_t::ntag
+       Definition at line 2300 of file files.c.
+
+       Referenced by generateDepends, and printDeps.
+
+   rpmTag DepMsg_t::vtag
+       Definition at line 2301 of file files.c.
+
+       Referenced by printDeps.
+
+   int DepMsg_t::xor
+       Definition at line 2304 of file files.c.
+
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002                DepMsg_t(3)

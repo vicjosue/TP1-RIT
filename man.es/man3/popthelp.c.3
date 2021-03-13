@@ -1,0 +1,360 @@
+popt/popthelp.c(3)                             popt/popthelp.c(3)
+
+
+
+NAME
+       popt/popthelp.c -
+
+SYNOPSIS
+       #include 'system.h'
+       #include 'poptint.h'
+
+   Functions
+       void displayArgs (poptContext con, enum poptCallbackReason
+           foo, struct poptOption *key, const char *arg, void
+           *data)
+       const char *const getTableTranslationDomain (const struct
+           poptOption *table)
+       const char *const getArgDescrip (const struct poptOption
+           *opt, const char *translation_domain)
+       char * singleOptionDefaultValue (int lineLength, const
+           struct poptOption *opt, const char
+           *translation_domain)
+       void singleOptionHelp (FILE *fp, int maxLeftCol, const
+           struct poptOption *opt, const char
+           *translation_domain)
+       int maxArgWidth (const struct poptOption *opt, const char
+           *translation_domain)
+       void itemHelp (FILE *fp, poptItem items, int nitems, int
+           left, const char *translation_domain)
+           Display popt alias and exec help.
+       void singleTableHelp (poptContext con, FILE *fp, const
+           struct poptOption *table, int left, const char
+           *translation_domain)
+       int showHelpIntro (poptContext con, FILE *fp)
+       void poptPrintHelp (poptContext con, FILE *fp, int flags)
+       int singleOptionUsage (FILE *fp, int cursor, const struct
+           poptOption *opt, const char *translation_domain)
+       int itemUsage (FILE *fp, int cursor, poptItem item, int
+           nitems, const char *translation_domain)
+           Display popt alias and exec usage.
+       int singleTableUsage (poptContext con, FILE *fp, int
+           cursor, const struct poptOption *opt, const char
+           *translation_domain)
+       int showShortOptions (const struct poptOption *opt, FILE
+           *fp, char *str)
+           Return concatenated short options for display.
+       void poptPrintUsage (poptContext con, FILE *fp, int flags)
+       void poptSetOtherOptionHelp (poptContext con, const char
+           *text)
+
+   Variables
+       poptOption poptAliasOptions []
+           Empty table marker to enable displaying popt
+           alias/exec options.
+       poptOption poptHelpOptions []
+           Auto help table options.
+
+DETAILED DESCRIPTION
+       Definition in file popthelp.c.
+
+FUNCTION DOCUMENTATION
+   void displayArgs (poptContext con, enum poptCallbackReason
+       foo, struct poptOption * key, const char * arg, void *
+       data) [static]
+       Parameters:
+
+       con    context
+
+       key    option(s)
+
+       Definition at line 18 of file popthelp.c.
+
+       References poptPrintHelp, and poptPrintUsage.
+
+   const char* const getArgDescrip (const struct poptOption *
+       opt, const char * translation_domain) [static]
+       Parameters:
+
+       opt    option(s)
+
+       translation_domain
+              translation domain
+
+       Definition at line 79 of file popthelp.c.
+
+       References D_, POPT_, POPT_ARG_DOUBLE, POPT_ARG_FLOAT,
+       POPT_ARG_INT, POPT_ARG_LONG, POPT_ARG_MASK, POPT_ARG_NONE,
+       POPT_ARG_STRING, POPT_ARG_VAL, and poptHelpOptions.
+
+       Referenced by maxArgWidth, singleOptionHelp, and
+       singleOptionUsage.
+
+   const char* const getTableTranslationDomain (const struct
+       poptOption * table) [static]
+       Parameters:
+
+       table  option(s)
+
+       Definition at line 61 of file popthelp.c.
+
+       References POPT_ARG_INTL_DOMAIN, and table.
+
+       Referenced by singleTableHelp.
+
+   void itemHelp (FILE * fp, poptItem items, int nitems, int
+       left, const char * translation_domain) [static]
+       Display popt alias and exec help.
+
+       Parameters:
+
+       fp     output file handle
+
+       items  alias/exec array
+
+       nitems no. of alias/exec entries
+
+       translation_domain
+              translation domain
+
+       Definition at line 369 of file popthelp.c.
+
+       References singleOptionHelp.
+
+       Referenced by singleTableHelp.
+
+   int itemUsage (FILE * fp, int cursor, poptItem item, int
+       nitems, const char * translation_domain) [static]
+       Display popt alias and exec usage.
+
+       Parameters:
+
+       fp     output file handle
+
+       item   alias/exec array
+
+       nitems no. of ara/exec entries
+
+       translation_domain
+              translation domain
+
+       Definition at line 518 of file popthelp.c.
+
+       References POPT_ARG_INTL_DOMAIN, POPT_ARG_MASK, and
+       singleOptionUsage.
+
+       Referenced by poptPrintUsage.
+
+   int maxArgWidth (const struct poptOption * opt, const char *
+       translation_domain) [static]
+       Parameters:
+
+       opt    option(s)
+
+       translation_domain
+              translation domain
+
+       Definition at line 325 of file popthelp.c.
+
+       References getArgDescrip, POPT_ARG_INCLUDE_TABLE,
+       POPT_ARG_MASK, and POPT_ARGFLAG_ONEDASH.
+
+       Referenced by poptPrintHelp.
+
+   void poptPrintHelp (poptContext con, FILE * fp, int flags)
+       Definition at line 452 of file popthelp.c.
+
+       References maxArgWidth, POPT_, showHelpIntro, and
+       singleTableHelp.
+
+       Referenced by displayArgs.
+
+   void poptPrintUsage (poptContext con, FILE * fp, int flags)
+       Definition at line 607 of file popthelp.c.
+
+       References itemUsage, showHelpIntro, showShortOptions, and
+       singleTableUsage.
+
+       Referenced by displayArgs.
+
+   void poptSetOtherOptionHelp (poptContext con, const char *
+       text)
+       Definition at line 626 of file popthelp.c.
+
+       References _free, and xstrdup.
+
+   int showHelpIntro (poptContext con, FILE * fp) [static]
+       Parameters:
+
+       con    context
+
+       fp     output file handle
+
+       Definition at line 432 of file popthelp.c.
+
+       References POPT_.
+
+       Referenced by poptPrintHelp, and poptPrintUsage.
+
+   int showShortOptions (const struct poptOption * opt, FILE *
+       fp, char * str) [static]
+       Return concatenated short options for display.
+
+       Parameters:
+
+       opt    option(s)
+
+       fp     output file handle
+
+       Return values:
+
+       str    concatenation of short options
+
+       Returns:
+           length of display string
+
+       Definition at line 577 of file popthelp.c.
+
+       References alloca, POPT_ARG_INCLUDE_TABLE, and
+       POPT_ARG_MASK.
+
+       Referenced by poptPrintUsage.
+
+   char* singleOptionDefaultValue (int lineLength, const struct
+       poptOption * opt, const char * translation_domain)
+       [static]
+       Parameters:
+
+       opt    option(s)
+
+       translation_domain
+              translation domain
+
+       Definition at line 109 of file popthelp.c.
+
+       References _free, D_, POPT_ARG_DOUBLE, POPT_ARG_FLOAT,
+       POPT_ARG_INT, POPT_ARG_LONG, POPT_ARG_MASK, POPT_ARG_NONE,
+       POPT_ARG_STRING, and POPT_ARG_VAL.
+
+       Referenced by singleOptionHelp.
+
+   void singleOptionHelp (FILE * fp, int maxLeftCol, const struct
+       poptOption * opt, const char * translation_domain)
+       [static]
+       Parameters:
+
+       fp     output file handle
+
+       opt    option(s)
+
+       translation_domain
+              translation domain
+
+       Definition at line 176 of file popthelp.c.
+
+       References _free, D_, getArgDescrip, ops, POPT_ARG_DOUBLE,
+       POPT_ARG_FLOAT, POPT_ARG_INT, POPT_ARG_LONG,
+       POPT_ARG_MASK, POPT_ARG_NONE, POPT_ARG_STRING,
+       POPT_ARG_VAL, POPT_ARGFLAG_ONEDASH, and
+       singleOptionDefaultValue.
+
+       Referenced by itemHelp, and singleTableHelp.
+
+   int singleOptionUsage (FILE * fp, int cursor, const struct
+       poptOption * opt, const char * translation_domain)
+       [static]
+       Parameters:
+
+       fp     output file handle
+
+       opt    option(s)
+
+       translation_domain
+              translation domain
+
+       Definition at line 471 of file popthelp.c.
+
+       References getArgDescrip, POPT_ARG_MASK, and
+       POPT_ARGFLAG_ONEDASH.
+
+       Referenced by itemUsage, and singleTableUsage.
+
+   void singleTableHelp (poptContext con, FILE * fp, const struct
+       poptOption * table, int left, const char *
+       translation_domain) [static]
+       Parameters:
+
+       fp     output file handle
+
+       table  option(s)
+
+       translation_domain
+              translation domain
+
+       Definition at line 392 of file popthelp.c.
+
+       References D_, getTableTranslationDomain, itemHelp,
+       POPT_ARG_INCLUDE_TABLE, POPT_ARG_MASK, poptAliasOptions,
+       singleOptionHelp, and table.
+
+       Referenced by poptPrintHelp.
+
+   int singleTableUsage (poptContext con, FILE * fp, int cursor,
+       const struct poptOption * opt, const char *
+       translation_domain) [static]
+       Parameters:
+
+       fp     output file handle
+
+       opt    option(s)
+
+       translation_domain
+              translation domain
+
+       Definition at line 546 of file popthelp.c.
+
+       References POPT_ARG_INCLUDE_TABLE, POPT_ARG_INTL_DOMAIN,
+       POPT_ARG_MASK, and singleOptionUsage.
+
+       Referenced by poptPrintUsage.
+
+VARIABLE DOCUMENTATION
+   struct poptOption poptAliasOptions[]
+       Initial value:
+
+        {
+           POPT_TABLEEND
+       }
+       Empty table marker to enable displaying popt alias/exec
+       options.
+
+       Definition at line 37 of file popthelp.c.
+
+       Referenced by singleTableHelp.
+
+   struct poptOption poptHelpOptions[]
+       Initial value:
+
+        {
+         { NULL, ' ', POPT_ARG_CALLBACK, (void *)&displayArgs, ' ', NULL, NULL },
+         { 'help', '?', 0, NULL, '?',  'Show this help message' , NULL },
+         { 'usage', ' ', 0, NULL, 'u',  'Display brief usage message' , NULL },
+
+
+
+
+           POPT_TABLEEND
+       }
+       Auto help table options.
+
+       Definition at line 45 of file popthelp.c.
+
+       Referenced by getArgDescrip.
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002         popt/popthelp.c(3)

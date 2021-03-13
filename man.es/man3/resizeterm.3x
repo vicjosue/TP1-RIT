@@ -1,0 +1,59 @@
+resizeterm(3X)                                     resizeterm(3X)
+
+
+
+NAME
+       resizeterm - change the curses terminal size
+
+SYNOPSIS
+       #include <curses.h>
+
+       int resizeterm(int lines, int columns);
+
+DESCRIPTION
+       This  is  an extension to the curses library.  It provides
+       callers with a hook into the ncurses data to  resize  win­
+       dows, primarily for use by programs running in an X Window
+       terminal (e.g., xterm).  The function  resizeterm  resizes
+       the  standard  and current windows to the specified dimen­
+       sions, and adjusts other  bookkeeping  data  used  by  the
+       ncurses library that record the window dimensions.
+
+       When  resizing  the  windows, the function blank-fills the
+       areas that are extended. The  calling  application  should
+       fill in these areas with appropriate data.
+
+       The function attempts to resize all windows.  However, due
+       to the calling convention of pads, it is not  possible  to
+       resize  these  without  additional  interaction  with  the
+       application.
+
+RETURN VALUE
+       The function returns the integer ERR upon failure  and  OK
+       on success.  It will fail if either of the dimensions less
+       than or equal  to  zero,  or  if  an  error  occurs  while
+       (re)allocating memory for the windows.
+
+NOTES
+       While  this  function  is intended to be used to support a
+       signal handler (i.e., for SIGWINCH), care should be  taken
+       to  avoid invoking it in a context where malloc or realloc
+       may have been interrupted, since it uses those  functions.
+
+       If  ncurses  is configured to supply its own SIGWINCH han­
+       dler, the resizeterm function ungetch's a KEY_RESIZE which
+       will  be  read on the next call to getch.  This is used to
+       alert an application that the screen size has changed, and
+       that  it should repaint special features such as pads that
+       cannot be done automatically.
+
+SEE ALSO
+       wresize(3X).
+
+AUTHOR
+       Thomas Dickey (from an equivalent function written in 1988
+       for BSD curses).
+
+
+
+                                                   resizeterm(3X)

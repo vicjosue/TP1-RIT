@@ -1,0 +1,36 @@
+lpmove(8)             Easy Software Products            lpmove(8)
+
+
+
+NAME
+       lpmove - move a job to a new destination
+
+SYNOPSIS
+       lpmove [ -E ] job destination
+
+DESCRIPTION
+       lpmove  moves the specified job to destination. job can be
+       the job ID number or the old destination and job ID:
+
+            lpmove 123 newprinter
+            lpmove oldprinter-123 newprinter
+
+       The -E option forces encryption  when  connecting  to  the
+       server.
+
+COMPATIBILITY
+       The System V version of this command also allows moving of
+       all jobs from one queue to another. This functionality  is
+       currently not supported by CUPS.
+
+SEE ALSO
+       cancel(1),    lp(1),    CUPS    Software   Users   Manual,
+       http://localhost:631/documentation.html
+
+COPYRIGHT
+       Copyright 1993-2002 by Easy Software Products, All  Rights
+       Reserved.
+
+
+
+23 January 2001    Common UNIX Printing System          lpmove(8)

@@ -1,0 +1,32 @@
+RDISTD(8)                                               RDISTD(8)
+
+
+
+NAME
+       rdistd - remote file distribution server program
+
+SYNOPSIS
+       rdistd -S [ -D ]
+
+       rdistd -V
+
+DESCRIPTION
+       Rdistd is the server program for the rdist command.  It is
+       normally run by rdist via rsh(1).
+
+       The -S argument must be specified.  The option is required
+       so  that  rdistd is not accidentally started since it nor­
+       mally resides somewhere in a normal user's $PATH.
+
+OPTIONS
+       -D     Enable debugging messages.  Messages are logged via
+              syslog(3).
+
+       -V     Print version information and exit.
+
+FILES
+SEE ALSO
+       rdist(1), rsh(1)
+
+BUGS
+                          June 21, 1992                 RDISTD(8)

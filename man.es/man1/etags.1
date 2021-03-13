@@ -1,0 +1,261 @@
+etags(1)                    GNU Tools                    etags(1)
+
+
+
+NAME
+       etags, gctags - generate tag file for Emacs, vi
+
+SYNOPSIS
+       etags [-aCDGImRVh] [-i file] [-l language]
+       [-o tagfile] [-r regexp]
+       [--append] [--no-defines] [--no-globals] [--include=file]
+       [--ignore-indentation] [--language=language] [--members]
+       [--output=tagfile] [--regex=regexp] [--no-regex]
+       [--ignore-case-regex=regexp] [--help] [--version] file ...
+
+       gctags [-aCdgImRVh] [-BtTuvwx] [-l language]
+       [-o tagfile] [-r regexp]
+       [--append] [--backward-search] [--cxref] [--defines]
+       [--forward-search] [--globals] [--ignore-indentation]
+       [--language=language] [--members] [--output=tagfile]
+       [--regex=regexp] [--ignore-case-regex=regexp] [--typedefs]
+       [--typedefs-and-c++] [--update] [--no-warn] [--help]
+       [--version] file ...
+
+DESCRIPTION
+       The etags program is used to create a tag table file, in a
+       format  understood by emacs(1); the gctags program is used
+       to create a similar table in a format understood by vi(1).
+       Both  forms of the program understand the syntax of C, Ob­
+       jective C, C++, Java, Fortran, Ada, Cobol, Erlang,  LaTeX,
+       Emacs   Lisp/Common   Lisp,   makefiles,   Pascal,   Perl,
+       Postscript, Python, Prolog, Scheme and most assembler-like
+       syntaxes.  Both forms read the files specified on the com­
+       mand line, and write  a  tag  table  (defaults:  TAGS  for
+       etags,  tags for gctags) in the current working directory.
+       Files specified with relative file names will be  recorded
+       in the tag table with file names relative to the directory
+       where the tag table resides.  Files specified  with  abso­
+       lute file names will be recorded with absolute file names.
+       The programs recognize the language used in an input  file
+       based  on  its  file  name  and  contents.  The --language
+       switch can be used to force parsing of the file names fol­
+       lowing  the  switch according to the given language, over­
+       riding guesses based on filename extensions.
+
+OPTIONS
+       Some options make sense only for the vi  style  tag  files
+       produced  by  gctags;  etags does not recognize them.  The
+       programs accept unambiguous abbreviations for long  option
+       names.
+
+       -a, --append
+              Append  to  existing  tag file.  (For vi-format tag
+              files, see also --update.)
+
+       -B, --backward-search
+              Tag files written in the format expected by vi con­
+              tain regular expression search instructions; the -B
+              option writes them  using  the  delimiter  `?',  to
+              search  backwards through files.  The default is to
+              use the delimiter `/', to search  forwards  through
+              files.  Only gctags accepts this option.
+
+       --declarations
+              In  C  and derived languages, create tags for func­
+              tion declarations, and create tags for extern vari­
+              ables unless --no-globals is used.
+
+       -d, --defines
+              Create tag entries for C preprocessor constant def­
+              initions and enum constants, too.  This is the  de­
+              fault behavior for etags.
+
+       -D, --no-defines
+              Do  not  create tag entries for C preprocessor con­
+              stant definitions and  enum  constants.   This  may
+              make  the  tags  file  much  smaller if many header
+              files are tagged.  This is the default behavior for
+              gctags.
+
+       -g, --globals
+              Create  tag entries for global variables in C, C++,
+              Objective C, Java, and Perl.  This is  the  default
+              behavior for etags.
+
+       -G, --no-globals
+              Do  not  tag  global variables.  Typically this re­
+              duces the file size by one fourth.  This is the de­
+              fault behavior for gctags.
+
+       -i file, --include=file
+              Include  a  note  in  the tag file indicating that,
+              when searching for a tag, one should  also  consult
+              the tags file file after checking the current file.
+              This options is only accepted by etags.
+
+       -I, --ignore-indentation
+              Don't rely on indentation as much  as  we  normally
+              do.   Currently,  this  means  not to assume that a
+              closing brace in the  first  column  is  the  final
+              brace  of  a  function or structure definition in C
+              and C++.
+
+       -l language, --language=language
+              Parse the following files according  to  the  given
+              language.  More than one such options may be inter­
+              mixed with filenames.  Use --help to get a list  of
+              the  available languages and their default filename
+              extensions.  The `auto' language can be used to re­
+              store  automatic detection of language based on the
+              file name.  The `none' language may be used to dis­
+              able   language  parsing  altogether;  only  regexp
+              matching is done in this case (see the --regex  op­
+              tion).
+
+       -m, --members
+              Create  tag  entries for variables that are members
+              of structure-like constructs in C++,  Objective  C,
+              Java.
+
+       -M, --no-members
+              Do  not  tag member variables.  This is the default
+              behavior.
+
+       --packages-only
+              Only tag packages in Ada files.
+
+       -o tagfile, --output=tagfile
+              Explicit name of file for tag table; overrides  de­
+              fault  TAGS or tags.   (But ignored with -v or -x.)
+
+       -r regexp, --regex=regexp
+
+       --ignore-case-regex=regexp
+              Make tags based on regexp matching for each line of
+              the files following this option, in addition to the
+              tags made with the standard parsing based  on  lan­
+              guage.   When  using  --regex, case is significant,
+              while it is not with  --ignore-case-regex.  May  be
+              freely intermixed with filenames and the -R option.
+              The regexps are cumulative, i.e. each  option  will
+              add  to  the previous ones.  The regexps are of the
+              form:
+                   /tagregexp[/nameregexp]/
+
+              where tagregexp is used to  match  the  lines  that
+              must  be tagged.  It should not match useless char­
+              acters.  If the match is such that more  characters
+              than  needed  are unavoidably matched by tagregexp,
+              it may be useful to add  a  nameregexp,  to  narrow
+              down the tag scope.  gctags ignores regexps without
+              a nameregexp.  The syntax of regexps is the same as
+              in  emacs,  augmented  with  intervals  of the form
+              \{m,n\}, as in ed or grep.
+              Here are some examples.  All the regexps are quoted
+              to protect them from shell interpretation.
+
+              Tag the DEFVAR macros in the emacs source files:
+              --regex='/[ \t]*DEFVAR_[A-Z_ \t(]+"\([^"]+\)"'
+
+              Tag VHDL files (this example is a single long line,
+              broken here for formatting reasons):
+              --language=none --regex='/[ \t]*\(ARCHITECTURE\|\
+              CONFIGURATION\) +[^ ]* +OF/' --regex='/[ \t]*\
+              \(ATTRIBUTE\|ENTITY\|FUNCTION\|PACKAGE\( BODY\)?\
+              \|PROCEDURE\|PROCESS\|TYPE\)[ \t]+\([^ \t(]+\)/\3/'
+
+              Tag TCL files (this last example shows the usage of
+              a tagregexp):
+              --lang=none --regex='/proc[ \t]+\([^ \t]+\)/\1/'
+
+              A  regexp can be preceded by {lang}, thus restrict­
+              ing it to match lines of  files  of  the  specified
+              language.  Use etags --help to obtain a list of the
+              recognised languages.  This feature is particularly
+              useful  inside  regex files.  A regex file contains
+              one regex per line.  Empty lines, and  those  lines
+              beginning with space or tab are ignored.  Lines be­
+              ginning with @ are references to regex files  whose
+              name  follows  the @ sign.  Other lines are consid­
+              ered  regular  expressions  like  those   following
+              --regex.
+              For example, the command
+              etags --regex=@regex.file *.c
+              reads the regexes contained in the file regex.file.
+
+       -R, --no-regex
+              Don't do any more regexp matching on the  following
+              files.  May be freely intermixed with filenames and
+              the --regex option.
+
+       -t, --typedefs
+              Record typedefs in C code as tags.  Since  this  is
+              the default behaviour of etags, only gctags accepts
+              this option.
+
+       -T, --typedefs-and-c++
+              Generate tag entries for  typedefs,  struct,  enum,
+              and  union  tags,  and C++ member functions.  Since
+              this is the default behaviour of etags, only gctags
+              accepts this option.
+
+       -u, --update
+              Update  tag  entries for files specified on command
+              line, leaving tag entries for other files in place.
+              Currently,  this is implemented by deleting the ex­
+              isting entries for the given files and then rewrit­
+              ing  the  new  entries at the end of the tags file.
+              It is often faster to simply rebuild the entire tag
+              file  than  to  use this.  Only gctags accepts this
+              option.
+
+       -v, --vgrind
+              Instead of generating a tag file, write  index  (in
+              vgrind format) to standard output.  Only gctags ac­
+              cepts this option.
+
+       -w, --no-warn
+              Suppress warning messages about duplicate  entries.
+              The  etags program does not check for duplicate en­
+              tries, so this option is not allowed with it.
+
+       -x, --cxref
+              Instead of generating a tag  file,  write  a  cross
+              reference  (in  cxref  format)  to standard output.
+              Only gctags accepts this option.
+
+       -h, -H, --help
+              Print usage information.
+
+       -V, --version
+              Print the current version of the program  (same  as
+              the version of the emacs etags is shipped with).
+
+
+SEE ALSO
+       `emacs' entry in info; GNU Emacs Manual, Richard Stallman.
+       cxref(1), emacs(1), vgrind(1), vi(1).
+
+
+COPYING
+       Copyright (c) 1999, 2001 Free Software Foundation, Inc.
+
+       Permission is granted to copy,  distribute  and/or  modify
+       this  document  under the terms of the GNU Free Documenta­
+       tion License, Version 1.1 or any later  version  published
+       by  the  Free  Software Foundation; with no Invariant Sec­
+       tions, with no Front-Cover Texts, and no Back-Cover Texts.
+
+       This  document  is  part of a collection distributed under
+       the GNU Free Documentation License.  If you want  to  dis­
+       tribute  this document separately from the collection, you
+       can do so by adding a copy of the license to the document,
+       as  described  in section 6 of the license.  A copy of the
+       license is included in the gfdl(1) man page,  and  in  the
+       section  entitled  "GNU Free Documentation License" in the
+       Emacs manual.
+
+
+
+GNU Tools                   08apr2001                    etags(1)

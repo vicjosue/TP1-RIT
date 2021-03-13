@@ -1,0 +1,1204 @@
+PERLFAQ8(1)      Perl Programmers Reference Guide     PERLFAQ8(1)
+
+
+
+NNAAMMEE
+       perlfaq8 - System Interaction ($Revision: 1.39 $, $Date:
+       1999/05/23 18:37:57 $)
+
+DDEESSCCRRIIPPTTIIOONN
+       This section of the Perl FAQ covers questions involving
+       operating system interaction.  Topics include interprocess
+       communication (IPC), control over the user-interface (key­
+       board, screen and pointing devices), and most anything
+       else not related to data manipulation.
+
+       Read the FAQs and documentation specific to the port of
+       perl to your operating system (eg, the perlvms manpage,
+       the perlplan9 manpage, ...).  These should contain more
+       detailed information on the vagaries of your perl.
+
+       HHooww ddoo II ffiinndd oouutt wwhhiicchh ooppeerraattiinngg ssyysstteemm II''mm rruunnnniinngg
+       uunnddeerr??
+
+       The $^O variable ($OSNAME if you use English) contains an
+       indication of the name of the operating system (not its
+       release number) that your perl binary was built for.
+
+       HHooww ccoommee exec() ddooeessnn''tt rreettuurrnn??
+
+       Because that's what it does: it replaces your currently
+       running program with a different one.  If you want to keep
+       going (as is probably the case if you're asking this ques­
+       tion) use system() instead.
+
+       HHooww ddoo II ddoo ffaannccyy ssttuuffff wwiitthh tthhee kkeeyybbooaarrdd//ssccrreeeenn//mmoouussee??
+
+       How you access/control keyboards, screens, and pointing
+       devices ("mice") is system-dependent.  Try the following
+       modules:
+
+       Keyboard
+               Term::Cap                   Standard perl distribution
+               Term::ReadKey               CPAN
+               Term::ReadLine::Gnu         CPAN
+               Term::ReadLine::Perl        CPAN
+               Term::Screen                CPAN
+
+
+       Screen
+               Term::Cap                   Standard perl distribution
+               Curses                      CPAN
+               Term::ANSIColor             CPAN
+
+
+       Mouse
+               Tk                          CPAN
+
+
+       Some of these specific cases are shown below.
+
+       HHooww ddoo II pprriinntt ssoommeetthhiinngg oouutt iinn ccoolloorr??
+
+       In general, you don't, because you don't know whether the
+       recipient has a color-aware display device.  If you know
+       that they have an ANSI terminal that understands color,
+       you can use the Term::ANSIColor module from CPAN:
+
+           use Term::ANSIColor;
+           print color("red"), "Stop!\n", color("reset");
+           print color("green"), "Go!\n", color("reset");
+
+       Or like this:
+
+           use Term::ANSIColor qw(:constants);
+           print RED, "Stop!\n", RESET;
+           print GREEN, "Go!\n", RESET;
+
+
+       HHooww ddoo II rreeaadd jjuusstt oonnee kkeeyy wwiitthhoouutt wwaaiittiinngg ffoorr aa rreettuurrnn
+       kkeeyy??
+
+       Controlling input buffering is a remarkably system-depen­
+       dent matter.  On many systems, you can just use the ssttttyy
+       command as shown in the getc entry in the perlfunc man­
+       page, but as you see, that's already getting you into
+       portability snags.
+
+           open(TTY, "+</dev/tty") or die "no tty: $!";
+           system "stty  cbreak </dev/tty >/dev/tty 2>&1";
+           $key = getc(TTY);           # perhaps this works
+           # OR ELSE
+           sysread(TTY, $key, 1);      # probably this does
+           system "stty -cbreak </dev/tty >/dev/tty 2>&1";
+
+       The Term::ReadKey module from CPAN offers an easy-to-use
+       interface that should be more efficient than shelling out
+       to ssttttyy for each key.  It even includes limited support
+       for Windows.
+
+           use Term::ReadKey;
+           ReadMode('cbreak');
+           $key = ReadKey(0);
+           ReadMode('normal');
+
+       However, using the code requires that you have a working C
+       compiler and can use it to build and install a CPAN mod­
+       ule.  Here's a solution using the standard POSIX module,
+       which is already on your systems (assuming your system
+       supports POSIX).
+
+           use HotKey;
+           $key = readkey();
+
+       And here's the HotKey module, which hides the somewhat
+       mystifying calls to manipulate the POSIX termios struc­
+       tures.
+
+           # HotKey.pm
+           package HotKey;
+
+           @ISA = qw(Exporter);
+           @EXPORT = qw(cbreak cooked readkey);
+
+           use strict;
+           use POSIX qw(:termios_h);
+           my ($term, $oterm, $echo, $noecho, $fd_stdin);
+
+           $fd_stdin = fileno(STDIN);
+           $term     = POSIX::Termios->new();
+           $term->getattr($fd_stdin);
+           $oterm     = $term->getlflag();
+
+           $echo     = ECHO | ECHOK | ICANON;
+           $noecho   = $oterm & ~$echo;
+
+           sub cbreak {
+               $term->setlflag($noecho);  # ok, so i don't want echo either
+               $term->setcc(VTIME, 1);
+               $term->setattr($fd_stdin, TCSANOW);
+           }
+
+           sub cooked {
+               $term->setlflag($oterm);
+               $term->setcc(VTIME, 0);
+               $term->setattr($fd_stdin, TCSANOW);
+           }
+
+           sub readkey {
+               my $key = '';
+               cbreak();
+               sysread(STDIN, $key, 1);
+               cooked();
+               return $key;
+           }
+
+           END { cooked() }
+
+           1;
+
+
+       HHooww ddoo II cchheecckk wwhheetthheerr iinnppuutt iiss rreeaaddyy oonn tthhee kkeeyybbooaarrdd??
+
+       The easiest way to do this is to read a key in nonblocking
+       mode with the Term::ReadKey module from CPAN, passing it
+       an argument of -1 to indicate not to block:
+
+           use Term::ReadKey;
+
+           ReadMode('cbreak');
+
+           if (defined ($char = ReadKey(-1)) ) {
+               # input was waiting and it was $char
+           } else {
+               # no input was waiting
+           }
+
+           ReadMode('normal');                  # restore normal tty settings
+
+
+       HHooww ddoo II cclleeaarr tthhee ssccrreeeenn??
+
+       If you only have do so infrequently, use "system":
+
+           system("clear");
+
+       If you have to do this a lot, save the clear string so you
+       can print it 100 times without calling a program 100
+       times:
+
+           $clear_string = `clear`;
+           print $clear_string;
+
+       If you're planning on doing other screen manipulations,
+       like cursor positions, etc, you might wish to use
+       Term::Cap module:
+
+
+
+           use Term::Cap;
+           $terminal = Term::Cap->Tgetent( {OSPEED => 9600} );
+           $clear_string = $terminal->Tputs('cl');
+
+
+       HHooww ddoo II ggeett tthhee ssccrreeeenn ssiizzee??
+
+       If you have Term::ReadKey module installed from CPAN, you
+       can use it to fetch the width and height in characters and
+       in pixels:
+
+           use Term::ReadKey;
+           ($wchar, $hchar, $wpixels, $hpixels) = GetTerminalSize();
+
+       This is more portable than the raw "ioctl", but not as
+       illustrative:
+
+           require 'sys/ioctl.ph';
+           die "no TIOCGWINSZ " unless defined &TIOCGWINSZ;
+           open(TTY, "+</dev/tty")                     or die "No tty: $!";
+           unless (ioctl(TTY, &TIOCGWINSZ, $winsize='')) {
+               die sprintf "$0: ioctl TIOCGWINSZ (%08x: $!)\n", &TIOCGWINSZ;
+           }
+           ($row, $col, $xpixel, $ypixel) = unpack('S4', $winsize);
+           print "(row,col) = ($row,$col)";
+           print "  (xpixel,ypixel) = ($xpixel,$ypixel)" if $xpixel || $ypixel;
+           print "\n";
+
+
+       HHooww ddoo II aasskk tthhee uusseerr ffoorr aa ppaasssswwoorrdd??
+
+       (This question has nothing to do with the web.  See a dif­
+       ferent FAQ for that.)
+
+       There's an example of this in the crypt entry in the perl­
+       func manpage).  First, you put the terminal into "no echo"
+       mode, then just read the password normally.  You may do
+       this with an old-style ioctl() function, POSIX terminal
+       control (see the POSIX manpage or its documentation the
+       Camel Book), or a call to the ssttttyy program, with varying
+       degrees of portability.
+
+       You can also do this for most systems using the
+       Term::ReadKey module from CPAN, which is easier to use and
+       in theory more portable.
+
+           use Term::ReadKey;
+
+           ReadMode('noecho');
+           $password = ReadLine(0);
+
+
+       HHooww ddoo II rreeaadd aanndd wwrriittee tthhee sseerriiaall ppoorrtt??
+
+       This depends on which operating system your program is
+       running on.  In the case of Unix, the serial ports will be
+       accessible through files in /dev; on other systems, device
+       names will doubtless differ.  Several problem areas common
+       to all device interaction are the following:
+
+       lockfiles
+           Your system may use lockfiles to control multiple
+           access.  Make sure you follow the correct protocol.
+           Unpredictable behavior can result from multiple pro­
+           cesses reading from one device.
+
+
+       open mode
+           If you expect to use both read and write operations on
+           the device, you'll have to open it for update (see the
+           open entry in the perlfunc manpage for details).  You
+           may wish to open it without running the risk of block­
+           ing by using sysopen() and "O_RDWR|O_NDELAY|O_NOCTTY"
+           from the Fcntl module (part of the standard perl dis­
+           tribution).  See the sysopen entry in the perlfunc
+           manpage for more on this approach.
+
+       end of line
+           Some devices will be expecting a "\r" at the end of
+           each line rather than a "\n".  In some ports of perl,
+           "\r" and "\n" are different from their usual (Unix)
+           ASCII values of "\012" and "\015".  You may have to
+           give the numeric values you want directly, using octal
+           ("\015"), hex ("0x0D"), or as a control-character
+           specification ("\cM").
+
+               print DEV "atv1\012";       # wrong, for some devices
+               print DEV "atv1\015";       # right, for some devices
+
+           Even though with normal text files a "\n" will do the
+           trick, there is still no unified scheme for terminat­
+           ing a line that is portable between Unix, DOS/Win, and
+           Macintosh, except to terminate ALL line ends with
+           "\015\012", and strip what you don't need from the
+           output.  This applies especially to socket I/O and
+           autoflushing, discussed next.
+
+       flushing output
+           If you expect characters to get to your device when
+           you print() them, you'll want to autoflush that file­
+           handle.  You can use select() and the "$|" variable to
+           control autoflushing (see perlvar/$ and the select
+           entry in the perlfunc manpage, or the perlfaq5 man­
+           page, ``How do I flush/unbuffer an output filehandle?
+           Why must I do this?''):
+
+               $oldh = select(DEV);
+               $| = 1;
+               select($oldh);
+
+           You'll also see code that does this without a tempo­
+           rary variable, as in
+
+               select((select(DEV), $| = 1)[0]);
+
+           Or if you don't mind pulling in a few thousand lines
+           of code just because you're afraid of a little $|
+           variable:
+
+               use IO::Handle;
+               DEV->autoflush(1);
+
+           As mentioned in the previous item, this still doesn't
+           work when using socket I/O between Unix and Macintosh.
+           You'll need to hardcode your line terminators, in that
+           case.
+
+       non-blocking input
+           If you are doing a blocking read() or sysread(),
+           you'll have to arrange for an alarm handler to provide
+           a timeout (see the alarm entry in the perlfunc man­
+           page).  If you have a non-blocking open, you'll likely
+           have a non-blocking read, which means you may have to
+           use a 4-arg select() to determine whether I/O is ready
+           on that device (see the select entry in the perlfunc
+           manpage.
+
+       While trying to read from his caller-id box, the notorious
+       Jamie Zawinski <jwz@netscape.com>, after much gnashing of
+       teeth and fighting with sysread, sysopen, POSIX's tcge­
+       tattr business, and various other functions that go bump
+       in the night, finally came up with this:
+
+           sub open_modem {
+               use IPC::Open2;
+               my $stty = `/bin/stty -g`;
+               open2( \*MODEM_IN, \*MODEM_OUT, "cu -l$modem_device -s2400 2>&1");
+               # starting cu hoses /dev/tty's stty settings, even when it has
+               # been opened on a pipe...
+               system("/bin/stty $stty");
+               $_ = <MODEM_IN>;
+               chomp;
+               if ( !m/^Connected/ ) {
+                   print STDERR "$0: cu printed `$_' instead of `Connected'\n";
+               }
+           }
+
+
+       HHooww ddoo II ddeeccooddee eennccrryypptteedd ppaasssswwoorrdd ffiilleess??
+
+       You spend lots and lots of money on dedicated hardware,
+       but this is bound to get you talked about.
+
+       Seriously, you can't if they are Unix password files--the
+       Unix password system employs one-way encryption.  It's
+       more like hashing than encryption.  The best you can check
+       is whether something else hashes to the same string.  You
+       can't turn a hash back into the original string.  Programs
+       like Crack can forcibly (and intelligently) try to guess
+       passwords, but don't (can't) guarantee quick success.
+
+       If you're worried about users selecting bad passwords, you
+       should proactively check when they try to change their
+       password (by modifying passwd(1), for example).
+
+       HHooww ddoo II ssttaarrtt aa pprroocceessss iinn tthhee bbaacckkggrroouunndd??
+
+       You could use
+
+           system("cmd &")
+
+       or you could use fork as documented in the fork entry in
+       the perlfunc manpage, with further examples in the perlipc
+       manpage.  Some things to be aware of, if you're on a Unix-
+       like system:
+
+       STDIN, STDOUT, and STDERR are shared
+           Both the main process and the backgrounded one (the
+           "child" process) share the same STDIN, STDOUT and
+           STDERR filehandles.  If both try to access them at
+           once, strange things can happen.  You may want to
+           close or reopen these for the child.  You can get
+           around this with "open"ing a pipe (see the open entry
+           in the perlfunc manpage) but on some systems this
+           means that the child process cannot outlive the par­
+           ent.
+
+
+
+       Signals
+           You'll have to catch the SIGCHLD signal, and possibly
+           SIGPIPE too.  SIGCHLD is sent when the backgrounded
+           process finishes.  SIGPIPE is sent when you write to a
+           filehandle whose child process has closed (an
+           untrapped SIGPIPE can cause your program to silently
+           die).  This is not an issue with "system("cmd&")".
+
+       Zombies
+           You have to be prepared to "reap" the child process
+           when it finishes
+
+               $SIG{CHLD} = sub { wait };
+
+           See the Signals entry in the perlipc manpage for other
+           examples of code to do this.  Zombies are not an issue
+           with "system("prog &")".
+
+       HHooww ddoo II ttrraapp ccoonnttrrooll cchhaarraacctteerrss//ssiiggnnaallss??
+
+       You don't actually "trap" a control character.  Instead,
+       that character generates a signal which is sent to your
+       terminal's currently foregrounded process group, which you
+       then trap in your process.  Signals are documented in the
+       Signals entry in the perlipc manpage and the section on
+       ``Signals'' in the Camel.
+
+       Be warned that very few C libraries are re-entrant.
+       Therefore, if you attempt to print() in a handler that got
+       invoked during another stdio operation your internal
+       structures will likely be in an inconsistent state, and
+       your program will dump core.  You can sometimes avoid this
+       by using syswrite() instead of print().
+
+       Unless you're exceedingly careful, the only safe things to
+       do inside a signal handler are (1) set a variable and (2)
+       exit.  In the first case, you should only set a variable
+       in such a way that malloc() is not called (eg, by setting
+       a variable that already has a value).
+
+       For example:
+
+           $Interrupted = 0;   # to ensure it has a value
+           $SIG{INT} = sub {
+               $Interrupted++;
+               syswrite(STDERR, "ouch\n", 5);
+           }
+
+       However, because syscalls restart by default, you'll find
+       that if you're in a "slow" call, such as <FH>, read(),
+       connect(), or wait(), that the only way to terminate them
+       is by "longjumping" out; that is, by raising an exception.
+       See the time-out handler for a blocking flock() in the
+       Signals entry in the perlipc manpage or the section on
+       ``Signals'' in the Camel book.
+
+       HHooww ddoo II mmooddiiffyy tthhee sshhaaddooww ppaasssswwoorrdd ffiillee oonn aa UUnniixx ssyysstteemm??
+
+       If perl was installed correctly and your shadow library
+       was written properly, the getpw*() functions described in
+       the perlfunc manpage should in theory provide (read-only)
+       access to entries in the shadow password file.  To change
+       the file, make a new shadow password file (the format
+       varies from system to system--see passwd(5) for specifics)
+       and use pwd_mkdb(8) to install it (see pwd_mkdb(8) for
+       more details).
+
+       HHooww ddoo II sseett tthhee ttiimmee aanndd ddaattee??
+
+       Assuming you're running under sufficient permissions, you
+       should be able to set the system-wide date and time by
+       running the date(1) program.  (There is no way to set the
+       time and date on a per-process basis.)  This mechanism
+       will work for Unix, MS-DOS, Windows, and NT; the VMS
+       equivalent is "set time".
+
+       However, if all you want to do is change your timezone,
+       you can probably get away with setting an environment
+       variable:
+
+           $ENV{TZ} = "MST7MDT";                  # unixish
+           $ENV{'SYS$TIMEZONE_DIFFERENTIAL'}="-5" # vms
+           system "trn comp.lang.perl.misc";
+
+
+       HHooww ccaann II sleep() oorr alarm() ffoorr uunnddeerr aa sseeccoonndd??
+
+       If you want finer granularity than the 1 second that the
+       sleep() function provides, the easiest way is to use the
+       select() function as documented in the select entry in the
+       perlfunc manpage.  Try the Time::HiRes and the BSD::Itimer
+       modules (available from CPAN).
+
+       HHooww ccaann II mmeeaassuurree ttiimmee uunnddeerr aa sseeccoonndd??
+
+       In general, you may not be able to.  The Time::HiRes mod­
+       ule (available from CPAN) provides this functionality for
+       some systems.
+
+       If your system supports both the syscall() function in
+       Perl as well as a system call like gettimeofday(2), then
+       you may be able to do something like this:
+
+           require 'sys/syscall.ph';
+
+           $TIMEVAL_T = "LL";
+
+           $done = $start = pack($TIMEVAL_T, ());
+
+           syscall(&SYS_gettimeofday, $start, 0) != -1
+                      or die "gettimeofday: $!";
+
+              ##########################
+              # DO YOUR OPERATION HERE #
+              ##########################
+
+           syscall( &SYS_gettimeofday, $done, 0) != -1
+                  or die "gettimeofday: $!";
+
+           @start = unpack($TIMEVAL_T, $start);
+           @done  = unpack($TIMEVAL_T, $done);
+
+           # fix microseconds
+           for ($done[1], $start[1]) { $_ /= 1_000_000 }
+
+           $delta_time = sprintf "%.4f", ($done[0]  + $done[1]  )
+                                                   -
+                                        ($start[0] + $start[1] );
+
+
+
+
+       HHooww ccaann II ddoo aann atexit() oorr setjmp()//longjmp()?? ((EExxcceeppttiioonn
+       hhaannddlliinngg))
+
+       Release 5 of Perl added the END block, which can be used
+       to simulate atexit().  Each package's END block is called
+       when the program or thread ends (see the perlmod manpage
+       manpage for more details).
+
+       For example, you can use this to make sure your filter
+       program managed to finish its output without filling up
+       the disk:
+
+           END {
+               close(STDOUT) || die "stdout close failed: $!";
+           }
+
+       The END block isn't called when untrapped signals kill the
+       program, though, so if you use END blocks you should also
+       use
+
+               use sigtrap qw(die normal-signals);
+
+       Perl's exception-handling mechanism is its eval() opera­
+       tor.  You can use eval() as setjmp and die() as longjmp.
+       For details of this, see the section on signals, espe­
+       cially the time-out handler for a blocking flock() in the
+       Signals entry in the perlipc manpage or the section on
+       ``Signals'' in the Camel Book.
+
+       If exception handling is all you're interested in, try the
+       exceptions.pl library (part of the standard perl distribu­
+       tion).
+
+       If you want the atexit() syntax (and an rmexit() as well),
+       try the AtExit module available from CPAN.
+
+       WWhhyy ddooeessnn''tt mmyy ssoocckkeettss pprrooggrraamm wwoorrkk uunnddeerr SSyysstteemm VV
+       ((SSoollaarriiss))??  WWhhaatt ddooeess tthhee eerrrroorr mmeessssaaggee ""PPrroottooccooll nnoott ssuupp­­
+       ppoorrtteedd"" mmeeaann??
+
+       Some Sys-V based systems, notably Solaris 2.X, redefined
+       some of the standard socket constants.  Since these were
+       constant across all architectures, they were often hard­
+       wired into perl code.  The proper way to deal with this is
+       to "use Socket" to get the correct values.
+
+       Note that even though SunOS and Solaris are binary compat­
+       ible, these values are different.  Go figure.
+
+       HHooww ccaann II ccaallll mmyy ssyysstteemm''ss uunniiqquuee CC ffuunnccttiioonnss ffrroomm PPeerrll??
+
+       In most cases, you write an external module to do it--see
+       the answer to "Where can I learn about linking C with
+       Perl? [h2xs, xsubpp]".  However, if the function is a sys­
+       tem call, and your system supports syscall(), you can use
+       the syscall function (documented in the perlfunc manpage).
+
+       Remember to check the modules that came with your distri­
+       bution, and CPAN as well--someone may already have written
+       a module to do it.
+
+       WWhheerree ddoo II ggeett tthhee iinncclluuddee ffiilleess ttoo ddoo ioctl() oorr
+       syscall()??
+
+       Historically, these would be generated by the h2ph tool,
+       part of the standard perl distribution.  This program con­
+       verts cpp(1) directives in C header files to files con­
+       taining subroutine definitions, like &SYS_getitimer, which
+       you can use as arguments to your functions.  It doesn't
+       work perfectly, but it usually gets most of the job done.
+       Simple files like errno.h, syscall.h, and socket.h were
+       fine, but the hard ones like ioctl.h nearly always need to
+       hand-edited.  Here's how to install the *.ph files:
+
+           1.  become super-user
+           2.  cd /usr/include
+           3.  h2ph *.h */*.h
+
+       If your system supports dynamic loading, for reasons of
+       portability and sanity you probably ought to use h2xs
+       (also part of the standard perl distribution).  This tool
+       converts C header files to Perl extensions.  See the per­
+       lxstut manpage for how to get started with h2xs.
+
+       If your system doesn't support dynamic loading, you still
+       probably ought to use h2xs.  See the perlxstut manpage and
+       the ExtUtils::MakeMaker manpage for more information (in
+       brief, just use mmaakkee ppeerrll instead of a plain mmaakkee to
+       rebuild perl with a new static extension).
+
+       WWhhyy ddoo sseettuuiidd ppeerrll ssccrriippttss ccoommppllaaiinn aabboouutt kkeerrnneell pprroobblleemmss??
+
+       Some operating systems have bugs in the kernel that make
+       setuid scripts inherently insecure.  Perl gives you a num­
+       ber of options (described in the perlsec manpage) to work
+       around such systems.
+
+       HHooww ccaann II ooppeenn aa ppiippee bbootthh ttoo aanndd ffrroomm aa ccoommmmaanndd??
+
+       The IPC::Open2 module (part of the standard perl distribu­
+       tion) is an easy-to-use approach that internally uses
+       pipe(), fork(), and exec() to do the job.  Make sure you
+       read the deadlock warnings in its documentation, though
+       (see the IPC::Open2 manpage).  See the Bidirectional Com­
+       munication with Another Process entry in the perlipc man­
+       page and the Bidirectional Communication with Yourself
+       entry in the perlipc manpage
+
+       You may also use the IPC::Open3 module (part of the stan­
+       dard perl distribution), but be warned that it has a dif­
+       ferent order of arguments from IPC::Open2 (see the
+       IPC::Open3 manpage).
+
+       WWhhyy ccaann''tt II ggeett tthhee oouuttppuutt ooff aa ccoommmmaanndd wwiitthh system()??
+
+       You're confusing the purpose of system() and backticks
+       (``).  system() runs a command and returns exit status
+       information (as a 16 bit value: the low 7 bits are the
+       signal the process died from, if any, and the high 8 bits
+       are the actual exit value).  Backticks (``) run a command
+       and return what it sent to STDOUT.
+
+           $exit_status   = system("mail-users");
+           $output_string = `ls`;
+
+
+       HHooww ccaann II ccaappttuurree SSTTDDEERRRR ffrroomm aann eexxtteerrnnaall ccoommmmaanndd??
+
+       There are three basic ways of running external commands:
+
+
+           system $cmd;                # using system()
+           $output = `$cmd`;           # using backticks (``)
+           open (PIPE, "cmd |");       # using open()
+
+       With system(), both STDOUT and STDERR will go the same
+       place as the script's STDOUT and STDERR, unless the sys­
+       tem() command redirects them.  Backticks and open() read
+       oonnllyy the STDOUT of your command.
+
+       With any of these, you can change file descriptors before
+       the call:
+
+           open(STDOUT, ">logfile");
+           system("ls");
+
+       or you can use Bourne shell file-descriptor redirection:
+
+           $output = `$cmd 2>some_file`;
+           open (PIPE, "cmd 2>some_file |");
+
+       You can also use file-descriptor redirection to make
+       STDERR a duplicate of STDOUT:
+
+           $output = `$cmd 2>&1`;
+           open (PIPE, "cmd 2>&1 |");
+
+       Note that you cannot simply open STDERR to be a dup of
+       STDOUT in your Perl program and avoid calling the shell to
+       do the redirection.  This doesn't work:
+
+           open(STDERR, ">&STDOUT");
+           $alloutput = `cmd args`;  # stderr still escapes
+
+       This fails because the open() makes STDERR go to where
+       STDOUT was going at the time of the open().  The backticks
+       then make STDOUT go to a string, but don't change STDERR
+       (which still goes to the old STDOUT).
+
+       Note that you must use Bourne shell (sh(1)) redirection
+       syntax in backticks, not csh(1)!  Details on why Perl's
+       system() and backtick and pipe opens all use the Bourne
+       shell are in http://www.perl.com/CPAN/doc/FMTEYEWTK/ver­
+       sus/csh.whynot .  To capture a command's STDERR and STDOUT
+       together:
+
+           $output = `cmd 2>&1`;                       # either with backticks
+           $pid = open(PH, "cmd 2>&1 |");              # or with an open pipe
+           while (<PH>) { }                            #    plus a read
+
+       To capture a command's STDOUT but discard its STDERR:
+
+           $output = `cmd 2>/dev/null`;                # either with backticks
+           $pid = open(PH, "cmd 2>/dev/null |");       # or with an open pipe
+           while (<PH>) { }                            #    plus a read
+
+       To capture a command's STDERR but discard its STDOUT:
+
+           $output = `cmd 2>&1 1>/dev/null`;           # either with backticks
+           $pid = open(PH, "cmd 2>&1 1>/dev/null |");  # or with an open pipe
+           while (<PH>) { }                            #    plus a read
+
+       To exchange a command's STDOUT and STDERR in order to cap­
+       ture the STDERR but leave its STDOUT to come out our old
+       STDERR:
+
+
+           $output = `cmd 3>&1 1>&2 2>&3 3>&-`;        # either with backticks
+           $pid = open(PH, "cmd 3>&1 1>&2 2>&3 3>&-|");# or with an open pipe
+           while (<PH>) { }                            #    plus a read
+
+       To read both a command's STDOUT and its STDERR separately,
+       it's easiest and safest to redirect them separately to
+       files, and then read from those files when the program is
+       done:
+
+           system("program args 1>/tmp/program.stdout 2>/tmp/program.stderr");
+
+       Ordering is important in all these examples.  That's
+       because the shell processes file descriptor redirections
+       in strictly left to right order.
+
+           system("prog args 1>tmpfile 2>&1");
+           system("prog args 2>&1 1>tmpfile");
+
+       The first command sends both standard out and standard
+       error to the temporary file.  The second command sends
+       only the old standard output there, and the old standard
+       error shows up on the old standard out.
+
+       WWhhyy ddooeessnn''tt open() rreettuurrnn aann eerrrroorr wwhheenn aa ppiippee ooppeenn ffaaiillss??
+
+       Because the pipe open takes place in two steps: first Perl
+       calls fork() to start a new process, then this new process
+       calls exec() to run the program you really wanted to open.
+       The first step reports success or failure to your process,
+       so open() can only tell you whether the fork() succeeded
+       or not.
+
+       To find out if the exec() step succeeded, you have to
+       catch SIGCHLD and wait() to get the exit status.  You
+       should also catch SIGPIPE if you're writing to the
+       child--you may not have found out the exec() failed by the
+       time you write.  This is documented in the perlipc man­
+       page.
+
+       In some cases, even this won't work.  If the second argu­
+       ment to a piped open() contains shell metacharacters, perl
+       fork()s, then exec()s a shell to decode the metacharacters
+       and eventually run the desired program.  Now when you call
+       wait(), you only learn whether or not the shell could be
+       successfully started...it's best to avoid shell metachar­
+       acters.
+
+       On systems that follow the spawn() paradigm, open() might
+       do what you expect--unless perl uses a shell to start your
+       command. In this case the fork()/exec() description still
+       applies.
+
+       WWhhaatt''ss wwrroonngg wwiitthh uussiinngg bbaacckkttiicckkss iinn aa vvooiidd ccoonntteexxtt??
+
+       Strictly speaking, nothing.  Stylistically speaking, it's
+       not a good way to write maintainable code because back­
+       ticks have a (potentially humongous) return value, and
+       you're ignoring it.  It's may also not be very efficient,
+       because you have to read in all the lines of output, allo­
+       cate memory for them, and then throw it away.  Too often
+       people are lulled to writing:
+
+           `cp file file.bak`;
+
+       And now they think "Hey, I'll just always use backticks to
+       run programs."  Bad idea: backticks are for capturing a
+       program's output; the system() function is for running
+       programs.
+
+       Consider this line:
+
+           `cat /etc/termcap`;
+
+       You haven't assigned the output anywhere, so it just
+       wastes memory (for a little while).  You forgot to check
+       "$?" to see whether the program even ran correctly, too.
+       Even if you wrote
+
+           print `cat /etc/termcap`;
+
+       this code could and probably should be written as
+
+           system("cat /etc/termcap") == 0
+               or die "cat program failed!";
+
+       which will get the output quickly (as it is generated,
+       instead of only at the end) and also check the return
+       value.
+
+       system() also provides direct control over whether shell
+       wildcard processing may take place, whereas backticks do
+       not.
+
+       HHooww ccaann II ccaallll bbaacckkttiicckkss wwiitthhoouutt sshheellll pprroocceessssiinngg??
+
+       This is a bit tricky.  Instead of writing
+
+           @ok = `grep @opts '$search_string' @filenames`;
+
+       You have to do this:
+
+           my @ok = ();
+           if (open(GREP, "-|")) {
+               while (<GREP>) {
+                   chomp;
+                   push(@ok, $_);
+               }
+               close GREP;
+           } else {
+               exec 'grep', @opts, $search_string, @filenames;
+           }
+
+       Just as with system(), no shell escapes happen when you
+       exec() a list.  Further examples of this can be found in
+       the Safe Pipe Opens entry in the perlipc manpage.
+
+       Note that if you're stuck on Microsoft, no solution to
+       this vexing issue is even possible.  Even if Perl were to
+       emulate fork(), you'd still be hosed, because Microsoft
+       gives no argc/argv-style API.  Their API always reparses
+       from a single string, which is fundamentally wrong, but
+       you're not likely to get the Gods of Redmond to acknowl­
+       edge this and fix it for you.
+
+       WWhhyy ccaann''tt mmyy ssccrriipptt rreeaadd ffrroomm SSTTDDIINN aafftteerr II ggaavvee iitt EEOOFF
+       ((^^DD oonn UUnniixx,, ^^ZZ oonn MMSS--DDOOSS))??
+
+       Some stdio's set error and eof flags that need clearing.
+       The POSIX module defines clearerr() that you can use.
+       That is the technically correct way to do it.  Here are
+       some less reliable workarounds:
+
+
+       1   Try keeping around the seekpointer and go there, like
+           this:
+
+               $where = tell(LOG);
+               seek(LOG, $where, 0);
+
+
+       2   If that doesn't work, try seeking to a different part
+           of the file and then back.
+
+       3   If that doesn't work, try seeking to a different part
+           of the file, reading something, and then seeking back.
+
+       4   If that doesn't work, give up on your stdio package
+           and use sysread.
+
+       HHooww ccaann II ccoonnvveerrtt mmyy sshheellll ssccrriipptt ttoo ppeerrll??
+
+       Learn Perl and rewrite it.  Seriously, there's no simple
+       converter.  Things that are awkward to do in the shell are
+       easy to do in Perl, and this very awkwardness is what
+       would make a shell->perl converter nigh-on impossible to
+       write.  By rewriting it, you'll think about what you're
+       really trying to do, and hopefully will escape the shell's
+       pipeline datastream paradigm, which while convenient for
+       some matters, causes many inefficiencies.
+
+       CCaann II uussee ppeerrll ttoo rruunn aa tteellnneett oorr ffttpp sseessssiioonn??
+
+       Try the Net::FTP, TCP::Client, and Net::Telnet modules
+       (available from CPAN).
+       http://www.perl.com/CPAN/scripts/netstuff/telnet.emul.shar
+       will also help for emulating the telnet protocol, but
+       Net::Telnet is quite probably easier to use..
+
+       If all you want to do is pretend to be telnet but don't
+       need the initial telnet handshaking, then the standard
+       dual-process approach will suffice:
+
+           use IO::Socket;             # new in 5.004
+           $handle = IO::Socket::INET->new('www.perl.com:80')
+                   || die "can't connect to port 80 on www.perl.com: $!";
+           $handle->autoflush(1);
+           if (fork()) {               # XXX: undef means failure
+               select($handle);
+               print while <STDIN>;    # everything from stdin to socket
+           } else {
+               print while <$handle>;  # everything from socket to stdout
+           }
+           close $handle;
+           exit;
+
+
+       HHooww ccaann II wwrriittee eexxppeecctt iinn PPeerrll??
+
+       Once upon a time, there was a library called chat2.pl
+       (part of the standard perl distribution), which never
+       really got finished.  If you find it somewhere, don't use
+       it.  These days, your best bet is to look at the Expect
+       module available from CPAN, which also requires two other
+       modules from CPAN, IO::Pty and IO::Stty.
+
+
+
+
+
+       IIss tthheerree aa wwaayy ttoo hhiiddee ppeerrll''ss ccoommmmaanndd lliinnee ffrroomm pprrooggrraammss
+       ssuucchh aass ""ppss""??
+
+       First of all note that if you're doing this for security
+       reasons (to avoid people seeing passwords, for example)
+       then you should rewrite your program so that critical
+       information is never given as an argument.  Hiding the
+       arguments won't make your program completely secure.
+
+       To actually alter the visible command line, you can assign
+       to the variable $0 as documented in the perlvar manpage.
+       This won't work on all operating systems, though.  Daemon
+       programs like sendmail place their state there, as in:
+
+           $0 = "orcus [accepting connections]";
+
+
+       II {{cchhaannggeedd ddiirreeccttoorryy,, mmooddiiffiieedd mmyy eennvviirroonnmmeenntt}} iinn aa ppeerrll
+       ssccrriipptt..  HHooww ccoommee tthhee cchhaannggee ddiissaappppeeaarreedd wwhheenn II eexxiitteedd tthhee
+       ssccrriipptt??  HHooww ddoo II ggeett mmyy cchhaannggeess ttoo bbee vviissiibbllee??
+
+
+       Unix
+           In the strictest sense, it can't be done--the script
+           executes as a different process from the shell it was
+           started from.  Changes to a process are not reflected
+           in its parent--only in any children created after the
+           change.  There is shell magic that may allow you to
+           fake it by eval()ing the script's output in your
+           shell; check out the comp.unix.questions FAQ for
+           details.
+
+       HHooww ddoo II cclloossee aa pprroocceessss''ss ffiilleehhaannddllee wwiitthhoouutt wwaaiittiinngg ffoorr
+       iitt ttoo ccoommpplleettee??
+
+       Assuming your system supports such things, just send an
+       appropriate signal to the process (see the kill entry in
+       the perlfunc manpage).  It's common to first send a TERM
+       signal, wait a little bit, and then send a KILL signal to
+       finish it off.
+
+       HHooww ddoo II ffoorrkk aa ddaaeemmoonn pprroocceessss??
+
+       If by daemon process you mean one that's detached (disas­
+       sociated from its tty), then the following process is
+       reported to work on most Unixish systems.  Non-Unix users
+       should check their Your_OS::Process module for other solu­
+       tions.
+
+       ·   Open /dev/tty and use the TIOCNOTTY ioctl on it.  See
+           tty(4) for details.  Or better yet, you can just use
+           the POSIX:\fIs0:setsid() function, so you don't have
+           to worry about process groups.
+
+       ·   Change directory to /
+
+       ·   Reopen STDIN, STDOUT, and STDERR so they're not con­
+           nected to the old tty.
+
+       ·   Background yourself like this:
+
+               fork && exit;
+
+
+       The Proc::Daemon module, available from CPAN, provides a
+       function to perform these actions for you.
+
+       HHooww ddoo II ffiinndd oouutt iiff II''mm rruunnnniinngg iinntteerraaccttiivveellyy oorr nnoott??
+
+       Good question.  Sometimes "-t STDIN" and "-t STDOUT" can
+       give clues, sometimes not.
+
+           if (-t STDIN && -t STDOUT) {
+               print "Now what? ";
+           }
+
+       On POSIX systems, you can test whether your own process
+       group matches the current process group of your control­
+       ling terminal as follows:
+
+           use POSIX qw/getpgrp tcgetpgrp/;
+           open(TTY, "/dev/tty") or die $!;
+           $tpgrp = tcgetpgrp(fileno(*TTY));
+           $pgrp = getpgrp();
+           if ($tpgrp == $pgrp) {
+               print "foreground\n";
+           } else {
+               print "background\n";
+           }
+
+
+       HHooww ddoo II ttiimmeeoouutt aa ssllooww eevveenntt??
+
+       Use the alarm() function, probably in conjunction with a
+       signal handler, as documented in the Signals entry in the
+       perlipc manpage and the section on ``Signals'' in the
+       Camel.  You may instead use the more flexible Sys::Alarm­
+       Call module available from CPAN.
+
+       HHooww ddoo II sseett CCPPUU lliimmiittss??
+
+       Use the BSD::Resource module from CPAN.
+
+       HHooww ddoo II aavvooiidd zzoommbbiieess oonn aa UUnniixx ssyysstteemm??
+
+       Use the reaper code from the Signals entry in the perlipc
+       manpage to call wait() when a SIGCHLD is received, or else
+       use the double-fork technique described in the fork entry
+       in the perlfunc manpage.
+
+       HHooww ddoo II uussee aann SSQQLL ddaattaabbaassee??
+
+       There are a number of excellent interfaces to SQL
+       databases.  See the DBD::* modules available from
+       http://www.perl.com/CPAN/modules/DBD .  A lot of informa­
+       tion on this can be found at http://www.symbol­
+       stone.org/technology/perl/DBI/
+
+       HHooww ddoo II mmaakkee aa system() eexxiitt oonn ccoonnttrrooll--CC??
+
+       You can't.  You need to imitate the system() call (see the
+       perlipc manpage for sample code) and then have a signal
+       handler for the INT signal that passes the signal on to
+       the subprocess.  Or you can check for it:
+
+           $rc = system($cmd);
+           if ($rc & 127) { die "signal death" }
+
+
+
+
+
+       HHooww ddoo II ooppeenn aa ffiillee wwiitthhoouutt bblloocckkiinngg??
+
+       If you're lucky enough to be using a system that supports
+       non-blocking reads (most Unixish systems do), you need
+       only to use the O_NDELAY or O_NONBLOCK flag from the Fcntl
+       module in conjunction with sysopen():
+
+           use Fcntl;
+           sysopen(FH, "/tmp/somefile", O_WRONLY|O_NDELAY|O_CREAT, 0644)
+               or die "can't open /tmp/somefile: $!":
+
+
+       HHooww ddoo II iinnssttaallll aa mmoodduullee ffrroomm CCPPAANN??
+
+       The easiest way is to have a module also named CPAN do it
+       for you.  This module comes with perl version 5.004 and
+       later.  To manually install the CPAN module, or any well-
+       behaved CPAN module for that matter, follow these steps:
+
+       1   Unpack the source into a temporary area.
+
+       2
+               perl Makefile.PL
+
+
+       3
+               make
+
+
+       4
+               make test
+
+
+       5
+               make install
+
+
+       If your version of perl is compiled without dynamic load­
+       ing, then you just need to replace step 3 (mmaakkee) with mmaakkee
+       ppeerrll and you will get a new perl binary with your exten­
+       sion linked in.
+
+       See the ExtUtils::MakeMaker manpage for more details on
+       building extensions.  See also the next question, ``What's
+       the difference between require and use?''.
+
+       WWhhaatt''ss tthhee ddiiffffeerreennccee bbeettwweeeenn rreeqquuiirree aanndd uussee??
+
+       Perl offers several different ways to include code from
+       one file into another.  Here are the deltas between the
+       various inclusion constructs:
+
+           1)  do $file is like eval `cat $file`, except the former
+               1.1: searches @INC and updates %INC.
+               1.2: bequeaths an *unrelated* lexical scope on the eval'ed code.
+
+           2)  require $file is like do $file, except the former
+               2.1: checks for redundant loading, skipping already loaded files.
+               2.2: raises an exception on failure to find, compile, or execute $file.
+
+           3)  require Module is like require "Module.pm", except the former
+               3.1: translates each "::" into your system's directory separator.
+               3.2: primes the parser to disambiguate class Module as an indirect object.
+
+
+           4)  use Module is like require Module, except the former
+               4.1: loads the module at compile time, not run-time.
+               4.2: imports symbols and semantics from that package to the current one.
+
+       In general, you usually want "use" and a proper Perl mod­
+       ule.
+
+       HHooww ddoo II kkeeeepp mmyy oowwnn mmoodduullee//lliibbrraarryy ddiirreeccttoorryy??
+
+       When you build modules, use the PREFIX option when gener­
+       ating Makefiles:
+
+           perl Makefile.PL PREFIX=/u/mydir/perl
+
+       then either set the PERL5LIB environment variable before
+       you run scripts that use the modules/libraries (see the
+       perlrun manpage) or say
+
+           use lib '/u/mydir/perl';
+
+       This is almost the same as
+
+           BEGIN {
+               unshift(@INC, '/u/mydir/perl');
+           }
+
+       except that the lib module checks for machine-dependent
+       subdirectories.  See Perl's the lib manpage for more
+       information.
+
+       HHooww ddoo II aadddd tthhee ddiirreeccttoorryy mmyy pprrooggrraamm lliivveess iinn ttoo tthhee mmoodd­­
+       uullee//lliibbrraarryy sseeaarrcchh ppaatthh??
+
+           use FindBin;
+           use lib "$FindBin::Bin";
+           use your_own_modules;
+
+
+       HHooww ddoo II aadddd aa ddiirreeccttoorryy ttoo mmyy iinncclluuddee ppaatthh aatt rruunnttiimmee??
+
+       Here are the suggested ways of modifying your include
+       path:
+
+           the PERLLIB environment variable
+           the PERL5LIB environment variable
+           the perl -Idir command line flag
+           the use lib pragma, as in
+               use lib "$ENV{HOME}/myown_perllib";
+
+       The latter is particularly useful because it knows about
+       machine dependent architectures.  The lib.pm pragmatic
+       module was first included with the 5.002 release of Perl.
+
+       WWhhaatt iiss ssoocckkeett..pphh aanndd wwhheerree ddoo II ggeett iitt??
+
+       It's a perl4-style file defining values for system net­
+       working constants.  Sometimes it is built using h2ph when
+       Perl is installed, but other times it is not.  Modern pro­
+       grams "use Socket;" instead.
+
+AAUUTTHHOORR AANNDD CCOOPPYYRRIIGGHHTT
+       Copyright (c) 1997-1999 Tom Christiansen and Nathan Tork­
+       ington.  All rights reserved.
+
+       When included as part of the Standard Version of Perl, or
+       as part of its complete documentation whether printed or
+       otherwise, this work may be distributed only under the
+       terms of Perl's Artistic License.  Any distribution of
+       this file or derivatives thereof outside of that package
+       require that special arrangements be made with copyright
+       holder.
+
+       Irrespective of its distribution, all code examples in
+       this file are hereby placed into the public domain.  You
+       are permitted and encouraged to use this code in your own
+       programs for fun or for profit as you see fit.  A simple
+       comment in the code giving credit would be courteous but
+       is not required.
+
+
+
+2001-04-08                 perl v5.6.1                PERLFAQ8(1)

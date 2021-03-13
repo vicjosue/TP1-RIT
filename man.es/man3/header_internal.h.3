@@ -1,0 +1,126 @@
+lib/header_internal.h(3)                 lib/header_internal.h(3)
+
+
+
+NAME
+       lib/header_internal.h -
+
+SYNOPSIS
+       #include <header.h>
+       #include <netinet/in.h>
+
+   Data Structures
+       struct entryInfo
+       struct extensionCache
+       struct headerToken
+       struct indexEntry
+       struct sprintfTag
+       struct sprintfToken
+
+   Defines
+       #define INDEX_MALLOC_SIZE   8
+       #define HEADER_OLDFILENAMES   1027
+       #define HEADER_BASENAMES   1117
+       #define REGION_TAG_TYPE   RPM_BIN_TYPE
+       #define REGION_TAG_COUNT   sizeof(struct entryInfo)
+       #define ENTRY_IS_REGION(_e)   (((_e)->info.tag >=
+           HEADER_IMAGE) && ((_e)->info.tag < HEADER_REGIONS))
+       #define ENTRY_IN_REGION(_e)   ((_e)->info.offset < 0)
+       #define HEADERFLAG_SORTED   (1 << 0) /*!< Are header
+           entries sorted? */
+       #define HEADERFLAG_ALLOCATED   (1 << 1) /*!< Is 1st header
+           region allocated? */
+       #define HEADERFLAG_LEGACY   (1 << 2) /*!< Header came from
+           legacy source? */
+       #define HEADER_DUMP_INLINE   1
+
+   Typedefs
+       typedef entryInfo * entryInfo
+       typedef indexEntry * indexEntry
+       typedef sprintfTag * sprintfTag
+       typedef extensionCache * extensionCache
+       typedef sprintfToken * sprintfToken
+
+   Functions
+       char ** headerGetLangs (Header h)
+       int headerGetRawEntry (Header h, int_32 tag, hTYP_t type,
+           hPTR_t *p, hCNT_t c)
+       int headerUsageCount (Header h)
+       void headerDump (Header h, FILE *f, int flags, const
+           struct headerTagTableEntry_s *tags)
+
+DETAILED DESCRIPTION
+       Definition in file header_internal.h.
+
+DEFINE DOCUMENTATION
+   #define ENTRY_IN_REGION(_e)   ((_e)->info.offset < 0)
+       Definition at line 38 of file header_internal.h.
+
+       Referenced by headerAddI18NString, headerAppendEntry,
+       headerFree, headerModifyEntry, and headerRemoveEntry.
+
+   #define ENTRY_IS_REGION(_e)   (((_e)->info.tag >=
+       HEADER_IMAGE) && ((_e)->info.tag < HEADER_REGIONS))
+       Definition at line 36 of file header_internal.h.
+
+       Referenced by copyEntry, doHeaderUnload, headerFree,
+       headerNextIterator, headerReload, and headerSizeof.
+
+   #define HEADER_BASENAMES   1117
+       Definition at line 20 of file header_internal.h.
+
+       Referenced by headerLoad.
+
+   #define HEADER_DUMP_INLINE   1
+       Definition at line 178 of file header_internal.h.
+
+       Referenced by headerDump, and main.
+
+   #define HEADER_OLDFILENAMES   1027
+       Definition at line 19 of file header_internal.h.
+
+       Referenced by headerLoad.
+
+   #define HEADERFLAG_ALLOCATED   (1 << 1) /*!< Is 1st header
+       region allocated? */
+       Definition at line 62 of file header_internal.h.
+
+       Referenced by headerAllocated, headerCopyLoad, headerFree,
+       headerRead, and headerReload.
+
+   #define HEADERFLAG_LEGACY   (1 << 2) /*!< Header came from
+       legacy source? */
+       Definition at line 63 of file header_internal.h.
+
+       Referenced by doHeaderUnload, headerLoad, and
+       headerSizeof.
+
+   #define HEADERFLAG_SORTED   (1 << 0) /*!< Are header entries
+       sorted? */
+       Definition at line 61 of file header_internal.h.
+
+       Referenced by doHeaderUnload, findEntry, headerAddEntry,
+       headerLoad, headerNew, and headerSort.
+
+   #define INDEX_MALLOC_SIZE   8
+       Definition at line 14 of file header_internal.h.
+
+       Referenced by headerAddEntry, and headerNew.
+
+   #define REGION_TAG_COUNT   sizeof(struct entryInfo)
+       Definition at line 34 of file header_internal.h.
+
+       Referenced by copyEntry, headerLoad, and regionSwab.
+
+   #define REGION_TAG_TYPE   RPM_BIN_TYPE
+       Definition at line 33 of file header_internal.h.
+
+       Referenced by headerLoad.
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002   lib/header_internal.h(3)

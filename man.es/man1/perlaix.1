@@ -1,0 +1,188 @@
+PERLAIX(1)       Perl Programmers Reference Guide      PERLAIX(1)
+
+
+
+NNAAMMEE
+       README.aix - Perl version 5 on IBM Unix (AIX) systems
+
+DDEESSCCRRIIPPTTIIOONN
+       This document describes various features of IBM's Unix
+       operating system (AIX) that will affect how Perl version 5
+       (hereafter just Perl) is compiled and/or runs.
+
+       CCoommppiilliinngg PPeerrll 55 oonn AAIIXX
+
+       When compiling Perl, you must use an ANSI C compiler. AIX
+       does not ship an ANSI compliant C-compiler with AIX by
+       default, but binary builds of gcc for AIX are widely
+       available.
+
+       At the moment of writing, AIX supports two different
+       native C compilers, for which you have to pay: xxllcc and
+       VVAACC. If you decide to use eiter of these two (which is
+       quite a lot easier than using gcc), be sure to upgrade to
+       the latest available patch level. Currently:
+
+           xlC.C     3.1.4.0
+           vac.C     4.4.0.3   (5.0 is already available)
+
+       Perl can be compiled with either IBM's ANSI C compiler or
+       with gcc.  The former is recommended, as not only can it
+       compile Perl with no difficulty, but also can take advan­
+       tage of features listed later that require the use of IBM
+       compiler-specific command-line flags.
+
+       If you decide to use gcc, make sure your installation is
+       recent and complete, and be sure to read the Perl README
+       file for more gcc-specific details.
+
+       OOSS lleevveell
+
+       Before installing the patches to the IBM C-compiler you
+       need to know the level of patching for the Operating Sys­
+       tem. IBM's command 'oslevel' will show the base, but is
+       not always complete:
+
+           # oslevel
+           4.3.0.0
+           # lslpp -l | grep 'bos.rte '
+           bos.rte      4.3.2.1  COMMITTED  Base Operating System Runtime
+           bos.rte      4.3.2.0  COMMITTED  Base Operating System Runtime
+           #
+
+
+       BBuuiillddiinngg DDyynnaammiicc EExxtteennssiioonnss oonn AAIIXX
+
+       AIX supports dynamically loadable libraries (shared
+       libraries).  Shared libraries end with the suffix .a,
+       which is a bit misleading, because *all* libraries are
+       shared ;-).
+
+       TThhee IIBBMM AANNSSII CC CCoommppiilleerr
+
+       All defaults for Configure can be used.
+
+       If you've chosen to use vac 4, be sure to run 4.4.0.3.
+       Older versions will turn up nasty later on.
+
+       Here's a brief lead of how to upgrade the compiler to the
+       latest level.  Of course this is subject to changes.  You
+       can only upgrade versions from ftp-available updates if
+       the first three digit groups are the same (in where you
+       can skip intermediate unlike the patches in the developer
+       snapshots of perl), or to one version up where the `base'
+       is available.  In other words, the AIX compiler patches
+       are cumulative.
+
+        vac.C.4.4.0.1 => vac.C.4.4.0.3  is OK     (vac.C.4.4.0.2 not needed)
+        xlC.C.3.1.3.3 => xlC.C.3.1.4.10 is NOT OK (xlC.C.3.1.4.0 is not available)
+
+        # ftp ftp.software.ibm.com
+        Connected to service.boulder.ibm.com.
+        : welcome message ...
+        Name (ftp.software.ibm.com:merijn): anonymous
+        331 Guest login ok, send your complete e-mail address as password.
+        Password:
+        ... accepted login stuff
+        ftp> cd /aix/fixes/v4/
+        ftp> dir other other.ll
+        output to local-file: other.ll? y
+        200 PORT command successful.
+        150 Opening ASCII mode data connection for /bin/ls.
+        226 Transfer complete.
+        ftp> dir xlc xlc.ll
+        output to local-file: xlc.ll? y
+        200 PORT command successful.
+        150 Opening ASCII mode data connection for /bin/ls.
+        226 Transfer complete.
+        ftp> bye
+        ... goodbye messages
+        # ls -l *.ll
+        -rw-rw-rw-   1 merijn   system    1169432 Nov  2 17:29 other.ll
+        -rw-rw-rw-   1 merijn   system      29170 Nov  2 17:29 xlc.ll
+
+       On AIX 4.2 using xlC, we continue:
+
+        # lslpp -l | fgrep 'xlC.C '
+          xlC.C                     3.1.4.9  COMMITTED  C for AIX Compiler
+          xlC.C                     3.1.4.0  COMMITTED  C for AIX Compiler
+        # grep 'xlC.C.3.1.4.*.bff' xlc.ll
+        -rw-r--r--   1 45776101 1        6286336 Jul 22 1996  xlC.C.3.1.4.1.bff
+        -rw-rw-r--   1 45776101 1        6173696 Aug 24 1998  xlC.C.3.1.4.10.bff
+        -rw-r--r--   1 45776101 1        6319104 Aug 14 1996  xlC.C.3.1.4.2.bff
+        -rw-r--r--   1 45776101 1        6316032 Oct 21 1996  xlC.C.3.1.4.3.bff
+        -rw-r--r--   1 45776101 1        6315008 Dec 20 1996  xlC.C.3.1.4.4.bff
+        -rw-rw-r--   1 45776101 1        6178816 Mar 28 1997  xlC.C.3.1.4.5.bff
+        -rw-rw-r--   1 45776101 1        6188032 May 22 1997  xlC.C.3.1.4.6.bff
+        -rw-rw-r--   1 45776101 1        6191104 Sep  5 1997  xlC.C.3.1.4.7.bff
+        -rw-rw-r--   1 45776101 1        6185984 Jan 13 1998  xlC.C.3.1.4.8.bff
+        -rw-rw-r--   1 45776101 1        6169600 May 27 1998  xlC.C.3.1.4.9.bff
+        # wget ftp://ftp.software.ibm.com/aix/fixes/v4/xlc/xlC.C.3.1.4.10.bff
+        #
+
+       On AIX 4.3 using vac, we continue:
+
+
+
+
+
+
+
+
+
+        # lslpp -l | fgrep 'vac.C '
+          vac.C                      4.4.0.2  COMMITTED  C for AIX Compiler
+          vac.C                      4.4.0.0  COMMITTED  C for AIX Compiler
+        # grep 'vac.C.4.4.0.*.bff' other.ll
+        -rw-rw-r--   1 45776101 1        13466624 May 26 1999  vac.C.4.4.0.1.bff
+        -rw-rw-r--   1 45776101 1        13473792 Aug 31 1999  vac.C.4.4.0.2.bff
+        -rw-rw-r--   1 45776101 1        13480960 May 19 20:32 vac.C.4.4.0.3.bff
+        # wget ftp://ftp.software.ibm.com/aix/fixes/v4/other/vac.C.4.4.0.3.bff
+        #
+
+       Then execute the following command, and fill in its
+       choices
+
+        # smit install_update
+         -> Install and Update from LATEST Available Software
+         * INPUT device / directory for software [ vac.C.4.4.0.3.bff    ]
+         [ OK ]
+         [ OK ]
+
+       Follow the messages ... and you're done.
+
+       UUssiinngg GGNNUU''ss ggcccc ffoorr bbuuiillddiinngg ppeerrll
+
+       ... ?
+
+       UUssiinngg LLaarrggee FFiilleess wwiitthh PPeerrll
+
+       ... ?
+
+       TThhrreeaaddeedd PPeerrll
+
+       ... ?
+
+       6644--bbiitt PPeerrll
+
+       ... ?
+
+       GGDDBBMM aanndd TThhrreeaaddss
+
+       ... ?
+
+       NNFFSS ffiilleessyysstteemmss aanndd utime((22))
+
+       ... ?
+
+AAUUTTHHOORR
+       H.Merijn Brand <h.m.brand@hccnet.nl>
+
+       Structure copied from README.hpux
+
+DDAATTEE
+       Version 0.0.1: 16-10-2000
+
+
+
+2001-03-18                 perl v5.6.1                 PERLAIX(1)

@@ -1,0 +1,36 @@
+GROUPDEL(8)                                           GROUPDEL(8)
+
+
+
+NAME
+       groupdel - Delete a group
+
+SYNOPSIS
+       groupdel group
+
+DESCRIPTION
+       The  groupdel  command  modifies the system account files,
+       deleting all entries that refer to group.  The named group
+       must exist.
+
+       You  must manually check all filesystems to insure that no
+       files remain with the named group as the file group ID.
+
+CAVEATS
+       You may not remove the primary group of any existing user.
+       You must remove the user before you remove the group.
+
+FILES
+       /etc/group - group information
+       /etc/gshadow - secure group information
+
+SEE ALSO
+       chfn(1),   chsh(1),  useradd(8),  userdel(8),  usermod(8),
+       passwd(1), groupadd(8), groupmod(8)
+
+AUTHOR
+       Julianne Frances Haugh (jfh@austin.ibm.com)
+
+
+
+                                                      GROUPDEL(8)

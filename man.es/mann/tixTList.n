@@ -1,0 +1,538 @@
+tixTList(n)           Tix Built-In Commands           tixTList(n)
+
+
+
+_________________________________________________________________
+
+NAME
+       tixTList - Create and manipulate Tix Tabular List widgets
+
+SYNOPSIS
+       tixTList pathName ?options?
+
+STANDARD OPTIONS
+       -background     -borderWidth   -cursor         -foreground
+       -font           -height        -highlightColor -highlightThickness
+       -relief         -selectBackground              -selectForeground
+       -xScrollCommand -yScrollCommand                -width
+
+       See  the  options manual entry for details on the standard
+       options.
+
+WIDGET-SPECIFIC OPTIONS
+       Command-Line Name:-browsecmd
+       Database Name:  browsecmd
+       Database Class: BrowseCmd
+
+              Specifies a TCL command to  be  executed  when  the
+              user  browses through the entries in the TList wid­
+              get.
+
+       Command-Line Name:-command
+       Database Name:  command
+       Database Class: Command
+
+              Specifies the TCL command to be executed  when  the
+              user invokes a list entry in the TList widget. Nor­
+              mally the user invokes  a  list  entry  by  double-
+              clicking it or pressing the Return key.
+
+       Command-Line Name:-foreground
+       Database Name:  foreground
+       Database Class: Foreground
+
+              Specifies the default foreground color for the list
+              entries.
+
+       Command-Line Name:-height
+       Database Name:  height
+       Database Class: Height
+
+              Specifies the desired height for the window in num­
+              ber of characters.
+
+       Command-Line Name:-itemtype
+       Database Name:  itemType
+       Database Class: ItemType
+
+              Specifies the default type of display item for this
+              TList widget. When you call the insert widget  com­
+              mands,  display  items of this type will be created
+              if the -itemtype option is not specified .
+
+       Command-Line Name:-orient
+       Database Name:  orient
+       Database Class: Orient
+
+              Specifies  the  order  of  tabularizing  the   list
+              entries.  When  set  to "vertical", the entries are
+              arranged in a column, from top to  bottom.  If  the
+              entries  cannot  be  contained  in  one column, the
+              remaining entries will go to the next  column,  and
+              so  on.  When  set to "horizontal", the entries are
+              arranged in a row,  from  left  to  right.  If  the
+              entries cannot be contained in one row, the remain­
+              ing entries will go to the next row, and so on.
+
+       Command-Line Name:-padx
+       Database Name:  padX
+       Database Class: Pad
+
+              The default horizontal padding for list entries.
+
+       Command-Line Name:-padx
+       Database Name:  padY
+       Database Class: Pad
+
+              The default vertical padding for list entries.
+
+       Command-Line Name:-selectbackground
+       Database Name:  selectBackground
+       Database Class: SelectBackground
+
+              Specifies the background  color  for  the  selected
+              list entries.
+
+       Command-Line Name:-selectborderwidth
+       Database Name:  selectBorderWidth
+       Database Class: BorderWidth
+
+              Specifies a non-negative value indicating the width
+              of the 3-D border to draw  around  selected  items.
+              The  value  may have any of the forms acceptable to
+              Tk_GetPixels.
+
+       Command-Line Name:-selectforeground
+       Database Name:  selectForeground
+       Database Class: SelectForeground
+
+              Specifies the foreground  color  for  the  selected
+              list entries.
+
+       Command-Line Name:-selectmode
+       Database Name:  selectMode
+       Database Class: SelectMode
+
+              Specifies  one  of  several styles for manipulating
+              the selection.  The value  of  the  option  may  be
+              arbitrary, but the default bindings expect it to be
+              either single, browse, multiple, or  extended;  the
+              default value is single.
+
+       Command-Line Name:-sizecmd
+       Database Name:  sizeCmd
+       Database Class: SizeCmd
+
+              Specifies  a  TCL  script to be called whenever the
+              TList widget changes its size. This command can  be
+              useful  to implement "user scroll bars when needed"
+              features.
+
+       Command-Line Name:-state
+       Database Name:  state
+       Database Class: State
+
+              Specifies whether the TList command should react to
+              user  actions.  When  set  to  "normal",  the TList
+              reacts to user actions in the normal way. When  set
+              to  "disabled", the TList can only be scrolled, but
+              its entries cannot be selected or activated.
+
+       Command-Line Name:-width
+       Database Name:  width
+       Database Class: Width
+
+              Specifies the desired width for the window in char­
+              acters.
+_________________________________________________________________
+
+DESCRIPTION
+       The  tixTList  command  creates a new window (given by the
+       pathName argument) and  makes  it  into  a  TList  widget.
+       Additional  options,  described above, may be specified on
+       the command line or in the option  database  to  configure
+       aspects of the TList widget such as its cursor and relief.
+
+       The TList widget can be used to display data in a  tabular
+       format.  The list entries of a TList widget are similar to
+       the entries in the Tk listbox widget. The main differences
+       are (1) the TList widget can display the list entries in a
+       two dimensional format  and  (2)  you  can  use  graphical
+       images  as  well as multiple colors and fonts for the list
+       entries.
+
+       Each list entry is identified by an index, which can be in
+       the following forms:
+
+              number An  integer  that  indicates the position of
+                     the entry in the list.  0  means  the  first
+                     position,  1  means the second position, and
+                     so on.
+
+              end    Indicates the end of the listbox.  For  some
+                     commands  this  means  just  after  the last
+                     entry; for other commands it means the  last
+                     entry.
+
+              @x,y   Indicates  the element that covers the point
+                     in the listbox window specified by x  and  y
+                     (in pixel coordinates). If no element covers
+                     that point, then the closest element to that
+                     point is used.
+
+DISPLAY ITEMS
+       Each  list  entry  in an TList widget is associated with a
+       display item.  The display  item  determines  what  visual
+       information  should  be  displayed  for  this  list entry.
+       Please see the tixDisplayStyle manual page for a  list  of
+       all display items.
+
+       When  a  list  entry is created by the insert command, the
+       type of its display item is determined  by  the  -itemtype
+       option passed to these commands. If the -itemtype is omit­
+       ted, then by default the type specified by this TList wid­
+       get's -itemtype option is used.
+
+WIDGET COMMAND
+       The  tixTList command creates a new Tcl command whose name
+       is the same as the path name of the TList widget's window.
+       This  command  may be used to invoke various operations on
+       the widget.  It has the following general form:
+                     pathName option ?arg arg ...?
+       PathName is the name of the command, which is the same  as
+       the  TList widget's path name.  Option and the args deter­
+       mine the exact behavior of  the  command.   The  following
+       commands are possible for TList widgets:
+
+       pathName anchor set index
+              Sets  the  anchor  to  the list entry identified by
+              index. The anchor is the end of the selection  that
+              is  fixed  while  dragging out a selection with the
+              mouse.
+
+       pathName anchor clear
+              Removes the anchor, if any, from this TList widget.
+              This only removes the surrounding highlights of the
+              anchor entry and does not affect its selection sta­
+              tus.
+
+       pathName cget option
+              Returns  the  current  value  of  the configuration
+              option given by option. Option may have any of  the
+              values accepted by the tixTList command.
+
+       pathName configure ?option? ?value option value ...?
+              Query  or  modify  the configuration options of the
+              widget.  If no option is specified, returns a  list
+              describing  all  of the available options for path­
+              Name (see Tk_ConfigureInfo for information  on  the
+              format  of  this list). If option is specified with
+              no value, then the command returns a list  describ­
+              ing the one named option (this list will be identi­
+              cal to  the  corresponding  sublist  of  the  value
+              returned  if  no  option  is specified).  If one or
+              more option-value pairs  are  specified,  then  the
+              command modifies the given widget option(s) to have
+              the  given  value(s);  in  this  case  the  command
+              returns  an  empty  string.  Option may have any of
+              the values accepted by the tixTList command.
+
+       pathName delete from ?to?
+              Deletes one or more list entries  between  the  two
+              entries specified by the indices from and to. If to
+              is not specified, deletes the single  entry  speci­
+              fied by from.
+
+       pathName dragsite set index
+              Sets  the  dragsite to the list entry identified by
+              index. The dragsite is used to indicate the  source
+              of  a drag-and-drop action. Currently drag-and-drop
+              functionality has not been implemented in Tix  yet.
+
+       pathName dragsite clear
+              Remove  the  dragsite,  if any, from the this TList
+              widget. This only  removes  the  surrounding  high­
+              lights  of  the  dragsite entry and does not affect
+              its selection status.
+
+       pathName dropsite set index
+              Sets the dropsite to the list entry  identified  by
+              index.  The dropsite is used to indicate the target
+              of a grag-and-drop action. Currently  drag-and-drop
+              functionality  has not been implemented in Tix yet.
+
+       pathName dropsite clear
+              Remove the dropsite, if any, from  the  this  TList
+              widget.  This  only  removes  the surrounding high­
+              lights of the dropsite entry and  does  not  affect
+              its selection status.
+
+       pathName entrycget index option
+              Returns  the  current  value  of  the configuration
+              option given by option for the entry indentfied  by
+              index.  Option  may have any of the values accepted
+              by the insert widget command.
+
+       pathName entryconfigure index ?option? ?value option value
+       ...?
+              Query or modify the configuration  options  of  the
+              list  entry  indentfied  by  index. If no option is
+              specified, returns a list  describing  all  of  the
+              available  options  for index (see Tk_ConfigureInfo
+              for information on the format  of  this  list).  If
+              option is specified with no value, then the command
+              returns a list  describing  the  one  named  option
+              (this  list  will be identical to the corresponding
+              sublist of the value returned if no option is spec­
+              ified). If one or more option-value pairs are spec­
+              ified,  then  the  command   modifies   the   given
+              option(s)  to have the given value(s); in this case
+              the command returns an empty  string.   Option  may
+              have  any of the values accepted by the insert wid­
+              get command. The exact set of  options  depends  on
+              the value of the -itemtype option passed to the the
+              insert widget command when this list entry is  cre­
+              ated.
+
+       pathName insert index ?option value ...?
+              Creates  a new list entry at the position indicated
+              by index. The following configuration  options  can
+              be given to configure the list entry:
+
+              -itemtype type
+                     Specifies  the  type  of  display item to be
+                     display for the new list entry. type must be
+                     a  valid  display  item  type. Currently the
+                     available  display  item  types  are  image,
+                     imagetext,  text, and window. If this option
+                     is not specified, then by default  the  type
+                     specified  by  this TList widget's -itemtype
+                     option is used.
+
+              -state Specifies whether this entry can be selected
+                     or invoked by the user.  Must be either nor­
+                     mal or disabled.
+       The insert widget command accepts additional configuration
+       options to configure the display item associated with this
+       list entry. The set of  additional  configuration  options
+       depends  on  the  type  of  the  display item given by the
+       -itemtype option. Please see  the  tixDisplayStyle  manual
+       page  for  a list of the configuration options for each of
+       the display item types.
+
+       pathName info option arg ...
+              Query information about the  TList  widget.  option
+              can be one of the following:
+
+              pathName info anchor index
+                     ;  Returns  the index of the current anchor,
+                     if any, of the TList widget. If  the  anchor
+                     is not set, returns the empty string.
+
+              pathName info dragsite index
+                     Returns  the  index of the current dragsite,
+                     if any, of the TList widget. If the dragsite
+                     is not set, returns the empty string.
+
+              pathName info dropsite index
+                     Returns  the  index of the current dropsite,
+                     if any, of the TList widget. If the dropsite
+                     is not set, returns the empty string.
+
+              pathName info selection
+                     Returns  a  list of selected elements in the
+                     TList widget. If  no  entries  are  selectd,
+                     returns an empty string.
+
+       pathName nearest x y
+              Given  an (x,y) coordinate within the TList window,
+              this command returns the index of the TList element
+              nearest to that coordinate.
+
+       pathName see index
+              Adjust  the  view  in  the  TList so that the entry
+              given by index is visible. If the entry is  already
+              visible  then  the  command  has  no effect; if the
+              entry is near one edge of the window then the TList
+              scrolls to bring the element into view at the edge;
+              otherwise the TList widget scrolls  to  center  the
+              entry.
+
+       pathName selection option arg ...
+              This command is used to adjust the selection within
+              a TList widget. It has several forms, depending  on
+              option:
+
+              pathName selection clear ?from? ?to?
+                     When no extra arguments are given, deselects
+                     all of the list entrie(s) in this TList wid­
+                     get.  When only from is given, only the list
+                     entry identified by from is deselected. When
+                     both from and to are given, deselects all of
+                     the list entrie(s) between between from  and
+                     to,  inclusive, without affecting the selec­
+                     tion state of entries outside that range.
+
+              pathName selection includes index
+                     Returns 1 if the  list  entry  indicated  by
+                     index  is currently selected; returns 0 oth­
+                     erwise.
+
+              pathName selection set from ?to?
+                     Selects all of the  list  entrie(s)  between
+                     between  from  and  to,  inclusive,  without
+                     affecting the  selection  state  of  entries
+                     outside that range. When only from is given,
+                     only the list entry identified  by  from  is
+                     selected.
+
+       pathName xview args
+              This  command is used to query and change the hori­
+              zontal position of the information in the  widget's
+              window. It can take any of the following forms:
+
+              pathName xview
+                     Returns  a  list  containing  two  elements.
+                     Each element is a real  fraction  between  0
+                     and 1; together they describe the horizontal
+                     span that is visible  in  the  window.   For
+                     example,  if the first element is .2 and the
+                     second element is .6, 20% of the TList entry
+                     is off-screen to the left, the middle 40% is
+                     visible in the window, and 40% of the  entry
+                     is  off-screen  to  the right. These are the
+                     same values passed  to  scrollbars  via  the
+                     -xscrollcommand option.
+
+              pathName xview index
+                     Adjusts  the  view in the window so that the
+                     list entry identified by index is aligned to
+                     the left edge of the window.
+
+              pathName xview moveto fraction
+                     Adjusts the view in the window so that frac­
+                     tion of the total width of the TList is off-
+                     screen to the left. fraction must be a frac­
+                     tion between 0 and 1.
+
+              pathName xview scroll number what
+                     This command shifts the view in  the  window
+                     left  or right according to number and what.
+                     Number must be an  integer.   What  must  be
+                     either  units or pages or an abbreviation of
+                     one of these. If what  is  units,  the  view
+                     adjusts  left  or  right by number character
+                     units (the width of the 0 character) on  the
+                     display;  if  it  is  pages  then  the  view
+                     adjusts by number screenfuls. If  number  is
+                     negative then characters farther to the left
+                     become visible; if it is positive then char­
+                     acters  farther to the right become visible.
+
+       pathName yview ?args?
+              This command is used to query and change the verti­
+              cal position of the entries in the widget's window.
+              It can take any of the following forms:
+
+              pathName yview
+                     Returns a list containing two elements, both
+                     of which are real fractions between 0 and 1.
+                     The first element gives the position of  the
+                     list element at the top of the window, rela­
+                     tive to the TList as a whole (0.5  means  it
+                     is  halfway through the TList, for example).
+                     The second element gives the position of the
+                     list  entry  just  after the last one in the
+                     window, relative to the TList  as  a  whole.
+                     These  are the same values passed to scroll­
+                     bars via the -yscrollcommand option.
+
+              pathName yview index
+                     Adjusts the view in the window so  that  the
+                     list  entry  given  by index is displayed at
+                     the top of the window.
+
+              pathName yview moveto fraction
+                     Adjusts the view in the window so  that  the
+                     list  entry given by fraction appears at the
+                     top of the window. Fraction  is  a  fraction
+                     between 0 and 1; 0 indicates the first entry
+                     in the TList, 0.33 indicates the entry  one-
+                     third  the way through the TList, and so on.
+
+              pathName yview scroll number what
+                     This command adjust the view in  the  window
+                     up  or  down  according  to number and what.
+                     Number must be an  integer.   What  must  be
+                     either  units  or  pages.  If what is units,
+                     the view adjusts up or down by number lines;
+                     if it is pages then the view adjusts by num­
+                     ber screenfuls.  If number is negative  then
+                     earlier  entries  become  visible;  if it is
+                     positive then later entries become  visible.
+
+BINDINGS
+       [1]    If the -selectmode is "browse", when the user drags
+              the mouse pointer over the list entries, the  entry
+              under  the  pointer  will  be  highlighted  and the
+              -browsecmd procedure will be called with one param­
+              eter,  the index of the highlighted entry. Only one
+              entry can be highlighted at a  time.  The  -command
+              procedure  will  be  called  when  the user double-
+              clicks on a list entry.
+
+       [2]    If the -selectmode is "single",  the  entries  will
+              only  be  highlighted  by  mouse  <ButtonRelease-1>
+              events. When a new list entry is  highlighted,  the
+              -browsecmd procedure will be called with one param­
+              eter indicating the  highlighted  list  entry.  The
+              -command  procedure  will  be  called when the user
+              double-clicks on a list entry.
+
+       [3]    If the -selectmode is  "multiple",  when  the  user
+              drags  the mouse pointer over the list entries, all
+              the entries under the pointer will be  highlighted.
+              However,  only  a contiguous region of list entries
+              can be  selected.  When  the  highlighted  area  is
+              changed,  the  -browsecmd  procedure will be called
+              with an undefined parameter. It is the responsibil­
+              ity  of  the  -browsecmd  procedure to find out the
+              exact highlighted selection in the TList. The -com­
+              mand procedure will be called when the user double-
+              clicks on a list entry.
+
+       [4]    If the -selectmode is  "extended",  when  the  user
+              drags  the mouse pointer over the list entries, all
+              the entries under the pointer will be  highlighted.
+              The  user can also make disjointed selections using
+              <Control-ButtonPress-1>. When the highlighted  area
+              is changed, the -browsecmd procedure will be called
+              with an undefined parameter. It is the responsibil­
+              ity  of  the  -browsecmd  procedure to find out the
+              exact highlighted selection in the TList. The -com­
+              mand procedure will be called when the user double-
+              clicks on a list entry.
+
+EXAMPLE
+       This example demonstrates how to use an TList to  store  a
+       list of numbers:
+
+              set image [tix getimage folder]
+              set t [tixTList .t -orient vertical]
+              $t insert end -itemtype imagetext -image $image -text one
+              $t insert end -itemtype imagetext -image $image -text two
+              $t insert end -itemtype imagetext -image $image -text three
+              $t insert end -itemtype imagetext -image $image -text four
+              $t insert end -itemtype imagetext -image $image -text five
+              $t insert end -itemtype imagetext -image $image -text six
+              pack $t -expand yes -fill both
+
+KEYWORDS
+       Tix(n), Tabular Listbox, Display Items
+
+
+
+
+
+
+Tix                            4.0                    tixTList(n)

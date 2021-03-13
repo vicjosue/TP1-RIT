@@ -1,0 +1,37 @@
+pcibios_write_config_byte(B9I)OS32 Functipocnisbios_write_config_byte(9)
+
+
+
+NAME
+       pcibios_write_config_byte  - write one byte of data to the
+       configuration space of the PCI bus
+
+SYNOPSIS
+       #include <linux/bios32.h>
+
+       int pcibios_write_config_byte(unsigned char bus,  unsigned
+       char device_fn,unsigned char where, unsigned char value);
+
+DESCRIPTION
+       The  pcibios_write_config_byte function writes one byte to
+       the configuration space of the PCI bus.  The  bus  can  be
+       specified with the bus parameters.  The device_fn paramter
+       determines which ? to use.  where is set to  the  ?.   The
+       byte to be written to the configuration space is stored in
+       the value parameter.
+
+RETURN VALUE
+       The return value is taken from the PCI controller in a way
+       that I'm not quite sure of.
+
+       If  the  PCI  system is unavailable, PCIBIOS_FUNC_NOT_SUP­
+       PORTED is returned.
+
+AVAILABILITY
+       Linux 1.0?
+
+AUTHOR
+       Kirk Petersen (kirk@speakeasy.org)
+
+BUGS
+Linux DDI                 August 5, 19p9c7ibios_write_config_byte(9)

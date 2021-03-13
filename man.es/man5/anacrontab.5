@@ -1,0 +1,48 @@
+ANACRONTAB(5)         Anacron Users' Manual         ANACRONTAB(5)
+
+
+
+NAME
+       /etc/anacrontab - configuration file for anacron
+
+DESCRIPTION
+       The  file /etc/anacrontab describes the jobs controlled by
+       anacron(8).  Its  lines  can  be  of  three  kinds:   job-
+       description   lines,  environment  assignments,  or  empty
+       lines.
+
+       Job-description lines are of the form:
+
+          period  delay  job-identifier  command
+
+       The period is specified in days,  the  delay  in  minutes.
+       The  job-identifier  can  contain any non-blank character,
+       except slashes.  It is used to identify the job in Anacron
+       messages,  and  as  the name for the job's timestamp file.
+       The command can be any shell command.
+
+       Environment assignment lines are of the form:
+
+          VAR = VALUE
+
+       Spaces around VAR are removed.  No spaces around VALUE are
+       allowed  (unless  you  want them to be part of the value).
+       The assignment takes effect from the next line to the  end
+       of  the  file, or to the next assignment of the same vari­
+       able.
+
+       Empty lines are either blank lines, line containing white-
+       space  only,  or  lines with white-space followed by a '#'
+       followed by an arbitrary comment.
+
+SEE ALSO
+       anacron(8)
+
+       The Anacron README file.
+
+AUTHOR
+       Itai Tzur <itzur@actcom.co.il>
+
+
+
+Itai Tzur                   1998-02-02              ANACRONTAB(5)

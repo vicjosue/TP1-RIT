@@ -1,0 +1,155 @@
+jikes(1)                                                 jikes(1)
+
+
+
+NAME
+       jikes - java source to bytecode compiler
+
+SYNOPSIS
+       jikes  [-bootclasspath  path] [-classpath path] [-d direc­
+       tory] [-debug] [-depend] [-deprecation] [-encoding  encod­
+       ing] [-extdirs path] [-g] [-nowarn] [-nowrite] [-O] [-ver­
+       bose] [-sourcepath path] [-Xdepend] [-Xstdout]  [++]  [+B]
+       [+OLDCSO]  [+D]  [+DR=filename]  [+E]  [+F] [+K] [+M] [+P]
+       [+Tnn] [+U] [+Z] [+c] file.java ...
+
+DESCRIPTION
+       Jikes translates Java(TM) source files to  bytecode.  Fea­
+       tures  include strict adherence to the language specifica­
+       tion, automatic makefile generation and incremental compi­
+       lation. It is maintained by the Jikes Project.
+
+
+OPTIONS
+       Jikes  may  be  invoked  with  the  following command-line
+       options:
+
+       -bootclasspath path
+              use path for the bootclasspath
+
+       -classpath path
+              use path for CLASSPATH
+
+       -d directory
+              write class files in specified directory
+
+       -debug no effect (recognized for compatibility)
+
+       -depend
+              recompile all used classes
+
+       -deprecation
+              report uses of deprecated features
+
+       -encoding
+              use specified encoding to read source files
+
+       -extdirs path
+              use path for extensions directories
+
+       -g     debug (generate LocalVariableTable attribute)
+
+       -nowarn
+              do not issue warning messages
+
+       -nowrite
+              do not write any class files
+
+       -O     do not write LineNumberTable
+
+       -sourcepath path
+              use path for specifying "source only" directories
+
+       -verbose
+              list files read and written
+
+       -Xdepend
+              same as -depend
+
+       -Xstdout
+              write error messages to standard output, not stderr
+
+       ++     compile in incremental mode
+
+       +B     do not invoke bytecode generator
+
+       +OLDCSO
+              Select  to  use  same  classpath search order as in
+              older versions of Jikes (for compatibility).
+
+       +D     report errors  immediately  in  emacs-form  without
+              buffering
+
+       +DR=filename
+              write report of dependencies to specified file
+
+       +E     list errors in emacs-form
+
+       +F     do  full  dependence  check  except for Zip and Jar
+              files
+
+       +Kname=TypeKeyWord
+              map name to type keyword
+
+       +M     generate makefile dependencies
+
+       +P     Pedantic compilation - issues lots of warnings
+
+       +Tnn   set value of tab to nn spaces
+
+       +U     do full dependence  check  including  Zip  and  Jar
+              files
+
+       +Z     treat cautions as errors
+
+       +c     do not discard comments from lexer output
+
+       An  argument may have the form @file; each line of file is
+       then interpreted as an argument, except that lines  begin­
+       ning with @ are not expanded recursively.
+
+
+FILES
+       Jikes  has several options related to classpath searching.
+       The -bootclasspath, -extdirs, and -sourcepath options  are
+       the  same  as in javac.  In addition to being specified on
+       the command line, the environment variables BOOTCLASSPATH,
+       EXTDIRS, and SOURCEPATH may also be used to specify values
+       for these  options,  respectively.   Jikes  also  has  the
+       -classpath  option  as  in  javac,  with the corresponding
+       environment variable CLASSPATH.  The classpath may also be
+       specified  in  the  environment  variable  JIKESPATH.   If
+       JIKESPATH and CLASSPATH coexist, preference will be  given
+       to  JIKESPATH.  A value specified on the command line will
+       be always be given preference over the value of any  envi­
+       ronment variable.  All the directories and files specified
+       in these options or environment variables  must  be  in  a
+       colon-separated list, e.g., ".:$HOME/java/jre/lib/rt.jar".
+
+SEE ALSO
+       Jikes Project homepage
+              http://ibm.com/developerworks/opensource/jikes/ for
+              news   of  recent  developments,  to  download  new
+              versions, to report bugs, or to learn how  to  par­
+              ticipate in the development process.
+
+
+COPYRIGHT
+       Copyright  ©  1996, 1997, 1998, 1999, 2000, 2001, Interna­
+       tional  Business  Machines  Corporation  and  others.  All
+       Rights Reserved.
+
+       Jikes  is  licensed under the IBM Public License, included
+       in the file license.htm distributed with the program,  and
+       also  available  at  the  Jikes  Project URL.  Portions of
+       Jikes are derived from prior,  freely  distributable  pro­
+       jects.  For more details on this code, see the comments in
+       src/double.h, src/platform.h, and src/unzip.h.
+
+
+NOTES
+       Java is a registered trademark of Sun Microsystems, Inc.
+
+
+
+                                                         jikes(1)

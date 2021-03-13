@@ -1,0 +1,72 @@
+urlview(1)                                             urlview(1)
+
+
+
+NAME
+       urlview - URL extractor/launcher
+
+SYNOPSIS
+       urlview filename [ filename ... ]
+
+DESCRIPTION
+       urlview  is  a screen oriented program for extracting URLs
+       from text files and displaying a menu from which  you  may
+       launch a command to view a specific item.
+
+CONFIGURATION
+       urlview attempts to read ~/.urlview upon startup.  If this
+       file doesn't exist, it will try to read a system wide file
+       in  /etc/urlview.conf.   There  are two configuration com­
+       mands (order does not matter):
+
+       REGEXP regexp
+              urlview uses a regular expression to  extract  URLs
+              from  the  specified text files.  \r, \t, \n and \f
+              are all converted to their normal  printf(3)  mean­
+              ings.  The default REGEXP is:
+
+
+       (((https?|ftp|gopher)://|(mailto|file|news):)[^' <>"]+|(www|web|w3).[-a-z0-9.]+)[^' .,;<>":]
+
+
+       COMMAND command
+              If  the specified command contains a %s, it will be
+              subsituted with the URL that was requested,  other­
+              wise  the  URL  is  appended to the COMMAND string.
+              The default COMMAND is:
+
+              url_handler.sh %s
+
+       Note: You should never put single quotes  around  the  %s.
+       urlview does this for you, and also makes sure that single
+       quotes eventually showing up inside the  URL  are  handled
+       properly.   (Note  that  this  shouldn't  happen  with the
+       default regular expression, which explicitly excludes sin­
+       gle quotes.)
+
+FILES
+       /etc/urlview.conf
+              system-wide urlview configuration file
+
+       ~/.urlview
+              urlview configuration file
+
+SEE ALSO
+       printf(3), regcomp(3), regex(7)
+
+AUTHOR
+       Michael Elkins <me@cs.hmc.edu>.
+
+       Modified   for   Debian   by   Luis   Francisco   Gonzalez
+       <luisgh@debian.org>.
+
+       Modified for SuSE by Dr. Werner Fink <werner@suse.de>  and
+       Stepan Kasal <kasal@suse.cz>.
+
+       Changes  put  together  by Thomas Roessler <roessler@does-
+       not-exist.org>.
+
+
+
+
+                                                       urlview(1)

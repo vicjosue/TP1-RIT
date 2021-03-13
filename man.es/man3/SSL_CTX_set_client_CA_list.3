@@ -1,0 +1,103 @@
+SSL_CTX_set_client_CA_list(3)OpenSSLSSL_CTX_set_client_CA_list(3)
+
+
+
+NNAAMMEE
+       SSL_CTX_set_client_CA_list, SSL_set_client_CA_list,
+       SSL_CTX_add_client_CA, SSL_add_client_CA - set list of CAs
+       sent to the client when requesting a client certificate
+
+SSYYNNOOPPSSIISS
+        #include <openssl/ssl.h>
+
+        void SSL_CTX_set_client_CA_list(SSL_CTX *ctx, STACK_OF(X509_NAME) *list);
+        void SSL_set_client_CA_list(SSL *s, STACK_OF(X509_NAME) *list);
+        int SSL_CTX_add_client_CA(SSL_CTX *ctx, X509 *cacert);
+        int SSL_add_client_CA(SSL *ssl, X509 *cacert);
+
+
+DDEESSCCRRIIPPTTIIOONN
+       SSL_CTX_set_client_CA_list() sets the lliisstt of CAs sent to
+       the client when requesting a client certificate for ccttxx.
+
+       SSL_set_client_CA_list() sets the lliisstt of CAs sent to the
+       client when requesting a client certificate for the chosen
+       ssssll, overriding the setting valid for ssssll's SSL_CTX
+       object.
+
+       SSL_CTX_add_client_CA() adds the CA name extracted from
+       ccaacceerrtt to the list of CAs sent to the client when
+       requesting a client certificate for ccttxx.
+
+       SSL_add_client_CA() adds the CA name extracted from ccaacceerrtt
+       to the list of CAs sent to the client when requesting a
+       client certificate for the chosen ssssll, overriding the
+       setting valid for ssssll's SSL_CTX object.
+
+NNOOTTEESS
+       When a TLS/SSL server requests a client certificate (see
+       SSSSLL_CCTTXX_sseett_vveerriiffyy_ooppttiioonnss(())), it sends a list of CAs, for
+       which it will accept certificates, to the client.
+
+       This list must explicitly be set using
+       SSL_CTX_set_client_CA_list() for ccttxx and
+       SSL_set_client_CA_list() for the specific ssssll. The list
+       specified overrides the previous setting. The CAs listed
+       do not become trusted (lliisstt only contains the names, not
+       the complete certificates); use
+       SSL_CTX_load_verify_locations(3) to additionally load them
+       for verification.
+
+       If the list of acceptable CAs is compiled in a file, the
+       SSL_load_client_CA_file(3) function can be used to help
+       importing the necessary data.
+
+       SSL_CTX_add_client_CA() and SSL_add_client_CA() can be
+       used to add additional items the list of client CAs. If no
+       list was specified before using
+       SSL_CTX_set_client_CA_list() or SSL_set_client_CA_list(),
+       a new client CA list for ccttxx or ssssll (as appropriate) is
+       opened.
+
+       These functions are only useful for TLS/SSL servers.
+
+RREETTUURRNN VVAALLUUEESS
+       SSL_CTX_set_client_CA_list() and SSL_set_client_CA_list()
+       do not return diagnostic information.
+
+       SSL_CTX_add_client_CA() and SSL_add_client_CA() have the
+       following return values:
+
+       1   The operation succeeded.
+
+       0   A failure while manipulating the STACK_OF(X509_NAME)
+           object occurred or the X509_NAME could not be
+           extracted from ccaacceerrtt. Check the error stack to find
+           out the reason.
+
+EEXXAAMMPPLLEESS
+       Scan all certificates in CCAAffiillee and list them as
+       acceptable CAs:
+
+         SSL_CTX_set_client_CA_list(ctx,SSL_load_client_CA_file(CAfile));
+
+
+SSEEEE AALLSSOO
+       ssl(3), SSL_get_client_CA_list(3),
+       SSL_load_client_CA_file(3),
+       SSL_CTX_load_verify_locations(3)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+12/Apr/2001                   0.9.6cSSL_CTX_set_client_CA_list(3)

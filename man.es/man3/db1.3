@@ -1,0 +1,121 @@
+DB1.(3)                                                   DB1.(3)
+
+
+
+NAME
+       DB1. -
+
+   Files
+       file db1.c
+       file falloc.c
+           The entire file space is thus divided into blocks with
+           a 'struct fablock' at the header of each.
+
+
+       file falloc.h
+           File space allocation routines.
+
+
+       file rpmdb.h
+           Access RPM indices using Berkeley DB interface(s).
+
+
+
+   Defines
+       #define FA_MAGIC   0x02050920
+
+   Functions
+       FD_t fadOpen (const char *path, int flags, mode_t perms)
+       unsigned int fadAlloc (FD_t fd, unsigned int size)
+       void fadFree (FD_t fd, unsigned int offset)
+       int fadFirstOffset (FD_t fd)
+       int fadNextOffset (FD_t fd, unsigned int lastoff)
+       char * db1basename (int rpmtag)
+
+   Variables
+       _dbiVec db1vec
+
+DEFINE DOCUMENTATION
+   #define FA_MAGIC   0x02050920
+       Definition at line 23 of file falloc.c.
+
+       Referenced by fadAlloc, fadFree, and fadOpen.
+
+FUNCTION DOCUMENTATION
+   char* db1basename (int rpmtag)
+       Return base file name for db1 database (legacy).
+
+       Parameters:
+
+       rpmtag rpm tag
+
+       Returns:
+           base file name of db1 database
+
+       Definition at line 2808 of file rpmdb.c.
+
+       Referenced by db1close, db1open, rpmdbMoveDatabase, and
+       rpmdbRemoveDatabase.
+
+   unsigned int fadAlloc (FD_t fd, unsigned int size)
+       Parameters:
+
+       fd     file handle
+
+       Returns:
+           0 on failure
+
+       Definition at line 110 of file falloc.c.
+
+       Referenced by db1cget.
+
+   int fadFirstOffset (FD_t fd)
+       Parameters:
+
+       fd     file handle
+
+       Definition at line 424 of file falloc.c.
+
+       Referenced by db1cget.
+
+   void fadFree (FD_t fd, unsigned int offset)
+       Parameters:
+
+       fd     file handle
+
+       Definition at line 298 of file falloc.c.
+
+       Referenced by db1cdel.
+
+   int fadNextOffset (FD_t fd, unsigned int lastoff)
+       Parameters:
+
+       fd     file handle
+
+       Returns:
+           next offset, 0 to terminate
+
+       Definition at line 429 of file falloc.c.
+
+       Referenced by db1cget, doGetRecord, and fadFirstOffset.
+
+   FD_t fadOpen (const char * path, int flags, mode_t perms)
+       Definition at line 55 of file falloc.c.
+
+       Referenced by db1open.
+
+VARIABLE DOCUMENTATION
+   struct _dbiVec db1vec
+       Initial value:
+
+        {
+            1 ,  85 ,  0 ,
+           db1open, db1close, db1sync, db1copen, db1cclose, db1cdel, db1cget, db1cput,
+           db1ccount, db1byteswapped, db1stat
+       }
+
+       Definition at line 603 of file db1.c.
+
+
+
+rpm                        13 Mar 2002                    DB1.(3)

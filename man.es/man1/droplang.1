@@ -1,0 +1,83 @@
+DROPLANG(1)       PostgreSQL Client Applications      DROPLANG(1)
+
+
+
+NAME
+       droplang - remove a PostgreSQL procedural language
+
+SYNOPSIS
+       droplang [ connection-options... ] langname [ dbname ]
+
+       droplang [ connection-options... ]  --list | -l dbname
+
+   INPUTS
+       droplang accepts the following command line arguments:
+
+       langname
+              Specifies  the name of the backend programming lan­
+              guage to be removed.
+
+       [-d, --dbname] dbname
+              Specifies from which database the  language  should
+              be  removed.   The  default  is to use the database
+              with the same name as the current system user.
+
+       -e, --echo
+              Displays SQL commands as they are executed.
+
+       -l, --list
+              Shows a list of already installed languages in  the
+              target database (which must be specified).
+
+
+       droplang also accepts the following command line arguments
+       for connection parameters:
+
+       -h, --host host
+              Specifies the host name of the machine on which the
+              server  is running. If host begins with a slash, it
+              is used  as  the  directory  for  the  Unix  domain
+              socket.
+
+       -p, --port port
+              Specifies  the  Internet  TCP/IP port or local Unix
+              domain socket file extension on which the server is
+              listening for connections.
+
+       -U, --username username
+              User name to connect as
+
+       -W, --password
+              Force password prompt.
+
+
+   OUTPUTS
+       Most  error  messages  are  self-explanatory.  If not, run
+       droplang with the --echo option and see under the  respec­
+       tive SQL command for details. Check also under psql(1) for
+       more possibilities.
+
+DESCRIPTION
+       droplang is a utility for removing an existing programming
+       language  from  a  PostgreSQL database.  droplang can drop
+       any procedural language, even those not  supplied  by  the
+       PostgreSQL distribution.
+
+       Although  backend  programming  languages  can  be removed
+       directly using several SQL commands, it is recommended  to
+       use droplang because it performs a number of checks and is
+       much easier to use. See DROP  LANGUAGE  [drop_language(7)]
+       for more.
+
+NOTES
+       Use createlang(1) to add a language.
+
+USAGE
+       To remove pltcl:
+
+       $ droplang pltcl dbname
+
+
+
+
+Application                 2001-05-09                DROPLANG(1)

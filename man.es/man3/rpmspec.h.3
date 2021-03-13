@@ -1,0 +1,95 @@
+build/rpmspec.h(3)                             build/rpmspec.h(3)
+
+
+
+NAME
+       build/rpmspec.h - The Spec and Package data structures
+       used during build.
+
+SYNOPSIS
+       #include 'rpmmacro.h'
+
+   Data Structures
+       struct OpenFileInfo
+       struct PackageStruct
+       struct ReadLevelEntry
+       struct Source
+       struct speclines_s
+       struct SpecStruct
+       struct spectag_s
+       struct spectags_s
+       struct TriggerFileEntry
+
+   Defines
+       #define RPMBUILD_ISSOURCE   1
+       #define RPMBUILD_ISPATCH   (1 << 1)
+       #define RPMBUILD_ISICON   (1 << 2)
+       #define RPMBUILD_ISNO   (1 << 3)
+       #define RPMBUILD_DEFAULT_LANG   'C'
+
+   Typedefs
+       typedef SpecStruct * Spec
+       typedef ReadLevelEntry RLE_t
+       typedef OpenFileInfo OFI_t
+       typedef spectag_s * spectag
+       typedef spectags_s * spectags
+       typedef speclines_s * speclines
+       typedef PackageStruct * Package
+
+   Functions
+       Spec newSpec (void)
+       Spec freeSpec (Spec spec)
+       OpenFileInfo * newOpenFileInfo (void)
+       spectag stashSt (Spec spec, Header h, int tag, const char
+           *lang)
+       int addSource (Spec spec, Package pkg, const char *field,
+           int tag)
+       int parseNoSource (Spec spec, const char *field, int tag)
+
+   Variables
+       Spec(* freeSpecVec )(Spec spec)
+
+DETAILED DESCRIPTION
+       The Spec and Package data structures used during build.
+
+
+
+       Definition in file rpmspec.h.
+
+DEFINE DOCUMENTATION
+   #define RPMBUILD_DEFAULT_LANG   'C'
+       Definition at line 30 of file rpmspec.h.
+
+       Referenced by findPreambleTag, handlePreambleTag,
+       parseDescription, printNewSpecfile, and stashSt.
+
+   #define RPMBUILD_ISICON   (1 << 2)
+       Definition at line 27 of file rpmspec.h.
+
+       Referenced by addSource.
+
+   #define RPMBUILD_ISNO   (1 << 3)
+       Definition at line 28 of file rpmspec.h.
+
+       Referenced by doRmSource, parseNoSource, and
+       processSourceFiles.
+
+   #define RPMBUILD_ISPATCH   (1 << 1)
+       Definition at line 26 of file rpmspec.h.
+
+       Referenced by addSource, doPatch, parseNoSource, and
+       processSourceFiles.
+
+   #define RPMBUILD_ISSOURCE   1
+       Definition at line 25 of file rpmspec.h.
+
+       Referenced by addSource, doUntar, parseNoSource, and
+       processSourceFiles.
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002         build/rpmspec.h(3)

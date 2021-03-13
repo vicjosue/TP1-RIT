@@ -1,0 +1,72 @@
+RESIZE2FS(8)                                         RESIZE2FS(8)
+
+
+
+NAME
+       resize2fs - ext2 file system resizer
+
+SYNOPSIS
+       resize2fs [ -d debug-flags ] [ -f ] [ -F ] [ -p ] device [
+       size ]
+
+DESCRIPTION
+       The resize2fs program will resize ext2 file  systems.   It
+       can  be  used  to  enlarge  or  shrink an ext2 file system
+       located on device so that it will have  size  blocks.   If
+       the  size  parameter  is not specified, it will default to
+       the size of the partition.  The size parameter  may  never
+       be larger than the size of the partition.
+
+       The resize2fs program does not manipulate the size of par­
+       titions.  If you wish to enlarge a  filesystem,  you  must
+       first  make sure you can expand the size of the underlying
+       partition first.  This  can  be  done  using  fdisk(8)  by
+       deleting  the  partition  and  recreating it with a larger
+       size.  When recreating the partition, make sure you create
+       it with the same starting disk cylinder as before!  Other­
+       wise, the resize operation will certainly  not  work,  and
+       you may lose your entire filesystem.
+
+       If  you  wish  to  shrink the an ext2 partition, first use
+       resize2fs to shrink the size of filesystem.  Then you  may
+       use  fdisk(8)  to  shrink the size of the partition.  When
+       shrinking the size of the partition, make sure you do  not
+       make  it smaller than the new size of the ext2 filesystem!
+
+OPTIONS
+       -d debug-flags
+              Turns on various resize2fs debugging  features,  if
+              they  have  been  compiled into the binary.  debug-
+              flags should be computed by adding the  numbers  of
+              the desired features from the following list:
+                   1    - Print out all disk I/O
+                   2    - Debug block relocations
+                   8    - Debug inode relocations
+                   16   - Debug moving the inode table
+
+       -p     Prints  out  a  percentage completion bars for each
+              resize2fs operation, so  that  the  user  can  keep
+              track of what the program is doing.
+
+       -f     Forces  resize2fs  to  proceed  with the filesystem
+              resize operation,  overriding  some  safety  checks
+              which resize2fs normally enforces.
+
+       -F     Flush  the filesystem device's buffer caches before
+              beginning.  Only really useful for doing  resize2fs
+              time trials.
+
+AUTHOR
+       resize2fs was written by Theodore Ts'o <tytso@mit.edu>.
+
+COPYRIGHT
+       Resize2fs  is  Copyright  1998  by  Theodore Ts'o and Pow­
+       erQuest, Inc.  All rights reserved.   As  of  April,  2000
+       Resize2fs may be redistributed under the terms of the GPL.
+
+SEE ALSO
+       fdisk(8), e2fsck(8), mke2fs(8)
+
+
+
+E2fsprogs version 1.26    February 2002              RESIZE2FS(8)

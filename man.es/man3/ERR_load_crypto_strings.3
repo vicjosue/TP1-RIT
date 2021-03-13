@@ -1,0 +1,54 @@
+ERR_load_crypto_strings(3)   OpenSSL   ERR_load_crypto_strings(3)
+
+
+
+NNAAMMEE
+       ERR_load_crypto_strings, SSL_load_error_strings,
+       ERR_free_strings - load and free error strings
+
+SSYYNNOOPPSSIISS
+        #include <openssl/err.h>
+
+        void ERR_load_crypto_strings(void);
+        void ERR_free_strings(void);
+
+        #include <openssl/ssl.h>
+
+        void SSL_load_error_strings(void);
+
+
+DDEESSCCRRIIPPTTIIOONN
+       ERR_load_crypto_strings() registers the error strings for
+       all lliibbccrryyppttoo functions. SSL_load_error_strings() does the
+       same, but also registers the lliibbssssll error strings.
+
+       One of these functions should be called before generating
+       textual error messages. However, this is not required when
+       memory usage is an issue.
+
+       ERR_free_strings() frees all previously loaded error
+       strings.
+
+RREETTUURRNN VVAALLUUEESS
+       ERR_load_crypto_strings(), SSL_load_error_strings() and
+       ERR_free_strings() return no values.
+
+SSEEEE AALLSSOO
+       err(3), ERR_error_string(3)
+
+HHIISSTTOORRYY
+       ERR_load_error_strings(), SSL_load_error_strings() and
+       ERR_free_strings() are available in all versions of SSLeay
+       and OpenSSL.
+
+
+
+
+
+
+
+
+
+
+
+24/Feb/2000                   0.9.6c   ERR_load_crypto_strings(3)

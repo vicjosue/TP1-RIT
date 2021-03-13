@@ -1,0 +1,326 @@
+lib/misc.c(3)                                       lib/misc.c(3)
+
+
+
+NAME
+       lib/misc.c -
+
+SYNOPSIS
+       #include 'system.h'
+       #include <rpmlib.h>
+       #include <rpmurl.h>
+       #include <rpmmacro.h>
+       #include 'misc.h'
+       #include 'debug.h'
+
+   Functions
+       char ** splitString (const char *str, int length, char
+           sep)
+       void freeSplitString (char **list)
+       int rpmfileexists (const char *urlfn)
+       int doputenv (const char *str)
+       int dosetenv (const char *name, const char *value, int
+           overwrite)
+       int rpmMkpath (const char *path, mode_t mode, uid_t uid,
+           gid_t gid)
+       int makeTempFile (const char *prefix, const char **fnptr,
+           FD_t *fdptr)
+           Return file handle for a temporaray file.
+       char * currentDirectory (void)
+           Return (malloc'd) current working directory.
+       int dncmp (const void *a, const void *b)
+       void compressFilelist (Header h)
+       void doBuildFileList (Header h, const char ***fileListPtr,
+           int *fileCountPtr, rpmTag baseNameTag, rpmTag
+           dirNameTag, rpmTag dirIndexesTag)
+       void expandFilelist (Header h)
+       void rpmBuildFileList (Header h, const char
+           ***fileListPtr, int *fileCountPtr)
+           Retrieve file names from header.
+       void buildOrigFileList (Header h, const char
+           ***fileListPtr, int *fileCountPtr)
+       int myGlobPatternP (const char *patternURL)
+       int glob_error (const char *foo, int bar)
+       int rpmGlob (const char *patterns, int *argcPtr, const
+           char ***argvPtr)
+       int rpmHeaderGetEntry (Header h, int_32 tag, int_32 *type,
+           void **p, int_32 *c)
+           Retrieve tag info from header.
+       int rpmPackageGetEntry (void *leadp, Header sigs, Header
+           h, int_32 tag, int_32 *type, void **p, int_32 *c)
+           Retrieve tag info from header.
+       void providePackageNVR (Header h)
+
+   Variables
+       int _debug = 0
+       char * RPMVERSION = VERSION
+       int _noDirTokens = 0
+
+DETAILED DESCRIPTION
+       Definition in file misc.c.
+
+FUNCTION DOCUMENTATION
+   void buildOrigFileList (Header h, const char *** fileListPtr,
+       int * fileCountPtr)
+       Definition at line 455 of file misc.c.
+
+       References doBuildFileList, RPMTAG_ORIGBASENAMES,
+       RPMTAG_ORIGDIRINDEXES, and RPMTAG_ORIGDIRNAMES.
+
+   void compressFilelist (Header h)
+       Definition at line 289 of file misc.c.
+
+       References alloca, dncmp, HAE_t, headerIsEntry, HFD_t,
+       HGE_t, HRE_t, int_32, RPM_INT32_TYPE,
+       RPM_STRING_ARRAY_TYPE, RPMTAG_BASENAMES,
+       RPMTAG_DIRINDEXES, RPMTAG_DIRNAMES, RPMTAG_OLDFILENAMES,
+       and rpmTagType.
+
+   char* currentDirectory (void)
+       Return (malloc'd) current working directory.
+
+       Returns:
+           current working directory (malloc'ed)
+
+       Definition at line 265 of file misc.c.
+
+       References errno, xmalloc, and xrealloc.
+
+   int dncmp (const void * a, const void * b) [static]
+       Definition at line 282 of file misc.c.
+
+       Referenced by compressFilelist.
+
+   void doBuildFileList (Header h, const char *** fileListPtr,
+       int * fileCountPtr, rpmTag baseNameTag, rpmTag dirNameTag,
+       rpmTag dirIndexesTag) [static]
+       Definition at line 380 of file misc.c.
+
+       References _free, HFD_t, HGE_t, rpmTag, rpmTagType,
+       stpcpy, and xmalloc.
+
+       Referenced by buildOrigFileList, expandFilelist, and
+       rpmBuildFileList.
+
+   int doputenv (const char * str)
+       Definition at line 97 of file misc.c.
+
+       References xmalloc.
+
+   int dosetenv (const char * name, const char * value, int
+       overwrite)
+       Definition at line 107 of file misc.c.
+
+       References getenv, stpcpy, and xmalloc.
+
+   void expandFilelist (Header h)
+       Definition at line 426 of file misc.c.
+
+       References _free, doBuildFileList, HAE_t, headerIsEntry,
+       HRE_t, RPM_STRING_ARRAY_TYPE, RPMTAG_BASENAMES,
+       RPMTAG_DIRINDEXES, RPMTAG_DIRNAMES, and
+       RPMTAG_OLDFILENAMES.
+
+   void freeSplitString (char ** list)
+       Definition at line 60 of file misc.c.
+
+       References _free.
+
+   int glob_error (const char * foo, int bar) [static]
+       Definition at line 493 of file misc.c.
+
+       Referenced by rpmGlob.
+
+   int makeTempFile (const char * prefix, const char ** fnptr,
+       FD_t * fdptr)
+       Return file handle for a temporaray file.
+
+       A unique temporaray file path will be generated using
+       rpmGenPath(prefix, '%{_tmppath}/', 'rpm-tmp.XXXXX') where
+       'XXXXXX' is filled in using rand(3). The file is opened,
+       and the link count and (dev,ino) location are verified
+       after opening. The file name and the open file handle are
+       returned.
+
+       Parameters:
+
+       prefix leading part of temp file path
+
+       Return values:
+
+       fnptr  temp file name (or NULL)
+
+       fdptr  temp file handle
+
+       Returns:
+           0 on success
+
+       Definition at line 167 of file misc.c.
+
+       References _, _free, errno, Fclose, Ferror, Fileno, Fopen,
+       rpmGenPath, rpmMkpath, S_ISLNK, URL_IS_DASH, URL_IS_HTTP,
+       URL_IS_PATH, URL_IS_UNKNOWN, and urlPath.
+
+   int myGlobPatternP (const char * patternURL)
+       Definition at line 466 of file misc.c.
+
+       References urlPath.
+
+   void providePackageNVR (Header h)
+       Definition at line 694 of file misc.c.
+
+       References alloca, headerAddOrAppendEntry, headerNVR,
+       HFD_t, HGE_t, int_32, RPM_INT32_TYPE,
+       RPM_STRING_ARRAY_TYPE, RPMSENSE_ANY, RPMSENSE_EQUAL,
+       RPMTAG_EPOCH, RPMTAG_PROVIDEFLAGS, RPMTAG_PROVIDENAME,
+       RPMTAG_PROVIDEVERSION, rpmTagType, and stpcpy.
+
+   void rpmBuildFileList (Header h, const char *** fileListPtr,
+       int * fileCountPtr)
+       Retrieve file names from header.
+
+       The representation of file names in package headers
+       changed in rpm-4.0. Originally, file names were stored as
+       an array of paths. In rpm-4.0, file names are stored as
+       separate arrays of dirname's and basename's, with a
+       dirname index to associate the correct dirname with each
+       basname. This function is used to retrieve file names
+       independent of how the file names are represented in the
+       package header.
+
+       Parameters:
+
+       h      header
+
+       Return values:
+
+       fileListPtr
+              address of array of file names
+
+       fileCountPtr
+              address of number of files
+
+       Definition at line 449 of file misc.c.
+
+       References doBuildFileList, RPMTAG_BASENAMES,
+       RPMTAG_DIRINDEXES, and RPMTAG_DIRNAMES.
+
+   int rpmfileexists (const char * urlfn)
+       Definition at line 68 of file misc.c.
+
+       References Stat, URL_IS_DASH, URL_IS_FTP, URL_IS_HTTP,
+       URL_IS_PATH, URL_IS_UNKNOWN, urlPath, and urltype.
+
+   int rpmGlob (const char * patterns, int * argcPtr, const char
+       *** argvPtr)
+       Definition at line 498 of file misc.c.
+
+       References _free, Glob, glob_error, Globfree,
+       myGlobPatternP, poptParseArgvString, URL_IS_DASH,
+       URL_IS_FTP, URL_IS_HTTP, URL_IS_PATH, URL_IS_UNKNOWN,
+       urlPath, xmalloc, xrealloc, and xstrdup.
+
+   int rpmHeaderGetEntry (Header h, int_32 tag, int_32 * type,
+       void ** p, int_32 * c)
+       Retrieve tag info from header.
+
+       This is a 'dressed' entry to headerGetEntry to do: 1)
+       DIRNAME/BASENAME/DIRINDICES -> FILENAMES tag conversions.
+       2) i18n lookaside (if enabled).
+
+       Parameters:
+
+       h      header
+
+       tag    tag
+
+       Return values:
+
+       type   address of tag value data type
+
+       p      address of pointer to tag value(s)
+
+       c      address of number of values
+
+       Returns:
+           0 on success, 1 on bad magic, 2 on error
+
+       Definition at line 609 of file misc.c.
+
+       References headerGetEntry, headerSprintf, int_32,
+       RPM_STRING_ARRAY_TYPE, RPM_STRING_TYPE, rpmBuildFileList,
+       RPMTAG_DESCRIPTION, RPMTAG_GROUP, RPMTAG_OLDFILENAMES,
+       RPMTAG_SUMMARY, rpmTagTable, stpcpy, and tagName.
+
+   int rpmMkpath (const char * path, mode_t mode, uid_t uid,
+       gid_t gid) [static]
+       Definition at line 119 of file misc.c.
+
+       References alloca, errno, and stpcpy.
+
+       Referenced by makeTempFile.
+
+   int rpmPackageGetEntry (void * leadp, Header sigs, Header h,
+       int_32 tag, int_32 * type, void ** p, int_32 * c)
+       Retrieve tag info from header.
+
+       Yet Another 'dressed' entry to headerGetEntry in order to
+       unify signature/header tag retrieval.
+
+       Deprecated:
+           Signature tags are now duplicated into header when
+           installed.
+
+       Todo:
+           Eliminate from API.
+
+       Parameters:
+
+       leadp  rpm lead
+
+       h      header
+
+       sigs   signatures
+
+       tag    tag
+
+       Return values:
+
+       type   address of tag value data type
+
+       p      address of pointer to tag value(s)
+
+       c      address of number of values
+
+       Returns:
+           0 on success, 1 on bad magic, 2 on error
+
+       Definition at line 660 of file misc.c.
+
+       References headerGetEntry, headerIsEntry, int_32,
+       rpmHeaderGetEntry, RPMTAG_SIGGPG, RPMTAG_SIGLEMD5_1,
+       RPMTAG_SIGLEMD5_2, RPMTAG_SIGMD5, RPMTAG_SIGPGP,
+       RPMTAG_SIGPGP5, and RPMTAG_SIGSIZE.
+
+   char** splitString (const char * str, int length, char sep)
+       Definition at line 24 of file misc.c.
+
+       References xmalloc.
+
+VARIABLE DOCUMENTATION
+   int _debug = 0 [static]
+       Definition at line 7 of file misc.c.
+
+   int _noDirTokens = 0
+       Definition at line 280 of file misc.c.
+
+   char* RPMVERSION = VERSION
+       Definition at line 21 of file misc.c.
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002              lib/misc.c(3)

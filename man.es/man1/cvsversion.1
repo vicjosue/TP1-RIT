@@ -1,0 +1,35 @@
+CVSVERSION(1)         K Desktop Environment         CVSVERSION(1)
+
+
+
+NNAAMMEE   ccvvssvveerrssiioonn ---- DDiissppllaayyss vveerrssiioonn ooff tthhee ffiillee ppaasssseedd aass
+       aarrgguummeenntt..
+SSYYNNOOPPSSIISS
+           cvsversion <file>
+
+
+DDEESSCCRRIIPPTTIIOONN
+       cvsversion displays the version in CVS of a file, as known
+       by the local checked out directory. No connection is
+       required to the CVS server.  It can be used in other
+       scripts, or simply to ask for diffs using
+
+       cvs diff -r <version> [-r <version>] <file>
+
+EEXXAAMMPPLLEESS
+           cd baseline/kdelibs ; cvsversion configure.in
+           cvsversion baseline/kdelibs/configure.in
+
+
+AAUUTTHHOORR
+       David Faure <faure@kde.org>
+
+
+
+
+
+
+
+
+
+11/Apr/99              perl 5.005, patch 02         CVSVERSION(1)

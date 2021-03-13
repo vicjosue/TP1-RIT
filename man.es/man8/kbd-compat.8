@@ -1,0 +1,35 @@
+KBD-COMPAT(8)          Linux User's Manual          KBD-COMPAT(8)
+
+
+
+NAME
+       kbd-compat  -  kbd-compatibility wrapper scripts for Linux
+       Console Tools.
+
+
+SYNOPSIS
+       setfont [ -o font.orig]  [-H]  [font.new]  [-m  acm]  [-om
+       acm.orig] [-u sfm] [-ou sfm.orig] [-v] [-V]
+       loadunimap sfm
+       saveunimap sfm.orig
+       mapscrn [ acm ] [ -o acm.orig]
+
+
+DESCRIPTION
+       All of these scripts are intended solely for backward com­
+       patibility with the old `kbd' package, and are only needed
+       by a few programs which rely on the command-line interface
+       of these programs.  They are all implemented  as  wrappers
+       around the consolechars(8) command.
+
+       These  scripts  may  not be installed on your system. They
+       will even hopefully one day never be installed on any sys­
+       tem again.
+
+
+SEE ALSO
+       consolechars(8).
+
+
+
+Console tools              27 Oct 1997              KBD-COMPAT(8)

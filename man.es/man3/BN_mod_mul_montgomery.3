@@ -1,0 +1,115 @@
+BN_mod_mul_montgomery(3)     OpenSSL     BN_mod_mul_montgomery(3)
+
+
+
+NNAAMMEE
+       BN_mod_mul_montgomery, BN_MONT_CTX_new, BN_MONT_CTX_init,
+       BN_MONT_CTX_free, BN_MONT_CTX_set, BN_MONT_CTX_copy,
+       BN_from_montgomery, BN_to_montgomery - Montgomery
+       multiplication
+
+SSYYNNOOPPSSIISS
+        #include <openssl/bn.h>
+
+        BN_MONT_CTX *BN_MONT_CTX_new(void);
+        void BN_MONT_CTX_init(BN_MONT_CTX *ctx);
+        void BN_MONT_CTX_free(BN_MONT_CTX *mont);
+
+        int BN_MONT_CTX_set(BN_MONT_CTX *mont, const BIGNUM *m, BN_CTX *ctx);
+        BN_MONT_CTX *BN_MONT_CTX_copy(BN_MONT_CTX *to, BN_MONT_CTX *from);
+
+        int BN_mod_mul_montgomery(BIGNUM *r, BIGNUM *a, BIGNUM *b,
+                BN_MONT_CTX *mont, BN_CTX *ctx);
+
+        int BN_from_montgomery(BIGNUM *r, BIGNUM *a, BN_MONT_CTX *mont,
+                BN_CTX *ctx);
+
+        int BN_to_montgomery(BIGNUM *r, BIGNUM *a, BN_MONT_CTX *mont,
+                BN_CTX *ctx);
+
+
+DDEESSCCRRIIPPTTIIOONN
+       These functions implement Montgomery multiplication. They
+       are used automatically when BN_mod_exp(3) is called with
+       suitable input, but they may be useful when several
+       operations are to be performed using the same modulus.
+
+       BN_MONT_CTX_new() allocates and initializes a BBNN_MMOONNTT_CCTTXX
+       structure.  BN_MONT_CTX_init() initializes an existing
+       uninitialized BBNN_MMOONNTT_CCTTXX.
+
+       BN_MONT_CTX_set() sets up the mmoonntt structure from the
+       modulus mm by precomputing its inverse and a value R.
+
+       BN_MONT_CTX_copy() copies the BBNN_MMOONNTT_CCTTXX ffrroomm to ttoo.
+
+       BN_MONT_CTX_free() frees the components of the
+       BBNN_MMOONNTT_CCTTXX, and, if it was created by BN_MONT_CTX_new(),
+       also the structure itself.
+
+       BN_mod_mul_montgomery() computes Mont(aa,bb):=aa*bb*R^-1 and
+       places the result in rr.
+
+       BN_from_montgomery() performs the Montgomery reduction rr =
+       aa*R^-1.
+
+       BN_to_montgomery() computes Mont(aa,R^2), i.e. aa*R.
+
+       For all functions, ccttxx is a previously allocated BBNN_CCTTXX
+       used for temporary variables.
+
+       The BBNN_MMOONNTT_CCTTXX structure is defined as follows:
+
+
+
+
+
+        typedef struct bn_mont_ctx_st
+               {
+               int ri;         /* number of bits in R */
+               BIGNUM RR;      /* R^2 (used to convert to Montgomery form) */
+               BIGNUM N;       /* The modulus */
+               BIGNUM Ni;      /* R*(1/R mod N) - N*Ni = 1
+                                * (Ni is only stored for bignum algorithm) */
+               BN_ULONG n0;    /* least significant word of Ni */
+               int flags;
+               } BN_MONT_CTX;
+
+       BN_to_montgomery() is a macro.
+
+RREETTUURRNN VVAALLUUEESS
+       BN_MONT_CTX_new() returns the newly allocated BBNN_MMOONNTT_CCTTXX,
+       and NULL on error.
+
+       BN_MONT_CTX_init() and BN_MONT_CTX_free() have no return
+       values.
+
+       For the other functions, 1 is returned for success, 0 on
+       error.  The error codes can be obtained by
+       ERR_get_error(3).
+
+SSEEEE AALLSSOO
+       bn(3), err(3), BN_add(3), BN_CTX_new(3)
+
+HHIISSTTOORRYY
+       BN_MONT_CTX_new(), BN_MONT_CTX_free(), BN_MONT_CTX_set(),
+       BN_mod_mul_montgomery(), BN_from_montgomery() and
+       BN_to_montgomery() are available in all versions of SSLeay
+       and OpenSSL.
+
+       BN_MONT_CTX_init() and BN_MONT_CTX_copy() were added in
+       SSLeay 0.9.1b.
+
+       BN_from_montgomery, BN_to_montgomery - Montgomery
+       multiplication"
+
+
+
+
+
+
+
+
+
+
+12/Jun/2000                   0.9.6c     BN_mod_mul_montgomery(3)

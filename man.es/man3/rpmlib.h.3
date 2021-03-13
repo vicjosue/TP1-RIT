@@ -1,0 +1,1943 @@
+lib/rpmlib.h(3)                                   lib/rpmlib.h(3)
+
+
+
+NAME
+       lib/rpmlib.h -
+
+SYNOPSIS
+       #include 'rpmio.h'
+       #include 'rpmmessages.h'
+       #include 'rpmerr.h'
+       #include 'header.h'
+       #include 'popt.h'
+
+   Data Structures
+       struct rpmDependencyConflict_s
+           Dependency problems found by rpmdepCheck().
+       struct rpmProblem_s
+       struct rpmProblemSet_s
+       struct rpmRelocation_s
+           We pass these around as an array with a sentinel.
+
+   RPMRC
+       #define RPMVAR_OPTFLAGS   3
+       #define RPMVAR_PROVIDES   38
+       #define RPMVAR_INCLUDE   43
+       #define RPMVAR_MACROFILES   49
+       #define RPMVAR_NUM   55
+       #define RPM_MACHTABLE_COUNT   4    /*!< No. of arch/os
+           tables. */
+       enum rpm_machtable_e { RPM_MACHTABLE_INSTARCH =  0,
+           RPM_MACHTABLE_INSTOS =  1, RPM_MACHTABLE_BUILDARCH =
+           2, RPM_MACHTABLE_BUILDOS =  3 }
+       const char * rpmGetVar (int var)
+       void rpmSetVar (int var, const char *val)
+       int rpmReadConfigFiles (const char *file, const char
+           *target)
+       int rpmReadRC (const char *rcfiles)
+       void rpmGetArchInfo (const char **name, int *num)
+       void rpmGetOsInfo (const char **name, int *num)
+       int rpmMachineScore (int type, const char *name)
+       int rpmShowRC (FILE *fp)
+       void rpmSetTables (int archTable, int osTable)
+       void rpmSetMachine (const char *arch, const char *os)
+       void rpmGetMachine (const char **arch, const char **os)
+       void rpmFreeRpmrc (void)
+       const char * macrofiles
+
+   RPMTS
+       #define XFA_SKIPPING(_a)   ((_a) == FA_SKIP || (_a) ==
+           FA_SKIPNSTATE || (_a) == FA_SKIPNETSHARED || (_a) ==
+           FA_SKIPMULTILIB)
+       #define _noTransScripts
+       #define _noTransTriggers
+       typedef void *(* HFD_t )(const void *data, rpmTagType
+           type)
+           Prototype for headerFreeData() vector.
+       typedef int(* HGE_t )(Header h, rpmTag tag, rpmTagType
+           *type, void **p, int_32 *c)
+           Prototype for headerGetEntry() vector.
+       typedef int(* HAE_t )(Header h, rpmTag tag, rpmTagType
+           type, const void *p, int_32 c)
+           Prototype for headerAddEntry() vector.
+       typedef int(* HME_t )(Header h, rpmTag tag, rpmTagType
+           type, const void *p, int_32 c)
+           Prototype for headerModifyEntry() vector.
+       typedef int(* HRE_t )(Header h, int_32 tag)
+           Prototype for headerRemoveEntry() vector.
+       typedef rpmRelocation_s rpmRelocation
+           We pass these around as an array with a sentinel.
+       typedef enum fileAction_e fileAction
+           File disposition(s) during package install/erase
+           transaction.
+       typedef enum fileTypes_e fileTypes
+           File types.
+       typedef fsmIterator_s * FSMI_t
+       typedef fsm_s * FSM_t
+       typedef psm_s * PSM_t
+       typedef transactionFileInfo_s * TFI_t
+       typedef rpmTransactionSet_s * rpmTransactionSet
+       typedef enum rpmtransFlags_e rpmtransFlags
+       typedef enum rpmprobFilterFlags_e rpmprobFilterFlags
+       enum fileAction_e { FA_UNKNOWN =  0, FA_CREATE, FA_COPYIN,
+           FA_COPYOUT, FA_BACKUP, FA_SAVE, FA_SKIP, FA_ALTNAME,
+           FA_ERASE, FA_SKIPNSTATE, FA_SKIPNETSHARED,
+           FA_SKIPMULTILIB }
+           File disposition(s) during package install/erase
+           transaction.
+       enum fileTypes_e { PIPE =   1, CDEV =   2, XDIR =   4,
+           BDEV =   6, REG =   8, LINK =  10, SOCK =  12 }
+           File types.
+       enum rpmtransFlags_e { RPMTRANS_FLAG_NONE =  0,
+           RPMTRANS_FLAG_TEST =  (1 <<  0),
+           RPMTRANS_FLAG_BUILD_PROBS =  (1 <<  1),
+           RPMTRANS_FLAG_NOSCRIPTS =  (1 <<  2),
+           RPMTRANS_FLAG_JUSTDB =  (1 <<  3),
+           RPMTRANS_FLAG_NOTRIGGERS =  (1 <<  4),
+           RPMTRANS_FLAG_NODOCS =  (1 <<  5),
+           RPMTRANS_FLAG_ALLFILES =  (1 <<  6),
+           RPMTRANS_FLAG_KEEPOBSOLETE =  (1 <<  7),
+           RPMTRANS_FLAG_MULTILIB =  (1 <<  8),
+           RPMTRANS_FLAG_DIRSTASH =  (1 <<  9),
+           RPMTRANS_FLAG_REPACKAGE =  (1 << 10),
+           RPMTRANS_FLAG_PKGCOMMIT =  (1 << 11),
+           RPMTRANS_FLAG_PKGUNDO =  (1 << 12),
+           RPMTRANS_FLAG_COMMIT =  (1 << 13), RPMTRANS_FLAG_UNDO
+           =  (1 << 14), RPMTRANS_FLAG_REVERSE =  (1 << 15),
+           RPMTRANS_FLAG_NOTRIGGERPREIN =  (1 << 16),
+           RPMTRANS_FLAG_NOPRE =  (1 << 17), RPMTRANS_FLAG_NOPOST
+           =  (1 << 18), RPMTRANS_FLAG_NOTRIGGERIN =  (1 << 19),
+           RPMTRANS_FLAG_NOTRIGGERUN =  (1 << 20),
+           RPMTRANS_FLAG_NOPREUN =  (1 << 21),
+           RPMTRANS_FLAG_NOPOSTUN =  (1 << 22),
+           RPMTRANS_FLAG_NOTRIGGERPOSTUN =  (1 << 23),
+           RPMTRANS_FLAG_NOPAYLOAD =  (1 << 24),
+           RPMTRANS_FLAG_APPLYONLY =  (1 << 25),
+           RPMTRANS_FLAG_CHAINSAW =  (1 << 26) }
+       enum rpmprobFilterFlags_e { RPMPROB_FILTER_NONE =  0,
+           RPMPROB_FILTER_IGNOREOS =  (1 << 0),
+           RPMPROB_FILTER_IGNOREARCH =  (1 << 1),
+           RPMPROB_FILTER_REPLACEPKG =  (1 << 2),
+           RPMPROB_FILTER_FORCERELOCATE =  (1 << 3),
+           RPMPROB_FILTER_REPLACENEWFILES =  (1 << 4),
+           RPMPROB_FILTER_REPLACEOLDFILES =  (1 << 5),
+           RPMPROB_FILTER_OLDPACKAGE =  (1 << 6),
+           RPMPROB_FILTER_DISKSPACE =  (1 << 7),
+           RPMPROB_FILTER_DISKNODES =  (1 << 8) }
+       rpmRC rpmInstallSourcePackage (const char *rootDir, FD_t
+           fd, const char **specFilePtr, rpmCallbackFunction
+           notify, rpmCallbackData notifyData, char **cookie)
+           Install source package.
+       int rpmVersionCompare (Header first, Header second)
+           Compare headers to determine which header is 'newer'.
+       rpmTransactionSet rpmtransCreateSet (rpmdb rpmdb, const
+           char *rootDir)
+       int rpmtransAddPackage (rpmTransactionSet ts, Header h,
+           FD_t fd, const void *key, int upgrade, rpmRelocation
+           *relocs)
+       void rpmtransAvailablePackage (rpmTransactionSet ts,
+           Header h, const void *key)
+       int rpmtransRemovePackage (rpmTransactionSet ts, int
+           dboffset)
+       rpmTransactionSet rpmtransFree (rpmTransactionSet ts)
+       void rpmtransSetScriptFd (rpmTransactionSet ts, FD_t fd)
+       int rpmtransGetKeys (const rpmTransactionSet ts, const
+           void ***ep, int *nep)
+       int rpmdepCheck (rpmTransactionSet ts,
+           rpmDependencyConflict *conflicts, int *numConflicts)
+       int rpmdepOrder (rpmTransactionSet ts)
+       rpmDependencyConflict rpmdepFreeConflicts
+           (rpmDependencyConflict conflicts, int numConflicts)
+       int rpmGetRpmlibProvides (const char ***provNames, int
+           **provFlags, const char ***provVersions)
+       int rpmvercmp (const char *a, const char *b)
+       int rpmRangesOverlap (const char *AName, const char *AEVR,
+           int AFlags, const char *BName, const char *BEVR, int
+           BFlags)
+       int rpmCheckRpmlibProvides (const char *keyName, const
+           char *keyEVR, int keyFlags)
+       void rpmShowRpmlibProvides (FILE *fp)
+       int rpmRunTransactions (rpmTransactionSet ts,
+           rpmCallbackFunction notify, rpmCallbackData
+           notifyData, rpmProblemSet okProbs, rpmProblemSet
+           *newProbs, rpmtransFlags transFlags,
+           rpmprobFilterFlags ignoreSet)
+
+   RPMDB
+       typedef rpmdb_s * rpmdb
+       typedef _dbiIndexSet * dbiIndexSet
+       typedef _rpmdbMatchIterator * rpmdbMatchIterator
+       typedef enum rpmMireMode_e rpmMireMode
+           Tag value pattern match mode.
+       enum rpmMireMode_e { RPMMIRE_DEFAULT =  0, RPMMIRE_STRCMP
+           =  1, RPMMIRE_REGEX =  2, RPMMIRE_GLOB =  3 }
+           Tag value pattern match mode.
+       int rpmdbOpen (const char *root, rpmdb *dbp, int mode, int
+           perms)
+       int rpmdbInit (const char *root, int perms)
+       int rpmdbVerify (const char *root)
+       int rpmdbClose (rpmdb rpmdb)
+       int rpmdbSync (rpmdb rpmdb)
+       int rpmdbOpenAll (rpmdb db)
+       int rpmdbCountPackages (rpmdb db, const char *name)
+       rpmdbMatchIterator rpmdbFreeIterator (rpmdbMatchIterator
+           mi)
+       rpmdb rpmdbGetIteratorRpmDB (rpmdbMatchIterator mi)
+       unsigned int rpmdbGetIteratorOffset (rpmdbMatchIterator
+           mi)
+       int rpmdbGetIteratorCount (rpmdbMatchIterator mi)
+       int rpmdbAppendIterator (rpmdbMatchIterator mi, const int
+           *hdrNums, int nHdrNums)
+       int rpmdbPruneIterator (rpmdbMatchIterator mi, int
+           *hdrNums, int nHdrNums, int sorted)
+       int rpmdbSetIteratorRE (rpmdbMatchIterator mi, rpmTag tag,
+           rpmMireMode mode, const char *pattern)
+       int rpmdbSetIteratorVersion (rpmdbMatchIterator mi, const
+           char *version)
+       int rpmdbSetIteratorRelease (rpmdbMatchIterator mi, const
+           char *release)
+       int rpmdbSetIteratorRewrite (rpmdbMatchIterator mi, int
+           rewrite)
+       int rpmdbSetIteratorModified (rpmdbMatchIterator mi, int
+           modified)
+       Header rpmdbNextIterator (rpmdbMatchIterator mi)
+       Header XrpmdbNextIterator (rpmdbMatchIterator mi, const
+           char *f, unsigned int l)
+       rpmdbMatchIterator rpmdbInitIterator (rpmdb db, int
+           rpmtag, const void *key, size_t keylen)
+       int rpmdbAdd (rpmdb db, int iid, Header h)
+       int rpmdbRemove (rpmdb db, int rid, unsigned int offset)
+       int rpmdbRebuild (const char *root)
+       int * dbiTags
+       int dbiTagsMax
+
+   RPMPROBS
+       typedef enum rpmProblemType_e rpmProblemType
+           Enumerate transaction set problem types.
+       typedef rpmProblem_s * rpmProblem
+       typedef rpmProblemSet_s * rpmProblemSet
+       typedef rpmDependencyConflict_s * rpmDependencyConflict
+           Dependency problems found by rpmdepCheck().
+       enum rpmProblemType_e { RPMPROB_BADARCH, RPMPROB_BADOS,
+           RPMPROB_PKG_INSTALLED, RPMPROB_BADRELOCATE,
+           RPMPROB_REQUIRES, RPMPROB_CONFLICT,
+           RPMPROB_NEW_FILE_CONFLICT, RPMPROB_FILE_CONFLICT,
+           RPMPROB_OLDPACKAGE, RPMPROB_DISKSPACE,
+           RPMPROB_DISKNODES, RPMPROB_BADPRETRANS }
+           Enumerate transaction set problem types.
+       void printDepFlags (FILE *fp, const char *version, int
+           flags)
+       void printDepProblems (FILE *fp, const
+           rpmDependencyConflict conflicts, int numConflicts)
+           Print results of rpmdepCheck() dependency check.
+       const char * rpmProblemString (const rpmProblem prob)
+           Return formatted string representation of problem.
+       void rpmProblemPrint (FILE *fp, rpmProblem prob)
+           Output formatted string representation of problem to
+           file handle.
+       void rpmProblemSetPrint (FILE *fp, rpmProblemSet probs)
+           Print problems to file handle.
+       void rpmProblemSetFree (rpmProblemSet probs)
+           Destroy problem set.
+
+   Defines
+       #define RPMDBI_PACKAGES   0   /*!< Installed package
+           headers. */
+           Pseudo-tags used by the rpmdb iterator API.
+       #define RPMDBI_DEPENDS   1    /*!< Dependency resolution
+           cache. */
+       #define RPMDBI_LABEL   2 /*!< Fingerprint search marker.
+           */
+       #define RPMDBI_ADDED   3 /*!< Added package headers. */
+       #define RPMDBI_REMOVED   4    /*!< Removed package
+           headers. */
+       #define RPMDBI_AVAILABLE   5  /*!< Available package
+           headers. */
+       #define RPMTAG_SERIAL   RPMTAG_EPOCH
+       #define RPMTAG_COPYRIGHT   RPMTAG_LICENSE
+       #define RPMTAG_PROVIDES   RPMTAG_PROVIDENAME
+       #define RPMTAG_OBSOLETES   RPMTAG_OBSOLETENAME
+       #define RPMTAG_EXTERNAL_TAG   1000000
+       #define RPMFILE_MULTILIB_SHIFT   9
+       #define RPMFILE_MULTILIB(N)   ((N) <<
+           RPMFILE_MULTILIB_SHIFT)
+       #define RPMFILE_MULTILIB_MASK   RPMFILE_MULTILIB(7)
+       #define RPMFILE_ALL   ~(RPMFILE_NONE)
+       #define isFileMULTILIB(_fflags)   ((_fflags) &
+           RPMFILE_MULTILIB_MASK)
+       #define RPMSENSE_SENSEMASK   15
+       #define RPMSENSE_TRIGGER   (RPMSENSE_TRIGGERIN |
+           RPMSENSE_TRIGGERUN | RPMSENSE_TRIGGERPOSTUN)
+       #define isDependsMULTILIB(_dflags)   ((_dflags) &
+           RPMSENSE_MULTILIB)
+       #define _ALL_REQUIRES_MASK
+       #define _notpre(_x)   ((_x) & ~RPMSENSE_PREREQ)
+       #define _INSTALL_ONLY_MASK
+           _notpre(RPMSENSE_SCRIPT_PRE|RPMSENSE_SCRIPT_POST|RPMSENSE_RPMLIB)
+       #define _ERASE_ONLY_MASK
+           _notpre(RPMSENSE_SCRIPT_PREUN|RPMSENSE_SCRIPT_POSTUN)
+       #define isLegacyPreReq(_x)   (((_x) & _ALL_REQUIRES_MASK)
+           == RPMSENSE_PREREQ)
+       #define isInstallPreReq(_x)   ((_x) & _INSTALL_ONLY_MASK)
+       #define isErasePreReq(_x)   ((_x) & _ERASE_ONLY_MASK)
+       #define RPMLEAD_BINARY   0
+       #define RPMLEAD_SOURCE   1
+       #define RPMLEAD_MAGIC0   0xed
+       #define RPMLEAD_MAGIC1   0xab
+       #define RPMLEAD_MAGIC2   0xee
+       #define RPMLEAD_MAGIC3   0xdb
+
+   Typedefs
+       typedef enum rpmRC_e rpmRC
+           Package read return codes.
+       typedef enum rpmTag_e rpmTag
+           Tags identify data in package headers.
+       typedef enum rpmfileState_e rpmfileState
+           File States (when installed).
+       typedef enum rpmfileAttrs_e rpmfileAttrs
+           File Attributes.
+       typedef enum rpmsenseFlags_e rpmsenseFlags
+           Dependency Attributes.
+
+   Enumerations
+       enum rpmRC_e { RPMRC_OK =  0, RPMRC_BADMAGIC =  1,
+           RPMRC_FAIL =  2, RPMRC_BADSIZE =  3, RPMRC_SHORTREAD =
+           4 }
+           Package read return codes.
+       enum rpmTag_e { RPMTAG_HEADERIMAGE =   61,
+           RPMTAG_HEADERSIGNATURES =   62, RPMTAG_HEADERIMMUTABLE
+           =   63, RPMTAG_HEADERREGIONS =   64,
+           RPMTAG_HEADERI18NTABLE =   100, RPMTAG_SIG_BASE =
+           256, RPMTAG_SIGSIZE =  RPMTAG_SIG_BASE+1,
+           RPMTAG_SIGLEMD5_1 =  RPMTAG_SIG_BASE+2, RPMTAG_SIGPGP
+           =  RPMTAG_SIG_BASE+3, RPMTAG_SIGLEMD5_2 =
+           RPMTAG_SIG_BASE+4, RPMTAG_SIGMD5 =  RPMTAG_SIG_BASE+5,
+           RPMTAG_SIGGPG =  RPMTAG_SIG_BASE+6, RPMTAG_SIGPGP5 =
+           RPMTAG_SIG_BASE+7, RPMTAG_BADSHA1HEADER =
+           RPMTAG_SIG_BASE+8, RPMTAG_SHA1HEADER =
+           RPMTAG_SIG_BASE+9, RPMTAG_NAME =  1000, RPMTAG_VERSION
+           =  1001, RPMTAG_RELEASE =  1002, RPMTAG_EPOCH =  1003,
+           RPMTAG_SUMMARY =  1004, RPMTAG_DESCRIPTION =  1005,
+           RPMTAG_BUILDTIME =  1006, RPMTAG_BUILDHOST =  1007,
+           RPMTAG_INSTALLTIME =  1008, RPMTAG_SIZE =  1009,
+           RPMTAG_DISTRIBUTION =  1010, RPMTAG_VENDOR =  1011,
+           RPMTAG_GIF =  1012, RPMTAG_XPM =  1013, RPMTAG_LICENSE
+           =  1014, RPMTAG_PACKAGER =  1015, RPMTAG_GROUP =
+           1016, RPMTAG_CHANGELOG =  1017, RPMTAG_SOURCE =  1018,
+           RPMTAG_PATCH =  1019, RPMTAG_URL =  1020, RPMTAG_OS =
+           1021, RPMTAG_ARCH =  1022, RPMTAG_PREIN =  1023,
+           RPMTAG_POSTIN =  1024, RPMTAG_PREUN =  1025,
+           RPMTAG_POSTUN =  1026, RPMTAG_OLDFILENAMES =  1027,
+           RPMTAG_FILESIZES =  1028, RPMTAG_FILESTATES =  1029,
+           RPMTAG_FILEMODES =  1030, RPMTAG_FILEUIDS =  1031,
+           RPMTAG_FILEGIDS =  1032, RPMTAG_FILERDEVS =  1033,
+           RPMTAG_FILEMTIMES =  1034, RPMTAG_FILEMD5S =  1035,
+           RPMTAG_FILELINKTOS =  1036, RPMTAG_FILEFLAGS =  1037,
+           RPMTAG_ROOT =  1038, RPMTAG_FILEUSERNAME =  1039,
+           RPMTAG_FILEGROUPNAME =  1040, RPMTAG_EXCLUDE =  1041,
+           RPMTAG_EXCLUSIVE =  1042, RPMTAG_ICON =  1043,
+           RPMTAG_SOURCERPM =  1044, RPMTAG_FILEVERIFYFLAGS =
+           1045, RPMTAG_ARCHIVESIZE =  1046, RPMTAG_PROVIDENAME =
+           1047, RPMTAG_REQUIREFLAGS =  1048, RPMTAG_REQUIRENAME
+           =  1049, RPMTAG_REQUIREVERSION =  1050,
+           RPMTAG_NOSOURCE =  1051, RPMTAG_NOPATCH =  1052,
+           RPMTAG_CONFLICTFLAGS =  1053, RPMTAG_CONFLICTNAME =
+           1054, RPMTAG_CONFLICTVERSION =  1055,
+           RPMTAG_DEFAULTPREFIX =  1056, RPMTAG_BUILDROOT =
+           1057, RPMTAG_INSTALLPREFIX =  1058, RPMTAG_EXCLUDEARCH
+           =  1059, RPMTAG_EXCLUDEOS =  1060,
+           RPMTAG_EXCLUSIVEARCH =  1061, RPMTAG_EXCLUSIVEOS =
+           1062, RPMTAG_AUTOREQPROV =  1063, RPMTAG_RPMVERSION =
+           1064, RPMTAG_TRIGGERSCRIPTS =  1065,
+           RPMTAG_TRIGGERNAME =  1066, RPMTAG_TRIGGERVERSION =
+           1067, RPMTAG_TRIGGERFLAGS =  1068, RPMTAG_TRIGGERINDEX
+           =  1069, RPMTAG_VERIFYSCRIPT =  1079,
+           RPMTAG_CHANGELOGTIME =  1080, RPMTAG_CHANGELOGNAME =
+           1081, RPMTAG_CHANGELOGTEXT =  1082, RPMTAG_BROKENMD5 =
+           1083, RPMTAG_PREREQ =  1084, RPMTAG_PREINPROG =  1085,
+           RPMTAG_POSTINPROG =  1086, RPMTAG_PREUNPROG =  1087,
+           RPMTAG_POSTUNPROG =  1088, RPMTAG_BUILDARCHS =  1089,
+           RPMTAG_OBSOLETENAME =  1090, RPMTAG_VERIFYSCRIPTPROG =
+           1091, RPMTAG_TRIGGERSCRIPTPROG =  1092, RPMTAG_DOCDIR
+           =  1093, RPMTAG_COOKIE =  1094, RPMTAG_FILEDEVICES =
+           1095, RPMTAG_FILEINODES =  1096, RPMTAG_FILELANGS =
+           1097, RPMTAG_PREFIXES =  1098, RPMTAG_INSTPREFIXES =
+           1099, RPMTAG_TRIGGERIN =  1100, RPMTAG_TRIGGERUN =
+           1101, RPMTAG_TRIGGERPOSTUN =  1102, RPMTAG_AUTOREQ =
+           1103, RPMTAG_AUTOPROV =  1104, RPMTAG_CAPABILITY =
+           1105, RPMTAG_SOURCEPACKAGE =  1106,
+           RPMTAG_OLDORIGFILENAMES =  1107, RPMTAG_BUILDPREREQ =
+           1108, RPMTAG_BUILDREQUIRES =  1109,
+           RPMTAG_BUILDCONFLICTS =  1110, RPMTAG_BUILDMACROS =
+           1111, RPMTAG_PROVIDEFLAGS =  1112,
+           RPMTAG_PROVIDEVERSION =  1113, RPMTAG_OBSOLETEFLAGS =
+           1114, RPMTAG_OBSOLETEVERSION =  1115,
+           RPMTAG_DIRINDEXES =  1116, RPMTAG_BASENAMES =  1117,
+           RPMTAG_DIRNAMES =  1118, RPMTAG_ORIGDIRINDEXES =
+           1119, RPMTAG_ORIGBASENAMES =  1120,
+           RPMTAG_ORIGDIRNAMES =  1121, RPMTAG_OPTFLAGS =  1122,
+           RPMTAG_DISTURL =  1123, RPMTAG_PAYLOADFORMAT =  1124,
+           RPMTAG_PAYLOADCOMPRESSOR =  1125, RPMTAG_PAYLOADFLAGS
+           =  1126, RPMTAG_MULTILIBS =  1127, RPMTAG_INSTALLTID =
+           1128, RPMTAG_REMOVETID =  1129, RPMTAG_SHA1RHN =
+           1130, RPMTAG_RHNPLATFORM =  1131, RPMTAG_PLATFORM =
+           1132, RPMTAG_FIRSTFREE_TAG }
+           Tags identify data in package headers.
+       enum rpmfileState_e { RPMFILE_STATE_NORMAL =  0,
+           RPMFILE_STATE_REPLACED =  1,
+           RPMFILE_STATE_NOTINSTALLED =  2,
+           RPMFILE_STATE_NETSHARED =  3 }
+           File States (when installed).
+       enum rpmfileAttrs_e { RPMFILE_NONE =  0, RPMFILE_CONFIG =
+           (1 << 0), RPMFILE_DOC =  (1 << 1), RPMFILE_DONOTUSE =
+           (1 << 2), RPMFILE_MISSINGOK =  (1 << 3),
+           RPMFILE_NOREPLACE =  (1 << 4), RPMFILE_SPECFILE =  (1
+           << 5), RPMFILE_GHOST =  (1 << 6), RPMFILE_LICENSE =
+           (1 << 7), RPMFILE_README =  (1 << 8), RPMFILE_EXCLUDE
+           =  (1 << 9) }
+           File Attributes.
+       enum rpmsenseFlags_e { RPMSENSE_ANY =  0, RPMSENSE_SERIAL
+           =  (1 << 0), RPMSENSE_LESS =  (1 << 1),
+           RPMSENSE_GREATER =  (1 << 2), RPMSENSE_EQUAL =  (1 <<
+           3), RPMSENSE_PROVIDES =  (1 << 4), RPMSENSE_CONFLICTS
+           =  (1 << 5), RPMSENSE_PREREQ =  (1 << 6),
+           RPMSENSE_OBSOLETES =  (1 << 7), RPMSENSE_INTERP =  (1
+           << 8), RPMSENSE_SCRIPT_PRE =  ((1 <<
+           9)|RPMSENSE_PREREQ), RPMSENSE_SCRIPT_POST =  ((1 <<
+           10)|RPMSENSE_PREREQ), RPMSENSE_SCRIPT_PREUN =  ((1 <<
+           11)|RPMSENSE_PREREQ), RPMSENSE_SCRIPT_POSTUN =  ((1 <<
+           12)|RPMSENSE_PREREQ), RPMSENSE_SCRIPT_VERIFY =  (1 <<
+           13), RPMSENSE_FIND_REQUIRES =  (1 << 14),
+           RPMSENSE_FIND_PROVIDES =  (1 << 15),
+           RPMSENSE_TRIGGERIN =  (1 << 16), RPMSENSE_TRIGGERUN =
+           (1 << 17), RPMSENSE_TRIGGERPOSTUN =  (1 << 18),
+           RPMSENSE_MULTILIB =  (1 << 19), RPMSENSE_SCRIPT_PREP =
+           (1 << 20), RPMSENSE_SCRIPT_BUILD =  (1 << 21),
+           RPMSENSE_SCRIPT_INSTALL =  (1 << 22),
+           RPMSENSE_SCRIPT_CLEAN =  (1 << 23), RPMSENSE_RPMLIB =
+           ((1 << 24) | RPMSENSE_PREREQ), RPMSENSE_TRIGGERPREIN =
+           (1 << 25) }
+           Dependency Attributes.
+
+   Functions
+       void * _free (const void *p)
+           Wrapper to free(3), hides const compilation noise,
+           permit NULL, return NULL.
+       rpmRC rpmReadPackageInfo (FD_t fd, Header *sigp, Header
+           *hdrp)
+           Return package signatures and header from file handle.
+       rpmRC rpmReadPackageHeader (FD_t fd, Header *hdrp, int
+           *isSource, int *major, int *minor)
+           Return package header and lead info from file handle.
+       int headerNVR (Header h, const char **np, const char **vp,
+           const char **rp)
+       void headerMergeLegacySigs (Header h, const Header sig)
+       Header headerRegenSigHeader (const Header h)
+       void rpmBuildFileList (Header h, const char
+           ***fileListPtr, int *fileCountPtr)
+           Retrieve file names from header.
+       int rpmHeaderGetEntry (Header h, int_32 tag, int_32 *type,
+           void **p, int_32 *c)
+           Retrieve tag info from header.
+       int rpmPackageGetEntry (void *leadp, Header sigs, Header
+           h, int_32 tag, int_32 *type, void **p, int_32 *c)
+           Retrieve tag info from header.
+       const char *const tagName (int tag)
+           Return name of tag from value.
+       int tagValue (const char *tagstr)
+           Return value of tag from name.
+
+   Variables
+       const struct headerTagTableEntry_s rpmTagTable []
+           Automatically generated table of tag name/value pairs.
+       const int rpmTagTableSize
+           Number of entries in rpmTagTable.
+       const struct headerSprintfExtension_s rpmHeaderFormats []
+           Table of query format extensions.
+
+DETAILED DESCRIPTION
+       Definition in file rpmlib.h.
+
+DEFINE DOCUMENTATION
+   #define _ALL_REQUIRES_MASK
+       Value:
+
+       (    RPMSENSE_INTERP |     RPMSENSE_SCRIPT_PRE |     RPMSENSE_SCRIPT_POST |     RPMSENSE_SCRIPT_PREUN |     RPMSENSE_SCRIPT_POSTUN |     RPMSENSE_SCRIPT_VERIFY |     RPMSENSE_FIND_REQUIRES |     RPMSENSE_SCRIPT_PREP |     RPMSENSE_SCRIPT_BUILD |     RPMSENSE_SCRIPT_INSTALL |     RPMSENSE_SCRIPT_CLEAN |     RPMSENSE_RPMLIB )
+
+       Definition at line 454 of file rpmlib.h.
+
+       Referenced by addReqProv.
+
+   #define _ERASE_ONLY_MASK
+       _notpre(RPMSENSE_SCRIPT_PREUN|RPMSENSE_SCRIPT_POSTUN)
+       Definition at line 471 of file rpmlib.h.
+
+   #define _INSTALL_ONLY_MASK
+       _notpre(RPMSENSE_SCRIPT_PRE|RPMSENSE_SCRIPT_POST|RPMSENSE_RPMLIB)
+       Definition at line 469 of file rpmlib.h.
+
+   #define _notpre(_x)   ((_x) & ~RPMSENSE_PREREQ)
+       Definition at line 468 of file rpmlib.h.
+
+       Referenced by identifyDepend.
+
+   #define _noTransScripts
+       Value:
+
+       ( RPMTRANS_FLAG_NOPRE |     RPMTRANS_FLAG_NOPOST |          RPMTRANS_FLAG_NOPREUN |         RPMTRANS_FLAG_NOPOSTUN        )
+
+       Definition at line 1371 of file rpmlib.h.
+
+       Referenced by main.
+
+   #define _noTransTriggers
+       Value:
+
+       ( RPMTRANS_FLAG_NOTRIGGERPREIN |     RPMTRANS_FLAG_NOTRIGGERIN |     RPMTRANS_FLAG_NOTRIGGERUN |     RPMTRANS_FLAG_NOTRIGGERPOSTUN   )
+
+       Definition at line 1378 of file rpmlib.h.
+
+       Referenced by main.
+
+   #define isDependsMULTILIB(_dflags)   ((_dflags) &
+       RPMSENSE_MULTILIB)
+       Definition at line 452 of file rpmlib.h.
+
+       Referenced by addReqProv, alMakeIndex, checkPackageDeps,
+       and printDepMsg.
+
+   #define isErasePreReq(_x)   ((_x) & _ERASE_ONLY_MASK)
+       Definition at line 476 of file rpmlib.h.
+
+       Referenced by rpmdepOrder.
+
+   #define isFileMULTILIB(_fflags)   ((_fflags) &
+       RPMFILE_MULTILIB_MASK)
+       Definition at line 405 of file rpmlib.h.
+
+       Referenced by alAllFileSatisfiesDepend.
+
+   #define isInstallPreReq(_x)   ((_x) & _INSTALL_ONLY_MASK)
+       Definition at line 475 of file rpmlib.h.
+
+       Referenced by rpmdbAdd, and rpmdepOrder.
+
+   #define isLegacyPreReq(_x)   (((_x) & _ALL_REQUIRES_MASK) ==
+       RPMSENSE_PREREQ)
+       Definition at line 474 of file rpmlib.h.
+
+       Referenced by identifyDepend, and rpmdepOrder.
+
+   #define RPM_MACHTABLE_COUNT   4    /*!< No. of arch/os tables.
+       */
+       Definition at line 527 of file rpmlib.h.
+
+   #define RPMDBI_ADDED   3 /*!< Added package headers. */
+       Definition at line 187 of file rpmlib.h.
+
+       Referenced by openDatabase, rpmdbAdd, rpmdbMoveDatabase,
+       rpmdbRemove, tagName, and tagValue.
+
+   #define RPMDBI_AVAILABLE   5  /*!< Available package headers.
+       */
+       Definition at line 189 of file rpmlib.h.
+
+       Referenced by openDatabase, rpmdbAdd, rpmdbMoveDatabase,
+       rpmdbRemove, tagName, and tagValue.
+
+   #define RPMDBI_DEPENDS   1    /*!< Dependency resolution
+       cache. */
+       Definition at line 185 of file rpmlib.h.
+
+       Referenced by db3New, openDatabase, rpmdbAdd,
+       rpmdbMoveDatabase, rpmdbRemove, rpmdepCheck, tagName,
+       tagValue, and unsatisfiedDepend.
+
+   #define RPMDBI_LABEL   2 /*!< Fingerprint search marker. */
+       Definition at line 186 of file rpmlib.h.
+
+       Referenced by rpmdbInitIterator, rpmErase, rpmQueryVerify,
+       and rpmtransRemove.
+
+   #define RPMDBI_PACKAGES   0   /*!< Installed package headers.
+       */
+       Pseudo-tags used by the rpmdb iterator API.
+
+       Definition at line 184 of file rpmlib.h.
+
+       Referenced by addLostFiles, db1basename, db1cdel, db1cget,
+       db1close, db1cput, db1open, db1sync, db3New, dbiDel,
+       dbiFindMatches, dbiTagsInit, main, openDatabase, rpmdbAdd,
+       rpmdbFindByFile, rpmdbFirst, rpmdbFreeIterator,
+       rpmdbInitIterator, rpmdbLength, rpmdbNextIterator,
+       rpmdbRebuild, rpmdbRemove, rpmdbSubscript, rpmdepCheck,
+       rpmQueryVerify, tagName, and tagValue.
+
+   #define RPMDBI_REMOVED   4    /*!< Removed package headers. */
+       Definition at line 188 of file rpmlib.h.
+
+       Referenced by openDatabase, rpmdbAdd, rpmdbMoveDatabase,
+       rpmdbRemove, tagName, and tagValue.
+
+   #define RPMFILE_ALL   ~(RPMFILE_NONE)
+       Definition at line 402 of file rpmlib.h.
+
+       Referenced by main.
+
+   #define RPMFILE_MULTILIB(N)   ((N) << RPMFILE_MULTILIB_SHIFT)
+       Definition at line 399 of file rpmlib.h.
+
+       Referenced by processPackageFiles.
+
+   #define RPMFILE_MULTILIB_MASK   RPMFILE_MULTILIB(7)
+       Definition at line 400 of file rpmlib.h.
+
+       Referenced by addFile, and genCpioListAndHeader.
+
+   #define RPMFILE_MULTILIB_SHIFT   9
+       Definition at line 398 of file rpmlib.h.
+
+       Referenced by genCpioListAndHeader.
+
+   #define RPMLEAD_BINARY   0
+       Definition at line 1495 of file rpmlib.h.
+
+       Referenced by packageBinaries, and writeRPM.
+
+   #define RPMLEAD_MAGIC0   0xed
+       Definition at line 1498 of file rpmlib.h.
+
+       Referenced by readPackageHeaders, and writeLead.
+
+   #define RPMLEAD_MAGIC1   0xab
+       Definition at line 1499 of file rpmlib.h.
+
+       Referenced by readPackageHeaders, and writeLead.
+
+   #define RPMLEAD_MAGIC2   0xee
+       Definition at line 1500 of file rpmlib.h.
+
+       Referenced by readPackageHeaders, and writeLead.
+
+   #define RPMLEAD_MAGIC3   0xdb
+       Definition at line 1501 of file rpmlib.h.
+
+       Referenced by readPackageHeaders, and writeLead.
+
+   #define RPMLEAD_SOURCE   1
+       Definition at line 1496 of file rpmlib.h.
+
+       Referenced by packageSources, readPackageHeaders,
+       rewriteRPM, rpmReadPackageHeader, and writeRPM.
+
+   #define RPMSENSE_SENSEMASK   15
+       Definition at line 446 of file rpmlib.h.
+
+       Referenced by addReqProv, headerMatchesDepFlags,
+       parseRCPOT, printDepend, printDepMsg,
+       rangeMatchesDepFlags, rpmRangesOverlap, triggercondsTag,
+       and unsatisfiedDepend.
+
+   #define RPMSENSE_TRIGGER   (RPMSENSE_TRIGGERIN |
+       RPMSENSE_TRIGGERUN | RPMSENSE_TRIGGERPOSTUN)
+       Definition at line 449 of file rpmlib.h.
+
+       Referenced by addReqProv.
+
+   #define RPMTAG_COPYRIGHT   RPMTAG_LICENSE
+   #define RPMTAG_EXTERNAL_TAG   1000000
+       Definition at line 366 of file rpmlib.h.
+
+       Referenced by convertExistingAMD, and main.
+
+   #define RPMTAG_OBSOLETES   RPMTAG_OBSOLETENAME
+   #define RPMTAG_PROVIDES   RPMTAG_PROVIDENAME
+   #define RPMTAG_SERIAL   RPMTAG_EPOCH
+   #define RPMVAR_INCLUDE   43
+       Definition at line 485 of file rpmlib.h.
+
+       Referenced by doReadRC.
+
+   #define RPMVAR_MACROFILES   49
+       Definition at line 486 of file rpmlib.h.
+
+       Referenced by doReadRC, and rpmReadRC.
+
+   #define RPMVAR_NUM   55
+       Definition at line 488 of file rpmlib.h.
+
+   #define RPMVAR_OPTFLAGS   3
+       Definition at line 483 of file rpmlib.h.
+
+       Referenced by rpmRebuildTargetVars, and setDefaults.
+
+   #define RPMVAR_PROVIDES   38
+       Definition at line 484 of file rpmlib.h.
+
+       Referenced by doReadRC, and unsatisfiedDepend.
+
+   #define XFA_SKIPPING(_a)   ((_a) == FA_SKIP || (_a) ==
+       FA_SKIPNSTATE || (_a) == FA_SKIPNETSHARED || (_a) ==
+       FA_SKIPMULTILIB)
+       Definition at line 1150 of file rpmlib.h.
+
+TYPEDEF DOCUMENTATION
+   typedef enum fileAction_e  fileAction
+       File disposition(s) during package install/erase
+       transaction.
+
+
+   typedef enum fileTypes_e  fileTypes
+       File types.
+
+       These are the types of files used internally by rpm. The
+       file type is determined by applying stat(2) macros like
+       S_ISDIR to the file mode tag from a header. The values are
+       arbitrary, but are identical to the linux stat(2) file
+       types.
+
+   typedef int(* HAE_t)(Header h, rpmTag tag, rpmTagType type,
+       const void * p, int_32 c)
+       Prototype for headerAddEntry() vector.
+
+       Duplicate tags are okay, but only defined for iteration
+       (with the exceptions noted below). While you are allowed
+       to add i18n string arrays through this function, you
+       probably don't mean to. See headerAddI18NString() instead.
+
+       Parameters:
+
+       h      header
+
+       tag    tag
+
+       type   tag value data type
+
+       p      pointer to tag value(s)
+
+       c      number of values
+
+       Returns:
+           1 on success, 0 on failure
+
+       Definition at line 1065 of file rpmlib.h.
+
+       Referenced by compressFilelist, expandFilelist, and
+       headerMergeLegacySigs.
+
+   typedef void*(* HFD_t)( const void * data, rpmTagType type)
+       Prototype for headerFreeData() vector.
+
+       Parameters:
+
+       data   address of data (or NULL)
+
+       type   type of data (or -1 to force free)
+
+       Returns:
+           NULL always
+
+       Definition at line 1029 of file rpmlib.h.
+
+       Referenced by addReqProv, alAddPackage, alFree,
+       checkPackageDeps, compressFilelist, doBuildFileList,
+       fpLookupHeader, handlePreambleTag, headerMergeLegacySigs,
+       headerRegenSigHeader, instprefixTag, isMemberInEntry,
+       mireSkip, printDeps, providePackageNVR,
+       rangeMatchesDepFlags, rpmdbAdd, rpmdbFindByFile,
+       rpmdbFindFpList, rpmdbRemove, rpmdepCheck,
+       rpmtransAddPackage, showQueryPackage, timeCheck,
+       triggercondsTag, and triggertypeTag.
+
+   typedef int(* HGE_t)(Header h, rpmTag tag, rpmTagType * type,
+       void ** p, int_32 * c)
+       Prototype for headerGetEntry() vector.
+
+       Will never return RPM_I18NSTRING_TYPE! RPM_STRING_TYPE
+       elements with RPM_I18NSTRING_TYPE equivalent entries are
+       translated (if HEADER_I18NTABLE entry is present).
+
+       Parameters:
+
+       h      header
+
+       tag    tag
+
+       Return values:
+
+       type   address of tag value data type (or NULL)
+
+       p      address of pointer to tag value(s) (or NULL)
+
+       c      address of number of values (or NULL)
+
+       Returns:
+           1 on success, 0 on failure
+
+       Definition at line 1045 of file rpmlib.h.
+
+       Referenced by addFileToTag, addReqProv, alAddPackage,
+       checkPackageDeps, compressFilelist, doBuildFileList,
+       fpLookupHeader, fssizesTag, handlePreambleTag,
+       headerMatchesDepFlags, i18nTag, IDTXglob, IDTXload,
+       instprefixTag, isMemberInEntry, mireSkip, printDeps,
+       processPackageFiles, providePackageNVR,
+       rangeMatchesDepFlags, rpmdbAdd, rpmdbFindByFile,
+       rpmdbFindFpList, rpmdbRemove, rpmdepCheck,
+       rpmtransAddPackage, showQueryPackage, stashSt, timeCheck,
+       triggercondsTag, triggertypeTag, and writeRPM.
+
+   typedef int(* HME_t)(Header h, rpmTag tag, rpmTagType type,
+       const void * p, int_32 c)
+       Prototype for headerModifyEntry() vector.
+
+       If there are multiple entries with this tag, the first one
+       gets replaced.
+
+       Parameters:
+
+       h      header
+
+       tag    tag
+
+       type   tag value data type
+
+       p      pointer to tag value(s)
+
+       c      number of values
+
+       Returns:
+           1 on success, 0 on failure
+
+       Definition at line 1079 of file rpmlib.h.
+
+   typedef int(* HRE_t)(Header h, int_32 tag)
+       Prototype for headerRemoveEntry() vector.
+
+       Delete tag in header. Removes all entries of type tag from
+       the header, returns 1 if none were found.
+
+       Parameters:
+
+       h      header
+
+       tag    tag
+
+       Returns:
+           0 on success, 1 on failure (INCONSISTENT)
+
+       Definition at line 1093 of file rpmlib.h.
+
+       Referenced by compressFilelist, and expandFilelist.
+
+   typedef struct rpmDependencyConflict_s *
+       rpmDependencyConflict
+       Dependency problems found by rpmdepCheck().
+
+
+   typedef enum rpmfileAttrs_e  rpmfileAttrs
+       File Attributes.
+
+
+   typedef enum rpmfileState_e  rpmfileState
+       File States (when installed).
+
+       Referenced by showQueryPackage.
+
+   typedef enum rpmprobFilterFlags_e  rpmprobFilterFlags
+       Todo:
+            Generalize filter mechanism.
+
+       Referenced by rpmInstall.
+
+   typedef struct rpmProblem_s *  rpmProblem
+   typedef struct rpmProblemSet_s *  rpmProblemSet
+   typedef enum rpmProblemType_e  rpmProblemType
+       Enumerate transaction set problem types.
+
+
+   typedef enum rpmRC_e  rpmRC
+       Package read return codes.
+
+       Referenced by checkSize, IDTXglob, readPackageHeaders,
+       readRPM, rpmCheckSig, rpmHeaderFromPackage,
+       rpmInstallSource, rpmLookupSignatureType, rpmQueryVerify,
+       rpmReadPackageHeader, rpmReadPackageInfo,
+       rpmReadSignature, and rpmReSign.
+
+   typedef struct rpmRelocation_s  rpmRelocation
+       We pass these around as an array with a sentinel.
+
+
+   typedef enum rpmsenseFlags_e  rpmsenseFlags
+       Dependency Attributes.
+
+       Referenced by addReqProv, buildSpec, handlePreambleTag,
+       parseBits, and parseRCPOT.
+
+   typedef enum rpmTag_e  rpmTag
+       Tags identify data in package headers.
+
+       Note:
+           tags should not have value 0!
+
+       Referenced by addReqProv, checkForRequired,
+       doBuildFileList, IDTXglob, IDTXload, isMemberInEntry,
+       mireDup, and rpmdbSetIteratorRE.
+
+ENUMERATION TYPE DOCUMENTATION
+   enum fileAction_e
+       File disposition(s) during package install/erase
+       transaction.
+
+       Enumeration values:
+
+       FA_UNKNOWN
+              initial action for file ...
+
+       FA_CREATE
+
+       FA_COPYIN
+
+       FA_COPYOUT
+
+       FA_BACKUP
+
+       FA_SAVE
+
+       FA_SKIP
+
+       FA_ALTNAME
+
+       FA_ERASE
+
+       FA_SKIPNSTATE
+
+       FA_SKIPNETSHARED
+
+       FA_SKIPMULTILIB
+
+       Todo:
+            state 'multilib' ???.
+
+       Definition at line 1135 of file rpmlib.h.
+
+   enum fileTypes_e
+       File types.
+
+       These are the types of files used internally by rpm. The
+       file type is determined by applying stat(2) macros like
+       S_ISDIR to the file mode tag from a header. The values are
+       arbitrary, but are identical to the linux stat(2) file
+       types.
+
+       Enumeration values:
+
+       PIPE   pipe/fifo
+
+       CDEV   character device
+
+       XDIR   directory
+
+       BDEV   block device
+
+       REG    regular file
+
+       LINK   hard link
+
+       SOCK   socket
+
+       Definition at line 1160 of file rpmlib.h.
+
+   enum rpmfileAttrs_e
+       File Attributes.
+
+       Enumeration values:
+
+       RPMFILE_NONE
+
+       RPMFILE_CONFIG
+              from %config
+
+       RPMFILE_DOC
+              from %doc
+
+       RPMFILE_DONOTUSE
+              Todo:
+                   (unimplemented) from donotuse.
+
+       RPMFILE_MISSINGOK
+              from %config(missingok)
+
+       RPMFILE_NOREPLACE
+              from %config(noreplace)
+
+       RPMFILE_SPECFILE
+              Todo:
+                   (unnecessary) marks 1st file in srpm.
+
+       RPMFILE_GHOST
+              from %ghost
+
+       RPMFILE_LICENSE
+              from %license
+
+       RPMFILE_README
+              from %readme
+
+       RPMFILE_EXCLUDE
+              from %exclude
+
+       Definition at line 381 of file rpmlib.h.
+
+   enum rpmfileState_e
+       File States (when installed).
+
+       Enumeration values:
+
+       RPMFILE_STATE_NORMAL
+
+       RPMFILE_STATE_REPLACED
+
+       RPMFILE_STATE_NOTINSTALLED
+
+       RPMFILE_STATE_NETSHARED
+
+
+       Definition at line 371 of file rpmlib.h.
+
+   enum rpmprobFilterFlags_e
+       Todo:
+            Generalize filter mechanism.
+
+       Enumeration values:
+
+       RPMPROB_FILTER_NONE
+
+       RPMPROB_FILTER_IGNOREOS
+              from --ignoreos
+
+       RPMPROB_FILTER_IGNOREARCH
+              from --ignorearch
+
+       RPMPROB_FILTER_REPLACEPKG
+              from --replacepkgs
+
+       RPMPROB_FILTER_FORCERELOCATE
+              from --badreloc
+
+       RPMPROB_FILTER_REPLACENEWFILES
+              from --replacefiles
+
+       RPMPROB_FILTER_REPLACEOLDFILES
+              from --replacefiles
+
+       RPMPROB_FILTER_OLDPACKAGE
+              from --oldpackage
+
+       RPMPROB_FILTER_DISKSPACE
+              from --ignoresize
+
+       RPMPROB_FILTER_DISKNODES
+              from --ignoresize
+
+       Definition at line 1442 of file rpmlib.h.
+
+   enum rpmProblemType_e
+       Enumerate transaction set problem types.
+
+       Enumeration values:
+
+       RPMPROB_BADARCH
+              package ... is for a different architecture
+
+       RPMPROB_BADOS
+              package ... is for a different operating system
+
+       RPMPROB_PKG_INSTALLED
+              package ... is already installed
+
+       RPMPROB_BADRELOCATE
+              path ... is not relocateable for package ...
+
+       RPMPROB_REQUIRES
+              Todo:
+                   Use for dependency errors.
+
+       RPMPROB_CONFLICT
+              Todo:
+                   Use for dependency errors.
+
+       RPMPROB_NEW_FILE_CONFLICT
+              file ... conflicts between attemped installs of ...
+
+       RPMPROB_FILE_CONFLICT
+              file ... from install of ... conflicts with file
+              from package ...
+
+       RPMPROB_OLDPACKAGE
+              package ... (which is newer than ...) is already
+              installed
+
+       RPMPROB_DISKSPACE
+              installing package ... needs ... on the ...
+              filesystem
+
+       RPMPROB_DISKNODES
+              installing package ... needs ... on the ...
+              filesystem
+
+       RPMPROB_BADPRETRANS
+              (unimplemented)
+
+       Definition at line 910 of file rpmlib.h.
+
+   enum rpmRC_e
+       Package read return codes.
+
+       Enumeration values:
+
+       RPMRC_OK
+
+       RPMRC_BADMAGIC
+
+       RPMRC_FAIL
+
+       RPMRC_BADSIZE
+
+       RPMRC_SHORTREAD
+
+
+       Definition at line 22 of file rpmlib.h.
+
+   enum rpmsenseFlags_e
+       Dependency Attributes.
+
+       Enumeration values:
+
+       RPMSENSE_ANY
+
+       RPMSENSE_SERIAL
+              Todo:
+                   Legacy.
+
+       RPMSENSE_LESS
+
+       RPMSENSE_GREATER
+
+       RPMSENSE_EQUAL
+
+       RPMSENSE_PROVIDES
+
+       RPMSENSE_CONFLICTS
+
+       RPMSENSE_PREREQ
+              Todo:
+                   Legacy.
+
+       RPMSENSE_OBSOLETES
+
+       RPMSENSE_INTERP
+              Interpreter used by scriptlet.
+
+       RPMSENSE_SCRIPT_PRE
+              pre dependency.
+
+       RPMSENSE_SCRIPT_POST
+              post dependency.
+
+       RPMSENSE_SCRIPT_PREUN
+              preun dependency.
+
+       RPMSENSE_SCRIPT_POSTUN
+              postun dependency.
+
+       RPMSENSE_SCRIPT_VERIFY
+              verify dependency.
+
+       RPMSENSE_FIND_REQUIRES
+              find-requires generated dependency.
+
+       RPMSENSE_FIND_PROVIDES
+              find-provides generated dependency.
+
+       RPMSENSE_TRIGGERIN
+              triggerin dependency.
+
+       RPMSENSE_TRIGGERUN
+              triggerun dependency.
+
+       RPMSENSE_TRIGGERPOSTUN
+              triggerpostun dependency.
+
+       RPMSENSE_MULTILIB
+
+       RPMSENSE_SCRIPT_PREP
+              prep build dependency.
+
+       RPMSENSE_SCRIPT_BUILD
+              build build dependency.
+
+       RPMSENSE_SCRIPT_INSTALL
+              install build dependency.
+
+       RPMSENSE_SCRIPT_CLEAN
+              clean build dependency.
+
+       RPMSENSE_RPMLIB
+              rpmlib(feature) dependency.
+
+       RPMSENSE_TRIGGERPREIN
+              Todo:
+                   Implement triggerprein.
+
+       Definition at line 410 of file rpmlib.h.
+
+   enum rpmTag_e
+       Tags identify data in package headers.
+
+       Note:
+           tags should not have value 0!
+
+       Enumeration values:
+
+       RPMTAG_HEADERIMAGE
+              Current image.
+
+       RPMTAG_HEADERSIGNATURES
+              Signatures.
+
+       RPMTAG_HEADERIMMUTABLE
+              Original image.
+
+       RPMTAG_HEADERREGIONS
+              Regions.
+
+       RPMTAG_HEADERI18NTABLE
+              I18N string locales.
+
+       RPMTAG_SIG_BASE
+
+       RPMTAG_SIGSIZE
+
+       RPMTAG_SIGLEMD5_1
+              internal
+
+       RPMTAG_SIGPGP
+
+       RPMTAG_SIGLEMD5_2
+              internal
+
+       RPMTAG_SIGMD5
+
+       RPMTAG_SIGGPG
+
+       RPMTAG_SIGPGP5
+              internal
+
+       RPMTAG_BADSHA1HEADER
+              internal
+
+       RPMTAG_SHA1HEADER
+
+       RPMTAG_NAME
+
+       RPMTAG_VERSION
+
+       RPMTAG_RELEASE
+
+       RPMTAG_EPOCH
+
+       RPMTAG_SUMMARY
+
+       RPMTAG_DESCRIPTION
+
+       RPMTAG_BUILDTIME
+
+       RPMTAG_BUILDHOST
+
+       RPMTAG_INSTALLTIME
+
+       RPMTAG_SIZE
+
+       RPMTAG_DISTRIBUTION
+
+       RPMTAG_VENDOR
+
+       RPMTAG_GIF
+
+       RPMTAG_XPM
+
+       RPMTAG_LICENSE
+
+       RPMTAG_PACKAGER
+
+       RPMTAG_GROUP
+
+       RPMTAG_CHANGELOG
+              internal
+
+       RPMTAG_SOURCE
+
+       RPMTAG_PATCH
+
+       RPMTAG_URL
+
+       RPMTAG_OS
+
+       RPMTAG_ARCH
+
+       RPMTAG_PREIN
+
+       RPMTAG_POSTIN
+
+       RPMTAG_PREUN
+
+       RPMTAG_POSTUN
+
+       RPMTAG_OLDFILENAMES
+
+       RPMTAG_FILESIZES
+
+       RPMTAG_FILESTATES
+
+       RPMTAG_FILEMODES
+
+       RPMTAG_FILEUIDS
+              internal
+
+       RPMTAG_FILEGIDS
+              internal
+
+       RPMTAG_FILERDEVS
+
+       RPMTAG_FILEMTIMES
+
+       RPMTAG_FILEMD5S
+
+       RPMTAG_FILELINKTOS
+
+       RPMTAG_FILEFLAGS
+
+       RPMTAG_ROOT
+              internal - obsolete
+
+       RPMTAG_FILEUSERNAME
+
+       RPMTAG_FILEGROUPNAME
+
+       RPMTAG_EXCLUDE
+              internal - obsolete
+
+       RPMTAG_EXCLUSIVE
+              internal - obsolete
+
+       RPMTAG_ICON
+
+       RPMTAG_SOURCERPM
+
+       RPMTAG_FILEVERIFYFLAGS
+
+       RPMTAG_ARCHIVESIZE
+
+       RPMTAG_PROVIDENAME
+
+       RPMTAG_REQUIREFLAGS
+
+       RPMTAG_REQUIRENAME
+
+       RPMTAG_REQUIREVERSION
+
+       RPMTAG_NOSOURCE
+              internal
+
+       RPMTAG_NOPATCH
+              internal
+
+       RPMTAG_CONFLICTFLAGS
+
+       RPMTAG_CONFLICTNAME
+
+       RPMTAG_CONFLICTVERSION
+
+       RPMTAG_DEFAULTPREFIX
+              internal - deprecated
+
+       RPMTAG_BUILDROOT
+              internal
+
+       RPMTAG_INSTALLPREFIX
+              internal - deprecated
+
+       RPMTAG_EXCLUDEARCH
+
+       RPMTAG_EXCLUDEOS
+
+       RPMTAG_EXCLUSIVEARCH
+
+       RPMTAG_EXCLUSIVEOS
+
+       RPMTAG_AUTOREQPROV
+              internal
+
+       RPMTAG_RPMVERSION
+
+       RPMTAG_TRIGGERSCRIPTS
+
+       RPMTAG_TRIGGERNAME
+
+       RPMTAG_TRIGGERVERSION
+
+       RPMTAG_TRIGGERFLAGS
+
+       RPMTAG_TRIGGERINDEX
+
+       RPMTAG_VERIFYSCRIPT
+
+       RPMTAG_CHANGELOGTIME
+
+       RPMTAG_CHANGELOGNAME
+
+       RPMTAG_CHANGELOGTEXT
+
+       RPMTAG_BROKENMD5
+              internal
+
+       RPMTAG_PREREQ
+              internal
+
+       RPMTAG_PREINPROG
+
+       RPMTAG_POSTINPROG
+
+       RPMTAG_PREUNPROG
+
+       RPMTAG_POSTUNPROG
+
+       RPMTAG_BUILDARCHS
+
+       RPMTAG_OBSOLETENAME
+
+       RPMTAG_VERIFYSCRIPTPROG
+
+       RPMTAG_TRIGGERSCRIPTPROG
+
+       RPMTAG_DOCDIR
+              internal
+
+       RPMTAG_COOKIE
+
+       RPMTAG_FILEDEVICES
+
+       RPMTAG_FILEINODES
+
+       RPMTAG_FILELANGS
+
+       RPMTAG_PREFIXES
+
+       RPMTAG_INSTPREFIXES
+
+       RPMTAG_TRIGGERIN
+              internal
+
+       RPMTAG_TRIGGERUN
+              internal
+
+       RPMTAG_TRIGGERPOSTUN
+              internal
+
+       RPMTAG_AUTOREQ
+              internal
+
+       RPMTAG_AUTOPROV
+              internal
+
+       RPMTAG_CAPABILITY
+              internal obsolete
+
+       RPMTAG_SOURCEPACKAGE
+              internal
+
+       RPMTAG_OLDORIGFILENAMES
+              internal - obsolete
+
+       RPMTAG_BUILDPREREQ
+              internal
+
+       RPMTAG_BUILDREQUIRES
+              internal
+
+       RPMTAG_BUILDCONFLICTS
+              internal
+
+       RPMTAG_BUILDMACROS
+              internal
+
+       RPMTAG_PROVIDEFLAGS
+
+       RPMTAG_PROVIDEVERSION
+
+       RPMTAG_OBSOLETEFLAGS
+
+       RPMTAG_OBSOLETEVERSION
+
+       RPMTAG_DIRINDEXES
+
+       RPMTAG_BASENAMES
+
+       RPMTAG_DIRNAMES
+
+       RPMTAG_ORIGDIRINDEXES
+              internal
+
+       RPMTAG_ORIGBASENAMES
+              internal
+
+       RPMTAG_ORIGDIRNAMES
+              internal
+
+       RPMTAG_OPTFLAGS
+
+       RPMTAG_DISTURL
+
+       RPMTAG_PAYLOADFORMAT
+
+       RPMTAG_PAYLOADCOMPRESSOR
+
+       RPMTAG_PAYLOADFLAGS
+
+       RPMTAG_MULTILIBS
+
+       RPMTAG_INSTALLTID
+
+       RPMTAG_REMOVETID
+
+       RPMTAG_SHA1RHN
+              internal
+
+       RPMTAG_RHNPLATFORM
+
+       RPMTAG_PLATFORM
+
+       RPMTAG_FIRSTFREE_TAG
+              internal
+
+       Definition at line 195 of file rpmlib.h.
+
+FUNCTION DOCUMENTATION
+   void* _free (const void * p) [inline, static]
+       Wrapper to free(3), hides const compilation noise, permit
+       NULL, return NULL.
+
+       Parameters:
+
+       p      memory to free
+
+       Returns:
+           NULL always
+
+       Definition at line 40 of file rpmlib.h.
+
+   void printDepFlags (FILE * fp, const char * version, int
+       flags)
+       Definition at line 19 of file problems.c.
+
+       Referenced by printDepProblems, and rpmShowRpmlibProvides.
+
+   void printDepProblems (FILE * fp, const rpmDependencyConflict
+       conflicts, int numConflicts)
+       Print results of rpmdepCheck() dependency check.
+
+       Parameters:
+
+       fp     output file
+
+       conflicts
+              dependency problems
+
+       numConflicts
+              no. of dependency problems
+
+       Definition at line 61 of file problems.c.
+
+       Referenced by checkSpec, rpmErase, and rpmInstall.
+
+   void rpmBuildFileList (Header h, const char *** fileListPtr,
+       int * fileCountPtr)
+       Retrieve file names from header.
+
+       The representation of file names in package headers
+       changed in rpm-4.0. Originally, file names were stored as
+       an array of paths. In rpm-4.0, file names are stored as
+       separate arrays of dirname's and basename's, with a
+       dirname index to associate the correct dirname with each
+       basname. This function is used to retrieve file names
+       independent of how the file names are represented in the
+       package header.
+
+       Parameters:
+
+       h      header
+
+       Return values:
+
+       fileListPtr
+              address of array of file names
+
+       fileCountPtr
+              address of number of files
+
+       Definition at line 449 of file misc.c.
+
+       Referenced by filenamesTag, fssizesTag, mungeFilelist, and
+       rpmHeaderGetEntry.
+
+   int rpmHeaderGetEntry (Header h, int_32 tag, int_32 * type,
+       void ** p, int_32 * c)
+       Retrieve tag info from header.
+
+       This is a 'dressed' entry to headerGetEntry to do: 1)
+       DIRNAME/BASENAME/DIRINDICES -> FILENAMES tag conversions.
+       2) i18n lookaside (if enabled).
+
+       Parameters:
+
+       h      header
+
+       tag    tag
+
+       Return values:
+
+       type   address of tag value data type
+
+       p      address of pointer to tag value(s)
+
+       c      address of number of values
+
+       Returns:
+           0 on success, 1 on bad magic, 2 on error
+
+       Definition at line 609 of file misc.c.
+
+       Referenced by rpmPackageGetEntry.
+
+   rpmRC rpmInstallSourcePackage (const char * rootDir, FD_t fd,
+       const char ** specFilePtr, rpmCallbackFunction notify,
+       rpmCallbackData notifyData, char ** cookie)
+       Install source package.
+
+       Parameters:
+
+       rootDir
+              path to top of install tree (or NULL)
+
+       fd     file handle
+
+       Return values:
+
+       specFilePtr
+              address of spec file name (or NULL)
+
+       Parameters:
+
+       notify progress callback
+
+       notifyData
+              progress callback private data
+
+       Return values:
+
+       cooke  address of cookie pointer (or NULL)
+
+       Returns:
+           rpmRC return code
+
+       Referenced by rpmInstall, and rpmInstallSource.
+
+   int rpmPackageGetEntry (void * leadp, Header sigs, Header h,
+       int_32 tag, int_32 * type, void ** p, int_32 * c)
+       Retrieve tag info from header.
+
+       Yet Another 'dressed' entry to headerGetEntry in order to
+       unify signature/header tag retrieval.
+
+       Deprecated:
+           Signature tags are now duplicated into header when
+           installed.
+
+       Todo:
+           Eliminate from API.
+
+       Parameters:
+
+       leadp  rpm lead
+
+       h      header
+
+       sigs   signatures
+
+       tag    tag
+
+       Return values:
+
+       type   address of tag value data type
+
+       p      address of pointer to tag value(s)
+
+       c      address of number of values
+
+       Returns:
+           0 on success, 1 on bad magic, 2 on error
+
+       Definition at line 660 of file misc.c.
+
+       Referenced by hdrSubscript.
+
+   void rpmProblemPrint (FILE * fp, rpmProblem prob)
+       Output formatted string representation of problem to file
+       handle.
+
+       Deprecated:
+           API: prob used to be passed by value, now passed by
+           reference.
+
+       Parameters:
+
+       fp     file handle
+
+       prob   rpm problem
+
+       Definition at line 191 of file problems.c.
+
+       Referenced by rpmProblemSetPrint.
+
+   void rpmProblemSetFree (rpmProblemSet probs)
+       Destroy problem set.
+
+       Parameters:
+
+       probs  problem set
+
+       Referenced by rpmInstall, and rpmtransRun.
+
+   void rpmProblemSetPrint (FILE * fp, rpmProblemSet probs)
+       Print problems to file handle.
+
+       Parameters:
+
+       fp     file handle
+
+       probs  problem set
+
+       Definition at line 198 of file problems.c.
+
+       References HEADER_I18NTABLE, HEADER_IMMUTABLE,
+       HEADER_REGIONS, HEADER_SIGNATURES, RPMTAG_HEADERI18NTABLE,
+       RPMTAG_HEADERIMMUTABLE, RPMTAG_HEADERREGIONS, and
+       RPMTAG_HEADERSIGNATURES.
+
+       Referenced by rpmInstall.
+
+   const char* rpmProblemString (const rpmProblem prob)
+       Return formatted string representation of problem.
+
+       Deprecated:
+           API: prob used to be passed by value, now passed by
+           reference.
+
+       Parameters:
+
+       prob   rpm problem
+
+       Returns:
+           formatted string
+
+       Definition at line 114 of file problems.c.
+
+       Referenced by rpmProblemPrint, and rpmtransRun.
+
+   rpmRC rpmReadPackageHeader (FD_t fd, Header * hdrp, int *
+       isSource, int * major, int * minor)
+       Return package header and lead info from file handle.
+
+       Parameters:
+
+       fd     file handle
+
+       Return values:
+
+       hdrp   address of header (or NULL)
+
+       isSource
+              address to return lead source flag (or NULL)
+
+       major  address to return lead major (or NULL)
+
+       minor  address to return lead minor (or NULL)
+
+       Returns:
+           rpmRC return code
+
+       Definition at line 219 of file package.c.
+
+       References RPMTAG_ARCH, RPMTAG_ARCHIVESIZE,
+       RPMTAG_AUTOPROV, RPMTAG_AUTOREQ, RPMTAG_AUTOREQPROV,
+       RPMTAG_BASENAMES, RPMTAG_BROKENMD5, RPMTAG_BUILDARCHS,
+       RPMTAG_BUILDCONFLICTS, RPMTAG_BUILDHOST,
+       RPMTAG_BUILDMACROS, RPMTAG_BUILDPREREQ,
+       RPMTAG_BUILDREQUIRES, RPMTAG_BUILDROOT, RPMTAG_BUILDTIME,
+       RPMTAG_CAPABILITY, RPMTAG_CHANGELOG, RPMTAG_CHANGELOGNAME,
+       RPMTAG_CHANGELOGTEXT, RPMTAG_CHANGELOGTIME,
+       RPMTAG_CONFLICTFLAGS, RPMTAG_CONFLICTNAME,
+       RPMTAG_CONFLICTVERSION, RPMTAG_COOKIE,
+       RPMTAG_DEFAULTPREFIX, RPMTAG_DESCRIPTION,
+       RPMTAG_DIRINDEXES, RPMTAG_DIRNAMES, RPMTAG_DISTRIBUTION,
+       RPMTAG_DISTURL, RPMTAG_DOCDIR, RPMTAG_EPOCH,
+       RPMTAG_EXCLUDE, RPMTAG_EXCLUDEARCH, RPMTAG_EXCLUDEOS,
+       RPMTAG_EXCLUSIVE, RPMTAG_EXCLUSIVEARCH,
+       RPMTAG_EXCLUSIVEOS, RPMTAG_FILEDEVICES, RPMTAG_FILEFLAGS,
+       RPMTAG_FILEGIDS, RPMTAG_FILEGROUPNAME, RPMTAG_FILEINODES,
+       RPMTAG_FILELANGS, RPMTAG_FILELINKTOS, RPMTAG_FILEMD5S,
+       RPMTAG_FILEMODES, RPMTAG_FILEMTIMES, RPMTAG_FILERDEVS,
+       RPMTAG_FILESIZES, RPMTAG_FILESTATES, RPMTAG_FILEUIDS,
+       RPMTAG_FILEUSERNAME, RPMTAG_FILEVERIFYFLAGS,
+       RPMTAG_FIRSTFREE_TAG, RPMTAG_GIF, RPMTAG_GROUP,
+       RPMTAG_ICON, RPMTAG_INSTALLPREFIX, RPMTAG_INSTALLTID,
+       RPMTAG_INSTALLTIME, RPMTAG_INSTPREFIXES, RPMTAG_LICENSE,
+       RPMTAG_MULTILIBS, RPMTAG_NAME, RPMTAG_NOPATCH,
+       RPMTAG_NOSOURCE, RPMTAG_OBSOLETEFLAGS,
+       RPMTAG_OBSOLETENAME, RPMTAG_OBSOLETEVERSION,
+       RPMTAG_OLDFILENAMES, RPMTAG_OLDORIGFILENAMES,
+       RPMTAG_OPTFLAGS, RPMTAG_ORIGBASENAMES,
+       RPMTAG_ORIGDIRINDEXES, RPMTAG_ORIGDIRNAMES, RPMTAG_OS,
+       RPMTAG_PACKAGER, RPMTAG_PATCH, RPMTAG_PAYLOADCOMPRESSOR,
+       RPMTAG_PAYLOADFLAGS, RPMTAG_PAYLOADFORMAT,
+       RPMTAG_PLATFORM, RPMTAG_POSTIN, RPMTAG_POSTINPROG,
+       RPMTAG_POSTUN, RPMTAG_POSTUNPROG, RPMTAG_PREFIXES,
+       RPMTAG_PREIN, RPMTAG_PREINPROG, RPMTAG_PREREQ,
+       RPMTAG_PREUN, RPMTAG_PREUNPROG, RPMTAG_PROVIDEFLAGS,
+       RPMTAG_PROVIDENAME, RPMTAG_PROVIDEVERSION, RPMTAG_RELEASE,
+       RPMTAG_REMOVETID, RPMTAG_REQUIREFLAGS, RPMTAG_REQUIRENAME,
+       RPMTAG_REQUIREVERSION, RPMTAG_RHNPLATFORM, RPMTAG_ROOT,
+       RPMTAG_RPMVERSION, RPMTAG_SHA1HEADER, RPMTAG_SHA1RHN,
+       RPMTAG_SIG_BASE, RPMTAG_SIZE, RPMTAG_SOURCE,
+       RPMTAG_SOURCEPACKAGE, RPMTAG_SOURCERPM, RPMTAG_SUMMARY,
+       RPMTAG_TRIGGERFLAGS, RPMTAG_TRIGGERIN,
+       RPMTAG_TRIGGERINDEX, RPMTAG_TRIGGERNAME,
+       RPMTAG_TRIGGERPOSTUN, RPMTAG_TRIGGERSCRIPTPROG,
+       RPMTAG_TRIGGERSCRIPTS, RPMTAG_TRIGGERUN,
+       RPMTAG_TRIGGERVERSION, RPMTAG_URL, RPMTAG_VENDOR,
+       RPMTAG_VERIFYSCRIPT, RPMTAG_VERIFYSCRIPTPROG,
+       RPMTAG_VERSION, and RPMTAG_XPM.
+
+       Referenced by IDTXglob, main, rpmInstall, and
+       rpmQueryVerify.
+
+   rpmRC rpmReadPackageInfo (FD_t fd, Header * sigp, Header *
+       hdrp)
+       Return package signatures and header from file handle.
+
+       Deprecated:
+           Signature tags are appended to header in rpm-4.0.2.
+
+       Todo:
+           Eliminate.
+
+       Parameters:
+
+       fd     file handle
+
+       Return values:
+
+       sigp   address of signature header (or NULL)
+
+       hdrp   address of header (or NULL)
+
+       Returns:
+           rpmRC return code
+
+       Definition at line 207 of file package.c.
+
+       References HEADER_SIGBASE, RPMTAG_BADSHA1HEADER,
+       RPMTAG_SIG_BASE, RPMTAG_SIGGPG, RPMTAG_SIGLEMD5_1,
+       RPMTAG_SIGLEMD5_2, RPMTAG_SIGMD5, RPMTAG_SIGPGP,
+       RPMTAG_SIGPGP5, and RPMTAG_SIGSIZE.
+
+       Referenced by readRPM, and rpmHeaderFromPackage.
+
+   int rpmVersionCompare (Header first, Header second)
+       Compare headers to determine which header is 'newer'.
+
+       Parameters:
+
+       first  1st header
+
+       second 2nd header
+
+       Returns:
+           result of comparison
+
+       Referenced by alAddPackage, findUpgradePackages,
+       pkgCompareVer, rpmInstall, rpmtransAddPackage,
+       unmarkPackagesAlreadyInstalled, and versionCompare.
+
+   const char* const tagName (int tag)
+       Return name of tag from value.
+
+       Parameters:
+
+       tag    tag value
+
+       Returns:
+           name of tag
+
+       Definition at line 10 of file tagName.c.
+
+   int tagValue (const char * tagstr)
+       Return value of tag from name.
+
+       Parameters:
+
+       targstr
+              name of tag
+
+       Returns:
+           tag value
+
+       Definition at line 62 of file tagName.c.
+
+VARIABLE DOCUMENTATION
+   const struct headerSprintfExtension_s rpmHeaderFormats[]
+       Table of query format extensions.
+
+       Note:
+           Chains to headerDefaultFormats[].
+
+       Definition at line 178 of file rpmlib.h.
+
+   const struct headerTagTableEntry_s rpmTagTable[]
+       Automatically generated table of tag name/value pairs.
+
+       Definition at line 163 of file rpmlib.h.
+
+       Referenced by getTagString, getTagVal, initrpm, main,
+       packageBinaries, printNewSpecfile, queryHeader,
+       rpmDisplayQueryTags, rpmHeaderGetEntry, rpmShowProgress,
+       tagName, tagNumFromPyObject, and tagValue.
+
+   const int rpmTagTableSize
+       Number of entries in rpmTagTable.
+
+       Definition at line 170 of file rpmlib.h.
+
+       Referenced by initrpm, rpmDisplayQueryTags, tagName, and
+       tagNumFromPyObject.
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002            lib/rpmlib.h(3)

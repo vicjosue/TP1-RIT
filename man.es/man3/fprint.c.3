@@ -1,0 +1,241 @@
+rpmdb/fprint.c(3)                               rpmdb/fprint.c(3)
+
+
+
+NAME
+       rpmdb/fprint.c -
+
+SYNOPSIS
+       #include 'system.h'
+       #include <rpmlib.h>
+       #include <rpmmacro.h>
+       #include 'fprint.h'
+       #include 'debug.h'
+
+   Functions
+       fingerPrintCache fpCacheCreate (int sizeHint)
+           Create finger print cache.
+       void fpCacheFree (fingerPrintCache cache)
+           Destroy finger print cache.
+       const struct fprintCacheEntry_s * cacheContainsDirectory
+           (fingerPrintCache cache, const char *dirName)
+           Find directory name entry in cache.
+       fingerPrint doLookup (fingerPrintCache cache, const char
+           *dirName, const char *baseName, int scareMemory)
+           Return finger print of a file path.
+       fingerPrint fpLookup (fingerPrintCache cache, const char
+           *dirName, const char *baseName, int scareMemory)
+           Return finger print of a file path.
+       unsigned int fpHashFunction (const void *key)
+           Return hash value for a finger print.
+       int fpEqual (const void *key1, const void *key2)
+           Compare two finger print entries.
+       void fpLookupList (fingerPrintCache cache, const char
+           **dirNames, const char **baseNames, const int
+           *dirIndexes, int fileCount, fingerPrint *fpList)
+           Return finger prints of an array of file paths.
+       void fpLookupHeader (fingerPrintCache cache, Header h,
+           fingerPrint *fpList)
+           Return finger prints of all file names in header.
+
+DETAILED DESCRIPTION
+       Definition in file fprint.c.
+
+FUNCTION DOCUMENTATION
+   const struct fprintCacheEntry_s* cacheContainsDirectory
+       (fingerPrintCache cache, const char * dirName) [static]
+       Find directory name entry in cache.
+
+       Parameters:
+
+       cache  pointer to fingerprint cache
+
+       dirName
+              string to locate in cache
+
+       Returns:
+           pointer to directory name entry (or NULL if not
+           found).
+
+       Definition at line 34 of file fprint.c.
+
+       References htGetEntry.
+
+       Referenced by doLookup.
+
+   fingerPrint doLookup (fingerPrintCache cache, const char *
+       dirName, const char * baseName, int scareMemory) [static]
+       Return finger print of a file path.
+
+       Parameters:
+
+       cache  pointer to fingerprint cache
+
+       dirName
+              leading directory name of path
+
+       baseName
+              file name of path
+
+       scareMemory
+              Returns:
+                  pointer to the finger print associated with a
+                  file path.
+
+       Definition at line 54 of file fprint.c.
+
+       References alloca, fingerPrint_s::baseName,
+       cacheContainsDirectory, fprintCacheEntry_s::dev,
+       fprintCacheEntry_s::dirName, fingerPrint_s::entry,
+       htAddEntry, fprintCacheEntry_s::ino,
+       fprintCacheEntry_s::isFake, realpath, rpmCleanPath,
+       stpncpy, fingerPrint_s::subDir, xmalloc, and xstrdup.
+
+       Referenced by fpLookup, and fpLookupList.
+
+   fingerPrintCache fpCacheCreate (int sizeHint)
+       Create finger print cache.
+
+       Parameters:
+
+       sizeHint
+              number of elements expected
+
+       Returns:
+           pointer to initialized fingerprint cache
+
+       Definition at line 12 of file fprint.c.
+
+       References fprintCache_s::ht, htCreate, and xmalloc.
+
+   void fpCacheFree (fingerPrintCache cache)
+       Destroy finger print cache.
+
+       Parameters:
+
+       cache  pointer to fingerprint cache
+
+       Definition at line 22 of file fprint.c.
+
+       References fprintCache_s::ht, and htFree.
+
+   int fpEqual (const void * key1, const void * key2)
+       Compare two finger print entries.
+
+       exactly equivalent to FP_EQUAL macro.
+
+       Parameters:
+
+       key1   finger print 1
+
+       key2   finger print 2
+
+       Returns:
+           result of comparing key1 and key2
+
+       Definition at line 198 of file fprint.c.
+
+       References FP_EQUAL.
+
+   unsigned int fpHashFunction (const void * key)
+       Return hash value for a finger print.
+
+       Hash based on dev and inode only!
+
+       Parameters:
+
+       key    pointer to finger print entry
+
+       Returns:
+           hash value
+
+       Definition at line 180 of file fprint.c.
+
+       References fingerPrint_s::baseName,
+       fprintCacheEntry_s::dev, fingerPrint_s::entry, and
+       fprintCacheEntry_s::ino.
+
+   fingerPrint fpLookup (fingerPrintCache cache, const char *
+       dirName, const char * baseName, int scareMemory)
+       Return finger print of a file path.
+
+       Parameters:
+
+       cache  pointer to fingerprint cache
+
+       dirName
+              leading directory name of file path
+
+       baseName
+              base name of file path
+
+       scareMemory
+              Returns:
+                  pointer to the finger print associated with a
+                  file path.
+
+       Definition at line 174 of file fprint.c.
+
+       References doLookup.
+
+   void fpLookupHeader (fingerPrintCache cache, Header h,
+       fingerPrint * fpList)
+       Return finger prints of all file names in header.
+
+       @warning: scareMemory is assumed!
+
+       Parameters:
+
+       cache  pointer to fingerprint cache
+
+       h      package header
+
+       Return values:
+
+       fpList pointer to array of finger prints
+
+       Definition at line 236 of file fprint.c.
+
+       References fpLookupList, HFD_t, HGE_t, int_32,
+       RPMTAG_BASENAMES, RPMTAG_DIRINDEXES, RPMTAG_DIRNAMES, and
+       rpmTagType.
+
+   void fpLookupList (fingerPrintCache cache, const char **
+       dirNames, const char ** baseNames, const int * dirIndexes,
+       int fileCount, fingerPrint * fpList)
+       Return finger prints of an array of file paths.
+
+       @warning: scareMemory is assumed!
+
+       Parameters:
+
+       cache  pointer to fingerprint cache
+
+       dirNames
+              directory names
+
+       baseNames
+              file base names
+
+       dirIndexes
+              index into dirNames for each baseNames
+
+       fileCount
+              number of file entries
+
+       Return values:
+
+       fpList pointer to array of finger prints
+
+       Definition at line 216 of file fprint.c.
+
+       References fingerPrint_s::baseName, doLookup,
+       fingerPrint_s::entry, and fingerPrint_s::subDir.
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002          rpmdb/fprint.c(3)

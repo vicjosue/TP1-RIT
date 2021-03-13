@@ -1,0 +1,137 @@
+Tcl_Exit(3)           Tcl Library Procedures          Tcl_Exit(3)
+
+
+
+_________________________________________________________________
+
+NAME
+       Tcl_Exit, Tcl_Finalize, Tcl_CreateExitHandler, Tcl_Delete­
+       ExitHandler, Tcl_ExitThread, Tcl_FinalizeThread,  Tcl_Cre­
+       ateThreadExitHandler,  Tcl_DeleteThreadExitHandler  -  end
+       the application or thread (and invoke exit handlers)
+
+SYNOPSIS
+       #include <tcl.h>
+
+       Tcl_Exit(status)
+
+       Tcl_Finalize()
+
+       Tcl_CreateExitHandler(proc, clientData)
+
+       Tcl_DeleteExitHandler(proc, clientData)
+
+       Tcl_ExitThread(status)
+
+       Tcl_FinalizeThread()
+
+       Tcl_CreateThreadExitHandler(proc, clientData)
+
+       Tcl_DeleteThreadExitHandler(proc, clientData)
+
+ARGUMENTS
+       int            status       (in)      Provides information
+                                             about why the appli­
+                                             cation   or   thread
+                                             exited.  Exact mean­
+                                             ing may be platform-
+                                             specific.  0 usually
+                                             means a normal exit,
+                                             any   nonzero  value
+                                             usually  means  that
+                                             an error occurred.
+
+       Tcl_ExitProc   *proc        (in)      Procedure  to invoke
+                                             before       exiting
+                                             application.
+
+       ClientData     clientData   (in)      Arbitrary   one-word
+                                             value  to  pass   to
+                                             proc.
+_________________________________________________________________
+
+
+DESCRIPTION
+       The procedures described here provide a graceful mechanism
+       to end the execution of a Tcl application.  Exit  handlers
+       are invoked to cleanup the application's state before end­
+       ing the execution of Tcl code.
+
+       Invoke Tcl_Exit to end a Tcl application and to exit  from
+       this  process.  This procedure is invoked by the exit com­
+       mand, and can be invoked anyplace else  to  terminate  the
+       application.   No-one  should  ever invoke the exit system
+       procedure directly;  always invoke  Tcl_Exit  instead,  so
+       that it can invoke exit handlers.  Note that if other code
+       invokes  exit  system  procedure  directly,  or  otherwise
+       causes   the  application  to  terminate  without  calling
+       Tcl_Exit, the exit handlers will  not  be  run.   Tcl_Exit
+       internally  invokes  the  exit  system call, thus it never
+       returns control to its caller.
+
+       Tcl_Finalize is similar to Tcl_Exit except  that  it  does
+       not  exit  from  the  current  process.   It is useful for
+       cleaning up when a  process  is  finished  using  Tcl  but
+       wishes  to  continue  executing, and when Tcl is used in a
+       dynamically loaded extension that is about to be unloaded.
+       On  some  systems Tcl is automatically notified when it is
+       being unloaded, and it calls Tcl_Finalize  internally;  on
+       these  systems  it not necessary for the caller to explic­
+       itly call Tcl_Finalize.  However, to  ensure  portability,
+       your  code  should  always invoke Tcl_Finalize when Tcl is
+       being unloaded, to ensure that the code will work  on  all
+       platforms.  Tcl_Finalize  can  be  safely called more than
+       once.
+
+       Tcl_ExitThread is used to terminate the current thread and |
+       invoke  per-thread  exit  handlers.   This finalization is |
+       done by Tcl_FinalizeThread, which you can call if you just |
+       want  to  clean  up per-thread state and invoke the thread |
+       exit handlers.  Tcl_Finalize calls Tcl_FinalizeThread  for |
+       the current thread automatically.
+
+       Tcl_CreateExitHandler  arranges  for proc to be invoked by
+       Tcl_Finalize  and  Tcl_Exit.   Tcl_CreateThreadExitHandler
+       arranges  for proc to be invoked by Tcl_FinalizeThread and
+       Tcl_ExitThread.  This provides a hook for  cleanup  opera­
+       tions  such as flushing buffers and freeing global memory.
+       Proc should match the type Tcl_ExitProc:
+              typedef void Tcl_ExitProc(ClientData clientData);
+       The clientData parameter to proc is a copy of the  client­
+       Data  argument  given to Tcl_CreateExitHandler or Tcl_Cre­
+       ateThreadExitHandler when the callback was created.  Typi­
+       cally,  clientData  points  to a data structure containing
+       application-specific information about what to do in proc.
+
+       Tcl_DeleteExitHandler  and Tcl_DeleteThreadExitHandler may
+       be called to delete a previously-created exit handler.  It
+       removes  the  handler  indicated by proc and clientData so
+       that no call to proc will be made.   If  no  such  handler
+       exists  then  Tcl_DeleteExitHandler or Tcl_DeleteThreadEx­
+       itHandler does nothing.
+
+
+       Tcl_Finalize and Tcl_Exit execute all registered exit han­ |
+       dlers,  in reverse order from the order in which they were |
+       registered.  This  matches  the  natural  order  in  which |
+       extensions  are  loaded and unloaded; if extension A loads |
+       extension B, it usually unloads  B  before  it  itself  is |
+       unloaded.   If  extension  A  registers  its exit handlers |
+       before loading extension B, this  ensures  that  any  exit |
+       handlers  for  B will be executed before the exit handlers |
+       for A.                                                     |
+
+       Tcl_Finalize and Tcl_Exit call Tcl_FinalizeThread and  the |
+       thread exit handlers after the process-wide exit handlers. |
+       This is because thread finalization  shuts  down  the  I/O |
+       channel  system,  so any attempt at I/O by the global exit |
+       handlers will vanish into the bitbucket.
+
+
+KEYWORDS
+       callback, cleanup, dynamic loading, end application, exit,
+       unloading, thread
+
+
+
+Tcl                            8.1                    Tcl_Exit(3)

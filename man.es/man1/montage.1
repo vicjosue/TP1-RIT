@@ -1,0 +1,1334 @@
+montage(1)                                             montage(1)
+
+
+
+NAME
+       montage  -  creates a composite image by combining several
+       separate images
+
+
+SYNOPSIS
+       montage [ options ...] file [ [  options  ...]  file  ...]
+       output_file
+
+
+DESCRIPTION
+       montage  creates  a  composite  image by combining several
+       separate images. The images are  tiled  on  the  composite
+       image with the name of the image optionally appearing just
+       below the individual tile.
+
+       The composite image is constructed in the  following  man­
+       ner.  First,  each  image  specified  on the command line,
+       except for the last, is scaled to  fit  the  maximum  tile
+       size. The maximum tile size by default is 120x120.  It can
+       be modified with the -geometry command line argument or  X
+       resource. See Options for more information on command line
+       arguments. See X(1) for more information on  X  resources.
+       Note  that  the maximum tile size need not be a square. To
+       respect the aspect ratio of each image  append  ~  to  the
+       geometry specification.
+
+       Next  the  composite  image  is initialized with the color
+       specified by the -background command line  argument  or  X
+       resource.  The  width and height of the composite image is
+       determined by the title specified, the maximum tile  size,
+       the  number  of  tiles  per row, the tile border width and
+       height, the image border width, and the label height.  The
+       number  of  tiles per row specifies how many images are to
+       appear in each row of the composite image. The default  is
+       to  have 5 tiles in each row and 4 tiles in each column of
+       the composite.  A specific value is specified with  -tile.
+       The  tile  border  width  and height, and the image border
+       width defaults to the value of  the  X  resource  -border­
+       width.  It can be changed with the -borderwidth or -geome­
+       try command line argument or X resource. The label  height
+       is  determined by the font you specify with the -font com­
+       mand line argument or X resource. If you do not specify  a
+       font,  a  font is chosen that allows the name of the image
+       to fit the maximum width of a tiled area.  The label  col­
+       ors  is  determined  by  the -background and -fill command
+       line argument or X resource. Note, that if the  background
+       and pen colors are the same, labels will not appear.
+
+       Initially,  the composite image title is placed at the top
+       if one is specified (refer to -fill). Next, each image  is
+       set  onto  the  composite  image, surrounded by its border
+       color, with its name centered just below it. The  individ­
+       ual  images  are  left-justified  within  the width of the
+       tiled area.  The order of the images is the same  as  they
+       appear  on the command line unless the images have a scene
+       keyword. If a scene number is  specified  in  each  image,
+       then  the images are tiled onto the composite in the order
+       of their scene number. Finally, the last argument  on  the
+       command  line is the name assigned to the composite image.
+       By default, the image is written in the  MIFF  format  and
+       can be viewed or printed with display.
+
+       Note, that if the number of tiles exceeds the default num­
+       ber of 20 (5 per row, 4 per column), more than one compos­
+       ite  image  is  created.  To ensure a single image is pro­
+       duced, use -tile to increase the number of tiles  to  meet
+       or exceed the number of input images.
+
+       Finally,  to  create  one  or  more  empty  spaces  in the
+       sequence of tiles, use the NULL image format.
+
+EXAMPLES
+       To create a montage of a cockatoo, a parrot,  and  a  hum­
+       mingbird and write it to a file called birds, use:
+
+           montage cockatoo.miff parrot.miff hummingbird.miff \
+                   birds.miff
+
+       To  tile  several bird images so that they are at most 256
+       pixels in width and 192 pixels in height, surrounded by  a
+       red  border,  and  separated  by  10  pixels of background
+       color, use:
+
+           montage -geometry 256x192"+1"0"+1"0 -bordercolor \
+                   red birds.* montage.miff
+
+       To create an unlabeled parrot image, 640  by  480  pixels,
+       and surrounded by a border of black, use:
+
+           montage -geometry 640x480 -bordercolor black \
+                   -label "" parrot.miff bird.miff
+
+       To create an image of an eagle with a textured background,
+       use:
+
+           montage -texture bumps.jpg eagle.jpg eagle.png
+
+       To join several GIF images together without any extraneous
+       graphics  (e.g.   no  label,  no shadowing, no surrounding
+       tile frame), use:
+
+           montage +frame +shadow +label -tile 5x1 \
+                   -geometry 50x50+0+0 *.png joined.png
+
+OPTIONS
+       Options are processed in command line  order.  Any  option
+       you specify on the command line remains in effect until it
+       is explicitly changed by specifying the option again  with
+       a  different  effect.  For example, to montage two images,
+       the first with 32 colors and the second with only 16  col­
+       ors, use:
+
+            montage -colors 32 cockatoo.1 -colors 16 cockatoo.2 \
+                    cockatoo.miff
+
+       -adjoin
+              join images into a single multi-image file
+
+              By default, all images of  an  image  sequence  are
+              stored  in  the  same  file.  However, some formats
+              (e.g. JPEG) do not support more than one image  and
+              are  saved  to separate files. Use +adjoin to force
+              this behavior.
+
+
+       -background color
+              the background color
+
+       -blur <radius>x<sigma>
+              blur the image with a gaussian operator
+
+              Blur with the given radius and  standard  deviation
+              (sigma).
+
+
+       -bordercolor color
+              the border color
+
+       -borderwidth color
+              the border width
+
+       -cache threshold
+              megabytes of memory available to the pixel cache
+
+              Image   pixels   are  stored  in  memory  until  80
+              megabytes of memory have been consumed.  Subsequent
+              pixel  operations are cached on disk. Operations to
+              memory are significantly faster but  if  your  com­
+              puter  does  not  have  a sufficient amount of free
+              memory you may want to adjust this threshold value.
+
+
+       -chop <width>x<height>{+-}<x offset>{+-}<y offset>{%}
+              remove pixels from the interior of an image
+
+              The width and height give the number of columns and
+              rows to remove, and the offsets give  the  location
+              of the leftmost column and topmost row to remove.
+
+
+              The  -chop  option removes entire rows and columns,
+              and moves the remaining corner blocks leftward  and
+              upward to close the gaps.
+
+
+       -colors value
+              preferred number of colors in the image
+
+              The  actual  number  of  colors in the image may be
+              less than your request, but never more. Note,  this
+              is  a  color  reduction  option.  Images  with less
+              unique colors than specified with this option  will
+              have  any duplicate or unused colors removed. Refer
+              to quantize for more details.
+
+
+              Note, options -dither, -colorspace, and  -treedepth
+              affect the color reduction algorithm.
+
+
+       -colorspace value
+              the type of colorspace
+
+              Choices  are:  GRAY,  OHTA,  RGB, Transparent, XYZ,
+              YCbCr, YIQ, YPbPr, YUV, or CMYK.
+
+
+              Color reduction, by default, takes place in the RGB
+              color  space. Empirical evidence suggests that dis­
+              tances in color spaces such as YUV  or  YIQ  corre­
+              spond  to perceptual color differences more closely
+              than do distances in RGB space.  These color spaces
+              may  give  better  results  when  color reducing an
+              image.  Refer to quantize for more details.
+
+
+              The Transparent color  space  behaves  uniquely  in
+              that it preserves the matte channel of the image if
+              it exists.
+
+
+              The -colors or -monochrome option is  required  for
+              this option to take effect.
+
+
+       -comment string
+              annotate an image with a comment
+
+              Use this option to assign a specific comment to the
+              image. You can include the  image  filename,  type,
+              width,  height,  or other image attribute by embed­
+              ding special format characters:
+
+
+                   %b   file size
+                   %c   comment
+                   %d   directory
+                   %e   filename extention
+                   %f   filename
+                   %h   height
+                   %i   input filename
+                   %k   number of unique colors
+                   %l   label
+                   %m   magick
+                   %n   number of scenes
+                   %o   output filename
+                   %p   page number
+                   %q   quantum depth
+                   %s   scene number
+                   %t   top of filename
+                   %u   unique temporary filename
+                   %w   width
+                   %x   x resolution
+                   %y   y resolution
+                   \n   newline
+                   \r   carriage return
+
+              For example,
+
+
+                   -comment "%m:%f %wx%h"
+
+              produces an image comment of MIFF:bird.miff 512x480
+              for  an  image  titled bird.miff and whose width is
+              512 and height is 480.
+
+
+              If the first character of string is  @,  the  image
+              comment is read from a file titled by the remaining
+              characters in the string.
+
+
+       -compose operator
+              the type of image composition
+
+              By default, each of the composite image pixels  are
+              replaced by the corresponding image tile pixel. You
+              can choose an alternate composite operation:
+
+
+                   Over
+                   In
+                   Out
+                   Atop
+                   Xor
+                   Plus
+                   Minus
+                   Add
+                   Subtract
+                   Difference
+                   Multiply
+                   Bumpmap
+                   Copy
+                   CopyRed
+                   CopyGreen
+                   CopyBlue
+                   CopyOpacity
+
+              How each operator behaves is described below.
+
+
+               Over
+
+
+                    The result will be the union of the two image
+                    shapes,  with opaque areas of composite image
+                    obscuring image in the region of overlap.
+
+               In
+
+
+                    The result is simply composite image  cut  by
+                    the  shape  of image.  None of the image data
+                    of image will be in the result.
+
+               Out
+
+
+                    The resulting image is composite  image  with
+                    the shape of image cut out.
+
+               Atop
+
+
+                    The  result is the same shape as image image,
+                    with composite image  obscuring  image  where
+                    the  image shapes overlap.  Note this differs
+                    from over because the  portion  of  composite
+                    image  outside  image's shape does not appear
+                    in the result.
+
+               Xor
+
+
+                    The result is the image data from  both  com­
+                    posite  image  and  image that is outside the
+                    overlap region.  The overlap region  will  be
+                    blank.
+
+               Plus
+
+
+                    The result is just the sum of the image data.
+                    Output values are cropped to  255  (no  over­
+                    flow).   This operation is independent of the
+                    matte channels.
+
+               Minus
+
+
+                    The result of composite image -  image,  with
+                    underflow cropped to zero.  The matte channel
+                    is ignored (set to 255, full coverage).
+
+               Add
+
+
+                    The result of composite image +  image,  with
+                    overflow wrapping around (mod 256).
+
+               Subtract
+
+
+                    The  result  of composite image - image, with
+                    underflow wrapping around (mod 256).  The add
+                    and subtract operators can be used to perform
+                    reversible transformations.
+
+               Difference
+
+
+                    The result of abs(composite image  -  image).
+                    This is useful for comparing two very similar
+                    images.
+
+               Multiply
+
+
+                    The result of composite image * image.   This
+                    is useful for the creation of drop-shadows.
+
+               Bumpmap
+
+
+                    The result image shaded by composite image.
+
+               Copy
+
+
+                    The  resulting  image  is image replaced with
+                    composite image.  Here the matte  information
+                    is ignored.
+
+               CopyRed
+
+
+                    The resulting image is the red layer in image
+                    replaced with  the  red  layer  in  composite
+                    image.    The   other   layers   are   copied
+                    untouched.
+
+               CopyGreen
+
+
+                    The resulting image is  the  green  layer  in
+                    image  replaced  with the green layer in com­
+                    posite image.  The other  layers  are  copied
+                    untouched.
+
+               CopyBlue
+
+
+                    The  resulting  image  is  the  blue layer in
+                    image replaced with the blue layer in compos­
+                    ite  image.   The  other  layers  are  copied
+                    untouched.
+
+               CopyOpacity
+
+
+                    The resulting image is  the  matte  layer  in
+                    image  replaced  with the matte layer in com­
+                    posite image.  The other  layers  are  copied
+                    untouched.
+
+
+
+               The  image  compositor  requires a matte, or alpha
+               channel in the image for  some  operations.   This
+               extra  channel usually defines a mask which repre­
+               sents a sort of a  cookie-cutter  for  the  image.
+               This is the case when matte is 255 (full coverage)
+               for pixels inside the  shape,  zero  outside,  and
+               between zero and 255 on the boundary.  For certain
+               operations, if image does not have a  matte  chan­
+               nel, it is initialized with 0 for any pixel match­
+               ing in color to pixel  location  (0,0),  otherwise
+               255 (to work properly borderwidth must be 0).
+
+
+       -compress type
+              the type of image compression
+
+              Choices  are:  None,  BZip, Fax, Group4, JPEG, LZW,
+              RLE or Zip.
+
+
+              Specify +compress to store the binary image  in  an
+              uncompressed  format.   The default is the compres­
+              sion type of the specified image file.
+
+
+       -crop <width>x<height>{+-}<x offset>{+-}<y offset>{%}
+              preferred size and location of the cropped image
+
+              See X(1) for details about the geometry  specifica­
+              tion.
+
+
+              The  width  and  height  give the size of the image
+              that remains after cropping, and the  offsets  give
+              the  location of the top left corner of the cropped
+              image with respect to the original image.  To spec­
+              ify the amount to be removed, use -shave instead.
+
+
+              To  specify  a  percentage  width  or  height to be
+              removed instead, append %. For example to crop  the
+              image  by ten percent (five percent on each side of
+              the image), use -crop 10%.
+
+
+              Use cropping to apply image processing options  to,
+              or display, a particular area of an image.
+
+
+              Omit  the  x  and  y offset to generate one or more
+              subimages of a uniform size.
+
+
+              Use cropping to crop a particular area of an image.
+              Use -crop 0x0 to trim edges that are the background
+              color. Add an x and y offset to leave a portion  of
+              the trimmed edges with the image.
+
+
+       -debug enable debug printout
+
+       -density <width>x<height>
+              vertical and horizontal resolution in pixels of the
+              image
+
+              This option specifies an image density when  decod­
+              ing  a  PostScript  or  Portable Document page. The
+              default is 72 dots per inch in the  horizontal  and
+              vertical  direction. This option is used in concert
+              with -page.
+
+
+       -depth value
+              depth of the image
+
+              This is the number of bits in  a  pixel.  The  only
+              acceptable  values are 8 or 16.  Use this option to
+              specify the depth of  raw  images  whose  depth  is
+              unknown  such  as  GRAY, RGB, or CMYK, or to change
+              the depth of any image after it has been read.
+
+
+       -display host:display[.screen]
+              specifies the X server to contact
+
+       -dispose method
+              GIF disposal method
+
+              Here are the valid methods:
+
+
+                   0     No disposal specified.
+                   1     Do not dispose between frames.
+                   2     Overwrite frame  with  background  color
+              from header.
+                   3     Overwrite with previous frame.
+
+       -dither
+              apply Floyd/Steinberg error diffusion to the image
+
+              The  basic strategy of dithering is to trade inten­
+              sity resolution for spatial resolution by averaging
+              the  intensities  of  several  neighboring  pixels.
+              Images which suffer  from  severe  contouring  when
+              reducing colors can be improved with this option.
+
+
+              The  -colors  or -monochrome option is required for
+              this option to take effect.
+
+
+              Use +dither to render Postscript  without  text  or
+              graphic aliasing.
+
+
+       -draw string
+              annotate  an  image with one or more graphic primi­
+              tives
+
+              Use this option to annotate an image  with  one  or
+              more graphic primitives.  The primitives include
+
+
+                   point
+                   line
+                   rectangle
+                   roundRectangle
+                   arc
+                   ellipse
+                   circle
+                   polyline
+                   polygon
+                   bezier
+                   path
+                   color
+                   matte
+                   text
+                   image
+
+              Point  and  line  each require a single coordinate.
+              Line requires a start  and  end  coordinate,  while
+              rectangle  expects  an  upper  left and lower right
+              coordinate.  roundRectangle has  a  center  coordi­
+              nate,  a width and height, and the width and height
+              of the corners.  Circle has a center coordinate and
+              a  coordinate  for the outer edge.  Use Arc to cir­
+              cumscribe an arc within a rectangle.  Arcs  require
+              a  start  and  end  point  as well as the degree of
+              rotation (e.g. 130,30 200,100 45,90).  Use  Ellipse
+              to  draw  a  partial  ellipse centered at the given
+              point with the x-axis and y-axis radius  and  start
+              and  end  of  arc  in degrees (e.g. 100,100 100,150
+              0,360).   Finally,  polyline  and  polygon  require
+              three or more coordinates to define its boundaries.
+              Coordinates are integers separated by  an  optional
+              comma.  For example, to define a circle centered at
+              100,100 that extends to 150,150 use:
+
+
+                   -draw 'circle 100,100 150,150'
+
+              See Paths.  Paths represent an outline of an object
+              which is defined in terms of moveto (set a new cur­
+              rent point), lineto (draw a straight line), curveto
+              (draw  a curve using a cubic bezier), arc (ellipti­
+              cal or circular arc) and closepath (close the  cur­
+              rent  shape  by  drawing a line to the last moveto)
+              elements. Compound paths (i.e., a  path  with  sub­
+              paths,  each consisting of a single moveto followed
+              by one or more line or curve operations) are possi­
+              ble  to  allow  effects  such  as  "donut holes" in
+              objects.
+
+
+              Use color to change the color of  a  pixel.  Follow
+              the pixel coordinate with a method:
+
+
+                   point
+                   replace
+                   floodfill
+                   filltoborder
+                   reset
+
+              Consider the target pixel as that specified by your
+              coordinate. The point method  recolors  the  target
+              pixel.  The  replace method recolors any pixel that
+              matches the color of the target  pixel.   Floodfill
+              recolors  any  pixel  that matches the color of the
+              target pixel and is a neighbor, whereas  filltobor­
+              der  recolors  any  neighbor  pixel that is not the
+              border color. Finally, reset recolors all pixels.
+
+
+              Use matte to the change the pixel  matte  value  to
+              transparent.  Follow  the  pixel  coordinate with a
+              method (see the color primitive for  a  description
+              of  methods).  The  point  method changes the matte
+              value of  the  target  pixel.  The  replace  method
+              changes  the  matte value of any pixel that matches
+              the color of the target  pixel.  Floodfill  changes
+              the matte value of any pixel that matches the color
+              of the target pixel  and  is  a  neighbor,  whereas
+              filltoborder  changes the matte value of any neigh­
+              bor pixel that is not the  border  color  (-border­
+              color).   Finally  reset changes the matte value of
+              all pixels.
+
+
+              Use text to annotate an image with text. Follow the
+              text  coordinates  with a string. If the string has
+              embedded  spaces,  enclose  it  in  double  quotes.
+              Optionally  you  can  include  the  image filename,
+              type, width, height, or other  image  attribute  by
+              embedding  special  format character.  See -comment
+              for details.
+
+
+              For example,
+
+
+                   -draw 'text 100,100 "%m:%f %wx%h"'
+
+              annotates the image with MIFF:bird.miff 512x480 for
+              an  image  titled  bird.miff and whose width is 512
+              and height is 480.
+
+
+              Use image to composite an image with another image.
+              Follow  the image keyword with the composite opera­
+              tor, image location, image size, and filename:
+
+
+                   -draw 'image Over 100,100 225,225 image.jpg'
+
+              See -compose for a  description  of  the  composite
+              operators.
+
+
+              If  the first character of string is @, the text is
+              read from a file titled by the remaining characters
+              in the string.
+
+
+              You  can  set  the primitive color, font color, and
+              font bounding box color with -fill, -font, and -box
+              respectively. Options are processed in command line
+              order so be sure to  use  -fill  before  the  -draw
+              option.
+
+
+       -fill color
+              color to use when filling a graphic primitive
+
+              See -draw for further details.
+
+
+       -filter type
+              use this type of filter when resizing an image
+
+              Use this option to affect the resizing operation of
+              an image (see -geometry).  Choose from  these  fil­
+              ters:
+
+
+                   Point
+                   Box
+                   Triangle
+                   Hermite
+                   Hanning
+                   Hamming
+                   Blackman
+                   Gaussian
+                   Quadratic
+                   Cubic
+                   Catrom
+                   Mitchell
+                   Lanczos
+                   Bessel
+                   Sinc
+
+              The default filter is Lanczos
+
+
+       -font name
+              use this font when annotating the image with text
+
+              You  can  tag  a  font  to  specify whether it is a
+              Postscript, Truetype, or OPTION1 font.   For  exam­
+              ple,  Arial.ttf is a Truetype font, ps:helvetica is
+              Postscript, and x:fixed is OPTION1.
+
+
+       -frame <width>x<height>+<outer bevel  width>+<inner  bevel
+              width>"  surround the image with an ornamental bor­
+              der
+
+              See X(1) for details about the geometry  specifica­
+              tion.
+
+
+              The color of the border is specified with the -mat­
+              tecolor command line option.
+
+
+       -gamma value
+              level of gamma correction
+
+              The same color image  displayed  on  two  different
+              workstations  may look different due to differences
+              in the display monitor.  Use  gamma  correction  to
+              adjust for this color difference. Reasonable values
+              extend from 0.8 to 2.3.
+
+
+              You can apply separate gamma  values  to  the  red,
+              green,  and blue channels of the image with a gamma
+              value   list   delineated   with   slashes    (i.e.
+              1.7/2.3/1.2).
+
+
+              Use +gamma value to set the image gamma level with­
+              out  actually  adjusting  the  image  pixels.  This
+              option  is  useful if the image is of a known gamma
+              but  not  set  as  an  image  attribute  (e.g.  PNG
+              images).
+
+
+       -geometry    <width>x<height>{+-}<x   offset>{+-}<y   off­
+       set>{%}{@}{!}{<}{>}
+              preferred size and location of the Image window.
+
+              See  X(1) for details about the geometry specifica­
+              tion. By default, the window size is the image size
+              and  the  location  is  chosen  by  you  when it is
+              mapped.
+
+
+              By default, the width and height are  maximum  val­
+              ues.  That  is, the image is expanded or contracted
+              to fit the width and height value while maintaining
+              the  aspect  ratio of the image. Append an exclama­
+              tion point to the geometry to force the image  size
+              to  exactly  the  size you specify. For example, if
+              you specify 640x480! the image width is set to  640
+              pixels  and  height  to  480. If only one factor is
+              specified, both the width  and  height  assume  the
+              value.
+
+
+              To  specify  a  percentage width or height instead,
+              append %. The image size is multiplied by the width
+              and  height  percentages  to obtain the final image
+              dimensions. To increase the size of an image, use a
+              value  greater than 100 (e.g. 125%). To decrease an
+              image's size, use a percentage less than 100.
+
+
+              Use @ to specify the maximum area in pixels  of  an
+              image.
+
+
+              Use > to change the dimensions of the image only if
+              its size  exceeds  the  geometry  specification.  <
+              resizes  the  image  only if its dimensions is less
+              than the geometry specification.  For  example,  if
+              you  specify  '640x480>'  and  the  image  size  is
+              512x512, the image size does not  change.  However,
+              if  the  image  is  1024x1024,  it  is  resized  to
+              640x480.
+
+
+              Use < to change the dimensions of the image only if
+              its  size  exceeds  the  geometry  specification. >
+              resizes the image only if its  dimensions  is  less
+              than  the  geometry  specification. For example, if
+              you specify 640x480> and the image size is 512x512,
+              the  image  size  does  not change. However, if the
+              image is 1024x1024, it is resized to 640x480.
+
+
+              There are 72 pixels per inch in PostScript  coordi­
+              nates.
+
+
+       -gravity type
+              direction  text  gravitates  to when annotating the
+              image.
+
+              Choices are:  NorthWest,  North,  NorthEast,  West,
+              Center, East, SouthWest, South, SouthEast. See X(1)
+              for details about the gravity specification.
+
+
+              The direction you choose specifies where  to  posi­
+              tion  the text when annotating the image. For exam­
+              ple Center gravity forces the text to  be  centered
+              within  the image. By default, the image gravity is
+              NorthWest.
+
+
+       -help  print usage instructions
+
+       -interlace type
+              the type of interlacing scheme
+
+              Choices are: None, Line, Plane, or  Partition.  The
+              default is None.
+
+
+              This  option  is used to specify the type of inter­
+              lacing scheme for raw image formats such as RGB  or
+              YUV.  None  means do not interlace (RGBRGBRGBRGBRG­
+              BRGB...),   Line    uses    scanline    interlacing
+              (RRR...GGG...BBB...RRR...GGG...BBB...),  and  Plane
+              uses               plane                interlacing
+              (RRRRRR...GGGGGG...BBBBBB...).   Partition  is like
+              plane except the  different  planes  are  saved  to
+              individual   files   (e.g.  image.R,  image.G,  and
+              image.B).
+
+
+              Use Line, or Plane to create an interlaced  PNG  or
+              GIF or progressive JPEG image.
+
+
+       -label name
+              assign a label to an image
+
+              Use  this  option to assign a specific label to the
+              image. Optionally you can include the  image  file­
+              name, type, width, height, or other image attribute
+              by embedding special format character. See -comment
+              for details.
+
+
+              For example,
+
+
+                   -label "%m:%f %wx%h"
+
+              produces  an  image label of MIFF:bird.miff 512x480
+              for an image titled bird.miff and  whose  width  is
+              512 and height is 480.
+
+
+              If  the  first  character of string is @, the image
+              label is read from a file titled by  the  remaining
+              characters in the string.
+
+
+              When  converting  to PostScript, use this option to
+              specify a header string to print above  the  image.
+              Specify the label font with -font.
+
+
+       -matte store matte channel if the image has one
+
+              If  the image does not have a matte channel, create
+              an opaque one.
+
+
+       -mattecolor color
+              specify the matte color
+
+       -mode value
+              mode of operation
+
+       -monochrome
+              transform the image to black and white
+
+       -page    <width>x<height>{+-}<x     offset>{+-}<y     off­
+       set>{%}{!}{<}{>}
+              size and location of an image canvas
+
+              Use this option to specify the  dimensions  of  the
+              PostScript  page in dots per inch or a TEXT page in
+              pixels. The choices for a Postscript page are:
+
+
+                   11x17         792  1224
+                   Ledger       1224   792
+                   Legal         612  1008
+                   Letter        612   792
+                   LetterSmall   612   792
+                   ArchE        2592  3456
+                   ArchD        1728  2592
+                   ArchC        1296  1728
+                   ArchB         864  1296
+                   ArchA         648   864
+                   A0           2380  3368
+                   A1           1684  2380
+                   A2           1190  1684
+                   A3            842  1190
+                   A4            595   842
+                   A4Small       595   842
+                   A5            421   595
+                   A6            297   421
+                   A7            210   297
+                   A8            148   210
+                   A9            105   148
+                   A10            74   105
+                   B0           2836  4008
+                   B1           2004  2836
+                   B2           1418  2004
+                   B3           1002  1418
+                   B4            709  1002
+                   B5            501   709
+                   C0           2600  3677
+                   C1           1837  2600
+                   C2           1298  1837
+                   C3            918  1298
+                   C4            649   918
+                   C5            459   649
+                   C6            323   459
+                   Flsa          612   936
+                   Flse          612   936
+                   HalfLetter    396   612
+
+              For convenience you can specify the  page  size  by
+              media  (e.g.  A4,  Ledger,  etc.). Otherwise, -page
+              behaves  much  like  -geometry  (e.g.   -page  let­
+              ter+43+43>).
+
+
+              To  position  a  GIF  image,  use  -page{+-}<x off­
+              set>{+-}<y offset> (e.g. -page +100+200).
+
+
+              For a Postscript page, the image  is  sized  as  in
+              -geometry and positioned relative to the lower left
+              hand corner of the page by {+-}<xoffset>{+-}<y off­
+              set>.  Use  -page  612x792>, for example, to center
+              the image  within  the  page.  If  the  image  size
+              exceeds  the  Postscript page, it is reduced to fit
+              the page.
+
+
+              The default page dimensions for  a  TEXT  image  is
+              612x792.
+
+
+              This option is used in concert with -density.
+
+
+       -pen color
+              specify the pen color for drawing operations
+
+       -pointsize value
+              pointsize  of  the Postscript, OPTION1, or TrueType
+              font
+
+       -quality value
+              JPEG/MIFF/PNG compression level
+
+              For the JPEG image format, quality is 0 (worst)  to
+              100 (best). The default quality is 75.
+
+
+              Quality  for the MIFF and PNG image format sets the
+              amount of image compression (quality / 10) and fil­
+              ter-type (quality % 10). Compression quality values
+              range from 0 (worst) to 100 (best). If  filter-type
+              is 4 or less, the specified filter-type is used for
+              all scanlines:
+
+
+                   0: none
+                   1: sub
+                   2: up
+                   3: average
+                   4: Paeth
+
+              If filter-type is 5,  adaptive  filtering  is  used
+              when  quality is greater than 50 and the image does
+              not have a color map,  otherwise  no  filtering  is
+              used.
+
+
+              If  filter-type  is  6  or more, adaptive filtering
+              with minimum-sum-of-absolute-values is used.
+
+
+              The default is quality is 75.  Which  means  nearly
+              the best compression with adaptive filtering.
+
+
+              For further information, see the PNG specification.
+
+
+       -rotate degrees{<}{>}
+              apply Paeth image rotation to the image
+
+              Use > to rotate the image only if its width exceeds
+              the  height.  < rotates the image only if its width
+              is less than the height. For example, if you  spec­
+              ify  -90>  and the image size is 480x640, the image
+              is not rotated by the specified angle. However,  if
+              the image is 640x480, it is rotated by -90 degrees.
+
+
+              Empty triangles left over from rotating  the  image
+              are  filled  with  the  color defined as background
+              (class backgroundColor). See X(1) for details.
+
+
+       -scene value{-value}
+              image scene number or range
+
+              Use this option to specify an image sequence with a
+              single  filename.  See the discussion of file below
+              for details.
+
+       -shadow <radius>x<sigma>
+              shadow the montage
+
+       -sharpen <radius>x<sigma>
+              sharpen the image
+
+              Use a gaussian operator of  the  given  radius  and
+              standard deviation (sigma).
+
+
+       -size <width>x<height>{+offset}
+              width and height of the image
+
+              Use  this option to specify the width and height of
+              raw images whose dimensions  are  unknown  such  as
+              GRAY,  RGB,  or  CMYK.  In  addition  to  width and
+              height, use -size with an offset to skip any header
+              information in the image or tell the number of col­
+              ors in a MAP image file, (e.g. -size  640x512+256).
+
+
+              For Photo CD images, choose from these sizes:
+
+                   192x128
+                   384x256
+                   768x512
+                   1536x1024
+                   3072x2048
+
+              Finally,  use  this  option  to choose a particular
+              resolution layer of a  JBIG  or  JPEG  image  (e.g.
+              -size 1024x768).
+
+
+       -stroke color
+              color to use when stroking a graphic primitive
+
+              See -draw for further details.
+
+
+       -strokewidth value
+              set the stroke width
+
+              See -draw for further details.
+
+
+       -texture filename
+              name of texture to tile onto the image background
+
+       -tile geometry
+              layout of images
+
+       -title assign a title to the displayed image
+
+              Use  this  option to assign a specific title to the
+              image. This is assigned to the image window and  is
+              typically   displayed  in  the  window  title  bar.
+              Optionally you  can  include  the  image  filename,
+              type,  width,  height,  or other image attribute by
+              embedding special format characters:
+
+                   %b file size
+                   %c comment
+                   %d directory
+                   %e filename extention
+                   %f filename
+                   %h height
+                   %i input filename
+                   %k number of unique colors
+                   %l label
+                   %m magick
+                   %n number of scenes
+                   %o output filename
+                   %p page number
+                   %q quantum depth
+                   %s scene number
+                   %t top of filename
+                   %u unique temporary filename
+                   %w width
+                   %x x resolution
+                   %y y resolution
+                   \n newline
+                   \r carriage return
+
+              For example,
+
+
+                   -title "%m:%f %wx%h"
+
+              produces an image title of  MIFF:bird.miff  512x480
+              for  an  image  titled bird.miff and whose width is
+              512 and height is 480.
+
+
+       -transparent color
+              make this color transparent within the image
+
+       -treedepth value
+              tree depth for the color reduction algorithm
+
+              Normally, this integer value is zero or one. A zero
+              or  one  tells  display  to  choose an optimal tree
+              depth for the color reduction algorithm
+
+              An optimal depth generally allows the  best  repre­
+              sentation of the source image with the fastest com­
+              putational speed and the least  amount  of  memory.
+              However,  the  default  depth  is inappropriate for
+              some images. To assure the best representation, try
+              values  between  2 and 8 for this parameter.  Refer
+              to quantize for more details.
+
+
+              The -colors or -monochrome option is  required  for
+              this option to take effect.
+
+
+       -type type
+              the image type
+
+              Choose from: Bilevel, Grayscale, Palette, PaletteM­
+              atte, TrueColor,  TrueColorMatte,  ColorSeparation,
+              ColorSeparationMatte, or Optimize.
+
+
+       -verbose
+              print detailed information about the image
+
+              This  information  is  printed: image scene number;
+              image name; image size; the  image  class  (Direct­
+              Class  or  PseudoClass); the total number of unique
+              colors; and the  number  of  seconds  to  read  and
+              transform  the image.  Refer to miff for a descrip­
+              tion of the image class.
+
+
+              If -colors is also specified, the total unique col­
+              ors  in  the image and color reduction error values
+              are printed. Refer to quantize for a description of
+              these values.
+
+
+FILES AND FORMATS
+       By  default,  the  image format is determined by its magic
+       number. To specify a particular image format, precede  the
+       filename  with  an  image  format  name  and a colon (i.e.
+       ps:image) or specify the image type as the filename suffix
+       (e.g.  image.ps). See convert(1) for a list of valid image
+       formats.
+
+       When you specify X as your image type,  the  filename  has
+       special  meaning. It specifies an X window by id, name, or
+       root. If no filename is specified, the window is  selected
+       by clicking the mouse in the desired window.
+
+       Specify file as - for standard input, output_file as - for
+       standard output. If file has the extension .Z or the  file
+       is  uncompressed  with  uncompress or gunzip respectively.
+       If output_file has the extension compress or gzip  respec­
+       tively.  Finally,  precede  the  image file name with | to
+       pipe to or from a system command.
+
+       Use an optional index enclosed in brackets  after  a  file
+       name  to  specify a desired subimage of a multi-resolution
+       image format like Photo CD  (e.g.   img0001.pcd[4])  or  a
+       range  for MPEG images (e.g. video.mpg[50-75]). A subimage
+       specification can be  disjoint  (e.g.  image.tiff[2,7,4]).
+       For  raw  images, specify a subimage with a geometry (e.g.
+       -size 640x512 image.rgb[320x256+50+50]).
+
+       Single images are written with the filename  you  specify.
+       However,  multi-part  images (i.e. a multi-page PostScript
+       document with +adjoin  specified)  are  written  with  the
+       filename  followed  by  a period (.) and the scene number.
+       You can change this behavior by embedding a printf  format
+       specification  in  the  file  name.  For example, montages
+       files image00.miff, image01.miff, etc.
+
+       Prepend an at sign @ to a filename to read a list of image
+       filenames  from that file. This is convenient in the event
+       you have too many image filenames to fit  on  the  command
+       line.
+
+       Note, a composite MIFF image displayed to an X server with
+       display behaves differently than  other  images.  You  can
+       think of the composite as a visual image directory. Choose
+       a particular tile of the composite and press a  button  to
+       display it. See display(1) and miff(5)
+
+X RESOURCES
+       Montage  options can appear on the command line or in your
+       X resource file. Options on  the  command  line  supersede
+       values  specified  in  your  X resource file. See X(1) for
+       more information on X resources.
+
+       All montage options have a corresponding  X  resource.  In
+       addition, montage uses the following X resources:
+
+       background (class Background)
+              background color
+
+              Specifies  the  preferred color to use for the com­
+              posite image background.  The default is #ccc.
+
+       borderColor (class BorderColor)
+              border color
+
+              Specifies the preferred color to use for  the  com­
+              posite image border. The default is #ccc.
+
+       borderWidth (class BorderWidth)
+              border width
+
+              Specifies  the  width  in  pixels  of the composite
+              image border. The default is 2.
+
+       font (class Font)
+              font to use
+
+              Specifies the name of the  preferred  font  to  use
+              when  displaying  text  within the composite image.
+              The default is 9x15, fixed, or  5x8  determined  by
+              the composite image size.
+
+       matteColor (class MatteColor)
+              color of the frame
+
+              Specify the color of an image frame. A 3D effect is
+              achieved  by  using  highlight  and  shadow  colors
+              derived  from  this  color.  The  default  value is
+              #697B8F.
+
+       pen (class Pen)
+              text color
+
+              Specifies the  preferred  color  to  use  for  text
+              within  the composite image.  The default is black.
+
+       title (class Title)
+              composite image title
+
+              This resource specifies the title to be  placed  at
+              the  top of the composite image. The default is not
+              to place a title at the top of the composite image.
+
+ENVIRONMENT
+       DISPLAY
+              To  get  the  default  host,  display  number,  and
+              screen.
+
+ACKNOWLEDGEMENTS
+       The MIT X Consortium for making network transparent graph­
+       ics a reality.
+
+
+       Michael  Halle, Spatial Imaging Group at MIT, for the ini­
+       tial implementation of Alan Paeth's image  rotation  algo­
+       rithm.
+
+
+       David  Pensak, ImageMagick Studio, for providing a comput­
+       ing environment that made this program possible.
+
+
+SEE ALSO
+       display(1), animate(1), import(1), mogrify(1), convert(1),
+       composite(1)
+
+
+COPYRIGHT
+       Copyright  (C) 2002 ImageMagick Studio, a non-profit orga­
+       nization dedicated to making  software  imaging  solutions
+       freely available.
+
+       Permission  is hereby granted, free of charge, to any per­
+       son obtaining a copy of this software and associated docu­
+       mentation  files  ("ImageMagick"),  to deal in ImageMagick
+       without  restriction,  including  without  limitation  the
+       rights  to  use, copy, modify, merge, publish, distribute,
+       sublicense, and/or sell copies of ImageMagick, and to per­
+       mit persons to whom the ImageMagick is furnished to do so,
+       subject to the following conditions:
+
+       The above copyright  notice  and  this  permission  notice
+       shall be included in all copies or substantial portions of
+       ImageMagick.
+
+       The software is provided "as is", without warranty of  any
+       kind, express or implied, including but not limited to the
+       warranties of merchantability, fitness  for  a  particular
+       purpose  and noninfringement.  In no event shall ImageMag­
+       ick Studio be liable for any claim, damages or other  lia­
+       bility,  whether  in an action of contract, tort or other­
+       wise, arising from, out of or in connection with ImageMag­
+       ick or the use or other dealings in ImageMagick.
+
+       Except  as  contained  in  this  notice,  the  name of the
+       ImageMagick Studio shall not be  used  in  advertising  or
+       otherwise  to  promote  the sale, use or other dealings in
+       ImageMagick without prior written authorization  from  the
+       ImageMagick Studio.
+
+
+AUTHORS
+       John Cristy, ImageMagick Studio LLC
+
+
+
+ImageMagick        $Date: 2002/01/01 06:46:48 $        montage(1)

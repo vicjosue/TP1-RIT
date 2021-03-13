@@ -1,0 +1,69 @@
+PG_PASSWD(1)      PostgreSQL Server Applications     PG_PASSWD(1)
+
+
+
+NAME
+       pg_passwd - change a secondary PostgreSQL password file
+
+SYNOPSIS
+       pg_passwd filename
+
+DESCRIPTION
+       pg_passwd  is  a  tool for manipulating flat text password
+       files. These files can control  client  authentication  of
+       the  PostgreSQL  server. More information about setting up
+       this authentication mechanism can be found in the Adminis­
+       trator's Guide.
+
+       The  format of a text password file is one entry per line;
+       the fields of each entry  are  separated  by  colons.  The
+       first  field  is  the  user  name, the second field is the
+       encrypted password. Other fields  are  ignored  (to  allow
+       password  files to be shared between applications that use
+       similar formats). pg_passwd enables users to interactively
+       add entries to such a file, to alter passwords of existing
+       entries, and to encrypt such passwords.
+
+       Supply the name of the password file as  argument  to  the
+       pg_passwd  command.  To  be  used  by PostgreSQL, the file
+       needs to be located in the server's  data  directory,  and
+       the  base  name  of  the file needs to be specified in the
+       pg_hba.conf access control file.
+
+       $ pg_passwd /usr/local/pgsql/data/passwords
+       File "/usr/local/pgsql/data/passwords" does not exist.  Create? (y/n): y
+       Username: guest
+       Password:
+       Re-enter password:
+
+       where the Password: and Re-enter password: prompts require
+       the same password input which is not displayed on the ter­
+       minal. Note that the password is limited to  eight  useful
+       characters   by  restrictions  of  the  standard  crypt(3)
+       library routine.
+
+       The original password file is renamed to passwords.bk.
+
+       To make use of this password file, put  a  line  like  the
+       following in pg_hba.conf:
+
+       host  mydb     133.65.96.250   255.255.255.255 password passwords
+
+       which  would  allow  access  to  database  mydb  from host
+       133.65.96.250 using the passwords listed in the  passwords
+       file (and only to the users listed in that file).
+
+              Note:  It is also useful to have entries in a pass­
+              word file with empty password fields. (This is dif­
+              ferent  from an empty password.) Such entries allow
+              you to restrict users who can  access  the  system.
+              These  entries  cannot be managed by pg_passwd, but
+              you can edit password files manually.
+
+
+SEE ALSO
+       PostgreSQL Administrator's Guide
+
+
+
+Application                 2000-11-18               PG_PASSWD(1)

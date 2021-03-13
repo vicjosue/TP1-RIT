@@ -1,0 +1,94 @@
+CREATELANG(1)     PostgreSQL Client Applications    CREATELANG(1)
+
+
+
+NAME
+       createlang - define a new PostgreSQL procedural language
+
+SYNOPSIS
+       createlang [ connection-options... ] langname [ dbname ]
+
+       createlang [ connection-options... ]  --list | -l dbname
+
+   INPUTS
+       createlang accepts the following command line arguments:
+
+       langname
+              Specifies  the  name  of the procedural programming
+              language to be defined.
+
+       -d, --dbname dbname
+              Specifies to which database the language should  be
+              added.  The default is to use the database with the
+              same name as the current system user.
+
+       -e, --echo
+              Displays SQL commands as they are executed.
+
+       -l, --list
+              Shows a list of already installed languages in  the
+              target database (which must be specified).
+
+       --L directory
+              Specifies  the  directory  in  which  the  language
+              interpreter is to be found. The directory  is  nor­
+              mally found automatically; this option is primarily
+              for debugging purposes.
+
+
+       createlang also accepts the following command  line  argu­
+       ments for connection parameters:
+
+       -h, --host host
+              Specifies the host name of the machine on which the
+              server is running. If host begins with a slash,  it
+              is  used  as  the  directory  for  the  Unix domain
+              socket.
+
+       -p, --port port
+              Specifies the Internet TCP/IP port  or  local  Unix
+              domain socket file extension on which the server is
+              listening for connections.
+
+       -U, --username username
+              User name to connect as
+
+       -W, --password
+              Force password prompt.
+
+
+   OUTPUTS
+       Most error messages are self-explanatory. If not, run cre­
+       atelang  with  the --echo option and see under the respec­
+       tive SQL command for details. Check also under psql(1) for
+       more possibilities.
+
+DESCRIPTION
+       createlang  is a utility for adding a new programming lan­
+       guage to a PostgreSQL database.  createlang can handle all
+       the languages supplied in the default PostgreSQL distribu­
+       tion, but not languages provided by other parties.
+
+       Although  backend  programming  languages  can  be   added
+       directly  using several SQL commands, it is recommended to
+       use createlang because it performs a number of checks  and
+       is  much  easier  to use. See CREATE LANGUAGE [create_lan­
+       guage(7)] for more.
+
+NOTES
+       Use droplang(1) to remove a language.
+
+       createlang is a shell script  that  invokes  psql  several
+       times.  If  you  have  things  arranged so that a password
+       prompt is required to connect, you will be prompted for  a
+       password several times.
+
+USAGE
+       To install pltcl into the database template1:
+
+       $ createlang pltcl template1
+
+
+
+
+Application                 2001-05-09              CREATELANG(1)

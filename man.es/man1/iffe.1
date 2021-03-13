@@ -1,0 +1,704 @@
+IFFE(1)                                                   IFFE(1)
+
+
+
+NAME
+       iffe - C compilation environment feature probe
+
+SYNOPSIS
+       iffe [-] op[,op...] [arg[,arg...]] [prereq ...] [: op ...]
+
+DESCRIPTION
+       iffe is a command interpreter that probes the  C  compila­
+       tion  environment  for  features.   A feature is any file,
+       option or symbol that controls or is controlled by  the  C
+       compiler.  iffe tests features by generating and compiling
+       C programs and observing the behavior of the C compiler.
+
+       iffe commands are line oriented.   Command  lines  may  be
+       iffe  command  arguments  with  the argument : as the line
+       delimiter or they may be  newline  terminated  lines  from
+       input files.  The command syntax is
+
+              op[,op...] [arg[,arg...]] [prereq ...] [block{ ... }end ...]
+
+       ops and args may be combined, separated by commas, to per­
+       form a set of operations on a set of arguments.  prerequi­
+       sites are compiler options (-D* -L*) and library (-l*) and
+       header (*.h) references to be used when  applying  the  op
+       feature  tests.   A  -  arg by itself groups prerequisites
+       into separate feature tests.  The prerequisites before the
+       first  -  be passed to the compiler for all feature tests;
+       the groups after the first - will be attempted in left-to-
+       right  order, and the first group that provides a success­
+       ful feature test result terminates the test.   blocks  are
+       multi-line  code  blocks  that  override  or  augment  the
+       default code provided by iffe.  User supplied code  blocks
+       should  be  compatible  with the K&R, ANSI, and C++ C lan­
+       guage dialects.  All generated code contains the following
+       at the top to hide dialect differences:
+
+              #if defined(__STDC__) || defined(__cplusplus) || defined(c_plusplus)
+              #define _STD_                 1
+              #define _ARG_(x)    x
+              #define _VOID_                void
+              #else
+              #define _STD_                 0
+              #define _ARG_(x)    ()
+              #define _VOID_                char
+              #endif
+              #if defined(__cplusplus)
+              #define _BEGIN_EXTERNS_       extern "C" {
+              #define _END_EXTERNS_         }
+              #else
+              #define _BEGIN_EXTERNS_
+              #define _END_EXTERNS_
+              #endif
+              #define _NIL_(x)    ((x)0)
+
+       Also  included  at  the top are macro defintions for tests
+       already performed.
+
+       The output file is a C language header that contains macro
+       defintions,  comments, and other text corresponding to the
+       feature test commands.
+
+              #ifndef _def_name_directory
+              ...
+              #endif
+
+       guards the header from multiple where name  is  determined
+       by  either  the  input  file name from the run command, if
+       any, or the first op of the first command,  and  directory
+       is basname component of either the run command, if any, or
+       the current working directory.  The output  file  name  is
+       determined in this order:
+
+       - option
+              Output is stdout.
+
+       set out file
+              Output is file.
+
+       run [directory/]base[.suffix]
+              Output is FEATURE/base.
+
+       Generated  iffe  headers  are often referenced in C source
+       as:
+
+              #include "FEATURE/file"
+
+       The nmake(1) base rules contain metarules  for  generating
+       from where suffix may be omitted, or .sh (see the run fea­
+       ture test op below).  Because #include  prerequisites  are
+       automatically  detected, nmake(1) ensures that all prereq­
+       uisite iffe  headers  are  generated  before  compilation.
+       Note  that  the directories are deliberately named FEATURE
+       and features to keep case-insensitive file systems  happy.
+
+       The feature test ops are:
+
+       # comment
+              Comment line.
+
+       cmd name
+              Defines  _cmd_name  if name is an executable in one
+              of the standard  system  directories  (/bin,  /etc,
+              /usr/bin,  /usr/etc, /usr/ucb).  _directory_name is
+              defined for directory in which name is found  (with
+              / translated to
+
+       dat name
+              Defines _dat_name if name is a data symbol in the C
+              library.
+
+       def name
+              Equivalent to cmd,dat,hdr,key,lib,mth,sys,typ name.
+
+       hdr name
+              Defines _hdr_name if the header <name.h> exists.
+
+       iff name
+              The  generated header #ifndef-#endif macro guard is
+              _name_H.
+
+       key name
+              Defines _key_name if name is a reserved word  (key­
+              word).
+
+       lcl name
+              Generates  a  #include statement for the local ver­
+              sion of either the header <name.h> if it exists  or
+              the  header  <sys/name.h>  if  it  exists.  Defines
+              _lcl_name on success.
+
+       lib name
+              Defines _lib_name if name is an external symbol  in
+              the C library.
+
+       mac name
+              Defines _mac_name if name is a macro.
+
+       mem struct.member
+              Defines _mem_member_struct if member is a member of
+              the structure struct.
+
+       mth name
+              Defines _mth_name if name is an external symbol  in
+              the math library.
+
+       nop name
+              No-op.
+
+       npt name
+              Defines  _npt_name  if the name function requires a
+              prototype.
+
+       one header ...
+              Generates a #include statement for the first header
+              found in the header list.
+
+       run file
+              Runs the tests in file based on file's suffix:
+
+              file   is  compiled  and executed and the output is
+                     copied to the iffe output file.
+
+              file   is executed as a shell script and the output
+                     is copied to the iffe output file.
+
+              no suffix
+
+              file   contains iffe commands.
+
+       set option value
+              Sets option values.  The options are
+
+              cc C-compiler-name [ C-compiler-flags
+              ]
+                     Sets  the  C compiler name and
+                     flags to be used in  the  fea­
+                     ture tests.
+
+              debug level
+                     Sets the debug level.  Level 0
+                     inhibits most error  messages,
+                     level  1  shows  compiler mes­
+                     sages,  and  level  2   traces
+                     internal iffe actions.
+
+              in file
+                     Sets  the  input  file name to
+                     file.  file must contain  iffe
+                     commands.
+
+              out file
+                     Sets  the  output file name to
+                     file.
+
+              prototyped
+                     Emits  #pragma  prototyped  at
+                     the  top  of  the output file.
+                     See proto(1).
+
+              pragma pragma-text
+                     Emits #pragma  pragma-text  at
+                     the top of the output file.
+
+              shell name
+                     Sets  the  internal shell name
+                     to name.  Used  for  debugging
+                     Bourne   shell   compatibility
+                     (otherwise iffe uses ksh  con­
+                     structs if available).
+
+              static [ flags ]
+                     Sets the C compiler flags that
+                     force static linking.  If  not
+                     set  then iffe probes the com­
+                     piler to determine the  flags.
+                     iffe  must  use static linking
+                     (no shared libraries)  because
+                     on    some   systems   missing
+                     library   symbols   are   only
+                     detected  when  referenced  at
+                     runtime.
+
+       sym name
+              Defines  _ary_name  if  name  is   an
+              array,  _fun_name  if name is a func­
+              tion pointer, _ptr_name if name is  a
+              pointer,  or  _reg_name  if name is a
+              scalar.  In most cases name  is  part
+              of a macro expansion.
+
+       sys name
+              Defines   _sys_name   if  the  header
+              <sys/name.h> exists.
+
+       tst name
+              A  user  defined  test  on  name.   A
+              source   block   must   be  supplied.
+              Defines _name on success.
+
+       typ name
+              Defines _typ_name if name is  a  type
+              in  any  of Any .  characters in name
+              are translated to space before  test­
+              ing  and  are  translated to _ in the
+              output macro.
+
+       val name
+              Code block names may be  prefixed  by
+              no  to  invert  the  test sense.  The
+              block names are:
+
+       cat
+       The
+       block
+       is
+       copied
+       to
+       the
+       out­
+       put
+       file.
+
+       com­
+       pile
+       The
+       block
+       is
+       com­
+       piled
+
+       exe­
+       cute
+       The
+       block
+       is
+       com­
+       piled,
+       linked,
+       and
+       exe­
+       cuted.
+       0
+       exit
+       sta­
+       tus
+       means
+       suc­
+       cess.
+
+       fail
+       If
+       the
+       test
+       fails
+       then
+       the
+       fail
+       block
+       text
+       is
+       copied
+       to
+       the
+       out­
+       put
+       file.
+
+       link
+       The
+       block
+       is
+       com­
+       piled
+       and
+       linked
+
+       macro
+       The
+       block
+       is
+       pre­
+       pro­
+       cessed
+       and
+       text
+       brack­
+       eted
+       by
+       is
+       copied
+       to
+       the
+       out­
+       put
+       file.
+
+       menu
+       [NOT
+       YET]
+
+       note
+       If
+       the
+       test
+       suc­
+       ceeds
+       then
+       the
+       note
+       block
+       is
+       copied
+       to
+       the
+       out­
+       put
+       as
+       a
+       com­
+       ment.
+
+       out­
+       put
+       The
+       block
+       is
+       com­
+       piled,
+       linked,
+       and
+       exe­
+       cuted,
+       and
+       the
+       out­
+       put
+       is
+       copied
+       to
+       the
+       out­
+       put
+       file.
+
+       pass
+       If
+       the
+       test
+       suc­
+       ceeds
+       then
+       the
+       pass
+       block
+       text
+       is
+       copied
+       to
+       the
+       out­
+       put
+       file.
+
+       pre­
+       pro­
+       cess
+       The
+       block
+       is
+       pre­
+       pro­
+       cessed
+
+       prompt
+       [NOT
+       YET]
+
+       run
+       The
+       block
+       is
+       exe­
+       cuted
+       as
+       a
+       shell
+       script
+       and
+       the
+       out­
+       put
+       is
+       copied
+       to
+       the
+       out­
+       put
+       file.
+
+       EXAM­
+              PLES
+              The
+              first
+              exam­
+              ples
+              show
+              iffe
+              com­
+              mand
+              line
+              tests.
+              The
+              com­
+              mand
+              line
+              is
+              pre­
+              ceded
+              by
+              $
+              and
+              the
+              out­
+              put
+              fol­
+              lows.
+              Test
+              if
+              volatile
+              or
+              alias
+              are
+              reserved
+              words:
+
+              $ iffe - key and
+              /* : : generated by iffe version 1998-01-23 : : */
+              #ifndef _def_volatile_tmp
+              #define _def_volatile_tmp       1
+              #define _key_volatile   1       /* volatile is a reserved keyword */
+              #endif
+
+       Check
+       for
+       <stdlib.h>
+       or
+       <sys/stdlib.h>:
+
+              $ iffe - hdr,sys stdlib
+              /* : : generated by iffe version 1998-01-23 : : */
+              #ifndef _def_stdlib_pp
+              #define _def_stdlib_pp  1
+              #define _hdr_stdlib     1       /* #include <stdlib.h> ok */
+              #endif
+
+       The
+       remain­
+       ing
+       exam­
+       ples
+       may
+       be
+       placed
+       in
+       a
+       file.iff
+       and
+       run
+       by:
+
+              $ iffe - run file.iff
+
+       _tst_errno
+       will
+       be
+       defined
+       1
+       if
+       errno
+       can
+       be
+       assigned:
+
+              tst errno errno.h note{ errno can be assigned }end link{
+                  _BEGIN_EXTERNS_
+                  extern int errno;
+                  error() { }
+                  strerror() { }
+                  _END_EXTERNS_
+                  main() { errno = 0; error(); strerror(); return 0; }
+              }end
+
+       _ptr_dd_buf
+       will
+       be
+       defined
+       1
+       if
+       the
+       DIR
+       struct
+       mem­
+       ber
+       dd_buf
+       exists
+       and
+       is
+       a
+       pointer.
+       The
+       test
+       will
+       be
+       done
+       as
+       many
+       as
+       3
+       times,
+       first
+       with
+       <dirent.h>,
+       next
+       with
+       <ndir.h>,
+       and
+       finally
+       with
+       <sys/dir.h>.
+
+              tst ptr_dd_buf sys/types.h - dirent.h - ndir.h - sys/dir.h compile{
+                  main() {
+                      DIR* dirp;
+                      dirp->dd_buf = 0;
+                      return 0;
+                  }
+              }end
+
+       Due
+       to
+       lim­
+       i­
+       ta­
+       tions
+       in
+       the
+       inter­
+       preter,
+       tests
+       scripts
+       con­
+       tain­
+       ing
+       C
+       escapes
+       must
+       spec­
+       ify
+       \
+       as
+       \\.
+       This
+       exam­
+       ple
+       defines
+       CODE_alert
+       to
+       be
+       the
+       char­
+       ac­
+       ter
+       code
+       value
+       for
+
+              tst output{
+                  _BEGIN_EXTERNS_
+                  extern int printf _ARG_((const char*, ...));
+                  _END_EXTERNS_
+                  main() {
+                      printf("#define CODE_alert    %d\\n", '\\a');
+                      return 0;
+                  }
+              }end
+
+
+FILES
+       fea­
+                      tures/op.c     C
+                      pro­
+                      gram
+                      to
+                      com­
+                      pile
+                      and
+                      run
+                      for
+                      op.
+                      Exe­
+                      cu­
+                      tion
+                      out­
+                      put
+                      copied
+                      to
+                      the
+                      FEA­
+                      TURE
+                      out­
+                      put
+                      file.
+       fea­
+                      tures/op.sh    sh(1)
+                      script
+                      to
+                      run
+                      for
+                      op.
+                      Exe­
+                      cu­
+                      tion
+                      out­
+                      put
+                      copied
+                      to
+                      the
+                      FEA­
+                      TURE
+                      out­
+                      put
+                      file.
+       fea­
+                      tures/op       iffe
+                      over­
+                      ride
+                      tests
+                      for
+                      op.
+
+SEE
+       ALSO
+       cc(1),
+       cpp(1),
+       nmake(1),
+       probe(1)
+
+AUTHOR
+       Glenn
+       Fowler         gsf@research.att.com
+       K.
+       Phong
+       Vo kpv@research.att.com
+       AT&T
+       Labs
+       Research
+
+
+
+                                                          IFFE(1)

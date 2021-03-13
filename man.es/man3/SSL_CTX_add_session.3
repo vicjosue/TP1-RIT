@@ -1,0 +1,71 @@
+SSL_CTX_add_session(3)       OpenSSL       SSL_CTX_add_session(3)
+
+
+
+NNAAMMEE
+       SSL_CTX_add_session, SSL_add_session,
+       SSL_CTX_remove_session, SSL_remove_session - manipulate
+       session cache
+
+SSYYNNOOPPSSIISS
+        #include <openssl/ssl.h>
+
+        int SSL_CTX_add_session(SSL_CTX *ctx, SSL_SESSION *c);
+        int SSL_add_session(SSL_CTX *ctx, SSL_SESSION *c);
+
+        int SSL_CTX_remove_session(SSL_CTX *ctx, SSL_SESSION *c);
+        int SSL_remove_session(SSL_CTX *ctx, SSL_SESSION *c);
+
+
+DDEESSCCRRIIPPTTIIOONN
+       SSL_CTX_add_session() adds the session cc to the context
+       ccttxx. The reference count for session cc is incremented by
+       1. If a session with the same session id already exists,
+       the old session is removed by calling SSL_SESSION_free(3).
+
+       SSL_CTX_remove_session() removes the session cc from the
+       context ccttxx.  SSL_SESSION_free(3) is called once for cc.
+
+       SSL_add_session() and SSL_remove_session() are synonyms
+       for their SSL_CTX_*() counterparts.
+
+NNOOTTEESS
+       When adding a new session to the internal session cache,
+       it is examined whether a session with the same session id
+       already exists. In this case it is assumed that both
+       sessions are identical. If the same session is stored in a
+       different SSL_SESSION object, The old session is removed
+       and replaced by the new session. If the session is
+       actually identical (the SSL_SESSION object is identical),
+       SSL_CTX_add_session() is a no-op, and the return value is
+       0.
+
+RREETTUURRNN VVAALLUUEESS
+       The following values are returned by all functions:
+
+       0
+
+            The operation failed. In case of the add operation, it was tried to add
+            the same (identical) session twice. In case of the remove operation, the
+            session was not found in the cache.
+
+
+       1    The operation succeeded.
+
+SSEEEE AALLSSOO
+       ssl(3), SSL_CTX_set_session_cache_mode(3),
+       SSL_SESSION_free(3)
+
+
+
+
+
+
+
+
+
+
+
+
+
+4/Feb/2001                    0.9.6c       SSL_CTX_add_session(3)

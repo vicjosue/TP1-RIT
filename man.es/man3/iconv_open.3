@@ -1,0 +1,56 @@
+ICONV_OPEN(3)       Linux Programmer's Manual       ICONV_OPEN(3)
+
+
+
+NAME
+       iconv_open - allocate descriptor for character set conver­
+       sion
+
+SYNOPSIS
+       #include <iconv.h>
+
+       iconv_t iconv_open(const char *tocode, const char *fromcode);
+
+DESCRIPTION
+       The iconv_open function allocates a conversion  descriptor
+       suitable  for  converting  byte  sequences  from character
+       encoding fromcode to character encoding tocode.
+
+       The values permitted for fromcode and tocode and the  sup­
+       ported  combinations  are  system dependent. For the GNU C
+       library, the permitted values  are  listed  by  the  iconv
+       --list  command, and all combinations of the listed values
+       are supported.
+
+       The resulting conversion descriptor can be used with iconv
+       any  number  of  times. It remains valid until deallocated
+       using iconv_close.
+
+       A conversion descriptor contains a conversion state. After
+       creation  using  iconv_open,  the  state is in the initial
+       state. Using iconv modifies  the  descriptor's  conversion
+       state.  (This implies that a conversion descriptor can not
+       be used in multiple threads simultaneously.) To bring  the
+       state  back  to  the initial state, use iconv with NULL as
+       inbuf argument.
+
+RETURN VALUE
+       The iconv_open function returns a freshly  allocated  con­
+       version  descriptor.  In  case of error, it sets errno and
+       returns (iconv_t)(-1).
+
+ERRORS
+       The following error can occur, among others:
+
+       EINVAL The conversion from fromcode to tocode is not  sup­
+              ported by the implementation.
+
+CONFORMING TO
+       UNIX98
+
+SEE ALSO
+       iconv(3), iconv_close(3), iconv(1)
+
+
+
+GNU                         1999-11-27              ICONV_OPEN(3)

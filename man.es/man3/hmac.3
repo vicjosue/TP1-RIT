@@ -1,0 +1,87 @@
+hmac(3)                      OpenSSL                      hmac(3)
+
+
+
+NNAAMMEE
+       HMAC, HMAC_Init, HMAC_Update, HMAC_Final, HMAC_cleanup -
+       HMAC message authentication code
+
+SSYYNNOOPPSSIISS
+        #include <openssl/hmac.h>
+
+        unsigned char *HMAC(const EVP_MD *evp_md, const void *key,
+                      int key_len, const unsigned char *d, int n,
+                      unsigned char *md, unsigned int *md_len);
+
+        void HMAC_Init(HMAC_CTX *ctx, const void *key, int key_len,
+                      const EVP_MD *md);
+        void HMAC_Update(HMAC_CTX *ctx, const unsigned char *data, int len);
+        void HMAC_Final(HMAC_CTX *ctx, unsigned char *md, unsigned int *len);
+
+        void HMAC_cleanup(HMAC_CTX *ctx);
+
+
+DDEESSCCRRIIPPTTIIOONN
+       HMAC is a MAC (message authentication code), i.e. a keyed
+       hash function used for message authentication, which is
+       based on a hash function.
+
+       HMAC() computes the message authentication code of the nn
+       bytes at dd using the hash function eevvpp_mmdd and the key kkeeyy
+       which is kkeeyy_lleenn bytes long.
+
+       It places the result in mmdd (which must have space for the
+       output of the hash function, which is no more than
+       EEVVPP_MMAAXX_MMDD_SSIIZZEE bytes).  If mmdd is NULL, the digest is
+       placed in a static array.  The size of the output is
+       placed in mmdd_lleenn, unless it is NNUULLLL.
+
+       eevvpp_mmdd can be EVP_sha1(), EVP_ripemd160() etc.  kkeeyy and
+       eevvpp_mmdd may be NNUULLLL if a key and hash function have been
+       set in a previous call to HMAC_Init() for that HHMMAACC_CCTTXX.
+
+       HMAC_cleanup() erases the key and other data from the
+       HHMMAACC_CCTTXX.
+
+       The following functions may be used if the message is not
+       completely stored in memory:
+
+       HMAC_Init() initializes a HHMMAACC_CCTTXX structure to use the
+       hash function eevvpp_mmdd and the key kkeeyy which is kkeeyy_lleenn
+       bytes long.
+
+       HMAC_Update() can be called repeatedly with chunks of the
+       message to be authenticated (lleenn bytes at ddaattaa).
+
+       HMAC_Final() places the message authentication code in mmdd,
+       which must have space for the hash function output.
+
+RREETTUURRNN VVAALLUUEESS
+       HMAC() returns a pointer to the message authentication
+       code.
+
+       HMAC_Init(), HMAC_Update(), HMAC_Final() and
+       HMAC_cleanup() do not return values.
+
+CCOONNFFOORRMMIINNGG TTOO
+       RFC 2104
+
+SSEEEE AALLSSOO
+       sha(3), evp(3)
+
+HHIISSTTOORRYY
+       HMAC(), HMAC_Init(), HMAC_Update(), HMAC_Final() and
+       HMAC_cleanup() are available since SSLeay 0.9.0.
+
+
+
+
+
+
+
+
+
+
+
+
+14/Sep/2000                   0.9.6c                      hmac(3)

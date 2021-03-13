@@ -1,0 +1,58 @@
+CHFN(1)               Linux Reference Manual              CHFN(1)
+
+
+
+NAME
+       chfn - change your finger information
+
+SYNOPSIS
+       chfn  [ -f full-name ]  [ -o office ]  [ -p office-phone ]
+       [ -h home-phone ] [ -u ] [ -v ] [ username ]
+
+DESCRIPTION
+       chfn is used to  change  your  finger  information.   This
+       information is stored in the /etc/passwd file, and is dis­
+       played by the finger program.  The  Linux  finger  command
+       will  display  four  pieces  of  information  that  can be
+       changed by chfn : your  real  name,  your  work  room  and
+       phone, and your home phone.
+
+   COMMAND LINE
+       Any  of the four pieces of information can be specified on
+       the command line.  If no information is given on the  com­
+       mand line, chfn enters interactive mode.
+
+   INTERACTIVE MODE
+       In  interactive mode, chfn will prompt for each field.  At
+       a prompt, you can enter the new information, or just press
+       return  to  leave  the field unchanged.  Enter the keyword
+       "none" to make the field blank.
+
+OPTIONS
+       -f, --full-name
+              Specify your real name.
+
+       -o, --office
+              Specify your office room number.
+
+       -p, --office-phone
+              Specify your office phone number.
+
+       -h, --home-phone
+              Specify your home phone number.
+
+       -u, --help
+              Print a usage message and exit.
+
+       -v, --version
+              Print version information and exit.
+
+SEE ALSO
+       finger(1), passwd(5)
+
+AUTHOR
+       Salvatore Valente <svalente@mit.edu>
+
+
+
+chfn                     October 13 1994                  CHFN(1)

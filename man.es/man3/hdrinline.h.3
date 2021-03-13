@@ -1,0 +1,65 @@
+lib/hdrinline.h(3)                             lib/hdrinline.h(3)
+
+
+
+NAME
+       lib/hdrinline.h -
+
+SYNOPSIS
+   Functions
+       HV_t h2hv (Header h)
+       Header headerNew (void)
+       Header headerFree (Header h)
+       Header headerLink (Header h)
+       void headerSort (Header h)
+       void headerUnsort (Header h)
+       unsigned int headerSizeof (Header h, enum hMagic magicp)
+       void * headerUnload (Header h)
+       Header headerReload (Header h, int tag)
+       Header headerCopy (Header h)
+       Header headerLoad (void *uh)
+       Header headerCopyLoad (const void *uh)
+       Header headerRead (FD_t fd, enum hMagic magicp)
+       int headerWrite (FD_t fd, Header h, enum hMagic magicp)
+       int headerIsEntry (Header h, int_32 tag)
+       void * headerFreeTag (Header h, const void *data,
+           rpmTagType type)
+       int headerGetEntry (Header h, int_32 tag, hTYP_t type,
+           void **p, hCNT_t c)
+       int headerGetEntryMinMemory (Header h, int_32 tag, hTYP_t
+           type, hPTR_t *p, hCNT_t c)
+       int headerAddEntry (Header h, int_32 tag, int_32 type,
+           const void *p, int_32 c)
+       int headerAppendEntry (Header h, int_32 tag, int_32 type,
+           const void *p, int_32 c)
+       int headerAddOrAppendEntry (Header h, int_32 tag, int_32
+           type, const void *p, int_32 c)
+       int headerAddI18NString (Header h, int_32 tag, const char
+           *string, const char *lang)
+       int headerModifyEntry (Header h, int_32 tag, int_32 type,
+           const void *p, int_32 c)
+       int headerRemoveEntry (Header h, int_32 tag)
+       char * headerSprintf (Header h, const char *fmt, const
+           struct headerTagTableEntry_s *tags, const struct
+           headerSprintfExtension_s *extensions, errmsg_t
+           *errmsg)
+       void headerCopyTags (Header headerFrom, Header headerTo,
+           hTAG_t tagstocopy)
+       HeaderIterator headerFreeIterator (HeaderIterator hi)
+       HeaderIterator headerInitIterator (Header h)
+       int headerNextIterator (HeaderIterator hi, hTAG_t tag,
+           hTYP_t type, hPTR_t *p, hCNT_t c)
+
+   Variables
+       HV_s * hdrVec = &hdrVec1
+
+DETAILED DESCRIPTION
+       Definition in file hdrinline.h.
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002         lib/hdrinline.h(3)

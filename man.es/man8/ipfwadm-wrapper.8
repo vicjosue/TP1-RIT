@@ -1,0 +1,54 @@
+IPFWADM-WRAPPER(8)                             IPFWADM-WRAPPER(8)
+
+
+
+NAME
+       ipfwadm-wrapper - IP firewall administration
+
+SYNOPSIS
+       ipfwadm-wrapper -A command parameters [options]
+       ipfwadm-wrapper -I command parameters [options]
+       ipfwadm-wrapper -O command parameters [options]
+       ipfwadm-wrapper -F command parameters [options]
+       ipfwadm-wrapper -M [ -l | -s ] [options]
+
+DESCRIPTION
+       Ipfwadm-wrapper emulates the behaviour of ipfwadm. You can
+       use this wrapper to use your old  ipfwadm  firewall  rules
+       with ipchains. See ipfwadm(8) for more details.
+
+       If  the  kernel  does not support ipchains (eg. a 2.0 ker­
+       nel), and the file /sbin/ipfwadm.real exists and  is  exe­
+       cutable, then it will be executed with the arguments given
+       to ipfwadm-wrapper.  This allows  simple  dual-booting  of
+       2.2  and  2.0  kernels  with the same firewalling scripts:
+       simply move ipfwadm to ipfwadm.real,  and  ipfwadm-wrapper
+       to ipfwadm.
+
+
+SEE ALSO
+       ipfwadm(8), ipchains(8)
+
+BUGS
+       The script isn't clever at parsing command line arguments.
+       You must use separate  arguments,  rather  than  run  them
+       together.   For  example, `ipfwadm -Mle' becomes `ipfwadm-
+       wrapper -M -l -e'.
+
+       Fragment accounting rules are  not  translated  correctly;
+       they will account packets with source port 65535.
+
+       Due  to  new kernel restrictions, you must be root even to
+       list rules for 2.2 kernels.
+
+       If /usr is mounted from NFS, you will not be able  to  use
+       ipfwadm-wrapper before /usr is mounted.
+
+
+AUTHOR
+       Paul ``Rusty'' Russell <ipchains@rustcorp.com>
+
+
+
+
+                         February 8, 1998      IPFWADM-WRAPPER(8)

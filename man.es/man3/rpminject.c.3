@@ -1,0 +1,284 @@
+tools/rpminject.c(3)                         tools/rpminject.c(3)
+
+
+
+NAME
+       tools/rpminject.c -
+
+SYNOPSIS
+       #include 'system.h'
+       #include 'rpmbuild.h'
+       #include 'buildio.h'
+       #include 'header.h'
+       #include 'rpmlead.h'
+       #include 'signature.h'
+       #include <err.h>
+       #include 'debug.h'
+
+   Data Structures
+       struct cmd_s
+       struct headerTypeTableEntry
+
+   Defines
+       #define MAXCMDS   40
+       #define MYBUFSIZ   (2*BUFSIZ)
+
+   Typedefs
+       typedef enum injmode_e injmode_t
+       typedef cmd_s cmd_t
+
+   Enumerations
+       enum injmode_e { INJ_UNKNOWN, INJ_ADD, INJ_DELETE,
+           INJ_MODIFY }
+       enum cvtaction { CA_OLD, CA_NEW, CA_OMIT, CA_ERR }
+
+   Functions
+       const char * pr_injmode (injmode_t injmode)
+       const char * getTagString (int tval)
+       int getTagVal (const char *tname)
+       char * getTypeString (int tval)
+       enum cvtaction convertAMD (enum cvtaction ca, int_32 type,
+           void **nvalsp, int_32 *ncountp, cmd_t *newc)
+       enum cvtaction convertExistingAMD (int_32 tag, int_32
+           type, void **valsp, int_32 *countp, void **nvalsp,
+           int_32 *ncountp, cmd_t *cmds[], int ncmds)
+       Header headerCopyWithConvert (Header h, cmd_t *cmds[], int
+           ncmds)
+       char * genChangelog (cmd_t *cmds[], int ncmds)
+       int headerInject (Header *hdrp, cmd_t *cmds[], int ncmds)
+       int rewriteRPM (const char *fni, const char *fno, cmd_t
+           *cmds[], int ncmds)
+       int do_inject (cmd_t *cmds[], int ncmds, const char
+           *argv[])
+       int main (int argc, char *argv[])
+
+   Variables
+       injmode_t injmode = INJ_UNKNOWN
+       cmd_t * cmds [40]
+       int ncmds = 0
+       const char * hdri18ntbl = 'HEADER_I18NTABLE'
+       const struct headerTypeTableEntry rpmTypeTable []
+       poptOption optionsTable []
+
+DEFINE DOCUMENTATION
+   #define MAXCMDS   40
+       Definition at line 27 of file rpminject.c.
+
+   #define MYBUFSIZ   (2*BUFSIZ)
+TYPEDEF DOCUMENTATION
+   typedef struct cmd_s  cmd_t
+   typedef enum injmode_e  injmode_t
+       Referenced by main, and pr_injmode.
+
+ENUMERATION TYPE DOCUMENTATION
+   enum cvtaction
+       Enumeration values:
+
+       CA_OLD
+
+       CA_NEW
+
+       CA_OMIT
+
+       CA_ERR
+
+       Definition at line 113 of file rpminject.c.
+
+       Referenced by convertAMD, convertExistingAMD,
+       headerCopyWithConvert, and headerInject.
+
+   enum injmode_e
+       Enumeration values:
+
+       INJ_UNKNOWN
+
+       INJ_ADD
+
+       INJ_DELETE
+
+       INJ_MODIFY
+
+
+       Definition at line 13 of file rpminject.c.
+
+FUNCTION DOCUMENTATION
+   enum cvtaction convertAMD (enum cvtaction ca, int_32 type,
+       void ** nvalsp, int_32 * ncountp, cmd_t * newc) [static]
+       Definition at line 115 of file rpminject.c.
+
+       References CA_ERR, CA_NEW, CA_OLD, CA_OMIT, cvtaction,
+       cmd_s::done, int_32, cmd_s::nvals, RPM_BIN_TYPE,
+       RPM_CHAR_TYPE, RPM_I18NSTRING_TYPE, RPM_INT16_TYPE,
+       RPM_INT32_TYPE, RPM_INT8_TYPE, RPM_NULL_TYPE,
+       RPM_STRING_ARRAY_TYPE, RPM_STRING_TYPE, cmd_s::vals,
+       xmalloc, and xstrdup.
+
+       Referenced by convertExistingAMD, and headerInject.
+
+   enum cvtaction convertExistingAMD (int_32 tag, int_32 type,
+       void ** valsp, int_32 * countp, void ** nvalsp, int_32 *
+       ncountp, cmd_t * cmds[], int ncmds) [static]
+       Definition at line 192 of file rpminject.c.
+
+       References CA_ERR, CA_NEW, CA_OLD, CA_OMIT, convertAMD,
+       cvtaction, cmd_s::done, INJ_ADD, INJ_DELETE, INJ_MODIFY,
+       INJ_UNKNOWN, cmd_s::injmode, int_32, ncmds, cmd_s::oldcnt,
+       RPMTAG_EXTERNAL_TAG, RPMTAG_FIRSTFREE_TAG, RPMTAG_NAME,
+       and cmd_s::tagval.
+
+       Referenced by headerCopyWithConvert.
+
+   int do_inject (cmd_t * cmds[], int ncmds, const char * argv[])
+       [static]
+       Definition at line 479 of file rpminject.c.
+
+       References _, ncmds, rewriteRPM, and xmalloc.
+
+       Referenced by main.
+
+   char* genChangelog (cmd_t * cmds[], int ncmds) [static]
+       Definition at line 314 of file rpminject.c.
+
+       References cmd_s::injmode, ncmds, cmd_s::nvals,
+       cmd_s::oldcnt, pr_injmode, cmd_s::tag, cmd_s::tagval, and
+       xmalloc.
+
+       Referenced by headerInject.
+
+   const char* getTagString (int tval) [static]
+       Definition at line 45 of file rpminject.c.
+
+       References hdri18ntbl, HEADER_I18NTABLE,
+       headerTagTableEntry_s::name, rpmTagTable, and
+       headerTagTableEntry_s::val.
+
+       Referenced by headerInject.
+
+   int getTagVal (const char * tname) [static]
+       Definition at line 58 of file rpminject.c.
+
+       References alloca, hdri18ntbl, HEADER_I18NTABLE,
+       headerTagTableEntry_s::name, rpmTagTable,
+       headerTagTableEntry_s::val, xstrcasecmp, and xstrncasecmp.
+
+       Referenced by main.
+
+   char* getTypeString (int tval) [static]
+       Definition at line 98 of file rpminject.c.
+
+       References headerTypeTableEntry::name, rpmTypeTable, and
+       headerTypeTableEntry::val.
+
+   Header headerCopyWithConvert (Header h, cmd_t * cmds[], int
+       ncmds) [static]
+       Definition at line 264 of file rpminject.c.
+
+       References CA_ERR, CA_NEW, CA_OLD, CA_OMIT,
+       convertExistingAMD, cvtaction, headerAddEntry,
+       headerFreeIterator, headerInitIterator, headerNew,
+       headerNextIterator, int_32, ncmds, RPM_I18NSTRING_TYPE,
+       RPM_STRING_ARRAY_TYPE, RPMTAG_CHANGELOGNAME,
+       RPMTAG_CHANGELOGTEXT, and RPMTAG_CHANGELOGTIME.
+
+       Referenced by headerInject.
+
+   int headerInject (Header * hdrp, cmd_t * cmds[], int ncmds)
+       [static]
+       Definition at line 351 of file rpminject.c.
+
+       References _, addChangelogEntry, buildHost, CA_NEW,
+       convertAMD, cvtaction, cmd_s::done, genChangelog,
+       getBuildTime, getTagString, getUname, headerAddEntry,
+       headerCopyTags, headerCopyWithConvert, headerFree,
+       headerIsEntry, headerSort, INJ_ADD, INJ_DELETE,
+       INJ_MODIFY, INJ_UNKNOWN, cmd_s::injmode, int_32, ncmds,
+       cmd_s::nvals, RPM_STRING_ARRAY_TYPE, RPM_STRING_TYPE,
+       RPMTAG_CHANGELOGNAME, RPMTAG_CHANGELOGTEXT,
+       RPMTAG_CHANGELOGTIME, and cmd_s::tagval.
+
+       Referenced by rewriteRPM.
+
+   int main (int argc, char * argv[])
+       Definition at line 524 of file rpminject.c.
+
+       References _, addMacro, bindtextdomain, do_inject,
+       EXIT_FAILURE, getTagVal, INJ_ADD, INJ_DELETE, INJ_MODIFY,
+       INJ_UNKNOWN, cmd_s::injmode, injmode, injmode_t,
+       LOCALEDIR, ncmds, cmd_s::nvals, optionsTable, PACKAGE,
+       poptFreeContext, poptGetArgs, poptGetContext,
+       poptGetNextOpt, poptGetOptArg, poptReadDefaultConfig,
+       RMIL_DEFAULT, rpmDisplayQueryTags, RPMTAG_EXTERNAL_TAG,
+       RPMTAG_FIRSTFREE_TAG, RPMTAG_NAME, setlocale, setprogname,
+       cmd_s::tag, cmd_s::tagval, textdomain, cmd_s::vals,
+       xcalloc, xrealloc, and xstrdup.
+
+   const char* pr_injmode (injmode_t injmode) [static]
+       Definition at line 31 of file rpminject.c.
+
+       References INJ_ADD, INJ_DELETE, INJ_MODIFY, INJ_UNKNOWN,
+       injmode, and injmode_t.
+
+       Referenced by genChangelog.
+
+   int rewriteRPM (const char * fni, const char * fno, cmd_t *
+       cmds[], int ncmds) [static]
+       Definition at line 439 of file rpminject.c.
+
+       References SpecStruct::cookie,
+       cpioSourceArchive_s::cpioArchiveSize,
+       cpioSourceArchive_s::cpioFdIn,
+       cpioSourceArchive_s::cpioList, Fclose, fdNew,
+       PackageStruct::header, headerInject,
+       cpioSourceArchive_s::lead, ncmds, SpecStruct::packages,
+       SpecStruct::passPhrase, readRPM, RPMLEAD_SOURCE, and
+       writeRPM.
+
+       Referenced by do_inject.
+
+VARIABLE DOCUMENTATION
+   cmd_t* cmds[ 40 ]
+       Definition at line 28 of file rpminject.c.
+
+   const char* hdri18ntbl = 'HEADER_I18NTABLE' [static]
+       Definition at line 43 of file rpminject.c.
+
+       Referenced by getTagString, and getTagVal.
+
+   injmode_t injmode = INJ_UNKNOWN
+       Definition at line 15 of file rpminject.c.
+
+       Referenced by main, and pr_injmode.
+
+   int ncmds = 0
+       Definition at line 29 of file rpminject.c.
+
+       Referenced by convertExistingAMD, do_inject, genChangelog,
+       headerCopyWithConvert, headerInject, main, and rewriteRPM.
+
+   struct poptOption optionsTable[] [static]
+       Initial value:
+
+        {
+        { 'add',       'a', 0, 0, 'a',                 NULL, NULL },
+        { 'del',       'd', 0, 0, 'd',                 NULL, NULL },
+        { 'injtags',   'i', 0, 0, 'i',                 NULL, NULL },
+        { 'modify',    'm', 0, 0, 'm',                 NULL, NULL },
+        { 'tag',       't', POPT_ARG_STRING, 0, 't',   NULL, NULL },
+        { 'value',     'v', POPT_ARG_STRING, 0, 'v',   NULL, NULL },
+        { NULL,        0, 0, 0, 0,                     NULL, NULL }
+       }
+
+       Definition at line 513 of file rpminject.c.
+
+       Referenced by main.
+
+   const struct headerTypeTableEntry  rpmTypeTable[] [static]
+       Referenced by getTypeString.
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002       tools/rpminject.c(3)

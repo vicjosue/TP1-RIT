@@ -1,0 +1,41 @@
+IPTABLES-SAVE(8)                                 IPTABLES-SAVE(8)
+
+
+
+NAME
+       iptables-save - Save IP Tables
+
+SYNOPSIS
+       iptables-save [-c] [-t table]
+
+DESCRIPTION
+       iptables-save  is used to dump the contents of an IP Table
+       in easily parseable format to STDOUT. Use  I/O-redirection
+       provided by your shell to write to a file.
+
+       -c, --counters
+              include  the  current values of all packet and byte
+              counters in the output
+
+       -t, --table tablename
+
+       restrict output to only one table. If not specified,  out­
+       put includes all
+              available tables.
+
+BUGS
+       None known as of iptables-1.2.1 release
+
+AUTHOR
+       Harald Welte <laforge@gnumonks.org>
+
+SEE ALSO
+       iptables-restore(8), iptables(8)
+
+       The iptables-HOWTO, which details more iptables usage, the
+       NAT-HOWTO,  which  details NAT, and the netfilter-hacking-
+       HOWTO which details the internals.
+
+
+
+                           Jan 04, 2001          IPTABLES-SAVE(8)

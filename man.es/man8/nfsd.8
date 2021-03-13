@@ -1,0 +1,44 @@
+rpc.nfsd(8)                                           rpc.nfsd(8)
+
+
+
+NAME
+       rpc.nfsd - NFS server process
+
+SYNOPSIS
+       /usr/sbin/rpc.nfsd [-p port] nproc
+
+DESCRIPTION
+       The rpc.nfsd program implements the user level part of the
+       NFS service. The main  functionality  is  handled  by  the
+       nfsd.o kernel module; the user space program merely starts
+       the specified number of kernel threads.
+
+       The rpc.mountd server provides an ancially service  needed
+       to satisfy mount requests by NFS clients.
+
+OPTIONS
+       -p port
+              specify  a  diferent  port  to  listen  on  for NFS
+              requests. By default, rpc.nfsd will listen on  port
+              2049.
+
+       nproc  specify  the  number  of  NFS  server  threads.  By
+              default, just one thread is started.  However,  for
+              optimum performance several threads should be used.
+              The actual figure depends on the number of and  the
+              work  load created by the NFS clients, but a useful
+              starting point is 8 threads. Effects  of  modifying
+              that  number  can  be  checked using the nfsstat(8)
+              program.
+
+SEE ALSO
+       rpc.mountd(8), exportfs(8), rpc.rquotad(8), nfsstat(8).
+
+AUTHOR
+       Olaf Kirch, Bill Hawes, H. J. Lu, G. Allan Morris III, and
+       a host of others.
+
+
+
+                           31 May 1999                rpc.nfsd(8)

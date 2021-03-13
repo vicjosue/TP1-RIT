@@ -1,0 +1,280 @@
+ROFF(7)                                                   ROFF(7)
+
+
+
+NAME
+       roff - a survey of the roff typesetting system
+
+DESCRIPTION
+       roff  is  the  general name for a set of type-setting pro­
+       grams, known under names like troff, nroff, groff, etc.
+
+       The roff type-setting system consists of a formatting lan­
+       guage,  macro  packages, preprocessors, postprocessors for
+       output devices, user front-end  programs,  and  conversion
+       tools.
+
+       The  most  common  roff  system today is the free software
+       implementation groff  (from  `GNU roff').   The  pre-groff
+       implementations  are  referred  to  as `classical' (dating
+       back as long as 1973).
+
+       groff is backward-compatible to its  classical  ancestors,
+       but  has many extensions, and is still evolving.  As it is
+       available for almost every computer system it is  the  de-
+       facto roff standard today.
+
+       In  spite of its age, roff is in wide use today, e.g., the
+       manual pages on UNIX systems (man-pages)  are  written  in
+       roff.    The   roff  output  for  text  devices  is  still
+       unmatched, and its graphical output has the  same  quality
+       as the other free type-setting programs and is better than
+       some of the commercial systems.
+
+       This document gives only an overview and provides pointers
+       to further documentation.
+
+       This  document is not maintained and might be out of date.
+       For the real documentation refer to the  groff  info  file
+       that  contains  the detailed, actual and concise reference
+       information.
+
+FORMATTING LANGUAGE
+       There are three terms that refer to the  language  of  the
+       roff  system.   The  term  troff language is used when the
+       classical aspects of roff are  stressed,  the  term  groff
+       language  includes  the  GNU extensions, whereas roff lan­
+       guage is the general term.
+
+       The main source of documentation for all  aspects  of  the
+       groff  language  is  the groff info file.  The manual page
+       groff(7) gives a short description of all predefined  lan­
+       guage elements.
+
+       Documents  using  roff  are normal text files decorated by
+       formatting elements.  It is very easy to write  high-qual­
+       ity  documents  by using one of the macro packages.  These
+       are like high-level programming languages, while the  bare
+       roff  language  compares to a low-level language like C or
+       assembler.
+
+       The roff language is a full programming language providing
+       low-level   requests,   definition   of   macros,   escape
+       sequences, string variables, number or size registers, and
+       C-like flow controls.
+
+       Some  clarification  on  the language elements seems to be
+       wanted.  Requests are basic formatting commands defined by
+       programming  languages  like  C, C++, etc., whereas macros
+       are formatting commands that are written in the roff  lan­
+       guage.   A document writer will not note any difference in
+       usage for requests or macros, both are written on  a  line
+       on  their  own  starting  with a dot `.'. But the user may
+       define her own macros if desired.
+
+       Escape sequences are  in-line  elements  starting  with  a
+       backslash  `\'.  They  are  used to implement various fea­
+       tures, including the  insertion  of  non-ASCII  characters
+       with \(, the content of strings with \* and register vari­
+       ables with \n, font changes with \f, in-line comments with
+       \",  the  escaping  of special control characters like \\,
+       and many other features.
+
+FORMATTERS
+       Formatters are the front-end programs that analyze a groff
+       document and translate it into a form that is suitable for
+       a special device.  The traditional roff  had  two  format­
+       ters,  nroff  for  text  devices  and  troff for graphical
+       devices.
+
+       These programs still exist in  the  groff  implementation,
+       but  usually  they  are  accessed through a program called
+       groff.  This combined and extended the  old  functionality
+       into  a single program.  It has many command-line options,
+       most of them herited from troff.  To ease the option  jun­
+       gle,  the  user-friendly utility grog (from `groff guess')
+       was created.  It tries to guess from  the  document  which
+       arguments  should  be used and displays a suitable command
+       line.  Though not being perfect, it  is  a  good  starting
+       point.
+
+PREPROCESSORS
+       The  classical  preprocessors  that are still available in
+       groff.
+
+              eqn    for including mathematical equations.
+              grap   for constructing  graphical  elements  (this
+                     preprocessor  doesn't come with groff; it is
+                     an extra package).
+              grn    for including gremlin pictures.
+              pic    for creating diagrams.
+              refer  for bibliographic references.
+              soelim for including other roff files.
+              tbl    for rectangular tables.
+
+       Each of these preprocessors defines its own language  that
+       is  translated into roff code when run through the prepro­
+       cessor program.  So parts written in these  languages  may
+       be included within a roff document.  Such an enhanced doc­
+       ument is run through one or more corresponding  preproces­
+       sors before it is fed into the actual formatter.
+
+       The  preprocessor programs extract and transform the docu­
+       ment parts determined for them.  They can be called either
+       in  a  UNIX  pipeline with their program name or automati­
+       cally with a groff option.
+
+
+
+
+
+
+
+                     +-------------+--------------+
+                     |preprocessor | groff option |
+                     +-------------+--------------+
+                     |    eqn      |      -e      |
+                     |    grap     |      -G      |
+                     |    grn      |      -g      |
+                     |    pic      |      -p      |
+                     |   refer     |      -R      |
+                     |    tbl      |      -r      |
+                     |   soelim    |      -s      |
+                     +-------------+--------------+
+
+MACRO PACKAGES
+       Macro packages are collections of macros that are suitable
+       to format a special kind of documents in a convenient way.
+       This greatly eases the usage of roff.  The  macro  defini­
+       tions of a package are kept in a file called name.tmac (or
+       tmac.name) where name is the internal roff name  for  this
+       package.   All  tmac  files  are stored in a single or few
+       directories at standard positions.
+
+       A macro package that is used in a document is specified by
+       the command line option -m for the formatter like troff -m
+       name or groff -m name. General details on  the  naming  of
+       macro   packages   and   their   placement   is  found  in
+       groff_tmac(5).
+
+       Famous classical macro packages are man, mandoc, and  mdoc
+       for  manual  pages and me, ms, and mm for books, articles,
+       and letters.  Besides these collections, groff provides an
+       increasing number of new macro packages for various appli­
+       cations, for example integration  of  or  conversion  into
+       other file formats.
+
+FILE NAME EXTENSIONS
+       Manual pages (man-pages) take the section number as a file
+       name extension, e.g., the filename for  this  document  is
+       roff.7, i.e., it is kept in section 7 of the man-pages.
+
+       The  classical  macro packages take the package name as an
+       extension, e.g.  file.me for a document using the me macro
+       package,  file.mm for mm, file.ms for ms, file.pic for pic
+       files, etc.
+
+EDITING
+       Most text editors provide support  for  editing  documents
+       using  roff.   Especially  useful is the nroff-mode in all
+       flavors of the Emacs editor.
+
+ENVIRONMENT
+       GROFF_TMAC_PATH
+              A colon separated list of directories in  which  to
+              search for macro files, see groff_tmac(5).
+
+       GROFF_TYPESETTER
+              Default device.
+
+       GROFF_FONT_PATH
+              A  colon  separated list of directories in which to
+              search for the devname directory.  troff will first
+              search  in  directories  given  with the -F command
+              line option, then in GROFF_FONT_PATH,  and  finally
+              in         the         standard         directories
+              (/usr/share/groff/1.17.2/font:/usr/lib/font).
+
+FILES
+       By default, groff installs all of its data files in subdi­
+       rectories    of    /usr/share/groff/1.17.2/font   and   in
+       /usr/share/groff/1.17.2/tmac  (except  wrapper  files  for
+       system-specific   macro   packages   which   will   be  in
+       /usr/lib/groff/site-tmac).  These locations might vary for
+       different  systems.   In  the  following,  the  former  is
+       referred   to   as   <groff_font_dir>,   the   latter   as
+       <groff_macro_dir>.
+
+       <groff_macro_dir>/troffrc
+              Initialization file for troff.
+
+       <groff_macro_dir>/name.tmac
+       <groff_macro_dir>/tmac.name
+              Macro files.
+
+       <groff_font_dir>/devname/DESC
+              Device description file for device name.
+
+       <groff_font_dir>/devname/F
+              Font file for font F of device name.
+
+       Finally,  a  local  macro directory /usr/share/groff/site-
+       tmac is provided for site-specific macros and packages; by
+       default,  it will be searched before the main macro direc­
+       tory.
+
+BUGS
+       The groff documentation is in evolution at the moment.  It
+       is  possible  that small inconsistencies between different
+       documents exist temporarily.
+
+AUTHOR
+       This document is part of groff, the GNU roff distribution.
+       It was written by Bernd Warken <bwarken@mayn.de>.
+
+       It  is  distributed  under  the terms of the FDL (GNU Free
+       Documentation License) version 1.1 or later.   You  should
+       have received a copy of the FDL on your system, it is also
+       available on-line under
+
+              <http://www.gnu.org/copyleft/fdl.html>.
+
+SEE ALSO
+       The main source of information is the groff info(1)  file.
+
+       The  predefined  elements  of  the groff language are also
+       documented in the manual page groff(7).
+
+       Formatters  and   their   wrappers:   groff(1),   grog(1),
+       nroff(1), and troff(1).
+
+       Postprocessors  for  the  output  devices: grodvi(1), gro­
+       html(1), grolbp(1), grolj4(1), grops(1), and grotty(1).
+
+       Standard preprocessors: eqn(1), grn(1),  grap(1),  pic(1),
+       refer(1), soelim(1), and tbl(1).
+
+       The  man  pages  for macro packages include groff_tmac(5),
+       groff_man(7),       groff_markup(7),        groff_mdoc(7),
+       groff_mdoc.samples(7),      groff_me(7),      groff_mm(7),
+       groff_mmroff(7), and groff_ms(7).
+
+       The following utilities are available: addftinfo(1),  afm­
+       todif(1), hpftodit(1), indxbib(1), lookbib(1), pfbtops(1),
+       tfmtodit(1), and gxditview(1).
+
+       For details on the GNU implementation of the  roff  system
+       see  groff_char(7),  groff_font(7),  groff_out(7), and the
+       file README in the main directory of the groff source dis­
+       tribution.   These  also give details on how to contact or
+       join the groff developer group.
+
+       Many classical  documents  are  still  available  on-line.
+       Especially informative are the original Bell Labs proceed­
+       ings for the old, free UNIX  7  found  at  http://cm.bell-
+       labs.com/cm/cs/cstr.html  and  the  collection of the late
+       Richard S. Stevens at  http://www.kohala.com/start/troff/.
+
+
+
+Groff Version 1.17.2       27 June 2001                   ROFF(7)

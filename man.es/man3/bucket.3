@@ -1,0 +1,39 @@
+bucket(3)                                               bucket(3)
+
+
+
+NAME
+       bucket -
+
+SYNOPSIS
+   Data Fields
+       filePath * data
+       int allocated
+       int firstFree
+
+FIELD DOCUMENTATION
+   int bucket::allocated
+       Definition at line 21 of file hash.c.
+
+       Referenced by htAddToTable, and htNewTable.
+
+   struct filePath* bucket::data
+       Definition at line 20 of file hash.c.
+
+       Referenced by htAddToTable, htFreeHashTable, htNewTable,
+       htRemoveFromTable, and in_table_aux.
+
+   int bucket::firstFree
+       Definition at line 22 of file hash.c.
+
+       Referenced by htAddToTable, htFreeHashTable, htHashStats,
+       htNewTable, htRemoveFromTable, and in_table_aux.
+
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002                  bucket(3)

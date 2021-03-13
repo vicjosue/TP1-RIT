@@ -1,0 +1,48 @@
+mitem_userptr(3X)                               mitem_userptr(3X)
+
+
+
+NAME
+       mitem_userptr  -  associate  application  data with a menu
+       item
+
+SYNOPSIS
+       #include <menu.h>
+       int set_item_userptr(ITEM *item, void *userptr);
+       void *item_userptr(const ITEM *item);
+
+DESCRIPTION
+       Every menu item has a field  that  can  be  used  to  hold
+       application-specific  data  (that is, the menu-driver code
+       leaves it alone).  These functions get and set that field.
+
+RETURN VALUE
+       Except  for  item_userptr  (which  returns NULL on error),
+       each function returns one of the following:
+
+       E_OK The routine succeeded.
+
+       E_SYSTEM_ERROR
+            System error occurred (see errno).
+
+SEE ALSO
+       curses(3X), menu(3X).
+
+NOTES
+       The header file <menu.h> automatically includes the header
+       file <curses.h>.
+
+PORTABILITY
+       These  routines  emulate  the System V menu library.  They
+       were not supported on Version 7 or BSD versions.
+
+       The user pointer should be a void pointer.  We leave it as
+       a char pointer for SVr4 compatibility.
+
+AUTHORS
+       Juergen  Pfeifer.   Manual  pages  and  adaptation for new
+       curses by Eric S. Raymond.
+
+
+
+                                                mitem_userptr(3X)

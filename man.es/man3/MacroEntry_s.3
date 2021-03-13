@@ -1,0 +1,80 @@
+MacroEntry_s(3)                                   MacroEntry_s(3)
+
+
+
+NAME
+       MacroEntry_s -
+
+SYNOPSIS
+       #include <rpmmacro.h>
+
+
+   Data Fields
+       MacroEntry_s * prev
+       const char * name
+       const char * opts
+       const char * body
+       int used
+       int level
+
+DETAILED DESCRIPTION
+       The structure used to store a macro.
+
+       Definition at line 9 of file rpmmacro.h.
+
+FIELD DOCUMENTATION
+   const char* MacroEntry_s::body
+       Macro body.
+
+       Definition at line 13 of file rpmmacro.h.
+
+       Referenced by expandMacro, freeArgs, popMacro, pushMacro,
+       rpmDumpMacroTable, rpmFreeMacros, and rpmLoadMacros.
+
+   int MacroEntry_s::level
+       Scoping level.
+
+       Definition at line 15 of file rpmmacro.h.
+
+       Referenced by freeArgs, pushMacro, and rpmDumpMacroTable.
+
+   const char* MacroEntry_s::name
+       Macro name.
+
+       Definition at line 11 of file rpmmacro.h.
+
+       Referenced by compareMacroName, expandMacro, findEntry,
+       freeArgs, popMacro, pushMacro, rpmDumpMacroTable,
+       rpmFreeMacros, and rpmLoadMacros.
+
+   const char* MacroEntry_s::opts
+       Macro parameters (a la getopt)
+
+       Definition at line 12 of file rpmmacro.h.
+
+       Referenced by expandMacro, popMacro, pushMacro,
+       rpmDumpMacroTable, rpmFreeMacros, and rpmLoadMacros.
+
+   struct MacroEntry_s* MacroEntry_s::prev
+       Macro entry stack.
+
+       Definition at line 10 of file rpmmacro.h.
+
+       Referenced by popMacro, pushMacro, and rpmFreeMacros.
+
+   int MacroEntry_s::used
+       No. of expansions.
+
+       Definition at line 14 of file rpmmacro.h.
+
+       Referenced by expandMacro, freeArgs, pushMacro, and
+       rpmDumpMacroTable.
+
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002            MacroEntry_s(3)

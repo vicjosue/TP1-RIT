@@ -1,0 +1,49 @@
+rpmio/ugid.c(3)                                   rpmio/ugid.c(3)
+
+
+
+NAME
+       rpmio/ugid.c -
+
+SYNOPSIS
+       #include 'system.h'
+       #include 'ugid.h'
+       #include 'debug.h'
+
+   Functions
+       int unameToUid (const char *thisUname, uid_t *uid)
+       int gnameToGid (const char *thisGname, gid_t *gid)
+       char * uidToUname (uid_t uid)
+       char * gidToGname (gid_t gid)
+
+DETAILED DESCRIPTION
+       Definition in file ugid.c.
+
+FUNCTION DOCUMENTATION
+   char* gidToGname (gid_t gid)
+       Definition at line 129 of file ugid.c.
+
+       References xrealloc.
+
+   int gnameToGid (const char * thisGname, gid_t * gid)
+       Definition at line 57 of file ugid.c.
+
+       References xrealloc.
+
+   char* uidToUname (uid_t uid)
+       Definition at line 98 of file ugid.c.
+
+       References xrealloc.
+
+   int unameToUid (const char * thisUname, uid_t * uid)
+       Definition at line 16 of file ugid.c.
+
+       References xrealloc.
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002            rpmio/ugid.c(3)

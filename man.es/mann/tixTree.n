@@ -1,0 +1,221 @@
+tixTree(n)            Tix Built-In Commands            tixTree(n)
+
+
+
+_________________________________________________________________
+
+NAME
+       tixTree - Create and manipulate tixTree widgets
+
+SYNOPSIS
+       tixTree pathName ?options?
+
+SUPER-CLASS
+       The  TixTree  class  is  derived from the TixScrolledHList
+       class and inherits all the commands, options  and  subwid­
+       gets of its super-class.
+
+STANDARD OPTIONS
+       TixTree  supports all the standard options of a frame wid­
+       get.  See the options(n) manual entry for details  on  the
+       standard options.
+
+WIDGET-SPECIFIC OPTIONS
+       Command-Line Name:-browsecmd
+       Database Name:  browseCmd
+       Database Class: BrowseCmd
+
+              Specifies  a  command  to  call  whenever  the user
+              browses on an entry (usually by single-clicking  on
+              the  entry).  The  command is called with one argu­
+              ment, the pathname of the entry.
+
+       Command-Line Name:-closecmd
+       Database Name:  closeCmd
+       Database Class: CloseCmd
+
+              Specifies a command to call whenever an entry needs
+              to be closed (See the BINDINGS section below). This
+              command is called with one argument,  the  pathname
+              of the entry. This command should perform appropri­
+              ate actions to close the specified  entry.  If  the
+              -closecmd  option  is  not  specified,  the default
+              closing action is to hide all child entries of  the
+              specified entry.
+
+       Command-Line Name:-command
+       Database Name:  command
+       Database Class: Command
+
+              Specifies a command to call whenever the user acti­
+              vates an entry (usually by double-clicking  on  the
+              entry).  The  command  is called with one argument,
+              the pathname of the entry.
+
+       Command-Line Name:-ignoreinvoke
+       Database Name:  ignoreInvoke
+       Database Class: IgnoreInvoke
+
+              A Boolean value that specifies when a branch should
+              be opened or closed. A branch will always be opened
+              or closed when the user presses  the  (+)  and  (-)
+              indicators. However, when the user invokes a branch
+              (by  doublc-clicking  or  pressing  <Return>),  the
+              branch  will be opened or closed only if -ignorein­
+              voke is set to false (the default setting).
+
+
+       Command-Line Name:-opencmd
+       Database Name:  openCmd
+       Database Class: OpenCmd
+
+              Specifies a command to call whenever an entry needs
+              to be opened (See the BINDINGS section below). This
+              command is called with one argument,  the  pathname
+              of the entry. This command should perform appropri­
+              ate actions to open the  specified  entry.  If  the
+              -opencmd option is not specified, the default open­
+              ing action is to show all the child entries of  the
+              specified entry.
+
+SUBWIDGETS
+       Name:           hlist
+       Class:          TixHList
+
+              The hierarchical listbox that displays the tree.
+
+       Name:           hsb
+       Class:          Scrollbar
+
+              The horizontal scrollbar subwidget.
+
+       Name:           vsb
+       Class:          Scrollbar
+
+              The vertical scrollbar subwidget.
+_________________________________________________________________
+
+DESCRIPTION
+       The  tixTree  command  creates  a new window (given by the
+       pathName argument) and makes it into a Tree widget.  Addi­
+       tional  options,  described above, may be specified on the
+       command line  or  in  the  option  database  to  configure
+       aspects  of the Tree widget such as its cursor and relief.
+
+       The Tree widget can be used to display hierachical data in
+       a  tree  form. The user can adjust the view of the tree by
+       opening or closing parts of the tree.
+
+       To display a  static  tree  structure,  you  can  add  the
+       entries  into  the hlist subwidget and hide any entries as
+       desired. Then you can call the  autosetmode  method.  This
+       will  set  up  the  Tree widget so that it handles all the
+       open and close events automatically.
+
+       The above method is not applicable if you want to maintain
+       a  dynamic  tree  structure,  i.e, you do not know all the
+       entries in the tree and you need to add or delete  entries
+       subsequently.  To  do  this,  you  should first create the
+       entries in the hlist  subwidget.  Then,  use  the  setmode
+       method  to  indicate  the  entries  that  can be opened or
+       closed, and use the -opencmd  and   -closecmd  options  to
+       handle the opening and closing events.
+
+WIDGET COMMANDS
+       The  tixTree  command creates a new Tcl command whose name
+       is the same as the path name of the Tree's  window.   This
+       command  may  be  used to invoke various operations on the
+       widget. It has the following general form:
+                     pathName option ?arg arg ...?
+       PathName is the name of the command, which is the same  as
+       the Tree widget's path name. Option and the args determine
+       the exact behavior of the command. The following  commands
+       are possible for Tree widgets:
+
+       pathName autosetmode
+              This  command  calls the setmode method for all the
+              entries in this Tree widget: if  an  entry  has  no
+              child  entries, its mode is set to none. Otherwise,
+              if the entry has any hidden child entries, its mode
+              is set to open; otherwise its mode is set to close.
+
+       pathName cget option
+              Returns the  current  value  of  the  configuration
+              option  given by option. Option may have any of the
+              values accepted by the tixTree command.
+
+       pathName close entryPath
+              Close the entry given by entryPath if its  mode  is
+              close.
+
+       pathName configure ?option? ?value option value ...?
+              Query  or  modify  the configuration options of the
+              widget.  If no option is specified, returns a  list
+              describing  all  of the available options for path­
+              Name (see Tk_ConfigureInfo for information  on  the
+              format  of  this list). If option is specified with
+              no value, then the command returns a list  describ­
+              ing the one named option (this list will be identi­
+              cal to  the  corresponding  sublist  of  the  value
+              returned  if  no  option  is specified).  If one or
+              more option-value pairs  are  specified,  then  the
+              command modifies the given widget option(s) to have
+              the  given  value(s);  in  this  case  the  command
+              returns  an  empty  string.  Option may have any of
+              the values accepted by the tixTree command.
+
+       pathName getmode entryPath
+              Returns the current mode  of  the  entry  given  by
+              entryPath.
+
+       pathName open entryPath
+              Open  the  entry givaen by entryPath if its mode is
+              open.
+
+       pathName setmode  entryPath mode
+              This command is used to indicate whether the  entry
+              given by entryPath has children entries and whether
+              the children are visible. mode must be one of open,
+              close  or none. If mode is set to open, a (+) indi­
+              cator is drawn next the the entry. If mode  is  set
+              to  close,  a  (-)  indicator is drawn next the the
+              entry. If mode is set to none, no  indicators  will
+              be  drawn for this entry. The default mode is none.
+              The open mode indicates the entry has hidden  chil­
+              dren  and this entry can be opened by the user. The
+              close mode indicates that all the children  of  the
+              entry  are  now visible and the entry can be closed
+              by the user.
+
+       pathName subwidget  name ?args?
+              When no options are given, this command returns the
+              pathname of the subwidget of the specified name.
+
+              When  options  are given, the widget command of the
+              specified  subwidget  will  be  called  with  these
+              options.
+
+BINDINGS
+       The  basic  mouse and keyboard bindings of the Tree widget
+       are the same as the bindings of the HList widget.
+
+       In addition, the entries can be opened or closed under the
+       following conditions:
+
+       [1]    If  the mode of the entry is open, it can be opened
+              by clicking on its (+) indicator or double-clicking
+              on the entry.
+
+       [2]    If the mode of the entry is close, it can be closed
+              by clicking on its (-) indicator or double-clicking
+              on the entry.
+
+KEYWORDS
+       Tix(n),tixHList(n)
+
+
+
+
+
+
+Tix                            4.0                     tixTree(n)

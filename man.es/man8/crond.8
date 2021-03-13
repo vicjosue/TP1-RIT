@@ -1,0 +1,43 @@
+CRON(8)                                                   CRON(8)
+
+
+
+NAME
+       cron - daemon to execute scheduled commands (Vixie Cron)
+
+SYNOPSIS
+       cron
+
+DESCRIPTION
+       Cron  should be started from /etc/rc or /etc/rc.local.  It
+       will return immediately, so you don't  need  to  start  it
+       with '&'.
+
+       Cron  searches /var/spool/cron for crontab files which are
+       named after accounts in /etc/passwd;  crontabs  found  are
+       loaded  into  memory.  Cron also searches for /etc/crontab
+       and the files in the /etc/cron.d/ directory, which are  in
+       a  different  format (see crontab(5)).  Cron then wakes up
+       every minute, examining all stored crontabs, checking each
+       command  to see if it should be run in the current minute.
+       When executing commands, any output is mailed to the owner
+       of  the  crontab (or to the user named in the MAILTO envi­
+       ronment variable in the crontab, if such exists).
+
+       Additionally, cron checks each minute to see if its  spool
+       directory's  modtime  (or the modtime on /etc/crontab) has
+       changed, and if it has, cron will then examine the modtime
+       on all crontabs and reload those which have changed.  Thus
+       cron need not be restarted whenever a crontab file is mod­
+       ified.   Note that the Crontab(1) command updates the mod­
+       time of the spool directory whenever it changes a crontab.
+
+SEE ALSO
+       crontab(1), crontab(5)
+
+AUTHOR
+       Paul Vixie <paul@vix.com>
+
+
+
+                         20 December 1993                 CRON(8)

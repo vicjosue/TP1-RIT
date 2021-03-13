@@ -1,0 +1,35 @@
+RENAME(1)           Linux Programmer's Manual           RENAME(1)
+
+
+
+NAME
+       rename - Rename files
+
+SYNOPSIS
+       rename from to file...
+
+DESCRIPTION
+       rename  will  rename  the specified files by replacing the
+       first occurrence of from in their name by to.
+
+       For example, given the files foo1, ..., foo9, foo10,  ...,
+       foo278, the commands
+
+              rename foo foo0 foo?
+              rename foo foo0 foo??
+
+       will  turn  them  into  foo001,  ..., foo009, foo010, ...,
+       foo278.
+
+       And
+              rename .htm .html *.htm
+
+       will fix the extension of your html files.
+
+
+SEE ALSO
+       mv(1)
+
+
+
+                          1 Januari 2000                RENAME(1)

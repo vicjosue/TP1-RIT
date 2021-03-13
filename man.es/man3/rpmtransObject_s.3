@@ -1,0 +1,53 @@
+rpmtransObject_s(3)                           rpmtransObject_s(3)
+
+
+
+NAME
+       rpmtransObject_s -
+
+SYNOPSIS
+   Data Fields
+       PyObject_HEAD
+       rpmdbObject * dbo
+       rpmTransactionSet ts
+       PyObject * keyList
+       FD_t scriptFd
+
+FIELD DOCUMENTATION
+   rpmdbObject* rpmtransObject_s::dbo
+       Definition at line 1285 of file rpmmodule.c.
+
+       Referenced by rpmtransCreate, rpmtransDealloc, and
+       rpmtransRemove.
+
+   PyObject* rpmtransObject_s::keyList
+       Definition at line 1287 of file rpmmodule.c.
+
+       Referenced by rpmtransAdd, rpmtransCreate, and
+       rpmtransDealloc.
+
+   rpmtransObject_s::PyObject_HEAD
+       Definition at line 1284 of file rpmmodule.c.
+
+   FD_t rpmtransObject_s::scriptFd
+       Definition at line 1288 of file rpmmodule.c.
+
+       Referenced by rpmtransCreate, rpmtransDealloc, and
+       rpmtransSetAttr.
+
+   rpmTransactionSet rpmtransObject_s::ts
+       Definition at line 1286 of file rpmmodule.c.
+
+       Referenced by py_rpmtransGetKeys, rpmtransAdd,
+       rpmtransCreate, rpmtransDealloc, rpmtransDepCheck,
+       rpmtransOrder, rpmtransRemove, rpmtransRun, and
+       rpmtransSetAttr.
+
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002        rpmtransObject_s(3)

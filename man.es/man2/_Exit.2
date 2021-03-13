@@ -1,0 +1,60 @@
+_EXIT(2)            Linux Programmer's Manual            _EXIT(2)
+
+
+
+NAME
+       _exit, _Exit - terminate the current process
+
+SYNOPSIS
+       #include <unistd.h>
+
+       void _exit(int status);
+
+       #include <stdlib.h>
+
+       void _Exit(int status);
+
+DESCRIPTION
+       The function _exit terminates the calling process "immedi­
+       ately". Any open file descriptors belonging to the process
+       are  closed;  any children of the process are inherited by
+       process 1, init,  and  the  process's  parent  is  sent  a
+       SIGCHLD signal.
+
+       The  value status is returned to the parent process as the
+       process's exit status, and can be collected using  one  of
+       the wait family of calls.
+
+       The function _Exit is equivalent to _exit.
+
+RETURN VALUE
+       These functions do not return.
+
+CONFORMING TO
+       SVr4,  SVID, POSIX, X/OPEN, BSD 4.3.  The function _Exit()
+       was introduced by C99.
+
+NOTES
+       For a discussion on the effects of an exit, the  transmis­
+       sion of exit status, zombie processes, signals sent, etc.,
+       see exit(3).
+
+       The function _exit is like exit(), but does not  call  any
+       functions  registered with the ANSI C atexit function, nor
+       any registered signal handlers. Whether it  flushes  stan­
+       dard  I/O buffers and removes temporary files created with
+       tmpfile(3)  is  implementation-dependent.   On  the  other
+       hand, _exit does close open file descriptors, and this may
+       cause an unknown delay, waiting for pending output to fin­
+       ish.  If  the delay is undesired, it may be useful to call
+       functions like tcflush() before calling _exit().   Whether
+       any pending I/O is cancelled, and which pending I/O may be
+       cancelled upon _exit(), is implementation-dependent.
+
+SEE ALSO
+       fork(2),   execve(2),   waitpid(2),   wait4(2),   kill(2),
+       wait(2), exit(3), termios(3)
+
+
+
+Linux                       2001-11-17                   _EXIT(2)

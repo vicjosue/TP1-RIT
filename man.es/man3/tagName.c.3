@@ -1,0 +1,74 @@
+lib/tagName.c(3)                                 lib/tagName.c(3)
+
+
+
+NAME
+       lib/tagName.c -
+
+SYNOPSIS
+       #include 'system.h'
+       #include <rpmlib.h>
+       #include 'debug.h'
+
+   Functions
+       const char *const tagName (int tag)
+           Return name of tag from value.
+       int tagValue (const char *tagstr)
+           Return value of tag from name.
+
+DETAILED DESCRIPTION
+       Definition in file tagName.c.
+
+FUNCTION DOCUMENTATION
+   const char* const tagName (int tag)
+       Return name of tag from value.
+
+       Parameters:
+
+       tag    tag value
+
+       Returns:
+           name of tag
+
+       Definition at line 10 of file tagName.c.
+
+       References headerTagTableEntry_s::name, RPMDBI_ADDED,
+       RPMDBI_AVAILABLE, RPMDBI_DEPENDS, RPMDBI_PACKAGES,
+       RPMDBI_REMOVED, rpmTagTable, rpmTagTableSize, setlocale,
+       headerTagTableEntry_s::val, and xtolower.
+
+       Referenced by checkForDuplicates, checkForRequired,
+       db1basename, db3close, db3New, db3open, dbiCclose,
+       dbiClose, dbiCopen, dbiCount, dbiDel, dbiGet, dbiOpen,
+       dbiPut, dbiSearch, dbiSync, dbiUpdateIndex, dbiVerify,
+       i18nTag, printNewSpecfile, rpmdbAdd, rpmdbInitIterator,
+       rpmdbMoveDatabase, rpmdbRemove, rpmdbRemoveDatabase,
+       rpmHeaderGetEntry, and stashSt.
+
+   int tagValue (const char * tagstr)
+       Return value of tag from name.
+
+       Parameters:
+
+       targstr
+              name of tag
+
+       Returns:
+           tag value
+
+       Definition at line 62 of file tagName.c.
+
+       References headerTagTableEntry_s::name, RPMDBI_ADDED,
+       RPMDBI_AVAILABLE, RPMDBI_DEPENDS, RPMDBI_PACKAGES,
+       RPMDBI_REMOVED, rpmTagTable, setlocale,
+       headerTagTableEntry_s::val, and xstrcasecmp.
+
+       Referenced by dbiTagsInit.
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002           lib/tagName.c(3)

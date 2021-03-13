@@ -1,0 +1,37 @@
+MEDUSA-IDLED(1)                                   MEDUSA-IDLED(1)
+
+
+
+NAME
+       medusa-idled  -  keep medusa from indexing when the system
+       is in use
+
+SYNOPSIS
+       medusa-idled
+
+DESCRIPTION
+       medusa-idled is normally run automatically at  login.   It
+       puts  itself  in  the background, connects to the X server
+       specified in  the  $DISPLAY  environmental  variable,  and
+       begins   accepting   connections   on   the  local  socket
+       /tmp/medusa-idled-service.
+
+       Each client that connects to the socket  will  immediately
+       receive  a  message telling it whether the X server is, at
+       that moment, idle or not.  The message will be either ``No
+       user activity\n'' or ``User activity\n''.  Later, when the
+       X server goes from being idle to  being  active,  or  vice
+       versa,  each  of  the connected clients will be sent a new
+       message notifying it of the new display status.
+
+FILES
+       /tmp/medusa-idled-service
+              Socket  on  which  medusa-idled  communicates  with
+              medusa-indexd
+
+SEE ALSO
+       medusa-indexd(8), medusa-searchd(8)
+
+
+
+Eazel                    February 8, 2001         MEDUSA-IDLED(1)

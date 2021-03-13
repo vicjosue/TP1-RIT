@@ -1,0 +1,163 @@
+XMMS(1)                 XMMS Manual Pages                 XMMS(1)
+
+
+
+NAME
+       XMMS - an audio player for X.
+
+SYNOPSIS
+       xmms  [-h]  [--help]  [-n <session>] [--session=<session>]
+       [-r] [--rew] [-p] [--play] [-u]  [--pause]  [-s]  [--stop]
+       [-f]  [--fwd]  [-e]  [--enqueue] [-m] [--show-main-window]
+       [-v] [--version] [filename]...
+
+DESCRIPTION
+       XMMS is the X Multimedia System.  It is used to play audio
+       and  other kinds of media files.  By default XMMS can play
+       MPEG audio, Ogg Vorbis, RIFF wav, most module formats, and
+       a few other formats.  XMMS can be extended through plugins
+       to play a number of other audio and video formats.
+
+OPTIONS
+       XMMS accepts the following options:
+
+       -h, --help
+              Show summary of options.
+
+       -n, --session
+              Select XMMS session (Default: 0).
+
+       -r, --rew
+              Skip backwards in playlist.
+
+       -p, --play
+              Start playing current playlist.
+
+       -u, --pause
+              Pause current song.
+
+       -s, --stop
+              Stop current song.
+
+       -t, --play-pause
+              Pause if playing, play otherwise.
+
+       -f, --fwd
+              Skip forward in playlist.
+
+       -e, --enqueue
+              Don't clear the playlist.
+
+       -m, --show-main-window
+              Show the main window.
+
+       -v, --version
+              Print version number and exit.
+
+SKINS
+       XMMS supports WinAmp style skins.  Skins may be stored  in
+       either  archived  (.zip, .wsz, .tgz, .tar.gz, or .tar.bz2)
+       or  unarchived  format.   XMMS  looks  for  skinfiles   in
+       /usr/share/xmms/Skins, ~/.xmms/Skins, and locations speci­
+       fied by the SKINSDIR variable.
+
+KEYBINDINGS
+       Global keybindings for XMMS:
+
+         z                   Previous song
+         x                   Play
+         c                   Pause
+         v                   Stop
+         b                   Next song
+         l                   Play file
+         j                   Jump to file
+         r                   Toggle Repeat
+         s                   Toggle Shuffle
+         Shift + l           Play directory
+         Control + l         Play location
+         Control + p         Preferences dialog
+         Control + v         Visualization plugin dialog
+         Control + r         Time remaining
+         Control + a         Always on top
+         Control + w         Winshade mode
+         Control + d         Doublesize mode
+         Control + e         Easy move
+         Control + j         Jump to time
+         Control + z         Start of list
+         Control + n         No Playlist Advance
+         Control + 3         File info dialog
+         Control + Alt + w   Toggle Equalizer winshade mode
+         Shift + Control + w Playlist winshade mode
+         Alt + w             Hide/show mainwindow
+         Alt + e             Hide/show playlistwindow
+         Alt + g             Hide/show Equalizer
+         Alt + s             Skin selecting window
+
+       Main window specific:
+
+         Arrow key up        Volume up 2%
+         Arrow key down      Volume down 2%
+         Arrow key right     Skip 5 seconds forward in song
+         Arrow key left      Skip 5 seconds back in song
+
+       Playlist window specific:
+
+         Arrow key up        Up one step in playlist
+         Arrow key down      Down one step in playlist
+         Delete              Remove selected songs from playlist
+         Page Up             Move one page up
+         Page Down           Move one page down
+         Home                First page in playlist
+         End                 Last page in playlist
+         Enter               Play selected song
+         Insert              Add file dialog
+         Shift + Insert      Add directory dialog
+         Alt + Insert        Add url dialog
+
+       Equalizer shade mode specific:
+
+         Arrow key up        Volume up 2%
+         Arrow key down      Volume down 2%
+         Arrow key right     Balance 4% to right
+         Arrow key left      Balance 4% to left
+
+FILES
+       ~/.xmms/config    Users xmms configuration.
+
+       ~/.xmms/xmms.m3u  Default  playlist  usually   loaded   on
+                         startup.
+
+       ~/.xmms/gtkrc     Users  set  of  xmms-specific GTK config
+                         settings. Options such as  widget  color
+                         and fonts sizes can be set here.
+
+       ~/.xmms/menurc    Users set of keybindings.
+
+       ~/.xmms/Skins, /usr/share/xmms/Skins
+                         Default locations where XMMS should look
+                         for skinfiles.
+
+       ~/.xmms/Plugins   Location of user installed plugins.
+
+ENVIRONMENT
+       SKINSDIR    Colon  separated  list  of  paths  where  XMMS
+                   should look for skinfiles.
+
+       TARCMD      Tar  command  supporting  GNU tar style decom­
+                   pression.  Used for unpacking gzip  and  bzip2
+                   compressed skins.  Default is tar.
+
+       UNZIPCMD    Command  for  decompressing zip files (skins).
+                   Default is unzip.
+
+OTHER INFO
+       The webpage for XMMS is at http://www.xmms.org.  Here  you
+       can  find  info  about  XMMS, download the latest version,
+       plugins, and skins.
+
+SEE ALSO
+       wmxmms(1), gnomexmms(1)
+
+
+
+Version 1.2.7           18 September 2001                 XMMS(1)

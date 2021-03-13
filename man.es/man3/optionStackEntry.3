@@ -1,0 +1,62 @@
+optionStackEntry(3)                           optionStackEntry(3)
+
+
+
+NAME
+       optionStackEntry -
+
+SYNOPSIS
+       #include <poptint.h>
+
+
+   Data Fields
+       int argc
+       const char ** argv
+       pbm_set * argb
+       int next
+       const char * nextArg
+       const char * nextCharArg
+       poptItem currAlias
+       int stuffed
+
+FIELD DOCUMENTATION
+   pbm_set* optionStackEntry::argb
+       Definition at line 44 of file poptint.h.
+
+       Referenced by findNextArg.
+
+   int optionStackEntry::argc
+       Definition at line 42 of file poptint.h.
+
+       Referenced by findNextArg.
+
+   const char** optionStackEntry::argv
+       Definition at line 43 of file poptint.h.
+
+       Referenced by findNextArg, and poptBadOption.
+
+   poptItem optionStackEntry::currAlias
+       Definition at line 48 of file poptint.h.
+
+   int optionStackEntry::next
+       Definition at line 45 of file poptint.h.
+
+       Referenced by findNextArg, and poptBadOption.
+
+   const char* optionStackEntry::nextArg
+       Definition at line 46 of file poptint.h.
+
+   const char* optionStackEntry::nextCharArg
+       Definition at line 47 of file poptint.h.
+
+   int optionStackEntry::stuffed
+       Definition at line 49 of file poptint.h.
+
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002        optionStackEntry(3)

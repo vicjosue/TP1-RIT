@@ -1,0 +1,125 @@
+urpmi.addmedia(8)         Mandrake Linux        urpmi.addmedia(8)
+
+
+
+NAME
+       urpmi.addmedia - adds a new rpms media for use with urpmi
+
+SYNOPSIS
+       urpmi.addmedia [options] <name> <url>
+
+DESCRIPTION
+       urpmi.addmedia  tells  urpmi  that he can find new rpms at
+       the specified location. Currently  supported  medias  are:
+       local  drives,  removable  drives (such as cd's), http and
+       ftp.
+
+       One of the following modes must be choosen:
+
+       http:
+
+         urpmi.addmedia  [options]  <name>   http://<host>/<path>
+       [with <relative path of synthesis|hdlist>]
+              Where <name> is your reference for the media  (e.g.
+              MandrakeUpdate).   <name>  is optional if --distrib
+              is given in options.
+              <host>/<path> is the location of the rpm  directory
+              on the net.
+              <relative  path of hdlist> is the pathname where to
+              find the hdlist of the rpms. The location is  given
+              relative to <path>.
+              curl is used by default to download files, wget may
+              be used if curl is not installed or --curl is given
+              in options.
+
+       ftp:
+
+         urpmi.addmedia  [options]  <name>  ftp://<login>:<user>@
+       <host>/<path> [with <relative path of synthesis|hdlist>]
+              The  same as for http, just add your login and user
+              if required  (Note  that  you  needn't  to  specify
+              anonymous   as   login  for  anonymous  access  ftp
+              servers).
+              Note that if wget is used to download files with  a
+              firewall  you may have to add passive_ftp=on option
+              to /etc/wgetrc.
+              eg: urpmi.addmedia ftp ftp://a:a@leia//export/Mandrake/RPMS with ../base/hdlist
+
+       Local drive or NFS:
+
+        urpmi.addmedia [options] <name> file://<path> [with <rel­
+       ative path of hdlist>]
+              Where <name> is your reference for the media  (e.g.
+              Myrpms).
+              <path> is the location of the rpm directory on your
+              machine.
+
+       Removable device:
+
+        urpmi.addmedia [options] <name> removable://<path>  [with
+       <relative path of hdlist>]
+              <path> is the location of the rpm directory on your
+              machine when the removable device is mounted.
+
+
+OPTIONS
+       --wget use  wget  only  for  downloading distant files. By
+              default curl is used if available or wget  instead.
+
+       --curl use  curl  only  for  downloading distant files. By
+              default curl is used if available or wget  instead.
+
+       --update
+              add  a medium which will be taken into account when
+              updating only update media by urpmi.
+
+       --distrib
+              add all media from an installation  medium.  <name>
+              if  used  is  used with medium name found to create
+              newer medium name in urpmi database. The with [...]
+              is  not used as hdlist found on installation medium
+              are used automatically.
+
+FILES
+       /usr/sbin/urpmi.addmedia
+       The urpmi.addmedia executable (perl script)
+
+       /var/lib/urpmi/list.*
+       Contains the list of all packages known by urpmi and their
+       location. There is one filelist per media(*).
+
+       /var/lib/urpmi/hdlist.*
+       Contain  information about all known packages, it's a sum­
+       mary of rpm headers.  There is one filelist per  media(*).
+
+       /var/lib/urpmi/synthesis.hdlist.*
+       Contain  synthesis  information  about  all known packages
+       built from hdlist files that can be used by  minimal  clo­
+       sure  algorithm.  If  these  files  are  not  present  use
+       urpmi.update -a to generate  them.  These  files  are  not
+       mandatory.
+
+       /etc/urpmi/urpmi.cfg
+       Contains  media  description,  previous  format from older
+       urpmi is accepted.
+
+       /etc/urpmi/skip.list
+       Contains package names that should  be  not  automatically
+       updated.
+
+       /etc/urpmi/inst.list
+       Contains package names that should be installed instead of
+       updated.
+
+SEE ALSO
+       urpmi(8),      urpmi.update(8),      urpmi.removemedia(8),
+       autoirpm(8),   autoirpm-icons(8),   gurpmi(8),   urpmf(8),
+       urpmq(8), rpmdrake(8)
+
+AUTHOR
+       Pascal Rigaux, Mandrakesoft <pixel@mandrakesoft.com>
+       Francois Pons, Mandrakesoft <fpons@mandrakesoft.com>
+
+
+
+MandrakeSoft               12 Feb 2001          urpmi.addmedia(8)

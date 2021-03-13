@@ -1,0 +1,48 @@
+NAMED-CHECKZONE(8)                             NAMED-CHECKZONE(8)
+
+
+
+NAME
+       named-checkzone - zone file validity checking tool
+
+SYNOPSIS
+       named-checkzone  [  -d  ]   [  -q  ]  [ -v ]  [ -c class ]
+       zonename filename
+
+DESCRIPTION
+       named-checkzone checks the syntax and integrity of a  zone
+       file. It performs the same checks as named does when load­
+       ing a zone. This makes named-checkzone useful for checking
+       zone files before configuring them into a name server.
+
+OPTIONS
+       -d     Enable debugging.
+
+       -q     Quiet mode - exit code only.
+
+       -v     Print  the  version  of the named-checkzone program
+              and exit.
+
+       -c class
+              Specify the class of the  zone.  If  not  specified
+              "IN" is assumed.
+
+       zonename
+              The domain name of the zone being checked.
+
+       filename
+              The name of the zone file.
+
+RETURN VALUES
+       named-checkzone returns an exit status of 1 if errors were
+       detected and 0 otherwise.
+
+SEE ALSO
+       named(8), RFC 1035, BIND 9 Administrator Reference Manual.
+
+AUTHOR
+       Internet Software Consortium
+
+
+
+BIND9                     June 13, 2000        NAMED-CHECKZONE(8)

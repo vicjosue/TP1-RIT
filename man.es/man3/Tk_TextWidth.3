@@ -1,0 +1,207 @@
+Tk_MeasureChars(3)    Tk Library Procedures    Tk_MeasureChars(3)
+
+
+
+_________________________________________________________________
+
+NAME
+       Tk_MeasureChars,   Tk_TextWidth,  Tk_DrawChars,  Tk_Under­
+       lineChars - routines to measure and display simple single-
+       line strings.
+
+SYNOPSIS
+       #include <tk.h>
+
+       int
+       Tk_MeasureChars(tkfont, string, numBytes, maxPixels, flags, lengthPtr)
+
+       int
+       Tk_TextWidth(tkfont, string, numBytes)
+
+       void
+       Tk_DrawChars(display, drawable, gc, tkfont, string, numBytes, x, y)
+
+       void
+       Tk_UnderlineChars(display, drawable, gc, tkfont, string, x, y, firstByte, lastByte)
+
+
+ARGUMENTS
+       Tk_Font      tkfont      (in)      Token for font in which
+                                          text is to be drawn  or
+                                          measured.    Must  have
+                                          been returned by a pre­
+                                          vious  call  to Tk_Get­
+                                          Font.
+
+       const char   *string     (in)      Text to be measured  or
+                                          displayed.  Need not be
+                                          null  terminated.   Any
+                                          non-printing meta-char­
+                                          acters  in  the  string
+                                          (such   as  tabs,  new­
+                                          lines, and  other  con­
+                                          trol  characters)  will
+                                          be  measured  or   dis­
+                                          played  in  a platform-
+                                          dependent manner.       |
+
+       int          num­                                          |
+       Bytes    (in)                              |               |
+                                          The  maximum  number of |
+                                          bytes to consider  when |
+                                          measuring   or  drawing |
+                                          string.     Must     be |
+                                          greater  than  or equal |
+                                          to 0.
+
+       int          maxPixels   (in)      If maxPixels is  >=  0,
+                                          it     specifies    the
+                                          longest     permissible
+                                          line  length in pixels.
+                                          Characters from  string
+                                          are    processed   only
+                                          until this many  pixels
+                                          have  been covered.  If
+                                          maxPixels is < 0,  then
+                                          the   line   length  is
+                                          unbounded and the flags
+                                          argument is ignored.
+
+       int          flags       (in)      Various flag bits OR-ed
+                                          together: TK_PARTIAL_OK
+                                          means include a charac­
+                                          ter as long as any part
+                                          of   it   fits  in  the
+                                          length given by maxPix­
+                                          els; otherwise, a char­
+                                          acter  must  fit   com­
+                                          pletely  to  be consid­
+                                          ered.    TK_WHOLE_WORDS
+                                          means  stop  on  a word
+                                          boundary, if  possible.
+                                          If  TK_AT_LEAST_ONE  is
+                                          set, it means return at
+                                          least   one   character
+                                          even if  no  characters
+                                          could fit in the length
+                                          given by maxPixels.  If
+                                          TK_AT_LEAST_ONE  is set
+                                          and  TK_WHOLE_WORDS  is
+                                          also set, it means that
+                                          if not  even  one  word
+                                          fits   on   the   line,
+                                          return  the  first  few
+                                          letters   of  the  word
+                                          that did  fit;  if  not
+                                          even  one letter of the
+                                          word  fit,   then   the
+                                          first letter will still
+                                          be returned.
+
+       int          *lengthPtr  (out)     Filled with the  number
+                                          of  pixels  occupied by
+                                          the number  of  charac­
+                                          ters  returned  as  the
+                                          result    of    Tk_Mea­
+                                          sureChars.
+
+       Display      *display    (in)      Display   on  which  to
+                                          draw.
+
+       Drawable     drawable    (in)      Window  or  pixmap   in
+                                          which to draw.
+
+       GC           gc          (in)      Graphics   context  for
+                                          drawing     characters.
+                                          The  font selected into
+                                          this  GC  must  be  the
+                                          same as the tkfont.
+
+       int          x, y        (in)      Coordinates at which to
+                                          place the left edge  of
+                                          the  baseline when dis­
+                                          playing string.         |
+
+       int          first­                                        |
+       Byte   (in)                              |                 |
+                                          The  index of the first |
+                                          byte of the first char­ |
+                                          acter  to  underline in |
+                                          the string.   Underlin­ |
+                                          ing  begins at the left |
+                                          edge of this character. |
+
+       int          last­                                         |
+       Byte    (in)                              |                |
+                                          The index of the  first |
+                                          byte  of the last char­ |
+                                          acter up to  which  the |
+                                          underline    will    be |
+                                          drawn.   The  character |
+                                          specified  by  lastByte |
+                                          will  not   itself   be |
+                                          underlined.
+_________________________________________________________________
+
+
+DESCRIPTION
+       These  routines  are  for  measuring and displaying simple
+       single-font, single-line, strings.  To measure and display
+       single-font, multi-line, justified text, refer to the doc­
+       umentation for Tk_ComputeTextLayout.  There is no program­
+       ming interface in the core of Tk that supports multi-font,
+       multi-line text; support for that behavior must  be  built
+       on  top  of  simpler  layers.   Note  that  the interfaces |
+       described here are byte-oriented  not  character-oriented, |
+       so  index  values  coming from Tcl scripts need to be con­ |
+       verted  to  byte  offsets  using  the  Tcl_UtfAtIndex  and |
+       related routines.
+
+       A glyph is the displayable picture of a letter, number, or
+       some other symbol.  Not all character  codes  in  a  given
+       font   have  a  glyph.   Characters  such  as  tabs,  new­
+       lines/returns, and control characters that have  no  glyph
+       are  measured and displayed by these procedures in a plat­
+       form-dependent manner; under X,  they  are  replaced  with
+       backslashed escape sequences, while under Windows and Mac­
+       intosh hollow or solid boxes may be substituted.  Refer to
+       the  documentation for Tk_ComputeTextLayout for a program­
+       ming  interface  that  supports  the  platform-independent
+       expansion   of   tab  characters  into  columns  and  new­
+       lines/returns into multi-line text.
+
+       Tk_MeasureChars is used both to compute the  length  of  a
+       given  string  and  to  compute how many characters from a
+       string fit in a given amount of space.  The  return  value
+       is  the  number of bytes from string that fit in the space
+       specified by maxPixels subject to the conditions described
+       by flags.  If all characters fit, the return value will be
+       numBytes.  *lengthPtr is filled with the  computed  width,
+       in pixels, of the portion of the string that was measured.
+       For example, if the return value is 5, then *lengthPtr  is
+       filled   with  the  distance  between  the  left  edge  of
+       string[0] and the right edge of string[4].
+
+       Tk_TextWidth is a wrapper function that provides a simpler
+       interface  to  the  Tk_MeasureChars  function.  The return
+       value is how much space in pixels the given string  needs.
+
+       Tk_DrawChars draws the string at the given location in the
+       given drawable.
+
+       Tk_UnderlineChars underlines the given range of characters
+       in  the  given  string.   It  doesn't  draw the characters
+       (which are assumed to have been  displayed  previously  by
+       Tk_DrawChars);  it  just draws the underline.  This proce­
+       dure is used to underline a few characters without  having
+       to  construct  an  underlined  font.   To produce natively
+       underlined text, the appropriate underlined font should be
+       constructed and used.
+
+
+KEYWORDS
+       font
+
+
+
+Tk                             8.1             Tk_MeasureChars(3)

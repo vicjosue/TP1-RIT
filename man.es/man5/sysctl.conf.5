@@ -1,0 +1,44 @@
+SYSCTL.CONF(5)                                     SYSCTL.CONF(5)
+
+
+
+NAME
+       sysctl.conf - sysctl(8) preload/configuration file
+
+DESCRIPTION
+       sysctl.conf  is  a simple file containing sysctl values to
+       be read in and set by sysctl(8).  The syntax is simply  as
+       follows:
+
+              # comment
+              ; comment
+
+                token  =   value
+
+
+       Note  that  blank lines are ignored, and whitespace before
+       and after a token or value is ignored,  although  a  value
+       can contain whitespace within.  Lines which begin with a #
+       or ; are considered comments and ignored.
+
+EXAMPLE
+              # sysctl.conf sample
+              #
+
+                kernel.domainname = example.com
+              ; this one has a space which will be written to the sysctl!
+                kernel.modprobe = /sbin/mod probe
+
+
+
+
+SEE ALSO
+       sysctl(8)
+
+AUTHOR
+       George Staikos, <staikos@0wned.org>
+
+
+
+
+                           21 Sep 1999             SYSCTL.CONF(5)

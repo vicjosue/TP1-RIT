@@ -1,0 +1,1461 @@
+TROFF(1)                                                 TROFF(1)
+
+
+
+NAME
+       troff - format documents
+
+SYNOPSIS
+       troff [ -abivzCERU ] [ -wname ] [ -Wname ] [ -dcs ]
+             [ -ffam ] [ -mname ] [ -nnum ] [ -olist ] [ -rcn ]
+             [ -Tname ] [ -Fdir ] [ -Mdir ] [ files... ]
+
+       It  is  possible to have whitespace between a command line
+       option and its parameter.
+
+DESCRIPTION
+       This manual page describes the GNU version of troff, which
+       is  part  of  the groff document formatting system.  It is
+       highly compatible with UNIX troff.  Usually it  should  be
+       invoked  using the groff command, which will also run pre­
+       processors and postprocessors in the appropriate order and
+       with the appropriate options.
+
+OPTIONS
+       -a        Generate  an  ASCII approximation of the typeset
+                 output.
+
+       -b        Print a backtrace with  each  warning  or  error
+                 message.   This backtrace should help track down
+                 the cause of the error.  The line numbers  given
+                 in  the  backtrace  may  not  always be correct:
+                 troff's idea of line numbers gets confused by as
+                 or am requests.
+
+       -i        Read  the  standard  input  after  all the named
+                 input files have been processed.
+
+       -v        Print the version number.
+
+       -wname    Enable warning  name.   Available  warnings  are
+                 described  in  the  Warnings  subsection  below.
+                 Multiple -w options are allowed.
+
+       -Wname    Inhibit warning name.  Multiple -W  options  are
+                 allowed.
+
+       -E        Inhibit all error messages.
+
+       -z        Suppress formatted output.
+
+       -C        Enable compatibility mode.
+
+       -dcs
+       -dname=s  Define  c  or name to be a string s; c must be a
+                 one letter name.
+
+       -ffam     Use fam as the default font family.
+
+       -mname    Read in the file name.tmac.  If it isn't  found,
+                 try   tmac.name   instead.   It  will  be  first
+                 searched for in directories given  with  the  -M
+                 command  line  option, then in directories given
+                 in  the  GROFF_TMAC_PATH  environment  variable,
+                 then in the current directory (only if in unsafe
+                 mode), the home directory,  /usr/lib/groff/site-
+                 tmac,       /usr/share/groff/site-tmac,      and
+                 /usr/share/groff/1.17.2/tmac.
+
+       -U        Unsafe mode.  This  will  enable  the  following
+                 requests:  .open,  .opena,  .pso,  .sy, and .pi.
+                 For security reasons, these potentially  danger­
+                 ous  requests  are  disabled otherwise.  It will
+                 also add the  current  directory  to  the  macro
+                 search path.
+
+       -R        Don't load troffrc and troffrc-end.
+
+       -nnum     Number the first page num.
+
+       -olist    Output only pages in list, which is a comma-sep­
+                 arated list of page ranges; n means  print  page
+                 n,  m-n  means print every page between m and n,
+                 -n means print every page  up  to  n,  n-  means
+                 print  every page from n.  Troff will exit after
+                 printing the last page in the list.
+
+       -rcn
+       -rname=n  Set number register c or name to n; c must be  a
+                 one  character  name; n can be any troff numeric
+                 expression.
+
+       -Tname    Prepare output for device name, rather than  the
+                 default ps.
+
+       -Fdir     Search  in directory (or directory path) dir for
+                 subdirectories devname (name is the name of  the
+                 device)  and  there  for  the DESC file and font
+                 files.  dir is scanned  before  all  other  font
+                 directories.
+
+       -Mdir     Search  directory  (or  directory  path) dir for
+                 macro files.  This is scanned before  all  other
+                 macro directories.
+
+USAGE
+       Only the features not in UNIX troff are described here.
+
+   Long names
+       The      names     of     number     registers,     fonts,
+       strings/macros/diversions, special characters  can  be  of
+       any length. In escape sequences, where you can use (xx for
+       a two character name, you can use  [xxx]  for  a  name  of
+       arbitrary length:
+
+       \[xxx] Print the special character called xxx.
+
+       \f[xxx]
+              Set font xxx.
+
+       \*[xxx]
+              Interpolate string xxx.
+
+       \n[xxx]
+              Interpolate number register xxx.
+
+   Fractional pointsizes
+       A  scaled  point  is  equal  to  1/sizescale points, where
+       sizescale is specified in the DESC file  (1  by  default).
+       There  is  a new scale indicator z which has the effect of
+       multiplying by sizescale.  Requests and  escape  sequences
+       in troff interpret arguments that represent a pointsize as
+       being in units of scaled points, but  they  evaluate  each
+       such argument using a default scale indicator of z.  Argu­
+       ments treated in this way  are  the  argument  to  the  ps
+       request,  the third argument to the cs request, the second
+       and fourth arguments to the tkf request, the  argument  to
+       the  \H  escape  sequence,  and  those  variants of the \s
+       escape sequence that take a numeric  expression  as  their
+       argument.
+
+       For  example,  suppose  sizescale  is  1000; then a scaled
+       point will be equivalent to a millipoint; the request  .ps
+       10.25  is  equivalent to .ps 10.25z and so sets the point­
+       size to 10250 scaled  points,  which  is  equal  to  10.25
+       points.
+
+       The number register \n[.s] returns the pointsize in points
+       as decimal fraction.  There is also a new number  register
+       \n[.ps] that returns the pointsize in scaled points.
+
+       It  would  make no sense to use the z scale indicator in a
+       numeric expression whose default scale indicator was  nei­
+       ther  u  nor z, and so troff disallows this.  Similarly it
+       would make no sense to use a scaling indicator other  than
+       z or u in a numeric expression whose default scale indica­
+       tor was z, and so troff disallows this as well.
+
+       There is also new scale indicator s  which  multiplies  by
+       the  number  of units in a scaled point.  So, for example,
+       \n[.ps]s is equal to 1m.  Be sure not to confuse the s and
+       z scale indicators.
+
+   Numeric expressions
+       Spaces  are permitted in a number expression within paren­
+       theses.
+
+       M indicates a scale of 100ths of an em.
+
+       e1>?e2 The maximum of e1 and e2.
+
+       e1<?e2 The minimum of e1 and e2.
+
+       (c;e)  Evaluate e using c as the default  scaling  indica­
+              tor.  If c is missing, ignore scaling indicators in
+              the evaluation of e.
+
+   New escape sequences
+       \A'anything'
+              This expands to 1 or 0 according as anything is  or
+              is  not  acceptable as the name of a string, macro,
+              diversion, number register,  environment  or  font.
+              It  will  return  0  if anything is empty.  This is
+              useful if you want to lookup  user  input  in  some
+              sort of associative table.
+
+       \B'anything'
+              This  expands to 1 or 0 according as anything is or
+              is not a valid numeric expression.  It will  return
+              0 if anything is empty.
+
+       \C'xxx'
+              Typeset  character  named xxx.  Normally it is more
+              convenient to use \[xxx].  But \C has the advantage
+              that  it is compatible with recent versions of UNIX
+              and is available in compatibility mode.
+
+       \E     This is equivalent to an escape character, but it's
+              not interpreted in copy-mode.  For example, strings
+              to start and end superscripting  could  be  defined
+              like this:
+
+                     .ds { \v'-.3m'\s'\En[.s]*6u/10u'
+                     .ds } \s0\v'.3m'
+
+              The  use  of \E ensures that these definitions will
+              work even if \*{ gets interpreted in copy-mode (for
+              example, by being used in a macro argument).
+
+       \N'n'  Typeset  the  character  with code n in the current
+              font.  n can be any  integer.   Most  devices  only
+              have  characters  with codes between 0 and 255.  If
+              the current font does not contain a character  with
+              that code, special fonts will not be searched.  The
+              \N escape sequence can be conveniently used on con­
+              junction with the char request:
+
+                     .char \[phone] \f(ZD\N'37'
+
+              The  code  of each character is given in the fourth
+              column in  the  font  description  file  after  the
+              charset command.  It is possible to include unnamed
+              characters in the font description file by using  a
+              name of ---; the \N escape sequence is the only way
+              to use these.
+
+       \R'name ±n'
+              This has the same effect as
+
+                     .nr name ±n
+
+       \s(nn
+       \s±(nn Set the point size to nn points; nn must be exactly
+              two digits.
+
+       \s[±n]
+       \s±[n]
+       \s'±n'
+       \s±'n' Set  the  point  size  to  n  scaled points; n is a
+              numeric expression with a default  scale  indicator
+              of z.
+
+       \Vx
+       \V(xx
+       \V[xxx]
+              Interpolate  the  contents of the environment vari­
+              able xxx, as returned by getenv(3).  \V  is  inter­
+              preted in copy-mode.
+
+       \Yx
+       \Y(xx
+       \Y[xxx]
+              This  is  approximately  equivalent to \X'\*[xxx]'.
+              However the contents of the string or macro xxx are
+              not  interpreted;  also  it is permitted for xxx to
+              have been defined as a macro and thus contain  new­
+              lines  (it  is not permitted for the argument to \X
+              to contain newlines).  The  inclusion  of  newlines
+              requires an extension to the UNIX troff output for­
+              mat, and will confuse  drivers  that  do  not  know
+              about this extension.
+
+       \Z'anything'
+              Print  anything and then restore the horizontal and
+              vertical position; anything may not contain tabs or
+              leaders.
+
+       \$0    The  name  by  which the current macro was invoked.
+              The als request can make a macro have more than one
+              name.
+
+       \$*    In  a macro, the concatenation of all the arguments
+              separated by spaces.
+
+       \$@    In a macro, the concatenation of all the  arguments
+              with  each  surrounded  by double quotes, and sepa­
+              rated by spaces.
+
+       \$(nn
+       \$[nnn]
+              In a macro, this gives the nn-th  or  nnn-th  argu­
+              ment.  Macros can have an unlimited number of argu­
+              ments.
+
+       \?anything\?
+              When used in a diversion, this  will  transparently
+              embed  anything in the diversion.  anything is read
+              in copy mode.  When the diversion is  reread,  any­
+              thing  will  be interpreted.  anything may not con­
+              tain newlines; use \! if you want to embed newlines
+              in  a  diversion.   The  escape sequence \? is also
+              recognised in copy mode and turned  into  a  single
+              internal code; it is this code that terminates any­
+              thing.  Thus
+                     .nr x 1
+                     .nf
+                     .di d
+                     \?\\?\\\\?\\\\\\\\nx\\\\?\\?\?
+                     .di
+                     .nr x 2
+                     .di e
+                     .d
+                     .di
+                     .nr x 3
+                     .di f
+                     .e
+                     .di
+                     .nr x 4
+                     .f
+
+              will print 4.
+
+       \/     This increases the width of the preceding character
+              so  that the spacing between that character and the
+              following character will be correct if the  follow­
+              ing  character  is a roman character.  For example,
+              if an italic f is immediately followed by  a  roman
+              right parenthesis, then in many fonts the top right
+              portion of the f will overlap the top left  of  the
+              right  parenthesis  producing  f),  which  is ugly.
+              Inserting \/ produces f) and avoids  this  problem.
+              It is a good idea to use this escape sequence when­
+              ever an italic character is immediately followed by
+              a roman character without any intervening space.
+
+       \,     This  modifies the spacing of the following charac­
+              ter so that the spacing between that character  and
+              the preceding character will correct if the preced­
+              ing character is a roman character.   For  example,
+              inserting  \,  between  the  parenthesis  and the f
+              changes (f to (f.  It is a good idea  to  use  this
+              escape sequence whenever a roman character is imme­
+              diately followed by an italic character without any
+              intervening space.
+
+       \)     Like  \&  except  that  it behaves like a character
+              declared with the cflags request to be  transparent
+              for the purposes of end of sentence recognition.
+
+       \~     This  produces  an unbreakable space that stretches
+              like a normal  inter-word  space  when  a  line  is
+              adjusted.
+
+       \:     This  causes  the  insertion  of a zero-width break
+              point.  It is equal to \% but without insertion  of
+              a soft hyphen character.
+
+       \#     Everything  up to and including the next newline is
+              ignored.  This is interpreted in copy  mode.   This
+              is  like \" except that \" does not ignore the ter­
+              minating newline.
+
+   New requests
+       .aln xx yy
+              Create an alias xx for number register object named
+              yy.   The new name and the old name will be exactly
+              equivalent.  If yy is undefined, a warning of  type
+              reg  will  be  generated,  and  the request will be
+              ignored.
+
+       .als xx yy
+              Create an alias xx for request, string,  macro,  or
+              diversion  object  named  yy.  The new name and the
+              old name will be exactly equivalent (it is  similar
+              to a hard rather than a soft link).  If yy is unde­
+              fined, a warning of type mac will be generated, and
+              the  request  will be ignored.  The de, am, di, da,
+              ds, and as requests only create a new object if the
+              name of the macro, diversion or string diversion is
+              currently undefined or if it is  defined  to  be  a
+              request;  normally  they  modify  the  value  of an
+              existing object.
+
+       .am1 xx yy
+              Similar to .am, but compatibility mode is  switched
+              off  during  execution.  On entry, the current com­
+              patibility mode is saved and restored at exit.
+
+       .asciify xx
+              This request `unformats' the diversion xx in such a
+              way  that  ASCII  and  space  characters  (and some
+              escape sequences) that were formatted and  diverted
+              into xx will be treated like ordinary input charac­
+              ters when xx is reread.  Useful for  diversions  in
+              conjunction  with  the  .writem request.  It can be
+              also used for gross hacks; for example, this
+
+                     .tr @.
+                     .di x
+                     @nr n 1
+                     .br
+                     .di
+                     .tr @@
+                     .asciify x
+                     .x
+
+              will  set  register  n  to  1.   Note  that   glyph
+              information  (font,  font  size,  etc.) is not pre­
+              served; use .unformat instead.
+
+       .backtrace
+              Print a backtrace of the input stack on stderr.
+
+       .blm xx
+              Set the blank line macro to  xx.   If  there  is  a
+              blank  line  macro, it will be invoked when a blank
+              line is encountered  instead  of  the  usual  troff
+              behaviour.
+
+       .box xx
+       .boxa xx
+              These  requests  are  similar  to  the  di  and  da
+              requests with the exception that a partially filled
+              line  will  not become part of the diversion (i.e.,
+              the diversion always starts with a  new  line)  but
+              restored after ending the diversion, discarding the
+              partially filled line which possibly comes from the
+              diversion.
+
+       .break Break  out of a while loop.  See also the while and
+              continue requests.  Be sure  not  to  confuse  this
+              with the br request.
+
+       .brp   This is the same as \p.
+
+       .cflags n c1 c2...
+              Characters  c1,  c2,...  have properties determined
+              by n, which is ORed from the following:
+
+              1      the  character  ends  sentences   (initially
+                     characters .?! have this property);
+
+              2      lines  can  be  broken  before the character
+                     (initially no  characters  have  this  prop­
+                     erty);  a line will not be broken at a char­
+                     acter with this property unless the  charac­
+                     ters on each side both have non-zero hyphen­
+                     ation codes.
+
+              4      lines can  be  broken  after  the  character
+                     (initially  characters  -\(hy\(em  have this
+                     property); a line will not be  broken  at  a
+                     character  with  this  property  unless  the
+                     characters on each side both  have  non-zero
+                     hyphenation codes.
+
+              8      the  character  overlaps  horizontally (ini­
+                     tially  characters  \(ul\(rn\(ru  have  this
+                     property);
+
+              16     the character overlaps vertically (initially
+                     character \(br has this property);
+
+              32     an end of sentence character followed by any
+                     number of characters with this property will
+                     be treated as the end of a sentence if  fol­
+                     lowed  by  a newline or two spaces; in other
+                     words the character is transparent  for  the
+                     purposes  of  end  of  sentence recognition;
+                     this is the same as having a zero space fac­
+                     tor    in    TeX    (initially    characters
+                     "')]*\(dg\(rq have this property).
+
+       .char c string
+              Define character c to be string.  Every time  char­
+              acter  c  needs  to be printed, string will be pro­
+              cessed in a temporary environment  and  the  result
+              will  be wrapped up into a single object.  Compati­
+              bility mode will be turned off and the escape char­
+              acter  will  be set to \ while string is being pro­
+              cessed.  Any emboldening, constant spacing or track
+              kerning  will be applied to this object rather than
+              to individual characters in  string.   A  character
+              defined  by  this  request  can be used just like a
+              normal character provided by the output device.  In
+              particular other characters can be translated to it
+              with the tr request; it  can  be  made  the  leader
+              character  by the lc request; repeated patterns can
+              be drawn with the character using  the  \l  and  \L
+              escape  sequences;  words  containing the character
+              can be hyphenated correctly, if the  hcode  request
+              is  used  to give the character a hyphenation code.
+              There is a special anti-recursion feature:  use  of
+              character within the character's definition will be
+              handled like normal  characters  not  defined  with
+              char.   A  character definition can be removed with
+              the rchar request.
+
+       .chop xx
+              Chop the  last  character  off  macro,  string,  or
+              diversion xx.  This is useful for removing the new­
+              line from the end of  diversions  that  are  to  be
+              interpolated as strings.
+
+       .close stream
+              Close  the  stream  named  stream;  stream  will no
+              longer be  an  acceptable  argument  to  the  write
+              request.  See the open request.
+
+       .continue
+              Finish  the current iteration of a while loop.  See
+              also the while and break requests.
+
+       .cp n  If n is non-zero or missing,  enable  compatibility
+              mode, otherwise disable it.  In compatibility mode,
+              long names are not recognised, and  the  incompati­
+              bilities caused by long names do not arise.
+
+       .dei xx yy
+              Define macro indirectly.  The following example
+
+                     .ds xx aa
+                     .ds yy bb
+                     .dei xx yy
+
+              is equivalent to
+
+                     .de aa bb
+
+       .de1 xx yy
+              Similar  to .de, but compatibility mode is switched
+              off during execution.  On entry, the  current  com­
+              patibility mode is saved and restored at exit.
+
+       .do xxx
+              Interpret  .xxx  with  compatibility mode disabled.
+              For example,
+
+                     .do fam T
+
+              would have the same effect as
+
+                     .fam T
+
+              except that it would  work  even  if  compatibility
+              mode had been enabled.  Note that the previous com­
+              patibility  mode  is  restored  before  any   files
+              sourced by xxx are interpreted.
+
+       .ecs   Save current escape character.
+
+       .ecr   Restore escape character saved with ecs.  Without a
+              previous call to ecs, `\' will be  the  new  escape
+              character.
+
+       .evc xx
+              Copy  the contents of environment xx to the current
+              environment.  No pushing or popping of  environents
+              will be done.
+
+       .fam xx
+              Set  the  current  font  family to xx.  The current
+              font family is part of the current environment.  If
+              xx is missing, switch back to previous font family.
+              See the description of the  sty  request  for  more
+              information on font families.
+
+       .fspecial f s1 s2...
+              When  the current font is f, fonts s1, s2,...  will
+              be special, that is, they will searched for charac­
+              ters  not in the current font.  Any fonts specified
+              in the special request will be searched after fonts
+              specified in the fspecial request.
+
+       .ftr f g
+              Translate  font f to g.  Whenever a font named f is
+              referred to in \f escape sequence, or  in  the  ft,
+              ul,  bd,  cs,  tkf,  special,  fspecial, fp, or sty
+              requests, font g will be used.  If g is missing, or
+              equal to f then font f will not be translated.
+
+       .hcode c1 code1 c2 code2...
+              Set  the  hyphenation code of character c1 to code1
+              and that of c2 to code2.  A hyphenation  code  must
+              be  a single input character (not a special charac­
+              ter) other than a digit or a space.  Initially each
+              lower-case  letter has a hyphenation code, which is
+              itself, and each upper-case letter  has  a  hyphen­
+              ation  code  which  is  the  lower  case version of
+              itself.  See also the hpf request.
+
+       .hla lang
+              Set  the  current  hyphenation  language  to  lang.
+              Hyphenation   exceptions   specified  with  the  hw
+              request and hyphenation patterns specified with the
+              hpf  request  are  both associated with the current
+              hyphenation language.  The hla request  is  usually
+              invoked by the troffrc file.
+
+       .hlm n Set  the  maximum  number of consecutive hyphenated
+              lines to n.  If n is negative, there is no maximum.
+              The  default value is -1.  This value is associated
+              with the current environment.   Only  lines  output
+              from an environment count towards the maximum asso­
+              ciated with that  environment.   Hyphens  resulting
+              from \% are counted; explicit hyphens are not.
+
+       .hpf file
+              Read  hyphenation  patterns from file; this will be
+              searched for in the  same  way  that  name.tmac  is
+              searched  for  when the -mname option is specified.
+              It should have the same format as the  argument  to
+              the \patterns primitive in TeX; the letters appear­
+              ing in this file  are  interpreted  as  hyphenation
+              codes.   A  % character in the patterns file intro­
+              duces a comment that continues to the  end  of  the
+              line.   The  set of hyphenation patterns is associ­
+              ated with the  current  language  set  by  the  hla
+              request.  The hpf request is usually invoked by the
+              troffrc file.
+
+       .hym n Set the hyphenation margin to n: when  the  current
+              adjustment  mode  is  not  b,  the line will not be
+              hyphenated if the line is no  more  than  n  short.
+              The  default  hyphenation margin is 0.  The default
+              scaling indicator  for  this  request  is  m.   The
+              hyphenation  margin  is associated with the current
+              environment.  The  current  hyphenation  margin  is
+              available in the \n[.hym] register.
+
+       .hys n Set  the  hyphenation  space to n: when the current
+              adjustment mode is b don't hyphenate  the  line  if
+              the  line can be justified by adding no more than n
+              extra  space  to  each  word  space.   The  default
+              hyphenation  space is 0.  The default scaling indi­
+              cator for this request is m.  The hyphenation space
+              is  associated  with  the current environment.  The
+              current  hyphenation  space  is  available  in  the
+              \n[.hys] register.
+
+       .kern n
+              If  n is non-zero or missing, enable pairwise kern­
+              ing, otherwise disable it.
+
+       .length xx string
+              Compute the length of string and return it  in  the
+              number   register  xx  (which  is  not  necessarily
+              defined before).
+
+       .linetabs n
+              If n is non-zero or missing, enable line-tabs mode,
+              otherwise  disable  it  (which is the default).  In
+              line-tabs mode, tab distances are computed relative
+              to  the  (current) output line.  Otherwise they are
+              taken relative to the input line.  For example, the
+              following
+
+                     .ds x a\t\c
+                     .ds y b\t\c
+                     .ds z c
+                     .ta 1i 3i
+                     \*x
+                     \*y
+                     \*z
+
+              yields
+
+                     a         b         c
+
+              In line-tabs mode, the same code gives
+
+                     a         b                   c
+
+              Line-tabs mode is associated with the current envi­
+              ronment;    the    read-only    number     register
+              \n[.linetabs] is set to 1 if in line-tabs mode, and
+              0 otherwise.
+
+       .mso file
+              The same as the so  request  except  that  file  is
+              searched for in the same directories as macro files
+              for the the -m command line option.   If  the  file
+              name  to  be included has the form name.tmac and it
+              isn't found, mso tries to include tmac.name instead
+              and vice versa.
+
+       .nop anything
+              Execute anything.  This is similar to `.if 1'.
+
+       .nroff Make the n built-in condition true and the t built-
+              in condition false.  This can be reversed using the
+              troff request.
+
+       .open stream filename
+              Open  filename for writing and associate the stream
+              named stream with it.  See also the close and write
+              requests.
+
+       .opena stream filename
+              Like  open,  but  if  filename exists, append to it
+              instead of truncating it.
+
+       .pnr   Print the  names  and  contents  of  all  currently
+              defined number registers on stderr.
+
+       .psbb filename
+              Get  the  bounding  box of a PostScript image file­
+              name.  This file must conform to  Adobe's  Document
+              Structuring  Conventions;  the  command looks for a
+              %%BoundingBox comment to extract the  bounding  box
+              values.   After  a successful call, the coordinates
+              (in PostScript units) of the lower left  and  upper
+              right corner can be found in the registers \n[llx],
+              \n[lly], \n[urx], and  \n[ury],  respectively.   If
+              some error has occurred, the four registers are set
+              to zero.
+
+       .pso command
+              This behaves like the so request except that  input
+              comes from the standard output of command.
+
+       .ptr   Print  the  names  and  positions of all traps (not
+              including input line traps and diversion traps)  on
+              stderr.   Empty  slots  in  the  page trap list are
+              printed as well, because they can affect the prior­
+              ity of subsequently planted traps.
+
+       .rchar c1 c2...
+              Remove  the  definitions  of  characters c1, c2,...
+              This undoes the effect of a char request.
+
+       .return
+              Within a macro, return immediately.  No effect oth­
+              erwise.
+
+       .rj
+       .rj n  Right  justify  the next n input lines.  Without an
+              argument right justify the next  input  line.   The
+              number  of lines to be right justified is available
+              in the  \n[.rj]  register.   This  implicitly  does
+              .ce 0.  The ce request implicitly does .rj 0.
+
+       .rnn xx yy
+              Rename number register xx to yy.
+
+       .shc c Set  the soft hyphen character to c.  If c is omit­
+              ted, the soft hyphen character will be set  to  the
+              default  \(hy.   The  soft  hyphen character is the
+              character which will be inserted  when  a  word  is
+              hyphenated  at  a  line  break.  If the soft hyphen
+              character does not exist in the font of the charac­
+              ter  immediately preceding a potential break point,
+              then the line will not be  broken  at  that  point.
+              Neither   definitions   (specified  with  the  char
+              request) nor translations (specified  with  the  tr
+              request)  are  considered  when  finding  the  soft
+              hyphen character.
+
+       .shift n
+              In a macro, shift the  arguments  by  n  positions:
+              argument  i  becomes argument i-n; arguments 1 to n
+              will no longer be  available.   If  n  is  missing,
+              arguments  will be shifted by 1.  Shifting by nega­
+              tive amounts is currently undefined.
+
+       .special s1 s2...
+              Fonts s1, s2, are special and will be searched  for
+              characters not in the current font.
+
+       .sty n f
+              Associate  style  f  with  font position n.  A font
+              position can be associated either with  a  font  or
+              with  a  style.  The current font is the index of a
+              font position and so is also either  a  font  or  a
+              style.   When it is a style, the font that is actu­
+              ally used is the font the name of which is the con­
+              catenation  of  the  name of the current family and
+              the name of the current style.  For example, if the
+              current font is 1 and font position 1 is associated
+              with style R and the current font family is T, then
+              font TR will be used.  If the current font is not a
+              style, then the current family  is  ignored.   When
+              the  requests  cs,  bd,  tkf,  uf,  or fspecial are
+              applied to a  style,  then  they  will  instead  be
+              applied  to the member of the current family corre­
+              sponding to that style.  The default family can  be
+              set  with the -f option.  The styles command in the
+              DESC file controls which font  positions  (if  any)
+              are  initially  associated  with styles rather than
+              fonts.
+
+       .substring xx n1 [n2]
+              Replace the string in register  xx  with  the  sub­
+              string defined by the indices n1 and n2.  The first
+              character in the string has index one.   If  n2  is
+              omitted,  it  is  taken to be equal to the string's
+              length.  If the index value n1 or n2 is negative or
+              zero,  it  will  be  counted  from  the  end of the
+              string, going backwards:  The  last  character  has
+              index  0,  the  character before the last character
+              has index -1, etc.
+
+       .tkf f s1 n1 s2 n2
+              Enable track kerning for font f.  When the  current
+              font  is  f  the  width  of every character will be
+              increased by an amount between n1 and n2; when  the
+              current  point size is less than or equal to s1 the
+              width will be increased by n1; when it  is  greater
+              than  or equal to s2 the width will be increased by
+              n2; when the point size is greater than or equal to
+              s1  and  less  than  or equal to s2 the increase in
+              width is a linear function of the point size.
+
+       .tm1 string
+              Similar to the tm request, string is read  in  copy
+              mode and written on the standard error, but an ini­
+              tial double quote in  string  is  stripped  off  to
+              allow initial blanks.
+
+       .tmc string
+              Similar to tm1 but without writing a final newline.
+
+       .trf filename
+              Transparently output the contents of file filename.
+              Each line is output as it would be were it preceded
+              by \!; however, the lines are not subject to  copy-
+              mode interpretation.  If the file does not end with
+              a newline, then a newline will be added.  For exam­
+              ple,  you  can define a macro x containing the con­
+              tents of file f, using
+
+                     .di x
+                     .trf f
+                     .di
+
+              Unlike with the cf request, the file cannot contain
+              characters  such  as  NUL  that are not legal troff
+              input characters.
+
+       .trnt abcd
+              This is the same as the tr request except that  the
+              translations do not apply to text that is transpar­
+              ently throughput into a  diversion  with  \!.   For
+              example,
+
+                     .tr ab
+                     .di x
+                     \!.tm a
+                     .di
+                     .x
+
+              will print b; if trnt is used instead of tr it will
+              print a.
+
+       .troff Make the n built-in  condition  false,  and  the  t
+              built-in condition true.  This undoes the effect of
+              the nroff request.
+
+       .unformat xx
+              This request `unformats' the  diversion  xx.   Con­
+              trary  to the .asciify request, which tries to con­
+              vert formatted elements of the  diversion  back  to
+              input  tokens  as  much as possible, .unformat will
+              only handle tabs and spaces between words  (usually
+              caused  by  spaces  or  newlines in the input) spe­
+              cially.  The former are treated  as  if  they  were
+              input tokens, and the latter are stretchable again.
+              Note that the vertical size of lines  is  not  pre­
+              served.   Glyph information (font, font size, space
+              width, etc.) is retained.   Useful  in  conjunction
+              with the .box and .boxa requests.
+
+       .vpt n Enable  vertical  position  traps if n is non-zero,
+              disable them otherwise.   Vertical  position  traps
+              are  traps set by the wh or dt requests.  Traps set
+              by the it request are not vertical position  traps.
+              The  parameter that controls whether vertical posi­
+              tion traps are enabled is global.  Initially verti­
+              cal position traps are enabled.
+
+       .warn n
+              Control  warnings.   n  is  the  sum of the numbers
+              associated with each warning that is to be enabled;
+              all  other  warnings  will be disabled.  The number
+              associated with  each  warning  is  listed  in  the
+              `Warnings' section.  For example, .warn 0 will dis­
+              able all warnings, and .warn  1  will  disable  all
+              warnings  except that about missing characters.  If
+              n is not given, all warnings will be enabled.
+
+       .while c anything
+              While condition  c  is  true,  accept  anything  as
+              input;  c  can be any condition acceptable to an if
+              request; anything can comprise  multiple  lines  if
+              the  first  line  starts  with \{ and the last line
+              ends with \}.  See  also  the  break  and  continue
+              requests.
+
+       .write stream anything
+              Write  anything to the stream named stream.  stream
+              must previously have been the subject  of  an  open
+              request.   anything is read in copy mode; a leading
+              " will be stripped.
+
+       .writem stream xx
+              Write the contents of the macro or string xx to the
+              stream  named  stream.  stream must previously have
+              been the subject of an open request.  xx is read in
+              copy mode.
+
+   Extended requests
+       .cf filename
+              When  used  in  a diversion, this will embed in the
+              diversion an object which, when reread, will  cause
+              the contents of filename to be transparently copied
+              through to the output.  In UNIX troff, the contents
+              of  filename  is  immediately copied through to the
+              output regardless of whether  there  is  a  current
+              diversion;  this  behaviour is so anomalous that it
+              must be considered a bug.
+
+       .ev xx If xx is not a number, this will switch to a  named
+              environment  called  xx.  The environment should be
+              popped with a matching ev request without any argu­
+              ments, just as for numbered environments.  There is
+              no limit on the number of named environments;  they
+              will be created the first time that they are refer­
+              enced.
+
+       .fp n f1 f2
+              The fp request  has  an  optional  third  argument.
+              This  argument gives the external name of the font,
+              which is used  for  finding  the  font  description
+              file.   The second argument gives the internal name
+              of the font which is used to refer to the  font  in
+              troff  after  it  has been mounted.  If there is no
+              third argument then the internal name will be  used
+              as  the  external name.  This feature allows you to
+              use fonts with long names in compatibility mode.
+
+       .ss m n
+              When two arguments are given to the ss request, the
+              second  argument gives the sentence space size.  If
+              the second argument  is  not  given,  the  sentence
+              space size will be the same as the word space size.
+              Like the word space size, the sentence space is  in
+              units  of  one  twelfth of the spacewidth parameter
+              for the current  font.   Initially  both  the  word
+              space  size  and  the  sentence  space size are 12.
+              Contrary to UNIX  troff,  GNU  troff  handles  this
+              request  in  nroff mode also; a given value is then
+              rounded down to the nearest multiple  of  12.   The
+              sentence  space  size is used in two circumstances:
+              if the end of a sentence occurs at  the  end  of  a
+              line  in  fill  mode, then both an inter-word space
+              and a sentence space will be added; if  two  spaces
+              follow  the  end  of  a sentence in the middle of a
+              line, then the second  space  will  be  a  sentence
+              space.   Note that the behaviour of UNIX troff will
+              be exactly that exhibited by GNU troff if a  second
+              argument  is never given to the ss request.  In GNU
+              troff, as in UNIX troff, you should always follow a
+              sentence with either a newline or two spaces.
+
+       .ta n1 n2...nn T r1 r2...rn
+              Set  tabs  at positions n1, n2,..., nn and then set
+              tabs  at  nn+r1,  nn+r2,....,  nn+rn  and  then  at
+              nn+rn+r1,  nn+rn+r2,...,  nn+rn+rn, and so on.  For
+              example,
+
+                     .ta T .5i
+
+              will set tabs every half an inch.
+
+   New number registers
+       The following read-only registers are available:
+
+       \n[.C] 1 if compatibility mode is in effect, 0  otherwise.
+
+       \n[.cdp]
+              The  depth  of the last character added to the cur­
+              rent environment.  It is positive if the  character
+              extends below the baseline.
+
+       \n[.ce]
+              The  number  of  lines remaining to be centered, as
+              set by the ce request.
+
+       \n[.cht]
+              The height of the last character added to the  cur­
+              rent  environment.  It is positive if the character
+              extends above the baseline.
+
+       \n[.csk]
+              The skew of the last character added to the current
+              environment.  The skew of a character is how far to
+              the right of the center of a character  the  center
+              of  an accent over that character should be placed.
+
+       \n[.ev]
+              The name or  number  of  the  current  environment.
+              This is a string-valued register.
+
+       \n[.fam]
+              The  current  font family.  This is a string-valued
+              register.
+
+       \n[.fp]
+              The number of the next free font position.
+
+       \n[.g] Always 1.  Macros  should  use  this  to  determine
+              whether they are running under GNU troff.
+
+       \n[.hla]
+              The  current hyphenation language as set by the hla
+              request.
+
+       \n[.hlc]
+              The number  of  immediately  preceding  consecutive
+              hyphenated lines.
+
+       \n[.hlm]
+              The  maximum  allowed number of consecutive hyphen­
+              ated lines, as set by the hlm request.
+
+       \n[.hy]
+              The current hyphenation flags (as  set  by  the  hy
+              request).
+
+       \n[.hym]
+              The  current  hyphenation margin (as set by the hym
+              request).
+
+       \n[.hys]
+              The current hyphenation space (as set  by  the  hys
+              request).
+
+       \n[.in]
+              The indent that applies to the current output line.
+
+       \n[.int]
+              Set to a positive value  if  last  output  line  is
+              interrupted (i.e., if it contains \c).
+
+       \n[.kern]
+              1 if pairwise kerning is enabled, 0 otherwise.
+
+       \n[.lg]
+              The  current  ligature  mode  (as  set  by  the  lg
+              request).
+
+       \n[.linetabs]
+              The current line-tabs mode (as set by the  linetabs
+              request).
+
+       \n[.ll]
+              The  line length that applies to the current output
+              line.
+
+       \n[.lt]
+              The title length as set by the lt request.
+
+       \n[.ne]
+              The amount of space that was needed in the last  ne
+              request that caused a trap to be sprung.  Useful in
+              conjunction with the \n[.trunc] register.
+
+       \n[.ns]
+              1 if no-space mode is active, 0 otherwise.
+
+       \n[.pn]
+              The number of the next page: either the  value  set
+              by  a pn request, or the number of the current page
+              plus 1.
+
+       \n[.ps]
+              The current pointsize in scaled points.
+
+       \n[.psr]
+              The last-requested pointsize in scaled points.
+
+       \n[.rj]
+              The number of lines to be right-justified as set by
+              the rj request.
+
+       \n[.sr]
+              The last requested pointsize in points as a decimal
+              fraction.  This is a string-valued register.
+
+       \n[.tabs]
+              A string representation of the current tab settings
+              suitable  for use as an argument to the ta request.
+
+       \n[.trunc]
+              The amount of vertical space truncated by the  most
+              recently  sprung vertical position trap, or, if the
+              trap was sprung by a ne request, minus  the  amount
+              of  vertical motion produced by the ne request.  In
+              other words, at the point a trap is sprung, it rep­
+              resents  the  difference of what the vertical posi­
+              tion would have been but for the trap, and what the
+              vertical  position actually is.  Useful in conjunc­
+              tion with the \n[.ne] register.
+
+       \n[.ss]
+       \n[.sss]
+              These give the values of the parameters set by  the
+              first and second arguments of the ss request.
+
+       \n[.vpt]
+              1  if vertical position traps are enabled, 0 other­
+              wise.
+
+       \n[.warn]
+              The sum of the numbers associated with each of  the
+              currently  enabled warnings.  The number associated
+              with each warning is listed in the `Warnings'  sub­
+              section.
+
+       \n[.x] The major version number.  For example, if the ver­
+              sion number is 1.03 then \n[.x] will contain 1.
+
+       \n[.y] The minor version number.  For example, if the ver­
+              sion number is 1.03 then \n[.y] will contain 03.
+
+       \n[.Y] The revision number of groff.
+
+       \n[llx]
+       \n[lly]
+       \n[urx]
+       \n[ury]
+              These  four  registers are set by the .psbb request
+              and contain the bounding box values (in  PostScript
+              units) of a given PostScript image.
+
+       The  following  read/write  registers  are  set  by the \w
+       escape sequence:
+
+       \n[rst]
+       \n[rsb]
+              Like the st and sb registers, but takes account  of
+              the heights and depths of characters.
+
+       \n[ssc]
+              The  amount of horizontal space (possibly negative)
+              that should be added to the last character before a
+              subscript.
+
+       \n[skw]
+              How  far to right of the center of the last charac­
+              ter in the \w argument, the  center  of  an  accent
+              from  a roman font should be placed over that char­
+              acter.
+
+       Other available read/write number registers are:
+
+       \n[c.] The current input line number.  \n[.c] is  a  read-
+              only alias to this register.
+
+       \n[hp] The current horizontal position at input line.
+
+       \n[systat]
+              The  return value of the system() function executed
+              by the last sy request.
+
+       \n[slimit]
+              If greater than 0, the maximum number of objects on
+              the input stack.  If less than or equal to 0, there
+              is no limit on the number of objects on  the  input
+              stack.  With no limit, recursion can continue until
+              virtual memory is exhausted.
+
+       \n[year]
+              The current year.  Note that the traditional  troff
+              number  register  \n[yr]  is the current year minus
+              1900.
+
+   Miscellaneous
+       troff predefines a single (read/write) string-based regis­
+       ter,  \*(.T,  which  contains the argument given to the -T
+       command line option, namely the current output device (for
+       example, latin1 or ascii).  Note that this is not the same
+       as the (read-only) number register \n[.T] which is defined
+       to  be 1  if  troff  is  called  with  the -T command line
+       option, and zero otherwise.  This behaviour  is  different
+       to UNIX troff.
+
+       Fonts  not  listed  in  the  DESC  file  are automatically
+       mounted on the next available font position when they  are
+       referenced.   If  a  font is to be mounted explicitly with
+       the fp request on an unused font position,  it  should  be
+       mounted  on  the  first unused font position, which can be
+       found in the \n[.fp] register;  although  troff  does  not
+       enforce  this  strictly,  it  will  not allow a font to be
+       mounted at a position whose number is  much  greater  than
+       that of any currently used position.
+
+       Interpolating  a string does not hide existing macro argu­
+       ments.  Thus in a macro, a more efficient way of doing
+
+              .xx \\$@
+
+       is
+
+              \\*[xx]\\
+
+       If the font description  file  contains  pairwise  kerning
+       information,  characters  from  that  font will be kerned.
+       Kerning between two characters can be inhibited by placing
+       a \& between them.
+
+       In  a  string  comparison  in a condition, characters that
+       appear at different input levels to  the  first  delimiter
+       character  will  not  be recognised as the second or third
+       delimiters.  This applies also to the tl request.  In a \w
+       escape  sequence,  a character that appears at a different
+       input level to the starting delimiter character  will  not
+       be  recognised  as  the closing delimiter character.  When
+       decoding a macro argument  that  is  delimited  by  double
+       quotes,  a  character  that  appears  at a different input
+       level to the starting  delimiter  character  will  not  be
+       recognised as the closing delimiter character.  The imple­
+       mentation of \$@ ensures that the double quotes  surround­
+       ing  an  argument  will appear the same input level, which
+       will be different to  the  input  level  of  the  argument
+       itself.  In a long escape name ] will not be recognized as
+       a closing delimiter except when  it  occurs  at  the  same
+       input  level  as the opening ].  In compatibility mode, no
+       attention is paid to the input-level.
+
+       There are some new types of condition:
+
+       .if rxxx
+              True if there is a number register named xxx.
+
+       .if dxxx
+              True if there is a  string,  macro,  diversion,  or
+              request named xxx.
+
+       .if cch
+              True  if  there  is a character ch available; ch is
+              either an ASCII character or  a  special  character
+              \(xx  or \[xxx]; the condition will also be true if
+              ch has been defined by the char request.
+
+       The tr request can now map characters onto \~.
+
+   Warnings
+       The warnings that can be given by troff are  divided  into
+       the  following  categories.  The name associated with each
+       warning is used by the -w and -W options;  the  number  is
+       used by the warn request, and by the .warn register.
+
+       char           1   Non-existent   characters.    This   is
+                          enabled by default.
+
+       number         2   Invalid numeric expressions.   This  is
+                          enabled by default.
+
+       break          4   In  fill mode, lines which could not be
+                          broken so that their  length  was  less
+                          than  the line length.  This is enabled
+                          by default.
+
+       delim          8   Missing    or    mismatched     closing
+                          delimiters.
+
+       el            16   Use  of the el request with no matching
+                          ie request.
+
+       scale         32   Meaningless scaling indicators.
+
+       range         64   Out of range arguments.
+
+       syntax       128   Dubious syntax in numeric  expressions.
+
+       di           256   Use  of  di  or  da without an argument
+                          when there is no current diversion.
+
+       mac          512   Use of undefined  strings,  macros  and
+                          diversions.   When an undefined string,
+                          macro or diversion is used, that string
+                          is automatically defined as empty.  So,
+                          in most cases, at most one warning will
+                          be given for each name.
+
+       reg         1024   Use   of  undefined  number  registers.
+                          When an undefined  number  register  is
+                          used,  that  register  is automatically
+                          defined to have a value of 0.  a  defi­
+                          nition  is  automatically  made  with a
+                          value of 0.  So, in most cases, at most
+                          one  warning will be given for use of a
+                          particular name.
+
+       tab         2048   Inappropriate use of a  tab  character.
+                          Either  use  of a tab character where a
+                          number was  expected,  or  use  of  tab
+                          character  in  an  unquoted macro argu­
+                          ment.
+
+       right-brace 4096   Use of \} where a number was  expected.
+
+       missing     8192   Requests  that are missing non-optional
+                          arguments.
+
+       input      16384   Illegal input characters.
+
+       escape     32768   Unrecognized escape sequences.  When an
+                          unrecognized escape sequence is encoun­
+                          tered, the escape character is ignored.
+
+       space      65536   Missing  space  between  a  request  or
+                          macro and its argument.   This  warning
+                          will  be  given  when an undefined name
+                          longer than two characters  is  encoun­
+                          tered,  and the first two characters of
+                          the name  make  a  defined  name.   The
+                          request  or  macro will not be invoked.
+                          When this warning is given, no macro is
+                          automatically defined.  This is enabled
+                          by default.  This  warning  will  never
+                          occur in compatibility mode.
+
+       font      131072   Non-existent fonts.  This is enabled by
+                          default.
+
+       ig        262144   Illegal escapes in  text  ignored  with
+                          the  ig  request.  These are conditions
+                          that are errors when they do not  occur
+                          in ignored text.
+
+       There  are  also names that can be used to refer to groups
+       of warnings:
+
+       all    All  warnings  except  di,  mac  and  reg.   It  is
+              intended  that  this  covers  all warnings that are
+              useful with traditional macro packages.
+
+       w      All warnings.
+
+   Incompatibilities
+       Long names cause some incompatibilities.  UNIX troff  will
+       interpret
+
+              .dsabcd
+
+       as  defining  a string ab with contents cd.  Normally, GNU
+       troff will interpret this as  a  call  of  a  macro  named
+       dsabcd.  Also UNIX troff will interpret \*[ or \n[ as ref­
+       erences to a string or number register called [.   In  GNU
+       troff,  however,  this will normally be interpreted as the
+       start of a long name.  In  compatibility  mode  GNU  troff
+       will  interpret  these  things in the traditional way.  In
+       compatibility mode, however, long  names  are  not  recog­
+       nised.   Compatibility  mode  can be turned on with the -C
+       command line option, and turned on  or  off  with  the  cp
+       request.  The number register \n[.C] is 1 if compatibility
+       mode is on, 0 otherwise.
+
+       GNU troff does not allow the use of the  escape  sequences
+       \\|\^\&\}\{\(space)\'\`\-\_\!\%\c  in  names  of  strings,
+       macros, diversions, number registers,  fonts  or  environ­
+       ments;  UNIX  troff  does.   The \A escape sequence may be
+       helpful in avoiding  use  of  these  escape  sequences  in
+       names.
+
+       Fractional  pointsizes  cause one noteworthy incompatibil­
+       ity.  In UNIX troff the ps request ignores  scale  indica­
+       tors and so
+
+              .ps 10u
+
+       will  set the pointsize to 10 points, whereas in GNU troff
+       it will set the pointsize to 10 scaled points.
+
+       In GNU troff there is  a  fundamental  difference  between
+       unformatted, input characters, and formatted, output char­
+       acters.  Everything that affects how an  output  character
+       will  be output is stored with the character; once an out­
+       put character has been constructed it is unaffected by any
+       subsequent  requests  that are executed, including bd, cs,
+       tkf, tr, or fp requests.  Normally output  characters  are
+       constructed  from  input  characters at the moment immedi­
+       ately before the character is added to the current  output
+       line.   Macros,  diversions  and strings are all, in fact,
+       the same type of object; they contain lists of input char­
+       acters  and output characters in any combination.  An out­
+       put character does not behave like an input character  for
+       the  purposes of macro processing; it does not inherit any
+       of the special properties that the  input  character  from
+       which it was constructed might have had.  For example,
+
+              .di x
+              \\\\
+              .br
+              .di
+              .x
+
+       will  print  \\  in  GNU  troff;  each pair of input \s is
+       turned into one output \ and the resulting output  \s  are
+       not interpreted as escape characters when they are reread.
+       UNIX troff would interpret them as escape characters  when
+       they  were  reread  and  would end up printing one \.  The
+       correct way to obtain a printable  \  is  to  use  the  \e
+       escape  sequence: this will always print a single instance
+       of the current escape character, regardless of whether  or
+       not  it  is used in a diversion; it will also work in both
+       GNU troff and UNIX troff.  If you wish for some reason  to
+       store  in  a  diversion  an  escape  sequence that will be
+       interpreted when the diversion is reread, you  can  either
+       use the traditional \! transparent output facility, or, if
+       this is unsuitable, the new \? escape sequence.
+
+ENVIRONMENT
+       GROFF_TMAC_PATH
+              A colon separated list of directories in  which  to
+              search  for  macro files.  troff will scan directo­
+              ries given in the -M option before  these,  and  in
+              standard   directories  (current  directory  if  in
+              unsafe mode, home directory, /usr/share/groff/site-
+              tmac,                     /usr/lib/groff/site-tmac,
+              /usr/share/groff/1.17.2/tmac) after these.
+
+       GROFF_TYPESETTER
+              Default device.
+
+       GROFF_FONT_PATH
+              A colon separated list of directories in  which  to
+              search  for the devname directory.  troff will scan
+              directories given in the -F  option  before  these,
+              and         in         standard         directories
+              (/usr/share/groff/1.17.2/font:/usr/lib/font)  after
+              these.
+
+FILES
+       /usr/share/groff/1.17.2/tmac/troffrc
+              Initialization  file (called before any other macro
+              package).
+
+       /usr/share/groff/1.17.2/tmac/troffrc-end
+              Initialization file (called after any  other  macro
+              package).
+
+       /usr/share/groff/1.17.2/tmac/name.tmac
+       /usr/share/groff/1.17.2/tmac/tmac.name
+              Macro files
+
+       /usr/share/groff/1.17.2/font/devname/DESC
+              Device description file for device name.
+
+       /usr/share/groff/1.17.2/font/devname/F
+              Font file for font F of device name.
+
+       Note  that troffrc and troffrc-end are neither searched in
+       the current nor in the home directory by default for secu­
+       rity reasons (even if the -U option is given).  Use the -M
+       command line option  or  the  GROFF_TMAC_PATH  environment
+       variable  to  add  these directories to the search path if
+       necessary.
+
+SEE ALSO
+       groff(7) -- This is a short but complete reference of  all
+       requests, registers, and escapes.
+
+       groff(1),  tbl(1),  pic(1),  eqn(1),  refer(1), soelim(1),
+       grn(1),  grops(1),   grodvi(1),   grotty(1),   grohtml(1),
+       grolj4(1), groff_font(5), groff_out(5), groff_char(7)
+
+
+
+Groff Version 1.17.2       27 June 2001                  TROFF(1)

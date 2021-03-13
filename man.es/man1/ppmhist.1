@@ -1,0 +1,42 @@
+ppmhist(1)                                             ppmhist(1)
+
+
+
+NAME
+       ppmhist - print a histogram of a portable pixmap
+
+SYNOPSIS
+       ppmhist [-hexcolor] [-noheader] [-map] [-nomap] [ppmfile]
+
+DESCRIPTION
+       Reads  a  portable pixmap as input.  Generates a histogram
+       of the colors in the pixmap.
+
+
+OPTIONS
+       -hexcolor
+              Print the color components in hexadecimal.  Default
+              is decimal.
+
+       -noheader
+              Do not print the column headings.
+
+       -map   Generates a PPM file of the colormap for the image,
+              with the color histogram as comments.
+
+       -nomap Generates the histogram for human reading.  This is
+              the default.
+
+
+
+SEE ALSO
+       ppm(5),   pgmhist(1),   ppmtomap(1),  pnmhistmap(1),  ppm­
+       change(1)
+
+
+AUTHOR
+       Copyright (C) 1989 by Jef Poskanzer.
+
+
+
+                        17 September 2000              ppmhist(1)

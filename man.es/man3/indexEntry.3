@@ -1,0 +1,66 @@
+indexEntry(3)                                       indexEntry(3)
+
+
+
+NAME
+       indexEntry -
+
+SYNOPSIS
+       #include <header_internal.h>
+
+
+   Data Fields
+       entryInfo info
+       void * data
+       int length
+       int rdlen
+
+FIELD DOCUMENTATION
+   void* indexEntry::data
+       Location of tag data.
+
+       Definition at line 46 of file header_internal.h.
+
+       Referenced by doHeaderUnload, headerAddEntry,
+       headerAddI18NString, headerAppendEntry, headerDump,
+       headerFindI18NString, headerFree, headerLoad,
+       headerModifyEntry, headerRemoveEntry, offsetCmp, and
+       regionSwab.
+
+   struct entryInfo indexEntry::info
+       Description of tag data.
+
+       Definition at line 45 of file header_internal.h.
+
+       Referenced by doHeaderUnload, findEntry, headerAddEntry,
+       headerAddI18NString, headerAppendEntry, headerDump,
+       headerFindI18NString, headerLoad, headerModifyEntry,
+       headerNextIterator, headerReload, headerRemoveEntry,
+       headerSizeof, indexCmp, intGetEntry, offsetCmp, and
+       regionSwab.
+
+   int indexEntry::length
+       No. bytes of data.
+
+       Definition at line 47 of file header_internal.h.
+
+       Referenced by doHeaderUnload, headerAddEntry,
+       headerAddI18NString, headerAppendEntry, headerFree,
+       headerLoad, headerModifyEntry, headerRemoveEntry,
+       headerSizeof, and regionSwab.
+
+   int indexEntry::rdlen
+       No. bytes of data in region.
+
+       Definition at line 48 of file header_internal.h.
+
+       Referenced by doHeaderUnload, headerLoad, and regionSwab.
+
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002              indexEntry(3)

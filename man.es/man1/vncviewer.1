@@ -1,0 +1,83 @@
+VNCVIEWER(1)                                         VNCVIEWER(1)
+
+
+
+NAME
+       vncviewer - VNC client application
+
+SYNOPSIS
+       vncviewer [options] host:display#
+       vncviewer [options] -listen [display#]
+
+DESCRIPTION
+       View  a  VNC session.  This is an Xt-based client applica­
+       tion for the VNC (Virtual Network Computing) system.   You
+       can  use  vncviewer to use a computing desktop environment
+       that is running on a different machine.
+
+       You can use F8 to display a pop-up utility menu.
+
+OPTIONS
+       The options are standard Xt options, or:
+
+       -shared
+              When connecting, specify that a  shared  connection
+              is allowed.  This is the default.
+
+       -noshared
+              When  connecting,  specify that the session may not
+              be shared.
+
+       -viewonly
+              Block mouse and keyboard events.
+
+       -fullscreen
+              Occupy the entire screen.
+
+       -passwd passwd-file
+              File from which to get the password  (as  generated
+              by the vncpasswd(1) program).
+
+       -encodings encoding-list
+              A  list of encodings to use in order of preference,
+              separated by  spaces.   The  default  is  "copyrect
+              tight  hextile  zlib  corre  rre", or "raw copyrect
+              tight hextile zlib corre rre" for a VNC  server  on
+              the same machine.
+
+       -bgr233
+              Always  use  the BGR233 (8-bit) pixel format on the
+              wire, regardless of the visual.
+
+       -owncmap
+              Try to use a PseudoColor visual and a private  col­
+              ormap  -  this allows the VNC server to control the
+              colormap.
+
+       -truecolour
+              Try to use a TrueColor visual.
+
+       -depth depth
+              Try to use a visual of this depth (bits per pixel).
+
+       -compresslevel level
+              Use  specified  compression  level  (0-9) for tight
+              encoding.
+
+       -quality level
+              Use the specified image  quality  level  (0-9)  for
+              tight encoding.
+
+       -nocursorshape
+              Disable the local cursor shape extension.
+
+SEE ALSO
+       vncserver(1), Xvnc(1), vncpasswd(1), vncconnect(1)
+
+AUTHOR
+       AT&T Laboratories Cambridge
+       Man page by Tim Waugh <twaugh@redhat.com>
+
+
+
+                            4 May 2001               VNCVIEWER(1)

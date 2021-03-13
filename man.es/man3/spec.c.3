@@ -1,0 +1,146 @@
+build/spec.c(3)                                   build/spec.c(3)
+
+
+
+NAME
+       build/spec.c - Handle spec data structure.
+
+SYNOPSIS
+       #include 'system.h'
+       #include 'rpmbuild.h'
+       #include 'buildio.h'
+       #include 'debug.h'
+
+   Defines
+       #define SKIPWHITE(_x)   {while(*(_x) && (xisspace(*_x) ||
+           *(_x) == ',')) (_x)++;}
+       #define SKIPNONWHITE(_x)   {while(*(_x) &&!(xisspace(*_x)
+           || *(_x) == ',')) (_x)++;}
+
+   Functions
+       TriggerFileEntry * freeTriggerFiles (struct
+           TriggerFileEntry *p)
+       Source * freeSources (struct Source *s)
+           Destroy source component chain.
+       int lookupPackage (Spec spec, const char *name, int flag,
+           Package *pkg)
+       Package newPackage (Spec spec)
+       Package freePackage (Package p)
+       Package freePackages (Package packages)
+       Source * findSource (Spec spec, int num, int flag)
+       int parseNoSource (Spec spec, const char *field, int tag)
+       int addSource (Spec spec, Package pkg, const char *field,
+           int tag)
+       speclines newSl (void)
+       speclines freeSl (speclines sl)
+       spectags newSt (void)
+       spectags freeSt (spectags st)
+       Spec newSpec (void)
+       Spec freeSpec (Spec spec)
+       OpenFileInfo * newOpenFileInfo (void)
+
+   Variables
+       int specedit
+       MacroContext_s rpmGlobalMacroContext
+
+DETAILED DESCRIPTION
+       Handle spec data structure.
+
+
+
+       Definition in file spec.c.
+
+DEFINE DOCUMENTATION
+   #define SKIPNONWHITE(_x)   {while(*(_x) &&!(xisspace(*_x) ||
+       *(_x) == ',')) (_x)++;}
+       Definition at line 20 of file spec.c.
+
+   #define SKIPWHITE(_x)   {while(*(_x) && (xisspace(*_x) ||
+       *(_x) == ',')) (_x)++;}
+       Definition at line 19 of file spec.c.
+
+FUNCTION DOCUMENTATION
+   struct Source* findSource (Spec spec, int num, int flag)
+       [inline, static]
+       Definition at line 192 of file spec.c.
+
+       References Source::flags, Source::next, and Source::num.
+
+       Referenced by parseNoSource.
+
+   speclines freeSl (speclines sl) [inline, static]
+       Definition at line 355 of file spec.c.
+
+       References _free, speclines_s::sl_lines, and
+       speclines_s::sl_nlines.
+
+       Referenced by freeSpec.
+
+   struct Source* freeSources (struct Source * s) [inline,
+       static]
+       Destroy source component chain.
+
+       Parameters:
+
+       source component chain
+
+       Returns:
+           NULL always
+
+       Definition at line 49 of file spec.c.
+
+       References _free, Source::fullSource, and Source::next.
+
+       Referenced by freePackage, and freeSpec.
+
+   spectags freeSt (spectags st) [inline, static]
+       Definition at line 383 of file spec.c.
+
+       References _free, spectags_s::st_ntags, spectags_s::st_t,
+       spectag_s::t_lang, and spectag_s::t_msgid.
+
+       Referenced by freeSpec.
+
+   struct TriggerFileEntry* freeTriggerFiles (struct
+       TriggerFileEntry * p) [inline, static]
+       Returns:
+           NULL always
+
+       Definition at line 28 of file spec.c.
+
+       References _free, TriggerFileEntry::fileName,
+       TriggerFileEntry::next, TriggerFileEntry::prog, and
+       TriggerFileEntry::script.
+
+       Referenced by freePackage.
+
+   speclines newSl (void) [inline, static]
+       Definition at line 341 of file spec.c.
+
+       References speclines_s::sl_lines, speclines_s::sl_nalloc,
+       speclines_s::sl_nlines, and xmalloc.
+
+       Referenced by newSpec.
+
+   spectags newSt (void) [inline, static]
+       Definition at line 369 of file spec.c.
+
+       References spectags_s::st_nalloc, spectags_s::st_ntags,
+       spectags_s::st_t, and xmalloc.
+
+       Referenced by newSpec.
+
+VARIABLE DOCUMENTATION
+   struct MacroContext_s rpmGlobalMacroContext
+       Definition at line 16 of file spec.c.
+
+   int specedit
+       Definition at line 13 of file spec.c.
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002            build/spec.c(3)

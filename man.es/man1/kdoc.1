@@ -1,0 +1,211 @@
+KDOC(1)             KDOC Documentation System             KDOC(1)
+
+
+
+NNAAMMEE
+       KDOC -- Programmers' Documentation Extraction and Genera­
+       tion Tool
+
+SSYYNNOOPPSSIISS
+               kdoc [-DqpieaP] [-f format] [-n libname] [-d outdir] [-u url] [-l lib]
+
+               kdoc [--help]
+
+               kdoc [--version]
+
+
+DDEESSCCRRIIPPTTIIOONN
+       KDOC uses specially formatted comments in your C++ headers
+       and CORBA IDL files to create cross-referenced documenta­
+       tion in various formats.
+
+       KDOC can also correctly handle "signal" and "slot" speci­
+       fiers as used by the Qt GUI Toolkit.
+
+EEXXAAMMPPLLEESS
+               kdoc -f html -d /home/web/komdoc -n kom *.idl
+               kdoc -d /home/web/kdecore
+                       -u "http://www.mydomain/kdecore/"
+                       -n kdecore ~/kdelibs/kdecore/*.h -lqt
+
+
+OOPPTTIIOONNSS
+       ----ssttddiinn, --ii
+           Read the filenames to process from standard input.
+           Ignored if filenames are specified at the command
+           line.
+
+       ----ffoorrmmaatt <string>, --ff <string>
+           Generate output in the specific format. This can be
+           used many times to generate documentation in multiple
+           formats. The default format is "html".
+
+           See the OUTPUT FORMAT OPTIONS section for a list of
+           available formats.
+
+       ----oouuttppuuttddiirr <path>, --dd <path>
+           Write output in the specified path.
+
+       ----uurrll <url>, --uu <url>
+           The URL which will be used for links when cross-refer­
+           encing with this library.
+
+       ----nnaammee <string>, --nn <string>
+           Set the name of the library being processed, eg
+           "kdecore" If no name is set, no index file is pro­
+           duced.
+
+       ----xxrreeff <library>, --ll <library>
+           Cross-reference with the specified library. This will
+           allow referencing of classes etc that exist in the
+           linked library. This option can be specified multiple
+           times.
+
+           For linking to work, you need to have generated docu­
+           mentation for the linked library with kdoc, so that
+           the necessary index file is produced.
+
+       ----lliibbddiirr <path>, --LL <path>
+           Set the directory that will be used to store the index
+           files generated for cross-referencing. This is also
+           used to search for index files for xref. The default
+           is $HOME/.kdoc.
+
+           If multiple paths are specified, each will be searched
+           in order of specification on the command line.
+
+           Unless --liboutdir is specified (see below), the gen­
+           erated .kdoc file will be written to the first path
+           specified with this option.
+
+       ----lliibboouuttddiirr <path>
+           Set the directory where newly created xref libraries
+           (see above) will be written. The default is the lib­
+           dir.
+
+       ----ccoommpprreessss, --zz
+           Compress generated KDOC index files with gzip to save
+           space.
+
+       ----pprriivvaattee, --pp
+           Document all private members. These are not documented
+           by default.
+
+       ----sskkiipp--iinntteerrnnaall, --ii
+           Do not document internal members. They are documented
+           as internal by default.
+
+       ----sskkiipp--ddeepprreeccaatteedd, --ee
+           Do not document deprecated members. They are docu­
+           mented as deprecated by default.
+
+       ----ssttrriipp--hh--ppaatthh
+           Strip the path from the filenames in the output.
+
+PPRREEPPRROOCCEESSSSOORR OOPPTTIIOONNSS
+       ----ccpppp, --PP
+           Pass each source file through the C preprocessor. Cur­
+           rently g++ is required for this, but this requirement
+           will change before 2.0. Directories for inclusion in
+           the preprocessor header search path can be specified
+           via the --II option.
+
+       ----ddoocciinncclluuddeedd
+           Parse files that are included by the preprocessor
+           #include macro.  This is off by default.
+
+       --ccppppccmmdd <command>, --CC <command>
+           Specify the preprocessor command that will be used.
+           The default is:
+
+                   g++ -Wp,-C -E
+
+           All specified --II paths will be appended to the com­
+           mand. This option quietly enables the --PP option.
+
+       ----iinncclluuddeeddiirr <path>, --II <path>
+           Add a directory to the preprocessor's header search
+           paths. Requires the --PP option. This option can be
+           specified multiple times.
+
+OOUUTTPPUUTT FFOORRMMAATT OOPPTTIIOONNSS
+
+
+       hhttmmll
+           Output documentation in HTML format. This is the
+           default.
+
+       llaatteexx
+           Output documentation as a LaTeX document.
+
+       mmaann Output documentation as man pages.
+
+       tteexxiinnffoo
+           Output documentation in texinfo format. You must set
+           the library name with the --nn option for the output to
+           be generated.
+
+       ddooccbbooookk
+           Output documentation in the DocBook SGML format. You
+           must set the library name with the --nn option for the
+           output to be generated.
+
+       cchheecckk
+           Print a report about the documentation, eg undocu­
+           mented classes and functions.
+
+       OOuuttppuutt ffoorrmmaatt mmooddiiffiieerrss
+
+
+       ----hhttmmll--ccssss <url>
+           In HTML format, the stylesheet specified by this
+           option will be used by the generated documentation.
+
+       ----hhttmmll--ccoollss <1, 2 ..>
+           In HTML format, set the number of columns for the
+           Class Index.
+
+       ----hhttmmll--llooggoo <image url>
+           In HTML format, specify the logo image to display on
+           every page.  It will appear to the left of the quick
+           links.
+
+CCRROOSSSS--RREEFFEERREENNCCIINNGG LLIIBBRRAARRIIEESS
+FFIILLEESS
+       **..kkddoocc, **..kkddoocc..ggzz
+           These are files that contain information about a
+           library that has been processed with kdoc. It is read
+           for cross-referencing with other libraries when the --ll
+           option is used.
+
+           The ..ggzz extension signifies gzipped cross-reference
+           files. kdoc is capable of reading these, and generates
+           them when the --zz option is used.
+
+EENNVVIIRROONNMMEENNTT
+       KKDDOOCCLLIIBBSS
+           If this is set, it is used as the default for the
+           directory where generated cross-reference index files
+           are saved. See also the ----lliibbddiirr option.
+
+SSEEEE AALLSSOO
+       See the qt2kdoc manpage for info on linking with the Qt
+       docs, and the makekdedoc manpage for info on generating
+       documentation for the KDE libraries.
+
+BBUUGGSS
+       Lots and Lots. Please send reports to the address
+       kkddoocc@@kkddee..oorrgg.
+
+AAUUTTHHOORR
+       Sirtaj Singh Kang <taj@kde.org>. KKDDOOCC has a web page at:
+            http://www.ph.unimelb.edu.au/~ssk/kde/kdoc
+
+CCOOPPYYRRIIGGHHTT
+       The KDOC tool is Copyright (c) 1998 by Sirtaj Singh Kang.
+       KDOC is free software under the conditions of the GNU Pub­
+       lic License.
+
+
+
+2001-05-20                    2.0a53                      KDOC(1)

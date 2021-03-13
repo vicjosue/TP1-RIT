@@ -1,0 +1,143 @@
+tixButtonBox(n)       Tix Built-In Commands       tixButtonBox(n)
+
+
+
+_________________________________________________________________
+
+NAME
+       tixButtonBox - Create and manipulate Tix ButtonBox widgets
+
+SYNOPSIS
+       tixButtonBox pathName ?options?
+
+STANDARD OPTIONS
+       -anchor         -background    -cursor
+       -relief         -borderWidth
+
+       See the options manual entry for details on  the  standard
+       options.
+
+WIDGET-SPECIFIC OPTIONS
+       Command-Line Name:-orientation
+       Database Name:  orientation
+       Database Class: Orientation
+
+              Static  Option.  Specifies  the  orientation of the
+              button subwidgets. Only the values "horizontal" and
+              "vertical" are recognized.
+
+       Command-Line Name:-padx
+       Database Name:  padx
+       Database Class: Pad
+
+              Specifies the horizontal padding between two neigh­
+              boring button subwidgets in the ButtonBox widget.
+
+
+       Command-Line Name:-pady
+       Database Name:  pady
+       Database Class: Pad
+
+              Specifies the vertical padding between  two  neigh­
+              boring button subwidgets in the ButtonBox widget.
+
+       Command-Line Name:-state
+       Database Name:  state
+       Database Class: State
+
+              Specifies  the  state of all the buttons inside the
+              ButtonBox widget.
+
+              Note: Setting this option using the  config  widget
+              command will enable or disable all the buttons sub­
+              widgets. Original states of the individual  buttons
+              are  not  saved. Only the values "normal" and "dis­
+              abled" are recognized.
+
+SUBWIDGETS
+       All the button subwidgets created as a result of  the  add
+       command can be accessed by the subwidget command. They are
+       identified by the buttonName parameter to the add command.
+       Here is an example:
+
+              set bbox [tixButtonBox .bbox]
+              pack $bbox
+              $bbox add eat   -text Eat
+              $bbox add sleep -text Sleep
+              $bbox subwidget eat   config -fg green
+              $bbox subwidget sleep config -fg red
+_________________________________________________________________
+
+DESCRIPTION
+       The  tixButtonBox  command  creates a new window (given by
+       the pathName argument) and makes it into a ButtonBox  wid­
+       get. Additional options, described above, may be specified
+       on the command line or in the option database to configure
+       aspects of the ButtonBox such as its cursor and relief.
+
+       The  ButtonBox widget can be used as a container widget to
+       hold the ``action'' buttons in a dialog box.
+
+WIDGET COMMAND
+       The tixButtonBox command creates a new Tcl  command  whose
+       name  is the same as the path name of the ButtonBox's win­
+       dow. This command may be used to invoke various operations
+       on the widget. It has the following general form:
+                     pathName option ?arg arg ...?
+       PathName  is the name of the command, which is the same as
+       the ButtonBox widget's path name.   Option  and  the  args
+       determine  the exact behavior of the command.  The follow­
+       ing commands are possible for ButtonBox widgets:
+
+       pathName add buttonName ?option value ...?
+              Add a new button subwidget with the name buttonName
+              into the ButtonBox widget. Additional configuration
+              options can be given to configure  the  new  button
+              subwidget.
+
+       pathName cget option
+              Returns  the  current  value  of  the configuration
+              option given by option. Option may have any of  the
+              values accepted by the tixButtonBox command.
+
+       pathName configure ?option? ?value option value ...?
+              Query  or  modify  the configuration options of the
+              widget.  If no option is specified, returns a  list
+              describing  all  of the available options for path­
+              Name (see Tk_ConfigureInfo for information  on  the
+              format  of  this list). If option is specified with
+              no value, then the command returns a list  describ­
+              ing the one named option (this list will be identi­
+              cal to  the  corresponding  sublist  of  the  value
+              returned  if  no  option  is specified).  If one or
+              more option-value pairs  are  specified,  then  the
+              command modifies the given widget option(s) to have
+              the  given  value(s);  in  this  case  the  command
+              returns an empty string. Option may have any of the
+              values accepted by the tixButtonBox command.
+
+       pathName invoke buttonName
+              Invoke the button subwidget with the  name  button­
+              Name.
+
+       pathName subwidget  name ?args?
+              When no additional arguments are given, returns the
+              pathname of the subwidget of the specified name.
+
+              When no additional arguments are given, the  widget
+              command  of  the specified subwidget will be called
+              with these parameters.
+
+BINDINGS
+       TixButtonBox widgets have no default bindings. The  button
+       subwidgets retain their default Tk bindings.
+
+KEYWORDS
+       Tix(n), Container Widgets
+
+
+
+
+
+
+Tix                            4.0                tixButtonBox(n)

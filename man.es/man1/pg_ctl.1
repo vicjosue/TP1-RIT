@@ -1,0 +1,187 @@
+PG_CTL(1)         PostgreSQL Server Applications        PG_CTL(1)
+
+
+
+NAME
+       pg_ctl - start, stop, or restart a PostgreSQL server
+
+SYNOPSIS
+       pg_ctl  start [ -w ] [ -s ] [ -D datadir ] [ -l filename ]
+       [ -o options ] [ -p path ]
+
+       pg_ctl stop [ -W ] [ -s ] [ -D datadir ] [ -m   s[mart]  |
+       f[ast] | i[mmediate] ]
+
+       pg_ctl  restart [ -w ] [ -s ] [ -D datadir ] [ -m  s[mart]
+       | f[ast] | i[mmediate] ] [ -o options ]
+
+       pg_ctl reload [ -s ] [ -D datadir ]
+
+       pg_ctl status [ -D datadir ]
+
+DESCRIPTION
+       pg_ctl is a utility for starting, stopping, or  restarting
+       postmaster(1),  the PostgreSQL backend server, or display­
+       ing the status of a running postmaster. Although the post­
+       master  can  be started manually, pg_ctl encapulates tasks
+       such as redirecting log output,  properly  detaching  from
+       the terminal and process group, and it provides convenient
+       options for controlled shutdown.
+
+       In start mode, a new postmaster is launched. The server is
+       started  in the background, the standard input attached to
+       /dev/null. The standard  output  and  standard  error  are
+       either  appended  to a log file, if the -l option is used,
+       or are redirected to pg_ctl's standard output  (not  stan­
+       dard error). If no log file is chosen, the standard output
+       of pg_ctl should be redirected  to  a  file  or  piped  to
+       another  process, for example a log rotating program, oth­
+       erwise the postmaster will write its output the  the  con­
+       trolling terminal (from the background) and will not leave
+       the shell's process group.
+
+       In stop mode, the postmaster that is running in the speci­
+       fied data directory is shut down. Three different shutdown
+       methods can be selected with the -m option: ``Smart'' mode
+       waits  for  all  the  clients  to  disconnect. This is the
+       default. ``Fast'' mode does not wait for clients  to  dis­
+       connect.  All  active  transactions  are  rolled  back and
+       clients are forcibly disconnected, then  the  database  is
+       shut  down.  ``Immediate'' mode will abort all server pro­
+       cesses without clean shutdown. This will lead to a  recov­
+       ery run on restart.
+
+       restart  mode  effectively  executes  a stop followed by a
+       start. This allows the changing of postmaster command line
+       options.
+
+       reload  mode  simply sends the postmaster a SIGHUP signal,
+       causing  it  to  reread  its  configuration  files  (post­
+       gresql.conf,  pg_hba.conf,  etc.). This allows changing of
+       configuration-file options that do not require a  complete
+       restart to take effect.
+
+       status  mode checks whether a postmaster is running and if
+       so displays the PID and the command line options that were
+       used to invoke it.
+
+   OPTIONS
+       -D datadir
+              Specifies  the file system location of the database
+              files. If this is omitted, the environment variable
+              PGDATA is used.
+
+       -l filename
+              Append  the  server  log output to filename. If the
+              file does not exist, it is created.  The  umask  is
+              set  to  077,  so access to the log file from other
+              users is disallowed by default.
+
+       -m mode
+              Specifies the shutdown mode.  mode  may  be  smart,
+              fast,  or  immediate, or the first letter of one of
+              these three.
+
+       -o options
+              Specifies options to be passed directly to postmas­
+              ter.
+
+              The  parameters are usually surrounded by single or
+              double  quotes  to  ensure  that  they  are  passed
+              through as a group.
+
+       -p path
+              Specifies  the  location  of  the  postmaster  exe­
+              cutable. By default the postmaster  is  taken  from
+              the  same directory as pg_ctl, or failing that, the
+              hard-wired installation directory. It is not neces­
+              sary  to use this option unless you are doing some­
+              thing unusual and get errors  that  the  postmaster
+              was not found.
+
+       -s     Only print errors, no informational messages.
+
+       -w     Wait  for  the start or shutdown to complete. Times
+              out after 60 seconds. This is the default for shut­
+              downs.
+
+       -W     Do not wait for start or shutdown to complete. This
+              is the default for starts and restarts.
+
+
+   FILES
+       If the file postmaster.opts.default  exists  in  the  data
+       directory,  the  contents  of  the  file will be passed as
+       options to the postmaster, unless  overridden  by  the  -o
+       option.
+
+EXAMPLES
+   STARTING THE POSTMASTER
+       To start up a postmaster:
+
+       $ pg_ctl start
+
+
+       An  example of starting the postmaster, blocking until the
+       postmaster comes up is:
+
+       $ pg_ctl -w start
+
+
+       For a postmaster using  port  5433,  and  running  without
+       fsync, use:
+
+       $ pg_ctl -o "-F -p 5433" start
+
+
+   STOPPING THE POSTMASTER
+       $ pg_ctl stop
+
+       stops  the  postmaster.  Using the -m switch allows one to
+       control how the backend shuts down.
+
+   RESTARTING THE POSTMASTER
+       This is almost equivalent to stopping the  postmaster  and
+       starting  it again except that pg_ctl saves and reuses the
+       command line options that were passed  to  the  previously
+       running  instance.  To  restart the postmaster in the sim­
+       plest form:
+
+       $ pg_ctl restart
+
+
+       To restart postmaster, waiting for it to shut down and  to
+       come up:
+
+       $ pg_ctl -w restart
+
+
+       To  restart  using  port  5433  and  disabling fsync after
+       restarting:
+
+       $ pg_ctl -o "-F -p 5433" restart
+
+
+   SHOWING POSTMASTER STATUS
+       Here is a sample status output from pg_ctl:
+
+       $ pg_ctl status
+       pg_ctl: postmaster is running (pid: 13718)
+       Command line was:
+       /usr/local/pgsql/bin/postmaster '-D' '/usr/local/pgsql/data' '-p' '5433' '-B' '128'
+
+       This is the command line that would be invoked in  restart
+       mode.
+
+BUGS
+       Waiting for complete start is not a well-defined operation
+       and may fail if access control is set up so that  a  local
+       client  cannot  connect  without  manual  interaction.  It
+       should be avoided.
+
+SEE ALSO
+       postmaster(1), PostgreSQL Administrator's Guide
+
+
+
+Application                 2001-02-08                  PG_CTL(1)

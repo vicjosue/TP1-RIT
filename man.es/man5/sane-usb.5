@@ -1,0 +1,102 @@
+sane-scsi(5)                                         sane-scsi(5)
+
+
+
+NAME
+       sane-usb - USB configuration tips for SANE
+
+DESCRIPTION
+       This manual page contains tips and tricks on how to access
+       scanners with a USB interface.
+
+GENERAL INFO
+       Sane-backends currently use three methods of communicating
+       with USB scanners:
+
+       - Using libusb (a library for usb access). This is used by
+         the sm3600 backend currently.
+
+       - Access through sanei_usb, the SANE USB  interface.  Used
+         by  the  mustek_usb,  plustek,  snapscan,  and umax1220u
+         backends.
+
+       - Direct access to the USB device files to  access  kernel
+         scanner drivers. Used by the epson backend.
+
+       This manual page describes the access of USB scanners over
+       the sanei_usb interface. For point one and three  of  this
+       list  have  a  look  at  the  backends'  manual  pages for
+       details.
+
+       Currently USB access is only tested for Linux, FreeBSD and
+       OpenBSD.     For     installation,    also    check    the
+       /usr/doc/sane-1.0.7/README.platform files.
+
+       For scanners with a USB interface, it may be necessary  to
+       edit  the  appropriate  backend  configuration file before
+       using SANE for the first time.  For most systems, the con­
+       figuration  file  should  list  the name of the USB device
+       file that the scanner is connected to (e.g., under  Linux,
+       /dev/usb/scanner0   or  /dev/usbscanner0  is  such  a  USB
+       device, the device file for FreeBSD is  e.g.   /dev/uscan­
+       ner0).   Do  not create a symlink from /dev/scanner to the
+       USB device because this link is used by the SCSI backends.
+       The  scanner may be confused if it receives SCSI commands.
+       For a detailed description of each backend's configuration
+       file,  please  refer  to  the relevant backend manual page
+       (e.g. sane-mustek_usb for Mustek USB scanners).
+
+       For Linux, there is an alternate way of specifying scanner
+       devices.   This  alternate  allows to identify scanners by
+       the USB vendor and product numbers.  The syntax for speci­
+       fying a scanner in this way is:
+
+              usb VENDOR PRODUCT
+
+       where  VENDOR is the USB vendor id, and PRODUCT is the USB
+       product id of the scanner. Both ids are non-negative inte­
+       ger  numbers in decimal or hexadecimal format. The correct
+       values for these fields can be found  by  looking  at  the
+       output  of the command "cat /proc/bus/usb/devices/".  This
+       is an example of a config file line:
+
+              usb 0x055f 0x0006
+
+       would have the effect that all USB devices in  the  system
+       with a vendor id of 0x55f and a product id of 0x0006 would
+       be probed and recognized by the backend. The  same  config
+       line in decimal format looks like this:
+
+              usb 0x055f 0x0006
+
+       When  using  a USB scanner, ensure that the access permis­
+       sions for the USB device are set appropriately.  We recom­
+       mend to add a group "scanner" to /etc/group which contains
+       all users that should have access  to  the  scanner.   The
+       permission of the device should then be set to allow group
+       read and write access.  For example, if the scanner is  at
+       USB  device /dev/usb/scanner0, then the following two com­
+       mands would set the permission correctly:
+
+              $ chgrp scanner /dev/usb/scanner0
+              $ chmod 660 /dev/usb/scanner0
+
+ENVIRONMENT
+       SANE_DEBUG_SANEI_USB
+              If the library  was  compiled  with  debug  support
+              enabled,  this  environment  variable  controls the
+              debug level for the USB  I/O  subsystem.   E.g.,  a
+              value  of  128  requests  all  debug  output  to be
+              printed.  Smaller levels reduce verbosity.
+
+SEE ALSO
+       sane(7),   sane-find-scanner(1),    sane-"backendname"(5),
+       sane-scsi(5)
+
+AUTHOR
+       Henning  Meier-Geinitz.  Some  parts  were copied from the
+       sane-scsi manual page.
+
+
+
+                           03 Jan 2002               sane-scsi(5)

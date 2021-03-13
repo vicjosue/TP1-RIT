@@ -1,0 +1,59 @@
+ypinit(8)                                               ypinit(8)
+
+
+
+NAME
+       ypinit - NIS database install and build program
+
+SYNOPSIS
+       /usr/lib/yp/ypinit [ -m ] [ -s master_name ]
+
+DESCRIPTION
+       ypinit  builds  the domain subdirectory of /var/yp for the
+       current default domain. After building the  domain  subdi­
+       rectory,  ypinit  builds  a complete set of administrative
+       maps for your system and places them  in  this  directory.
+       The  first  map created by ypinit -m is the ypservers map.
+       You should run it as root on the hosts,  which  should  be
+       the  master  ypserver.   You  should  have only one master
+       server per NIS domain.
+
+       All databases are built from scratch, either from informa­
+       tion  available  to  the  program  at runtime, or from the
+       ASCII data base files in /etc.   These  files  are  listed
+       below under FILES.
+
+       An  NIS database on a slave server is set up by copying an
+       existing database from a running server.  The  master_name
+       argument  should  be the hostname of an NIS server (either
+       the master server for all the maps, or a server  on  which
+       the data base is up-to-date and stable).
+
+OPTIONS
+       -m     If the local host is the NIS master.
+
+       -s     Set  up  a slave server with the database from mas­
+              ter_name
+
+FILES
+       /etc/passwd
+       /etc/group
+       /etc/hosts
+       /etc/networks
+       /etc/services
+       /etc/protocols
+       /etc/netgroup
+       /etc/rpc
+
+SEE ALSO
+       makedbm(8), revnetgroup(8), yppush(8), ypserv(8), ypxfr(8)
+
+BUGS
+       There isn't a good error handling at the moment.
+
+AUTHOR
+       Thorsten Kukuk <kukuk@suse.de>
+
+
+
+                           August 1996                  ypinit(8)

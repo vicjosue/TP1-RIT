@@ -1,0 +1,95 @@
+PERLMACHTEN(1)   Perl Programmers Reference Guide  PERLMACHTEN(1)
+
+
+
+NNAAMMEE
+       README.machten - Perl version 5 on Power MachTen systems
+
+DDEESSCCRRIIPPTTIIOONN
+       This document describes how to build Perl 5 on Power
+       MachTen systems, and discusses a few wrinkles in the
+       implementation.
+
+       CCoommppiilliinngg PPeerrll 55 oonn MMaacchhTTeenn
+
+       To compile perl under MachTen 4.1.4 (and probably earlier
+       versions):
+
+         ./Configure -de
+         make
+         make test
+         make install
+
+       This builds and installs a statically-linked perl;
+       MachTen's dynamic linking facilities are not adequate to
+       support Perl's use of dynamically linked libraries.  (See
+       hints/machten.sh for more information.)
+
+       You should have at least 32 megabytes of free memory on
+       your system before running the "make" command.
+
+       For much more information on building perl -- for example,
+       on how to change the default installation directory -- see
+       INSTALL.
+
+       FFaaiilluurreess dduurriinngg ""mmaakkee tteesstt""
+
+
+       op/lexassign.t
+           This test may fail when first run after building perl.
+           It does not fail subsequently.  The cause is unknown.
+
+       pragma/warnings.t
+           Test 257 fails due to a failure to warn about attempts
+           to read from a filehandle which is a duplicate of std­
+           out when stdout is attached to a pipe.  The output of
+           the test contains a block comment which discusses a
+           different failure, not applicable to MachTen.
+
+           The root of the problem is that Machten does not
+           assign a file type to either end of a pipe (see the
+           stat manpage), resulting, among other things in Perl's
+           "-p" test failing on file descriptors belonging to
+           pipes.  As a result, perl becomes confused, and the
+           test for reading from a write-only file fails.  I am
+           reluctant to patch perl to get around this, as it's
+           clearly an OS bug (about which Tenon has been
+           informed), and limited in its effect on practical Perl
+           programs.
+
+       BBuuiillddiinngg eexxtteerrnnaall mmoodduulleess
+
+       To add an external module to perl, build in the normal
+       way, which is documented in the ExtUtils::MakeMaker man­
+       page, or which can be driven automatically by the CPAN
+       module (see the CPAN manpage), which is part of the stan­
+       dard distribution.  If you want to install a module which
+       contains XS code (C or C++ source which compiles to object
+       code for linking with perl), you will have to replace your
+       perl binary with a new version containing the new stati­
+       cally-linked object module.  The build process tells you
+       how to do this.
+
+       There is a gotcha, however, which users usually encounter
+       immediately they respond to CPAN's invitation to "install
+       Bundle::CPAN". When installing a bundle -- a group of mod­
+       ules which together achieve some particular purpose, the
+       installation process for later modules in the bundle tends
+       to assume that earlier modules have been fully installed
+       and are available for use.  This is not true on a stati­
+       cally-linked system for earlier modules which contain XS
+       code.  As a result the installation of the bundle fails.
+       The work-around is not to install the bundle as a one-shot
+       operation, but instead to see what modules it contains,
+       and install these one-at-a-time by hand in the order
+       given.
+
+AAUUTTHHOORR
+       Dominic Dunlop <domo@computer.org>
+
+DDAATTEE
+       Version 1.0.1 2000-03-27
+
+
+
+2001-03-03                 perl v5.6.1             PERLMACHTEN(1)

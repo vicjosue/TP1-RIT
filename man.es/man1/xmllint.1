@@ -1,0 +1,290 @@
+xmllint(1)                xmllint Manual               xmllint(1)
+
+
+
+NAME
+       xmllint - command line XML tool
+
+SYNOPSIS
+       xmllint  [--version  |  --debug  |  --shell | --debugent |
+       --copy | --recover |  --noent  |  --noout  |  --htmlout  |
+       --nowrap  |  --valid  |  --postvalid  | --dtdvalid  URL  |
+       --timing | --repeat | --insert |  --compress  |  --sgml  |
+       --html  |  --push  | --memory | --nowarning | --noblanks |
+       --format | --testIO | --encode  encoding  |  --catalogs  |
+       --nocatalogs | --auto | --xinclude | --loaddtd | --dtdattr
+       | --dropdtd] [xmlfile]
+
+INTRODUCTION
+       The xmllint program parses one or more XML  files,  speci­
+       fied  on  the  command  line as xmlfile. It prints various
+       types of output, depending upon the options  selected.  It
+       is useful for detecting errors both in XML code and in the
+       XML parser itself.
+
+
+       It is included in libxml2.
+
+
+OPTIONS
+       --version
+
+              Display the version of libxml2 used.
+
+
+       --debug
+
+              Parse a file and output an annotated  tree  of  the
+              in-memory version of the document.
+
+
+       --shell
+
+              Run  a  navigating shell. Details on available com­
+              mands in shell mode are below.
+
+
+       --debugent
+
+              Debug the entities defined in the document.
+
+
+       --copy  Test the internal copy implementation.
+
+
+       --recover
+
+              Output any parsable portions of  an  invalid  docu­
+              ment.
+
+
+       --noent
+
+              Substitute  entity values for entity references. By
+              default, xmllint leaves entity references in place.
+
+
+       --noout
+
+              Suppress  output.  By  default, xmllint outputs the
+              result tree.
+
+
+       --htmlout
+
+              Output results as an HTML file. This causes xmllint
+              to  output  the necessary HTML tags surrounding the
+              result tree output so the results can be  displayed
+              in a browser.
+
+
+       --nowrap
+
+              Do not output HTML doc wrapper.
+
+
+       --valid
+
+              Determine  if  the  document is a valid instance of
+              the included Document Type Definition (DTD). A  DTD
+              to  be  validated  against also can be specified at
+              the command line using the  --dtdvalid  option.  By
+              default,  xmllint  also  checks to determine if the
+              document is well-formed.
+
+
+       --postvalid
+
+              Validate after parsing is completed.
+
+
+        --dtdvalid URL
+
+              Use the DTD specified by URL for validation.
+
+
+       --timing
+
+              Output information about the time it takes  xmllint
+              to perform the various steps.
+
+
+       --repeat
+
+              Repeat 100 times, for timing or profiling.
+
+
+       --insert
+
+              Test for valid insertions.
+
+
+       --compress
+
+              Turn on gzip compression of output.
+
+
+       --sgml  Use the DocBook SGML parser. This allows documents
+              written in SGML DocBook to be converted into an in-
+              memory  tree and treated as if they were written in
+              XML.
+
+
+       --html  Use the HTML parser.
+
+
+       --push  Use the push mode of the parser.
+
+
+       --memory
+
+              Parse from memory.
+
+
+       --nowarning
+
+              Do not emit warnings from the parser and/or valida­
+              tor.
+
+
+       --noblanks
+
+              Drop ignorable blank spaces.
+
+
+       --format
+
+              Reformat and reindent the output.
+
+
+       --testIO
+
+              Test user input/output support.
+
+
+       --encode encoding
+
+              Output in the given encoding.
+
+
+       --catalogs
+
+              Use  the  catalogs from $SGML_CATALOG_FILES. Other­
+              wise /etc/xml/catalog is used by default.
+
+
+       --nocatalogs
+
+              Do not use any catalogs.
+
+
+       --auto  Generate a small document for testing purposes.
+
+
+       --xinclude
+
+              Do XInclude processing.
+
+
+       --loaddtd
+
+              Fetch external DTD.
+
+
+       --dtdattr
+
+              Fetch external  DTD  and  populate  the  tree  with
+              inherited attributes.
+
+
+       --dropdtd
+
+              Remove DTD from output.
+
+
+SHELL
+       xmllint  offers an interactive shell mode invoked with the
+       --shell command. Available commands in shell mode include:
+
+
+       base    display XML base of the node
+
+
+       bye     leave shell
+
+
+       cat node
+
+              Display node if given or current node.
+
+
+       cd path
+
+              Change  the  current  node  to  path  (if given and
+              unique) or root if no argument given.
+
+
+       dir path
+
+              Dumps  information  about  the   node   (namespace,
+              attributes, content).
+
+
+       du path
+
+              Show the structure of the subtree under path or the
+              current node.
+
+
+       exit    Leave the shell.
+
+
+       help    Show this help.
+
+
+       free    Display memory usage.
+
+
+       load name
+
+              Load a new document with the given name.
+
+
+       ls path
+
+              List contents of path (if  given)  or  the  current
+              directory.
+
+
+       pwd     Display the path to the current node.
+
+
+       quit    Leave the shell.
+
+
+       save name
+
+              Saves  the  current document to name if given or to
+              the original name.
+
+
+       validate
+
+              Check the document for error.
+
+
+       write name
+
+              Write the current node to the given filename.
+
+
+AUTHOR
+       Copyright 2001
+
+       John Fleck   <jfleck@inkstain.net>Ziying  Sherwin   <sher­
+       win@nlm.nih.gov>Heiko    Rupp    <hwr@pilhuhn.de>This   is
+       release 0.2 of the xmllint Manual.
+
+
+
+                                                       xmllint(1)

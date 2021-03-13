@@ -1,0 +1,89 @@
+SIGALTSTACK(2)      Linux Programmer's Manual      SIGALTSTACK(2)
+
+
+
+NAME
+       sigaltstack - get or set alternate signal stack content
+
+SYNOPSIS
+       #include <signal.h>
+
+       int sigaltstack(const stack_t *ss, stack_t *oss);
+
+       where:
+
+       ss     points  to a signalstack structure defined in <sig­
+              nal.h> containing stack content after the call.
+
+       oss    if not NULL, points to a signalstack structure con­
+              taining stack content before the call.
+
+DESCRIPTION
+       sigaction(2)  may indicate that a signal should execute on
+       an alternate stack. Where this is the case, sigaltstack(2)
+       stores the signal in an alternate stack structure ss where
+       its execution status may be examined prior to  processing.
+
+
+       The  sigaltstack  struct  is defined in <signal.h> as fol­
+       lows:
+
+
+                  void       *ss_sp     /* SVID3 uses caddr_t ss_sp
+                  int        ss_flags
+                  size_t     ss_size
+       where:
+
+       ss_sp  points to the stack structure.
+
+       ss_flags
+              specifies  the  stack  state   to   SS_DISABLE   or
+              SS_ONSTACK as follows:
+
+              If  ss  is  not  NULL,the  new  state may be set to
+              SS_DISABLE, which specifies that the stack is to be
+              disabled  and  ss_sp  and  ss_size are ignored.  If
+              SS_DISABLE is not set, the stack will be enabled.
+
+              If oss is not NULL, the stack state may  be  either
+              SS_ONSTACK  or  SS_DISABLE.  The  value  SS_ONSTACK
+              indicates that the process is  currently  executing
+              on the alternate stack and that any attempt to mod­
+              ify it  during  execution  will  fail.   The  value
+              SS_DISABLE  indicates that the current signal stack
+              is disabled.
+
+       ss_size
+              specifies the size of the stack.
+
+       The value SIGSTKSZ defines the  average  number  of  bytes
+       used  when  allocating an alternate stack area.  The value
+       MINSIGSTKSZ defines the minimum stack size  for  a  signal
+       handler.   When  processing  an alternate stack size, your
+       program should include these values in the stack  require­
+       ment to plan for the overhead of the operating system.
+
+RETURN VALUES
+       sigaltstack(2) returns 0 on success and -1 on failure.
+
+ERRORS
+       sigaltstack(2) sets  errno for the following conditions:
+
+       EINVAL ss  is  not  a  null  pointer  the  ss_flags member
+              pointed to by ss contains flags other than  SS_DIS­
+              ABLE.
+
+       ENOMEM The  size  of the alternate stack area is less than
+              MINSIGSTKSZ.
+
+       EPERM  An attempt was made to modify an active stack.
+
+STANDARDS
+       This function comforms to: XPG4-UNIX.
+
+SEE ALSO
+       getcontext(2), sigaction(2), sigsetjmp(3).
+
+
+
+Red Hat Linux 6.1       20 September 1999          SIGALTSTACK(2)

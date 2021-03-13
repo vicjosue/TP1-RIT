@@ -1,0 +1,47 @@
+RSA_check_key(3)             OpenSSL             RSA_check_key(3)
+
+
+
+NNAAMMEE
+       RSA_check_key - validate private RSA keys
+
+SSYYNNOOPPSSIISS
+        #include <openssl/rsa.h>
+
+        int RSA_check_key(RSA *rsa);
+
+
+DDEESSCCRRIIPPTTIIOONN
+       This function validates RSA keys. It checks that pp and qq
+       are in fact prime, and that nn == pp**qq.
+
+       It also checks that dd**ee == 11 mmoodd ((pp--11**qq--11)), and that ddmmpp11,
+       ddmmqq11 and iiqqmmpp are set correctly or are NNUULLLL.
+
+       The key's public components may not be NNUULLLL.
+
+RREETTUURRNN VVAALLUUEE
+       RSA_check_key() returns 1 if rrssaa is a valid RSA key, and 0
+       otherwise.  -1 is returned if an error occurs while
+       checking the key.
+
+       If the key is invalid or an error occurred, the reason
+       code can be obtained using ERR_get_error(3).
+
+SSEEEE AALLSSOO
+       rsa(3), err(3)
+
+HHIISSTTOORRYY
+       RSA_check() appeared in OpenSSL 0.9.4.
+
+
+
+
+
+
+
+
+
+
+
+24/Feb/2000                   0.9.6c             RSA_check_key(3)

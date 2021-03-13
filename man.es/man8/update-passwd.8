@@ -1,0 +1,83 @@
+UPDATE-PASSWD(8)                                 UPDATE-PASSWD(8)
+
+
+
+NAME
+       update-passwd - safely update /etc/passwd, /etc/shadow and
+       /etc/group
+
+SYNOPSIS
+       update-passwd [options]
+
+DESCRIPTION
+       update-passwd handles updates of /etc/passwd,  /etc/shadow
+       /etc/group on running Mandrake Linux systems.  It compares
+       the current files to master  copies,  distributed  in  the
+       base-passwd package, and updates all entries in the global
+       system range (that is, 0-99).
+
+
+OPTIONS
+       update-passwd follows the usual GNU command  line  syntax,
+       with long options starting with two dashes (`-').
+
+       -p, --passwd-master=FILE
+              Use FILE as the master copy of the passwd database.
+              The    default    value     is     /usr/share/base-
+              passwd/passwd.master.
+
+       -g, --group-master=FILE
+              Use  FILE as the master copy of the group database.
+              The    default    value     is     /usr/share/base-
+              passwd/group.master.
+
+       -P, --passwd=FILE
+              Use  FILE  as  the  the system passwd database. The
+              default value is /etc/passwd.
+
+       -S, --shadow=FILE
+              Use FILE as the the  system  passwd  database.  The
+              default value is /etc/shadow.
+
+       -G, --group=FILE
+              Use  FILE  as  the  the  system group database. The
+              default value is /etc/group.
+
+       -s, --sanity-check
+              Only perform sanity-checks but don't do anything.
+
+       -v, --verbose
+              Give detailed information about we are doing.
+
+       -n, --dry-run
+              Don't do anything but only show what we would do
+
+       -L, --no-locking
+              Don't attempt to lock the  account  database.  This
+              should  only  be  used  for  debugging purposes.  I
+              repeat: do not do this unless you are  really  sure
+              you need this!
+
+       -h, --help
+              Show a summary of how to use update-passwd.
+
+       -V, --version
+              Show the version number
+
+BUGS
+       At   this   moment   update-passwd  does  not  verify  the
+       shadow-file. It should check if the entries in the  passwd
+       are  also in shadow and vica versa, and that passwords are
+       not present in both files.
+
+AUTHOR
+       Wichert Akkerman <wakkerma@debian.org>
+
+       This program was written for the Debian  project,  and  is
+       Copyright  1999-2002  Wichert  Akkerman. It is distributed
+       under version 2 of the GNU General Public License.
+
+
+
+
+                       Mandrake Linux tools      UPDATE-PASSWD(8)

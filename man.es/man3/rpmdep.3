@@ -1,0 +1,79 @@
+RPMDEP.(3)                                             RPMDEP.(3)
+
+
+
+NAME
+       RPMDEP. -
+
+   Files
+       file depends.c
+       file depends.h
+           Structures used for dependency checking.
+
+
+       file rpmlib.h
+       file rpmlibprov.c
+
+   Data Structures
+       struct availableIndex
+       struct availableIndexEntry
+       struct availableList_s
+       struct availablePackage
+       struct dirInfo_s
+       struct fileIndexEntry
+       struct problemsSet_s
+       struct rpmTransactionSet_s
+       struct transactionElement
+       struct tsortInfo
+
+   Typedefs
+       typedef dirInfo_s * dirInfo
+       typedef availableList_s * availableList
+       typedef problemsSet_s * problemsSet
+
+   Functions
+       int headerMatchesDepFlags (Header h, const char *reqName,
+           const char *reqEVR, int reqFlags)
+
+TYPEDEF DOCUMENTATION
+   typedef struct availableList_s *  availableList
+       Set of available packages, items, and directories.
+
+   typedef struct dirInfo_s *  dirInfo
+       A directory to be installed/removed.
+
+   typedef struct problemsSet_s *  problemsSet
+       Problems encountered while checking dependencies.
+
+FUNCTION DOCUMENTATION
+   int headerMatchesDepFlags (Header h, const char * reqName,
+       const char * reqEVR, int reqFlags)
+       Compare package name-version-release from header with
+       dependency, looking for overlap.
+
+       Deprecated:
+           Remove from API when obsoletes is correctly
+           eliminated.
+
+       Parameters:
+
+       h      header
+
+       reqName
+              dependency name
+
+       reqEVR dependency [epoch:]version[-release]
+
+       reqFlags
+              dependency logical range qualifiers
+
+       Returns:
+           1 if dependency overlaps, 0 otherwise
+
+       Definition at line 663 of file depends.c.
+
+       Referenced by rpmtransAddPackage.
+
+
+
+rpm                        13 Mar 2002                 RPMDEP.(3)

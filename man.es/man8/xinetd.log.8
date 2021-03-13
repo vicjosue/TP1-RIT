@@ -1,0 +1,118 @@
+XINETD.LOG(5)                                       XINETD.LOG(5)
+
+
+
+NAME
+       xinetd.log - xinetd service log format
+
+DESCRIPTION
+       A  service  configuration  may  specify various degrees of
+       logging when attempts are made to access the service. When
+       logging  for  a  service  is enabled, xinetd will generate
+       one-line log entries which have the following format  (all
+       entries have a timestamp as a prefix):
+
+              entry: service-id data
+
+       The  data  depends  on  the  entry.   Possible entry types
+       include:
+
+              START       generated when a server is started
+
+              EXIT        generated when a server exits
+
+              FAIL        generated when it is  not  possible  to
+                          start a server
+
+              DATA        generated  when  an  attempt to start a
+                          server fails and the  service  supports
+                          the RECORD log option.
+
+              USERID      generated  if  the USERID log option is
+                          used.
+
+              NOID        generated if the USERID log  option  is
+                          used,  and  the  IDONLY service flag is
+                          used, and the remote end does not iden­
+                          tify  who  is trying to access the ser­
+                          vice.
+
+       In the following, the  information  enclosed  in  brackets
+       appears if the appropriate log option is used.
+
+       A START entry has the format:
+
+              START: service-id [pid=%d] [from=%d.%d.%d.%d]
+
+       An EXIT entry has the format:
+
+              EXIT:    service-id   [type=%d]   [pid=%d]   [dura­
+              tion=%d(sec)]
+
+       type can be either status or signal.  The number is either
+       the exit status or the signal that caused process termina­
+       tion.
+
+       A FAIL entry has the format:
+
+              FAIL: service-id reason [from=%d.%d.%d.%d]
+
+       Possible reasons are:
+
+              fork           a certain number of consecutive fork
+                             attempts  failed  (this  number is a
+                             configurable parameter)
+
+              time           the time check failed
+
+              address        the address check failed
+
+              service_limit  the   allowed   number   of   server
+                             instances  for this service would be
+                             exceeded
+
+              process_limit  a limit on the number of forked pro­
+                             cesses was specified and it would be
+                             exceeded
+
+       A DATA entry has the format:
+
+              DATA: service-id data
+
+       The data logged depends on the service.
+
+              login       remote_user=%s local_user=%s tty=%s
+
+              exec        remote_user=%s verify=status command=%s
+                          Possible status values:
+
+                          ok        the password was correct
+
+                          failed    the password was incorrect
+
+                          baduser   no such user
+
+              shell       remote_user=%s local_user=%s command=%s
+
+              finger      received string or EMPTY-LINE
+
+       A USERID entry has the format:
+
+              USERID: service-id text
+
+       The text is the response of the identification  daemon  at
+       the  remote  end  excluding  the  port  numbers (which are
+       included in the response).
+
+       A NOID entry has the format:
+
+              NOID: service-id IP-address reason
+
+SEE ALSO
+       xinetd(1L),
+
+       xinetd.conf(5)
+
+
+
+                          28 April 1993             XINETD.LOG(5)

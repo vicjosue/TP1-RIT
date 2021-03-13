@@ -1,0 +1,91 @@
+curs_util(3X)                                       curs_util(3X)
+
+
+
+NAME
+       unctrl,   keyname,   filter,   use_env,   putwin,  getwin,
+       delay_output, flushinp - miscellaneous curses utility rou­
+       tines
+
+SYNOPSIS
+       #include <curses.h>
+
+       char *unctrl(chtype c);
+       char *keyname(int c);
+       void filter(void);
+       void use_env(bool f);
+       int putwin(WINDOW *win, FILE *filep);
+       WINDOW *getwin(FILE *filep);
+       int delay_output(int ms);
+       int flushinp(void);
+
+DESCRIPTION
+       The  unctrl macro expands to a character string which is a
+       printable representation  of  the  character  c.   Control
+       characters  are  displayed  in  the ^X notation.  Printing
+       characters are displayed as is.
+
+       The keyname routine returns a character string correspond­
+       ing to the key c.
+
+       The filter routine, if used, must be called before initscr
+       or newterm are called.  The effect is that,  during  those
+       calls,  LINES  is  set  to 1; the capabilities clear, cup,
+       cud, cud1, cuu1, cuu,  vpa  are  disabled;  and  the  home
+       string is set to the value of cr.
+
+       The  use_env routine, if used, is called before initscr or
+       newterm are called.  When called with FALSE  as  an  argu­
+       ment,  the  values  of  lines and columns specified in the
+       terminfo database will be used, even if environment  vari­
+       ables  LINES  and COLUMNS (used by default) are set, or if
+       curses is running in  a  window  (in  which  case  default
+       behavior  would  be  to  use  the window size if LINES and
+       COLUMNS are not set).
+
+       The putwin routine writes all data associated with  window
+       win into the file to which filep points.  This information
+       can be later retrieved using the getwin function.
+
+       The getwin routine reads window related data stored in the
+       file  by putwin.  The routine then creates and initializes
+       a new window using that data.  It returns a pointer to the
+       new window.
+
+       The  delay_output  routine inserts an ms millisecond pause
+       in output.  This routine should not  be  used  extensively
+       because  padding  characters  are  used  rather than a CPU
+       pause.
+
+       The flushinp routine throws away any  typeahead  that  has
+       been  typed  by  the user and has not yet been read by the
+       program.
+
+RETURN VALUE
+       Except for  flushinp,  routines  that  return  an  integer
+       return  ERR  upon  failure and OK (SVr4 specifies only "an
+       integer value other than ERR") upon successful completion.
+
+       flushinp always returns OK.
+
+       Routines that return pointers return NULL on error.
+
+PORTABILITY
+       The  XSI  Curses  standard,  Issue 4 describes these func­
+       tions.
+
+       The SVr4 documentation describes the action of filter only
+       in  the  vaguest  terms.   The description here is adapted
+       from the XSI Curses standard (which erroneously  fails  to
+       describe the disabling of cuu).
+
+NOTES
+       Note  that  unctrl  is  a macro, which is defined in <unc­
+       trl.h>.
+
+SEE ALSO
+       curses(3X), curs_initscr(3X), curs_scr_dump(3X).
+
+
+
+                                                    curs_util(3X)

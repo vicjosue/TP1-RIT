@@ -1,0 +1,37 @@
+DIRFD(3)            Linux Programmer's Manual            DIRFD(3)
+
+
+
+NAME
+       dirfd - get directory stream file descriptor
+
+SYNOPSIS
+       #include <sys/types.h>
+       #include <dirent.h>
+
+       int dirfd(DIR *dir);
+
+DESCRIPTION
+       The  function  dirfd() returns the file descriptor associ­
+       ated with the directory stream dir.
+
+ERRORS
+       On error -1 is returned.
+
+NOTES
+       The prototype for dirfd is only available  if  _BSD_SOURCE
+       or  _SVID_SOURCE is defined (either explicitly, or implic­
+       itly, by not defining _POSIX_SOURCE or compiling with  the
+       -ansi flag).
+
+CONFORMING TO
+       This  is  a  BSD extension, present in 4.3BSD-Reno, not in
+       4.2BSD.  Present in libc5 (since 5.1.2) and in glibc2.
+
+SEE ALSO
+       open(2),  closedir(3),  opendir(3),  readdir(3),   rewind­
+       dir(3), scandir(3), seekdir(3), telldir(3)
+
+
+
+Linux 2.5                   2002-01-05                   DIRFD(3)

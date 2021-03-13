@@ -1,0 +1,86 @@
+lib/poptI.c(3)                                     lib/poptI.c(3)
+
+
+
+NAME
+       lib/poptI.c - Popt tables for install modes.
+
+SYNOPSIS
+       #include 'system.h'
+       #include <rpmcli.h>
+       #include 'debug.h'
+
+   Defines
+       #define POPT_RELOCATE   1016
+       #define POPT_EXCLUDEPATH   1019
+       #define POPT_ROLLBACK   1024
+
+   Functions
+       time_t get_date (const char *p, void *now)
+       void argerror (const char *desc)
+       void installArgCallback (poptContext con, enum
+           poptCallbackReason reason, const struct poptOption
+           *opt, const char *arg, const void *data)
+
+   Variables
+       rpmInstallArguments_s rpmIArgs
+       poptOption rpmInstallPoptTable []
+
+DETAILED DESCRIPTION
+       Popt tables for install modes.
+
+
+
+       Definition in file poptI.c.
+
+DEFINE DOCUMENTATION
+   #define POPT_EXCLUDEPATH   1019
+       Definition at line 19 of file poptI.c.
+
+       Referenced by installArgCallback.
+
+   #define POPT_RELOCATE   1016
+       Definition at line 18 of file poptI.c.
+
+       Referenced by installArgCallback.
+
+   #define POPT_ROLLBACK   1024
+       Definition at line 20 of file poptI.c.
+
+       Referenced by installArgCallback.
+
+FUNCTION DOCUMENTATION
+   void argerror (const char * desc) [static]
+       Definition at line 22 of file poptI.c.
+
+       References _, __progname, and EXIT_FAILURE.
+
+       Referenced by installArgCallback, and main.
+
+   time_t get_date (const char * p, void * now)
+       Referenced by installArgCallback.
+
+   void installArgCallback (poptContext con, enum
+       poptCallbackReason reason, const struct poptOption * opt,
+       const char * arg, const void * data) [static]
+       Definition at line 32 of file poptI.c.
+
+       References _, argerror, get_date, POPT_EXCLUDEPATH,
+       POPT_RELOCATE, POPT_ROLLBACK, rpmIArgs, and xrealloc.
+
+VARIABLE DOCUMENTATION
+   struct rpmInstallArguments_s rpmIArgs
+       Definition at line 16 of file poptI.c.
+
+       Referenced by installArgCallback, and main.
+
+   struct poptOption rpmInstallPoptTable[]
+       Definition at line 83 of file poptI.c.
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002             lib/poptI.c(3)

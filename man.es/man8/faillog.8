@@ -1,0 +1,67 @@
+FAILLOG(8)                                             FAILLOG(8)
+
+
+
+NAME
+       faillog - examine faillog and set login failure limits
+
+SYNOPSIS
+       faillog [-u login-name] [-a] [-t days] [-m max] [-pr]
+
+DESCRIPTION
+       faillog   formats   the   contents  of  the  failure  log,
+       /var/log/faillog, and maintains failure counts and limits.
+       The  order  of  the  arguments  to faillog is significant.
+       Each argument is processed immediately in the order given.
+
+       The  -p  flag  causes failure entries to be printed in UID
+       order.  Entering -u login-name flag will cause the failure
+       record  for  login-name  only  to be printed.  Entering -t
+       days will cause only the failures more recent than days to
+       be  printed.  The -t flag overrides the use of -u.  The -a
+       flag causes all users to be selected.  When used with  the
+       -p flag, this option selects all users who have ever had a
+       login failure.  It is meaningless with the -r flag.
+
+       The -r flag is used to reset the count of login  failures.
+       Write  access  to  /var/log/faillog  is  required for this
+       option.  Entering -u login-name will cause only the  fail­
+       ure count for login-name to be reset.
+
+       The  -m  flag  is  used to set the maximum number of login
+       failures before the account is disabled.  Write access  to
+       /var/log/faillog is required for this option.  Entering -m
+       max will cause all  accounts  to  be  disabled  after  max
+       failed  logins occur.  This may be modified with -u login-
+       name to limit this function to login-name only.  Selecting
+       a  max value of 0 has the effect of not placing a limit on
+       the number of failed logins.  The  maximum  failure  count
+       should  always  be  0 for root to prevent a denial of ser­
+       vices attack against the system.
+
+       Options may be combined in virtually  any  fashion.   Each
+       -p, -r, and -m option will cause immediate execution using
+       any -u or -t modifier.
+
+CAVEATS
+       faillog only prints out users  with  no  successful  login
+       since the last failure.  To print out a user who has had a
+       successful  login  since  their  last  failure,  you  must
+       explicitly request the user with the -u flag, or print out
+       all users with the -a flag.
+
+       Some  systems  may  replace  /var/log  with  /var/adm   or
+       /usr/adm.
+
+FILES
+       /var/log/faillog - failure logging file
+
+SEE ALSO
+       login(1), faillog(5)
+
+AUTHOR
+       Julianne Frances Haugh (jfh@austin.ibm.com)
+
+
+
+                                                       FAILLOG(8)

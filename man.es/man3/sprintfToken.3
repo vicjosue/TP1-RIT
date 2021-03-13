@@ -1,0 +1,107 @@
+sprintfToken(3)                                   sprintfToken(3)
+
+
+
+NAME
+       sprintfToken -
+
+SYNOPSIS
+       #include <header_internal.h>
+
+
+   Public Types
+       enum { PTOK_NONE =  0, PTOK_TAG, PTOK_ARRAY, PTOK_STRING,
+           PTOK_COND }
+
+   Data Fields
+       enum sprintfToken:: { ... }  type
+       union {
+          struct {
+             sprintfToken format
+             int numTokens
+          } array
+          sprintfTag tag
+          struct {
+             char * string
+             int len
+          } string
+          struct {
+             sprintfToken ifFormat
+             int numIfTokens
+             sprintfToken elseFormat
+             int numElseTokens
+             sprintfTag tag
+          } cond
+       } u
+
+
+MEMBER ENUMERATION DOCUMENTATION
+   anonymous enum
+       Enumeration values:
+
+       PTOK_NONE
+
+       PTOK_TAG
+
+       PTOK_ARRAY
+
+       PTOK_STRING
+
+       PTOK_COND
+
+
+       Definition at line 97 of file header_internal.h.
+
+FIELD DOCUMENTATION
+   struct { ... }   sprintfToken::array
+       Referenced by parseFormat.
+
+   struct { ... }   sprintfToken::cond
+   sprintfToken sprintfToken::elseFormat
+       Definition at line 117 of file header_internal.h.
+
+   sprintfToken sprintfToken::format
+       Definition at line 106 of file header_internal.h.
+
+   sprintfToken sprintfToken::ifFormat
+       Definition at line 115 of file header_internal.h.
+
+   int sprintfToken::len
+       Definition at line 112 of file header_internal.h.
+
+   int sprintfToken::numElseTokens
+       Definition at line 118 of file header_internal.h.
+
+   int sprintfToken::numIfTokens
+       Definition at line 116 of file header_internal.h.
+
+   int sprintfToken::numTokens
+       Definition at line 107 of file header_internal.h.
+
+   struct { ... }   sprintfToken::string
+   char* sprintfToken::string
+       Definition at line 111 of file header_internal.h.
+
+       Referenced by parseFormat.
+
+   struct sprintfTag sprintfToken::tag
+       Definition at line 119 of file header_internal.h.
+
+   struct sprintfTag sprintfToken::tag
+       Definition at line 109 of file header_internal.h.
+
+   enum { ... }   sprintfToken::type
+       Referenced by parseExpression, and parseFormat.
+
+   union { ... }   sprintfToken::u
+       Referenced by freeFormat, parseExpression, parseFormat,
+       and singleSprintf.
+
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002            sprintfToken(3)

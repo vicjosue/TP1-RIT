@@ -1,0 +1,265 @@
+lib/poptBT.c(3)                                   lib/poptBT.c(3)
+
+
+
+NAME
+       lib/poptBT.c - Popt tables for build modes.
+
+SYNOPSIS
+       #include 'system.h'
+       #include <rpmcli.h>
+       #include <rpmbuild.h>
+       #include 'build.h'
+       #include 'debug.h'
+
+   Defines
+       #define POPT_USECATALOG   1000
+       #define POPT_NOLANG   1001
+       #define POPT_RMSOURCE   1002
+       #define POPT_RMBUILD   1003
+       #define POPT_BUILDROOT   1004
+       #define POPT_TARGETPLATFORM   1007
+       #define POPT_NOBUILD   1008
+       #define POPT_SHORTCIRCUIT   1009
+       #define POPT_RMSPEC   1010
+       #define POPT_NODEPS   1011
+       #define POPT_SIGN   1012
+       #define POPT_FORCE   1013
+       #define POPT_REBUILD   0x4220
+       #define POPT_RECOMPILE   0x4320
+       #define POPT_BA   0x6261
+       #define POPT_BB   0x6262
+       #define POPT_BC   0x6263
+       #define POPT_BI   0x6269
+       #define POPT_BL   0x626c
+       #define POPT_BP   0x6270
+       #define POPT_BS   0x6273
+       #define POPT_TA   0x7461
+       #define POPT_TB   0x7462
+       #define POPT_TC   0x7463
+       #define POPT_TI   0x7469
+       #define POPT_TL   0x746c
+       #define POPT_TP   0x7470
+       #define POPT_TS   0x7473
+
+   Functions
+       void buildArgCallback (poptContext con, enum
+           poptCallbackReason reason, const struct poptOption
+           *opt, const char *arg, const void *data)
+
+   Variables
+       rpmBuildArguments_s rpmBTArgs
+       int _noDirTokens
+       int _fsm_debug
+       int force = 0
+       int noLang = 0
+       int noBuild = 0
+       int noDeps = 0
+       int signIt = 0
+       int useCatalog = 0
+       poptOption rpmBuildPoptTable []
+
+DETAILED DESCRIPTION
+       Popt tables for build modes.
+
+
+
+       Definition in file poptBT.c.
+
+DEFINE DOCUMENTATION
+   #define POPT_BA   0x6261
+       Definition at line 31 of file poptBT.c.
+
+       Referenced by buildArgCallback.
+
+   #define POPT_BB   0x6262
+       Definition at line 32 of file poptBT.c.
+
+       Referenced by buildArgCallback.
+
+   #define POPT_BC   0x6263
+       Definition at line 33 of file poptBT.c.
+
+       Referenced by buildArgCallback.
+
+   #define POPT_BI   0x6269
+       Definition at line 34 of file poptBT.c.
+
+       Referenced by buildArgCallback.
+
+   #define POPT_BL   0x626c
+       Definition at line 35 of file poptBT.c.
+
+       Referenced by buildArgCallback.
+
+   #define POPT_BP   0x6270
+       Definition at line 36 of file poptBT.c.
+
+       Referenced by buildArgCallback.
+
+   #define POPT_BS   0x6273
+       Definition at line 37 of file poptBT.c.
+
+       Referenced by buildArgCallback.
+
+   #define POPT_BUILDROOT   1004
+       Definition at line 20 of file poptBT.c.
+
+       Referenced by buildArgCallback.
+
+   #define POPT_FORCE   1013
+       Definition at line 27 of file poptBT.c.
+
+       Referenced by buildArgCallback.
+
+   #define POPT_NOBUILD   1008
+       Definition at line 22 of file poptBT.c.
+
+       Referenced by buildArgCallback.
+
+   #define POPT_NODEPS   1011
+       Definition at line 25 of file poptBT.c.
+
+       Referenced by buildArgCallback.
+
+   #define POPT_NOLANG   1001
+       Definition at line 17 of file poptBT.c.
+
+       Referenced by buildArgCallback.
+
+   #define POPT_REBUILD   0x4220
+       Definition at line 29 of file poptBT.c.
+
+       Referenced by buildArgCallback.
+
+   #define POPT_RECOMPILE   0x4320
+       Definition at line 30 of file poptBT.c.
+
+       Referenced by buildArgCallback.
+
+   #define POPT_RMBUILD   1003
+       Definition at line 19 of file poptBT.c.
+
+       Referenced by buildArgCallback.
+
+   #define POPT_RMSOURCE   1002
+       Definition at line 18 of file poptBT.c.
+
+       Referenced by buildArgCallback.
+
+   #define POPT_RMSPEC   1010
+       Definition at line 24 of file poptBT.c.
+
+       Referenced by buildArgCallback.
+
+   #define POPT_SHORTCIRCUIT   1009
+       Definition at line 23 of file poptBT.c.
+
+       Referenced by buildArgCallback.
+
+   #define POPT_SIGN   1012
+       Definition at line 26 of file poptBT.c.
+
+       Referenced by buildArgCallback.
+
+   #define POPT_TA   0x7461
+       Definition at line 38 of file poptBT.c.
+
+       Referenced by buildArgCallback.
+
+   #define POPT_TARGETPLATFORM   1007
+       Definition at line 21 of file poptBT.c.
+
+       Referenced by buildArgCallback.
+
+   #define POPT_TB   0x7462
+       Definition at line 39 of file poptBT.c.
+
+       Referenced by buildArgCallback.
+
+   #define POPT_TC   0x7463
+       Definition at line 40 of file poptBT.c.
+
+       Referenced by buildArgCallback.
+
+   #define POPT_TI   0x7469
+       Definition at line 41 of file poptBT.c.
+
+       Referenced by buildArgCallback.
+
+   #define POPT_TL   0x746c
+       Definition at line 42 of file poptBT.c.
+
+       Referenced by buildArgCallback.
+
+   #define POPT_TP   0x7470
+       Definition at line 43 of file poptBT.c.
+
+       Referenced by buildArgCallback.
+
+   #define POPT_TS   0x7473
+       Definition at line 44 of file poptBT.c.
+
+       Referenced by buildArgCallback.
+
+   #define POPT_USECATALOG   1000
+       Definition at line 16 of file poptBT.c.
+
+       Referenced by buildArgCallback.
+
+FUNCTION DOCUMENTATION
+   void buildArgCallback (poptContext con, enum
+       poptCallbackReason reason, const struct poptOption * opt,
+       const char * arg, const void * data) [static]
+       Definition at line 59 of file poptBT.c.
+
+       References _, POPT_BA, POPT_BB, POPT_BC, POPT_BI, POPT_BL,
+       POPT_BP, POPT_BS, POPT_BUILDROOT, POPT_FORCE,
+       POPT_NOBUILD, POPT_NODEPS, POPT_NOLANG, POPT_REBUILD,
+       POPT_RECOMPILE, POPT_RMBUILD, POPT_RMSOURCE, POPT_RMSPEC,
+       POPT_SHORTCIRCUIT, POPT_SIGN, POPT_TA,
+       POPT_TARGETPLATFORM, POPT_TB, POPT_TC, POPT_TI, POPT_TL,
+       POPT_TP, POPT_TS, POPT_USECATALOG, rpmBTArgs,
+       RPMBUILD_RMBUILD, RPMBUILD_RMSOURCE, RPMBUILD_RMSPEC,
+       xmalloc, xrealloc, and xstrdup.
+
+VARIABLE DOCUMENTATION
+   int _fsm_debug
+       Definition at line 48 of file poptBT.c.
+
+   int _noDirTokens
+       Definition at line 47 of file poptBT.c.
+
+   int force = 0 [static]
+       Definition at line 50 of file poptBT.c.
+
+   int noBuild = 0 [static]
+       Definition at line 52 of file poptBT.c.
+
+   int noDeps = 0 [static]
+       Definition at line 53 of file poptBT.c.
+
+   int noLang = 0
+       Definition at line 51 of file poptBT.c.
+
+   struct rpmBuildArguments_s rpmBTArgs
+       Definition at line 14 of file poptBT.c.
+
+       Referenced by buildArgCallback, and main.
+
+   struct poptOption rpmBuildPoptTable[]
+       Definition at line 121 of file poptBT.c.
+
+   int signIt = 0 [static]
+       Definition at line 54 of file poptBT.c.
+
+   int useCatalog = 0 [static]
+       Definition at line 55 of file poptBT.c.
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002            lib/poptBT.c(3)

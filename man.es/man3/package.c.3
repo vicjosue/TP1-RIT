@@ -1,0 +1,142 @@
+lib/package.c(3)                                 lib/package.c(3)
+
+
+
+NAME
+       lib/package.c -
+
+SYNOPSIS
+       #include 'system.h'
+       #include <netinet/in.h>
+       #include <rpmlib.h>
+       #include 'misc.h'
+       #include 'rpmlead.h'
+       #include 'signature.h'
+       #include 'debug.h'
+
+   Defines
+       #define alloca_strdup(_s)   strcpy(alloca(strlen(_s)+1),
+           (_s))
+
+   Functions
+       void headerMergeLegacySigs (Header h, const Header sig)
+       Header headerRegenSigHeader (const Header h)
+       rpmRC readPackageHeaders (FD_t fd, struct rpmlead
+           *leadPtr, Header *sigs, Header *hdrPtr)
+           Retrieve package components from file handle.
+       rpmRC rpmReadPackageInfo (FD_t fd, Header *sigp, Header
+           *hdrp)
+           Return package signatures and header from file handle.
+       rpmRC rpmReadPackageHeader (FD_t fd, Header *hdrp, int
+           *isSource, int *major, int *minor)
+           Return package header and lead info from file handle.
+
+DETAILED DESCRIPTION
+       Definition in file package.c.
+
+DEFINE DOCUMENTATION
+   #define alloca_strdup(_s)   strcpy(alloca(strlen(_s)+1), (_s))
+       Definition at line 18 of file package.c.
+
+       Referenced by ftpNLST, and readPackageHeaders.
+
+FUNCTION DOCUMENTATION
+   rpmRC readPackageHeaders (FD_t fd, struct rpmlead * leadPtr,
+       Header * sigs, Header * hdrPtr) [static]
+       Retrieve package components from file handle.
+
+       Parameters:
+
+       fd     file handle
+
+       leadPtr
+              address of lead (or NULL)
+
+       sigs   address of signatures (or NULL)
+
+       hdrPtr address of header (or NULL)
+
+       Returns:
+           rpmRC return code
+
+       Definition at line 98 of file package.c.
+
+       References _, alloca_strdup, compressFilelist, Fileno,
+       HEADER_MAGIC_NO, HEADER_MAGIC_YES, headerAddEntry,
+       headerFree, headerGetEntry, headerIsEntry, headerRead,
+       headerRemoveEntry, int_32, providePackageNVR, readLead,
+       RPM_INT32_TYPE, RPM_STRING_ARRAY_TYPE, rpmFreeSignature,
+       RPMLEAD_MAGIC0, RPMLEAD_MAGIC1, RPMLEAD_MAGIC2,
+       RPMLEAD_MAGIC3, RPMLEAD_SOURCE, rpmRC, RPMRC_BADMAGIC,
+       RPMRC_FAIL, RPMRC_OK, rpmReadSignature,
+       RPMTAG_DEFAULTPREFIX, RPMTAG_FILEGIDS,
+       RPMTAG_FILEGROUPNAME, RPMTAG_FILEUIDS,
+       RPMTAG_FILEUSERNAME, RPMTAG_PREFIXES,
+       RPMTAG_SOURCEPACKAGE, and stripTrailingChar.
+
+       Referenced by rpmReadPackageHeader, and
+       rpmReadPackageInfo.
+
+   rpmRC rpmReadPackageHeader (FD_t fd, Header * hdrp, int *
+       isSource, int * major, int * minor)
+       Return package header and lead info from file handle.
+
+       Parameters:
+
+       fd     file handle
+
+       Return values:
+
+       hdrp   address of header (or NULL)
+
+       isSource
+              address to return lead source flag (or NULL)
+
+       major  address to return lead major (or NULL)
+
+       minor  address to return lead minor (or NULL)
+
+       Returns:
+           rpmRC return code
+
+       Definition at line 219 of file package.c.
+
+       References headerMergeLegacySigs, major, minor,
+       readPackageHeaders, rpmFreeSignature, RPMLEAD_SOURCE,
+       rpmRC, and RPMRC_OK.
+
+   rpmRC rpmReadPackageInfo (FD_t fd, Header * sigp, Header *
+       hdrp)
+       Return package signatures and header from file handle.
+
+       Deprecated:
+           Signature tags are appended to header in rpm-4.0.2.
+
+       Todo:
+           Eliminate.
+
+       Parameters:
+
+       fd     file handle
+
+       Return values:
+
+       sigp   address of signature header (or NULL)
+
+       hdrp   address of header (or NULL)
+
+       Returns:
+           rpmRC return code
+
+       Definition at line 207 of file package.c.
+
+       References headerMergeLegacySigs, readPackageHeaders,
+       rpmRC, and RPMRC_OK.
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002           lib/package.c(3)

@@ -1,0 +1,80 @@
+PWCK(1)                                                   PWCK(1)
+
+
+
+NAME
+       pwck - verify integrity of password files
+
+SYNOPSIS
+       pwck [-r] [passwd shadow]
+
+DESCRIPTION
+       pwck  verifies  the integrity of the system authentication
+       information.   All  entries   in   the   /etc/passwd   and
+       /etc/shadow  are  checked  to  see  that the entry has the
+       proper format and valid data in each field.  The  user  is
+       prompted  to  delete entries that are improperly formatted
+       or which have other incorrectable errors.
+
+       Checks are made to verify that each entry has
+
+            - the correct number of fields
+            - a unique user name
+            - a valid user and group identifier
+            - a valid primary group
+            - a valid home directory
+            - a valid login shell
+
+
+       The checks for correct number of fields  and  unique  user
+       name  are  fatal.   If  the  entry has the wrong number of
+       fields, the user will be prompted  to  delete  the  entire
+       line.  If the user does not answer affirmatively, all fur­
+       ther checks are bypassed.  An entry with a duplicated user
+       name  is  prompted  for deletion, but the remaining checks
+       will still be made.  All other errors are warning and  the
+       user  is  encouraged to run the usermod command to correct
+       the error.
+
+       The commands which operate on the /etc/passwd file are not
+       able  to  alter  corrupted  or  duplicated  entries.  pwck
+       should be  used  in  those  circumstances  to  remove  the
+       offending entry.
+
+OPTIONS
+       By  default,  pwck  operates  on the files /etc/passwd and
+       /etc/shadow.  The user may select alternate files with the
+       passwd  and shadow parameters.  Additionally, the user may
+       execute the command in read-only mode by specifying the -r
+       flag.   This  causes all questions regarding changes to be
+       answered no without user intervention.
+
+FILES
+       /etc/passwd - user account information
+       /etc/shadow - encrypted password information
+       /etc/group - group information
+
+SEE ALSO
+       usermod(8), group(5), passwd(5), shadow(5)
+
+DIAGNOSTICS
+       The pwck command exits with the following values:
+
+       0    Success
+
+       1    Syntax Error
+
+       2    One or more bad password entries
+
+       3    Cannot open password files
+
+       4    Cannot lock password files
+
+       5    Cannot update password files
+
+AUTHOR
+       Julianne Frances Haugh (jfh@austin.ibm.com)
+
+
+
+                                                          PWCK(1)

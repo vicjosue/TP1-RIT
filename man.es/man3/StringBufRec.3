@@ -1,0 +1,47 @@
+StringBufRec(3)                                   StringBufRec(3)
+
+
+
+NAME
+       StringBufRec -
+
+SYNOPSIS
+   Data Fields
+       char * buf
+       char * tail
+       int allocated
+       int free
+
+FIELD DOCUMENTATION
+   int StringBufRec::allocated
+       Definition at line 15 of file stringbuf.c.
+
+       Referenced by appendStringBufAux, newStringBuf,
+       stripTrailingBlanksStringBuf, and truncStringBuf.
+
+   char* StringBufRec::buf
+       Definition at line 13 of file stringbuf.c.
+
+       Referenced by appendStringBufAux, freeStringBuf,
+       getStringBuf, newStringBuf, and truncStringBuf.
+
+   int StringBufRec::free
+       Definition at line 16 of file stringbuf.c.
+
+       Referenced by appendStringBufAux, newStringBuf,
+       stripTrailingBlanksStringBuf, and truncStringBuf.
+
+   char* StringBufRec::tail
+       Definition at line 14 of file stringbuf.c.
+
+       Referenced by appendStringBufAux, newStringBuf,
+       stripTrailingBlanksStringBuf, and truncStringBuf.
+
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002            StringBufRec(3)

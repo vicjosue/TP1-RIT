@@ -1,0 +1,31 @@
+PTHREAD_SELF(3)                                   PTHREAD_SELF(3)
+
+
+
+NAME
+       pthread_self - return identifier of current thread
+
+
+SYNOPSIS
+       #include <pthread.h>
+
+       pthread_t pthread_self(void);
+
+
+DESCRIPTION
+       pthread_self  return the thread identifier for the calling
+       thread.
+
+
+AUTHOR
+       Xavier Leroy <Xavier.Leroy@inria.fr>
+
+
+SEE ALSO
+       pthread_equal(3),   pthread_join(3),    pthread_detach(3),
+       pthread_setschedparam(3), pthread_getschedparam(3).
+
+
+
+
+                           LinuxThreads           PTHREAD_SELF(3)

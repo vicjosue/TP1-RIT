@@ -1,0 +1,135 @@
+KAFFE(1)                  Kaffe project                  KAFFE(1)
+
+
+
+NAME
+       kaffe - a virtual machine to execute Java(tm) bytecode
+
+SYNOPSIS
+       kaffe  [-help] [-version] [-ss size] [-ms size] [-mx size]
+       [-classpath   path]   [-addclasspath   path]   [-noverify]
+       [-Dproperty=value]  [-v] [-verbosegc] [-verbosejit] [-ver­
+       bosemem] [-jar] [-vmdebug flag{,flag}]  classname
+
+DESCRIPTION
+       kaffe executes classfile containing Java bytecode,  either
+       as a pure bytecode interpreter, or by doing "just-in-time"
+       code  conversion  from  the  abstract  code  to  the  host
+       machine's native code.
+
+OPTIONS
+       -help  Give a short usage message.
+
+       -version
+              Print the version number.
+
+       -ss size
+              Set the maximum stack size to size
+
+       -mx size
+              Set the maximum heap size to size
+
+       -ms size
+              Set the initial heap size to size
+
+       -classpath path
+              Set   the  path  which  is  searched  for  compiled
+              classes, e.g.  /usr/share/kaffe
+
+       -addclasspath path
+              Appends the given path  to  the  current  classpath
+              setting.  Multiple  instances  of  this flag may be
+              given.
+
+       -noverify
+              Do not verify any bytecode.
+
+       -Dproperty=value
+              Set a property to a given value.
+
+       -jar   Executable is a JAR file.
+
+       -v     Enable verbose output.
+
+       -verbosegc
+              Print message during garbage collection.
+
+       -verbosemem
+              Print detailed memory allocation statistics.
+
+       -verbosejit
+              Print message during JIT code generation.
+
+       -vmdebug flag{,flag}
+              Enable VM debugging. Set ``-vmdebug  list''  for  a
+              list.
+
+CLASS
+       classname
+              Java  class  name to invoke.  Note that this is not
+              the filename.
+
+ENVIRONMENT
+       CLASSPATH
+              A colon-separated list of directories in  which  to
+              search for .class files.
+
+       KAFFEHOME
+              Base directory of kaffe installation.
+
+       LD_LIBRARY_PATH
+              A  colon-separated  list of directories in which to
+              search for libraries.  See  ld.so(1)  for  details.
+              This  needs  to  be set if Kaffe's shared libraries
+              are installed in a location not part of the dynamic
+              loader's default search path.
+
+FILES
+       /usr/share/kaffe/kafferc
+              System-wide  shell  script  read  by  kaffe  script
+              (optional).
+
+       ${HOME}/.kafferc
+              Per-user  shell  script  read   by   kaffe   script
+              (optional).
+
+DIAGNOSTICS
+       Not documented yet.
+
+NOTES
+       Java is a registered trademark of Sun Microsystems, Inc.
+
+       Kaffe  is  available  from  various sites, the primary one
+       being <http://www.transvirtual.com>.
+
+       There are several mailing lists for Kaffe:
+
+       kaffe@rufus.w3.org
+              General Kaffe discussions
+
+       kaffe-announce@rufus.w3.org
+              Kaffe related announcements
+
+       To subscribe to these lists send a message containing  the
+       word "subscribe" to <listname>-request@rufus.w3.org
+
+BUGS
+       See the file FAQ.Known-Bugs for an updated list.
+
+AUTHOR
+       Kaffe    was   originally   written   by   Tim   Wilkinson
+       <tim@transvirtual.com>, 1996.  Many others contributed  to
+       the Kaffe project. They are listed in the source distribu­
+       tion's NOTES/THANKS and NOTES/HELPERS files.
+
+COPYING
+       Kaffe is distributed under the GNU GPL. For full  details,
+       see  the file license.terms in the source distribution for
+       full details.
+
+SEE ALSO
+       Guavac, the GNU Java compiler, David Engberg
+
+
+
+Kaffe version 1.0b3       December 1998                  KAFFE(1)

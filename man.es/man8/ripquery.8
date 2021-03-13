@@ -1,0 +1,20 @@
+RIPQUERY(8)                 System Manager's Manual                RIPQUERY(8)
+
+NAME
+     ripquery - send a RIP request to a remote host
+
+SYNOPSIS
+     ripquery [-n] host
+
+DESCRIPTION
+     The ripquery command can be used to send a RIP request to a remote host.
+     If the remote host runs a RIP server it will reply to the RIP request and
+     sends its current routing table entries.  ripquery will then print these
+     entries. The option -n can be used to suppress the IP number to name con­
+     version.
+
+SEE ALSO
+     routed(8)
+
+
+Linux NetKit (0.17)             March 27, 1999             Linux NetKit (0.17)

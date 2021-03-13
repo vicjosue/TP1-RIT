@@ -1,0 +1,65 @@
+entryInfo(3)                                         entryInfo(3)
+
+
+
+NAME
+       entryInfo -
+
+SYNOPSIS
+       #include <header_internal.h>
+
+
+   Data Fields
+       int_32 tag
+       int_32 type
+       int_32 offset
+       int_32 count
+
+FIELD DOCUMENTATION
+   int_32 entryInfo::count
+       Number of tag elements.
+
+       Definition at line 30 of file header_internal.h.
+
+       Referenced by doHeaderUnload, headerAddEntry,
+       headerAddI18NString, headerAppendEntry, headerDump,
+       headerFindI18NString, headerLoad, headerModifyEntry, and
+       regionSwab.
+
+   int_32 entryInfo::offset
+       Offset into data segment (ondisk only).
+
+       Definition at line 29 of file header_internal.h.
+
+       Referenced by doHeaderUnload, headerAddEntry,
+       headerAddI18NString, headerAppendEntry, headerDump,
+       headerLoad, headerModifyEntry, headerSizeof, offsetCmp,
+       and regionSwab.
+
+   int_32 entryInfo::tag
+       Tag identifier.
+
+       Definition at line 27 of file header_internal.h.
+
+       Referenced by doHeaderUnload, findEntry, headerAddEntry,
+       headerDump, headerLoad, headerModifyEntry,
+       headerNextIterator, headerReload, headerRemoveEntry,
+       indexCmp, offsetCmp, and regionSwab.
+
+   int_32 entryInfo::type
+       Tag data type.
+
+       Definition at line 28 of file header_internal.h.
+
+       Referenced by doHeaderUnload, findEntry, headerAddEntry,
+       headerDump, headerLoad, headerModifyEntry, headerSizeof,
+       intGetEntry, and regionSwab.
+
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002               entryInfo(3)

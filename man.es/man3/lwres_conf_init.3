@@ -1,0 +1,58 @@
+LWRES_CONFIG(3)                                   LWRES_CONFIG(3)
+
+
+
+NAME
+       lwres_conf_init,    lwres_conf_clear,    lwres_conf_parse,
+       lwres_conf_print, lwres_conf_get  -  lightweight  resolver
+       configuration
+
+SYNOPSIS
+       #include <lwres/lwres.h>
+
+       void lwres_conf_init(lwres_context_t *ctx);
+
+       void lwres_conf_clear(lwres_context_t *ctx);
+
+       lwres_result_t lwres_conf_parse(lwres_context_t *ctx,
+       const char *filename);
+
+       lwres_result_t lwres_conf_print(lwres_context_t *ctx, FILE
+       *fp);
+
+       lwres_conf_t * lwres_conf_get(lwres_context_t *ctx);
+
+DESCRIPTION
+       lwres_conf_init()  creates an empty lwres_conf_t structure
+       for lightweight resolver context ctx.
+
+       lwres_conf_clear() frees up all the internal  memory  used
+       by that lwres_conf_t structure in resolver context ctx.
+
+       lwres_conf_parse()  opens  the file filename and parses it
+       to initialise  the  resolver  context  ctx's  lwres_conf_t
+       structure.
+
+       lwres_conf_print()  prints  the lwres_conf_t structure for
+       resolver context ctx to the FILE fp.
+
+RETURN VALUES
+       lwres_conf_parse() returns LWRES_R_SUCCESS if it  success­
+       fully  read and parsed filename.  It returns LWRES_R_FAIL­
+       URE if filename could not be opened or contained incorrect
+       resolver statements.
+
+       lwres_conf_print() returns LWRES_R_SUCCESS unless an error
+       occurred  when  converting  the  network  addresses  to  a
+       numeric  host  address string.  If this happens, the func­
+       tion returns LWRES_R_FAILURE.
+
+SEE ALSO
+       stdio(3), resolver(5).
+
+FILES
+       /etc/resolv.conf
+
+
+
+BIND9                      Jun 30, 2000           LWRES_CONFIG(3)

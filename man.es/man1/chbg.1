@@ -1,0 +1,317 @@
+chbg-1.5(1)                                           chbg-1.5(1)
+
+
+
+NAME
+       chbg - root background image changer & manager for X
+
+SYNOPSIS
+       chbg [OPTIONS..] [IMAGE FILES]
+
+DESCRIPTION
+       chbg  is  a simple program for managing & changing desktop
+       pictures that  can  also  be  used  as  a  xscreensaver(1)
+       client.
+
+OPTIONS
+       -v     Prints version number and exit.
+
+       -h --help
+              Prints help message and exit.
+
+       -setup Starts setup window.
+
+       -scenario filename
+              Fetch parameters from specified file.
+
+       -mode type
+              Set  picture  rendering mode from following types :
+              tile, mirror, center, maximize, smart,  centertile,
+              inttile, symtile, intmirror, symmirror.
+               (Default: smart)
+
+       -effect n
+              Effect type for changing pictures [0-29].
+               0    : no effect. (Default)
+               1    : random effect.
+               2-29 : various picture changing effects.
+
+       -bg "#rrggbb"
+              Set default background color 1. (Default: #000000)
+
+       -bg2 "#rrggbb"
+              Set default background color 2. (Default: #ffffff)
+
+       -rand_colors
+              Randomize background colors.
+
+       -shader n
+              Set background color shading effect type [0-564].
+               0     : no shading. (Default)
+               1     : random shading style.
+               2-564 : various shading types.
+
+       -interval n.n-n.n
+              Picture  change  time in [min].[sec] format. Adding
+              second time value ChBg generates random  changetime
+              using  user  defined  values  as  boundaries.   New
+              changetime is generated during picture change.
+               (Default: 5)
+
+       -max_grow n.n
+              Maximal growing ratio of picture in smart mode.
+               (Default: 1.0)
+
+       -max_size percentage
+              Maximal size of picture in % of screen size used in
+              smart mode, acceptable value 10-100.
+               (Default: 90)
+
+       -xpos n.n
+              Adjust picture's horizontal position in screen when
+              using smart mode.
+               (Value between 0.0-1.0  Default: 0.5)
+
+       -ypos n.n
+              Adjust picture's vertical position in  screen  when
+              using smart mode.
+               (Value between 0.0-1.0  Default: 0.5)
+
+       -randomize
+              Randomize picture order.
+
+       -screensaver
+              Act as screensaver.
+
+       -xscreensaver
+              Act as xscreensaver client.
+
+       -speed n
+              Speed  ratio for picture changing effects.  Smaller
+              value means faster change.
+               (Default: 100)
+
+       -blank Show blank screen, when unable to load picture.
+
+       -cycle_blank
+              When  pictures  not  present  cycle  with  blanking
+              screen.  (optionaly with shading)
+
+       -R     Recurse through directory and search pictures.  See
+              also options -pattern and -min_psize.
+
+       -pattern pattern
+              Wildcard pattern for picture selection in recursion
+              through  directories.   When  you  want to use more
+              patterns, use more -pattern options.
+               (effects only when used with -R option)
+
+       -inwindow
+              Run in own window not on root.
+
+       -windowid id
+              Run in existing window.
+
+       -run   Start run after setup window is popped up.
+               (effects only when used with -setup option)
+
+       -min_psize n
+              Minimal size  of  picture  when  recursing  through
+              directory.  This option allows you to exclude small
+              pictures or possible thumbnails.
+               (effects only when used with -R option)
+
+       -deffects list
+              List of disabled picture changing effects when ran­
+              domizing.  This option allows you to omit some pic­
+              ture changing effects,  which  you  don't  like  or
+              which  doesn't  suit  your  needs. Usable, when you
+              want to reject some of  slow  effects  when  faster
+              changing is required.
+
+       -dshaders list
+              List  of  disabled  background shading effects when
+              randomizing.  This option allows you to  omit  some
+              picture  changing  effects, which you don't like or
+              which doesn't suit your needs.
+
+       -notooltips
+              Disable showing description tooltips for setup con­
+              trols.
+
+       -friter n
+              Set  number  of iterations in fractal based shading
+              effects.
+               (Default: 30)
+
+       -rect_size n
+              Set size of used rectangle in any of picture chang­
+              ing effects.
+               (Default: 16)
+
+       -grad_dir dir
+              Directory  where  GIMP  gradients can be located on
+              your system.  As default following directories  are
+              scanned to search gradient files.
+               /usr/share/gimp/gradients
+               /usr/share/gimp-1.1/gradients
+               /usr/share/gimp-1.2/gradients
+               /opt/share/gimp/gradients
+               /opt/share/gimp-1.1/gradients
+               /opt/share/gimp-1.2/gradients
+               /usr/local/share/gimp/gradients
+               /usr/local/share/gimp-1.1/gradients
+               /usr/local/share/gimp-1.2/gradients
+               When   GIMP  gradient  files  are  elsewhere  than
+              default directories, use this option to force  ChBg
+              to  load  GIMP gradients from your directory.  When
+              ChBg can't find  gradient,  it  will  automatically
+              disable all gradient shading features.
+
+       -use_grad
+              Enable the use of GIMP gradients for coloring back­
+              ground shading effects.
+
+       -grad n
+              Set gradient number to use for coloring  background
+              shading effects. 0 means random.
+
+       -remember
+              Allow  remembering  of  last shown picture. This is
+              very usable when you maintain  very  long  list  of
+              pictures  and next time when you run ChBg with same
+              scenario file you want to continue from that  point
+              where you left ChBg last time.
+               WARNING:  this feature requires to have saved sce­
+              narion and that scenario must be writable by  user.
+
+       -enlightenment
+              If  you are running Enlightenment window manager on
+              your desktop, you may want to use its functions  to
+              manage  desktop background images.  When you enable
+              this option, ChBg will try to use its capabilities.
+              This  works  only with enlightenment 0.16 and above
+              using eesh program.
+
+       -once  This option have only  effect  when  used  directly
+              from  commandline  and  ChBg  will  run without GUI
+              environment. When this option is  used,  ChBg  will
+              run only one cycle of background changing and after
+              that it will exit. This is usable if  you  want  to
+              change  background  once  per  session (for example
+              from  .xinitrc  or  .xsession  startup  scripts  or
+              Gnome/KDE session managers).
+
+       -thumb type
+              You  can  use this option when you just want to use
+              directly one of ChBg's thumbnail previews. As  type
+              use one of all/dir/page.
+
+       -use_tiles
+              This  option  activates coloring of shading effects
+              by tiled pixmaps.  To activate it fully,  you  must
+              also use -tile option.
+
+       -tile file
+              With  this option you can set picture which will be
+              used  as  tile  for  coloring  background   shading
+              effects  or  just  plain drawn on backround when no
+              shading effect will be used. To activate this  fea­
+              ture you must also use -use_tiles option, otherwise
+              it won't work. You can also set the file  parameter
+              to  random  and  ChBg  will  select randomly one of
+              tiles set by -add_tile option.
+
+       -add_tile file
+              Use this option, when  you  want  to  use  multiple
+              tiles  for  coloring  background  shading  effects.
+              Parameter file can be one picture file or directory
+              with  pictures,  which  will be scanned recursively
+              for  pictures.  See  also  -tile   and   -use_tiles
+              options.
+
+       -use_banners
+              This  options  activates  use of banner pictures on
+              top of normal background pictures. Banner  pictures
+              will  be  drawn  in  mode similar to smart mode for
+              normal background pictures. To fully use this  fea­
+              ture,  you must also set banner pictures with -ban­
+              ner and or -add_banner options.
+
+       -banner file
+              Parameter file of this options sets particular ban­
+              ner  picture  file or when it is set to "random" it
+              can randomly select one banner  from  banner  files
+              added by -add_banner option.
+
+       -add_banner file
+              Set  a  directory  where to find banner pictures or
+              file which will be use as a banner.
+
+       -banner_mode mode
+              ChBg allows various drawing modes for drawing  ban­
+              ner  on top of background.  You can set one of nor­
+              mal, average, lighten,  darken,  divide,  multiply,
+              multiplybg,   multiplyfg,   add,  subtractbg,  sub­
+              tractfg, grayscale, bumpmap, bumpmapself or  number
+              0-13.
+
+       -banner_xpos pos
+              Horizontal  position of banner on the screen. It is
+              similar to -xpos.
+
+       -banner_ypos pos
+              Vertical position of banner on the  screen.  It  is
+              similar to -ypos.
+
+       -banner_max_grow ratio
+              Maximal  banner growing ratio. This option is equal
+              to -max_grow option, it is just applied to banners.
+
+       -banner_max_size nr
+              Maximal  allowed area of screen taken by banner. It
+              is equal to -max_size option.
+
+       -to_file
+              Render the composite picture directly to  file.  To
+              work    fully    -out_file,   -out_file_width   and
+              -out_file_height have to be given.   Fileformat  of
+              the rendered picture is PNG.
+
+       -out_file filename
+              Set the composite picture's filename.
+
+       -out_file_width n
+              Set composite picture's width.
+               (Default value 0 means that ChBg takes size from X
+              root window.)
+
+       -out_file_height n
+              Set composite picture's height.
+               (Default value 0 means that ChBg takes size from X
+              root window.)
+
+       -force_nautilus
+              Force Nautilus to use ChBg generated picture.
+
+       -send_expose
+              Send  expose  event  to  foreign  window  to  force
+              redraw.
+
+FILES
+       chbgrc.sample
+              Sample configuration file.
+
+BUGS
+       See file BUGS in chbg source distribution.
+
+AUTHOR
+       Programm - Stefan Ondrejicka <ondrej@idata.sk>
+       Manual page - Mikko Kilponen <mikil@uni.kaapeli.net>
+
+SEE ALSO
+       X(1), xscreensaver(1), xscreensaver-command(1).
+
+
+
+                                                      chbg-1.5(1)

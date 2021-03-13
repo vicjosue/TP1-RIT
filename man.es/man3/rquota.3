@@ -1,0 +1,30 @@
+RQUOTA(3)                                               RQUOTA(3)
+
+
+
+NAME
+       rquota - implement quotas on remote machines
+
+PROTOCOL
+       /usr/include/rpcsvc/rquota.x
+
+DESCRIPTION
+       The  rquota()  protocol  inquires  about  quotas on remote
+       machines.  It is used in conjunction with NFS,  since  NFS
+       itself does not implement quotas.
+
+PROGRAMMING
+       #include <rpcsvc/rquota.h>
+
+       The following XDR routines are available in librpcsvc:
+       xdr_getquota_arg
+       xdr_getquota_rslt
+       xdr_rquota
+
+SEE ALSO
+       quota(1), quotactl(2)
+
+
+
+
+                                                        RQUOTA(3)

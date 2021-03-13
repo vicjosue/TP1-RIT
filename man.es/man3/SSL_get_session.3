@@ -1,0 +1,79 @@
+SSL_get_session(3)           OpenSSL           SSL_get_session(3)
+
+
+
+NNAAMMEE
+       SSL_get_session - retrieve TLS/SSL session data
+
+SSYYNNOOPPSSIISS
+        #include <openssl/ssl.h>
+
+        SSL_SESSION *SSL_get_session(SSL *ssl);
+        SSL_SESSION *SSL_get0_session(SSL *ssl);
+        SSL_SESSION *SSL_get1_session(SSL *ssl);
+
+
+DDEESSCCRRIIPPTTIIOONN
+       SSL_get_session() returns a pointer to the SSSSLL_SSEESSSSIIOONN
+       actually used in ssssll. The reference count of the
+       SSSSLL_SSEESSSSIIOONN is not incremented, so that the pointer can
+       become invalid by other operations.
+
+       SSL_get0_session() is the same as SSL_get_session().
+
+       SSL_get1_session() is the same as SSL_get_session(), but
+       the reference count of the SSSSLL_SSEESSSSIIOONN is incremented by
+       one.
+
+NNOOTTEESS
+       The ssl session contains all information required to re-
+       establish the connection without a new handshake.
+
+       SSL_get0_session() returns a pointer to the actual
+       session. As the reference counter is not incremented, the
+       pointer is only valid while the connection is in use. If
+       SSL_clear(3) or SSL_free(3) is called, the session may be
+       removed completely (if considered bad), and the pointer
+       obtained will become invalid. Even if the session is
+       valid, it can be removed at any time due to timeout during
+       SSL_CTX_flush_sessions(3).
+
+       If the data is to be kept, SSL_get1_session() will
+       increment the reference count, so that the session will
+       not be implicitly removed by other operations but stays in
+       memory. In order to remove the session SSL_SESSION_free(3)
+       must be explicitly called once to decrement the reference
+       count again.
+
+       SSL_SESSION objects keep internal link information about
+       the session cache list, when being inserted into one
+       SSL_CTX object's session cache.  One SSL_SESSION object,
+       regardless of its reference count, must therefore only be
+       used with one SSL_CTX object (and the SSL objects created
+       from this SSL_CTX object).
+
+RREETTUURRNN VVAALLUUEESS
+       The following return values can occur:
+
+       NULL
+           There is no session available in ssssll.
+
+       Pointer to an SSL
+           The return value points to the data of an SSL session.
+
+SSEEEE AALLSSOO
+       ssl(3), SSL_free(3), SSL_clear(3), SSL_SESSION_free(3)
+
+
+
+
+
+
+
+
+
+
+
+
+
+19/Nov/2001                   0.9.6c           SSL_get_session(3)

@@ -1,0 +1,114 @@
+FOOMATIC-PRINTJOB(1)                         FOOMATIC-PRINTJOB(1)
+
+
+
+NAME
+       foomatic-printjob - <put a short description here>
+
+SYNOPSIS
+       foomatic-printjob  [  -s  spooler  ] [ -P queuename ] [ -o
+       option1=value1 -o option2 ... ] [ -i ] [ file1 file2 ... ]
+
+       foomatic-printjob  -Q [ -s spooler ] [ -P queuename ] [ -i
+       ] [ -a ] [ user1 user2 ... ]
+
+       foomatic-printjob -R [ -s spooler ] [ -P queuename ] [ - ]
+       [ -i ] [ jobid1 jobid2 ... ]
+
+       foomatic-printjob -C [ -s spooler ] [ -i ] command [ argu­
+       ments ]
+
+       foomatic-printjob -S [ -s spooler ] [ -i ]
+
+       foomatic-printjob -h [ -s spooler ] [ -P queuename ] [  -i
+       ]
+
+
+   Options
+       -sspooler Explicit spooler type (cups,lpd,lprng,pdq)
+
+
+       -Pqueuename
+                 Command should apply to this queue
+
+
+       -ooption=value
+                 Set option to value
+
+
+       -ooption  Set the switch option
+
+
+       -#n       Print n copies
+
+
+       file1  file2  ...
+                 Files  to  be  printed,  when  no file is given,
+                 standard input will be printed
+
+
+       -Q        Query the jobs in a queue
+
+
+       -a        Query the jobs in all queues
+
+
+       user1  user2  ...
+                 Users whose jobs should be listed
+
+
+       -R        Remove a job from a queue
+
+
+       -         Remove all your jobs
+
+
+       jobid1  jobid2
+                 IDs of the jobs to be removed
+
+
+       -C        Execute control commands for queue/job manipula­
+                 tion
+
+
+       command [ arguments ]
+                 Control  command for queue/job manipulation. The
+                 commands are the ones of the BSD "lpc"  utility.
+                 Use  the control command "help" to get a list of
+                 supported commands. Note: the amount of commands
+                 varies  with  the spooler, but the same commands
+                 given  under  different  spoolers  do  the  same
+                 thing.
+
+
+       -i        Interactive mode: You will be asked if foomatic-
+                 printjob is in doubt about something.  Otherwise
+                 foomatic-printjob  uses  auto-detection or quits
+                 with an error.
+
+
+       -S        Save the chosen spooler as the default spooler
+
+
+       -h        Show this message or show a  list  of  available
+                 options if a queue is specified
+
+
+
+
+EXIT STATUS
+       foomatic-printjob returns ...
+
+
+AUTHOR
+       Manfred  Wassmann  <manolo@NCC-1701.B.Shuttle.de>  for the
+       foomatic project using output from the associated  binary.
+
+
+BUGS
+       This manpage needs some editing.
+
+
+
+
+Foomatic Project            2001-01-06       FOOMATIC-PRINTJOB(1)

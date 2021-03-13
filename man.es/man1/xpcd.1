@@ -1,0 +1,120 @@
+xpcd(1)                                                   xpcd(1)
+
+
+
+NAME
+       xpcd - X11 program for reading PhotoCD-Images
+
+SYNOPSIS
+       xpcd [ mount-point | filename ] ...
+
+DESCRIPTION
+       xpcd  is an program for handling PhotoCDs. You can specify
+       a *.pcd file or the  mount  point  of  a  PhotoCD  (simply
+       "/cdrom"  for  example)  on  the  command line.  The usage
+       should be straigtforward. If not:  there  is  some  online
+       help, you get the help window with the F1 key.
+
+       You  can  switch  language with the LANG environment vari­
+       able, currently only english and german are available.
+
+The GIMP and xpcd
+       Everything you have to do is to install the xpcd-gate plu­
+       gin  among the other plugins. The GIMP should come up with
+       a new entry  "xpcd-gate"  in  the  extentions  menu.  This
+       starts up a small bridge plug-in which allows xpcd to talk
+       to The GIMP. Once the plug-in is running, xpcd  allows  to
+       choose "The GIMP" in the Viewer menu.
+
+CONFIGURATION
+       xpcd  uses  /usr/lib/X11/system.xpcdrc or $HOME/.xpcdrc as
+       configuration file. The global  config  file  should  hold
+       some  useful  defaults.  xpcd will automatically save your
+       current settings to your personal configuration file.
+
+       jpeg_quality = [ 5 .. 100 ]
+           Quality setting when saveing images with JPEG.  75  is
+           the default, higher values give better quality.
+
+       cdrom = [ string ]
+           Mount point of the PhotoCD.
+
+       display_gray = [ yes | no ]
+           xpcd  displays the images grayscaled. Can be turned on
+           and off in the options menu.
+
+       load_gray = [ yes | no ]
+           xpcd loads the images colored or  grayscaled.  Can  be
+           turned  on  and off in the options menu. Don't confuse
+           this with the previous one! xpcd's internal viewer can
+           handle  images internally in color (save them in color
+           for example), even if they are displayed in grayscale.
+
+       Some other configuration options you can add to your .xpc­
+       drc file (which are not autosaved) are:
+
+       viewer = label, command-line
+           configure a external viewer. You may  have  this  line
+           more  than  once. label is the string which appears in
+           the viewer menu, command-line is the command  line  of
+           that  tool.  The  image is piped to the viewer, so the
+           command line should tell that  the  image  comes  from
+           stdin (often this is done by using a dash as argument,
+           e.g. "xv -").
+
+       disable_color = [ yes | no ]
+           Disable colored display. This is useful if  you  think
+           xpcd  eats  to  much colormap entries. Well, of cource
+           you can't switch between colored and  grayscaled  dis­
+           play then.
+
+           This  is  turned  on  automatically for StaticGray and
+           Grayscaled visuals or if there  are  not  enouth  free
+           entries  in  your colormap with PseudoColor. For True­
+           Color Visuals this switch has no effect.
+
+       num_grays = [ 4 .. 64 ]
+           Number of colormap entries to use for grayscaled  dis­
+           play  (default:  8)  Less  than  8 colors looks really
+           ugly, 32 usally enouth for good display quality.
+
+
+BUGS
+       Bugs are turned off.
+
+       Seriously: If you find one, drop me a note. There are even
+       some known bugs:
+
+       I/O  errors  kill  xpcd  with  a SIGBUS. BTW: Is there any
+       portable way to catch I/O errors on mmap(2)'ed files?
+
+       You can exit xpcd even if the internal viewer is busy with
+       saving a image. You'll end up with a tuncated file.
+
+AUTHOR
+       Gerd Knorr <kraxel@goldbach.in-berlin.de>
+
+COPYRIGHT
+       Copyright   (C)   1997   Gerd  Knorr  <kraxel@goldbach.in-
+       berlin.de>
+
+       This program is free software;  you  can  redistribute  it
+       and/or modify it under the terms of the GNU General Public
+       License as published  by  the  Free  Software  Foundation;
+       either  version  2 of the License, or (at your option) any
+       later version.
+
+       This program is distributed in the hope that  it  will  be
+       useful, but WITHOUT ANY WARRANTY; without even the implied
+       warranty of MERCHANTABILITY or FITNESS  FOR  A  PARTICULAR
+       PURPOSE.   See  the  GNU  General  Public License for more
+       details.
+
+       You should have received a copy of the GNU General  Public
+       License along with this program; if not, write to the Free
+       Software Foundation, Inc., 675  Mass  Ave,  Cambridge,  MA
+       02139, USA.
+
+
+
+                       (c) 1997 Gerd Knorr                xpcd(1)

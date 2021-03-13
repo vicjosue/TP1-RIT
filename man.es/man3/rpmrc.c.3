@@ -1,0 +1,434 @@
+lib/rpmrc.c(3)                                     lib/rpmrc.c(3)
+
+
+
+NAME
+       lib/rpmrc.c -
+
+SYNOPSIS
+       #include 'system.h'
+       #include <stdarg.h>
+       #include <rpmlib.h>
+       #include <rpmmacro.h>
+       #include 'misc.h'
+       #include 'debug.h'
+
+   Data Structures
+       struct canonEntry_s
+       struct defaultEntry_s
+       struct machCache_s
+       struct machCacheEntry_s
+       struct machEquivInfo_s
+       struct machEquivTable_s
+       struct rpmOption
+       struct rpmvarValue
+       struct tableType_s
+
+   Defines
+       #define __power_pc()   0
+       #define OS   0
+       #define ARCH   1
+       #define _TOPDIRMACRO   '%{_topdir}/'
+
+   Typedefs
+       typedef const char * cptr_t
+       typedef machCacheEntry_s * machCacheEntry
+       typedef machCache_s * machCache
+       typedef machEquivInfo_s * machEquivInfo
+       typedef machEquivTable_s * machEquivTable
+       typedef defaultEntry_s * defaultEntry
+       typedef canonEntry_s * canonEntry
+       typedef tableType_s * tableType
+
+   Functions
+       int doReadRC (FD_t fd, const char *urlfn)
+       void rpmSetVarArch (int var, const char *val, const char
+           *arch)
+       void rebuildCompatTables (int type, const char *name)
+       int optionCompare (const void *a, const void *b)
+       void rpmRebuildTargetVars (const char **target, const char
+           **canontarget)
+       machCacheEntry machCacheFindEntry (const machCache cache,
+           const char *key)
+       int machCompatCacheAdd (char *name, const char *fn, int
+           linenum, machCache cache)
+       machEquivInfo machEquivSearch (const machEquivTable table,
+           const char *name)
+       void machAddEquiv (machEquivTable table, const char *name,
+           int distance)
+       void machCacheEntryVisit (machCache cache, machEquivTable
+           table, const char *name, int distance)
+       void machFindEquivs (machCache cache, machEquivTable
+           table, const char *key)
+       int addCanon (canonEntry *table, int *tableLen, char
+           *line, const char *fn, int lineNum)
+       int addDefault (defaultEntry *table, int *tableLen, char
+           *line, const char *fn, int lineNum)
+       const canonEntry lookupInCanonTable (const char *name,
+           const canonEntry table, int tableLen)
+       const char * lookupInDefaultTable (const char *name, const
+           defaultEntry table, int tableLen)
+       int rpmReadConfigFiles (const char *file, const char
+           *target)
+       void setVarDefault (int var, const char *macroname, const
+           char *val, const char *body)
+       void setPathDefault (int var, const char *macroname, const
+           char *subdir)
+       void setDefaults (void)
+       int rpmReadRC (const char *rcfiles)
+       void defaultMachine (const char **arch, const char **os)
+       const char * rpmGetVarArch (int var, const char *arch)
+       const char * rpmGetVar (int var)
+       void freeRpmVar (struct rpmvarValue *orig)
+       void rpmSetVar (int var, const char *val)
+       void rpmSetTables (int archTable, int osTable)
+       int rpmMachineScore (int type, const char *name)
+       void rpmGetMachine (const char **arch, const char **os)
+       void rpmSetMachine (const char *arch, const char *os)
+       void getMachineInfo (int type, const char **name, int
+           *num)
+       void rpmGetArchInfo (const char **name, int *num)
+       void rpmGetOsInfo (const char **name, int *num)
+       void rpmFreeRpmrc (void)
+       int rpmShowRC (FILE *fp)
+
+   Variables
+       const char * defrcfiles
+       const char * macrofiles = MACROFILES
+       tableType_s tables [RPM_MACHTABLE_COUNT]
+       rpmOption optionTable []
+       int optionTableSize = sizeof(optionTable) /
+           sizeof(*optionTable)
+       cptr_t current [2]
+       int currTables [2] = { RPM_MACHTABLE_INSTOS,
+           RPM_MACHTABLE_INSTARCH }
+       rpmvarValue values [RPMVAR_NUM]
+       int defaultsInitialized = 0
+       const char * prescriptenviron
+
+DEFINE DOCUMENTATION
+   #define __power_pc()   0
+       Definition at line 8 of file rpmrc.c.
+
+       Referenced by defaultMachine.
+
+   #define _TOPDIRMACRO   '%{_topdir}/'
+   #define ARCH   1
+       Definition at line 113 of file rpmrc.c.
+
+       Referenced by doReadRC, rpmFreeRpmrc, rpmGetArchInfo,
+       rpmGetMachine, rpmGetVarArch, rpmSetMachine, rpmSetTables,
+       and rpmShowRC.
+
+   #define OS   0
+       Definition at line 112 of file rpmrc.c.
+
+       Referenced by rpmFreeRpmrc, rpmGetMachine, rpmGetOsInfo,
+       rpmSetMachine, rpmSetTables, and rpmShowRC.
+
+TYPEDEF DOCUMENTATION
+   typedef struct canonEntry_s *  canonEntry
+   typedef const char* cptr_t
+       Definition at line 24 of file rpmrc.c.
+
+   typedef struct defaultEntry_s *  defaultEntry
+   typedef struct machCache_s *  machCache
+   typedef struct machCacheEntry_s *  machCacheEntry
+   typedef struct machEquivInfo_s *  machEquivInfo
+   typedef struct machEquivTable_s *  machEquivTable
+   typedef struct tableType_s *  tableType
+FUNCTION DOCUMENTATION
+   int addCanon (canonEntry * table, int * tableLen, char * line,
+       const char * fn, int lineNum) [static]
+       Definition at line 300 of file rpmrc.c.
+
+       References _, canonEntry_s::name, canonEntry_s::num,
+       canonEntry_s::short_name, table, xmalloc, xrealloc, and
+       xstrdup.
+
+       Referenced by doReadRC.
+
+   int addDefault (defaultEntry * table, int * tableLen, char *
+       line, const char * fn, int lineNum) [static]
+       Definition at line 357 of file rpmrc.c.
+
+       References _, defaultEntry_s::defName,
+       defaultEntry_s::name, table, xmalloc, xrealloc, and
+       xstrdup.
+
+       Referenced by doReadRC.
+
+   void defaultMachine (const char ** arch, const char ** os)
+       [static]
+       Definition at line 1002 of file rpmrc.c.
+
+       References __power_pc, _free, Fclose, Ferror, Fopen,
+       Fread, lookupInCanonTable, RPM_MACHTABLE_INSTARCH,
+       RPM_MACHTABLE_INSTOS, canonEntry_s::short_name, xcalloc,
+       and xisdigit.
+
+       Referenced by rpmRebuildTargetVars, rpmSetMachine, and
+       rpmSetTables.
+
+   int doReadRC (FD_t fd, const char * urlfn) [static]
+       Definition at line 634 of file rpmrc.c.
+
+       References _, _free, addCanon, addDefault, addMacro,
+       alloca, ARCH, rpmOption::archSpecific, current, Fclose,
+       fdSize, Ferror, Fopen, Fread, Fstrerror,
+       tableType_s::hasCanon, tableType_s::hasTranslate,
+       rpmOption::localize, machCompatCacheAdd,
+       rpmOption::macroize, rpmOption::name, optionCompare,
+       optionTableSize, RMIL_RPMRC, rpmGetPath, rpmGetVar,
+       rpmRebuildTargetVars, rpmSetVarArch, RPMVAR_INCLUDE,
+       RPMVAR_MACROFILES, RPMVAR_PROVIDES, rpmOption::var,
+       xisspace, and xmalloc.
+
+       Referenced by rpmReadRC.
+
+   void freeRpmVar (struct rpmvarValue * orig) [static]
+       Definition at line 1266 of file rpmrc.c.
+
+       References _free, rpmvarValue::arch, rpmvarValue::next,
+       and rpmvarValue::value.
+
+       Referenced by rpmSetVar.
+
+   void getMachineInfo (int type, const char ** name, int * num)
+       [static]
+       Definition at line 1414 of file rpmrc.c.
+
+       References _, current, currTables, lookupInCanonTable,
+       canonEntry_s::num, and canonEntry_s::short_name.
+
+       Referenced by rpmGetArchInfo, and rpmGetOsInfo.
+
+   const canonEntry lookupInCanonTable (const char * name, const
+       canonEntry table, int tableLen) [static]
+       Definition at line 395 of file rpmrc.c.
+
+       References table.
+
+       Referenced by defaultMachine, and getMachineInfo.
+
+   const char* lookupInDefaultTable (const char * name, const
+       defaultEntry table, int tableLen) [static]
+       Definition at line 412 of file rpmrc.c.
+
+       References table.
+
+       Referenced by rpmSetMachine.
+
+   void machAddEquiv (machEquivTable table, const char * name,
+       int distance) [static]
+       Definition at line 232 of file rpmrc.c.
+
+       References machEquivSearch, table, xmalloc, xrealloc, and
+       xstrdup.
+
+       Referenced by machCacheEntryVisit, and machFindEquivs.
+
+   void machCacheEntryVisit (machCache cache, machEquivTable
+       table, const char * name, int distance) [static]
+       Definition at line 251 of file rpmrc.c.
+
+       References machCacheEntry_s::count,
+       machCacheEntry_s::equivs, machAddEquiv,
+       machCacheFindEntry, table, and machCacheEntry_s::visited.
+
+       Referenced by machFindEquivs.
+
+   machCacheEntry machCacheFindEntry (const machCache cache,
+       const char * key) [static]
+       Definition at line 139 of file rpmrc.c.
+
+       Referenced by machCacheEntryVisit, and machCompatCacheAdd.
+
+   int machCompatCacheAdd (char * name, const char * fn, int
+       linenum, machCache cache) [static]
+       Definition at line 150 of file rpmrc.c.
+
+       References _, _free, machCacheEntry_s::count,
+       machCacheEntry_s::equivs, machCacheFindEntry,
+       machCacheEntry_s::name, machCacheEntry_s::visited,
+       xisspace, xmalloc, xrealloc, and xstrdup.
+
+       Referenced by doReadRC.
+
+   machEquivInfo machEquivSearch (const machEquivTable table,
+       const char * name) [static]
+       Definition at line 220 of file rpmrc.c.
+
+       References table, and xstrcasecmp.
+
+       Referenced by machAddEquiv, and rpmMachineScore.
+
+   void machFindEquivs (machCache cache, machEquivTable table,
+       const char * key) [static]
+       Definition at line 272 of file rpmrc.c.
+
+       References _free, machAddEquiv, machCacheEntryVisit, and
+       table.
+
+       Referenced by rebuildCompatTables.
+
+   int optionCompare (const void * a, const void * b) [static]
+       Definition at line 129 of file rpmrc.c.
+
+       References xstrcasecmp.
+
+       Referenced by doReadRC.
+
+   void rebuildCompatTables (int type, const char * name)
+       [static]
+       Definition at line 1406 of file rpmrc.c.
+
+       References currTables, and machFindEquivs.
+
+       Referenced by rpmSetMachine, and rpmSetTables.
+
+   const char* rpmGetVarArch (int var, const char * arch)
+       [static]
+       Definition at line 1239 of file rpmrc.c.
+
+       References rpmvarValue::arch, ARCH, current,
+       rpmvarValue::next, and rpmvarValue::value.
+
+       Referenced by rpmGetVar, and rpmRebuildTargetVars.
+
+   void rpmRebuildTargetVars (const char ** target, const char **
+       canontarget) [static]
+       Definition at line 1452 of file rpmrc.c.
+
+       References _free, addMacro, defaultMachine, delMacro,
+       RMIL_RPMRC, RPM_MACHTABLE_BUILDARCH,
+       RPM_MACHTABLE_BUILDOS, RPM_MACHTABLE_INSTARCH,
+       RPM_MACHTABLE_INSTOS, rpmGetArchInfo, rpmGetOsInfo,
+       rpmGetVarArch, rpmSetMachine, rpmSetTables,
+       RPMVAR_OPTFLAGS, xmalloc, xstrcasecmp, xstrdup, and
+       xtolower.
+
+       Referenced by doReadRC, and rpmReadConfigFiles.
+
+   void rpmSetVarArch (int var, const char * val, const char *
+       arch) [static]
+       Definition at line 1289 of file rpmrc.c.
+
+       References _free, rpmvarValue::arch, rpmvarValue::next,
+       rpmvarValue::value, xmalloc, and xstrdup.
+
+       Referenced by doReadRC.
+
+   void setDefaults (void) [static]
+       Definition at line 512 of file rpmrc.c.
+
+       References addMacro, prescriptenviron, RMIL_DEFAULT,
+       RPMVAR_OPTFLAGS, setPathDefault, and setVarDefault.
+
+       Referenced by rpmReadRC.
+
+   void setPathDefault (int var, const char * macroname, const
+       char * subdir) [static]
+       Definition at line 463 of file rpmrc.c.
+
+       References _free, addMacro, alloca, RMIL_DEFAULT,
+       rpmGetPath, rpmGetVar, and rpmSetVar.
+
+       Referenced by setDefaults.
+
+   void setVarDefault (int var, const char * macroname, const
+       char * val, const char * body) [static]
+       Definition at line 450 of file rpmrc.c.
+
+       References addMacro, RMIL_DEFAULT, rpmGetVar, and
+       rpmSetVar.
+
+       Referenced by setDefaults.
+
+VARIABLE DOCUMENTATION
+   cptr_t current[2] [static]
+       Definition at line 115 of file rpmrc.c.
+
+       Referenced by doReadRC, getMachineInfo, rpmFreeRpmrc,
+       rpmGetMachine, rpmGetVarArch, rpmSetMachine, and
+       rpmShowRC.
+
+   int currTables[2] = { RPM_MACHTABLE_INSTOS,
+       RPM_MACHTABLE_INSTARCH } [static]
+       Definition at line 116 of file rpmrc.c.
+
+       Referenced by getMachineInfo, rebuildCompatTables,
+       rpmSetMachine, and rpmSetTables.
+
+   int defaultsInitialized = 0 [static]
+       Definition at line 118 of file rpmrc.c.
+
+       Referenced by rpmFreeRpmrc, and rpmReadRC.
+
+   const char* defrcfiles [static]
+       Initial value:
+
+
+               LIBRPMRC_FILENAME ':/etc/rpmrc:~/.rpmrc'
+
+       Definition at line 19 of file rpmrc.c.
+
+       Referenced by rpmReadRC.
+
+   const char* macrofiles = MACROFILES
+       List of macro files to read when configuring rpm. This is
+       a colon separated list of files. URI's are permitted as
+       well, identified by the token '://', so file paths must
+       not begin with '//'.
+
+       Definition at line 22 of file rpmrc.c.
+
+   struct rpmOption optionTable[] [static]
+       Initial value:
+
+        {
+           { 'include',                RPMVAR_INCLUDE,                 0, 1,   0, 2 },
+           { 'macrofiles',             RPMVAR_MACROFILES,              0, 0,   0, 1 },
+           { 'optflags',               RPMVAR_OPTFLAGS,                1, 0,   1, 0 },
+           { 'provides',               RPMVAR_PROVIDES,                0, 0,   0, 0 },
+       }
+
+       Definition at line 103 of file rpmrc.c.
+
+   int optionTableSize = sizeof(optionTable) /
+       sizeof(*optionTable) [static]
+       Definition at line 110 of file rpmrc.c.
+
+       Referenced by doReadRC, and rpmShowRC.
+
+   const char* prescriptenviron [static]
+       Initial value:
+
+        '0PM_SOURCE_DIR='%{_sourcedir}'0PM_BUILD_DIR='%{_builddir}'0PM_OPT_FLAGS='%{optflags}'0PM_ARCH='%{_arch}'0PM_OS='%{_os}'0xport RPM_SOURCE_DIR RPM_BUILD_DIR RPM_OPT_FLAGS RPM_ARCH RPM_OS0PM_DOC_DIR='%{_docdir}'0xport RPM_DOC_DIR0PM_PACKAGE_NAME='%{name}'0PM_PACKAGE_VERSION='%{version}'0PM_PACKAGE_RELEASE='%{release}'0xport RPM_PACKAGE_NAME RPM_PACKAGE_VERSION RPM_PACKAGE_RELEASE7{?buildroot:RPM_BUILD_ROOT='%{buildroot}'0xport RPM_BUILD_ROOT0'
+
+       Definition at line 495 of file rpmrc.c.
+
+       Referenced by setDefaults.
+
+   struct tableType_s tables[RPM_MACHTABLE_COUNT] [static]
+       Initial value:
+
+        {
+           { 'arch', 1, 0 },
+           { 'os', 1, 0 },
+           { 'buildarch', 0, 1 },
+           { 'buildos', 0, 1 }
+       }
+
+       Definition at line 93 of file rpmrc.c.
+
+   struct rpmvarValue values[RPMVAR_NUM] [static]
+       Definition at line 117 of file rpmrc.c.
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002             lib/rpmrc.c(3)

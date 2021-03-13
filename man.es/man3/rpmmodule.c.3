@@ -1,0 +1,506 @@
+python/rpmmodule.c(3)                       python/rpmmodule.c(3)
+
+
+
+NAME
+       python/rpmmodule.c -
+
+SYNOPSIS
+       #include <alloca.h>
+       #include <errno.h>
+       #include <fcntl.h>
+       #include <time.h>
+       #include <sys/stat.h>
+       #include <sys/time.h>
+       #include <unistd.h>
+       #include <glob.h>
+       #include <dirent.h>
+       #include <locale.h>
+       #include 'Python.h'
+       #include 'rpmcli.h'
+       #include 'misc.h'
+       #include 'rpmio_internal.h'
+       #include 'header_internal.h'
+       #include 'upgrade.h'
+
+   Data Structures
+       struct FDlist_t
+       struct hdrObject_s
+       struct rpmdbMIObject_s
+       struct rpmdbObject_s
+       struct rpmtransObject_s
+       struct tsCallbackType
+
+   Module: rpm
+       typedef FDlist_t FDlist
+       void initrpm (void)
+       PyObject * rpmtransCreate (PyObject *self, PyObject *args)
+       PyObject * doAddMacro (PyObject *self, PyObject *args)
+       PyObject * doDelMacro (PyObject *self, PyObject *args)
+       PyObject * archScore (PyObject *self, PyObject *args)
+       int psGetArchScore (Header h)
+       int pkgCompareVer (void *first, void *second)
+       void pkgSort (struct pkgSet *psp)
+       PyObject * findUpgradeSet (PyObject *self, PyObject *args)
+       PyObject * rpmHeaderFromPackage (PyObject *self, PyObject
+           *args)
+       PyObject * hdrLoad (PyObject *self, PyObject *args)
+       PyObject * rhnLoad (PyObject *self, PyObject *args)
+       PyObject * rpmInitDB (PyObject *self, PyObject *args)
+       rpmdbObject * rpmOpenDB (PyObject *self, PyObject *args)
+       PyObject * rebuildDB (PyObject *self, PyObject *args)
+       PyObject * rpmReadHeaders (FD_t fd)
+       PyObject * rpmHeaderFromFD (PyObject *self, PyObject
+           *args)
+       PyObject * rpmHeaderFromFile (PyObject *self, PyObject
+           *args)
+       int rpmMergeHeaders (PyObject *list, FD_t fd, int
+           matchTag)
+           This assumes the order of list matches the order of
+           the new headers, and throws an exception if that isn't
+           true.
+       PyObject * rpmMergeHeadersFromFD (PyObject *self, PyObject
+           *args)
+       void errorcb (void)
+       PyObject * errorSetCallback (PyObject *self, PyObject
+           *args)
+       PyObject * errorString (PyObject *self, PyObject *args)
+       PyObject * versionCompare (PyObject *self, PyObject *args)
+       PyObject * labelCompare (PyObject *self, PyObject *args)
+       PyObject * checkSig (PyObject *self, PyObject *args)
+       PyObject * getTsHeader (PyObject *self, PyObject *args)
+       int closeCallback (FILE *f)
+       PyObject * doFopen (PyObject *self, PyObject *args)
+       PyObject * errorCB = NULL
+       PyObject * errorData = NULL
+       FDlist * fdhead = NULL
+       FDlist * fdtail = NULL
+       PyMethodDef rpmModuleMethods []
+
+   Class: header
+       PyObject * hdrKeyList (hdrObject *s, PyObject *args)
+       PyObject * hdrUnload (hdrObject *s, PyObject *args,
+           PyObject *keywords)
+       PyObject * hdrVerifyFile (hdrObject *s, PyObject *args)
+       PyObject * hdrExpandFilelist (hdrObject *s, PyObject
+           *args)
+       PyObject * hdrCompressFilelist (hdrObject *s, PyObject
+           *args)
+       void mungeFilelist (Header h)
+       PyObject * rhnUnload (hdrObject *s, PyObject *args)
+       PyObject * hdrFullFilelist (hdrObject *s, PyObject *args)
+       PyObject * hdrGetAttr (hdrObject *s, char *name)
+       void hdrDealloc (hdrObject *s)
+       long tagNumFromPyObject (PyObject *item)
+       PyObject * hdrSubscript (hdrObject *s, PyObject *item)
+       PyMethodDef hdrMethods []
+       PyMappingMethods hdrAsMapping
+       PyTypeObject hdrType
+
+   Class: rpmdbMatchIterator
+       PyObject * rpmdbMINext (rpmdbMIObject *s, PyObject *args)
+       PyObject * rpmdbMIGetAttr (rpmdbObject *s, char *name)
+       void rpmdbMIDealloc (rpmdbMIObject *s)
+       PyMethodDef rpmdbMIMethods []
+       PyTypeObject rpmdbMIType
+
+   Class: rpmdb
+       PyObject * rpmdbFirst (rpmdbObject *s, PyObject *args)
+       PyObject * rpmdbNext (rpmdbObject *s, PyObject *args)
+       PyObject * handleDbResult (rpmdbMatchIterator mi)
+       PyObject * rpmdbByFile (rpmdbObject *s, PyObject *args)
+       PyObject * rpmdbByName (rpmdbObject *s, PyObject *args)
+       PyObject * rpmdbByProvides (rpmdbObject *s, PyObject
+           *args)
+       rpmdbMIObject * py_rpmdbInitIterator (rpmdbObject *s,
+           PyObject *args)
+       PyObject * rpmdbGetAttr (rpmdbObject *s, char *name)
+       void rpmdbDealloc (rpmdbObject *s)
+       int rpmdbLength (rpmdbObject *s)
+       hdrObject * rpmdbSubscript (rpmdbObject *s, PyObject *key)
+       PyMethodDef rpmdbMethods []
+       PyMappingMethods rpmdbAsMapping
+       PyTypeObject rpmdbType
+
+   Class: rpmtrans
+       PyObject * rpmtransAdd (rpmtransObject *s, PyObject *args)
+       PyObject * rpmtransRemove (rpmtransObject *s, PyObject
+           *args)
+       PyObject * rpmtransDepCheck (rpmtransObject *s, PyObject
+           *args)
+       PyObject * rpmtransOrder (rpmtransObject *s, PyObject
+           *args)
+       PyObject * py_rpmtransGetKeys (rpmtransObject *s, PyObject
+           *args)
+       void * tsCallback (const void *hd, const rpmCallbackType
+           what, const unsigned long amount, const unsigned long
+           total, const void *pkgKey, rpmCallbackData data)
+       PyObject * rpmtransRun (rpmtransObject *s, PyObject *args)
+       PyObject * rpmtransGetAttr (rpmtransObject *o, char *name)
+       void rpmtransDealloc (PyObject *o)
+       int rpmtransSetAttr (rpmtransObject *o, char *name,
+           PyObject *val)
+       Header transactionSetHeader = NULL
+       PyMethodDef rpmtransMethods []
+       PyTypeObject rpmtransType
+
+   Defines
+       #define REGISTER_ENUM(val)
+
+   Typedefs
+       typedef rpmdbObject_s rpmdbObject
+       typedef rpmdbMIObject_s rpmdbMIObject
+       typedef rpmtransObject_s rpmtransObject
+       typedef hdrObject_s hdrObject
+
+   Functions
+       Header headerAllocated (Header h)
+       int mdfile (const char *fn, unsigned char *digest)
+       int rpmvercmp (const char *one, const char *two)
+
+   Variables
+       int _rpmio_debug
+       PyObject * pyrpmError
+
+DETAILED DESCRIPTION
+       Definition in file rpmmodule.c.
+
+DEFINE DOCUMENTATION
+   #define REGISTER_ENUM(val)
+       Value:
+
+       PyDict_SetItemString(d, #val, o=PyInt_FromLong( val ));     Py_DECREF(o);
+
+TYPEDEF DOCUMENTATION
+   typedef struct FDlist_t FDlist
+       Definition at line 2337 of file rpmmodule.c.
+
+FUNCTION DOCUMENTATION
+   PyObject* archScore (PyObject * self, PyObject * args)
+       [static]
+       Definition at line 1675 of file rpmmodule.c.
+
+       References RPM_MACHTABLE_INSTARCH, and rpmMachineScore.
+
+   PyObject* checkSig (PyObject * self, PyObject * args) [static]
+       Definition at line 2302 of file rpmmodule.c.
+
+       References rpmCheckSig.
+
+   int closeCallback (FILE * f) [static]
+       Definition at line 2358 of file rpmmodule.c.
+
+       References FDlist_t::f, Fclose, FDlist_t::fd, fdFree,
+       fdLink, FDlist_t::next, and FDlist_t::note.
+
+       Referenced by doFopen.
+
+   PyObject* doAddMacro (PyObject * self, PyObject * args)
+       [static]
+       Definition at line 1647 of file rpmmodule.c.
+
+       References addMacro, and RMIL_DEFAULT.
+
+   PyObject* doDelMacro (PyObject * self, PyObject * args)
+       [static]
+       Definition at line 1661 of file rpmmodule.c.
+
+       References delMacro.
+
+   PyObject* doFopen (PyObject * self, PyObject * args) [static]
+       Definition at line 2389 of file rpmmodule.c.
+
+       References closeCallback, FDlist_t::f, FDlist_t::fd,
+       fdGetFp, fdLink, Ferror, Fopen, Fstrerror, FDlist_t::next,
+       FDlist_t::note, and pyrpmError.
+
+   void errorcb (void) [static]
+       Definition at line 2196 of file rpmmodule.c.
+
+       References errorCB, and errorData.
+
+       Referenced by errorSetCallback.
+
+   PyObject* errorSetCallback (PyObject * self, PyObject * args)
+       [static]
+       Definition at line 2215 of file rpmmodule.c.
+
+       References errorcb, errorCB, and errorData.
+
+   PyObject* errorString (PyObject * self, PyObject * args)
+       [static]
+       Definition at line 2255 of file rpmmodule.c.
+
+   PyObject* findUpgradeSet (PyObject * self, PyObject * args)
+       [static]
+       Definition at line 1757 of file rpmmodule.c.
+
+       References alloca, packageInfo::data, packageInfo::h,
+       hdrType, headerGetEntry, packageInfo::name,
+       pkgSet::numPackages, pkgSet::packages, pkgSort,
+       pyrpmError, RPMTAG_NAME, packageInfo::selected, and
+       ugFindUpgradePackages.
+
+   PyObject* getTsHeader (PyObject * self, PyObject * args)
+       [static]
+       Definition at line 2319 of file rpmmodule.c.
+
+       References hdrObject_s::fileList, hdrObject_s::fileSizes,
+       hdrObject_s::gids, hdrObject_s::h, hdrType, headerLink,
+       hdrObject_s::linkList, hdrObject_s::md5list,
+       hdrObject_s::modes, hdrObject_s::mtimes,
+       hdrObject_s::rdevs, hdrObject_s::sigs, and
+       hdrObject_s::uids.
+
+   PyObject* hdrLoad (PyObject * self, PyObject * args) [static]
+       Definition at line 1853 of file rpmmodule.c.
+
+       References compressFilelist, hdrObject_s::fileList,
+       hdrObject_s::fileSizes, hdrObject_s::gids, hdrObject_s::h,
+       hdrType, headerAllocated, headerLoad,
+       hdrObject_s::linkList, hdrObject_s::md5list,
+       hdrObject_s::modes, hdrObject_s::mtimes,
+       providePackageNVR, pyrpmError, hdrObject_s::rdevs,
+       hdrObject_s::sigs, and hdrObject_s::uids.
+
+   Header headerAllocated (Header h) [inline, static]
+       Definition at line 26 of file rpmmodule.c.
+
+       References headerToken::flags, and HEADERFLAG_ALLOCATED.
+
+       Referenced by hdrLoad, rhnLoad, and rhnUnload.
+
+   void initrpm (void)
+       Definition at line 2466 of file rpmmodule.c.
+
+       References hdrType, HEADER_EXT_TAG,
+       headerSprintfExtension_s::name, pyrpmError, rpmdbMIType,
+       rpmdbType, RPMFILE_CONFIG, RPMFILE_DOC, RPMFILE_GHOST,
+       RPMFILE_LICENSE, RPMFILE_MISSINGOK, RPMFILE_NOREPLACE,
+       RPMFILE_README, RPMFILE_STATE_NETSHARED,
+       RPMFILE_STATE_NORMAL, RPMFILE_STATE_NOTINSTALLED,
+       RPMFILE_STATE_REPLACED, rpmModuleMethods, RPMPROB_BADARCH,
+       RPMPROB_BADOS, RPMPROB_BADPRETRANS, RPMPROB_BADRELOCATE,
+       RPMPROB_CONFLICT, RPMPROB_DISKNODES, RPMPROB_DISKSPACE,
+       RPMPROB_FILE_CONFLICT, RPMPROB_FILTER_DISKNODES,
+       RPMPROB_FILTER_DISKSPACE, RPMPROB_FILTER_FORCERELOCATE,
+       RPMPROB_FILTER_IGNOREARCH, RPMPROB_FILTER_IGNOREOS,
+       RPMPROB_FILTER_OLDPACKAGE, RPMPROB_FILTER_REPLACENEWFILES,
+       RPMPROB_FILTER_REPLACEOLDFILES, RPMPROB_FILTER_REPLACEPKG,
+       RPMPROB_NEW_FILE_CONFLICT, RPMPROB_OLDPACKAGE,
+       RPMPROB_PKG_INSTALLED, RPMPROB_REQUIRES,
+       rpmReadConfigFiles, RPMSENSE_EQUAL,
+       RPMSENSE_FIND_PROVIDES, RPMSENSE_FIND_REQUIRES,
+       RPMSENSE_GREATER, RPMSENSE_INTERP, RPMSENSE_LESS,
+       RPMSENSE_MULTILIB, RPMSENSE_PREREQ, RPMSENSE_RPMLIB,
+       RPMSENSE_SCRIPT_BUILD, RPMSENSE_SCRIPT_CLEAN,
+       RPMSENSE_SCRIPT_INSTALL, RPMSENSE_SCRIPT_POST,
+       RPMSENSE_SCRIPT_POSTUN, RPMSENSE_SCRIPT_PRE,
+       RPMSENSE_SCRIPT_PREP, RPMSENSE_SCRIPT_PREUN,
+       RPMSENSE_SCRIPT_VERIFY, RPMSENSE_SERIAL,
+       RPMSENSE_TRIGGERIN, RPMSENSE_TRIGGERPOSTUN,
+       RPMSENSE_TRIGGERPREIN, RPMSENSE_TRIGGERUN, rpmTagTable,
+       rpmTagTableSize, RPMTRANS_FLAG_ALLFILES,
+       RPMTRANS_FLAG_BUILD_PROBS, RPMTRANS_FLAG_JUSTDB,
+       RPMTRANS_FLAG_KEEPOBSOLETE, RPMTRANS_FLAG_MULTILIB,
+       RPMTRANS_FLAG_NODOCS, RPMTRANS_FLAG_NOSCRIPTS,
+       RPMTRANS_FLAG_NOTRIGGERS, RPMTRANS_FLAG_TEST,
+       rpmtransType, and headerSprintfExtension_s::type.
+
+   PyObject* labelCompare (PyObject * self, PyObject * args)
+       [static]
+       Definition at line 2271 of file rpmmodule.c.
+
+       References rpmvercmp.
+
+   int mdfile (const char * fn, unsigned char * digest)
+       Definition at line 120 of file md5sum.c.
+
+       References hdrObject_s::md5list.
+
+       Referenced by genCpioListAndHeader, and hdrVerifyFile.
+
+   int pkgCompareVer (void * first, void * second) [static]
+       Definition at line 1702 of file rpmmodule.c.
+
+       References psGetArchScore, rpmVersionCompare, and
+       xstrcasecmp.
+
+       Referenced by pkgSort.
+
+   void pkgSort (struct pkgSet * psp) [static]
+       Definition at line 1724 of file rpmmodule.c.
+
+       References packageInfo::name, pkgSet::numPackages,
+       pkgSet::packages, and pkgCompareVer.
+
+       Referenced by findUpgradeSet.
+
+   int psGetArchScore (Header h) [static]
+       Definition at line 1689 of file rpmmodule.c.
+
+       References headerGetEntry, RPM_INT8_TYPE,
+       RPM_MACHTABLE_INSTARCH, rpmMachineScore, and RPMTAG_ARCH.
+
+       Referenced by pkgCompareVer.
+
+   PyObject* rebuildDB (PyObject * self, PyObject * args)
+       [static]
+       Definition at line 2010 of file rpmmodule.c.
+
+       References rpmdbRebuild.
+
+   PyObject* rhnLoad (PyObject * self, PyObject * args) [static]
+       Definition at line 1890 of file rpmmodule.c.
+
+       References hdrObject_s::fileList, hdrObject_s::fileSizes,
+       hdrObject_s::gids, hdrObject_s::h, hdrType,
+       headerAddEntry, headerAllocated, headerFree,
+       headerGetEntry, headerIsEntry, headerLoad, int_32,
+       hdrObject_s::linkList, hdrObject_s::md5list,
+       hdrObject_s::modes, hdrObject_s::mtimes, pyrpmError,
+       hdrObject_s::rdevs, RPMTAG_ARCH, RPMTAG_HEADERIMMUTABLE,
+       RPMTAG_RHNPLATFORM, RPMTAG_SHA1HEADER, RPMTAG_SHA1RHN,
+       hdrObject_s::sigs, and hdrObject_s::uids.
+
+   PyObject* rpmHeaderFromFD (PyObject * self, PyObject * args)
+       [static]
+       Definition at line 2062 of file rpmmodule.c.
+
+       References Fclose, fdDup, and rpmReadHeaders.
+
+   PyObject* rpmHeaderFromFile (PyObject * self, PyObject * args)
+       [static]
+       Definition at line 2078 of file rpmmodule.c.
+
+       References Fclose, Fopen, pyrpmError, and rpmReadHeaders.
+
+   PyObject* rpmHeaderFromPackage (PyObject * self, PyObject *
+       args) [static]
+       Definition at line 1808 of file rpmmodule.c.
+
+       References Fclose, fdDup, hdrObject_s::fileList,
+       hdrObject_s::fileSizes, hdrObject_s::gids, hdrObject_s::h,
+       hdrType, headerIsEntry, hdrObject_s::linkList,
+       hdrObject_s::md5list, hdrObject_s::modes,
+       hdrObject_s::mtimes, pyrpmError, hdrObject_s::rdevs,
+       rpmRC, RPMRC_BADMAGIC, RPMRC_BADSIZE, RPMRC_FAIL,
+       RPMRC_OK, RPMRC_SHORTREAD, rpmReadPackageInfo,
+       RPMTAG_SOURCEPACKAGE, hdrObject_s::sigs, and
+       hdrObject_s::uids.
+
+   PyObject* rpmInitDB (PyObject * self, PyObject * args)
+       [static]
+       Definition at line 1954 of file rpmmodule.c.
+
+       References alloca, pyrpmError, rpmdbInit, and snprintf.
+
+   int rpmMergeHeaders (PyObject * list, FD_t fd, int matchTag)
+       [static]
+       This assumes the order of list matches the order of the
+       new headers, and throws an exception if that isn't true.
+
+       Definition at line 2101 of file rpmmodule.c.
+
+       References hdrObject_s::fileList, hdrObject_s::h,
+       HEADER_MAGIC_YES, headerAddEntry, headerFree,
+       headerFreeData, headerFreeIterator, headerGetEntry,
+       headerInitIterator, headerNextIterator, headerRead,
+       headerRemoveEntry, int_32, hdrObject_s::linkList,
+       hdrObject_s::md5list, pyrpmError, and hdrObject_s::sigs.
+
+       Referenced by rpmMergeHeadersFromFD.
+
+   PyObject* rpmMergeHeadersFromFD (PyObject * self, PyObject *
+       args) [static]
+       Definition at line 2162 of file rpmmodule.c.
+
+       References Fclose, fdDup, and rpmMergeHeaders.
+
+   rpmdbObject* rpmOpenDB (PyObject * self, PyObject * args)
+       [static]
+       Definition at line 1978 of file rpmmodule.c.
+
+       References alloca, rpmdbObject_s::db,
+       rpmdbObject_s::noffs, rpmdbObject_s::offsets,
+       rpmdbObject_s::offx, pyrpmError, rpmdbOpen, rpmdbType, and
+       snprintf.
+
+   PyObject* rpmReadHeaders (FD_t fd) [static]
+       Definition at line 2020 of file rpmmodule.c.
+
+       References compressFilelist, hdrObject_s::fileList,
+       hdrObject_s::fileSizes, hdrObject_s::gids, hdrObject_s::h,
+       hdrType, HEADER_MAGIC_YES, headerRead,
+       hdrObject_s::linkList, hdrObject_s::md5list,
+       hdrObject_s::modes, hdrObject_s::mtimes,
+       providePackageNVR, pyrpmError, hdrObject_s::rdevs,
+       hdrObject_s::sigs, and hdrObject_s::uids.
+
+       Referenced by rpmHeaderFromFD, and rpmHeaderFromFile.
+
+   PyObject* versionCompare (PyObject * self, PyObject * args)
+       [static]
+       Definition at line 2261 of file rpmmodule.c.
+
+       References hdrObject_s::h, hdrType, and rpmVersionCompare.
+
+VARIABLE DOCUMENTATION
+   int _rpmio_debug
+       Definition at line 24 of file rpmmodule.c.
+
+   PyObject* errorCB = NULL [static]
+       Definition at line 2192 of file rpmmodule.c.
+
+       Referenced by errorcb, and errorSetCallback.
+
+   PyObject * errorData = NULL [static]
+       Definition at line 2192 of file rpmmodule.c.
+
+       Referenced by errorcb, and errorSetCallback.
+
+   FDlist* fdhead = NULL [static]
+       Definition at line 2350 of file rpmmodule.c.
+
+   FDlist* fdtail = NULL [static]
+       Definition at line 2354 of file rpmmodule.c.
+
+   PyMethodDef rpmModuleMethods[] [static]
+       Initial value:
+
+        {
+           { 'TransactionSet', (PyCFunction) rpmtransCreate, METH_VARARGS, NULL },
+           { 'addMacro', (PyCFunction) doAddMacro, METH_VARARGS, NULL },
+           { 'delMacro', (PyCFunction) doDelMacro, METH_VARARGS, NULL },
+           { 'archscore', (PyCFunction) archScore, METH_VARARGS, NULL },
+           { 'findUpgradeSet', (PyCFunction) findUpgradeSet, METH_VARARGS, NULL },
+           { 'headerFromPackage', (PyCFunction) rpmHeaderFromPackage, METH_VARARGS, NULL },
+           { 'headerLoad', (PyCFunction) hdrLoad, METH_VARARGS, NULL },
+           { 'rhnLoad', (PyCFunction) rhnLoad, METH_VARARGS, NULL },
+           { 'initdb', (PyCFunction) rpmInitDB, METH_VARARGS, NULL },
+           { 'opendb', (PyCFunction) rpmOpenDB, METH_VARARGS, NULL },
+           { 'rebuilddb', (PyCFunction) rebuildDB, METH_VARARGS, NULL },
+           { 'mergeHeaderListFromFD', (PyCFunction) rpmMergeHeadersFromFD, METH_VARARGS, NULL },
+           { 'readHeaderListFromFD', (PyCFunction) rpmHeaderFromFD, METH_VARARGS, NULL },
+           { 'readHeaderListFromFile', (PyCFunction) rpmHeaderFromFile, METH_VARARGS, NULL },
+           { 'errorSetCallback', (PyCFunction) errorSetCallback, METH_VARARGS, NULL },
+           { 'errorString', (PyCFunction) errorString, METH_VARARGS, NULL },
+           { 'versionCompare', (PyCFunction) versionCompare, METH_VARARGS, NULL },
+           { 'labelCompare', (PyCFunction) labelCompare, METH_VARARGS, NULL },
+           { 'checksig', (PyCFunction) checkSig, METH_VARARGS, NULL },
+           { 'getTransactionCallbackHeader', (PyCFunction) getTsHeader, METH_VARARGS, NULL },
+
+           { NULL }
+       }
+
+       Definition at line 2439 of file rpmmodule.c.
+
+       Referenced by initrpm.
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002      python/rpmmodule.c(3)

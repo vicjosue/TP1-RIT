@@ -1,0 +1,182 @@
+rpmdb/db1.c(3)                                     rpmdb/db1.c(3)
+
+
+
+NAME
+       rpmdb/db1.c -
+
+SYNOPSIS
+       #include 'system.h'
+       #include <rpmio_internal.h>
+       #include <rpmlib.h>
+       #include <rpmmacro.h>
+       #include <rpmurl.h>
+       #include 'falloc.h'
+       #include 'misc.h'
+       #include 'rpmdb.h'
+       #include 'debug.h'
+
+   Data Structures
+       struct _DBT1
+
+   Defines
+       #define _mymemset(_a, _b, _c)
+       #define DB_VERSION_MAJOR   1
+       #define DB_VERSION_MINOR   85
+       #define DB_VERSION_PATCH   0
+       #define DBT   struct _DBT1
+
+   Functions
+       int db1sync (dbiIndex dbi, unsigned int flags)
+       void * doGetRecord (dbiIndex dbi, unsigned int offset)
+       int db1copen (dbiIndex dbi, void **dbcp, unsigned int
+           flags)
+       int db1cclose (dbiIndex dbi, void *dbcursor, unsigned int
+           flags)
+       int db1cget (dbiIndex dbi, void *dbcursor, void **keyp,
+           size_t *keylen, void **datap, size_t *datalen,
+           unsigned int flags)
+       int db1cdel (dbiIndex dbi, void *dbcursor, const void
+           *keyp, size_t keylen, unsigned int flags)
+       int db1cput (dbiIndex dbi, void *dbcursor, const void
+           *keyp, size_t keylen, const void *datap, size_t
+           datalen, unsigned int flags)
+       int db1ccount (dbiIndex dbi, void *dbcursor, unsigned int
+           *countp, unsigned int flags)
+       int db1byteswapped (dbiIndex dbi)
+       int db1stat (dbiIndex dbi, unsigned int flags)
+       int db1close (dbiIndex dbi, unsigned int flags)
+       int db1open (rpmdb rpmdb, int rpmtag, dbiIndex *dbip)
+
+   Variables
+       int _debug = 1
+       _dbiVec db1vec
+
+DETAILED DESCRIPTION
+       Definition in file db1.c.
+
+DEFINE DOCUMENTATION
+   #define _mymemset(_a, _b, _c)
+       Definition at line 9 of file db1.c.
+
+   #define DB_VERSION_MAJOR   1
+       Definition at line 22 of file db1.c.
+
+       Referenced by db1open, and db3open.
+
+   #define DB_VERSION_MINOR   85
+       Definition at line 23 of file db1.c.
+
+   #define DB_VERSION_PATCH   0
+       Definition at line 24 of file db1.c.
+
+   #define DBT   struct _DBT1
+       Definition at line 32 of file db1.c.
+
+       Referenced by db1cdel, db1cget, and db1cput.
+
+FUNCTION DOCUMENTATION
+   int db1byteswapped (dbiIndex dbi) [static]
+       Definition at line 456 of file db1.c.
+
+   int db1cclose (dbiIndex dbi, void * dbcursor, unsigned int
+       flags) [static]
+       Definition at line 252 of file db1.c.
+
+       References DBC.
+
+   int db1ccount (dbiIndex dbi, void * dbcursor, unsigned int *
+       countp, unsigned int flags) [static]
+       Definition at line 448 of file db1.c.
+
+       References DBC.
+
+   int db1cdel (dbiIndex dbi, void * dbcursor, const void * keyp,
+       size_t keylen, unsigned int flags) [static]
+       Definition at line 360 of file db1.c.
+
+       References _debug, cvtdberr, DB, DBC, DBT, fadFree, and
+       RPMDBI_PACKAGES.
+
+   int db1cget (dbiIndex dbi, void * dbcursor, void ** keyp,
+       size_t * keylen, void ** datap, size_t * datalen, unsigned
+       int flags) [static]
+       Definition at line 261 of file db1.c.
+
+       References _debug, cvtdberr, DB, DBC, DBT, doGetRecord,
+       fadAlloc, fadFirstOffset, fadNextOffset, RPMDBI_PACKAGES,
+       and xmalloc.
+
+   int db1close (dbiIndex dbi, unsigned int flags) [static]
+       Definition at line 468 of file db1.c.
+
+       References _, _debug, _free, cvtdberr, DB, db1basename,
+       db3Free, rpmdb_s::db_home, rpmdb_s::db_root, Fclose,
+       RPMDBI_PACKAGES, rpmGenPath, and urlPath.
+
+       Referenced by db1open.
+
+   int db1copen (dbiIndex dbi, void ** dbcp, unsigned int flags)
+       [static]
+       Definition at line 242 of file db1.c.
+
+       References DBC.
+
+   int db1cput (dbiIndex dbi, void * dbcursor, const void * keyp,
+       size_t keylen, const void * datap, size_t datalen,
+       unsigned int flags) [static]
+       Definition at line 393 of file db1.c.
+
+       References _debug, cvtdberr, DB, DBC, DBT,
+       fdSetContentLength, Fseek, HEADER_MAGIC_NO, headerFree,
+       headerLoad, headerSizeof, headerWrite, RPMDBI_PACKAGES,
+       and SEEK_SET.
+
+   int db1open (rpmdb rpmdb, int rpmtag, dbiIndex * dbip)
+       [static]
+       Definition at line 510 of file db1.c.
+
+       References _, _free, db1basename, db1close, db3New,
+       DB_VERSION_MAJOR, _dbiIndex::dbi_api, _dbiIndex::dbi_db,
+       _dbiIndex::dbi_eflags, _dbiIndex::dbi_lockdbfd,
+       _dbiIndex::dbi_mode, _dbiIndex::dbi_perms,
+       _dbiIndex::dbi_rpmtag, _dbiIndex::dbi_temporary,
+       _dbiIndex::dbi_type, _dbiIndex::dbi_vec, errno, fadOpen,
+       Fcntl, Ferror, RPMDBI_PACKAGES, rpmGenPath, and urlPath.
+
+   int db1stat (dbiIndex dbi, unsigned int flags) [static]
+       Definition at line 462 of file db1.c.
+
+   int db1sync (dbiIndex dbi, unsigned int flags) [static]
+       Definition at line 111 of file db1.c.
+
+       References _debug, cvtdberr, DB, errno, Fileno, and
+       RPMDBI_PACKAGES.
+
+   void* doGetRecord (dbiIndex dbi, unsigned int offset) [static]
+       Definition at line 135 of file db1.c.
+
+       References _, alloca, compressFilelist, fadGetFileSize,
+       fadNextOffset, Fseek, HEADER_MAGIC_NO, headerFree,
+       headerGetEntryMinMemory, headerIsEntry, headerModifyEntry,
+       headerRead, headerUnload, providePackageNVR,
+       RPM_STRING_ARRAY_TYPE, RPMTAG_BUILDTIME, RPMTAG_NAME,
+       RPMTAG_OLDFILENAMES, RPMTAG_RELEASE, RPMTAG_VERSION, and
+       SEEK_SET.
+
+       Referenced by db1cget.
+
+VARIABLE DOCUMENTATION
+   int _debug = 1 [static]
+       Definition at line 7 of file db1.c.
+
+       Referenced by db1cdel, db1cget, db1close, db1cput, and
+       db1sync.
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002             rpmdb/db1.c(3)

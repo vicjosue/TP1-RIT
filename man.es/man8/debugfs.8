@@ -1,0 +1,271 @@
+DEBUGFS(8)                                             DEBUGFS(8)
+
+
+
+NAME
+       debugfs - ext2 file system debugger
+
+SYNOPSIS
+       debugfs [ -b blocksize ] [ -s superblock ] [ -f cmd_file ]
+       [ -R request ] [ -V ] [ [ -w ] [ -c ] [ -i ] [ device ] ]
+
+DESCRIPTION
+       The debugfs program is an interactive file  system  debug­
+       ger.  It can be used to examine and change the state of an
+       ext2 file system.
+       device is the special file  corresponding  to  the  device
+       containing the ext2 file system (e.g /dev/hdXX).
+
+OPTIONS
+       -w     Specifies  that the file system should be opened in
+              read-write mode.  Without  this  option,  the  file
+              system is opened in read-only mode.
+
+       -c     Specifies  that the file system should be opened in
+              catastrophic mode, in which  the  inode  and  group
+              bitmaps are not read initially.  This can be useful
+              for filesystems with  significant  corruption,  but
+              because  of  this,  catastrophic  mode  forces  the
+              filesystem to be opened read-only.
+
+       -i     Specifies that device represents an ext2 image file
+              created  by  the  e2image  program.  Since the ext2
+              image file  only  contains  the  superblock,  block
+              group   descriptor,   block  and  inode  allocation
+              bitmaps, and the inode table, many debugfs commands
+              will  not  function  properly.   Warning: no safety
+              checks are in place, and debugfs may fail in inter­
+              esting  ways if commands such as ls, dump, etc. are
+              tried.  debugfs is a debugging tool.  It has  rough
+              edges!
+
+       -b blocksize
+              Forces the use of the given block size for the file
+              system, rather than  detecting  the  correct  block
+              size as normal.
+
+       -s superblock
+              Causes  the  file system superblock to be read from
+              the given block number,  rather  than  the  default
+              (1).  If you give a -s option, you must also give a
+              -b option.
+
+       -f cmd_file
+              Causes debugfs to read in commands  from  cmd_file,
+              and execute them.  When debugfs is finished execut­
+              ing those commands, it will exit.
+
+       -R request
+              Causes  debugfs  to  execute  the  single   command
+              request, and then exit.
+
+       -V     print the version number of debugfs and exit.
+
+SPECIFYING FILES
+       Many  debugfs  commands  take a filespec as an argument to
+       specify an  inode  (as  opposed  to  a  pathname)  in  the
+       filesystem  which  is  currently  opened  by debugfs.  The
+       filespec argument may be  specified  in  two  forms.   The
+       first  form  is an inode number surrounded by angle brack­
+       ets, e.g., <2>.  The second form is  a  pathname;  if  the
+       pathname  is prefixed by a forward slash ('/'), then it is
+       interpreted relative to the root of the  filesystem  which
+       is  currently  opened by debugfs.  If not, the pathname is
+       interpreted relative to the current working  directory  as
+       maintained  by debugfs.  This may be modified by using the
+       debugfs command cd.
+
+COMMANDS
+       This is a list of the commands which debugfs supports.
+
+       cat filespec
+              Dump the contents of the inode filespec to  stdout.
+
+       cd filespec
+              Change the current working directory to filespec.
+
+       chroot filespec
+              Change the root directory to be the directory file­
+              spec.
+
+       close  Close the currently open file system.
+
+       clri file
+              Clear the contents of the inode file.
+
+       dump [-p] filspec out_file
+              Dump the contents of the inode filespec to the out­
+              put  file  out_file.  If the -p option is given set
+              the owner, group  and  permissions  information  on
+              out_file to match filespec.
+
+       expand_dir filespec
+              Expand the directory filespec.
+
+       feature [fs_feature] [-fs_feature] ...
+              Set  or  clear  various  filesystem features in the
+              superblock.  After setting or clearing any filesys­
+              tem features that were requested, print the current
+              state of the filesystem feature set.
+
+       find_free_block [count [goal]]
+              Find the first count  free  blocks,  starting  from
+              goal and allocate it.
+
+       find_free_inode [dir [mode]]
+              Find a free inode and allocate it.  If present, dir
+              specifies the inode number of the  directory  which
+              the  inode  is  to be located.  The second optional
+              argument mode specifies the permissions of the  new
+              inode.   (If  the directory bit is set on the mode,
+              the allocation routine will function  differently.)
+
+       freeb block [count]
+              Mark  the  block number block as not allocated.  If
+              the optional argument count is present, then  count
+              blocks  starting  at  block  number  block  will be
+              marked as not allocated.
+
+       freei filespec
+              Free the inode specified by filespec.
+
+       help   Print a list of commands understood by  debugfs(8).
+
+       icheck block ...
+              Print  a listing of the inodes which use the one or
+              more blocks specified on the command line.
+
+       initialize device blocksize
+              Create an ext2 file system on  device  with  device
+              size blocksize.  Note that this does not fully ini­
+              tialize all of the data structures; to do this, use
+              the  mke2fs(8) program.  This is just a call to the
+              low-level library, which sets up the superblock and
+              block descriptors.
+
+       kill_file filespec
+              Deallocate the inode filespec and its blocks.  Note
+              that this does not remove any directory entries (if
+              any)  to  this inode.  See the rm(1) command if you
+              wish to unlink a file.
+
+       lcd directory
+              Change the current working directory of the debugfs
+              process to directory on the native filesystem.
+
+       ln filespec dest_file
+              Create  a  link  named dest_file which is a link to
+              filespec.  Note this does not adjust the inode ref­
+              erence counts.
+
+       logdump  [-ac]  [-b<block>] [-i<inode>] [-f<journal_file>]
+       [output_file]
+              Dump the contents of the ext3 journal.
+
+       ls [-l] [-d] filespec
+              Print a listing of the files in the directory file­
+              spec.  The -l flag will list  files  using  a  more
+              verbose  format.   The  -d  flag  will list deleted
+              entries in the directory.
+
+       modify_inode filespec
+              Modify the contents of the inode structure  in  the
+              inode filespec.
+
+       mkdir filespec
+              Make a directory.
+
+       mknod filespec [p|[[c|b] major minor]]
+              Create a special device file (a named pipe, charac­
+              ter or block device).   If  a  character  or  block
+              device  is  to  be made, the major and minor device
+              numbers must be specified.
+
+       ncheck inode_num ...
+              Take the requested list of inode numbers, and print
+              a listing of pathnames to those inodes.
+
+       open  [-w]  [-f]  [-i] [-c] [-b blocksize] [-s superblock]
+       device
+              Open  a filesystem for editing.  The -w flag causes
+              the filesystem to be opened for  writing.   The  -f
+              flag  forces  the  filesystem  to be opened even if
+              there are some unknown or  incompatible  filesystem
+              features  which would normally prevent the filesys­
+              tem from being opened.  The  -c,  -b,  -i,  and  -s
+              options behave the same as those to debugfs itself.
+
+       pwd    Print the current working directory.
+
+       quit   Quit debugfs
+
+       rdump directory destination
+              Recursively dump directory  and  all  its  contents
+              (including regular files, symbolic links, and other
+              directories)  into  the  named  destination   which
+              should  be  an  existing  directory  on  the native
+              filesystem.
+
+       rm pathname
+              Unlink pathname.  If this causes the inode  pointed
+              to by pathname to have no other references, deallo­
+              cate the  file.   This  command  functions  as  the
+              unlink() system call.
+
+       rmdir filespec
+              Remove  the  directory  filespec.  This function is
+              currently not implemented.
+
+       setb block [count]
+              Mark the block number block as allocated.   If  the
+              optional  argument  count  is  present,  then count
+              blocks starting  at  block  number  block  will  be
+              marked as allocated.
+
+       seti filespec
+              Mark  inode filespec as in use in the inode bitmap.
+
+       set_super_value field value
+              Set the superblock field field to value.  The  list
+              of  valid  superblock  fields  which can be set via
+              this command can be displayed by using the command:
+              set_super_value -l
+
+       show_super_stats [-h]
+              List  the contents of the super block and the block
+              group descriptors.  If the -h flag is  given,  only
+              print out the superblock contents.
+
+       stat filespec
+              Display  the contents of the inode structure of the
+              inode filespec.
+
+       testb block [count]
+              Test if the block number block is marked  as  allo­
+              cated  in  the block bitmap.  If the optional argu­
+              ment count is present, then count  blocks  starting
+              at block number block will be tested.
+
+       testi filespec
+              Test  if  the inode filespec is marked as allocated
+              in the inode bitmap.
+
+       unlink pathname
+              Remove the link specified by pathname to an  inode.
+              Note  this  does  not  adjust  the  inode reference
+              counts.
+
+       write source_file out_file
+              Create a file in the filesystem named out_file, and
+              copy  the contents of source_file into the destina­
+              tion file.
+
+AUTHOR
+       debugfs was written by Theodore Ts'o <tytso@mit.edu>.
+
+SEE ALSO
+       dumpe2fs(8), e2fsck(8), mke2fs(8)
+
+
+
+E2fsprogs version 1.26    February 2002                DEBUGFS(8)

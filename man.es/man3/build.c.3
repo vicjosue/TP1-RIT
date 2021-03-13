@@ -1,0 +1,49 @@
+build/build.c(3)                                 build/build.c(3)
+
+
+
+NAME
+       build/build.c - Top-level build dispatcher.
+
+SYNOPSIS
+       #include 'system.h'
+       #include <rpmio_internal.h>
+       #include <rpmbuild.h>
+       #include 'debug.h'
+
+   Functions
+       void doRmSource (Spec spec)
+       int doScript (Spec spec, int what, const char *name,
+           StringBuf sb, int test)
+       int buildSpec (Spec spec, int what, int test)
+
+   Variables
+       int _build_debug = 0
+
+DETAILED DESCRIPTION
+       Top-level build dispatcher.
+
+
+
+       Definition in file build.c.
+
+FUNCTION DOCUMENTATION
+   void doRmSource (Spec spec) [static]
+       Definition at line 21 of file build.c.
+
+       References _free, Source::flags, Source::next,
+       RPMBUILD_ISNO, rpmGetPath, Source::source, and Unlink.
+
+       Referenced by buildSpec.
+
+VARIABLE DOCUMENTATION
+   int _build_debug = 0 [static]
+       Definition at line 13 of file build.c.
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002           build/build.c(3)

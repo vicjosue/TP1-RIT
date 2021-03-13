@@ -1,0 +1,61 @@
+SMBMNT(8)                                               SMBMNT(8)
+
+
+
+NAME
+       smbmnt - helper utility for mounting SMB filesystems
+
+SYNOPSIS
+       smbmnt mount-point [ -s <share> ]  [ -r ]  [ -u <uid> ]  [
+       -g <gid> ]  [ -f <mask> ]  [ -d <mask> ]  [ -o <options> ]
+
+DESCRIPTION
+       smbmnt  is  a helper application used by the smbmount pro­
+       gram to do the actual mounting of SMB shares.  smbmnt  can
+       be  installed  setuid  root if you want normal users to be
+       able to mount their SMB shares.
+
+       A setuid smbmnt will  only  allow  mounts  on  directories
+       owned  by the user, and that the user has write permission
+       on.
+
+       The smbmnt program is normally invoked by smbmount(8)
+
+       smbmount searches the normal PATH  for  smbmnt.  You  must
+       ensure  that  the  smbmnt version in your path matches the
+       smbmount used.
+
+OPTIONS
+       -r     mount the filesystem read-only
+
+       -u uid specify the uid that the files will be owned by
+
+       -g gid specify the gid that the files will be owned by
+
+       -f mask
+              specify the octal file mask applied
+
+       -d mask
+              specify the octal directory mask applied
+
+       -o options
+              list of options that are passed as-is to smbfs,  if
+              this  command  is run on a 2.4 or higher Linux ker­
+              nel.
+
+AUTHOR
+       Volker Lendecke, Andrew Tridgell, Michael H. Warfield  and
+       others.
+
+       The  current  maintainer  of smbfs and the userspace tools
+       smbmount,  smbumount,  and   smbmnt   is   Urban   Widmark
+       <URL:mailto:urban@teststation.com>.    The  SAMBA  Mailing
+       list <URL:mailto:samba@samba.org> is the  preferred  place
+       to ask questions regarding these programs.
+
+       The conversion of this manpage for Samba 2.2 was performed
+       by Gerald Carter
+
+
+
+                         06 December 2001               SMBMNT(8)

@@ -1,0 +1,140 @@
+rpmdb/rpmdb.h(3)                                 rpmdb/rpmdb.h(3)
+
+
+
+NAME
+       rpmdb/rpmdb.h - Access RPM indices using Berkeley DB
+       interface(s).
+
+SYNOPSIS
+       #include <rpmlib.h>
+       #include 'fprint.h'
+
+   Data Structures
+       struct _dbiIndex
+       struct _dbiIndexItem
+       struct _dbiIndexSet
+       struct _dbiVec
+       struct rpmdb_s
+
+   Defines
+       #define DB   void
+       #define DB_ENV   void
+       #define DBC   void
+       #define DBT   void
+       #define DB_LSN   void
+       #define DBI_WRITECURSOR   (1 << 0)
+       #define DBI_ITERATOR   (1 << 1)
+
+   Typedefs
+       typedef _dbiIndexItem * dbiIndexItem
+       typedef _dbiIndex * dbiIndex
+
+   Enumerations
+       enum rpmdbFlags { RPMDB_FLAG_JUSTCHECK =  (1 << 0),
+           RPMDB_FLAG_MINIMAL =  (1 << 1), RPMDB_FLAG_CHROOT =
+           (1 << 2) }
+
+   Functions
+       dbiIndex db3New (rpmdb rpmdb, int rpmtag)
+       dbiIndex db3Free (dbiIndex dbi)
+       const char *const prDbiOpenFlags (int dbflags, int
+           print_dbenv_flags)
+       dbiIndex dbiOpen (rpmdb db, int rpmtag, unsigned int
+           flags)
+       int dbiCopen (dbiIndex dbi, void **dbcp, unsigned int
+           dbiflags)
+       int dbiCclose (dbiIndex dbi, void *dbcursor, unsigned int
+           flags)
+       int dbiDel (dbiIndex dbi, void *dbcursor, const void
+           *keyp, size_t keylen, unsigned int flags)
+       int dbiGet (dbiIndex dbi, void *dbcursor, void **keypp,
+           size_t *keylenp, void **datapp, size_t *datalenp,
+           unsigned int flags)
+       int dbiPut (dbiIndex dbi, void *dbcursor, const void
+           *keyp, size_t keylen, const void *datap, size_t
+           datalen, unsigned int flags)
+       int dbiCount (dbiIndex dbi, void *dbcursor, unsigned int
+           *countp, unsigned int flags)
+       int dbiVerify (dbiIndex dbi, unsigned int flags)
+       int dbiClose (dbiIndex dbi, unsigned int flags)
+       int dbiSync (dbiIndex dbi, unsigned int flags)
+       int dbiByteSwapped (dbiIndex dbi)
+       char * db1basename (int rpmtag)
+       unsigned int rpmdbGetIteratorFileNum (rpmdbMatchIterator
+           mi)
+       int rpmdbFindFpList (rpmdb db, fingerPrint *fpList,
+           dbiIndexSet *matchList, int numItems)
+       dbiIndexSet dbiFreeIndexSet (dbiIndexSet set)
+       unsigned int dbiIndexSetCount (dbiIndexSet set)
+       unsigned int dbiIndexRecordOffset (dbiIndexSet set, int
+           recno)
+       unsigned int dbiIndexRecordFileNumber (dbiIndexSet set,
+           int recno)
+
+DETAILED DESCRIPTION
+       Access RPM indices using Berkeley DB interface(s).
+
+
+
+       Definition in file rpmdb.h.
+
+DEFINE DOCUMENTATION
+   #define DB   void
+       Definition at line 57 of file rpmdb.h.
+
+       Referenced by db1cdel, db1cget, db1close, db1cput,
+       db1sync, db3byteswapped, db3c_open, db3cdel, db3cget,
+       db3close, db3cput, db3open, db3stat, and db3sync.
+
+   #define DB_ENV   void
+       Definition at line 58 of file rpmdb.h.
+
+       Referenced by db3close, db3open, db_fini, and db_init.
+
+   #define DB_LSN   void
+       Definition at line 61 of file rpmdb.h.
+
+   #define DBC   void
+       Definition at line 59 of file rpmdb.h.
+
+       Referenced by addIndexEntry, db1cclose, db1ccount,
+       db1cdel, db1cget, db1copen, db1cput, db3c_close, db3c_del,
+       db3c_dup, db3c_get, db3c_open, db3c_put, db3cclose,
+       db3ccount, db3cdel, db3cget, db3copen, db3cput, db3open,
+       dbiCclose, dbiCopen, dbiCount, dbiDel, dbiFindByLabel,
+       dbiFindMatches, dbiGet, dbiPut, dbiSearch, dbiSync,
+       dbiUpdateIndex, dbiUpdateRecord, openDatabase,
+       removeIndexEntry, rpmdbAdd, rpmdbCountPackages,
+       rpmdbFindByFile, rpmdbGrowIterator, rpmdbInitIterator,
+       rpmdbRemove, and unsatisfiedDepend.
+
+   #define DBI_ITERATOR   (1 << 1)
+       Definition at line 396 of file rpmdb.h.
+
+       Referenced by db3cclose, db3copen, rpmdbFreeIterator, and
+       rpmdbNextIterator.
+
+   #define DBI_WRITECURSOR   (1 << 0)
+       Definition at line 395 of file rpmdb.h.
+
+       Referenced by db3c_open, dbiCopen, rpmdbAdd, rpmdbRemove,
+       rpmdbSetIteratorRewrite, and unsatisfiedDepend.
+
+   #define DBT   void
+       Definition at line 60 of file rpmdb.h.
+
+TYPEDEF DOCUMENTATION
+   typedef struct _dbiIndex* dbiIndex
+       Definition at line 19 of file rpmdb.h.
+
+   typedef struct _dbiIndexItem* dbiIndexItem
+       Definition at line 15 of file rpmdb.h.
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002           rpmdb/rpmdb.h(3)

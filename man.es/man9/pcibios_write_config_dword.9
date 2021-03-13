@@ -1,0 +1,38 @@
+pcibios_write_config_dwordB(I9O)S32 Functpicoinbsios_write_config_dword(9)
+
+
+
+NAME
+       pcibios_write_config_dword - write one double word of data
+       to the configuration space of the PCI bus
+
+SYNOPSIS
+       #include <linux/bios32.h>
+
+       int   pcibios_write_config_dword   (unsigned   char   bus,
+       unsigned  char device_fn,unsigned char where, unsigned int
+       value);
+
+DESCRIPTION
+       The pcibios_write_config_dword function writes one  double
+       word  to  the configuration space of the PCI bus.  The bus
+       can be specified with the bus parameters.   The  device_fn
+       paramter  determines  which ? to use.  where is set to the
+       ?.  The word to be written to the configuration  space  is
+       stored in the value parameter.
+
+RETURN VALUE
+       The return value is taken from the PCI controller in a way
+       that I'm not quite sure of.
+
+       If the PCI system  is  unavailable,  PCIBIOS_FUNC_NOT_SUP­
+       PORTED is returned.
+
+AVAILABILITY
+       Linux 1.0?
+
+AUTHOR
+       Kirk Petersen (kirk@speakeasy.org)
+
+BUGS
+Linux DDI                 August 5, 1p9c9i7bios_write_config_dword(9)

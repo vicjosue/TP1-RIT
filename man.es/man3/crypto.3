@@ -1,0 +1,69 @@
+crypto(3)                    OpenSSL                    crypto(3)
+
+
+
+NNAAMMEE
+       crypto - OpenSSL cryptographic library
+
+SSYYNNOOPPSSIISS
+DDEESSCCRRIIPPTTIIOONN
+       The OpenSSL ccrryyppttoo library implements a wide range of
+       cryptographic algorithms used in various Internet
+       standards. The services provided by this library are used
+       by the OpenSSL implementations of SSL, TLS and S/MIME, and
+       they have also been used to implement SSH, OpenPGP, and
+       other cryptographic standards.
+
+OOVVEERRVVIIEEWW
+       lliibbccrryyppttoo consists of a number of sub-libraries that
+       implement the individual algorithms.
+
+       The functionality includes symmetric encryption, public
+       key cryptography and key agreement, certificate handling,
+       cryptographic hash functions and a cryptographic pseudo-
+       random number generator.
+
+       SYMMETRIC CIPHERS
+           blowfish(3), cast(3), des(3), idea(3), rc2(3), rc4(3),
+           rc5(3)
+
+       PUBLIC KEY CRYPTOGRAPHY AND KEY AGREEMENT
+           dsa(3), dh(3), rsa(3)
+
+       CERTIFICATES
+           x509(3), x509v3(3)
+
+       AUTHENTICATION CODES, HASH FUNCTIONS
+           hmac(3), md2(3), md4(3), md5(3), mdc2(3), ripemd(3),
+           sha(3)
+
+       AUXILIARY FUNCTIONS
+           err(3), threads(3), rand(3)
+
+       INPUT/OUTPUT, DATA ENCODING
+           asn1(3), bio(3), evp(3), pem(3), pkcs7(3), pkcs12(3)
+
+       INTERNAL FUNCTIONS
+           bn(3), buffer(3), lhash(3), objects(3), stack(3),
+           txt_db(3)
+
+SSEEEE AALLSSOO
+       openssl(1), ssl(3)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+14/Aug/2000                   0.9.6c                    crypto(3)

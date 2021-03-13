@@ -1,0 +1,32 @@
+proc_net_register(9)     /proc Functions     proc_net_register(9)
+
+
+
+NAME
+       proc_net_register, proc_net_unregister - register network
+       entries in the /proc filesystem
+
+SYNOPSIS
+       #include <linux/proc_fs.h>
+
+       int proc_net_register(struct proc_dir_entry * child);
+
+       int proc_net_unregister(int inode);
+
+
+DESCRIPTION
+       These  are  wrapper  functions  around  proc_register  and
+       proc_unregister.  They always use a parent of proc_net.
+
+RETURN VALUE
+       As for proc_register and proc_unregister.
+
+SEE ALSO
+       proc_register(9), proc_unregister(9)
+
+AUTHOR
+       Keith Owens <kaos@ocs.com.au>
+
+
+
+Linux 2.0.30                July 1997        proc_net_register(9)

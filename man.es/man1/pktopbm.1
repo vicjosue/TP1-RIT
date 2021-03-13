@@ -1,0 +1,46 @@
+pktopbm(1)                                             pktopbm(1)
+
+
+
+NAME
+       pktopbm  -  convert  packed (PK) format font into portable
+       bitmap(s)
+
+SYNOPSIS
+       pktopbm pkfile[.pk] [ -x width ] [ -y height  ]  [-c  num]
+       pbmfile ...
+
+DESCRIPTION
+       Reads  a  packed  (PK)  font  file  as input, and produces
+       portable bitmaps as output. If the filename  "-"  is  used
+       for  any  of  the filenames, the standard input stream (or
+       standard output where appropriate) will be used. If either
+       the  width or height is specified, this value will be used
+       for all bitmaps produced. Also if one or both  values  are
+       specified,  the  bitmap will be relocated with the hoffset
+       and voffset given in the pkfile.  The  basepoint  will  be
+       placed  in  the  lower  left  corner  of the bitmap if the
+       bitmap is bigger than the specified size it will be  trun­
+       cated at the top or right.
+
+OPTIONS
+       -c num Sets  the character number of the next bitmap writ­
+              ten to num.
+
+       -x width
+              Sets the width of the bitmap.
+
+       -y width
+              Sets the height of the bitmap.
+
+SEE ALSO
+       pbmtopk(1), pbm(5)
+
+AUTHOR
+       Adapted  from  Tom  Rokicki's  pxtopk  by   Angus   Duggan
+       <ajcd@dcs.ed.ac.uk>.    <bartel@informatik.tu-muenchen.de>
+       in March 1995.
+
+
+
+                          6 August 1990                pktopbm(1)

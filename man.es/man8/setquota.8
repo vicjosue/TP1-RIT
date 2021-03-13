@@ -1,0 +1,69 @@
+SETQUOTA(8)                                           SETQUOTA(8)
+
+
+
+NAME
+       setquota - set disk quotas
+
+SYNOPSIS
+       /usr/sbin/setquota  [  -r ] [ -u | -g ] [ -F quotaformat ]
+       name   block-softlimit   block-hardlimit   inode-softlimit
+       inode-hardlimit -a | filesystem...
+
+       /usr/sbin/setquota [ -r ] [ -u | -g ] [ -F quotaformat ] [
+       -p protoname ] name -a | filesystem...
+
+       /usr/sbin/setquota -t [ -u |  -g  ]  [  -F  quotaformat  ]
+       block-grace inode-grace -a | filesystem...
+
+DESCRIPTION
+       setquota  is a command line quota editor.  The filesystem,
+       user/group name and new quotas for this filesystem can  be
+       specified on the command line.
+
+       -r     Edit  also  remote  quota use rpc.rquotad on remote
+              server to set quota.
+
+       -F quotaformat
+              Perform setting for  specified  format  (ie.  don't
+              perform  format  autodetection).   Possible  format
+              names are: vfsold (version 1 quota), vfsv0 (version
+              2  quota),  rpc (quota over NFS), xfs (quota on XFS
+              filesystem)
+
+       -u     Set  user  quotas  for  named  user.  This  is  the
+              default.
+
+       -g     Set group quotas for named group.
+
+       -p protoname
+              Use  quota  settings  of user or group protoname to
+              set the quota for the named user or group.
+
+       -t     Set grace times for users/groups. Times block-grace
+              and inode-grace are specified in seconds.
+
+       -a     Go  through all filesystems with quota in /etc/mtab
+              and perform setting.
+
+       To disable a quota, set the coresponding parameter  to  0.
+       To  change quotas for several filesystems, invoke once for
+       each filesystem.
+
+       Only the super-user may edit quotas.
+
+FILES
+       aquota.user or aquota.group
+                           quota  file  at  the  filesystem  root
+                           (version 2 quota, non-XFS filesystems)
+       quota.user or quota.group
+                           quota  file  at  the  filesystem  root
+                           (version 1 quota, non-XFS filesystems)
+       /etc/mtab           mounted filesystem table
+
+SEE ALSO
+       edquota(8),  quota(1),  quotactl(2),  quotacheck(8),  quo­
+       taon(8), repquota(8)
+
+
+

@@ -1,0 +1,43 @@
+ERR_remove_state(3)          OpenSSL          ERR_remove_state(3)
+
+
+
+NNAAMMEE
+       ERR_remove_state - free a thread's error queue
+
+SSYYNNOOPPSSIISS
+        #include <openssl/err.h>
+
+        void ERR_remove_state(unsigned long pid);
+
+
+DDEESSCCRRIIPPTTIIOONN
+       ERR_remove_state() frees the error queue associated with
+       thread ppiidd.  If ppiidd == 0, the current thread will have its
+       error queue removed.
+
+       Since error queue data structures are allocated
+       automatically for new threads, they must be freed when
+       threads are terminated in order to avoid memory leaks.
+
+RREETTUURRNN VVAALLUUEE
+       ERR_remove_state() returns no value.
+
+SSEEEE AALLSSOO
+       err(3)
+
+HHIISSTTOORRYY
+       ERR_remove_state() is available in all versions of SSLeay
+       and OpenSSL.
+
+
+
+
+
+
+
+
+
+
+
+19/May/2000                   0.9.6c          ERR_remove_state(3)

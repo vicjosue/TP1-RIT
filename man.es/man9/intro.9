@@ -1,0 +1,160 @@
+intro(9)                    Linux DDI                    intro(9)
+
+
+
+NAME
+       intro - Introduction to kernel interface
+
+SYNOPSIS
+       #include <linux/version.h>
+
+DESCRIPTION
+       This  section  documents the functions available to device
+       driver writers and kernel level modules. The functions are
+       of interest mainly to device driver writers, although any­
+       one considering running code in linux kernel mode may need
+       to be familiar with these interfaces.
+
+       Some  of  the  functions  of the DDI exist only in certain
+       versions of the kernel. Use the  LINUX_VERSION_CODE  macro
+       to  test for specific versions of the kernel. For example,
+       to use a feature that is new to 2.1, say:
+
+       #if LINUX_VERSION_CODE >= 0x020100
+           ... use new stuff ...
+       #else
+           ... do it the old way ...
+       #endif
+
+       The following is a list of the man pages, divided  roughly
+       into function groups.
+
+   Kernel Functions
+       These are general kernel functions.
+
+              MAJOR
+
+              MOD_INC_USE_COUNT
+
+              cli
+
+              init_bh
+
+              init_module
+
+              kmalloc
+
+              poll_wait
+
+              printk
+
+              probe_irq_on
+
+              register_chrdev
+
+              register_console
+
+              request_irq
+
+              save_flags
+
+              sleep_on
+
+              wake_up
+
+   /proc functions
+       These  functions  relate  to  manipulation  of  the  /proc
+       filesystem.
+
+              proc_dir_entry
+
+              proc_net_register
+
+              proc_scsi_register
+
+   BIOS32 functions
+       These are specific to PCI (BIOS32) support.
+
+              pcibios_find_class
+
+              pcibios_present
+
+              pcibios_read_config_byte
+
+              pcibios_read_config_dword
+
+              pcibios_read_config_word
+
+              pcibios_strerror
+
+              pcibios_write_config_byte
+
+              pcibios_write_config_dword
+
+              pcibios_write_config_word
+
+   VM functions
+       These are functions that support manipulating the  virtual
+       memory subsystem.
+
+              MAP_NR
+
+              mem_map_reserve
+
+   Network Functions
+              skb_dequeue
+
+              skb_insert
+
+              skb_peek
+
+              skb_queue_empty
+
+              skb_queue_head
+
+              skb_queue_head_init
+
+              skb_queue_len
+
+              skb_queue_tail
+
+              skb_unlink
+
+AVAILABILITY
+       Each  man  page attempts to list the kernel versions where
+       the function is available. If the  form  of  the  function
+       changes,  this  section  tells  when  the  described  form
+       applies.
+
+SEE ALSO
+       This section lists other man pages that may be  of  inter­
+       est.  Also,  interesting  source files in the linux kernel
+       may be listed here.
+
+AUTHORS
+       Each man page has a section like this one that  lists  the
+       author(s)  who  contributed  significantly  to  that page.
+       Other unnamed individuals may also have  contributed  cor­
+       rections, editorial, etc.
+
+       Major  contributors are (in alphabetical order) Cyrus Dur­
+       gin        <cider@speakeasy.org>,        Niel        Moore
+       <amethyst@maxwell.ml.org>,  Keith Owens <kaos@ocs.com.au>,
+       Kirk Petersen <kirk@speakeasy.org>, and  Stephen  Williams
+       <steve@icarus.com>.
+
+       Editorial,  and  this  intro  page,  were  done by Stephen
+       Williams <steve@icarus.com>.
+
+BUGS
+       The living linux kernel is a moving target, and the kernel
+       functions  are  unique  to  linux. Therefore, although the
+       editor and contributers make a good effort to be as  accu­
+       rate  as  possible,  errors may exist. The source codes of
+       the linux kernel are the ultimate authority on the  behav­
+       ior  of  any  function  and should be considered the final
+       word.
+
+
+
+Linux DDI                   July 1997                    intro(9)

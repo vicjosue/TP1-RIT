@@ -1,0 +1,56 @@
+Source(3)                                               Source(3)
+
+
+
+NAME
+       Source -
+
+SYNOPSIS
+       #include <rpmspec.h>
+
+
+   Data Fields
+       char * fullSource
+       char * source
+       int flags
+       int num
+       Source * next
+
+FIELD DOCUMENTATION
+   int Source::flags
+       Definition at line 37 of file rpmspec.h.
+
+       Referenced by addSource, doPatch, doRmSource, doUntar,
+       findSource, parseNoSource, and processSourceFiles.
+
+   char* Source::fullSource
+       Definition at line 35 of file rpmspec.h.
+
+       Referenced by addSource, doUntar, and freeSources.
+
+   struct Source* Source::next
+       Definition at line 39 of file rpmspec.h.
+
+       Referenced by addSource, doPatch, doRmSource, doUntar,
+       findSource, freeSources, and processSourceFiles.
+
+   int Source::num
+       Definition at line 38 of file rpmspec.h.
+
+       Referenced by addSource, doPatch, doUntar, findSource, and
+       processSourceFiles.
+
+   char* Source::source
+       Definition at line 36 of file rpmspec.h.
+
+       Referenced by addSource, doPatch, doRmSource, doUntar, and
+       processSourceFiles.
+
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002                  Source(3)

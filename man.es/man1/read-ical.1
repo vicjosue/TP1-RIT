@@ -1,0 +1,43 @@
+READ-ICAL(1)                                         READ-ICAL(1)
+
+
+
+NAME
+       read-ical  -  coverts  information  on your Palm Computing
+       Device into an Ical-formatted calendar
+
+SYNOPSIS
+       read-ical /dev/tty[<0..n>] filename
+
+DESCRIPTION
+       This manual page documents  the  small  application  read-
+       ical.   read-ical allows the user to retrieve the contents
+       of the ToDo and Datebook databases on a a Pilot, and  con­
+       vert  their  contents to an Ical calendar.  Once read-ical
+       is started, the user must invoke  HotSync  on  the  target
+       device.
+
+       Note  that  the  calendar  file  named by filename will be
+       deleted, so do not use your main calendar. Instead, use  a
+       separate one for this purpose, and include it in your main
+       calendar.
+
+       As read-ical works by passing a script to ical, ical  must
+       be in your path.
+
+   OPTIONS
+       <port> <filename>
+
+USEAGE
+       The  program will connect to a target device, retrieve the
+       ToDo and Datebook databases (ToDoDB.pdb and DatebookDB.pdb
+       respectively), then instruct ical to write a calendar file
+       based on the retrieved information.
+
+AUTHOR
+       read-ical was written by Kenneth Albanowski
+
+
+
+
+FSF                Palm Computing Device Tools       READ-ICAL(1)

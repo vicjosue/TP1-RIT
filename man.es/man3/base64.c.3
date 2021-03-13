@@ -1,0 +1,76 @@
+rpmio/base64.c(3)                               rpmio/base64.c(3)
+
+
+
+NAME
+       rpmio/base64.c -
+
+SYNOPSIS
+       #include 'system.h'
+       #include 'base64.h'
+       #include 'debug.h'
+
+   Functions
+       int B64decode (const char *s, void **datap, size_t *lenp)
+           Decode chunks of 4 bytes of base64 input into 3 bytes
+           of binary output.
+       char * B64encode (const void *str, size_t ns)
+           Encode chunks of 3 bytes of binary input into 4 bytes
+           of base64 output.
+
+   Variables
+       int _debug = 0
+
+DETAILED DESCRIPTION
+       Definition in file base64.c.
+
+FUNCTION DOCUMENTATION
+   int B64decode (const char * s, void ** datap, size_t * lenp)
+       Decode chunks of 4 bytes of base64 input into 3 bytes of
+       binary output.
+
+       Parameters:
+
+       s      base64 string
+
+       Return values:
+
+       datap  address of (malloc'd) binary data
+
+       lenp   address of no. bytes of binary data
+
+       Returns:
+           0 on success
+
+       Definition at line 11 of file base64.c.
+
+       References xmalloc.
+
+   char* B64encode (const void * data, size_t ns)
+       Encode chunks of 3 bytes of binary input into 4 bytes of
+       base64 output.
+
+       Parameters:
+
+       data   binary data
+
+       ns     no. bytes of data (0 uses strlen(data))
+
+       Returns:
+           (malloc'd) base64 string
+
+       Definition at line 76 of file base64.c.
+
+       References xmalloc, and xstrdup.
+
+VARIABLE DOCUMENTATION
+   int _debug = 0 [static]
+       Definition at line 5 of file base64.c.
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002          rpmio/base64.c(3)

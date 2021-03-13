@@ -1,0 +1,52 @@
+GNOME-MOZ-REMOTE(1)                           GNOME-MOZ-REMOTE(1)
+
+
+
+NAME
+       gnome-moz-remote - remote control of Mozilla.
+
+SYNOPSIS
+       gnome-moz-remote  [   --remote  [=CMD]  ]  [  --raise  ] [
+       --noraise  ] [  --newwin  ] [  --local  ] [  --version  -V
+       ]
+
+
+DESCRIPTION
+       gnome-moz-remote  open  a  URL  in  a current netscape, or
+       start a new copy of netscape, pointing at the given  page.
+
+OPTIONS
+       --remote=CMD
+              Execute a command inside Netscape.
+
+       --raise
+              Raise the Netscape window after commands.
+
+       --noraise
+              Don't raise the Netscape window.
+
+       --newwin
+              Show the given URL in a new window
+
+       --local
+              Copy of netscape must be local
+
+       --version
+              Display version
+
+USER CONFIGURATION
+       If  you  want  to  start  netscape instead of mozilla with
+       gnome-moz-remote, create a file named  ~/.gnome/gnome-moz-
+       remote with the following contents:
+
+              [Mozilla]
+              filename=netscape
+
+AUTHOR
+       This manual page was written by Christian Marillat <maril­
+       lat@debian.org> for the Debian GNU/Linux system  (but  may
+       be used by others).
+
+
+
+                          09 januar 2002      GNOME-MOZ-REMOTE(1)

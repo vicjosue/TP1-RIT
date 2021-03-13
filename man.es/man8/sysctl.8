@@ -1,0 +1,79 @@
+SYSCTL(8)                                               SYSCTL(8)
+
+
+
+NAME
+       sysctl - configure kernel parameters at runtime
+
+SYNOPSIS
+       sysctl [-n] [-v] [-e] variable ...
+       sysctl [-n] [-v] [-e] -w variable=value ...
+       sysctl   [-n]   [-v]   [-e]   -p   <filename>     (default
+       /etc/sysctl.conf)
+       sysctl [-n] [-v] [-e] -a
+       sysctl [-n] [-v] [-e] -A
+
+DESCRIPTION
+       sysctl is used to modify  kernel  parameters  at  runtime.
+       The   parameters   available   are   those   listed  under
+       /proc/sys/.  Procfs is required for sysctl(8)  support  in
+       Linux.   You  can  use  sysctl(8)  to  both read and write
+       sysctl data.
+
+PARAMETERS
+       variable
+              The name of a key to read from.  An example is ker­
+              nel.ostype.   The '/' separator is also accepted in
+              place of a '.'.
+
+       variable=value
+              To set a key, use the  form  variable=value,  where
+              variable  is  the key and value is the value to set
+              it to.  If the value contains quotes or  characters
+              which  are  parsed  by  the  shell, you may need to
+              enclose the value in double quotes.  This  requires
+              the -w parameter to use.
+
+       -v     Use  this option to enable printing of the key name
+              when  printing  values  (by  default   nothing   is
+              printed).
+
+       -e     Use  this  option  to  ignore  errors about unknown
+              keys.
+
+       -w     Use this option when you want to  change  a  sysctl
+              setting.
+
+       -p     Load  in sysctl settings from the file specified or
+              /etc/sysctl.conf if none given.
+
+       -a     Display all values currently available.
+
+       -A     Display all values  currently  available  in  table
+              form.
+
+EXAMPLES
+       /sbin/sysctl -a
+
+       /sbin/sysctl -n kernel.hostname
+
+       /sbin/sysctl -w kernel.domainname="example.com"
+
+       /sbin/sysctl -p /etc/sysctl.conf
+
+FILES
+       /proc/sys /etc/sysctl.conf
+
+SEE ALSO
+       sysctl.conf(5)
+
+BUGS
+       The -A parameter behaves just as -a does.
+
+AUTHOR
+       George Staikos, <staikos@0wned.org>
+
+
+
+
+                           21 Sep 1999                  SYSCTL(8)

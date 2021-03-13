@@ -1,0 +1,107 @@
+GENKSYMS(8)            Linux Module Support           GENKSYMS(8)
+
+
+
+NAME
+       genksyms - generate symbol version information
+
+SYNOPSIS
+       genksyms  [-wq]  [-dD] [-V] [-k version] [-p string] [out­
+       put directory]
+
+DESCRIPTION
+       Genksyms reads (on standard input) the output from "gcc -E
+       source.c" and generates a file containing version informa­
+       tion.
+
+       Depending on the output format indicated by the -k option,
+       the  output  will  either be written to a .ver file in the
+       named output directory, or to the standard output.
+
+       Genksyms normally looks for explicit symbol table  defini­
+       tions  in  the  source file.  All definitions and declara­
+       tions of typedef, struct, union and enum will be saved for
+       later  expansion.  Every global symbol will also be saved,
+       together with pointers that will enable a  full  expansion
+       later on.
+
+       When  a  symbol  table  is found in the source, the symbol
+       will  be  expanded  to  its  full  definition,  where  all
+       structs,  unions, enums and typedefs will be expanded down
+       to their basic part, recursively.  This final string  will
+       then be used as input to a CRC algorithm that will give an
+       integer that will change as soon as any  of  the  included
+       definitions changes, for this symbol.
+
+       The version information in the kernel normally looks like:
+       symbol_R12345678, where 12345678 is the hexadecimal repre­
+       sentation of the CRC.
+
+OPTIONS
+       -d, --debug
+              Output debugging information; repeating this option
+              increases the verbosity.  Debug level  1  generates
+              moderate information about the actions being taken;
+              debug level 2 enables  parser  recognition  output;
+              debug level 3 enables lexical analysis output.
+
+       -D, --dump
+              Dump  expanded  symbol  definitions to stderr.  For
+              debugging use only.
+
+       -h, --help
+              Display a summary of options and immediately  exit.
+
+       -k version, --kernel version
+              Select  the version of the kernel for which to gen­
+              erate output.  Omitting this option assumes a  ver­
+              sion below 2.1.0.  Versions below 2.1.18 use check­
+              sum version 1, and  produce  their  output  in  the
+              directory  given  on  the  command  line.  Versions
+              2.1.18 and above use checksum version 2 and produce
+              their output on stdout.
+
+       -p string, --prefix string
+              Prepend  the given string to the CRCs generated for
+              all symbols.  This is intended for use with,  e.g.,
+              SMP kernels, wherein the modules are not compatible
+              at a level below that described by the data  types.
+              This  is primarily caused by inline function expan­
+              sions in the module code itself.
+
+       -q, --quiet
+              Quiet warnings, i.e. reverse the -w option.
+
+       -V, --version
+              Display the version of genksyms.
+
+       -w, --warnings
+              Enable warnings  due  to  unrecognized  syntax  and
+              declared  but undefined structures.  These warnings
+              are normally suppressed.
+
+SEE ALSO
+       insmod(8), modprobe(8)
+
+BUGS
+       The -h option is broken; --help is fine.
+       genksyms [-V | --version] should display version  informa­
+       tion  and  then  exit immediately.  Instead, it prints the
+       version information and behaves  as  if  no  options  were
+       given.
+
+HISTORY
+       This  versioning concept is a result from discussions, not
+       at least on the KERNEL-channel, with a lot of people.
+
+       The genksyms utility was created in 1994 by  Bjorn  Ekwall
+       <bj0rn@blox.se>  being  mostly inspired by Jacques Gelinas
+       <jack@solucorp.ca>      and      Jeremy       Fitzhardinge
+       <jeremy@suite.sw.oz.au>
+
+       It  was  rewritten  in  1996 by Richard Henderson to use a
+       proper lexer and parser.
+
+
+
+Linux                    January 30, 2002             GENKSYMS(8)

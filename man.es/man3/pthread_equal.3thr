@@ -1,0 +1,34 @@
+PTHREAD_EQUAL(3)                                 PTHREAD_EQUAL(3)
+
+
+
+NAME
+       pthread_equal - compare two thread identifiers
+
+
+SYNOPSIS
+       #include <pthread.h>
+
+       int pthread_equal(pthread_t thread1, pthread_t thread2);
+
+
+DESCRIPTION
+       pthread_equal  determines  if two thread identifiers refer
+       to the same thread.
+
+
+RETURN VALUE
+       A non-zero value is returned if thread1 and thread2  refer
+       to the same thread. Otherwise, 0 is returned.
+
+
+AUTHOR
+       Xavier Leroy <Xavier.Leroy@inria.fr>
+
+
+SEE ALSO
+       pthread_self(3).
+
+
+
+                           LinuxThreads          PTHREAD_EQUAL(3)

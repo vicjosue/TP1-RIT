@@ -1,0 +1,203 @@
+PERLBS2000(1)    Perl Programmers Reference Guide   PERLBS2000(1)
+
+
+
+NNAAMMEE
+       README.BS2000 - building and installing Perl for BS2000.
+
+SSYYNNOOPPSSIISS
+       This document will help you Configure, build, test and
+       install Perl on BS2000 in the POSIX subsystem.
+
+DDEESSCCRRIIPPTTIIOONN
+       This is a ported perl for the POSIX subsystem in BS2000
+       VERSION OSD V3.1A or later.  It may work on other ver­
+       sions, but we started porting and testing it with 3.1A and
+       are currently using Version V4.0A.
+
+       You may need the following GNU programs in order to
+       install perl:
+
+       ggzziipp
+
+       We used version 1.2.4, which could be installed out of the
+       box with one failure during 'make check'.
+
+       bbiissoonn
+
+       The yacc coming with BS2000 POSIX didn't work for us.  So
+       we had to use bison.  We had to make a few changes to perl
+       in order to use the pure (reentrant) parser of bison.  We
+       used version 1.25, but we had to add a few changes due to
+       EBCDIC.  See below for more details concerning yacc.
+
+       UUnnppaacckkiinngg
+
+       To extract an ASCII tar archive on BS2000 POSIX you need
+       an ASCII filesystem (we used the mountpoint
+       /usr/local/ascii for this).  Now you extract the archive
+       in the ASCII filesystem without I/O-conversion:
+
+       cd /usr/local/ascii export IO_CONVERSION=NO gunzip <
+       /usr/local/src/perl.tar.gz | pax -r
+
+       You may ignore the error message for the first element of
+       the archive (this doesn't look like a tar archive / skip­
+       ping to next file...), it's only the directory which will
+       be created automatically anyway.
+
+       After extracting the archive you copy the whole directory
+       tree to your EBCDIC filesystem.  TThhiiss ttiimmee yyoouu uussee II//OO--
+       ccoonnvveerrssiioonn:
+
+       cd /usr/local/src IO_CONVERSION=YES cp -r
+       /usr/local/ascii/perl5.005_02 ./
+
+       CCoommppiilliinngg
+
+       There is a "hints" file for BS2000 called hints.posix-bc
+       (because posix-bc is the OS name given by `uname`) that
+       specifies the correct values for most things.  The major
+       problem is (of course) the EBCDIC character set.  We have
+       german EBCDIC version.
+
+       Because of our problems with the native yacc we used GNU
+       bison to generate a pure (=reentrant) parser for perly.y.
+       So our yacc is really the following script:
+
+       -----8<-----/usr/local/bin/yacc-----8<----- #! /usr/bin/sh
+
+       # Bison as a reentrant yacc:
+
+       # save parameters: params="" while [[ $# -gt 1 ]]; do
+           params="$params $1"
+           shift done
+
+       # add flag %pure_parser:
+
+       tmpfile=/tmp/bison.$$.y echo %pure_parser > $tmpfile cat
+       $1 >> $tmpfile
+
+       # call bison:
+
+       echo "/usr/local/bin/bison --yacc $params $1\t\t\t(Pure
+       Parser)" /usr/local/bin/bison --yacc $params $tmpfile
+
+       # cleanup:
+
+       rm -f $tmpfile -----8<----------8<-----
+
+       We still use the normal yacc for a2p.y though!!!  We made
+       a softlink called byacc to distinguish between the two
+       versions:
+
+       ln -s /usr/bin/yacc /usr/local/bin/byacc
+
+       We build perl using GNU make.  We tried the native make
+       once and it worked too.
+
+       TTeessttiinngg
+
+       We still got a few errors during "make test".  Some of
+       them are the result of using bison.  Bison prints parser
+       error instead of syntax error, so we may ignore them.  The
+       following list shows our errors, your results may differ:
+
+       op/numconvert.......FAILED tests 1409-1440 op/reg­
+       exp...........FAILED tests 483, 496 op/reg­
+       exp_noamp.....FAILED tests 483, 496 pragma/over­
+       load.....FAILED tests 152-153, 170-171 pragma/warn­
+       ings.....FAILED tests 14, 82, 129, 155, 192, 205, 207
+       lib/bigfloat........FAILED tests 351-352, 355
+       lib/bigfltpm........FAILED tests 354-355, 358 lib/com­
+       plex.........FAILED tests 267, 487
+       lib/dumper..........FAILED tests 43, 45 Failed 11/231 test
+       scripts, 95.24% okay. 57/10595 subtests failed, 99.46%
+       okay.
+
+       IInnssttaallll
+
+       We have no nroff on BS2000 POSIX (yet), so we ignored any
+       errors while installing the documentation.
+
+       UUssiinngg PPeerrll iinn tthhee PPoossiixx--SShheellll
+
+       BS2000 POSIX doesn't support the shebang notation
+       ("#!/usr/local/bin/perl"), so you have to use the follow­
+       ing lines instead:
+
+       : # use perl
+           eval 'exec /usr/local/bin/perl -S $0 ${1+"$@"}'
+               if $running_under_some_shell;
+
+
+       UUssiinngg PPeerrll iinn ""nnaattiivvee"" BBSS22000000
+
+       We don't have much experience with this yet, but try the
+       following:
+
+       Copy your Perl executable to a BS2000 LLM using bs2cp:
+
+       "bs2cp /usr/local/bin/perl 'bs2:perl(perl,l)'"
+
+       Now you can start it with the following (SDF) command:
+
+       "/START-PROG FROM-FILE=*MOD­
+       ULE(PERL,PERL),PROG-MODE=*ANY,RUN-MODE=*ADV"
+
+       First you get the BS2000 commandline prompt ('*').  Here
+       you may enter your parameters, e.g. "-e 'print "Hello
+       World!\\n";'" (note the double backslash!) or "-w" and the
+       name of your Perl script.  Filenames starting with "/" are
+       searched in in the Posix filesystem, others are searched
+       in the BS2000 filesystem.  You may even use wildcards if
+       you put a "%" in front of your filename (e.g. "-w check­
+       files.pl %*.c").  Read your C/C++ manual for additional
+       possibilities of the commandline prompt (look for PARAME­
+       TER-PROMPTING).
+
+       FFllooaattiinngg ppooiinntt aannoommaalliieess
+
+       There appears to be a bug in the floating point implemen­
+       tation on BS2000 POSIX systems such that calling int() on
+       the product of a number and a small magnitude number is
+       not the same as calling int() on the quotient of that num­
+       ber and a large magnitude number.  For example, in the
+       following Perl code:
+
+           my $x = 100000.0;
+           my $y = int($x * 1e-5) * 1e5; # '0'
+           my $z = int($x / 1e+5) * 1e5;  # '100000'
+           print "\$y is $y and \$z is $z\n"; # $y is 0 and $z is 100000
+
+       Although one would expect the quantities $y and $z to be
+       the same and equal to 100000 they will differ and instead
+       will be 0 and 100000 respectively.
+
+AAUUTTHHOORRSS
+       Thomas Dorner
+
+SSEEEE AALLSSOO
+       the INSTALL manpage, the perlport manpage.
+
+       MMaaiilliinngg lliisstt
+
+       The Perl Institute (http://www.perl.org/) maintains a
+       perl-mvs mailing list of interest to all folks building
+       and/or using perl on EBCDIC platforms.  To subscribe, send
+       a message of:
+
+           subscribe perl-mvs
+
+       to majordomo@perl.org.
+
+HHIISSTTOORRYY
+       This document was originally written by Thomas Dorner for
+       the 5.005 release of Perl.
+
+       This document was podified for the 5.6 release of perl 11
+       July 2000.
+
+
+
+2001-03-18                 perl v5.6.1              PERLBS2000(1)

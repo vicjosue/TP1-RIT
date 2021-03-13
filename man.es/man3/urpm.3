@@ -1,0 +1,90 @@
+urpm(3)        User Contributed Perl Documentation        urpm(3)
+
+
+
+NNAAMMEE
+       urpm - Mandrake perl tools to handle urpmi database
+
+SSYYNNOOPPSSYYSS
+           require urpm;
+
+           my $urpm = new urpm;
+           $urpm->read_config();
+           $urpm->add_medium('medium_ftp',
+                             'ftp://ftp.mirror/pub/linux/distributions/mandrake-devel/cooker/i586/Mandrake/RPMS',
+                             'synthesis.hdlist.cz',
+                             update => 0);
+           $urpm->add_distrib_media('stable', 'removable://mnt/cdrom',
+                                    update => 1);
+           $urpm->select_media('contrib', 'update');
+           $urpm->update_media(%options);
+           $urpm->write_config();
+
+           my $urpm = new urpm;
+           $urpm->read_config(nocheck_access => $uid > 0);
+           foreach (grep { !$_->{ignore} } @{$urpm->{media} || []}) {
+               $urpm->parse_synthesis($_);
+           }
+           if (@files) {
+               push @names, $urpm->register_local_packages(@files);
+           }
+           $urpm->relocate_depslist_provides();
+
+           my %packages;
+           @names and $urpm->search_packages(\%packages, [ @names],
+                                             use_provides => 1);
+           if ($auto_select) {
+               my (%to_remove, %keep_files);
+
+               $urpm->select_packages_to_upgrade('', \%packages,
+                                                 \%to_remove, \%keep_files,
+                                                 use_parsehdlist => $complete);
+           }
+           $urpm->filter_packages_to_upgrade(\%packages,
+                                             $ask_choice);
+           $urpm->deselect_unwanted_packages(\%packages);
+
+           my ($local_sources,
+               $list,
+               $local_to_removes) = $urpm->get_source_packages(\%packages);
+           my %sources = $urpm->download_source_packages($local_sources,
+                                                         $list,
+                                                         'force_local',
+                                                         $ask_medium_change);
+           my @rpms_install = grep { $_ !~ /\.src.\.rpm/ } values %{
+                                $urpm->extract_packages_to_install(\%sources)
+                              || {}};
+           my @rpms_upgrade = grep { $_ !~ /\.src.\.rpm/ } values %sources;
+
+
+DDEESSCCRRIIPPTTIIOONN
+       "urpm" is used by urpmi executables to manipulate packages
+       and media on a Linux-Mandrake distribution.
+
+SSEEEE AALLSSOO
+       rpmtools package is used to manipulate at a lower level
+       hdlist and rpm files.
+
+CCOOPPYYRRIIGGHHTT
+       Copyright (C) 2000,2001,2002 MandrakeSoft <fpons@mandrake­
+       soft.com>
+
+       This program is free software; you can redistribute it
+       and/or modify it under the terms of the GNU General Public
+       License as published by the Free Software Foundation;
+       either version 2, or (at your option) any later version.
+
+       This program is distributed in the hope that it will be
+       useful, but WITHOUT ANY WARRANTY; without even the implied
+       warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+       PURPOSE.  See the GNU General Public License for more
+       details.
+
+       You should have received a copy of the GNU General Public
+       License along with this program; if not, write to the Free
+       Software Foundation, Inc., 59 Temple Place - Suite 330,
+       Boston, MA 02111-1307, USA.
+
+
+
+2002-03-05                 perl v5.6.1                    urpm(3)

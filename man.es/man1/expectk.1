@@ -1,0 +1,36 @@
+EXPECTK(1)                                             EXPECTK(1)
+
+
+
+NAME
+       expectk - Expect with Tk support
+
+SYNOPSIS
+       expectk [ args ]
+
+INTRODUCTION
+       Expectk  is  a  combination of Expect with Tk.  (See their
+       respective man pages for a more comprehensive  explanation
+       of  either.)  Expectk should run any wish or Expect script
+       (with minor changes - see below).
+
+       The differences between the Expectk and Expect environment
+       follows.
+
+       The  send  command  is Tk's.  Expect's send command can be
+       invoked by the name exp_send.  (For compatibility,  Expect
+       allows either send or exp_send to be used.)
+
+       Scripts may be invoked implicitly on systems which support
+       the #! notation by marking the script executable, and mak­
+       ing the first line in your script:
+
+            #!/usr/local/bin/expectk -f
+
+       Of course, the path must accurately describe where Expectk
+       lives.  /usr/local/bin is just an example.
+
+
+
+
+                         15 February 1993              EXPECTK(1)

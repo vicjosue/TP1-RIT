@@ -1,0 +1,142 @@
+HSEARCH(3)          Linux Programmer's Manual          HSEARCH(3)
+
+
+
+NAME
+       hcreate, hdestroy, hsearch - hash table management
+
+SYNOPSIS
+       #include <search.h>
+
+       int hcreate(size_t nel);
+
+       ENTRY *hsearch(ENTRY item, ACTION action);
+
+       void hdestroy(void);
+
+
+       #define _GNU_SOURCE
+       #include <search.h>
+
+       int hcreate_r(size_t nel, struct hsearch_data *tab);
+
+       int  *hsearch_r(ENTRY  item,  ACTION  action, ENTRY **ret,
+       struct hsearch_data *tab);
+
+       void hdestroy_r(struct hsearch_data *tab);
+
+DESCRIPTION
+       The three functions hcreate, hsearch, and  hdestroy  allow
+       the user to create a hash table (only one at a time) which
+       associates a key with any data.  The three functions hcre­
+       ate_r,  hsearch_r,  hdestroy_r are reentrant versions that
+       allow the use of more than one table.
+
+       First the table must be created with  the  function  hcre­
+       ate().   The  argument  nel  is an estimate of the maximum
+       number of entries in the table.   The  function  hcreate()
+       may adjust this value upward to improve the performance of
+       the resulting hash table.
+
+       The corresponding function  hdestroy()  frees  the  memory
+       occupied by the hash table so that a new table can be con­
+       structed.
+
+       The argument item is of type ENTRY,  which  is  a  typedef
+       defined in <search.h> and includes these elements:
+
+            typedef struct entry {
+                char *key;
+                void *data;
+            } ENTRY;
+
+       The field key points to the NUL-terminated string which is
+       the search key.  The field data points to the data associ­
+       ated  with  that key.  The function hsearch() searches the
+       hash table for an item with the same key  as  item  (where
+       "the same" is determined using strcmp(3)), and if success­
+       ful returns a pointer to it.  The argument  action  deter­
+       mines what hsearch() does after an unsuccessful search.  A
+       value of ENTER instructs it to  insert  a  copy  of  item,
+       while a value of FIND means to return NULL.
+
+RETURN VALUE
+       hcreate()  and hcreate_r() return 0 when allocation of the
+       memory for the hash table fails, nonzero otherwise.
+
+       hsearch() returns NULL if action is  ENTER  and  the  hash
+       table  is full, or action is FIND and item cannot be found
+       in the hash table.
+
+       hsearch_r() returns 0 if action  is  ENTER  and  the  hash
+       table is full, and nonzero otherwise.
+
+ERRORS
+       ENOMEM Out of memory.
+
+CONFORMS TO
+       The  functions  hcreate,  hsearch,  and  hdestroy are from
+       SVID, and are described in POSIX 1003.1-2001.   The  func­
+       tions hcreate_r, hsearch_r, hdestroy_r are GNU extensions.
+
+BUGS
+       SVID and POSIX 1003.1-2001 specify that action is signifi­
+       cant  only  for  unsuccessful  searches,  so that an ENTER
+       should not do anything for a successful search.  The  libc
+       and  glibc  implementations  update the data for the given
+       key in this case.
+
+       Individual hash  table  entries  can  be  added,  but  not
+       deleted.
+
+EXAMPLE
+       The following program inserts 24 items in to a hash table,
+       then prints some of them.
+
+           #include <stdio.h>
+           #include <search.h>
+
+           char *data[] = { "alpha", "bravo", "charlie", "delta",
+                "echo", "foxtrot", "golf", "hotel", "india", "juliet",
+                "kilo", "lima", "mike", "november", "oscar", "papa",
+                "quebec", "romeo", "sierra", "tango", "uniform",
+                "victor", "whisky", "x-ray", "yankee", "zulu"
+           };
+
+           int main() {
+             ENTRY e, *ep;
+             int i;
+
+             /* starting with small table, and letting it grow does not work */
+             hcreate(30);
+             for (i = 0; i < 24; i++) {
+                 e.key = data[i];
+                 /* data is just an integer, instead of a
+                    pointer to something */
+                 e.data = (char *)i;
+                 ep = hsearch(e, ENTER);
+                 /* there should be no failures */
+                 if (ep == NULL) {
+                   fprintf(stderr, "entry failed\n");
+                   exit(1);
+                 }
+             }
+             for (i = 22; i < 26; i++) {
+                 /* print two entries from the table, and
+                    show that two are not in the table */
+                 e.key = data[i];
+                 ep = hsearch(e, FIND);
+                 printf("%9.9s -> %9.9s:%d\n", e.key,
+                        ep ? ep->key : "NULL",
+                        ep ? (int)(ep->data) : 0);
+             }
+             return 0;
+           }
+
+
+SEE ALSO
+       bsearch(3), lsearch(3), tsearch(3), malloc(3)
+
+
+
+GNU                         2001-12-26                 HSEARCH(3)

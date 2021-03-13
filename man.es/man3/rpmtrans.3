@@ -1,0 +1,542 @@
+RPMTRANS.(3)                                         RPMTRANS.(3)
+
+
+
+NAME
+       RPMTRANS. -
+
+   Files
+       file depends.h
+           Structures used for dependency checking.
+
+
+       file fprint.h
+           Identify a file name path by a unique 'finger print'.
+
+
+       file psm.c
+           Package state machine to handle a package from a
+           transaction set.
+
+
+       file psm.h
+           Package state machine to handle a package from a
+           transaction set.
+
+
+       file rpmlib.h
+       file rpmvercmp.c
+       file transaction.c
+
+   RPMTS
+       typedef psm_s * PSM_t
+       typedef transactionFileInfo_s * TFI_t
+       typedef rpmTransactionSet_s * rpmTransactionSet
+       typedef enum rpmtransFlags_e rpmtransFlags
+       enum rpmtransFlags_e { RPMTRANS_FLAG_NONE =  0,
+           RPMTRANS_FLAG_TEST =  (1 <<  0),
+           RPMTRANS_FLAG_BUILD_PROBS =  (1 <<  1),
+           RPMTRANS_FLAG_NOSCRIPTS =  (1 <<  2),
+           RPMTRANS_FLAG_JUSTDB =  (1 <<  3),
+           RPMTRANS_FLAG_NOTRIGGERS =  (1 <<  4),
+           RPMTRANS_FLAG_NODOCS =  (1 <<  5),
+           RPMTRANS_FLAG_ALLFILES =  (1 <<  6),
+           RPMTRANS_FLAG_KEEPOBSOLETE =  (1 <<  7),
+           RPMTRANS_FLAG_MULTILIB =  (1 <<  8),
+           RPMTRANS_FLAG_DIRSTASH =  (1 <<  9),
+           RPMTRANS_FLAG_REPACKAGE =  (1 << 10),
+           RPMTRANS_FLAG_PKGCOMMIT =  (1 << 11),
+           RPMTRANS_FLAG_PKGUNDO =  (1 << 12),
+           RPMTRANS_FLAG_COMMIT =  (1 << 13), RPMTRANS_FLAG_UNDO
+           =  (1 << 14), RPMTRANS_FLAG_REVERSE =  (1 << 15),
+           RPMTRANS_FLAG_NOTRIGGERPREIN =  (1 << 16),
+           RPMTRANS_FLAG_NOPRE =  (1 << 17), RPMTRANS_FLAG_NOPOST
+           =  (1 << 18), RPMTRANS_FLAG_NOTRIGGERIN =  (1 << 19),
+           RPMTRANS_FLAG_NOTRIGGERUN =  (1 << 20),
+           RPMTRANS_FLAG_NOPREUN =  (1 << 21),
+           RPMTRANS_FLAG_NOPOSTUN =  (1 << 22),
+           RPMTRANS_FLAG_NOTRIGGERPOSTUN =  (1 << 23),
+           RPMTRANS_FLAG_NOPAYLOAD =  (1 << 24),
+           RPMTRANS_FLAG_APPLYONLY =  (1 << 25),
+           RPMTRANS_FLAG_CHAINSAW =  (1 << 26) }
+       rpmTransactionSet rpmtransCreateSet (rpmdb rpmdb, const
+           char *rootDir)
+       int rpmtransAddPackage (rpmTransactionSet ts, Header h,
+           FD_t fd, const void *key, int upgrade, rpmRelocation
+           *relocs)
+       void rpmtransAvailablePackage (rpmTransactionSet ts,
+           Header h, const void *key)
+       int rpmtransRemovePackage (rpmTransactionSet ts, int
+           dboffset)
+       rpmTransactionSet rpmtransFree (rpmTransactionSet ts)
+       void rpmtransSetScriptFd (rpmTransactionSet ts, FD_t fd)
+       int rpmtransGetKeys (const rpmTransactionSet ts, const
+           void ***ep, int *nep)
+       int rpmdepCheck (rpmTransactionSet ts,
+           rpmDependencyConflict *conflicts, int *numConflicts)
+       int rpmdepOrder (rpmTransactionSet ts)
+       rpmDependencyConflict rpmdepFreeConflicts
+           (rpmDependencyConflict conflicts, int numConflicts)
+       int rpmGetRpmlibProvides (const char ***provNames, int
+           **provFlags, const char ***provVersions)
+       int rpmvercmp (const char *a, const char *b)
+       int rpmRangesOverlap (const char *AName, const char *AEVR,
+           int AFlags, const char *BName, const char *BEVR, int
+           BFlags)
+       int rpmCheckRpmlibProvides (const char *keyName, const
+           char *keyEVR, int keyFlags)
+       int rpmRunTransactions (rpmTransactionSet ts,
+           rpmCallbackFunction notify, rpmCallbackData
+           notifyData, rpmProblemSet okProbs, rpmProblemSet
+           *newProbs, rpmtransFlags transFlags,
+           rpmprobFilterFlags ignoreSet)
+
+TYPEDEF DOCUMENTATION
+   typedef struct psm_s* PSM_t
+       Package state machine data.
+
+       Definition at line 1183 of file rpmlib.h.
+
+   typedef struct rpmTransactionSet_s* rpmTransactionSet
+       The RPM Transaction Set. Transaction sets are inherently
+       unordered! RPM may reorder transaction sets to reduce
+       errors. In general, installs/upgrades are done before
+       strict removals, and prerequisite ordering is done on
+       installs/upgrades.
+
+       Definition at line 1195 of file rpmlib.h.
+
+   typedef enum rpmtransFlags_e  rpmtransFlags
+       Bit(s) to control rpmRunTransaction() operation.
+
+       Referenced by rpmErase, and rpmInstall.
+
+   typedef struct transactionFileInfo_s* TFI_t
+       Definition at line 1187 of file rpmlib.h.
+
+       Referenced by cpio_doio, freePackage, freeSpec,
+       genCpioListAndHeader, generateDepends,
+       processPackageFiles, and processSourceFiles.
+
+ENUMERATION TYPE DOCUMENTATION
+   enum rpmtransFlags_e
+       Bit(s) to control rpmRunTransaction() operation.
+
+       Enumeration values:
+
+       RPMTRANS_FLAG_NONE
+
+       RPMTRANS_FLAG_TEST
+              from --test
+
+       RPMTRANS_FLAG_BUILD_PROBS
+              Todo:
+                   Document.
+
+       RPMTRANS_FLAG_NOSCRIPTS
+              from --noscripts
+
+       RPMTRANS_FLAG_JUSTDB
+              from --justdb
+
+       RPMTRANS_FLAG_NOTRIGGERS
+              from --notriggers
+
+       RPMTRANS_FLAG_NODOCS
+              from --excludedocs
+
+       RPMTRANS_FLAG_ALLFILES
+              from --allfiles
+
+       RPMTRANS_FLAG_KEEPOBSOLETE
+              Todo:
+                   Document.
+
+       RPMTRANS_FLAG_MULTILIB
+              Todo:
+                   Document.
+
+       RPMTRANS_FLAG_DIRSTASH
+              from --dirstash
+
+       RPMTRANS_FLAG_REPACKAGE
+              from --repackage
+
+       RPMTRANS_FLAG_PKGCOMMIT
+
+       RPMTRANS_FLAG_PKGUNDO
+
+       RPMTRANS_FLAG_COMMIT
+
+       RPMTRANS_FLAG_UNDO
+
+       RPMTRANS_FLAG_REVERSE
+
+       RPMTRANS_FLAG_NOTRIGGERPREIN
+
+       RPMTRANS_FLAG_NOPRE
+
+       RPMTRANS_FLAG_NOPOST
+
+       RPMTRANS_FLAG_NOTRIGGERIN
+
+       RPMTRANS_FLAG_NOTRIGGERUN
+
+       RPMTRANS_FLAG_NOPREUN
+
+       RPMTRANS_FLAG_NOPOSTUN
+
+       RPMTRANS_FLAG_NOTRIGGERPOSTUN
+
+       RPMTRANS_FLAG_NOPAYLOAD
+
+       RPMTRANS_FLAG_APPLYONLY
+
+       RPMTRANS_FLAG_CHAINSAW
+
+
+       Definition at line 1329 of file rpmlib.h.
+
+FUNCTION DOCUMENTATION
+   int rpmCheckRpmlibProvides (const char * keyName, const char *
+       keyEVR, int keyFlags)
+       Check dependency against internal rpmlib feature provides.
+
+       Parameters:
+
+       keyName
+              dependency name string
+
+       keyEVR dependency [epoch:]version[-release] string
+
+       keyFlags
+              dependency logical range qualifiers
+
+       Returns:
+           1 if dependency overlaps, 0 otherwise
+
+       Definition at line 54 of file rpmlibprov.c.
+
+   int rpmdepCheck (rpmTransactionSet ts, rpmDependencyConflict *
+       conflicts, int * numConflicts)
+       Check that all dependencies can be resolved.
+
+       Parameters:
+
+       ts     transaction set
+
+       Return values:
+
+       conflicts
+              dependency problems
+
+       numConflicts
+              no. of dependency problems
+
+       Returns:
+           0 on success
+
+       Definition at line 2178 of file depends.c.
+
+       Referenced by checkSpec, rpmErase, rpmInstall, and
+       rpmtransDepCheck.
+
+   rpmDependencyConflict rpmdepFreeConflicts
+       (rpmDependencyConflict conflicts, int numConflicts)
+       Destroy dependency conflicts storage.
+
+       Parameters:
+
+       conflicts
+              dependency problems
+
+       numConflicts
+              no. of dependency problems @retrun NULL always
+
+       Definition at line 935 of file depends.c.
+
+       References rpmProblem_s::ulong1.
+
+       Referenced by checkSpec, rpmErase, rpmInstall, and
+       rpmtransDepCheck.
+
+   int rpmdepOrder (rpmTransactionSet ts)
+       Determine package order in a transaction set according to
+       dependencies.
+
+       Order packages, returning error if circular dependencies
+       cannot be eliminated by removing PreReq's from the
+       loop(s). Only dependencies from added or removed packages
+       are used to determine ordering using a topological sort
+       (Knuth vol. 1, p. 262). Use rpmdepCheck() to verify that
+       all dependencies can be reolved.
+
+       The order ends up as installed packages followed by
+       removed packages, with packages removed for upgrades
+       immediately following the new package to be installed.
+
+       The operation would be easier if we could sort the
+       addedPackages array in the transaction set, but we store
+       indexes into the array in various places.
+
+       Parameters:
+
+       ts     transaction set
+
+       Returns:
+           0 if packages are successfully ordered, 1 otherwise
+
+       Definition at line 1871 of file depends.c.
+
+       Referenced by rpmInstall, and rpmtransOrder.
+
+   int rpmGetRpmlibProvides (const char *** provNames, int **
+       provFlags, const char *** provVersions)
+       Return copy of rpmlib internal provides.
+
+       Return values:
+
+       address
+              of array of rpmlib internal provide names
+
+       address
+              of array of rpmlib internal provide flags
+
+       address
+              of array of rpmlib internal provide versions
+
+       Returns:
+           no. of entries
+
+       Definition at line 70 of file rpmlibprov.c.
+
+       References int_32, major, and minor.
+
+   int rpmRangesOverlap (const char * AName, const char * AEVR,
+       int AFlags, const char * BName, const char * BEVR, int
+       BFlags)
+       Compare two versioned dependency ranges, looking for
+       overlap.
+
+       Parameters:
+
+       AName  1st dependncy name string
+
+       AEVR   1st dependency [epoch:]version[-release] string
+
+       AFlags 1st dependency logical range qualifiers
+
+       BName  2nd dependncy name string
+
+       BEVR   2nd dependency [epoch:]version[-release] string
+
+       BFlags 2nd dependency logical range qualifiers
+
+       Returns:
+           1 if dependencies overlap, 0 otherwise
+
+       Definition at line 528 of file depends.c.
+
+       Referenced by alAllSatisfiesDepend, headerMatchesDepFlags,
+       rangeMatchesDepFlags, and rpmCheckRpmlibProvides.
+
+   int rpmRunTransactions (rpmTransactionSet ts,
+       rpmCallbackFunction notify, rpmCallbackData notifyData,
+       rpmProblemSet okProbs, rpmProblemSet * newProbs,
+       rpmtransFlags transFlags, rpmprobFilterFlags ignoreSet)
+       Process all packages in transaction set.
+
+       Parameters:
+
+       ts     transaction set
+
+       notify progress callback
+
+       notifyData
+              progress callback private data
+
+       okProbs
+              previously known problems (or NULL)
+
+       Return values:
+
+       newProbs
+              address to return unfiltered problems (or NULL)
+
+       Parameters:
+
+       transFlags
+              bits to control rpmRunTransactions()
+
+       ignoreSet
+              bits to filter problem types
+
+       Returns:
+           0 on success, -1 on error, >0 with newProbs set
+
+       Referenced by rpmErase, rpmInstall, and rpmtransRun.
+
+   int rpmtransAddPackage (rpmTransactionSet ts, Header h, FD_t
+       fd, const void * key, int upgrade, rpmRelocation * relocs)
+       Add package to be installed to unordered transaction set.
+
+       If fd is NULL, the callback specified in
+       rpmtransCreateSet() is used to open and close the file
+       descriptor. If Header is NULL, the fd is always used,
+       otherwise fd is only needed (and only opened) for actual
+       package  installation.
+
+       Parameters:
+
+       ts     transaction set
+
+       h      package header
+
+       fd     package file handle
+
+       key    package private data
+
+       upgrade
+              is package being upgraded?
+
+       relocs package file relocations
+
+       Returns:
+           0 on success, 1 on I/O error, 2 needs capabilities
+
+       Definition at line 796 of file depends.c.
+
+       References rpmMireMode.
+
+       Referenced by checkSpec, rpmInstall, and rpmtransAdd.
+
+   void rpmtransAvailablePackage (rpmTransactionSet ts, Header h,
+       const void * key)
+       Add package to universe of possible packages to install in
+       transaction set.
+
+       Parameters:
+
+       ts     transaction set
+
+       h      header
+
+       key    package private data
+
+       Definition at line 905 of file depends.c.
+
+       Referenced by rpmtransAdd.
+
+   rpmTransactionSet rpmtransCreateSet (rpmdb rpmdb, const char *
+       rootDir)
+       Create an empty transaction set.
+
+       Parameters:
+
+       rpmdb  rpm database (may be NULL if database is not
+              accessed)
+
+       rootdir
+              path to top of install tree
+
+       Returns:
+           transaction set
+
+       Definition at line 691 of file depends.c.
+
+       Referenced by checkSpec, cpio_doio, rpmErase, rpmInstall,
+       rpmRollback, and rpmtransCreate.
+
+   rpmTransactionSet rpmtransFree (rpmTransactionSet ts)
+       Destroy transaction set.
+
+       Parameters:
+
+       ts     transaction set
+
+       Returns:
+           NULL always
+
+       Definition at line 916 of file depends.c.
+
+       References RPMPROB_BADPRETRANS, RPMPROB_CONFLICT,
+       RPMPROB_DISKNODES, RPMPROB_DISKSPACE,
+       RPMPROB_FILE_CONFLICT, RPMPROB_NEW_FILE_CONFLICT, and
+       RPMPROB_OLDPACKAGE.
+
+       Referenced by checkSpec, cpio_doio, rpmErase, rpmInstall,
+       rpmRollback, and rpmtransDealloc.
+
+   int rpmtransGetKeys (const rpmTransactionSet ts, const void
+       *** ep, int * nep)
+       Retrieve keys from ordered transaction set.
+
+       Todo:
+           Removed packages have no keys, returned as interleaved
+           NULL pointers.
+
+       Parameters:
+
+       ts     transaction set
+
+       Return values:
+
+       ep     address of returned element array pointer (or NULL)
+
+       nep    address of no. of returned elements (or NULL)
+
+       Returns:
+           0 always
+
+       Referenced by py_rpmtransGetKeys.
+
+   int rpmtransRemovePackage (rpmTransactionSet ts, int dboffset)
+       Add package to be removed to unordered transaction set.
+
+       Parameters:
+
+       ts     transaction set
+
+       dboffset
+              rpm database instance
+
+       Returns:
+           0 on success
+
+       Definition at line 911 of file depends.c.
+
+       References RPMPROB_BADARCH, RPMPROB_BADOS,
+       RPMPROB_BADRELOCATE, RPMPROB_PKG_INSTALLED, and
+       RPMPROB_REQUIRES.
+
+       Referenced by rpmErase, and rpmtransRemove.
+
+   void rpmtransSetScriptFd (rpmTransactionSet ts, FD_t fd)
+       Save file handle to be used as stderr when running package
+       scripts.
+
+       Parameters:
+
+       ts     transaction set
+
+       fd     file handle
+
+       Referenced by rpmtransSetAttr.
+
+   int rpmvercmp (const char * a, const char * b)
+       Segmented string compare for version and/or release.
+
+       Parameters:
+
+       a      1st string
+
+       b      2nd string
+
+       Returns:
+           +1 if a is 'newer', 0 if equal, -1 if b is 'newer'
+
+       Definition at line 15 of file rpmvercmp.c.
+
+
+
+rpm                        13 Mar 2002               RPMTRANS.(3)

@@ -1,0 +1,245 @@
+PERLAPIO(1)      Perl Programmers Reference Guide     PERLAPIO(1)
+
+
+
+NNAAMMEE
+       perlapio - perl's IO abstraction interface.
+
+SSYYNNOOPPSSIISS
+           PerlIO *PerlIO_stdin(void);
+           PerlIO *PerlIO_stdout(void);
+           PerlIO *PerlIO_stderr(void);
+
+           PerlIO *PerlIO_open(const char *,const char *);
+           int     PerlIO_close(PerlIO *);
+
+           int     PerlIO_stdoutf(const char *,...)
+           int     PerlIO_puts(PerlIO *,const char *);
+           int     PerlIO_putc(PerlIO *,int);
+           int     PerlIO_write(PerlIO *,const void *,size_t);
+           int     PerlIO_printf(PerlIO *, const char *,...);
+           int     PerlIO_vprintf(PerlIO *, const char *, va_list);
+           int     PerlIO_flush(PerlIO *);
+
+           int     PerlIO_eof(PerlIO *);
+           int     PerlIO_error(PerlIO *);
+           void    PerlIO_clearerr(PerlIO *);
+
+           int     PerlIO_getc(PerlIO *);
+           int     PerlIO_ungetc(PerlIO *,int);
+           int     PerlIO_read(PerlIO *,void *,size_t);
+
+           int     PerlIO_fileno(PerlIO *);
+           PerlIO *PerlIO_fdopen(int, const char *);
+           PerlIO *PerlIO_importFILE(FILE *, int flags);
+           FILE   *PerlIO_exportFILE(PerlIO *, int flags);
+           FILE   *PerlIO_findFILE(PerlIO *);
+           void    PerlIO_releaseFILE(PerlIO *,FILE *);
+
+           void    PerlIO_setlinebuf(PerlIO *);
+
+           long    PerlIO_tell(PerlIO *);
+           int     PerlIO_seek(PerlIO *,off_t,int);
+           int     PerlIO_getpos(PerlIO *,Fpos_t *)
+           int     PerlIO_setpos(PerlIO *,Fpos_t *)
+           void    PerlIO_rewind(PerlIO *);
+
+           int     PerlIO_has_base(PerlIO *);
+           int     PerlIO_has_cntptr(PerlIO *);
+           int     PerlIO_fast_gets(PerlIO *);
+           int     PerlIO_canset_cnt(PerlIO *);
+
+           char   *PerlIO_get_ptr(PerlIO *);
+           int     PerlIO_get_cnt(PerlIO *);
+           void    PerlIO_set_cnt(PerlIO *,int);
+           void    PerlIO_set_ptrcnt(PerlIO *,char *,int);
+           char   *PerlIO_get_base(PerlIO *);
+           int     PerlIO_get_bufsiz(PerlIO *);
+
+
+DDEESSCCRRIIPPTTIIOONN
+       Perl's source code should use the above functions instead
+       of those defined in ANSI C's stdio.h.  The perl headers
+       will "#define" them to the I/O mechanism selected at Con­
+       figure time.
+
+       The functions are modeled on those in stdio.h, but
+       parameter order has been "tidied up a little".
+
+       PPeerrllIIOO **
+           This takes the place of FILE *. Like FILE * it should
+           be treated as opaque (it is probably safe to assume it
+           is a pointer to something).
+
+       PerlIO_stdin(), PerlIO_stdout(), PerlIO_stderr()
+           Use these rather than "stdin", "stdout", "stderr".
+           They are written to look like "function calls" rather
+           than variables because this makes it easier to make
+           them function calls if platform cannot export data to
+           loaded modules, or if (say) different "threads" might
+           have different values.
+
+       PPeerrllIIOO_ooppeenn((ppaatthh,, mmooddee)), PPeerrllIIOO_ffddooppeenn((ffdd,,mmooddee))
+           These correspond to fopen()/fdopen() arguments are the
+           same.
+
+       PPeerrllIIOO_pprriinnttff((ff,,ffmmtt,,......)), PPeerrllIIOO_vvpprriinnttff((ff,,ffmmtt,,aa))
+           These are fprintf()/vfprintf() equivalents.
+
+       PPeerrllIIOO_ssttddoouuttff((ffmmtt,,......))
+           This is printf() equivalent. printf is #defined to
+           this function, so it is (currently) legal to use
+           "printf(fmt,...)" in perl sources.
+
+       PPeerrllIIOO_rreeaadd((ff,,bbuuff,,ccoouunntt)), PPeerrllIIOO_wwrriittee((ff,,bbuuff,,ccoouunntt))
+           These correspond to fread() and fwrite(). Note that
+           arguments are different, there is only one "count" and
+           order has "file" first.
+
+       PerlIO_close((ff))
+       PPeerrllIIOO_ppuuttss((ff,,ss)), PPeerrllIIOO_ppuuttcc((ff,,cc))
+           These correspond to fputs() and fputc().  Note that
+           arguments have been revised to have "file" first.
+
+       PPeerrllIIOO_uunnggeettcc((ff,,cc))
+           This corresponds to ungetc().  Note that arguments
+           have been revised to have "file" first.
+
+       PerlIO_getc((ff))
+           This corresponds to getc().
+
+       PerlIO_eof((ff))
+           This corresponds to feof().
+
+       PerlIO_error((ff))
+           This corresponds to ferror().
+
+       PerlIO_fileno((ff))
+           This corresponds to fileno(), note that on some plat­
+           forms, the meaning of "fileno" may not match Unix.
+
+       PerlIO_clearerr((ff))
+           This corresponds to clearerr(), i.e., clears 'eof' and
+           'error' flags for the "stream".
+
+       PerlIO_flush((ff))
+           This corresponds to fflush().
+
+       PerlIO_tell((ff))
+           This corresponds to ftell().
+
+       PPeerrllIIOO_sseeeekk((ff,,oo,,ww))
+           This corresponds to fseek().
+
+       PPeerrllIIOO_ggeettppooss((ff,,pp)), PPeerrllIIOO_sseettppooss((ff,,pp))
+           These correspond to fgetpos() and fsetpos(). If plat­
+           form does not have the stdio calls then they are
+           implemented in terms of PerlIO_tell() and Per­
+           lIO_seek().
+
+       PerlIO_rewind((ff))
+           This corresponds to rewind(). Note may be redefined in
+           terms of PerlIO_seek() at some point.
+
+       PerlIO_tmpfile()
+           This corresponds to tmpfile(), i.e., returns an anony­
+           mous PerlIO which will automatically be deleted when
+           closed.
+
+       CCoo--eexxiisstteennccee wwiitthh ssttddiioo
+
+       There is outline support for co-existence of PerlIO with
+       stdio.  Obviously if PerlIO is implemented in terms of
+       stdio there is no problem. However if perlio is imple­
+       mented on top of (say) sfio then mechanisms must exist to
+       create a FILE * which can be passed to library code which
+       is going to use stdio calls.
+
+       PPeerrllIIOO_iimmppoorrttFFIILLEE((ff,,ffllaaggss))
+           Used to get a PerlIO * from a FILE *.  May need addi­
+           tional arguments, interface under review.
+
+       PPeerrllIIOO_eexxppoorrttFFIILLEE((ff,,ffllaaggss))
+           Given an PerlIO * return a 'native' FILE * suitable
+           for passing to code expecting to be compiled and
+           linked with ANSI C stdio.h.
+
+           The fact that such a FILE * has been 'exported' is
+           recorded, and may affect future PerlIO operations on
+           the original PerlIO *.
+
+       PerlIO_findFILE((ff))
+           Returns previously 'exported' FILE * (if any).  Place
+           holder until interface is fully defined.
+
+       PPeerrllIIOO_rreelleeaasseeFFIILLEE((pp,,ff))
+           Calling PerlIO_releaseFILE informs PerlIO that all use
+           of FILE * is complete. It is removed from list of
+           'exported' FILE *s, and associated PerlIO * should
+           revert to original behaviour.
+
+       PerlIO_setlinebuf((ff))
+           This corresponds to setlinebuf(). Use is deprecated
+           pending further discussion. (Perl core uses it only
+           when "dumping"; it has nothing to do with $| auto-
+           flush.)
+
+       In addition to user API above there is an "implementation"
+       interface which allows perl to get at internals of PerlIO.
+       The following calls correspond to the various FILE_xxx
+       macros determined by Configure. This section is really of
+       interest to only those concerned with detailed perl-core
+       behaviour or implementing a PerlIO mapping.
+
+       PerlIO_has_cntptr((ff))
+           Implementation can return pointer to current position
+           in the "buffer" and a count of bytes available in the
+           buffer.
+
+
+       PerlIO_get_ptr((ff))
+           Return pointer to next readable byte in buffer.
+
+       PerlIO_get_cnt((ff))
+           Return count of readable bytes in the buffer.
+
+       PerlIO_canset_cnt((ff))
+           Implementation can adjust its idea of number of bytes
+           in the buffer.
+
+       PerlIO_fast_gets((ff))
+           Implementation has all the interfaces required to
+           allow perl's fast code to handle <FILE> mechanism.
+
+             PerlIO_fast_gets(f) = PerlIO_has_cntptr(f) && \
+                                   PerlIO_canset_cnt(f) && \
+                                   `Can set pointer into buffer'
+
+
+       PPeerrllIIOO_sseett_ppttrrccnntt((ff,,pp,,cc))
+           Set pointer into buffer, and a count of bytes still in
+           the buffer. Should be used only to set pointer to
+           within range implied by previous calls to "Per­
+           lIO_get_ptr" and "PerlIO_get_cnt".
+
+       PPeerrllIIOO_sseett_ccnntt((ff,,cc))
+           Obscure - set count of bytes in the buffer. Depre­
+           cated.  Currently used in only doio.c to force count <
+           -1 to -1.  Perhaps should be PerlIO_set_empty or simi­
+           lar.  This call may actually do nothing if "count" is
+           deduced from pointer and a "limit".
+
+       PerlIO_has_base((ff))
+           Implementation has a buffer, and can return pointer to
+           whole buffer and its size. Used by perl for --TT / --BB
+           tests.  Other uses would be very obscure...
+
+       PerlIO_get_base((ff))
+           Return start of buffer.
+
+       PerlIO_get_bufsiz((ff))
+           Return total size of buffer.
+
+
+
+2001-04-08                 perl v5.6.1                PERLAPIO(1)

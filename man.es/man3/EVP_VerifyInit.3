@@ -1,0 +1,82 @@
+EVP_VerifyInit(3)            OpenSSL            EVP_VerifyInit(3)
+
+
+
+NNAAMMEE
+       EVP_VerifyInit, EVP_VerifyUpdate, EVP_VerifyFinal - EVP
+       signature verification functions
+
+SSYYNNOOPPSSIISS
+        #include <openssl/evp.h>
+
+        void EVP_VerifyInit(EVP_MD_CTX *ctx, const EVP_MD *type);
+        void EVP_VerifyUpdate(EVP_MD_CTX *ctx, const void *d, unsigned int cnt);
+        int EVP_VerifyFinal(EVP_MD_CTX *ctx,unsigned char *sigbuf, unsigned int siglen,EVP_PKEY *pkey);
+
+
+DDEESSCCRRIIPPTTIIOONN
+       The EVP signature verification routines are a high level
+       interface to digital signatures.
+
+       EVP_VerifyInit() initializes a verification context ccttxx to
+       using digest ttyyppee: this will typically be supplied by a
+       function such as EVP_sha1().
+
+       EVP_VerifyUpdate() hashes ccnntt bytes of data at dd into the
+       verification context ccttxx. This function can be called
+       several times on the same ccttxx to include additional data.
+
+       EVP_VerifyFinal() verifies the data in ccttxx using the
+       public key ppkkeeyy and against the ssiigglleenn bytes at ssiiggbbuuff.
+       After calling EVP_VerifyFinal() no additional calls to
+       EVP_VerifyUpdate() can be made, but EVP_VerifyInit() can
+       be called to initialize a new verification operation.
+
+RREETTUURRNN VVAALLUUEESS
+       EVP_VerifyInit() and EVP_VerifyUpdate() do not return
+       values.
+
+       EVP_VerifyFinal() returns 1 for a correct signature, 0 for
+       failure and -1 if some other error occurred.
+
+       The error codes can be obtained by ERR_get_error(3).
+
+NNOOTTEESS
+       The EEVVPP interface to digital signatures should almost
+       always be used in preference to the low level interfaces.
+       This is because the code then becomes transparent to the
+       algorithm used and much more flexible.
+
+       Due to the link between message digests and public key
+       algorithms the correct digest algorithm must be used with
+       the correct public key type. A list of algorithms and
+       associated public key algorithms appears in
+       EVP_DigestInit(3).
+
+BBUUGGSS
+       Several of the functions do not return values: maybe they
+       should. Although the internal digest operations will never
+       fail some future hardware based operations might.
+
+SSEEEE AALLSSOO
+       evp(3), EVP_SignInit(3), EVP_DigestInit(3), err(3),
+       evp(3), hmac(3), md2(3), md5(3), mdc2(3), ripemd(3),
+       sha(3), digest(1)
+
+HHIISSTTOORRYY
+       EVP_VerifyInit(), EVP_VerifyUpdate() and EVP_VerifyFinal()
+       are available in all versions of SSLeay and OpenSSL.
+
+
+
+
+
+
+
+
+
+
+
+
+
+23/Sep/2000                   0.9.6c            EVP_VerifyInit(3)

@@ -1,0 +1,81 @@
+DIRNAME(3)          Linux Programmer's Manual          DIRNAME(3)
+
+
+
+NAME
+       dirname, basename - Parse pathname components
+
+SYNOPSIS
+       #include <libgen.h>
+
+       char *dirname(char *path);
+       char *basename(char *path);
+
+DESCRIPTION
+       The functions dirname and basename break a null-terminated
+       pathname string into directory  and  filename  components.
+       In  the  usual case, dirname returns the string up to, but
+       not including, the final '/',  and  basename  returns  the
+       component  following  the final '/'.  Trailing '/' charac­
+       ters are not counted as part of the pathname.
+
+       If path does not contain  a  slash,  dirname  returns  the
+       string "." while basename returns a copy of path.  If path
+       is the string "/", then both dirname and  basename  return
+       the string "/".  If path is a NULL pointer or points to an
+       empty string, then both dirname and  basename  return  the
+       string ".".
+
+       Concatenating  the  string returned by dirname, a "/", and
+       the string returned by basename yields  a  complete  path­
+       name.
+
+       Both dirname and basename may modify the contents of path,
+       so if you need to preserve  the  pathname  string,  copies
+       should be passed to these functions.  Furthermore, dirname
+       and basename may return pointers to  statically  allocated
+       memory which may be overwritten by subsequent calls.
+
+       The  following  list  of examples (taken from SUSv2) shows
+       the strings returned by dirname and basename for different
+       paths:
+
+       path           dirname        basename
+       "/usr/lib"     "/usr"         "lib"
+       "/usr/"        "/"            "usr"
+       "usr"          "."            "usr"
+       "/"            "/"            "/"
+       "."            "."            "."
+       ".."           "."            ".."
+
+EXAMPLE
+       char *dirc, *basec, *bname, *dname;
+       char *path = "/etc/passwd";
+
+       dirc = strdup(path);
+       basec = strdup(path);
+       dname = dirname(dirc);
+       bname = basename(basec);
+       printf("dirname=%s, basename=%s\n", dname, bname);
+       free(dirc);
+       free(basec);
+
+RETURN VALUE
+       Both  dirname  and basename return pointers to null-termi­
+       nated strings.
+
+BUGS
+       In versions of glibc up to and  including  2.2.1,  dirname
+       does  not  correctly  handle  pathnames  with trailing '/'
+       characters, and  generates  a  segmentation  violation  if
+       given a NULL argument.
+
+CONFORMING TO
+       SUSv2
+
+SEE ALSO
+       dirname(1), basename(1),
+
+
+
+GNU                         2000-12-14                 DIRNAME(3)

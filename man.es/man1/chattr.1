@@ -1,0 +1,110 @@
+CHATTR(1)                                               CHATTR(1)
+
+
+
+NAME
+       chattr - change file attributes on a Linux second extended
+       file system
+
+SYNOPSIS
+       chattr [ -RV ] [ -v version ] [ mode ] files...
+
+DESCRIPTION
+       chattr changes the  file  attributes  on  a  Linux  second
+       extended file system.
+
+       The format of a symbolic mode is +-=[ASacdistu].
+
+       The  operator  `+'  causes  the  selected attributes to be
+       added to the existing attributes of the files; `-'  causes
+       them  to  be  removed;  and `=' causes them to be the only
+       attributes that the files have.
+
+       The letters `ASacdijsu' select the new attributes for  the
+       files:  don't  update  atime (A), synchronous updates (S),
+       append only (a), compressed (c), no  dump  (d),  immutable
+       (i),  data  journalling  (j),  secure  deletion  (s),  and
+       undeletable (u).
+
+OPTIONS
+       -R     Recursively change attributes  of  directories  and
+              their  contents.  Symbolic links encountered during
+              recursive directory traversals are ignored.
+
+       -V     Be verbose with chattr's output and print the  pro­
+              gram version.
+
+       -v version
+              Set the file's version/generation number.
+
+ATTRIBUTES
+       When  a  file  with the 'A' attribute set is modified, its
+       atime record is  not  modified.   This  avoids  a  certain
+       amount of disk I/O for laptop systems.
+
+       A  file  with  the  `a'  attribute set can only be open in
+       append mode for writing.  Only the superuser  can  set  or
+       clear this attribute.
+
+       A  file  with  the `c' attribute set is automatically com­
+       pressed on the disk by the kernel. A read from  this  file
+       returns uncompressed data. A write to this file compresses
+       data before storing them on the disk.
+
+       A file with the `d' attribute set  is  not  candidate  for
+       backup when the dump(8) program is run.
+
+       A  file with the `i' attribute cannot be modified: it can­
+       not be deleted or renamed, no link can be created to  this
+       file  and  no  data  can  be written to the file. Only the
+       superuser can set or clear this attribute.
+
+       A file with the `j' attribute has all of its data  written
+       to  the  ext3  journal  before  being  written to the file
+       itself,  if   the   filesystem   is   mounted   with   the
+       "data=ordered"  or  "data=writeback"  options.   When  the
+       filesystem is mounted with  the  "data=journalled"  option
+       all file data is already journalled and this attribute has
+       no effect.
+
+       When a file with the `s' attribute  set  is  deleted,  its
+       blocks are zeroed and written back to the disk.
+
+       When  a  file  with the `S' attribute set is modified, the
+       changes are written synchronously on  the  disk;  this  is
+       equivalent  to the `sync' mount option applied to a subset
+       of the files.
+
+       A file with the 't' attribute  will  not  have  a  partial
+       block  fragment at the of the file merged with other files
+       (for those filesystems which support tail-merging).   This
+       is  necessary for applications such as LILO which read the
+       filesystem directly, and who don't understand  tail-merged
+       files.
+
+       When  a  file  with  the `u' attribute set is deleted, its
+       contents are saved.  This allows the user to ask  for  its
+       undeletion.
+
+
+AUTHOR
+       chattr was written by Remy Card <Remy.Card@linux.org>.
+
+BUGS AND LIMITATIONS
+       As  of Linux 2.2, the `c', 's',  and `u' attribute are not
+       honored by the kernel filesystem code.    These attributes
+       will be implemented in a future ext2 fs version.
+
+       The `j' option is only useful if the filesystem is mounted
+       as ext3.
+
+AVAILABILITY
+       chattr is part of the e2fsprogs package and  is  available
+       from http://e2fsprogs.sourceforge.net.
+
+SEE ALSO
+       lsattr(1)
+
+
+
+E2fsprogs version 1.26    February 2002                 CHATTR(1)

@@ -1,0 +1,68 @@
+build/myftw.c(3)                                 build/myftw.c(3)
+
+
+
+NAME
+       build/myftw.c - Modified ftw() -- uses Lstat() instead of
+       stat().
+
+SYNOPSIS
+       #include 'system.h'
+       #include <rpmio.h>
+       #include 'myftw.h'
+       #include 'debug.h'
+
+   Defines
+       #define NAMLEN(a)   strlen((a)->d_name)
+       #define PATH_MAX   1024
+
+   Functions
+       int myftw_dir (DIR **dirs, int level, int descriptors,
+           char *dir, size_t len, myftwFunc func, void *fl)
+       int myftw (const char *dir, int descriptors, myftwFunc
+           func, void *fl)
+
+DETAILED DESCRIPTION
+       Modified ftw() -- uses Lstat() instead of stat().
+
+
+
+       Definition in file myftw.c.
+
+DEFINE DOCUMENTATION
+   #define NAMLEN(a)   strlen((a)->d_name)
+       Definition at line 30 of file myftw.c.
+
+       Referenced by myftw_dir.
+
+   #define PATH_MAX   1024
+       Definition at line 41 of file myftw.c.
+
+       Referenced by myftw, and myftw_dir.
+
+FUNCTION DOCUMENTATION
+   int myftw (const char * dir, int descriptors, myftwFunc func,
+       void * fl)
+       Definition at line 179 of file myftw.c.
+
+       References alloca, Closedir, errno, Lstat, MYFTW_D,
+       myftw_dir, MYFTW_DNR, MYFTW_F, MYFTW_NS, myftwFunc,
+       Opendir, and PATH_MAX.
+
+   int myftw_dir (DIR ** dirs, int level, int descriptors, char *
+       dir, size_t len, myftwFunc func, void * fl) [static]
+       Definition at line 56 of file myftw.c.
+
+       References Closedir, dirent, errno, Lstat, MYFTW_D,
+       MYFTW_DNR, MYFTW_F, MYFTW_NS, myftwFunc, NAMLEN, Opendir,
+       PATH_MAX, and Readdir.
+
+       Referenced by myftw.
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002           build/myftw.c(3)

@@ -1,0 +1,92 @@
+Magick++-Config(1)                             Magick++-Config(1)
+
+
+
+NAME
+       Magick++-config - get information about the installed ver­
+       sion of Magick++
+
+SYNOPSIS
+       Magick++-config [--version] [--cppflags] [--cxxflags]
+       [--ldflags] [--libs]
+
+DESCRIPTION
+       Magick++-config prints the compiler and linker flags
+       required to compile and link programs that use the
+       ImageMagick C++ Application Programmer Interface (known as
+       Magick++ ).
+
+EXAMPLES
+       To print the version of the installed distribution of
+       ImageMagick, use:
+
+         Magick++-config --version
+
+       To compile a program that calls the ImageMagick C++ Appli­
+       cation Programmer Interface, use:
+
+         c++ `Magick++-config --cxxflags --cppflags --ldflags --libs` program.cpp
+
+
+OPTIONS
+       --version
+              Print the version of the ImageMagick distribution
+              to standard output.
+
+       --cppflags
+              Print the precompiler flags that are needed to find
+              the ImageMagick C and C++ include files and ensures
+              that the ImageMagick data structures match between
+              your program and the installed libraries.
+
+       --cxxflags
+              Print the compiler flags that are needed to compile
+              a program with libMagick++.
+
+       --libs Print the linker flags that are needed to link a
+              program with libMagick++.
+
+       --ldflags
+              Print the linker flags that are needed to link with
+              the libMagick++ library.
+
+COPYRIGHT
+       Copyright (C) 2000 ImageMagick Studio, a non-profit orga­
+       nization dedicated to making software imaging solutions
+       freely available.
+
+       Permission is hereby granted, free of charge, to any per­
+       son obtaining a copy of this software and associated docu­
+       mentation files ("ImageMagick"), to deal in ImageMagick
+       without restriction, including without limitation the
+       rights to use, copy, modify, merge, publish, distribute,
+       sublicense, and/or sell copies of ImageMagick, and to per­
+       mit persons to whom the ImageMagick is furnished to do so,
+       subject to the following conditions:
+
+       The above copyright notice and this permission notice
+       shall be included in all copies or substantial portions of
+       ImageMagick.
+
+       The software is provided "as is", without warranty of any
+       kind, express or implied, including but not limited to the
+       warranties of merchantability, fitness for a particular
+       purpose and noninfringement.  In no event shall ImageMag­
+       ick Studio be liable for any claim, damages or other lia­
+       bility, whether in an action of contract, tort or other­
+       wise, arising from, out of or in connection with ImageMag­
+       ick or the use or other dealings in ImageMagick.
+
+       Except as contained in this notice, the name of the
+       ImageMagick Studio shall not be used in advertising or
+       otherwise to promote the sale, use or other dealings in
+       ImageMagick without prior written authorization from the
+       ImageMagick Studio.
+
+AUTHORS
+       Bob Friesenhahn, ImageMagick Studio
+
+
+
+
+ImageMagick              4 November 2000       Magick++-Config(1)

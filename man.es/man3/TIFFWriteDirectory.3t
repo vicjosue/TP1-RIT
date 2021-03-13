@@ -1,0 +1,76 @@
+TIFFWriteDirectory(3T)                     TIFFWriteDirectory(3T)
+
+
+
+NAME
+       TIFFWriteDirectory  -  write  the  current directory in an
+       open TIFF file
+
+SYNOPSIS
+       #include <tiffio.h>
+       int TIFFWriteDirectory(TIFF* tif)
+
+DESCRIPTION
+       Write the contents of the current directory  to  the  file
+       and  setup  to  create  a  new  subfile  in the same file.
+       Applications only need  to  call  TIFFWriteDirectory  when
+       writing   multiple   subfiles   to  a  single  TIFF  file.
+       TIFFWriteDirectory is automatically  called  by  TIFFClose
+       and TIFFFlush to write a modified directory if the file is
+       open for writing.
+
+RETURN VALUES
+       1 is returned when the contents are  successfully  written
+       to  the  file.   Otherwise,  0 is returned if an error was
+       encountered when writing the directory contents.
+
+DIAGNOSTICS
+       All error messages are directed to the TIFFError(3T)  rou­
+       tine.
+
+       Error  post-encoding before directory write.  Before writ­
+       ing the contents of the  current  directory,  any  pending
+       data  are  flushed.   This message indicates that an error
+       occurred while doing this.
+
+       Error flushing data before directory write.  Before  writ­
+       ing  the  contents  of  the current directory, any pending
+       data are flushed.  This message indicates  that  an  error
+       occurred while doing this.
+
+       Cannot  write  directory,  out  of  space.   There was not
+       enough space to allocate a temporary area for  the  direc­
+       tory that was to be written.
+
+       Error  writing  directory  count.   A write error occurred
+       when writing the count of fields in the directory.
+
+       Error writing directory contents.  A write error  occurred
+       when writing the directory fields.
+
+       Error writing directory link.  A write error occurred when
+       writing the link to the next directory.
+
+       Error writing data for field "%s".  A write error occurred
+       when writing indirect data for the specified field.
+
+       Error  writing  TIFF  header.  A write error occurred when
+       re-writing header at the front of the file.
+
+       Error fetching directory count.   A  read  error  occurred
+       when  fetching  the  directory  count field for a previous
+       directory.  This can occur when setting up a link  to  the
+       directory that is being written.
+
+       Error fetching directory link.  A read error occurred when
+       fetching  the  directory  link  field   for   a   previous
+       directory.   This  can occur when setting up a link to the
+       directory that is being written.
+
+SEE ALSO
+       libtiff(3T), TIFFOpen(3T),  TIFFError(3T),  TIFFReadDirec­
+       tory(3T), TIFFSetDirectory(3T)
+
+
+
+                        December 16, 1991  TIFFWriteDirectory(3T)

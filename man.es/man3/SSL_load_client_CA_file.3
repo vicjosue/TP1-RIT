@@ -1,0 +1,70 @@
+SSL_load_client_CA_file(3)   OpenSSL   SSL_load_client_CA_file(3)
+
+
+
+NNAAMMEE
+       SSL_load_client_CA_file - load certificate names from file
+
+SSYYNNOOPPSSIISS
+        #include <openssl/ssl.h>
+
+        STACK_OF(X509_NAME) *SSL_load_client_CA_file(const char *file);
+
+
+DDEESSCCRRIIPPTTIIOONN
+       SSL_load_client_CA_file() reads certificates from ffiillee and
+       returns a STACK_OF(X509_NAME) with the subject names
+       found.
+
+NNOOTTEESS
+       SSL_load_client_CA_file() reads a file of PEM formatted
+       certificates and extracts the X509_NAMES of the
+       certificates found. While the name suggests the specific
+       usage as support function for
+       SSL_CTX_set_client_CA_list(3), it is not limited to CA
+       certificates.
+
+EEXXAAMMPPLLEESS
+       Load names of CAs from file and use it as a client CA
+       list:
+
+        SSL_CTX *ctx;
+        STACK_OF(X509_NAME) *cert_names;
+
+        ...
+        cert_names = SSL_load_client_CA_file("/path/to/CAfile.pem");
+        if (cert_names != NULL)
+          SSL_CTX_set_client_CA_list(ctx, cert_names);
+        else
+          error_handling();
+        ...
+
+
+RREETTUURRNN VVAALLUUEESS
+       The following return values can occur:
+
+       NULL
+           The operation failed, check out the error stack for
+           the reason.
+
+       Pointer to STACK_OF(X509_NAME)
+           Pointer to the subject names of the successfully read
+           certificates.
+
+SSEEEE AALLSSOO
+       ssl(3), SSL_CTX_set_client_CA_list(3)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+11/Oct/2000                   0.9.6c   SSL_load_client_CA_file(3)

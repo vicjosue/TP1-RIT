@@ -1,0 +1,281 @@
+build/pack.c(3)                                   build/pack.c(3)
+
+
+
+NAME
+       build/pack.c - Assemble components of an RPM package.
+
+SYNOPSIS
+       #include 'system.h'
+       #include <rpmio_internal.h>
+       #include <rpmbuild.h>
+       #include 'buildio.h'
+       #include 'misc.h'
+       #include 'signature.h'
+       #include 'rpmlead.h'
+       #include 'debug.h'
+
+   Defines
+       #define RPMPKGVERSION_MIN   30004
+       #define RPMPKGVERSION_MAX   40003
+
+   Functions
+       int genSourceRpmName (Spec spec)
+       int cpio_doio (FD_t fdo, Header h, CSA_t csa, const char
+           *fmodeMacro)
+       int cpio_copy (FD_t fdo, CSA_t csa)
+       StringBuf addFileToTagAux (Spec spec, const char *file,
+           StringBuf sb)
+       int addFileToTag (Spec spec, const char *file, Header h,
+           int tag)
+       int addFileToArrayTag (Spec spec, const char *file, Header
+           h, int tag)
+       int processScriptFiles (Spec spec, Package pkg)
+       int readRPM (const char *fileName, Spec *specp, struct
+           rpmlead *lead, Header *sigs, CSA_t csa)
+           Read rpm package components from file.
+       int rpmLeadVersion (void)
+       int writeRPM (Header *hdrp, const char *fileName, int
+           type, CSA_t csa, char *passPhrase, const char
+           **cookie)
+           Write rpm package to file.
+       int packageBinaries (Spec spec)
+       int packageSources (Spec spec)
+
+   Variables
+       int _noDirTokens
+       unsigned char header_magic [8]
+       int rpmpkg_version = -1
+       int_32 copyTags []
+
+DETAILED DESCRIPTION
+       Assemble components of an RPM package.
+
+
+
+       Definition in file pack.c.
+
+DEFINE DOCUMENTATION
+   #define RPMPKGVERSION_MAX   40003
+       Definition at line 342 of file pack.c.
+
+       Referenced by rpmLeadVersion.
+
+   #define RPMPKGVERSION_MIN   30004
+       Definition at line 341 of file pack.c.
+
+       Referenced by rpmLeadVersion.
+
+FUNCTION DOCUMENTATION
+   int addFileToArrayTag (Spec spec, const char * file, Header h,
+       int tag) [static]
+       Definition at line 178 of file pack.c.
+
+       References addFileToTagAux, freeStringBuf, getStringBuf,
+       headerAddOrAppendEntry, newStringBuf, and
+       RPM_STRING_ARRAY_TYPE.
+
+       Referenced by processScriptFiles.
+
+   int addFileToTag (Spec spec, const char * file, Header h, int
+       tag) [static]
+       Definition at line 155 of file pack.c.
+
+       References addFileToTagAux, appendLineStringBuf,
+       freeStringBuf, getStringBuf, headerAddEntry,
+       headerRemoveEntry, HGE_t, newStringBuf, and
+       RPM_STRING_TYPE.
+
+       Referenced by processScriptFiles.
+
+   StringBuf addFileToTagAux (Spec spec, const char * file,
+       StringBuf sb) [static]
+       Definition at line 120 of file pack.c.
+
+       References _, _free, appendStringBuf, expandMacros,
+       Fclose, fdGetFp, Ferror, Fopen, freeStringBuf, and
+       rpmGetPath.
+
+       Referenced by addFileToArrayTag, and addFileToTag.
+
+   int cpio_copy (FD_t fdo, CSA_t csa) [static]
+       Definition at line 96 of file pack.c.
+
+       References _, Ferror, Fread, Fstrerror, and Fwrite.
+
+       Referenced by writeRPM.
+
+   int cpio_doio (FD_t fdo, Header h, CSA_t csa, const char *
+       fmodeMacro) [static]
+       Todo:
+            Create transaction set *much* earlier.
+
+       Definition at line 48 of file pack.c.
+
+       References _, _free, Fclose, fdDup, Fdopen, Fflush,
+       Fileno, rpmExpand, rpmtransCreateSet, rpmtransFree, TFI_t,
+       and xstrdup.
+
+       Referenced by writeRPM.
+
+   int genSourceRpmName (Spec spec) [inline, static]
+       Definition at line 29 of file pack.c.
+
+       References headerNVR, and xstrdup.
+
+       Referenced by packageBinaries, and packageSources.
+
+   int processScriptFiles (Spec spec, Package pkg) [static]
+       Definition at line 196 of file pack.c.
+
+       References _, addFileToArrayTag, addFileToTag,
+       TriggerFileEntry::fileName, headerAddOrAppendEntry,
+       TriggerFileEntry::next, TriggerFileEntry::prog,
+       RPM_STRING_ARRAY_TYPE, RPMTAG_POSTIN, RPMTAG_POSTUN,
+       RPMTAG_PREIN, RPMTAG_PREUN, RPMTAG_TRIGGERSCRIPTPROG,
+       RPMTAG_TRIGGERSCRIPTS, RPMTAG_VERIFYSCRIPT, and
+       TriggerFileEntry::script.
+
+       Referenced by packageBinaries.
+
+   int readRPM (const char * fileName, Spec * specp, struct
+       rpmlead * lead, Header * sigs, CSA_t csa)
+       Read rpm package components from file.
+
+       Parameters:
+
+       filename
+              file name of package (or NULL to use stdin)
+
+       Return values:
+
+       specp  spec structure to carry package header (or NULL)
+
+       lead   package lead
+
+       sigs   package signature
+
+       Parameters:
+
+       csa    Returns:
+                  0 on success
+
+       Definition at line 264 of file pack.c.
+
+       References _, cpioSourceArchive_s::cpioFdIn, Fclose,
+       fdDup, Ferror, Fopen, Fread, freeSpec, Fseek, Fstrerror,
+       PackageStruct::header, headerFree, newPackage, newSpec,
+       SpecStruct::packages, rpmRC, RPMRC_BADMAGIC,
+       RPMRC_BADSIZE, RPMRC_FAIL, RPMRC_OK, RPMRC_SHORTREAD,
+       rpmReadPackageInfo, and SEEK_SET.
+
+       Referenced by rewriteRPM.
+
+   int rpmLeadVersion (void) [static]
+       Definition at line 345 of file pack.c.
+
+       References _noDirTokens, rpmExpandNumeric, rpmpkg_version,
+       RPMPKGVERSION_MAX, and RPMPKGVERSION_MIN.
+
+       Referenced by writeRPM.
+
+   int writeRPM (Header * hdrp, const char * fileName, int type,
+       CSA_t csa, char * passPhrase, const char ** cookie)
+       Write rpm package to file.
+
+       Warning:
+           The first argument (header) is now passed by reference
+           in order to return a reloaded contiguous header to the
+           caller.
+
+       Return values:
+
+       hdrp   header to write (final header is returned).
+
+       Parameters:
+
+       filename
+              file name of package
+
+       type   RPMLEAD_SOURCE/RPMLEAD_BINARY
+
+       csa
+
+       passPhrase
+              Return values:
+
+       cookie generated cookie (i.e build host/time)
+
+       Returns:
+           0 on success
+
+       Definition at line 364 of file pack.c.
+
+       References _, _free, buildHost, cpio_copy, cpio_doio,
+       cpioSourceArchive_s::cpioArchiveSize,
+       cpioSourceArchive_s::cpioFdIn,
+       cpioSourceArchive_s::cpioList, Fclose, fdFiniSHA1,
+       fdInitSHA1, Ferror, Fflush, Fileno, Fopen, Fread, Fseek,
+       Fstrerror, Fwrite, header_magic, HEADER_MAGIC_NO,
+       HEADER_MAGIC_YES, headerAddEntry, headerFree, headerLink,
+       headerMergeLegacySigs, headerNVR, headerRead,
+       headerReload, headerWrite, HGE_t, int_32,
+       cpioSourceArchive_s::lead, makeTempFile,
+       providePackageNVR, RPM_INT32_TYPE, RPM_STRING_TYPE,
+       rpmAddSignature, rpmExpand, rpmFreeSignature,
+       rpmGetArchInfo, rpmGetOsInfo, RPMLEAD_BINARY,
+       RPMLEAD_SOURCE, rpmLeadVersion, rpmlibNeedsFeature,
+       RPMLOOKUPSIG_QUERY, rpmLookupSignatureType,
+       rpmNewSignature, RPMSIGTYPE_HEADERSIG, RPMTAG_ARCHIVESIZE,
+       RPMTAG_COOKIE, RPMTAG_HEADERIMMUTABLE,
+       RPMTAG_HEADERSIGNATURES, RPMTAG_PAYLOADCOMPRESSOR,
+       RPMTAG_PAYLOADFLAGS, RPMTAG_PAYLOADFORMAT,
+       RPMTAG_SHA1HEADER, rpmWriteSignature, SEEK_SET, Unlink,
+       writeLead, and xstrdup.
+
+       Referenced by packageBinaries, packageSources, and
+       rewriteRPM.
+
+VARIABLE DOCUMENTATION
+   int _noDirTokens
+       Definition at line 18 of file pack.c.
+
+       Referenced by rpmLeadVersion.
+
+   int_32 copyTags[] [static]
+       Initial value:
+
+        {
+           RPMTAG_CHANGELOGTIME,
+           RPMTAG_CHANGELOGNAME,
+           RPMTAG_CHANGELOGTEXT,
+           0
+       }
+
+       Definition at line 658 of file pack.c.
+
+       Referenced by packageBinaries.
+
+   unsigned char header_magic[8] [static]
+       Initial value:
+
+        {
+               0x8e, 0xad, 0xe8, 0x01, 0x00, 0x00, 0x00, 0x00
+       }
+
+       Definition at line 337 of file pack.c.
+
+       Referenced by writeRPM.
+
+   int rpmpkg_version = -1 [static]
+       Definition at line 343 of file pack.c.
+
+       Referenced by rpmLeadVersion.
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002            build/pack.c(3)

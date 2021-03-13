@@ -1,0 +1,160 @@
+_rpmdbMatchIterator(3)                     _rpmdbMatchIterator(3)
+
+
+
+NAME
+       _rpmdbMatchIterator -
+
+SYNOPSIS
+   Data Fields
+       const void * mi_keyp
+       size_t mi_keylen
+       rpmdb mi_rpmdb
+       int mi_rpmtag
+       dbiIndexSet mi_set
+       void * mi_dbc
+       unsigned int mi_ndups
+       int mi_setx
+       Header mi_h
+       int mi_sorted
+       int mi_cflags
+       int mi_modified
+       unsigned int mi_prevoffset
+       unsigned int mi_offset
+       unsigned int mi_filenum
+       unsigned int mi_fpnum
+       unsigned int mi_dbnum
+       int mi_nre
+       miRE mi_re
+       const char * mi_version
+       const char * mi_release
+
+FIELD DOCUMENTATION
+   int _rpmdbMatchIterator::mi_cflags
+       Definition at line 1447 of file rpmdb.c.
+
+       Referenced by rpmdbInitIterator, rpmdbNextIterator, and
+       rpmdbSetIteratorRewrite.
+
+   void* _rpmdbMatchIterator::mi_dbc
+       Definition at line 1442 of file rpmdb.c.
+
+       Referenced by rpmdbFreeIterator, rpmdbInitIterator, and
+       rpmdbNextIterator.
+
+   unsigned int _rpmdbMatchIterator::mi_dbnum
+       Definition at line 1453 of file rpmdb.c.
+
+       Referenced by rpmdbInitIterator.
+
+   unsigned int _rpmdbMatchIterator::mi_filenum
+       Definition at line 1451 of file rpmdb.c.
+
+       Referenced by rpmdbGetIteratorFileNum, rpmdbInitIterator,
+       and rpmdbNextIterator.
+
+   unsigned int _rpmdbMatchIterator::mi_fpnum
+       Definition at line 1452 of file rpmdb.c.
+
+       Referenced by rpmdbInitIterator.
+
+   Header _rpmdbMatchIterator::mi_h
+       Definition at line 1445 of file rpmdb.c.
+
+       Referenced by rpmdbFreeIterator, rpmdbInitIterator, and
+       rpmdbNextIterator.
+
+   size_t _rpmdbMatchIterator::mi_keylen
+       Definition at line 1438 of file rpmdb.c.
+
+       Referenced by rpmdbInitIterator, and rpmdbNextIterator.
+
+   const void* _rpmdbMatchIterator::mi_keyp
+       Definition at line 1437 of file rpmdb.c.
+
+       Referenced by rpmdbFreeIterator, rpmdbInitIterator, and
+       rpmdbNextIterator.
+
+   int _rpmdbMatchIterator::mi_modified
+       Definition at line 1448 of file rpmdb.c.
+
+       Referenced by rpmdbFreeIterator, rpmdbInitIterator,
+       rpmdbNextIterator, and rpmdbSetIteratorModified.
+
+   unsigned int _rpmdbMatchIterator::mi_ndups
+       Definition at line 1443 of file rpmdb.c.
+
+       Referenced by rpmdbInitIterator.
+
+   int _rpmdbMatchIterator::mi_nre
+       Definition at line 1454 of file rpmdb.c.
+
+       Referenced by rpmdbFreeIterator, rpmdbInitIterator, and
+       rpmdbSetIteratorRE.
+
+   unsigned int _rpmdbMatchIterator::mi_offset
+       Definition at line 1450 of file rpmdb.c.
+
+       Referenced by rpmdbGetIteratorOffset, rpmdbInitIterator,
+       and rpmdbNextIterator.
+
+   unsigned int _rpmdbMatchIterator::mi_prevoffset
+       Definition at line 1449 of file rpmdb.c.
+
+       Referenced by rpmdbFreeIterator, rpmdbInitIterator, and
+       rpmdbNextIterator.
+
+   miRE _rpmdbMatchIterator::mi_re
+       Definition at line 1455 of file rpmdb.c.
+
+       Referenced by rpmdbFreeIterator, rpmdbInitIterator, and
+       rpmdbSetIteratorRE.
+
+   const char* _rpmdbMatchIterator::mi_release
+       Definition at line 1457 of file rpmdb.c.
+
+       Referenced by rpmdbFreeIterator, and rpmdbInitIterator.
+
+   rpmdb _rpmdbMatchIterator::mi_rpmdb
+       Definition at line 1439 of file rpmdb.c.
+
+       Referenced by rpmdbFreeIterator, rpmdbGetIteratorRpmDB,
+       rpmdbInitIterator, and rpmdbNextIterator.
+
+   int _rpmdbMatchIterator::mi_rpmtag
+       Definition at line 1440 of file rpmdb.c.
+
+       Referenced by rpmdbInitIterator.
+
+   dbiIndexSet _rpmdbMatchIterator::mi_set
+       Definition at line 1441 of file rpmdb.c.
+
+       Referenced by rpmdbAppendIterator, rpmdbFindFpList,
+       rpmdbFreeIterator, rpmdbGetIteratorCount,
+       rpmdbInitIterator, rpmdbNextIterator, and
+       rpmdbPruneIterator.
+
+   int _rpmdbMatchIterator::mi_setx
+       Definition at line 1444 of file rpmdb.c.
+
+       Referenced by rpmdbFindFpList, rpmdbInitIterator, and
+       rpmdbNextIterator.
+
+   int _rpmdbMatchIterator::mi_sorted
+       Definition at line 1446 of file rpmdb.c.
+
+       Referenced by rpmdbInitIterator.
+
+   const char* _rpmdbMatchIterator::mi_version
+       Definition at line 1456 of file rpmdb.c.
+
+       Referenced by rpmdbFreeIterator, and rpmdbInitIterator.
+
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002     _rpmdbMatchIterator(3)

@@ -1,0 +1,90 @@
+TESTPRNS(1)                                           TESTPRNS(1)
+
+
+
+NAME
+       testprns - check printer name for validity with smbd
+
+SYNOPSIS
+       testprns printername [ printcapname ]
+
+DESCRIPTION
+       This tool is part of the  Sambasuite.
+
+       testprns  is  a  very  simple  test  program  to determine
+       whether a given printer name is valid for use in a service
+       to be provided by  smbd(8).
+
+       "Valid"  in this context means "can be found in the print­
+       cap specified". This program is very stupid - so stupid in
+       fact  that it would be wisest to always specify the print­
+       cap file to use.
+
+OPTIONS
+       printername
+              The printer name to validate.
+
+              Printer names are taken from  the  first  field  in
+              each  record  in  the printcap file, single printer
+              names and sets of  aliases  separated  by  vertical
+              bars ("|") are recognized.  Note that no validation
+              or checking of the printcap syntax is  done  beyond
+              that  required  to extract the printer name. It may
+              be that the print spooling system is more forgiving
+              or  less forgiving than testprns. However, if test­
+              prns finds the printer then smbd should  do  so  as
+              well.
+
+       printcapname
+              This  is the name of the printcap file within which
+              to search for the given printer name.
+
+              If no printcap  name  is  specified  testprns  will
+              attempt to scan the printcap file name specified at
+              compile time.
+
+FILES
+       /etc/printcap
+              This is usually the default printcap file to  scan.
+              See printcap (5).
+
+DIAGNOSTICS
+       If  a  printer  is found to be valid, the message "Printer
+       name <printername> is valid" will be displayed.
+
+       If a printer is found to be invalid, the message  "Printer
+       name <printername> is not valid" will be displayed.
+
+       All  messages  that would normally be logged during opera­
+       tion of the Samba daemons are logged by  this  program  to
+       the  file  test.log  in the current directory. The program
+       runs at debuglevel 3, so quite extensive logging  informa­
+       tion  is  written. The log should be checked carefully for
+       errors and warnings.
+
+       Other messages are self-explanatory.
+
+VERSION
+       This man page is correct for  version  2.2  of  the  Samba
+       suite.
+
+SEE ALSO
+       printcap(5), smbd(8), smbclient(1)
+
+AUTHOR
+       The  original  Samba  software  and related utilities were
+       created by Andrew Tridgell. Samba is now developed by  the
+       Samba  Team  as  an Open Source project similar to the way
+       the Linux kernel is developed.
+
+       The original Samba man pages were written  by  Karl  Auer.
+       The  man  page  sources  were  converted  to  YODL  format
+       (another excellent piece of Open Source  software,  avail­
+       able           at          ftp://ftp.icce.rug.nl/pub/unix/
+       <URL:ftp://ftp.icce.rug.nl/pub/unix/>) and updated for the
+       Samba  2.0  release  by  Jeremy Allison. The conversion to
+       DocBook for Samba 2.2 was done by Gerald Carter
+
+
+
+                         06 December 2001             TESTPRNS(1)

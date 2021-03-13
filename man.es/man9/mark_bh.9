@@ -1,0 +1,101 @@
+INIT_BH(9)            Linux Kernel Functions           INIT_BH(9)
+
+
+
+NAME
+       init_bh, remove_bh, mark_bh, disable_bh, enable_bh -
+       split-half interrupt handling
+
+SYNOPSIS
+       #include <linux/interrupt.h>
+
+       void init_bh(int nr, void (*routine)(void));
+       void remove_bh(int nr);
+       void mark_bh(int nr);
+       void disable_bh(int nr);
+       void enable_bh(int nr);
+
+DESCRIPTION
+   Theory
+       Split-half handling is a means of  dividing  an  interrupt
+       handler into two sections, one of which (known as the `top
+       half') is time-critical and  one  of  which  (the  `bottom
+       half') is not.
+
+       The  top half (the handler registered with request_irq(9))
+       normally moves  data  between  the  device  and  a  memory
+       buffer,  ensures  that  the device is in a sane state, and
+       little else.  While the top half of a handler is  running,
+       the  IRQ is question is blocked; if it is a fast interrupt
+       handler (i.e., it has SA_INTERRUPT  set),  all  interrupts
+       are disabled.
+
+       The  bottom half does whatever remains to be done.  Bottom
+       halves run with interrupts  enabled,  although  a  locking
+       mechanism  ensures  that only one bottom half will be run­
+       ning  at  a  given  time.   Bottom  halves  are   run   by
+       do_bottom_half(),  which  is  called  from  schedule() and
+       ret_from_sys_call().
+
+   Usage
+       init_bh() installs routine() as bottom half number nr.  It
+       operates  by  adding  an entry to the bh_base[] table, and
+       setting the appropriate bit of the bh_mask vector.  Rather
+       than  specifying  a  number  explicitly, one should add an
+       entry to the anonymous enum in  include/linux/interrupt.h.
+
+       remove_bh() removes bottom half number nr from the list of
+       bottom halves.  It removes the entry  from  bh_base[]  and
+       clears the appropriate bit of bh_mask.
+
+       mark_bh()  requests that the kernel run the specified bot­
+       tom  half  at  the  first  available  opportunity.    This
+       function is normally called from the top half of an inter­
+       rupt handler.  It operates by setting the appropriate  bit
+       of the bh_active vector.
+
+       disable_bh()  disables  bottom  half number nr by clearing
+       the appropriate bit of bh_mask.  This function also incre­
+       ments  bh_mask_count[nr],  which  is  used  to ensure that
+       nested calls to disable_bh() must be matched by  an  equal
+       number of calls to enable_bh().
+
+       enable_bh()  enables  a bottom half previously disabled by
+       disable_bh().  This function decrements bh_mask_count[nr].
+       Then,  if that value is zero, the specified bottom half is
+       enabled by setting the appropriate bit of bh_mask.
+
+RETURN VALUE
+       No value is returned.
+
+AVAILABILITY
+       Linux 2.0+.  init_bh() and remove_bh() were not present in
+       older  versions on Linux.  Under those versions, bh_base[]
+       and bh_mask must be modified by hand.
+
+SEE ALSO
+       request_irq(9), queue_task(9)
+
+       include/asm*/softirq.h,  include/linux/interrupt.h,   ker­
+       nel/softirq.c
+
+       "Kernel  Korner" in issue 26 of The Linux Journal includes
+       a discussion of split-half  interrupts  under  Linux.   An
+       online   copy   of   this   article   can   be   found  at
+       http://www.ssc.com/lj/issue26/interrupt.html.
+
+AUTHOR
+       Neil Moore <amethyst@maxwell.ml.org>
+
+BUGS
+       Only 32 bottom halves are allowed.  Increasing this number
+       requires    changing    the    size   of   bh_base[]   and
+       bh_mask_count[]   in   kernel/softirq.c,   and    changing
+       bh_active and bh_mask (in the same file) to a larger type.
+       A better solution, however, would be to consolidate multi­
+       ple  bottom halves into a single one by using task queues.
+       See queue_task(9) for details.
+
+
+
+Linux DDI 2.1.48       1997/08/14 07:53:12             INIT_BH(9)

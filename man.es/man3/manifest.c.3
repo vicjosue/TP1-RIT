@@ -1,0 +1,62 @@
+lib/manifest.c(3)                               lib/manifest.c(3)
+
+
+
+NAME
+       lib/manifest.c -
+
+SYNOPSIS
+       #include 'system.h'
+       #include <rpmlib.h>
+       #include <rpmio_internal.h>
+       #include 'stringbuf.h'
+       #include 'manifest.h'
+       #include 'misc.h'
+       #include 'debug.h'
+
+   Functions
+       char * rpmPermsString (int mode)
+           Return ls(1)-like formatted mode string.
+       int rpmReadPackageManifest (FD_t fd, int *argcPtr, const
+           char ***argvPtr)
+           Read manifest, glob items, and append to existing
+           args.
+
+DETAILED DESCRIPTION
+       Definition in file manifest.c.
+
+FUNCTION DOCUMENTATION
+   char* rpmPermsString (int mode)
+       Return ls(1)-like formatted mode string.
+
+       Parameters:
+
+       mode   file mode
+
+       Returns:
+           (malloc'd) formatted mode string
+
+       Definition at line 16 of file manifest.c.
+
+       References S_ISLNK, S_ISSOCK, and xstrdup.
+
+   int rpmReadPackageManifest (FD_t fd, int * argcPtr, const char
+       *** argvPtr)
+       Read manifest, glob items, and append to existing args.
+
+       Todo:
+            Infinite loops through manifest files exist, operator
+           error for now.
+
+       Definition at line 60 of file manifest.c.
+
+       References _free, appendStringBuf, fdGetFp, freeStringBuf,
+       getStringBuf, newStringBuf, rpmGlob, and xcalloc.
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002          lib/manifest.c(3)

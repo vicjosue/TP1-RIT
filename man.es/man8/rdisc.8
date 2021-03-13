@@ -1,0 +1,110 @@
+in.rdisc(8C)                                         in.rdisc(8C)
+
+
+
+NAME
+       in.rdisc - network router discovery daemon
+
+SYNOPSIS
+       in.rdisc [ -sfa ]
+
+       in.rdisc -r [ -p preference ] [ -T interval ]
+
+DESCRIPTION
+       in.rdisc  implements  the  ICMP  router discover protocol.
+       The first form of the command is used  on  hosts  and  the
+       second  form  is  used  on routers.  On a host in.rdisc is
+       invoked at boot  time  to  populate  the  network  routing
+       tables  with  default  routes.   On  a  router  it is also
+       invoked at boot time in order  to  start  advertising  the
+       router to all the hosts.
+
+   Host (First Form)
+       On  a  host  in.rdisc listens on the ALL_HOSTS (224.0.0.1)
+       multicast  address  for  ROUTER_ADVERTISE  messages   from
+       routers. The received messages are handled by first ignor­
+       ing those listed router addresses with which the host does
+       not  share  a  network.  Among the remaining addresses the
+       ones with the highest preference are selected  as  default
+       routers and a default route is entered in the kernel rout­
+       ing table for each one of them.
+
+       Optionally, in.rdisc can  avoid  waiting  for  routers  to
+       announce  themselves by sending out a few ROUTER_SOLICITA­
+       TION messages to  the  ALL_ROUTERS  (224.0.0.2)  multicast
+       address when it is started.
+
+       A  timer  is  associated  with each router address and the
+       address will no longer be considered for inclusion in  the
+       the  routing  tables  if  the  timer  expires before a new
+       advertise  message  is  received  from  the  router.   The
+       address  will  also  be excluded from consideration if the
+       host receives an advertise  message  with  the  preference
+       being maximally negative.
+
+   Router (Second Form)
+       When in.rdisc is started on a router, it uses the SIOCGIF­
+       CONF ioctl(2) to find the interfaces configured  into  the
+       system  and  it starts listening on the ALL_ROUTERS multi­
+       cast address on all the interfaces that support multicast.
+       It sends out advertise messages to the ALL_HOSTS multicast
+       address advertising all  its  addresses.   A  few  initial
+       advertise  messages  are sent out during the first 30 sec­
+       onds and after that it will  transmit  advertise  messages
+       approximately every 600 seconds.
+
+       When  in.rdisc receives a solicitation message it sends an
+       advertise message to the host that sent  the  solicitation
+       message.
+
+       When  in.rdisc  is  terminated by a signal it sends out an
+       advertise message with the preference being maximally neg­
+       ative.
+
+
+
+
+
+OPTIONS
+       -a             Accept  all  routers  independently  of the
+                      preference they  have  in  their  advertise
+                      messages.   Normally  in.rdisc only accepts
+                      (and enters in the kernel  routing  tables)
+                      the  router  or  routers  with  the highest
+                      preference.
+
+       -f             Run in.rdisc forever even if no routers are
+                      found.   Normally  in.rdisc  gives up if it
+                      has  not  received  any  advertise  message
+                      after  after  soliciting  three  times,  in
+                      which case it exits with  a  non-zero  exit
+                      code.   If -f is not specified in the first
+                      form then -s must be specified.
+
+       -p preference  Set  the  preference  transmitted  in   the
+                      solicitation   messages.   The  default  is
+                      zero.
+
+       -r             Act as a router as opposed to a host.
+
+       -s             Send three solicitation messages  initially
+                      to  quickly  discover  the routers when the
+                      system is booted.   When  -s  is  specified
+                      in.rdisc exits with a non-zero exit code if
+                      it can not find any routers.  This  can  be
+                      overridden with the -f option.
+
+       -T interval    Set  the  interval between transmitting the
+                      advertise messages.  The  default  time  is
+                      600 seconds.
+
+SEE ALSO
+       in.routed(8C) ioctl(2), icmp(7), inet(7)
+
+       Deering,  S.E.,ed  ``ICMP Router Discovery Messages,'' RFC
+       1256, Network Information Center, SRI International, Menlo
+       Park, Calif., September 1991.
+
+
+
+                            2 Oct 1991               in.rdisc(8C)

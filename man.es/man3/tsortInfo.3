@@ -1,0 +1,63 @@
+tsortInfo(3)                                         tsortInfo(3)
+
+
+
+NAME
+       tsortInfo -
+
+SYNOPSIS
+       #include <depends.h>
+
+
+   Data Fields
+       union {
+          int count
+          availablePackage * suc
+       } tsi_u
+
+       tsortInfo * tsi_next
+       availablePackage * tsi_pkg
+       int tsi_reqx
+       int tsi_qcnt
+
+DETAILED DESCRIPTION
+       Dependncy ordering information.
+
+       Definition at line 14 of file depends.h.
+
+FIELD DOCUMENTATION
+   int tsortInfo::count
+       Definition at line 16 of file depends.h.
+
+   struct availablePackage* tsortInfo::suc
+       Definition at line 17 of file depends.h.
+
+   struct tsortInfo* tsortInfo::tsi_next
+       Definition at line 21 of file depends.h.
+
+       Referenced by addRelation, alFree, markLoop, rpmdepOrder,
+       and zapRelation.
+
+   struct availablePackage* tsortInfo::tsi_pkg
+       Definition at line 22 of file depends.h.
+
+       Referenced by markLoop, and rpmdepOrder.
+
+   int tsortInfo::tsi_qcnt
+       Definition at line 24 of file depends.h.
+
+       Referenced by addQ, addRelation, and rpmdepOrder.
+
+   int tsortInfo::tsi_reqx
+       Definition at line 23 of file depends.h.
+
+       Referenced by addRelation, rpmdepOrder, and zapRelation.
+
+   union { ... }   tsortInfo::tsi_u
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002               tsortInfo(3)

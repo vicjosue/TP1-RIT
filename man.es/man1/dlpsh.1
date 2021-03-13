@@ -1,0 +1,42 @@
+DLPSH(1)                                                 DLPSH(1)
+
+
+
+NAME
+       dlpsh - command shell for executing DLP commands to a Palm
+       Device
+
+SYNOPSIS
+       dlpsh /dev/cua?
+
+DESCRIPTION
+       This manual page documents the  small  application  dlpsh.
+       dlpsh  allows  the  user to connect to a Pilot and execute
+       arbitrary Data Link Protocol (DLP)  commands  to  a  Pilot
+       connected  to the specified callout device.  Once dlpsh is
+       started, the  user  must  invoke  HotSync  on  the  target
+       device.   Once  connected, the user may execute any of the
+       built-in DLP commands. (See BUILT-IN COMMANDS).  The  con­
+       nection  to the Pilot is kept alive by sending a PadTickle
+       packet to the Pilot after a small period of  non-activity.
+       (7 seconds by default)
+
+   BUILT-IN COMMANDS
+       user [-n username] [-i user id] [-v viewer id] [-p pc id]
+
+   OPTIONS
+       none
+
+USEAGE
+       The  program will connect to a target, and give the user a
+       prompt for executing commands.
+
+BUGS
+       dlpsh has no known bugs.
+
+AUTHOR
+       dlpsh was written by Chris Stevens and Damien Neil
+
+
+
+FSF                Palm Computing Device Tools           DLPSH(1)

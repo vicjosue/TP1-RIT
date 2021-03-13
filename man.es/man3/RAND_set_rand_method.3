@@ -1,0 +1,70 @@
+RAND_set_rand_method(3)      OpenSSL      RAND_set_rand_method(3)
+
+
+
+NNAAMMEE
+       RAND_set_rand_method, RAND_get_rand_method, RAND_SSLeay -
+       select RAND method
+
+SSYYNNOOPPSSIISS
+        #include <openssl/rand.h>
+
+        void RAND_set_rand_method(RAND_METHOD *meth);
+
+        RAND_METHOD *RAND_get_rand_method(void);
+
+        RAND_METHOD *RAND_SSLeay(void);
+
+
+DDEESSCCRRIIPPTTIIOONN
+       A RRAANNDD_MMEETTHHOODD specifies the functions that OpenSSL uses
+       for random number generation. By modifying the method,
+       alternative implementations such as hardware RNGs may be
+       used.  Initially, the default is to use the OpenSSL
+       internal implementation. RAND_SSLeay() returns a pointer
+       to that method.
+
+       RAND_set_rand_method() sets the RAND method to mmeetthh.
+       RAND_get_rand_method() returns a pointer to the current
+       method.
+
+TTHHEE RRAANNDD_MMEETTHHOODD SSTTRRUUCCTTUURREE
+        typedef struct rand_meth_st
+        {
+               void (*seed)(const void *buf, int num);
+               int (*bytes)(unsigned char *buf, int num);
+               void (*cleanup)(void);
+               void (*add)(const void *buf, int num, int entropy);
+               int (*pseudorand)(unsigned char *buf, int num);
+               int (*status)(void);
+        } RAND_METHOD;
+
+       The components point to the implementation of RAND_seed(),
+       RAND_bytes(), RAND_cleanup(), RAND_add(),
+       RAND_pseudo_rand() and RAND_status().  Each component may
+       be NULL if the function is not implemented.
+
+RREETTUURRNN VVAALLUUEESS
+       RAND_set_rand_method() returns no value.
+       RAND_get_rand_method() and RAND_SSLeay() return pointers
+       to the respective methods.
+
+SSEEEE AALLSSOO
+       rand(3)
+
+HHIISSTTOORRYY
+       RAND_set_rand_method(), RAND_get_rand_method() and
+       RAND_SSLeay() are available in all versions of OpenSSL.
+
+
+
+
+
+
+
+
+
+
+
+
+3/Mar/2000                    0.9.6c      RAND_set_rand_method(3)

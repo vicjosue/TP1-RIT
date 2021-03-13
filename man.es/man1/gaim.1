@@ -1,0 +1,554 @@
+gaim(1)                                                   gaim(1)
+
+
+
+NAME
+       Gaim v0.51 - Instant Messaging client
+
+SYNOPSIS
+       gaim [options]
+
+
+DESCRIPTION
+       gaim  is an Instant Messaging (IM) client designed primar­
+       ily for use with AOL Instant Messager (AIM).  However,  it
+       supports  most  other  popular IM protocols including ICQ,
+       MSN Messager, Jabber, Yahoo!, IRC, Napster, and Zephyr.
+
+
+OPTIONS
+       The following options are provided by gaim using the stan­
+       dard GNU command line syntax.
+
+       -a, --acct
+              Launch  the  account  editor  rather than the login
+              window on start.
+
+       -w, --away[=MESG]
+              Automatically go away on signon.  You  may  option­
+              ally  use  the  MESG parameter to set the away mes­
+              sage.
+
+       -l, --login[=NAME]
+              Automatically login  on  start  using  the  default
+              account or the account specified by the NAME param­
+              eter.
+
+       -u, --user=NAME
+              Use account NAME as default.
+
+       -f, --file=FILE
+              Use FILE  as  the  configuration  file  instead  of
+              ~/.gaimrc.
+
+
+BUDDY LIST
+       The  Buddy  List  Window  is gaim's main interface window.
+       The focus of this window is the Buddy List  itself.   This
+       is  a  list  of your contacts whose presence you have been
+       notified of.
+
+       The list of buddies is organized into groups.   Gaim  sup­
+       ports  multiple  connections,  but  all online buddies are
+       organized on the same buddy list.  Buddy List organization
+       is handled in the Edit Buddies tab.
+
+       Buddy Lists can be imported and exported to disk using the
+       appropriate commands in the file menu.
+
+       The icon to the left of each buddy indicates  the  buddy's
+       current  state.   Double  clicking a buddy will open a new
+       conversation window.  Right clicking will open a menu:
+
+       IM     Opens a new conversation  window  to  the  selected
+              buddy.
+
+       Alias  Create  an alias for this buddy.  This will open up
+              a new dialog in which one can give  this  buddy  an
+              alternate  name  to appear on the buddy list and in
+              conversataions.
+
+              For example, if a  buddy's  name  screen  name  was
+              jsmith1281xx and his real name was 'John Q. Smith,'
+              one could create an alias as to identify the  buddy
+              by his common name.
+
+       Add Buddy Pounce
+              A  Buddy  Pounce is a configurable automated action
+              to be performed when  the  buddy's  state  changes.
+              This  will  open the Buddy Pounce dialog to be dis­
+              cussed later.
+
+       View Log
+              gaim is capable of automatically  log  its  activi­
+              ties.   These  logs  are  html  files  (with a .log
+              extenstion) located in the ~/.gaim/logs  directory.
+              This  menu  command  will attempt to view this file
+              with gaim's internal log viewer.
+
+       The remainder of the menu will consist  of  protocol  spe­
+       cific  commands.   If logged on with multiple connections,
+       these will appear in submenus named with each screen  name
+       logged on.  These commands vary depending on the protocol;
+       below are the commands available  when  using  OSCAR,  the
+       more popular and developer-recommended AIM protocol:
+
+       Get Info
+              Retrieves and displays information about the buddy.
+              This information is also known as a Profile.
+
+       Get Away Msg
+              If this buddy  is  in  an  Away  state,  this  will
+              retrieve and display the buddy's Away Message.
+
+       Direct IM
+              This  will send a request to the buddy for a Direct
+              IM.  If accepted, a direct connection will be  made
+              between  the  two clients, no longer relying on the
+              server.  This will reveal your IP address  to  your
+              buddy, which may constitute a security risk.
+
+
+The Conversation Window
+       When  starting  a  new conversation, the user is presented
+       with the conversation window.  The conversation appears in
+       the  upper  text box and the user types his message in the
+       lower.  Between the two is a row of  setting,  represented
+       by icons.  From left to right:
+
+       Bold   adds <b></b> to your message
+
+       Italics
+              adds <i></i> to your message
+
+       Underline
+              adds <u></u> to your message
+
+       Strikethrough
+              adds <s></s> to your message
+
+       Decrease font size
+              adds <font size="1"></font> to your message
+
+       Default font size
+              adds <font size="3"></font> to your message
+
+       Increase font size
+              adds <font size="5"></font> to your message
+
+       Select font face
+              adds an appropriate font tag to your message.
+
+       Select a foreground color
+              adds an appropriate font tag to your message.
+
+       Select a background color
+              adds an appropriate body tag to your message.
+
+       Add hyperlink
+              adds an appropriate a href tag to your message.
+
+       Add smiley
+              adds  an  ASCII  smiley to your message.  This will
+              become a graphic smiley in the upper textbox if the
+              option for graphical smileys is set.
+
+       Enable logging
+              As  the conversation continues, everything will get
+              logged to a log file in ~/.gaim/logs
+
+       Save Conversation
+              Saves the current conversation to  a  log  file  of
+              your choice.
+
+       Enable Sounds
+              Choose  whether  events  in  this conversation will
+              trigger sounds.
+
+              Beneath the lower textbox is a row of buttons  that
+              execute commands:
+
+       Send   This sends what's currently in the lower textbox
+
+       Get Info
+              This  gets  information (a profile) about the other
+              person in the conversation.
+
+       Warn   This issues a warning to the other  person  in  the
+              conversation.
+
+       Block  This adds the other person to your deny list.
+
+       Add to buddy list
+              This  adds  this  user  to  your buddy list.  If he
+              already is on your list, it will  remove  him  from
+              it.
+
+       Close  Closes this window.
+
+
+
+Edit Buddies
+       Clicking this tab on the Buddy List Window will invoke the
+       main interface to edit and organize buddy lists.   Buddy's
+       already  in  your  buddy  list  can  be moved to different
+       groups or reordered in the  same  group  by  clicking  and
+       dragging with the mouse.  One can also add, rename, alias,
+       or delete buddies here, as well as some of  the  functions
+       available in the Buddy List Dialog.
+
+       In  the  Edit Buddies dialog, the list is arranged by con­
+       nection.  If two or more connections have a group  of  the
+       same,  the  Buddy  List will only show one group with that
+       name.  Available buddies from  both  connections  will  be
+       shown  in  this  group.   If both connections have a buddy
+       with the same screen name in a group of the same name, the
+       buddy will appear only once.
+
+
+Buddy Chat
+       For  protocols  that  allow it, Buddy Chats can be entered
+       through the file menu, the keyboard  shortcut  CTRL+C,  or
+       the  right most button on the bottom of the uddy List Dia­
+       log.
+
+       Additional commands available in chat,  depending  on  the
+       protocol are:
+
+       Whisper
+              The  text will appear in the chat conversation, but
+              it will only be  visible  to  the  sender  and  the
+              receiver.
+
+       Invite Invite other people to join the chat room.
+
+       Ignore Ignore anything said by the chosen person
+
+       Set Topic
+              Set  the topic of the chat room.  This is usually a
+              brief  sentence  describing  the  nature   of   the
+              chat--an explanation of the chat room's name.
+
+
+AWAY MESSAGES
+       Most  protocols  allow  for away messages.  When a user is
+       away, he can leave a message indicating why for others  to
+       see.   The  away  submenu of the Tools menu is used to add
+       and remove away message, as well as to set a  user's  away
+       state.
+
+       New  Away  Message provides space for one to enter an away
+       message and a title for that message.  If Save of  Save  &
+       Use  are chosen, this message will be saved.  It can later
+       be referred to by the title given to it.
+
+       Remove Away Message is a submenu containing the titles  of
+       saved away messages.  Clicking on one of these titles will
+       remove the away message associated with it.
+
+       The rest of the away menu provides the user with a way  to
+       assign  different  away messages to different connections.
+       Choosing Set All Away will set away  all  the  connections
+       capable of the away state.
+
+
+BUDDY POUNCE
+       A  Buddy Pounce is an automated trigger that occurs when a
+       buddy returns to a normal state from  an  away  state.   A
+       pounce  can  be  set  to  occur  on any combination of the
+       events listed, and any combination of actions can  result.
+       If Save this pounce after activation is checked, the trig­
+       ger will remain until it is removed from the Remove  buddy
+       pounce menu.
+
+
+ACCOUNT EDITOR
+       The  account  editor  consists  of  a list of accounts and
+       information about  them.   Clicking  Add  or  Modify  will
+       invoke  a  Modify  Account  window.   Here,  you can alter
+       information about  your  account.   When  creating  a  new
+       account,  you  will  submit your screen name and password.
+       You will also choose your protocol; The two AIM protocols,
+       TOC  and  OSCAR are always loaded, but other protocols can
+       be dynamically loaded and unloaded using Protocols Plugins
+       (PRPLS).
+
+       If Remember Password is chosen, the password will be saved
+       in gaim's configuration file.
+
+       If Auto-Login is chosen, this account  will  automatically
+       login upon starting gaim.
+
+       Each  protocol  has  it's own specific options that can be
+       found in the protocol-specific tab on the modify screen.
+
+
+PERL
+       /fBGaim/fR allows for perl scripting.  This  submenu  pro­
+       vides  for  the loading of individual perl scripts and for
+       the unloading of all of them.   See  PERL-HOWTO  for  more
+       information about perl scripting.
+
+
+PLUGINS
+       /fBGain/fR  allows  for  dynamic  loading of plugins.  The
+       plugin window shows the paths to  loaded  plugins  on  the
+       left,  and  the  name and description of the plugin on the
+       right.
+
+       You may load and unload plugins using the appropriate but­
+       tons.
+
+
+PREFERENCES
+General
+       Use Borderless Buttons
+              Change the appearence of the GUI's buttons.
+
+       Show Buddy Ticker
+              This  opens  the  Buddy  Ticker,  a small window in
+              which the contents of your  buddy  list  scroll  to
+              keep you up to date on their status.
+
+       Show Debug Window
+              This  opens  a  debug  window into which gaim sends
+              more verbose information about what it's doing.
+
+       Report Idle Times
+              For protocol's that require the  client  to  report
+              idle  times,  this option sets the method of deter­
+              mining idle times.  If  None  is  chosen,  idleness
+              will  not  be  reported.  If Gaim Use is chosen, it
+              will send idle times relative to the last time gaim
+              was  used.   If X Use is chosen, idle times will be
+              reported based on the last time the mouse  or  key­
+              board was used.
+
+       Logging
+              Log  all  conversations will automatically log con­
+              versations into ~/.gaim/logs/.  Unless  Strip  HTML
+              from logs is checked, they will be saved as an HTML
+              file with a .log extension.  The preferences window
+              provides options to specify exactly what to log.
+
+       Browser
+              Choose  the  Web Browser to use when a hyperlink is
+              clicked.
+
+Buddy List
+       Hide IM/Info/Chat buttons
+              This option will remove the three  buttons  beneath
+              the Buddy List in the Buddy List Window.
+
+       Show pictures on buttons
+              If  checked, the buttons will feature an icon, oth­
+              erwise, the buttons will be text.
+
+       Hide groups with no online buddies
+              This feature will only display a folder  represent­
+              ing  a  group if there is at least one online buddy
+              in it.
+
+       Shoe numbers in groups
+              This feature displays the number of buddies in each
+              group  and  the number of these online in the Buddy
+              List.
+
+       Show buddy type icons
+              This icon is a quick reference as to what  protocol
+              a  buddy  is using, and what away state, if any, he
+              is in.
+
+       Show Idle times
+              This shows how long a buddy has been idle  next  to
+              his name.  Show warning levels This shows the warn­
+              ing level of a buddy next to his name.
+
+Conversations
+       Keyboard Options
+              These options set certain keybindings.
+
+       Show graphical smileys
+              This will convert emoticons such as :) and >:-O  to
+              small icons representing them.
+
+       Show timestamp on messages
+              When  selected,  this option shows in the conversa­
+              tion window, the time each message was received  or
+              sent.
+
+       Show URLs as links
+              This  will convert URLs such as http://gaim.source­
+              forge.net to a hyperlink pointing to that site.
+
+       Highlight misspelled words
+              While typing a message, if a user misspells a word,
+              it  will  immediately  turn red.  Right-clicking on
+              the word will invoke a  menu  of  possible  correc­
+              tions.
+
+       Sending messages removes away status
+              If  this  option is selected, a user will come back
+              from away if he sends a message to someone.
+
+       Queue new messages when away
+              This option will cause new conversation windows not
+              to  be  created  until  a  user  returns from away.
+              Instead, a record of how many messages received and
+              from  whom  they were received is shown in the away
+              message window.
+
+       Ignore colors/font faces/ font sizes
+              These options ignore font settings that can be  set
+              in HTML tags.
+
+       Ignore TiK Automated Messages
+              AOL's  open  source  TiK  client gets a user's away
+              message by sending him an automated message.   This
+              option ignores those messages.
+
+       Ignore new conversations when away
+              If  checked,  new  conversations  will  be  ignored
+              entirely when away.  Unlike the Queue new  messages
+              when  away option, no record will be kept of these.
+
+Windows
+       Show buttons as:
+              This option selects the look of the buttons.
+
+       Show all conversations in one tabbed window
+              Instead of seperate windows for each  conversation,
+              they  are  all shown in one window with tabs at the
+              top to select the conversation.  A name  on  a  tab
+              will  become  red  if a new message hasn't yet been
+              read.
+
+       Raise windows on events
+              When an event happens to a conversation,  the  con­
+              versation  window  will  be  raised above all other
+              windows on the desktop.
+
+       Show logins in window
+              This will show when buddies log in and out  in  the
+              conversation window, if one is open for that buddy.
+
+       Window size
+              Select the default size for new  conversation  win­
+              dows.
+
+Font Options
+        These  set  the  font  preferences that are sent with all
+       messages over a protocol that supports HTML.
+
+Chat Rooms
+       This is a list of available chat rooms and chat rooms that
+       you are subscribed to.
+
+Sounds
+       No sounds when you log in
+              This  will prevent sounds from playing when gaim is
+              first notified of your buddy's presence because you
+              just signed on.
+
+       Sounds while away
+              This  option will continue to play sounds on events
+              if you are away.
+
+       Beep instead of playing sound
+              This will cause a terminal beep instead of a  sound
+              upon events.
+
+       Command to play sound files
+              If  you  need  a special command executed to play a
+              sound, enter it in the given box with %s represent­
+              ing  the  filename.  If you prefer gaim to play the
+              sound, leave it blank.
+
+       Events Choose sounds to play when each event occurs.
+
+Away Messages
+       Don't send auto-response
+              If someone sends the user  a  message  while  away,
+              gaim will not respond with the away message if this
+              is checked.
+
+       Auto Away
+              If this is selected gaim will automatically go away
+              if it's been idle for the specified length of time.
+
+Privacy
+       Here, the user can configure his permit/deny lists.
+
+
+
+
+FILES
+       ~/.gaimrc - Gaim Config File
+       ~/.gaim/logs/SCREENNAME.log - a log  of  all  conversation
+       with SCREENNAME.
+       /usr/local/lib/gaim/ - Gaim Plugin Files
+       ~/.gaim/SCREENAME.PROTOCOL.blist  -  the  buddy  list  for
+       SCREENAME using protocol number PROTOCOL
+
+BUGS
+       Known       bugs       are        at        http://source­
+       forge.net/bugs/?group_id=235
+
+BUG REPORTS
+       If  you  find  a  bug in gaim, please submit a bug form at
+       http://sourceforge.net/bugs/?group_id=235
+
+       Before sending a bug report, please verify that  you  have
+       the  latest  version of gaim.  Many bugs (major and minor)
+       are fixed at each release, and if yours is  out  of  date,
+       the problem may already have been solved.
+
+
+SEE ALSO
+       http://gaim.sourceforge.net/            http://www.source­
+       forge.net/projects/gaim/
+
+
+LICENSE
+       This program is free software;  you  can  redistribute  it
+       and/or modify it under the terms of the GNU General Public
+       License as published  by  the  Free  Software  Foundation;
+       either  version  2 of the License, or (at your option) any
+       later version.
+
+       This program is distributed in the hope that  it  will  be
+       useful, but WITHOUT ANY WARRANTY; without even the implied
+       warranty of MERCHANTABILITY or FITNESS  FOR  A  PARTICULAR
+       PURPOSE.   See  the  GNU  General  Public License for more
+       details.
+
+       You should have received a copy of the GNU General  Public
+       License along with this program; if not, write to the Free
+       Software Foundation, Inc., 59  Temple  PLace,  Suite  330,
+       Boston, MA  02111-1307  USA
+
+AUTHORS
+       The authors of gaim are:
+
+        Rob Flynn <rob@marko.net> - AIM: RobFlynn
+        Eric  Warmenhoven <warmenhoven@yahoo.com> - AIM: EWarmen­
+       hoven
+        Syd Logan
+
+       The retired authors of gaim are:
+
+        Jim Duchek <jim@linuxpimps.com> - AIM: Zilding
+        Mark Spencer <markster@marko.net> - AIM: Markster97
+
+
+
+
+       This manpage was originally written  by  Dennis  Ristuccia
+       <dennis@dennisr.net>  AIM:  D3nnisR.   It has been updated
+       and largely rewritten  by  Sean  Egan  <sean@posseweb.org>
+       AIM: SeanEgn
+
+
+
+
+                                                          gaim(1)

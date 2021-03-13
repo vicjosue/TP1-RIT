@@ -1,0 +1,126 @@
+SGMLTOOLS(1)                                         SGMLTOOLS(1)
+
+
+
+NAME
+       sgmltools  -  SGML-tools  translators to other markup lan­
+       guages
+
+SYNOPSIS
+       sgml2xxx     [generic-option...]      [backend-options...]
+       file[.sgml]
+
+DESCRIPTION
+       The  sgmltools  suite  is  a collection of text formatters
+       which understands a small family of  SGML-based  document-
+       structure markup languages. Each formatter (or "back-end")
+       renders the common markup languages into a variety of out­
+       put  formats,  including HTML, TeX, DVI, PostScript, plain
+       text, and groff(1)  source  in  manual-page  format.   The
+       SGML-tools  suite  is useful for authoring documents which
+       must be distributed in  a  variety  of  formats  including
+       plain text, hypertext, and high-quality typeset books.
+
+       The  markup  language(s)  accepted  by these formatters is
+       described in the SGML-Tools User's Guide.  They are  vari­
+       ants  of  an  SGML  document  type  definition  originally
+       designed by Matt Welsh for Linux documentation.
+
+OPTIONS
+       Most command-line options are accepted by  all  back-ends.
+       Some back-ends have additional specific options to control
+       rendering to their particular output format.  Here are the
+       common options:
+
+       --papersize=size, -p
+              Set  the  paper  size.  Default is ``letter''.  You
+              may also specify ``a4''  size  (European  297x210mm
+              paper).
+
+       --language=lang, -l
+              Specify  the  language  of  the  document (this may
+              change which style files are used for formatting by
+              a  back end).  The default language is English. Run
+              an SGML-tools command without arguments to see  the
+              list of valid language codes.
+
+       --charset=chars, -c
+              Specify the output character encoding.  Defaults to
+              ``ascii'' selecting the ASCII set; you may  specify
+              "latin" to specify the ISO 8859-1 (Latin-1) charac­
+              ter set.
+
+       --style=file, -S
+              Include an auxiliary DTD (Document Type Definition)
+              from $LINUXDOCLIB/dtd.
+
+       --tabsize=n, -t
+              Set the tab spacing assumed for generating the out­
+              put document.  The default tab spacing is 8.
+
+       --debug, -d
+              Don't delete intermediate files (such as .TeX files
+              generated  on  the  way  to  a  .dvi, or .man files
+              deleted on the way to plain text).
+
+       --define, -D
+              Pass attribute/value pairs to  be  matched  against
+              "if"  and  "unless"  conditionals.   See the User's
+              Guide for extended discussion of this feature.
+
+       --include, -i
+              Pass a -i option to nsgmls(1).  This  may  be  used
+              for  conditional inclusion.  See the nsgmls(1) man­
+              ual page for details.
+
+       --pass, -P
+              Pass an option string to the back end.   The  exact
+              semantics  of this option are dependent on the back
+              end and should be explained in the individual  man­
+              ual pages for each.
+
+       file   The   SGML   source  file,  named  either  file  or
+              file.sgml.
+
+       Running a back-end with no arguments will cause it to list
+       all its options.  The available back ends include:
+
+       sgml2html
+              translate to HTML
+
+       sgml2info
+              translate to GNU info
+
+       sgml2lyx
+              translate to Lyx macros
+
+       sgml2latex
+              translate to LaTeX 2e
+
+       sgml2rtf
+              translate to Microsoft Rich Text Format
+
+       sgml2txt
+              translate to plain text or Unix manual-page markup.
+
+       There is also a tool sgmlcheck(1) available  for  checking
+       the SGML-Tools syntax of document sources without actually
+       generating a translated version.
+
+FILES
+       Many files and executables  in  $LINUXDOCLIB  and  $LINUX­
+       DOCBIN are used.
+
+BUGS
+       None known.
+
+MAINTAINER
+       Cees de Groot <cg@pobox.com>.
+
+SEE ALSO
+       sgml2html(1),  sgml2info(1),  sgml2latex(1),  sgml2lyx(1),
+       sgml2rtf(1), sgml2txt(1), sgmlcheck(1).
+
+
+
+                           10 Nov 1997               SGMLTOOLS(1)

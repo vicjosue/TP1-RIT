@@ -1,0 +1,61 @@
+EVP_OpenInit(3)              OpenSSL              EVP_OpenInit(3)
+
+
+
+NNAAMMEE
+       EVP_OpenInit, EVP_OpenUpdate, EVP_OpenFinal - EVP envelope
+       decryption
+
+SSYYNNOOPPSSIISS
+        #include <openssl/evp.h>
+
+        int EVP_OpenInit(EVP_CIPHER_CTX *ctx,EVP_CIPHER *type,unsigned char *ek,
+                       int ekl,unsigned char *iv,EVP_PKEY *priv);
+        int EVP_OpenUpdate(EVP_CIPHER_CTX *ctx, unsigned char *out,
+                int *outl, unsigned char *in, int inl);
+        int EVP_OpenFinal(EVP_CIPHER_CTX *ctx, unsigned char *out,
+                int *outl);
+
+
+DDEESSCCRRIIPPTTIIOONN
+       The EVP envelope routines are a high level interface to
+       envelope decryption. They decrypt a public key encrypted
+       symmetric key and then decrypt data using it.
+
+       EVP_OpenInit() initializes a cipher context ccttxx for
+       decryption with cipher ttyyppee. It decrypts the encrypted
+       symmetric key of length eekkll bytes passed in the eekk
+       parameter using the private key pprriivv.  The IV is supplied
+       in the iivv parameter.
+
+       EVP_OpenUpdate() and EVP_OpenFinal() have exactly the same
+       properties as the EVP_DecryptUpdate() and
+       EVP_DecryptFinal() routines, as documented on the
+       EVP_EncryptInit(3) manual page.
+
+NNOOTTEESS
+       It is possible to call EVP_OpenInit() twice in the same
+       way as EVP_DecryptInit(). The first call should have pprriivv
+       set to NULL and (after setting any cipher parameters) it
+       should be called again with ttyyppee set to NULL.
+
+       If the cipher passed in the ttyyppee parameter is a variable
+       length cipher then the key length will be set to the value
+       of the recovered key length. If the cipher is a fixed
+       length cipher then the recovered key length must match the
+       fixed cipher length.
+
+RREETTUURRNN VVAALLUUEESS
+       EVP_OpenInit() returns 0 on error or a non zero integer
+       (actually the recovered secret key size) if successful.
+
+       EVP_OpenUpdate() returns 1 for success or 0 for failure.
+
+       EVP_OpenFinal() returns 0 if the decrypt failed or 1 for
+       success.
+
+SSEEEE AALLSSOO
+       evp(3), rand(3), EVP_EncryptInit(3), EVP_SealInit(3)
+
+HHIISSTTOORRYY
+23/Sep/2000                   0.9.6c              EVP_OpenInit(3)

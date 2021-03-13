@@ -1,0 +1,70 @@
+SHELLMOD(1)                                           SHELLMOD(1)
+
+
+
+NAME
+       shellmod  -  an  interpretor to run linuxconf module using
+       /bin/sh
+
+SYNOPSIS
+       shellmod [ UI options ] options ...
+
+DESCRIPTION
+       shellmod is a solution  to  write  Linuxconf  modules  and
+       standalone  utilities  using  either  /bin/sh  or perl. It
+       offers access to Linuxconf  user  interface,  which  works
+       transparently in text, graphic and HTML.
+
+       The  goal  is  to  provide  a  very simple and easy to use
+       scripting solution to create on site administration compo­
+       nent. One can certainly create complex module with it, but
+       the main goal was to replace the various  non  interactive
+       administration scripts by interactive one, properly mapped
+       in Linuxconf menuing system. This makes the administrators
+       tasks   easier   (those  command  line  script  are  often
+       lost...).
+
+       The binding is fully described in the main help screen  of
+       the shellmod utility. Type shellmod --build and select the
+       help button.
+
+
+OPTIONS
+       --build
+              starts a small dialog to  help  you  create  a  new
+              script.  You  fill  the  various field (name of the
+              script, where to hook it in  linuxconf  menu,  menu
+              entry name, sub-menus, etc...) and a script is gen­
+              erated.  From there, you edit the  script  and  add
+              some programming.
+
+
+       --exec is  used  to  execute the main function of an arbi­
+              traty script within linuxconf context. You use  the
+              option like this
+
+              linuxconf  --modulemain shellmod --exec script_path
+              script options
+
+
+       --setmod
+              registers a shellmod module in Linuxconf.
+
+              linuxconf    --modulemain     shellmod     --setmod
+              script_path
+
+
+       --unsetmod
+              remove a shellmod module from Linuxconf.
+
+              linuxconf    --modulemain    shellmod    --unsetmod
+              script_path
+
+
+SEE ALSO
+       linuxconf (8) , vregistry (8)
+
+
+
+
+                 Linuxconf modules using /bin/sh      SHELLMOD(1)

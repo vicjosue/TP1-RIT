@@ -1,0 +1,961 @@
+ssl(3)                       OpenSSL                       ssl(3)
+
+
+
+NNAAMMEE
+       SSL - OpenSSL SSL/TLS library
+
+SSYYNNOOPPSSIISS
+DDEESSCCRRIIPPTTIIOONN
+       The OpenSSL ssssll library implements the Secure Sockets
+       Layer (SSL v2/v3) and Transport Layer Security (TLS v1)
+       protocols. It provides a rich API which is documented
+       here.
+
+       At first the library must be initialized; see
+       SSL_library_init(3).
+
+       Then an SSSSLL_CCTTXX object is created as a framework to
+       establish TLS/SSL enabled connections (see
+       SSL_CTX_new(3)).  Various options regarding certificates,
+       algorithms etc. can be set in this object.
+
+       When a network connection has been created, it can be
+       assigned to an SSSSLL object. After the SSSSLL object has been
+       created using SSL_new(3), SSL_set_fd(3) or SSL_set_bio(3)
+       can be used to associate the network connection with the
+       object.
+
+       Then the TLS/SSL handshake is performed using
+       SSL_accept(3) or SSL_connect(3) respectively.  SSL_read(3)
+       and SSL_write(3) are used to read and write data on the
+       TLS/SSL connection.  SSL_shutdown(3) can be used to shut
+       down the TLS/SSL connection.
+
+DDAATTAA SSTTRRUUCCTTUURREESS
+       Currently the OpenSSL ssssll library functions deals with the
+       following data structures:
+
+       SSSSLL_MMEETTHHOODD (SSL Method)
+           That's a dispatch structure describing the internal
+           ssssll library methods/functions which implement the
+           various protocol versions (SSLv1, SSLv2 and TLSv1).
+           It's needed to create an SSSSLL_CCTTXX.
+
+       SSSSLL_CCIIPPHHEERR (SSL Cipher)
+           This structure holds the algorithm information for a
+           particular cipher which are a core part of the SSL/TLS
+           protocol. The available ciphers are configured on a
+           SSSSLL_CCTTXX basis and the actually used ones are then part
+           of the SSSSLL_SSEESSSSIIOONN.
+
+       SSSSLL_CCTTXX (SSL Context)
+           That's the global context structure which is created
+           by a server or client once per program life-time and
+           which holds mainly default values for the SSSSLL
+           structures which are later created for the
+           connections.
+
+       SSSSLL_SSEESSSSIIOONN (SSL Session)
+           This is a structure containing the current TLS/SSL
+           session details for a connection: SSSSLL_CCIIPPHHEERRs, client
+           and server certificates, keys, etc.
+
+       SSSSLL (SSL Connection)
+           That's the main SSL/TLS structure which is created by
+           a server or client per established connection. This
+           actually is the core structure in the SSL API.  Under
+           run-time the application usually deals with this
+           structure which has links to mostly all other
+           structures.
+
+HHEEAADDEERR FFIILLEESS
+       Currently the OpenSSL ssssll library provides the following C
+       header files containing the prototypes for the data
+       structures and and functions:
+
+       ssssll..hh
+           That's the common header file for the SSL/TLS API.
+           Include it into your program to make the API of the
+           ssssll library available. It internally includes both
+           more private SSL headers and headers from the ccrryyppttoo
+           library.  Whenever you need hard-core details on the
+           internals of the SSL API, look inside this header
+           file.
+
+       ssssll22..hh
+           That's the sub header file dealing with the SSLv2
+           protocol only.  Usually you don't have to include it
+           explicitly because it's already included by ssl.h.
+
+       ssssll33..hh
+           That's the sub header file dealing with the SSLv3
+           protocol only.  Usually you don't have to include it
+           explicitly because it's already included by ssl.h.
+
+       ssssll2233..hh
+           That's the sub header file dealing with the combined
+           use of the SSLv2 and SSLv3 protocols.  Usually you
+           don't have to include it explicitly because it's
+           already included by ssl.h.
+
+       ttllss11..hh
+           That's the sub header file dealing with the TLSv1
+           protocol only.  Usually you don't have to include it
+           explicitly because it's already included by ssl.h.
+
+AAPPII FFUUNNCCTTIIOONNSS
+       Currently the OpenSSL ssssll library exports 214 API
+       functions.  They are documented in the following:
+
+       DDEEAALLIINNGG WWIITTHH PPRROOTTOOCCOOLL MMEETTHHOODDSS
+
+       Here we document the various API functions which deal with
+       the SSL/TLS protocol methods defined in SSSSLL_MMEETTHHOODD
+       structures.
+
+       SSL_METHOD *SSSSLLvv22_cclliieenntt_mmeetthhoodd(void);
+           Constructor for the SSLv2 SSL_METHOD structure for a
+           dedicated client.
+
+       SSL_METHOD *SSSSLLvv22_sseerrvveerr_mmeetthhoodd(void);
+           Constructor for the SSLv2 SSL_METHOD structure for a
+           dedicated server.
+
+       SSL_METHOD *SSSSLLvv22_mmeetthhoodd(void);
+           Constructor for the SSLv2 SSL_METHOD structure for
+           combined client and server.
+
+       SSL_METHOD *SSSSLLvv33_cclliieenntt_mmeetthhoodd(void);
+           Constructor for the SSLv3 SSL_METHOD structure for a
+           dedicated client.
+
+
+       SSL_METHOD *SSSSLLvv33_sseerrvveerr_mmeetthhoodd(void);
+           Constructor for the SSLv3 SSL_METHOD structure for a
+           dedicated server.
+
+       SSL_METHOD *SSSSLLvv33_mmeetthhoodd(void);
+           Constructor for the SSLv3 SSL_METHOD structure for
+           combined client and server.
+
+       SSL_METHOD *TTLLSSvv11_cclliieenntt_mmeetthhoodd(void);
+           Constructor for the TLSv1 SSL_METHOD structure for a
+           dedicated client.
+
+       SSL_METHOD *TTLLSSvv11_sseerrvveerr_mmeetthhoodd(void);
+           Constructor for the TLSv1 SSL_METHOD structure for a
+           dedicated server.
+
+       SSL_METHOD *TTLLSSvv11_mmeetthhoodd(void);
+           Constructor for the TLSv1 SSL_METHOD structure for
+           combined client and server.
+
+       DDEEAALLIINNGG WWIITTHH CCIIPPHHEERRSS
+
+       Here we document the various API functions which deal with
+       the SSL/TLS ciphers defined in SSSSLL_CCIIPPHHEERR structures.
+
+       char *SSSSLL_CCIIPPHHEERR_ddeessccrriippttiioonn(SSL_CIPHER *cipher, char
+       *buf, int len);
+           Write a string to buf (with a maximum size of len)
+           containing a human readable description of cipher.
+           Returns buf.
+
+       int SSSSLL_CCIIPPHHEERR_ggeett_bbiittss(SSL_CIPHER *cipher, int
+       *alg_bits);
+           Determine the number of bits in cipher. Because of
+           export crippled ciphers there are two bits: The bits
+           the algorithm supports in general (stored to alg_bits)
+           and the bits which are actually used (the return
+           value).
+
+       const char *SSSSLL_CCIIPPHHEERR_ggeett_nnaammee(SSL_CIPHER *cipher);
+           Return the internal name of cipher as a string. These
+           are the various strings defined by the SSL2_TXT_xxx,
+           SSL3_TXT_xxx and TLS1_TXT_xxx definitions in the
+           header files.
+
+       char *SSSSLL_CCIIPPHHEERR_ggeett_vveerrssiioonn(SSL_CIPHER *cipher);
+           Returns a string like "TLSv1/SSLv3" or "SSLv2" which
+           indicates the SSL/TLS protocol version to which cipher
+           belongs (i.e. where it was defined in the
+           specification the first time).
+
+       DDEEAALLIINNGG WWIITTHH PPRROOTTOOCCOOLL CCOONNTTEEXXTTSS
+
+       Here we document the various API functions which deal with
+       the SSL/TLS protocol context defined in the SSSSLL_CCTTXX
+       structure.
+
+       int SSSSLL_CCTTXX_aadddd_cclliieenntt_CCAA(SSL_CTX *ctx, X509 *x);
+
+       long SSSSLL_CCTTXX_aadddd_eexxttrraa_cchhaaiinn_cceerrtt(SSL_CTX *ctx, X509
+       *x509);
+
+       int SSSSLL_CCTTXX_aadddd_sseessssiioonn(SSL_CTX *ctx, SSL_SESSION *c);
+
+
+
+       int SSSSLL_CCTTXX_cchheecckk_pprriivvaattee_kkeeyy(SSL_CTX *ctx);
+
+       long SSSSLL_CCTTXX_ccttrrll(SSL_CTX *ctx, int cmd, long larg, char
+       *parg);
+
+       void SSSSLL_CCTTXX_fflluusshh_sseessssiioonnss(SSL_CTX *s, long t);
+
+       void SSSSLL_CCTTXX_ffrreeee(SSL_CTX *a);
+
+       char *SSSSLL_CCTTXX_ggeett_aapppp_ddaattaa(SSL_CTX *ctx);
+
+       X509_STORE *SSSSLL_CCTTXX_ggeett_cceerrtt_ssttoorree(SSL_CTX *ctx);
+
+       STACK *SSSSLL_CCTTXX_ggeett_cclliieenntt_CCAA_lliisstt(SSL_CTX *ctx);
+
+       int (*SSSSLL_CCTTXX_ggeett_cclliieenntt_cceerrtt_ccbb(SSL_CTX *ctx))(SSL *ssl,
+       X509 **x509, EVP_PKEY **pkey);
+
+       char *SSSSLL_CCTTXX_ggeett_eexx_ddaattaa(SSL_CTX *s, int idx);
+
+       int SSSSLL_CCTTXX_ggeett_eexx_nneeww_iinnddeexx(long argl, char *argp, int
+       (*new_func);(void), int (*dup_func)(void), void
+       (*free_func)(void))
+
+       void (*SSSSLL_CCTTXX_ggeett_iinnffoo_ccaallllbbaacckk(SSL_CTX *ctx))(SSL *ssl,
+       int cb, int ret);
+
+       int SSSSLL_CCTTXX_ggeett_qquuiieett_sshhuuttddoowwnn(SSL_CTX *ctx);
+
+       int SSSSLL_CCTTXX_ggeett_sseessssiioonn_ccaacchhee_mmooddee(SSL_CTX *ctx);
+
+       long SSSSLL_CCTTXX_ggeett_ttiimmeeoouutt(SSL_CTX *ctx);
+
+       int (*SSSSLL_CCTTXX_ggeett_vveerriiffyy_ccaallllbbaacckk(SSL_CTX *ctx))(int ok,
+       X509_STORE_CTX *ctx);
+
+       int SSSSLL_CCTTXX_ggeett_vveerriiffyy_mmooddee(SSL_CTX *ctx);
+
+       int SSSSLL_CCTTXX_llooaadd_vveerriiffyy_llooccaattiioonnss(SSL_CTX *ctx, char
+       *CAfile, char *CApath);
+
+       long SSSSLL_CCTTXX_nneeeedd_ttmmpp_RRSSAA(SSL_CTX *ctx);
+
+       SSL_CTX *SSSSLL_CCTTXX_nneeww(SSL_METHOD *meth);
+
+       int SSSSLL_CCTTXX_rreemmoovvee_sseessssiioonn(SSL_CTX *ctx, SSL_SESSION *c);
+
+       int SSSSLL_CCTTXX_sseessss_aacccceepptt(SSL_CTX *ctx);
+
+       int SSSSLL_CCTTXX_sseessss_aacccceepptt_ggoooodd(SSL_CTX *ctx);
+
+       int SSSSLL_CCTTXX_sseessss_aacccceepptt_rreenneeggoottiiaattee(SSL_CTX *ctx);
+
+       int SSSSLL_CCTTXX_sseessss_ccaacchhee_ffuullll(SSL_CTX *ctx);
+
+       int SSSSLL_CCTTXX_sseessss_ccbb_hhiittss(SSL_CTX *ctx);
+
+       int SSSSLL_CCTTXX_sseessss_ccoonnnneecctt(SSL_CTX *ctx);
+
+       int SSSSLL_CCTTXX_sseessss_ccoonnnneecctt_ggoooodd(SSL_CTX *ctx);
+
+       int SSSSLL_CCTTXX_sseessss_ccoonnnneecctt_rreenneeggoottiiaattee(SSL_CTX *ctx);
+
+       int SSSSLL_CCTTXX_sseessss_ggeett_ccaacchhee_ssiizzee(SSL_CTX *ctx);
+
+
+       SSL_SESSION *(*SSSSLL_CCTTXX_sseessss_ggeett_ggeett_ccbb(SSL_CTX *ctx))(SSL
+       *ssl, unsigned char *data, int len, int *copy);
+
+       int (*SSSSLL_CCTTXX_sseessss_ggeett_nneeww_ccbb(SSL_CTX *ctx)(SSL *ssl,
+       SSL_SESSION *sess);
+
+       void (*SSSSLL_CCTTXX_sseessss_ggeett_rreemmoovvee_ccbb(SSL_CTX *ctx)(SSL_CTX
+       *ctx, SSL_SESSION *sess);
+
+       int SSSSLL_CCTTXX_sseessss_hhiittss(SSL_CTX *ctx);
+
+       int SSSSLL_CCTTXX_sseessss_mmiisssseess(SSL_CTX *ctx);
+
+       int SSSSLL_CCTTXX_sseessss_nnuummbbeerr(SSL_CTX *ctx);
+
+       void SSSSLL_CCTTXX_sseessss_sseett_ccaacchhee_ssiizzee(SSL_CTX *ctx,t);
+
+       void SSSSLL_CCTTXX_sseessss_sseett_ggeett_ccbb(SSL_CTX *ctx, SSL_SESSION
+       *(*cb)(SSL *ssl, unsigned char *data, int len, int
+       *copy));
+
+       void SSSSLL_CCTTXX_sseessss_sseett_nneeww_ccbb(SSL_CTX *ctx, int (*cb)(SSL
+       *ssl, SSL_SESSION *sess));
+
+       void SSSSLL_CCTTXX_sseessss_sseett_rreemmoovvee_ccbb(SSL_CTX *ctx, void
+       (*cb)(SSL_CTX *ctx, SSL_SESSION *sess));
+
+       int SSSSLL_CCTTXX_sseessss_ttiimmeeoouuttss(SSL_CTX *ctx);
+
+       LHASH *SSSSLL_CCTTXX_sseessssiioonnss(SSL_CTX *ctx);
+
+       void SSSSLL_CCTTXX_sseett_aapppp_ddaattaa(SSL_CTX *ctx, void *arg);
+
+       void SSSSLL_CCTTXX_sseett_cceerrtt_ssttoorree(SSL_CTX *ctx, X509_STORE *cs);
+
+       void SSSSLL_CCTTXX_sseett_cceerrtt_vveerriiffyy_ccbb(SSL_CTX *ctx, int (*cb)(),
+       char *arg)
+
+       int SSSSLL_CCTTXX_sseett_cciipphheerr_lliisstt(SSL_CTX *ctx, char *str);
+
+       void SSSSLL_CCTTXX_sseett_cclliieenntt_CCAA_lliisstt(SSL_CTX *ctx, STACK
+       *list);
+
+       void SSSSLL_CCTTXX_sseett_cclliieenntt_cceerrtt_ccbb(SSL_CTX *ctx, int
+       (*cb)(SSL *ssl, X509 **x509, EVP_PKEY **pkey));
+
+       void SSSSLL_CCTTXX_sseett_ddeeffaauulltt_ppaasssswwdd_ccbb(SSL_CTX *ctx, int
+       (*cb);(void))
+
+       void SSSSLL_CCTTXX_sseett_ddeeffaauulltt_rreeaadd_aahheeaadd(SSL_CTX *ctx, int m);
+
+       int SSSSLL_CCTTXX_sseett_ddeeffaauulltt_vveerriiffyy_ppaatthhss(SSL_CTX *ctx);
+
+       int SSSSLL_CCTTXX_sseett_eexx_ddaattaa(SSL_CTX *s, int idx, char *arg);
+
+       void SSSSLL_CCTTXX_sseett_iinnffoo_ccaallllbbaacckk(SSL_CTX *ctx, void
+       (*cb)(SSL *ssl, int cb, int ret));
+
+       void SSSSLL_CCTTXX_sseett_ooppttiioonnss(SSL_CTX *ctx, unsigned long op);
+
+       void SSSSLL_CCTTXX_sseett_qquuiieett_sshhuuttddoowwnn(SSL_CTX *ctx, int mode);
+
+       void SSSSLL_CCTTXX_sseett_sseessssiioonn_ccaacchhee_mmooddee(SSL_CTX *ctx, int
+       mode);
+
+
+       int SSSSLL_CCTTXX_sseett_ssssll_vveerrssiioonn(SSL_CTX *ctx, SSL_METHOD
+       *meth);
+
+       void SSSSLL_CCTTXX_sseett_ttiimmeeoouutt(SSL_CTX *ctx, long t);
+
+       long SSSSLL_CCTTXX_sseett_ttmmpp_ddhh(SSL_CTX* ctx, DH *dh);
+
+       long SSSSLL_CCTTXX_sseett_ttmmpp_ddhh_ccaallllbbaacckk(SSL_CTX *ctx, DH
+       *(*cb)(void));
+
+       long SSSSLL_CCTTXX_sseett_ttmmpp_rrssaa(SSL_CTX *ctx, RSA *rsa);
+
+       SSL_CTX_set_tmp_rsa_callback
+           long SSSSLL_CCTTXX_sseett_ttmmpp_rrssaa_ccaallllbbaacckk(SSL_CTX *ccttxx, RSA
+           *(*ccbb)(SSL *ssssll, int eexxppoorrtt, int kkeeyylleennggtthh));
+
+           Sets the callback which will be called when a
+           temporary private key is required. The eexxppoorrtt flag
+           will be set if the reason for needing a temp key is
+           that an export ciphersuite is in use, in which case,
+           kkeeyylleennggtthh will contain the required keylength in bits.
+           Generate a key of appropriate size (using ???) and
+           return it.
+
+       SSL_set_tmp_rsa_callback
+           long SSSSLL_sseett_ttmmpp_rrssaa_ccaallllbbaacckk(SSL *ssl, RSA *(*cb)(SSL
+           *ssl, int export, int keylength));
+
+           The same as the section on
+           SSL_CTX_set_tmp_rsa_callback, except it operates on an
+           SSL session instead of a context.
+
+       void SSSSLL_CCTTXX_sseett_vveerriiffyy(SSL_CTX *ctx, int mode, int
+       (*cb);(void))
+
+       int SSSSLL_CCTTXX_uussee_PPrriivvaatteeKKeeyy(SSL_CTX *ctx, EVP_PKEY *pkey);
+
+       int SSSSLL_CCTTXX_uussee_PPrriivvaatteeKKeeyy_AASSNN11(int type, SSL_CTX *ctx,
+       unsigned char *d, long len);
+
+       int SSSSLL_CCTTXX_uussee_PPrriivvaatteeKKeeyy_ffiillee(SSL_CTX *ctx, char *file,
+       int type);
+
+       int SSSSLL_CCTTXX_uussee_RRSSAAPPrriivvaatteeKKeeyy(SSL_CTX *ctx, RSA *rsa);
+
+       int SSSSLL_CCTTXX_uussee_RRSSAAPPrriivvaatteeKKeeyy_AASSNN11(SSL_CTX *ctx, unsigned
+       char *d, long len);
+
+       int SSSSLL_CCTTXX_uussee_RRSSAAPPrriivvaatteeKKeeyy_ffiillee(SSL_CTX *ctx, char
+       *file, int type);
+
+       int SSSSLL_CCTTXX_uussee_cceerrttiiffiiccaattee(SSL_CTX *ctx, X509 *x);
+
+       int SSSSLL_CCTTXX_uussee_cceerrttiiffiiccaattee_AASSNN11(SSL_CTX *ctx, int len,
+       unsigned char *d);
+
+       int SSSSLL_CCTTXX_uussee_cceerrttiiffiiccaattee_ffiillee(SSL_CTX *ctx, char *file,
+       int type);
+
+       DDEEAALLIINNGG WWIITTHH SSEESSSSIIOONNSS
+
+       Here we document the various API functions which deal with
+       the SSL/TLS sessions defined in the SSSSLL_SSEESSSSIIOONN
+       structures.
+
+
+       int SSSSLL_SSEESSSSIIOONN_ccmmpp(SSL_SESSION *a, SSL_SESSION *b);
+
+       void SSSSLL_SSEESSSSIIOONN_ffrreeee(SSL_SESSION *ss);
+
+       char *SSSSLL_SSEESSSSIIOONN_ggeett_aapppp_ddaattaa(SSL_SESSION *s);
+
+       char *SSSSLL_SSEESSSSIIOONN_ggeett_eexx_ddaattaa(SSL_SESSION *s, int idx);
+
+       int SSSSLL_SSEESSSSIIOONN_ggeett_eexx_nneeww_iinnddeexx(long argl, char *argp,
+       int (*new_func);(void), int (*dup_func)(void), void
+       (*free_func)(void))
+
+       long SSSSLL_SSEESSSSIIOONN_ggeett_ttiimmee(SSL_SESSION *s);
+
+       long SSSSLL_SSEESSSSIIOONN_ggeett_ttiimmeeoouutt(SSL_SESSION *s);
+
+       unsigned long SSSSLL_SSEESSSSIIOONN_hhaasshh(SSL_SESSION *a);
+
+       SSL_SESSION *SSSSLL_SSEESSSSIIOONN_nneeww(void);
+
+       int SSSSLL_SSEESSSSIIOONN_pprriinntt(BIO *bp, SSL_SESSION *x);
+
+       int SSSSLL_SSEESSSSIIOONN_pprriinntt_ffpp(FILE *fp, SSL_SESSION *x);
+
+       void SSSSLL_SSEESSSSIIOONN_sseett_aapppp_ddaattaa(SSL_SESSION *s, char *a);
+
+       int SSSSLL_SSEESSSSIIOONN_sseett_eexx_ddaattaa(SSL_SESSION *s, int idx, char
+       *arg);
+
+       long SSSSLL_SSEESSSSIIOONN_sseett_ttiimmee(SSL_SESSION *s, long t);
+
+       long SSSSLL_SSEESSSSIIOONN_sseett_ttiimmeeoouutt(SSL_SESSION *s, long t);
+
+       DDEEAALLIINNGG WWIITTHH CCOONNNNEECCTTIIOONNSS
+
+       Here we document the various API functions which deal with
+       the SSL/TLS connection defined in the SSSSLL structure.
+
+       int SSSSLL_aacccceepptt(SSL *ssl);
+
+       int SSSSLL_aadddd_ddiirr_cceerrtt_ssuubbjjeeccttss_ttoo_ssttaacckk(STACK *stack, const
+       char *dir);
+
+       int SSSSLL_aadddd_ffiillee_cceerrtt_ssuubbjjeeccttss_ttoo_ssttaacckk(STACK *stack,
+       const char *file);
+
+       int SSSSLL_aadddd_cclliieenntt_CCAA(SSL *ssl, X509 *x);
+
+       char *SSSSLL_aalleerrtt_ddeesscc_ssttrriinngg(int value);
+
+       char *SSSSLL_aalleerrtt_ddeesscc_ssttrriinngg_lloonngg(int value);
+
+       char *SSSSLL_aalleerrtt_ttyyppee_ssttrriinngg(int value);
+
+       char *SSSSLL_aalleerrtt_ttyyppee_ssttrriinngg_lloonngg(int value);
+
+       int SSSSLL_cchheecckk_pprriivvaattee_kkeeyy(SSL *ssl);
+
+       void SSSSLL_cclleeaarr(SSL *ssl);
+
+       long SSSSLL_cclleeaarr_nnuumm_rreenneeggoottiiaattiioonnss(SSL *ssl);
+
+       int SSSSLL_ccoonnnneecctt(SSL *ssl);
+
+
+
+       void SSSSLL_ccooppyy_sseessssiioonn_iidd(SSL *t, SSL *f);
+
+       long SSSSLL_ccttrrll(SSL *ssl, int cmd, long larg, char *parg);
+
+       int SSSSLL_ddoo_hhaannddsshhaakkee(SSL *ssl);
+
+       SSL *SSSSLL_dduupp(SSL *ssl);
+
+       STACK *SSSSLL_dduupp_CCAA_lliisstt(STACK *sk);
+
+       void SSSSLL_ffrreeee(SSL *ssl);
+
+       SSL_CTX *SSSSLL_ggeett_SSSSLL_CCTTXX(SSL *ssl);
+
+       char *SSSSLL_ggeett_aapppp_ddaattaa(SSL *ssl);
+
+       X509 *SSSSLL_ggeett_cceerrttiiffiiccaattee(SSL *ssl);
+
+       const char *SSSSLL_ggeett_cciipphheerr(SSL *ssl);
+
+       int SSSSLL_ggeett_cciipphheerr_bbiittss(SSL *ssl, int *alg_bits);
+
+       char *SSSSLL_ggeett_cciipphheerr_lliisstt(SSL *ssl, int n);
+
+       char *SSSSLL_ggeett_cciipphheerr_nnaammee(SSL *ssl);
+
+       char *SSSSLL_ggeett_cciipphheerr_vveerrssiioonn(SSL *ssl);
+
+       STACK *SSSSLL_ggeett_cciipphheerrss(SSL *ssl);
+
+       STACK *SSSSLL_ggeett_cclliieenntt_CCAA_lliisstt(SSL *ssl);
+
+       SSL_CIPHER *SSSSLL_ggeett_ccuurrrreenntt_cciipphheerr(SSL *ssl);
+
+       long SSSSLL_ggeett_ddeeffaauulltt_ttiimmeeoouutt(SSL *ssl);
+
+       int SSSSLL_ggeett_eerrrroorr(SSL *ssl, int i);
+
+       char *SSSSLL_ggeett_eexx_ddaattaa(SSL *ssl, int idx);
+
+       int SSSSLL_ggeett_eexx_ddaattaa_XX550099_SSTTOORREE_CCTTXX_iiddxx(void);
+
+       int SSSSLL_ggeett_eexx_nneeww_iinnddeexx(long argl, char *argp, int
+       (*new_func);(void), int (*dup_func)(void), void
+       (*free_func)(void))
+
+       int SSSSLL_ggeett_ffdd(SSL *ssl);
+
+       void (*SSSSLL_ggeett_iinnffoo_ccaallllbbaacckk(SSL *ssl);)(void)
+
+       STACK *SSSSLL_ggeett_ppeeeerr_cceerrtt_cchhaaiinn(SSL *ssl);
+
+       X509 *SSSSLL_ggeett_ppeeeerr_cceerrttiiffiiccaattee(SSL *ssl);
+
+       EVP_PKEY *SSSSLL_ggeett_pprriivvaatteekkeeyy(SSL *ssl);
+
+       int SSSSLL_ggeett_qquuiieett_sshhuuttddoowwnn(SSL *ssl);
+
+       BIO *SSSSLL_ggeett_rrbbiioo(SSL *ssl);
+
+       int SSSSLL_ggeett_rreeaadd_aahheeaadd(SSL *ssl);
+
+       SSL_SESSION *SSSSLL_ggeett_sseessssiioonn(SSL *ssl);
+
+
+
+       char *SSSSLL_ggeett_sshhaarreedd_cciipphheerrss(SSL *ssl, char *buf, int
+       len);
+
+       int SSSSLL_ggeett_sshhuuttddoowwnn(SSL *ssl);
+
+       SSL_METHOD *SSSSLL_ggeett_ssssll_mmeetthhoodd(SSL *ssl);
+
+       int SSSSLL_ggeett_ssttaattee(SSL *ssl);
+
+       long SSSSLL_ggeett_ttiimmee(SSL *ssl);
+
+       long SSSSLL_ggeett_ttiimmeeoouutt(SSL *ssl);
+
+       int (*SSSSLL_ggeett_vveerriiffyy_ccaallllbbaacckk(SSL *ssl);)(void)
+
+       int SSSSLL_ggeett_vveerriiffyy_mmooddee(SSL *ssl);
+
+       long SSSSLL_ggeett_vveerriiffyy_rreessuulltt(SSL *ssl);
+
+       char *SSSSLL_ggeett_vveerrssiioonn(SSL *ssl);
+
+       BIO *SSSSLL_ggeett_wwbbiioo(SSL *ssl);
+
+       int SSSSLL_iinn_aacccceepptt_iinniitt(SSL *ssl);
+
+       int SSSSLL_iinn_bbeeffoorree(SSL *ssl);
+
+       int SSSSLL_iinn_ccoonnnneecctt_iinniitt(SSL *ssl);
+
+       int SSSSLL_iinn_iinniitt(SSL *ssl);
+
+       int SSSSLL_iiss_iinniitt_ffiinniisshheedd(SSL *ssl);
+
+       STACK *SSSSLL_llooaadd_cclliieenntt_CCAA_ffiillee(char *file);
+
+       void SSSSLL_llooaadd_eerrrroorr_ssttrriinnggss(void);
+
+       SSL *SSSSLL_nneeww(SSL_CTX *ctx);
+
+       long SSSSLL_nnuumm_rreenneeggoottiiaattiioonnss(SSL *ssl);
+
+       int SSSSLL_ppeeeekk(SSL *ssl, void *buf, int num);
+
+       int SSSSLL_ppeennddiinngg(SSL *ssl);
+
+       int SSSSLL_rreeaadd(SSL *ssl, void *buf, int num);
+
+       int SSSSLL_rreenneeggoottiiaattee(SSL *ssl);
+
+       char *SSSSLL_rrssttaattee_ssttrriinngg(SSL *ssl);
+
+       char *SSSSLL_rrssttaattee_ssttrriinngg_lloonngg(SSL *ssl);
+
+       long SSSSLL_sseessssiioonn_rreeuusseedd(SSL *ssl);
+
+       void SSSSLL_sseett_aacccceepptt_ssttaattee(SSL *ssl);
+
+       void SSSSLL_sseett_aapppp_ddaattaa(SSL *ssl, char *arg);
+
+       void SSSSLL_sseett_bbiioo(SSL *ssl, BIO *rbio, BIO *wbio);
+
+       int SSSSLL_sseett_cciipphheerr_lliisstt(SSL *ssl, char *str);
+
+       void SSSSLL_sseett_cclliieenntt_CCAA_lliisstt(SSL *ssl, STACK *list);
+
+
+       void SSSSLL_sseett_ccoonnnneecctt_ssttaattee(SSL *ssl);
+
+       int SSSSLL_sseett_eexx_ddaattaa(SSL *ssl, int idx, char *arg);
+
+       int SSSSLL_sseett_ffdd(SSL *ssl, int fd);
+
+       void SSSSLL_sseett_iinnffoo_ccaallllbbaacckk(SSL *ssl, void (*cb);(void))
+
+       void SSSSLL_sseett_ooppttiioonnss(SSL *ssl, unsigned long op);
+
+       void SSSSLL_sseett_qquuiieett_sshhuuttddoowwnn(SSL *ssl, int mode);
+
+       void SSSSLL_sseett_rreeaadd_aahheeaadd(SSL *ssl, int yes);
+
+       int SSSSLL_sseett_rrffdd(SSL *ssl, int fd);
+
+       int SSSSLL_sseett_sseessssiioonn(SSL *ssl, SSL_SESSION *session);
+
+       void SSSSLL_sseett_sshhuuttddoowwnn(SSL *ssl, int mode);
+
+       int SSSSLL_sseett_ssssll_mmeetthhoodd(SSL *ssl, SSL_METHOD *meth);
+
+       void SSSSLL_sseett_ttiimmee(SSL *ssl, long t);
+
+       void SSSSLL_sseett_ttiimmeeoouutt(SSL *ssl, long t);
+
+       void SSSSLL_sseett_vveerriiffyy(SSL *ssl, int mode, int
+       (*callback);(void))
+
+       void SSSSLL_sseett_vveerriiffyy_rreessuulltt(SSL *ssl, long arg);
+
+       int SSSSLL_sseett_wwffdd(SSL *ssl, int fd);
+
+       int SSSSLL_sshhuuttddoowwnn(SSL *ssl);
+
+       int SSSSLL_ssttaattee(SSL *ssl);
+
+       char *SSSSLL_ssttaattee_ssttrriinngg(SSL *ssl);
+
+       char *SSSSLL_ssttaattee_ssttrriinngg_lloonngg(SSL *ssl);
+
+       long SSSSLL_ttoottaall_rreenneeggoottiiaattiioonnss(SSL *ssl);
+
+       int SSSSLL_uussee_PPrriivvaatteeKKeeyy(SSL *ssl, EVP_PKEY *pkey);
+
+       int SSSSLL_uussee_PPrriivvaatteeKKeeyy_AASSNN11(int type, SSL *ssl, unsigned
+       char *d, long len);
+
+       int SSSSLL_uussee_PPrriivvaatteeKKeeyy_ffiillee(SSL *ssl, char *file, int
+       type);
+
+       int SSSSLL_uussee_RRSSAAPPrriivvaatteeKKeeyy(SSL *ssl, RSA *rsa);
+
+       int SSSSLL_uussee_RRSSAAPPrriivvaatteeKKeeyy_AASSNN11(SSL *ssl, unsigned char *d,
+       long len);
+
+       int SSSSLL_uussee_RRSSAAPPrriivvaatteeKKeeyy_ffiillee(SSL *ssl, char *file, int
+       type);
+
+       int SSSSLL_uussee_cceerrttiiffiiccaattee(SSL *ssl, X509 *x);
+
+       int SSSSLL_uussee_cceerrttiiffiiccaattee_AASSNN11(SSL *ssl, int len, unsigned
+       char *d);
+
+
+
+       int SSSSLL_uussee_cceerrttiiffiiccaattee_ffiillee(SSL *ssl, char *file, int
+       type);
+
+       int SSSSLL_vveerrssiioonn(SSL *ssl);
+
+       int SSSSLL_wwaanntt(SSL *ssl);
+
+       int SSSSLL_wwaanntt_nnootthhiinngg(SSL *ssl);
+
+       int SSSSLL_wwaanntt_rreeaadd(SSL *ssl);
+
+       int SSSSLL_wwaanntt_wwrriittee(SSL *ssl);
+
+       int SSSSLL_wwaanntt_xx550099_llooookkuupp(s);
+
+       int SSSSLL_wwrriittee(SSL *ssl, const void *buf, int num);
+
+SSEEEE AALLSSOO
+       openssl(1), crypto(3), SSL_accept(3), SSL_clear(3),
+       SSL_connect(3), SSL_CIPHER_get_name(3),
+       SSL_COMP_add_compression_method(3),
+       SSL_CTX_add_extra_chain_cert(3), SSL_CTX_add_session(3),
+       SSL_CTX_ctrl(3), SSL_CTX_flush_sessions(3),
+       SSL_CTX_get_ex_new_index(3), SSL_CTX_get_verify_mode(3),
+       SSL_CTX_load_verify_locations(3) SSL_CTX_new(3),
+       SSL_CTX_sess_number(3), SSL_CTX_sess_set_cache_size(3),
+       SSL_CTX_sess_set_get_cb(3), SSL_CTX_sessions(3),
+       SSL_CTX_set_cert_store(3),
+       SSL_CTX_set_cert_verify_callback(3),
+       SSL_CTX_set_cipher_list(3), SSL_CTX_set_client_CA_list(3),
+       SSL_CTX_set_default_passwd_cb(3),
+       SSL_CTX_set_info_callback(3), SSL_CTX_set_mode(3),
+       SSL_CTX_set_options(3), SSL_CTX_set_quiet_shutdown(3),
+       SSL_CTX_set_session_cache_mode(3),
+       SSL_CTX_set_session_id_context(3),
+       SSL_CTX_set_ssl_version(3), SSL_CTX_set_timeout(3),
+       SSL_CTX_set_tmp_rsa_callback(3),
+       SSL_CTX_set_tmp_dh_callback(3), SSL_CTX_set_verify(3),
+       SSL_CTX_use_certificate(3), SSL_alert_type_string(3),
+       SSL_get_SSL_CTX(3), SSL_get_ciphers(3),
+       SSL_get_client_CA_list(3), SSL_get_default_timeout(3),
+       SSL_get_error(3), SSL_get_ex_data_X509_STORE_CTX_idx(3),
+       SSL_get_ex_new_index(3), SSL_get_fd(3),
+       SSL_get_peer_cert_chain(3), SSL_get_rbio(3),
+       SSL_get_session(3), SSL_get_verify_result(3),
+       SSL_get_version(3), SSL_library_init(3),
+       SSL_load_client_CA_file(3), SSL_new(3), SSL_pending(3),
+       SSL_read(3), SSL_rstate_string(3), SSL_session_reused(3),
+       SSL_set_bio(3), SSL_set_connect_state(3), SSL_set_fd(3),
+       SSL_set_session(3), SSL_set_shutdown(3), SSL_shutdown(3),
+       SSL_state_string(3), SSL_want(3), SSL_write(3),
+       SSL_SESSION_free(3), SSL_SESSION_get_ex_new_index(3),
+       SSL_SESSION_get_time(3), d2i_SSL_SESSION(3)
+
+HHIISSTTOORRYY
+       The ssl(3) document appeared in OpenSSL 0.9.2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+13/Sep/2001                   0.9.6c                       ssl(3)

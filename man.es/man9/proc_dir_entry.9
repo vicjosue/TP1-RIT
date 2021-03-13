@@ -1,0 +1,135 @@
+proc_dir_entry(9)        /proc Functions        proc_dir_entry(9)
+
+
+
+NAME
+       proc_dir_entry, proc_register, proc_register_dynamic,
+       proc_unregister - register entries in the /proc
+       filesystem.
+
+SYNOPSIS
+       #include <linux/proc_fs.h>
+
+       int proc_register(struct proc_dir_entry * parent,
+       struct proc_dir_entry * child);
+
+       int proc_unregister(struct proc_dir_entry * parent,
+       int inode);
+
+       int proc_register_dynamic(struct proc_dir_entry * parent,
+       struct proc_dir_entry * child);
+
+DESCRIPTION
+       The  proc_register functions add file or directory entries
+       to the  /proc  file  system.   They  associate  processing
+       routines  with each node of the /proc tree.  The structure
+       proc_dir_entry is defined as
+
+       struct proc_dir_entry {
+               unsigned short low_ino;
+               unsigned short namelen;
+               const char *name;
+               mode_t mode;
+               nlink_t nlink;
+               uid_t uid;
+               gid_t gid;
+               unsigned long size;
+               struct inode_operations * ops;
+               int (*get_info)(char *buffer, char **start,
+                       off_t offset, int length, int unused);
+               void (*fill_inode)(struct inode *);
+               struct proc_dir_entry *next, *parent, *subdir;
+               void *data;
+       };
+
+
+       low_ino The inode number of  this  directory  entry.   For
+               proc_register this  number should be unique within
+               the  /proc  filesystem,  values  are  defined   in
+               <linux/proc_fs.h>.   For proc_register_dynamic the
+               inode number is dynamically assigned.
+
+       namelen The length of the  name,  excluding  the  trailing
+               null.
+
+       name    The name of this node.
+
+       mode    The  node's  type  and  permissions.   Drawn  from
+               <linux/stat.h>.
+
+       nlink   Number of links to the node.  Initialise to  2  if
+               mode includes S_IFDIR, 1 otherwise.
+
+       uid     The uid that owns the node, normally 0.
+
+       gid     The gid that owns the node. normally 0.
+
+       size    Sets  the  size of the node, the value will appear
+               as the inode size in listings and be  returned  by
+               stat.   Unless you really need a size, set this to
+               zero.
+
+       ops     Defines the set of inode operations to perform for
+               your  /proc  node.   For  a  directory  node,  use
+               &proc_dir_inode_operations unless you have special
+               requirements.  For a leaf node, set to NULL unless
+               you have special requirements.
+
+       get_info
+               If defined, this proc is called when the  node  is
+               read.   Should be NULL for directory nodes.  NOTE:
+               If you need to return large amounts of  data,  the
+               proc must return the data in chunks and reposition
+               itself  on  the  next  call,  using   the   offset
+               variable.   See  ip_masq_procinfo for example code
+               with large output.
+
+       fill_inode
+               Dynamically  fill  in  the  inode  characteristics
+               during   directory   operations.    Not   normally
+               required and set to NULL.  See proc_pid_fill_inode
+               for example code.
+
+       next, parent, subdir
+               Maintained  by  /proc  routines.  Initial value is
+               irrelevant, set to NULL.
+
+       data    An opaque  pointer  which  can  be  used  by  proc
+               handlers  to  pass  local  data  around.   Set  to
+               whatever  you  like  when  calling  proc_register,
+               normally  NULL.   This  pointer is copied into the
+               inode u.ip_generic field (by proc_get_inode) so it
+               is  available to any proc routines that are passed
+               an inode.
+
+       proc_register adds the child as a node under the parent.
+
+       proc_register_dynamic dynamically assigns an inode  number
+       then adds the child as a node under the parent.
+
+       proc_unregister  scans the inode list under the parent for
+       the specified inode number and removes the matching entry.
+
+RETURN VALUE
+       proc_register always returns 0.
+
+       proc_register_dynamic  returns 0 for success or -EAGAIN if
+       there are no free dynamic inode numbers.
+
+       proc_unregister returns 0 for success or  -EINVAL  if  the
+       node was not found.
+
+SEE ALSO
+       proc_net_register(9), proc_net_unregister(9),
+       proc_scsi_register(9), proc_scsi_unregister(9), stat(2).
+
+AUTHOR
+       Keith Owens <kaos@ocs.com.au>
+
+BUGS
+       The uniqueness of /proc  inode  numbers  is  assumed,  not
+       enforced.   It  is possible to add two nodes with the same
+       inode number.
+
+
+

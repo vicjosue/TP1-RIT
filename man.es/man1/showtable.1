@@ -1,0 +1,337 @@
+SHOWTABLE(1)   User Contributed Perl Documentation   SHOWTABLE(1)
+
+
+
+NNAAMMEE
+       sshhoowwttaabbllee - Show data in nicely formatted columns
+
+UUSSAAGGEE
+       sshhoowwttaabbllee [-options] [file]
+
+DDEESSCCRRIIPPTTIIOONN
+       SShhoowwttaabbllee reads an input data stream and displays it in a
+       nicely formatted listing, with exact formatting depending
+       upon the options.  The input stream, file or "STDIN" by
+       default should consist of data separated by tabs or the
+       defined separator character (see --dd).
+
+       The actual output formatting is peformed by the SShhoowwTTaabbllee
+       module.
+
+OOPPTTIIOONNSS
+       There are two general sets of options: those which help
+       determine the format of the input, and those which deter­
+       mine the format of the output.
+
+       OOppttiioonnss aaffffeeccttiinngg iinnppuutt
+
+
+       --bbrreeaakk==str
+                 Set the inter-column break string to "str".  The
+                 default is a tab (""\t"").  If --ssttrriipp is also
+                 given, blanks surrounding the break string will
+                 also be ignored.
+
+       --ddstr     This is the same as "-break="str.
+
+       --nnoodd((aasshheess))
+                 Do not ignore lines of separators, such as
+                 dashes, equal signs, or underlines.  If
+                 --nnooddaasshheess is given, and these lines do occur in
+                 the stream, they will be treated as normal data.
+
+       --ttii((ttlleess))[[==NN]]
+                 Treat the first NN rows of data as column
+                 titles; multiple words in the column titles may
+                 wrap vertically. If NN is omitted, it defaults
+                 to 1.  No --ttiittlleess option is the same as
+                 --ttiittlleess==00.
+
+       --iinn((ppuutt))==type
+                 Set the input type as type, which can be one of:
+                 box, list, table, or simple.  A simple-type
+                 table is the same as a table-type, but no wrap­
+                 ping characters are recognized.
+
+       --ss((ttrriipp))  Strip blanks from around the column values.
+
+       --nnooss((ttrriipp))
+                 Do not strip blanks from the input.  Useful if
+                 there is formatted or aligned data within a
+                 boxed table.
+
+       OOppttiioonnss aaffffeeccttiinngg oouuttppuutt
+
+
+
+
+       --tt((aabbllee))  Use a table format for output, with wrapping of
+                 column values longer than the given or deter­
+                 mined column widths.  See the ShowTable manpage
+                 for more details.
+
+       --ssii((mmppllee)) Use a simple table format, without any wrapping
+                 of column values.  See the ShowTable manpage for
+                 more details.
+
+       --ll((iisstt))   Use a list style format.  See the ShowTable man­
+                 page for more details.
+
+       --bb((ooxx))    Use a "boxed" style table.  See the ShowTable
+                 manpage for more details.
+
+       --hhtt((mmll))   Use HTML-formating.  See the ShowTable manpage
+                 for more details.
+
+       --ttii((ttlleess))==name1,,name2,,......,,nameN
+                 Define the column names explicitly.  This is
+                 useful for naming columns of data from "STDIN",
+                 when sshhoowwttaabbllee is being used as a filter.  The
+                 first column name, name1, cannot begin with a
+                 digit.  This option allows any column titles
+                 obtained from the input to be overridden.
+
+       --nnoohh((eeaaddeerrss))
+                 Do not output any headers on the tables;
+                 --ttiittlleess==00 implies this option.
+
+       --ffn1[,n2, ..., nN]
+                 Select fields numbered n1, n2, etc., to display.
+                 Each nN is a field index, or a range of indexes
+                 in the form: "N"-"M" The default is to show all
+                 the fields in each row.  Fields are numbered
+                 from 1.  An example:  to show the first, and
+                 three through five fields of the "/etc/passwd"
+                 file:
+
+                     showtable -d: -f1,2-5 /etc/passwd
+
+
+       --ffiieellddss=fname1[,fname2, ..., fnameN]
+                 Select the named fields to display.  The field
+                 names must be available, either through the data
+                 stream, or by using the --ttiittlleess option.   The
+                 field names given must match the existing field
+                 names exactly.
+
+                 Using the file "/etc/passwd" for another exam­
+                 ple: to show the same first two fields, by name:
+
+                     showtable -d: -titles=Login,UID -fields=Login,UID /etc/passwd
+
+
+       --ww((iiddtthh))=num
+                 Set the maximum table width.  This value is
+                 applied to the variable the
+                 Data::Showtable::Max_Table_Width manpage.  When
+                 the total width of all columns to be displayed
+                 exceeds this value, all column widths are scaled
+                 uniformly.
+
+                 If --wwiiddtthh is not given, then for all output but
+                 --hhttmmll, the default value is either ""COLUMNS"",
+                 if defined, or 80, if not.  Whith --hhttmmll mode,
+                 there is no default value for --wwiiddtthh; in other
+                 words, there is no limit to the width.
+
+       --ccww((iiddtthhss))=w1[,w2,...,wN]
+                 Set individual column widths to the specified
+                 values.  Empty column widths imply no maximum
+                 width.  If the --wwiiddtthh option is also given, then
+                 the --ccwwiiddtthh column widths can also be given as
+                 fractions or percentages.
+
+                 Example: To set the maximum width of the third
+                 column to 20 characters:
+
+                     -cw=,,20
+
+
+       HHTTMMLL--oonnllyy ooppttiioonnss ((tthhee uussaaggee ooff wwhhiicchh iimmpplliieess --hhttmmll))
+
+
+       --nnooee((ssccaappee))
+                 Do not perform HTML escape sequences on the
+                 data; this allows embedded HTML text in the data
+                 to be displayed properly with the --hhttmmll option.
+
+       --aattttrriibbuutteess='attr1 attr2 ...'
+                 Declare the table attributes, which are inserted
+                 into the "TABLE" token.  For example, the
+                 option:
+
+                     -attributes='BORDER=0 CELLSPACING=2 CELLPADDING=4'
+
+                 would cause the following HTML:
+
+                     <TABLE BORDER=0 CELLSPACING=2 CELLPADDING=4>
+
+                 The default table attributes are:
+
+                     <TABLE BORDER=1 CELLSPACING=1 CELLPADDING=1>
+
+
+       --tt((iittllee))_ff((oorrmmaattss))=fmt1;fmt2;...;fmtN
+                 Set the HTML formats for the column titles.  The
+                 --ttiittllee_ffoorrmmaattss (or just --ttff) can be given multi­
+                 ple times, for each column, or formats for mul­
+                 tiple columns can be given on the same option
+                 separated by semi-colons "";"".
+
+                 Each fmtN can itself be multiple HTML items,
+                 separated by commas.  Each HTML element can be
+                 given either as an HTML token (eg:
+                 ""\<BOLD\">"), or as a plain name (eg:
+                 ""BOLD"").
+
+                 For example, here is a title format specifica­
+                 tion for three columns, where the first column
+                 title should be bold italic, the second italic,
+                 and the third italic in a smaller font:
+
+                         -tf='BOLD,I;I;<FONT SIZE=-2>,I'
+
+
+       --dd((aattaa))_ff((ffoorrmmaattss))=fmt1;fmt2;...;fmtN
+                 The same as --ttiittllee_ffoorrmmaattss but applies to the
+                 column data.
+
+
+       --url((ss))==col1==url1,,col2==url2,,......
+                 Define a mapping from column names, or indexes,
+                 to URLs to be inserted as <A HREF's> around the
+                 values for the named columns.  Each colN is a
+                 column name or index, and each urlN is a string
+                 representing the URL to be inserted for the
+                 given column.
+
+                 The URL text may contain these substitution
+                 strings:
+
+                 %%KK - will be substituted with the current column
+                 name (or key).
+
+                 %%VV - will be substituted with the current column
+                 value.
+
+                 Multiple --uurrll options may be given, if desired,
+                 rather than creating one long argument for a
+                 single --uurrll.  For example:
+
+                     showtable   -d: -f1,6 -titles=Login,Homedir \
+                                 -url='Login=mailto:%V' \
+                                 -url='HomeDir=file:%V' \
+                                 /etc/passwd
+
+
+       OOtthheerr ooppttiioonnss
+
+
+       --hheellpp     Display some help to the user and quit.
+
+       BBooxxeedd IInnppuutt
+
+       If the input type is box, then vertical and horizontal box
+       characters are removed from the input stream, and blanks
+       surrounding the vertical box characters are removed.  The
+       vertical box characters (column separaters) are ""|"" or
+       "":"".  The The horizontal box characters are ""+"" and
+       ""-"".
+
+       Morever, data wrapped within a column is recognized and
+       parsed as one column value, by recognizing the presence of
+       a wrapping prefix or wrapping suffix character.  Cur­
+       rently, the wrapping prefix character is "<", and the
+       wrapping suffix character is ">".
+
+       An example of data wrapped within a column is given here.
+       The table below has just two logical rows of data; with
+       both rows having data wrapped into multiple physical rows.
+
+               +---------+---------+---------+
+               |  Col 1  |  Col 2  |  Col 3  |
+               +---------+---------+---------+
+               | This is>| Another>| Row 1,3>|
+               |< a cont>|< value. |<is also>|
+               |<inued  >|         |<long.   |
+               |<value.  |         |         |
+               |This is >| Item2-2 | Item2-3 |
+               +---------+---------+---------+
+
+
+
+
+
+
+       LLiisstt FFoorrmmaatt
+
+       When using the --lliisstt or --iinnppuutt==lliisstt options, either, or
+       both, the input and output may be in a "list" format,
+       which is implemented using the following syntax:
+
+               r1c1_name: r1c1_value
+               r1c2_name: r1c2_value
+               ...
+               r1cN_name: r1cN_value
+
+               r2c1_name: r2c1_value
+               r2c2_name: r2c2_value
+                        : r2c2_value_continued
+               ...
+               r2cN_name: r2cN_value
+
+               rMc1_name: rMc1_value
+               rMc2_name: rMc2_value
+               ...
+               rMcN_name: rMcN_value
+
+       Each row of data consists of one or more columns, and ends
+       with a blank line.
+
+       Each column consists of a column name, followed by a colon
+       ":", followed by an optional, single space or tab, fol­
+       lowed by the column value, on the same line.
+
+       Continuation lines of the previous column value consist of
+       one or more space or tab characters, a colon ":", one
+       optional, single space or tab, followed by the continua­
+       tion value.  In the example above, The second column value
+       of the second row was continued.
+
+       HHTTMMLL IInnppuutt wwiitthh HHTTMMLL OOuuttppuutt
+
+       When using --hhttmmll on data already containing HTML-formatted
+       text, the --nnooeessccaappee option should be used.  By default,
+       all input text is assumed not to be HTML-formatted, and is
+       escaped allowing embedded "<", ">" characters, if any, to
+       be displayed correctly.
+
+DDEEPPEENNDDEENNCCIIEESS
+       DDaattaa::::SShhoowwTTaabbllee module
+                 Performs the actual output formatting.
+
+AAUUTTHHOORR
+       Alan K. Stebbens aks@sgi.com
+
+BBUUGGSS
+       ·    Currently, the box formatting characters are not con­
+            figurable: '+' for the corners; '-' and '|' for the
+            tops and sides, respectively.  In an ideal world,
+            these things would be configurable.
+
+       ·    The continuation prefix and suffix characters, '<'
+            and '>', respectively, are also not configurable:
+
+       ·    When reading table input, any data ending with ">"
+            will be considered to be continued by the next row of
+            data.  To avoid this, use --iinnppuutt==ssiimmppllee.
+
+       ·    When selecting noncontiguous fields (ie: --ff11,,44>)
+            without field names, the default field names will be
+            consecutively numbered from 1, which is counter-intu­
+            itive to the original selection.  To avoid this, name
+            the fields using the --ttiittllee==......  option.
+
+
+
+1997-02-25                 perl v5.6.1               SHOWTABLE(1)

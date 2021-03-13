@@ -1,0 +1,104 @@
+TBL(1)                                                     TBL(1)
+
+
+
+NAME
+       tbl - format tables for troff
+
+SYNOPSIS
+       tbl [ -Cv ] [ files...  ]
+
+DESCRIPTION
+       This  manual  page describes the GNU version of tbl, which
+       is part of the groff document formatting system.  tbl com­
+       piles  descriptions  of tables embedded within troff input
+       files into commands that are understood  by  troff.   Nor­
+       mally,  it should be invoked using the -t option of groff.
+       It is highly compatible with Unix tbl.  The output  gener­
+       ated  by  GNU  tbl cannot be processed with Unix troff; it
+       must be processed with GNU troff.  If no files  are  given
+       on  the  command line, the standard input will be read.  A
+       filename of - will cause the standard input to be read.
+
+OPTIONS
+       -C     Recognize .TS and .TE even when followed by a char­
+              acter other than space or newline.
+
+       -v     Print the version number.
+
+USAGE
+       Only  the  differences  between  GNU  tbl and Unix tbl are
+       described here.
+
+       Normally tbl attempts to prevent undesirable breaks in the
+       table  by  using  diversions.  This can sometimes interact
+       badly with macro packages' own  use  of  diversions,  when
+       footnotes, for example, are used.  The nokeep option tells
+       tbl not to try and prevent breaks in this way.
+
+       The decimalpoint option specifies the character to be rec­
+       ognized  as  the  decimal  point character in place of the
+       default period.  It  takes  an  argument  in  parentheses,
+       which must be a single character, as for the tab option.
+
+       The  f  format  modifier  can  be followed by an arbitrary
+       length font name in parentheses.
+
+       There is a d format modifier which means that a vertically
+       spanning  entry  should  be  aligned  at the bottom of its
+       range.
+
+       There is no limit on the number of columns in a table, nor
+       any  limit on the number of text blocks.  All the lines of
+       a table are considered in deciding column widths, not just
+       the  first  200.   Table  continuation (.T&) lines are not
+       restricted to the first 200 lines.
+
+       Numeric and alphabetic items may appear in the  same  col­
+       umn.
+
+       Numeric and alphabetic items may span horizontally.
+
+       tbl  uses  register,  string,  macro  and  diversion names
+       beginning with 3.  When using tbl you should  avoid  using
+       any names beginning with a 3.
+
+BUGS
+       You  should use .TS H/.TH in conjunction with a supporting
+       macro package for all multi-page boxed tables.   If  there
+       is  no  header  that you wish to appear at the top of each
+       page of the table, place the .TH  line  immediately  after
+       the  format  section.   Do  not enclose a multi-page table
+       within keep/release macros, or divert it in any other way.
+
+       A  text  block  within  a table must be able to fit on one
+       page.
+
+       The bp request cannot be used to force a page-break  in  a
+       multi-page table.  Instead, define BP as follows
+
+              .de BP
+              .ie '\\n(.z'' .bp \\$1
+              .el \!.BP \\$1
+              ..
+
+       and use BP instead of bp.
+
+       Using \a directly in a table to get leaders will not work.
+       This is correct behaviour: \a is a  uninterpreted  leader.
+       To  get  leaders use a real leader, either by using a con­
+       trol A or like this:
+
+              .ds a \a
+              .TS
+              tab(;);
+              lw(1i) l.
+              A\*a;B
+              .TE
+
+SEE ALSO
+       groff(1), troff(1)
+
+
+
+Groff Version 1.17.2       27 June 2001                    TBL(1)

@@ -1,0 +1,527 @@
+RPMDB.(3)                                               RPMDB.(3)
+
+
+
+NAME
+       RPMDB. -
+
+   Files
+       file dbconfig.c
+       file rpmdb.c
+       file rpmdb.h
+           Access RPM indices using Berkeley DB interface(s).
+
+
+       file rpmlib.h
+
+   Data Structures
+       struct rpmdb_s
+
+   RPMDB
+       typedef rpmdb_s * rpmdb
+       typedef _dbiIndexSet * dbiIndexSet
+       typedef _rpmdbMatchIterator * rpmdbMatchIterator
+       typedef enum rpmMireMode_e rpmMireMode
+           Tag value pattern match mode.
+       enum rpmMireMode_e { RPMMIRE_DEFAULT =  0, RPMMIRE_STRCMP
+           =  1, RPMMIRE_REGEX =  2, RPMMIRE_GLOB =  3 }
+           Tag value pattern match mode.
+       int rpmdbOpen (const char *root, rpmdb *dbp, int mode, int
+           perms)
+       int rpmdbInit (const char *root, int perms)
+       int rpmdbVerify (const char *root)
+       int rpmdbClose (rpmdb rpmdb)
+       int rpmdbSync (rpmdb rpmdb)
+       int rpmdbOpenAll (rpmdb db)
+       int rpmdbCountPackages (rpmdb db, const char *name)
+       rpmdbMatchIterator rpmdbFreeIterator (rpmdbMatchIterator
+           mi)
+       rpmdb rpmdbGetIteratorRpmDB (rpmdbMatchIterator mi)
+       unsigned int rpmdbGetIteratorOffset (rpmdbMatchIterator
+           mi)
+       int rpmdbGetIteratorCount (rpmdbMatchIterator mi)
+       int rpmdbAppendIterator (rpmdbMatchIterator mi, const int
+           *hdrNums, int nHdrNums)
+       int rpmdbPruneIterator (rpmdbMatchIterator mi, int
+           *hdrNums, int nHdrNums, int sorted)
+       int rpmdbSetIteratorRE (rpmdbMatchIterator mi, rpmTag tag,
+           rpmMireMode mode, const char *pattern)
+       int rpmdbSetIteratorVersion (rpmdbMatchIterator mi, const
+           char *version)
+       int rpmdbSetIteratorRelease (rpmdbMatchIterator mi, const
+           char *release)
+       int rpmdbSetIteratorRewrite (rpmdbMatchIterator mi, int
+           rewrite)
+       int rpmdbSetIteratorModified (rpmdbMatchIterator mi, int
+           modified)
+       Header rpmdbNextIterator (rpmdbMatchIterator mi)
+       rpmdbMatchIterator rpmdbInitIterator (rpmdb db, int
+           rpmtag, const void *key, size_t keylen)
+       int rpmdbAdd (rpmdb db, int iid, Header h)
+       int rpmdbRemove (rpmdb db, int rid, unsigned int offset)
+       int rpmdbRebuild (const char *root)
+       Header XrpmdbNextIterator (rpmdbMatchIterator mi, const
+           char *f, unsigned int l)
+       int * dbiTags
+       int dbiTagsMax
+
+   Enumerations
+       enum rpmdbFlags { RPMDB_FLAG_JUSTCHECK =  (1 << 0),
+           RPMDB_FLAG_MINIMAL =  (1 << 1), RPMDB_FLAG_CHROOT =
+           (1 << 2) }
+
+   Functions
+       unsigned int rpmdbGetIteratorFileNum (rpmdbMatchIterator
+           mi)
+       int rpmdbFindFpList (rpmdb db, fingerPrint *fpList,
+           dbiIndexSet *matchList, int numItems)
+
+TYPEDEF DOCUMENTATION
+   typedef struct _dbiIndexSet* dbiIndexSet
+       Definition at line 645 of file rpmlib.h.
+
+   typedef struct rpmdb_s* rpmdb
+       Definition at line 641 of file rpmlib.h.
+
+   typedef struct _rpmdbMatchIterator* rpmdbMatchIterator
+       Definition at line 717 of file rpmlib.h.
+
+   typedef enum rpmMireMode_e  rpmMireMode
+       Tag value pattern match mode.
+
+       Referenced by mireDup, rpmdbSetIteratorRE, and
+       rpmtransAddPackage.
+
+ENUMERATION TYPE DOCUMENTATION
+   enum rpmdbFlags
+       Enumeration values:
+
+       RPMDB_FLAG_JUSTCHECK
+
+       RPMDB_FLAG_MINIMAL
+
+       RPMDB_FLAG_CHROOT
+
+
+       Definition at line 337 of file rpmdb.h.
+
+   enum rpmMireMode_e
+       Tag value pattern match mode.
+
+       Enumeration values:
+
+       RPMMIRE_DEFAULT
+              regex with \., .* and ^...$
+
+       RPMMIRE_STRCMP
+              strcmp on strings
+
+       RPMMIRE_REGEX
+              regex patterns
+
+       RPMMIRE_GLOB
+              glob patterns
+
+       Definition at line 780 of file rpmlib.h.
+
+FUNCTION DOCUMENTATION
+   int rpmdbAdd (rpmdb db, int iid, Header h)
+       Add package header to rpm database and indices.
+
+       Parameters:
+
+       db     rpm database
+
+       iid    install transaction id (iid = 0 or -1 to skip)
+
+       h      header
+
+       Returns:
+           0 on success
+
+       Definition at line 2445 of file rpmdb.c.
+
+   int rpmdbAppendIterator (rpmdbMatchIterator mi, const int *
+       hdrNums, int nHdrNums)
+       Append items to set of package instances to iterate.
+
+       Parameters:
+
+       mi     rpm database iterator
+
+       hdrNums
+              array of package instances
+
+       nHdrNums
+              number of elements in array
+
+       Returns:
+           0 on success, 1 on failure (bad args)
+
+       Definition at line 2090 of file rpmdb.c.
+
+   int rpmdbClose (rpmdb rpmdb)
+       Close all database indices and free rpmdb.
+
+       Parameters:
+
+       rpmdb  rpm database
+
+       Returns:
+           0 on success
+
+       Definition at line 771 of file rpmdb.c.
+
+   int rpmdbCountPackages (rpmdb db, const char * name)
+       Return number of instances of package in rpm database.
+
+       Parameters:
+
+       db     rpm database
+
+       name   rpm package name
+
+       Returns:
+           number of instances
+
+       Definition at line 1177 of file rpmdb.c.
+
+   int rpmdbFindFpList (rpmdb db, fingerPrint * fpList,
+       dbiIndexSet * matchList, int numItems)
+       Parameters:
+
+       db     rpm database
+
+       Definition at line 2711 of file rpmdb.c.
+
+   rpmdbMatchIterator rpmdbFreeIterator (rpmdbMatchIterator mi)
+       Destroy rpm database iterator.
+
+       Parameters:
+
+       mi     rpm database iterator
+
+       Returns:
+           NULL always
+
+       Definition at line 1460 of file rpmdb.c.
+
+   int rpmdbGetIteratorCount (rpmdbMatchIterator mi)
+       Return number of elements in rpm database iterator.
+
+       Parameters:
+
+       mi     rpm database iterator
+
+       Returns:
+           number of elements
+
+       Definition at line 1526 of file rpmdb.c.
+
+       References int_32, and uint_32.
+
+   unsigned int rpmdbGetIteratorFileNum (rpmdbMatchIterator mi)
+       Definition at line 1520 of file rpmdb.c.
+
+   unsigned int rpmdbGetIteratorOffset (rpmdbMatchIterator mi)
+       Return join key for current position of rpm database
+       iterator.
+
+       Parameters:
+
+       mi     rpm database iterator
+
+       Returns:
+           current join key
+
+       Definition at line 1514 of file rpmdb.c.
+
+   rpmdb rpmdbGetIteratorRpmDB (rpmdbMatchIterator mi)
+       Return rpm database used by iterator.
+
+       Parameters:
+
+       mi     rpm database iterator
+
+       Returns:
+           rpm database handle
+
+       Definition at line 1506 of file rpmdb.c.
+
+   int rpmdbInit (const char * root, int perms)
+       Initialize database.
+
+       Parameters:
+
+       root   path to top of install tree
+
+       perms  database permissions
+
+       Returns:
+           0 on success
+
+       Definition at line 1003 of file rpmdb.c.
+
+   rpmdbMatchIterator rpmdbInitIterator (rpmdb db, int rpmtag,
+       const void * key, size_t keylen)
+       Return database iterator.
+
+       Parameters:
+
+       db     rpm database
+
+       rpmtag rpm tag
+
+       keyp   key data (NULL for sequential access)
+
+       keylen key data length (0 will use strlen(keyp))
+
+       Returns:
+           NULL on failure
+
+       Definition at line 2101 of file rpmdb.c.
+
+   Header rpmdbNextIterator (rpmdbMatchIterator mi)
+       Return next package header from iteration.
+
+       Parameters:
+
+       mi     rpm database iterator
+
+       Returns:
+           NULL on end of iteration.
+
+       Definition at line 1895 of file rpmdb.c.
+
+   int rpmdbOpen (const char * root, rpmdb * dbp, int mode, int
+       perms)
+       Open rpm database.
+
+       Parameters:
+
+       root   path to top of install tree
+
+       Return values:
+
+       dbp    address of rpm database
+
+       Parameters:
+
+       mode   open(2) flags: O_RDWR or O_RDONLY (O_CREAT also)
+
+       perms  database permissions
+
+       Returns:
+           0 on success
+
+       Definition at line 997 of file rpmdb.c.
+
+   int rpmdbOpenAll (rpmdb db)
+       Open all database indices.
+
+       Parameters:
+
+       db     rpm database
+
+       Returns:
+           0 on success
+
+       Definition at line 754 of file rpmdb.c.
+
+   int rpmdbPruneIterator (rpmdbMatchIterator mi, int * hdrNums,
+       int nHdrNums, int sorted)
+       Remove items from set of package instances to iterate.
+
+       Note:
+           Sorted hdrNums are always passed in rpmlib.
+
+       Parameters:
+
+       mi     rpm database iterator
+
+       hdrNums
+              array of package instances
+
+       nHdrNums
+              number of elements in array
+
+       sorted is the array sorted? (array will be sorted on
+              return)
+
+       Returns:
+           0 on success, 1 on failure (bad args)
+
+       Definition at line 2079 of file rpmdb.c.
+
+   int rpmdbRebuild (const char * root)
+       Rebuild database indices from package headers.
+
+       Parameters:
+
+       root   path to top of install tree
+
+       Definition at line 3016 of file rpmdb.c.
+
+   int rpmdbRemove (rpmdb db, int rid, unsigned int offset)
+       Remove package header from rpm database and indices.
+
+       Parameters:
+
+       db     rpm database
+
+       rid    remove transaction id (rid = 0 or -1 to skip)
+
+       offset location in Packages dbi
+
+       Returns:
+           0 on success
+
+       Definition at line 2237 of file rpmdb.c.
+
+   int rpmdbSetIteratorModified (rpmdbMatchIterator mi, int
+       modified)
+       Modify iterator to mark header for lazy write.
+
+       Parameters:
+
+       mi     rpm database iterator
+
+       modified
+              new value of modified
+
+       Returns:
+           previous value
+
+       Definition at line 1880 of file rpmdb.c.
+
+   int rpmdbSetIteratorRE (rpmdbMatchIterator mi, rpmTag tag,
+       rpmMireMode mode, const char * pattern)
+       Add pattern to iterator selector.
+
+       Parameters:
+
+       mi     rpm database iterator
+
+       tag    rpm tag
+
+       mode   type of pattern match
+
+       pattern
+              pattern to match
+
+       Returns:
+           0 on success
+
+       Definition at line 1659 of file rpmdb.c.
+
+   int rpmdbSetIteratorRelease (rpmdbMatchIterator mi, const char
+       * release)
+       Modify iterator to filter out headers that do not match
+       release.
+
+       Deprecated:
+           Use rpmdbSetIteratorRE(mi, RPMTAG_RELEASE,
+           RPMMIRE_DEFAULT, release) instead.
+
+       Todo:
+           Eliminate from API.
+
+       Parameters:
+
+       mi     rpm database iterator
+
+       release
+              release to match (can be a regex pattern)
+
+       Returns:
+           0 on success
+
+       Definition at line 1860 of file rpmdb.c.
+
+   int rpmdbSetIteratorRewrite (rpmdbMatchIterator mi, int
+       rewrite)
+       Prepare iterator for lazy writes.
+
+       Note:
+           Must be called before rpmdbNextIterator() in CDB model
+           database.
+
+       Parameters:
+
+       mi     rpm database iterator
+
+       rewrite
+              new value of rewrite
+
+       Returns:
+           previous value
+
+       Definition at line 1868 of file rpmdb.c.
+
+   int rpmdbSetIteratorVersion (rpmdbMatchIterator mi, const char
+       * version)
+       Modify iterator to filter out headers that do not match
+       version.
+
+       Deprecated:
+           Use rpmdbSetIteratorRE(mi, RPMTAG_VERSION,
+           RPMMIRE_DEFAULT, version) instead.
+
+       Todo:
+           Eliminate from API.
+
+       Parameters:
+
+       mi     rpm database iterator
+
+       version
+              version to match (can be a regex pattern)
+
+       Returns:
+           0 on success
+
+       Definition at line 1864 of file rpmdb.c.
+
+   int rpmdbSync (rpmdb rpmdb)
+       Sync all database indices.
+
+       Parameters:
+
+       rpmdb  rpm database
+
+       Returns:
+           0 on success
+
+       Definition at line 796 of file rpmdb.c.
+
+   int rpmdbVerify (const char * root)
+       Verify database components.
+
+       Parameters:
+
+       root   path to top of install tree
+
+       Returns:
+           0 on success
+
+       Definition at line 1022 of file rpmdb.c.
+
+   Header XrpmdbNextIterator (rpmdbMatchIterator mi, const char *
+       f, unsigned int l)
+       Todo:
+            Remove debugging entry from the ABI.
+
+       Definition at line 1889 of file rpmdb.c.
+
+VARIABLE DOCUMENTATION
+   int* dbiTags
+       Tags for which rpmdb indices will be built.
+
+       Definition at line 650 of file rpmlib.h.
+
+   int dbiTagsMax
+       Definition at line 651 of file rpmlib.h.
+
+
+
+rpm                        13 Mar 2002                  RPMDB.(3)

@@ -1,0 +1,35 @@
+X0RFBSERVER(1)            User's Manual            X0RFBSERVER(1)
+
+
+
+NAME
+       x0rfbserver - a VNC server for an existing display
+
+SYNOPSIS
+       x0rfbserver [-shared] [-viewonly]
+
+       x0rfbserver { -stdio | -about | -help }
+
+DESCRIPTION
+       This  is a VNC server that acts for a pre-existing display
+       (whereas the AT&T VNC server creates a new display).
+
+OPTIONS
+       -stdio Use stdin and stdout for RFB communications.
+
+       -shared
+              Allow the session to be shared.
+
+       -viewonly
+              Ignore keystrokes and mouse movements.
+
+SEE ALSO
+       xrfbviewer(1), Xvnc(1)
+
+AUTHOR
+       Jens Wagner <jwagner@hexonet.de>
+       Man page by Tim Waugh <twaugh@redhat.com>
+
+
+
+Linux                      21 Nov 2000             X0RFBSERVER(1)

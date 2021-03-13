@@ -1,0 +1,254 @@
+MKE2FS(8)                                               MKE2FS(8)
+
+
+
+NAME
+       mke2fs - create a Linux second extended file system
+
+SYNOPSIS
+       mke2fs  [  -c | -l filename ] [ -b block-size ] [ -f frag­
+       ment-size ] [ -i bytes-per-inode ] [ -j ]  [  -J  journal-
+       options  ]  [  -N number-of-inodes ] [ -n ] [ -m reserved-
+       blocks-percentage ] [ -o creator-os ] [  -O  feature[,...]
+       ] [ -q ] [ -r fs-revision-level ] [ -R raid-options ] [ -v
+       ] [ -F ] [ -L volume-label ] [ -M last-mounted-directory ]
+       [ -S ] [ -T filesystem-type ] [ -V ] device [ blocks-count
+       ]
+
+       mke2fs -O journal_dev [ -b block-size ] [ -L  volume-label
+       ] [ -n ] [ -q ] [ -v ] external-journal [ blocks-count ]
+
+DESCRIPTION
+       mke2fs is used to create a Linux second extended file sys­
+       tem on a device (usually a disk partition).  device is the
+       special  file corresponding to the device (e.g /dev/hdXX).
+       blocks-count is the number of blocks on  the  device.   If
+       omitted,  mke2fs  automagically  figures  the  file system
+       size.
+
+OPTIONS
+       -b block-size
+              Specify the size of blocks in bytes.   Valid  block
+              size vales are 1024, 2048 and 4096 bytes per block.
+              If omitted, mke2fs block-size is determined by  the
+              file  system  size  and  the  expected usage of the
+              filesystem (see the -T option).
+
+       -c     Check the device for bad blocks before creating the
+              file  system.   If  this option is specified twice,
+              then a slower, destructive, read-write test is used
+              instead of a fast read-only test.
+
+       -f fragment-size
+              Specify the size of fragments in bytes.
+
+       -F     Force  mke2fs  to run, even if the specified device
+              is not a block special device,  or  appears  to  be
+              mounted.
+
+       -i bytes-per-inode
+              Specify  the  bytes/inode ratio.  mke2fs creates an
+              inode for every bytes-per-inode bytes of  space  on
+              the  disk.   The  larger the bytes-per-inode ratio,
+              the fewer inodes will be created.  This value  gen­
+              erally  shouldn't  be smaller than the blocksize of
+              the filesystem, since then too many inodes will  be
+              made.  Be warned that is not possible to expand the
+              number of inodes on a filesystem after it  is  cre­
+              ated,  so be careful deciding the correct value for
+              this parameter.
+
+       -j     Create the filesystem with an ext3 journal.  If the
+              -J  option  is  not  specified, the default journal
+              parameters will be used to create an  appropriately
+              sized  journal  (given  the size of the filesystem)
+              stored within the filesystem.  Note that  you  must
+              be  using  a kernel which has ext3 support in order
+              to actually make use of the journal.
+
+       -J journal-options
+              Create the ext3 journal using options specified  on
+              the  command-line.  Journal options are comma sepa­
+              rated, and may take an argument  using  the  equals
+              ('=')   sign.   The  following  journal options are
+              supported:
+
+                   size=journal-size
+                          Create a journal stored in the filesys­
+                          tem  of  size  journal-size  megabytes.
+                          The size of  the  journal  must  be  at
+                          least 1024 filesystem blocks (i.e., 1MB
+                          if using 1k blocks,  4MB  if  using  4k
+                          blocks,  etc.)  and may be no more than
+                          102,400 filesystem blocks.  The journal
+                          must   fit  within  the  newly  created
+                          filesystem.
+
+                   device=external-journal
+                          Attach the filesystem  to  the  journal
+                          block  device located on external-jour­
+                          nal.  The external journal must already
+                          have been created using the command
+
+                          mke2fs -O journal_dev external-journal
+
+                          Note  that  external-journal  must have
+                          been created with the same  block  size
+                          as the new filesystem.
+
+                          Instead  of  specifying  a  device name
+                          directly, external-journal can also  be
+                          specified   by  either  LABEL=label  or
+                          UUID=UUID to locate the external  jour­
+                          nal  by either the volume label or UUID
+                          stored in the ext2  superblock  at  the
+                          start  of the journal.  Use dumpe2fs(8)
+                          to display a  journal  device's  volume
+                          label and UUID.  See also the -L option
+                          of tune2fs(8).
+
+              Only one of the size or device options can be given
+              for a filesystem.
+
+       -l filename
+              Read  the bad blocks list from filename.  Note that
+              the block numbers in the bad  block  list  must  be
+              generated  using  the  same  block  size as used by
+              mke2fs.  As a result, the -c option to mke2fs is  a
+              much  simpler and less error-prone method of check­
+              ing a disk for bad blocks before formatting it,  as
+              mke2fs  will automatically pass the correct parame­
+              ters to the badblocks program.
+
+       -L     Set the volume label for the filesystem.
+
+       -m reserved-blocks-percentage
+              Specify the percentage  of  the  filesystem  blocks
+              reserved  for  the super-user.  This value defaults
+              to 5%.
+
+       -M     Set the last mounted directory for the  filesystem.
+              This might be useful for the sake of utilities that
+              key off of the last mounted directory to  determine
+              where the filesytem should be mounted.
+
+       -n     causes  mke2fs to not actually create a filesystem,
+              but display what it would do if it were to create a
+              filesystem.
+
+       -N number-of-inodes
+              overrides  the default calculation of the number of
+              inodes that should be reserved for  the  filesystem
+              (which  is  based  on  the number of blocks and the
+              bytes-per-inode ratio).  This allows  the  user  to
+              specify the number of desired inodes directly.
+
+       -o creator-os
+              Manually override the default value of the "creator
+              os" field of the filesystem.  Normally the  creator
+              field  is  set  by  default to the native OS of the
+              mke2fs executable.
+
+       -O feature[,...]
+              Create filesystem with given  features  (filesystem
+              options).  Currently, the sparse_super and filetype
+              features are turned on by default unless mke2fs  is
+              run  on  a  system  with  a  pre-2.2  Linux kernel.
+              Filesystems that may need  to  mounted  on  pre-2.2
+              kernels should be created with -O none (or -r 0 for
+              1.2 kernels) which  will  disable  these  features,
+              even if mke2fs is run on a system which can support
+              them.
+
+              The following filesystem options are supported:
+
+                   sparse_super
+                          Create   a   filesystem   with    fewer
+                          superblock  backup  copies (saves space
+                          on large filesystems).
+
+                   filetype
+                          Store file type information  in  direc­
+                          tory entries.
+
+                   has_journal
+                          Create an ext3 journal (as if using the
+                          -j option).
+
+                   journal_dev
+                          Create an external ext3 journal on  the
+                          given  device instead of a regular ext2
+                          filesystem.  Note that external-journal
+                          must  be  created  with  the same block
+                          size as the filesystems  that  will  be
+                          using it.
+
+       -q     Quiet  execution.   Useful  if  mke2fs  is run in a
+              script.
+
+       -r revision
+              Set the filesystem revision for the new filesystem.
+              Note  that  1.2  kernels  only  support  revision 0
+              filesystems.  The default is to create  revision  1
+              filesystems.
+
+       -R raid-options
+              Set  raid-related options for the filesystem.  Raid
+              options are comma separated, and may take an  argu­
+              ment  using  the  equals ('=') sign.  The following
+              options are supported:
+
+                   stride=stripe-size
+                          Configure the  filesystem  for  a  RAID
+                          array   with   stripe-size   filesystem
+                          blocks per stripe.
+
+       -S     Write superblock and group descriptors only.   This
+              is  useful  if  all  of  the  superblock and backup
+              superblocks are corrupted, and a last-ditch  recov­
+              ery  method is desired.  It causes mke2fs to reini­
+              tialize the superblock and group descriptors, while
+              not  touching  the  inode  table  and the block and
+              inode bitmaps.  The e2fsck program  should  be  run
+              immediately after this option is used, and there is
+              no guarantee that any data will be salvageable.  It
+              is  critical  to  specify  the  correct  filesystem
+              blocksize when using this option, or  there  is  no
+              chance of recovery.
+
+       -T fs-type
+              Specify  how the filesystem is going to be used, so
+              that mke2fs can chose optimal filesystem parameters
+              for that use.  The supported filesystem types are:
+
+                   news        one inode per 4kb block
+
+                   largefile   one inode per megabyte
+
+                   largefile4  one inode per 4 megabytes
+
+       -v     Verbose execution.
+
+       -V     Print the version number of mke2fs and exit.
+
+AUTHOR
+       This  version  of mke2fs has been written by Theodore Ts'o
+       <tytso@mit.edu>.
+
+BUGS
+       mke2fs accepts the -f  option  but  currently  ignores  it
+       because  the  second extended file system does not support
+       fragments yet.
+       There may be other  ones.   Please,  report  them  to  the
+       author.
+
+AVAILABILITY
+       mke2fs  is  part of the e2fsprogs package and is available
+       from http://e2fsprogs.sourceforge.net.
+
+SEE ALSO
+       badblocks(8), dumpe2fs(8), e2fsck(8), tune2fs(8)
+
+
+
+E2fsprogs version 1.26    February 2002                 MKE2FS(8)

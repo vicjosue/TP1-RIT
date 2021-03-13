@@ -1,0 +1,28 @@
+TIFFClose(3T)                                       TIFFClose(3T)
+
+
+
+NAME
+       TIFFClose - close a previously opened TIFF file
+
+SYNOPSIS
+       #include <tiffio.h>
+       void TIFFClose(TIFF* tif)
+
+DESCRIPTION
+       TIFFClose  closes  a  file that was previously opened with
+       TIFFOpen(3T).  Any buffered data are flushed to the  file,
+       including  the contents of the current directory (if modi­
+       fied); and all resources are reclaimed.
+
+DIAGNOSTICS
+       All error messages are directed to the TIFFError(3T)  rou­
+       tine.   Likewise,  warning  messages  are  directed to the
+       TIFFWarning(3T) routine.
+
+SEE ALSO
+       libtiff(3T), TIFFOpen(3T)
+
+
+
+                           May 2, 1990              TIFFClose(3T)

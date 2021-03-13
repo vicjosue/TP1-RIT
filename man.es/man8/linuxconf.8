@@ -1,0 +1,355 @@
+LINUXCONF(8)                                         LINUXCONF(8)
+
+
+
+NAME
+       linuxconf - System configuration/administration tool
+
+SYNOPSIS
+       linuxconf [ --help ]
+       linuxconf [ UI options ] [ options ... ]
+
+DESCRIPTION
+       linuxconf  is  a  sophisticated  administration  tool  for
+       Linux.  It provides a complete framework  so  modules  can
+       concentrate on the task to perform. The framework provides
+
+       User interface independance.
+       Fine grain privileges granting.
+       Multiple modules co-working on the same dialog.
+       Module providing generic interface to other modules.
+       Extensive configurability (file path, command path).
+
+       Linuxconf has also extensive command  line  options.  Each
+       module may add its own set.
+
+
+User interface options (UI options)
+       linuxconf  supports 3 user interfaces: Text, graphical and
+       WEB. The WEB interface is triggered by an http request  on
+       port  98.  The other interfaces are selected based on con­
+       text. But one may force linuxconf to pick on or the other.
+
+       User  interface options must be presented before any other
+       options on the command line.  The  following  options  are
+       provided:
+
+
+       --gui  forces  the graphical mode. In general, there is no
+              point to force the graphical mode. It is  possible,
+              using  the  feature  dialog found in Linuxconf main
+              menu to disable the graphical mode (useful on  less
+              capable machine). The --gui option override this.
+
+
+       --guiproto
+              is used to tell Linuxconf it is being called by its
+              GUI front-end.  In  general,  Linuxconf  calls  the
+              front-end  itself,  but it is sometime useful to do
+              the reverse, especially when doing remote  adminis­
+              tration.  For  example,  the following command pro­
+              vides a very efficient and secure  remote  adminis­
+              tration solution:
+
+              remadmin --exec ssh some-host linuxconf --guiproto
+
+
+       --mono force the monochrome color scheme in text mode.
+
+
+       --silent
+              disable  messages  printing  on the console in text
+              mode.
+
+
+       --text forces the text mode interface. Linuxconf is  built
+              using   the  ncurses  library,  so  obey  the  TERM
+              variable to handle screen drawing properly.
+
+
+WEB interface
+       By default, on most installation,  the  WEB  interface  is
+       disabled.   When active, it provides access to pretty much
+       every feature found in Linuxconf.
+
+       The WEB interface is listening on TCP port  98.  Linuxconf
+       does  not requires any WEB server. As such, it can config­
+       ure even a non active Apache server for example. Linuxconf
+       own WEB server is started from inetd or xinetd, on demand.
+       See networking / misc / network access for more details.
+
+       Linuxconf in WEB mode starts a single process. The process
+       goes  away  after  10  minutes of inactivity (configurable
+       from the features dialog in the main menu).
+
+
+OPTIONS
+       --archive file_path/sub-system ...
+              copies some  configuration  files  to  the  archive
+              (/etc/linuxconf/archive).  The  files  are recorded
+              using RCS if available. The option expect a list of
+              sub-systems and absolute file paths. For example:
+
+              linuxconf --archive /etc/smb.conf
+              linuxconf --archive netclient
+
+
+       --demo This triggers a special http mode. Linuxconf does a
+              change root to the  directory  /demo_linuxconf  and
+              executes  from  there.  All system sensible updates
+              are    stopped.    http://www.solucorp.qc.ca/linux­
+              conf/demo.html  has been running this live demo for
+              several years now.
+
+              See the script  install-demo.sh  to  build  a  demo
+              directory.
+
+
+       --diff file_path/sub-system ...
+              produce  a  "diff"  output of various configuration
+              files. It compares the current state with the  last
+              archived version. Like --archive, it expects a list
+              of sub-systems and file paths.
+
+
+       --extract file_path/sub-system ...
+              will replace the current version of some configura­
+              tion  file  with  the  last version in the archive.
+              Like --archive, the option expects a list  of  sub-
+              systems and absolute file paths.
+
+
+       --help presents the various command line options, for Lin­
+              uxconf and all  components  and  modules.  This  is
+              always presented in text mode.
+
+
+       --helpfile
+              presents the list of all help files known to Linux­
+              conf (including all modules).  Lines starting  with
+              *** indicate a missing (not written) help file.
+
+
+       --hint is an option used by some service to help them per­
+              form their task. This is never used directly by the
+              system administrator.
+
+
+       --history file_path/sub-system ...
+              presents  the revision of the various configuration
+              files. It is currently presenting the output of the
+              rlog  command  (RCS  system).  It  expects the same
+              extra parameters as --archive.
+
+
+       --http triggers the WEB mode. When started from  inetd  or
+              xinetd,  Linuxconf  used  the supplied socket. When
+              started from the command line, Linuxconf  binds  to
+              port 8000 (see the --port option below).
+
+
+       --listconfig
+              presents  all  configuration  files known to Linux­
+              conf. Each file path is presented  with  a  set  of
+              flags  and  the  sub-system  name owning it.  The 3
+              informations are separated  by  tabs.  Consult  the
+              control/control files and systems/all configuration
+              files help  screen  for  the  definition  of  those
+              flags.
+
+
+       --md5sum file_path/sub-system ...
+              produces the MD5 digest of configurations files and
+              sub-systems.
+
+
+       --modulemain modulename [ options ]
+              triggers the main function/menu  of  a  module.  In
+              general, using --modulemain will present the module
+              main menu. For example, doing
+
+              linuxconf --modulemain dnsconf
+
+              bring the DNS configurator main menu. A  short  cut
+              mechanism  exist.   For  a given module fooconf one
+              may do the following:
+
+              ls -s /bin/linuxconf /bin/fooconf
+
+
+              and calling the fooconf command will be  equivalent
+              to  using  the longer --modulemain syntax.  Several
+              modules are installed using this  short  cut  nota­
+              tion.  This  includes dnsconf, mailconf, vregistry,
+              viewlog, modemconf, managerpm, and uucpconf.
+
+
+       --services
+              triggers the control service activity dialog.
+
+
+       --setkeymap keymapfile
+              records the keymap. This option  is  only  used  on
+              distribution  lacking  a well defined configuration
+              file to store this information.
+
+
+       --setmod module
+              enables      this      module       (found       in
+              /usr/lib/linuxconf/module).  If  the  user has dis­
+              abled this module using the dialog found in control
+              /  control  files  and  systems / linuxconf modules
+              this option has no effect.
+
+
+       --shutdown
+              triggers the shutdown dialog found in  the  control
+              panel sub-menu.
+
+
+       --status
+              probes  the  system  and present the list of action
+              needed to brings the system current with  its  con­
+              figuration.  Linuxconf  does this probing everytime
+              you quit from an interactive session. See  --update
+              below.
+
+
+       --selectprofile profile
+              archive the current profile and extract the config­
+              uration files of the new profile.  Only  the  files
+              belonging   to   different  archiving  familty  are
+              archived/extracted. See the help screen in  control
+              / control files and systems / linuxconf profiles to
+              get more information on this topic.
+
+              A profile switch may be triggered at boot  time  by
+              passing  the  option  PROFILE=profile  at  the LILO
+              prompt. The boot time menu  (askrunlevel)  must  be
+              installed though.
+
+
+       --unsetmod module
+              disables the module.
+
+
+       --update
+              executes  the various actions found by the --status
+              option.
+
+
+       --vdb  is  obsolete.  It  was  the  key  to  the   virtual
+              database.  It is now replaced by the vregistry mod­
+              ule.
+
+
+       --version
+              prints Linuxconf version and exits.
+
+
+The treemenu interface
+       Linuxconf has several user  interfaces  and  even  several
+       ways to present its menus. Users usually pick the one they
+       prefer. The default interface in most installation is  the
+       tree  menu.  You  have a tree on the left side and dialogs
+       are poping up on the right side.
+
+       The presentation  is  done  by  a  special  module  called
+       treemenu.   One may disable it either interactivly in con­
+       trol/ control files and systems / linuxconf  modules.   or
+       by executing the following command:
+
+       linuxconf --unsetmod treemenu
+
+       The  content  of  the  tree  menu  is built dynamically by
+       inspecting all modules. They are run in a simulation mode,
+       travelling  from  one menu to the other. This may take few
+       seconds on  slower  systems.  When  Linuxconf  builds  its
+       treemenu, a popup inform you. Linuxconf will redo its menu
+       if something has changed:  A  module  has  been  added  or
+       removed, linuxconf was upgraded, or the operation language
+       has changed.
+
+       The treemenu date is stored in the file  /var/state/linux­
+       conf/treemenu.cache.   If  the  file is missing, linuxconf
+       will redo it. The file also hold the  state  of  the  tree
+       menu  from  one  session  to the other (it remembers which
+       branches are open or collapsed).
+
+       This dynamic way of building the tree menu has a drawback.
+       To  build the menu, linuxconf has to walk every module. If
+       a module has a flaw, it may very well fail, making  linux­
+       conf unusable. While building its menu, linuxconf produces
+       a file /var/run/treemenu.log. This file shows  which  menu
+       option  was  processed  last. This may help diagnose which
+       module is the problem. To fix  this  issue  (after  having
+       send  a  bug  report  to  linuxconf mailing list), one may
+       either  disable  the  offending  module  or  disable   the
+       treemenu module as shown above.
+
+
+FILES
+       /etc/conf.linuxconf
+              Linuxconf edits configuration files in place. There
+              is no intermediate registry or database.  It  reads
+              and update various configurations.  For some infor­
+              mation, there is no standard place (or no place  at
+              all)   to   store   it.  Linuxconf  saves  this  in
+              /etc/conf.linuxconf.  This file has a  simple  text
+              of the form:
+
+              key.subkey value ...
+
+              The file is splitted in numerous section identified
+              like this
+
+              [ section-name ]
+
+
+       /etc/linuxconf/archive
+              When linuxconf updates  a  configuration  file,  it
+              archives   the   original   copy   in   /etc/linux­
+              conf/archive.  This  is   done   by   the   utility
+              /usr/lib/linuxconf/lib/cfgarchive   (changeable  by
+              the admin, see control / control files and  systems
+              / all commands and daemons).
+
+              cfgarchive  uses  RCS to archive the file if avail­
+              able. If not, it keeps  the  last  copy  only.   To
+              understand the archiving mechanism, one should con­
+              sult the help screen for control  /  control  files
+              and systems / system profiles.
+
+
+       /etc/linuxconf/control
+              Yhis directory contains the linuxconf addons. These
+              are control file used to start/stop/restart a given
+              service.  Addons  can  be seen as a friendly way to
+              add custom services to a host. For more information
+              consult  control / control files and systems / lin­
+              uxconf addons.
+
+
+
+Linuxconf references
+       The  home   site   for   linuxconf   is   http://www.solu­
+       corp.qc.ca/linuxconf.
+
+       You   can   register   to   linuxconf   mailing   list  at
+       http://www.solucorp.qc.ca/linuxconf/mailinglist.html
+
+       A bug tracking system  is  available  at  http://www.solu­
+       corp.qc.ca/bug.
+
+
+SEE ALSO
+       accountbatch(8) , askrunlevel(8) , dialout(8) , dnsconf(8)
+       , netconf(8) , mailconf(8) , remadmin(1) ,  shellmod(1)  ,
+       userconf(8) , viewlog(8) , vregistry(8)
+
+
+
+
+
+
+                    System configuration tool        LINUXCONF(8)

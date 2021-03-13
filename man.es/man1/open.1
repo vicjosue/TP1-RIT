@@ -1,0 +1,80 @@
+OPEN(1)                     Linux 1.x                     OPEN(1)
+
+
+
+NAME
+       open - start a program on a new virtual terminal (VT).
+
+SYNOPSIS
+       open  [-c  vtnumber] [-s] [-u] [-l] [-v] [--] command com­
+       mand_options
+
+DESCRIPTION
+       open will find the first available VT, and run on  it  the
+       given  command  with  the  given command options, standard
+       input, output and error are directed to that terminal. The
+       current  search path ($PATH) is used to find the requested
+       command. If no command is specified then  the  environment
+       variable $SHELL is used.
+
+   OPTIONS
+       -c vtnumber
+              Use  the  given  VT number and not the first avail­
+              able. Note you must have write access to  the  sup­
+              plied VT for this to work.
+
+       -s     Switch to the new VT when starting the command. The
+              VT of the new command will be made the new  current
+              VT.
+
+       -u     Figure  out  the  owner  of the current VT, and run
+              login as that user.  Suitable to be called by init.
+              Shouldn't be used with -c or -l.
+
+       -l     Make the command a login shell. A - is prepended to
+              the name of the command to be executed.
+
+       -v     Be a bit more verbose.
+
+       -w     wait for command to complete. If -w and -s are used
+              together then open will switch back to the control­
+              ling terminal when the command completes.
+
+       --     end of options to open.
+
+NOTE
+       If open is compiled with a POSIX (Gnu)  getopt()  and  you
+       wish  to  set  options  to the command to be run, then you
+       must supply the end of options -- flag before the command.
+
+
+EXAMPLES
+       open  can be used to start a shell on the next free VT, by
+       using the command:
+
+       open bash
+
+
+       To start the shell as a login shell, use:
+
+       open -l bash
+
+
+       To get a long listing you must supply the -- separator:
+
+       open -- ls -l
+
+
+
+
+SEE ALSO
+       login(1), doshell(8), switchto(1).
+
+
+AUTHOR
+       Jon Tombs <jon@gtex02.us.es or jon@robots.ox.ac.uk>
+       -w idea from "sam".
+
+
+
+19 Jul 1996                    V1.4                       OPEN(1)

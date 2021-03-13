@@ -1,0 +1,55 @@
+fingerPrint_s(3)                                 fingerPrint_s(3)
+
+
+
+NAME
+       fingerPrint_s - Associates a trailing sub-directory and
+       final base name with an existing directory finger print.
+
+SYNOPSIS
+       #include <fprint.h>
+
+
+   Data Fields
+       const struct fprintCacheEntry_s * entry
+       const char * subDir
+       const char * baseName
+
+DETAILED DESCRIPTION
+       Associates a trailing sub-directory and final base name
+       with an existing directory finger print.
+
+       Definition at line 36 of file fprint.h.
+
+FIELD DOCUMENTATION
+   const char* fingerPrint_s::baseName
+       file base name
+
+       Definition at line 41 of file fprint.h.
+
+       Referenced by doLookup, fpHashFunction, and fpLookupList.
+
+   const struct fprintCacheEntry_s* fingerPrint_s::entry
+       directory finger print entry (the directory path is
+       stat(2)-able
+
+       Definition at line 38 of file fprint.h.
+
+       Referenced by doLookup, fpHashFunction, and fpLookupList.
+
+   const char* fingerPrint_s::subDir
+       trailing sub-directory path (directories that are not
+       stat(2)-able
+
+       Definition at line 40 of file fprint.h.
+
+       Referenced by doLookup, and fpLookupList.
+
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002           fingerPrint_s(3)

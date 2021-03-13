@@ -1,0 +1,31 @@
+tixGetInt(n)          Tix Built-In Commands          tixGetInt(n)
+
+
+
+_________________________________________________________________
+
+NAME
+       tixGetInt - Get the integer value of a string.
+
+SYNOPSIS
+       tixGetInt ?-nocomplain? ?-trunc? string
+_________________________________________________________________
+
+DESCRIPTION
+       The  command tixGetInt converts any number into an integer
+       number. By default, it will round the number to the  near­
+       est  integer.   When  the  -trunc option is specified, the
+       number is truncated instead of rounded.
+
+       When the string is not a valid TCL numerical value and the
+       -nocomplain  option  is  specified,  tixGetInt will return
+       "0". Otherwise it will generate an error.
+
+
+KEYWORDS
+       Tix(n)
+
+
+
+
+Tix                            4.0                   tixGetInt(n)

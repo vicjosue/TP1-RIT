@@ -1,0 +1,74 @@
+DSA_sign(3)                  OpenSSL                  DSA_sign(3)
+
+
+
+NNAAMMEE
+       DSA_sign, DSA_sign_setup, DSA_verify - DSA signatures
+
+SSYYNNOOPPSSIISS
+        #include <openssl/dsa.h>
+
+        int    DSA_sign(int type, const unsigned char *dgst, int len,
+                       unsigned char *sigret, unsigned int *siglen, DSA *dsa);
+
+        int    DSA_sign_setup(DSA *dsa, BN_CTX *ctx, BIGNUM **kinvp,
+                       BIGNUM **rp);
+
+        int    DSA_verify(int type, const unsigned char *dgst, int len,
+                       unsigned char *sigbuf, int siglen, DSA *dsa);
+
+
+DDEESSCCRRIIPPTTIIOONN
+       DSA_sign() computes a digital signature on the lleenn byte
+       message digest ddggsstt using the private key ddssaa and places
+       its ASN.1 DER encoding at ssiiggrreett. The length of the
+       signature is places in *ssiigglleenn. ssiiggrreett must point to
+       DSA_size(ddssaa) bytes of memory.
+
+       DSA_sign_setup() may be used to precompute part of the
+       signing operation in case signature generation is time-
+       critical. It expects ddssaa to contain DSA parameters. It
+       places the precomputed values in newly allocated BBIIGGNNUUMMs
+       at *kkiinnvvpp and *rrpp, after freeing the old ones unless
+       *kkiinnvvpp and *rrpp are NULL. These values may be passed to
+       DSA_sign() in ddssaa-->>kkiinnvv and ddssaa-->>rr.  ccttxx is a pre-
+       allocated BBNN_CCTTXX or NULL.
+
+       DSA_verify() verifies that the signature ssiiggbbuuff of size
+       ssiigglleenn matches a given message digest ddggsstt of size lleenn.
+       ddssaa is the signer's public key.
+
+       The ttyyppee parameter is ignored.
+
+       The PRNG must be seeded before DSA_sign() (or
+       DSA_sign_setup()) is called.
+
+RREETTUURRNN VVAALLUUEESS
+       DSA_sign() and DSA_sign_setup() return 1 on success, 0 on
+       error.  DSA_verify() returns 1 for a valid signature, 0
+       for an incorrect signature and -1 on error. The error
+       codes can be obtained by ERR_get_error(3).
+
+CCOONNFFOORRMMIINNGG TTOO
+       US Federal Information Processing Standard FIPS 186
+       (Digital Signature Standard, DSS), ANSI X9.30
+
+SSEEEE AALLSSOO
+       dsa(3), err(3), rand(3), DSA_do_sign(3)
+
+HHIISSTTOORRYY
+       DSA_sign() and DSA_verify() are available in all versions
+       of SSLeay.  DSA_sign_setup() was added in SSLeay 0.8.
+
+
+
+
+
+
+
+
+
+
+
+
+30/Jan/2000                   0.9.6c                  DSA_sign(3)

@@ -1,0 +1,53 @@
+MrProject(1)               User Manuals              MrProject(1)
+
+
+
+NAME
+       MrProject - A Project Management Application for GNOME
+
+SYNOPSIS
+       mrproject [--debug= LEVEL]
+
+DESCRIPTION
+       MrProject  is  a  project management program that can help
+       build project plans, and track the progress of a  project.
+       MrProject  is  built  on a client/server architecture, and
+       uses CORBA and Bonobo for the communications  between  the
+       client  and  the  server.  The server is called mrproject-
+       engine(1) and should never be started  manually.   Instead
+       run-mrproject(1) should be used.
+
+OPTIONS
+       --debug=LEVEL
+              Enables some debugging features
+
+FILES
+       ~/mrproject-saved*.mrproject
+              These  files  are  created  whenever mrproject seg­
+              faults, and hopefully it contains the project  that
+              was active.
+
+DIAGNOSTICS
+       The following diagnostics may be issued:
+       MrProject has crashed.
+              This  message indicates that a bug caused the soft­
+              ware to crash.  Hopefully your  (un)saved  will  be
+              saved in ~/mrproject-saved*.mrproject.
+
+BUGS
+       Since mrproject is a project under development it is bound
+       to contain a  bugs.  To  report  new  bugs,  please  visit
+       http://bugzilla.codefactory.se,  or send a mail to <mrpro­
+       ject-team@codefactory.se>
+
+AUTHORS
+       Richard Hult <richard.hult@codefactory.se>
+
+       Mikael Hallendal <mikael.hallendal@codefactory.se>
+
+SEE ALSO
+       mrproject-engine(1), run-mrproject(1)
+
+
+
+Unix                       August 2001               MrProject(1)

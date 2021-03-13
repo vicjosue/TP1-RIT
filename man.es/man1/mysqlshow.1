@@ -1,0 +1,86 @@
+MYSQLSHOW(1)                                         MYSQLSHOW(1)
+
+
+
+NAME
+       mysqlshow
+        -    Shows    the   structure   of   a   mysql   database
+       (databases,tables and columns)
+
+USAGE
+       shell> mysqlshow [OPTIONS] [database [table [column]]]
+
+SYNOPSIS
+       mysqlshow  [-#|--debug=...]    [-?|--help]   [-c|--charac­
+       ter-sets-dir=...]      [-C|--compress]     [-h|--host=...]
+       [-i|--status]      [-k|--keys]       [-p|--password[=...]]
+       [-P|--port=...]       [-S|--socket=...]      [-u|--user=#]
+       [-V|--version]
+
+DESCRIPTION
+       -#|--debug=...
+              output debug log. Often this is 'd:t:o,filename`
+
+       -?|--help
+              display help and exit
+
+       -c|--character-sets-dir=...
+              Directory where character sets are
+
+       -C|--compress
+              Use compression in server/client protocol
+
+       -h|--host=...
+              connect to host
+
+       -i|--status
+              Shows a lot of extra information about each table
+
+       -k|--keys
+              show keys for table
+
+       -p|--password[=...]
+              password to use when connecting to server If  pass­
+              word is not given it's asked from the tty.
+
+       -P|--port=...
+              Port number to use for connection
+
+       -S|--socket=...
+              Socket file to use for connection
+
+       -u|--user=#
+              user for login if not current user
+
+       -V|--version
+              output version information and exit
+
+
+
+NOTE
+       If  last  argument contains a shell or SQL wildcard (*,?,%
+       or _) then only what's matched by the wildcard  is  shown.
+       If  no  database  is given then all matching databases are
+       shown.  If no table is given then all matching  tables  in
+       database are shown If no column is given then all matching
+       columns and columntypes in table are shown
+
+
+SEE ALSO
+       isamchk (1), isamlog (1), mysqlaccess (1), mysqladmin (1),
+       mysqlbug  (1),  mysqld  (1), mysqldump (1), mysqlshow (1),
+       msql2mysql (1), perror (1), replace (1), safe_mysqld  (1),
+       which1 (1), zap (1),
+
+AUTHOR
+       Ver  1.0,  distribution  3.23.29a Michael (Monty) Widenius
+       (monty@tcx.se), TCX  Datakonsult  AB  (http://www.tcx.se).
+       This  software  comes with no warranty.  Manual page by L.
+       (Kill-9)  Pedersen  (kill-9@kill-9.dk),  Mercurmedia  Data
+       Model  Architect  / system developer (http://www.mercurme­
+       dia.com)
+
+
+
+
+                         19 December 2000            MYSQLSHOW(1)

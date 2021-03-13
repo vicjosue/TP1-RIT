@@ -1,0 +1,47 @@
+SOELIM(1)                                               SOELIM(1)
+
+
+
+NAME
+       soelim - interpret .so requests in groff input
+
+SYNOPSIS
+       soelim [ -Cv ] [ -Idir ] [ files... ]
+
+       It  is  possible to have whitespace between the -I command
+       line option and its parameter.
+
+DESCRIPTION
+       soelim reads files and replaces lines of the form
+
+              .so file
+
+       by the contents of file.  It is useful if  files  included
+       with  so need to be preprocessed.  Normally, soelim should
+       be invoked with the -s option of groff.
+
+       Note that there must be no whitespace between the  leading
+       dot  and  the two characters `s' and `o'.  Otherwise, only
+       groff interprets the .so request (and soelim ignores  it).
+
+OPTIONS
+       -C     Recognize  .so  even  when  followed by a character
+              other than space or newline.
+
+       -Idir  This option may be used to specify a  directory  to
+              search  for  files  (both those on the command line
+              and those named in .so lines).  The current  direc­
+              tory  is always searched first.  This option may be
+              specified more than once, the directories  will  be
+              searched  in  the  order  specified.   No directory
+              search is performed for files  specified  using  an
+              absolute path.
+
+       -v     Print the version number.
+
+SEE ALSO
+       groff(1)
+
+
+
+Groff Version 1.17.2       27 June 2001                 SOELIM(1)

@@ -1,0 +1,65 @@
+cmd_s(3)                                                 cmd_s(3)
+
+
+
+NAME
+       cmd_s -
+
+SYNOPSIS
+   Data Fields
+       injmode_t injmode
+       char * tag
+       int_32 tagval
+       int done
+       int oldcnt
+       int nvals
+       char ** vals
+
+FIELD DOCUMENTATION
+   int cmd_s::done
+       Definition at line 21 of file rpminject.c.
+
+       Referenced by convertAMD, convertExistingAMD, and
+       headerInject.
+
+   injmode_t cmd_s::injmode
+       Definition at line 18 of file rpminject.c.
+
+       Referenced by convertExistingAMD, genChangelog,
+       headerInject, and main.
+
+   int cmd_s::nvals
+       Definition at line 23 of file rpminject.c.
+
+       Referenced by convertAMD, genChangelog, headerInject, and
+       main.
+
+   int cmd_s::oldcnt
+       Definition at line 22 of file rpminject.c.
+
+       Referenced by convertExistingAMD, and genChangelog.
+
+   char* cmd_s::tag
+       Definition at line 19 of file rpminject.c.
+
+       Referenced by genChangelog, and main.
+
+   int_32 cmd_s::tagval
+       Definition at line 20 of file rpminject.c.
+
+       Referenced by convertExistingAMD, genChangelog,
+       headerInject, and main.
+
+   char** cmd_s::vals
+       Definition at line 24 of file rpminject.c.
+
+       Referenced by convertAMD, and main.
+
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002                   cmd_s(3)

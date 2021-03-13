@@ -1,0 +1,126 @@
+SSL_CIPHER_get_name(3)       OpenSSL       SSL_CIPHER_get_name(3)
+
+
+
+NNAAMMEE
+       SSL_CIPHER_get_name, SSL_CIPHER_get_bits,
+       SSL_CIPHER_get_version, SSL_CIPHER_description - get
+       SSL_CIPHER properties
+
+SSYYNNOOPPSSIISS
+        #include <openssl/ssl.h>
+
+        const char *SSL_CIPHER_get_name(SSL_CIPHER *cipher);
+        int SSL_CIPHER_get_bits(SSL_CIPHER *cipher, int *alg_bits);
+        char *SSL_CIPHER_get_version(SSL_CIPHER *cipher);
+        char *SSL_CIPHER_description(SSL_CIPHER *cipher, char *buf, int size);
+
+
+DDEESSCCRRIIPPTTIIOONN
+       SSL_CIPHER_get_name() returns a pointer to the name of
+       cciipphheerr. If the argument is the NULL pointer, a pointer to
+       the constant value "NONE" is returned.
+
+       SSL_CIPHER_get_bits() returns the number of secret bits
+       used for cciipphheerr. If aallgg_bbiittss is not NULL, it contains the
+       number of bits processed by the chosen algorithm. If
+       cciipphheerr is NULL, 0 is returned.
+
+       SSL_CIPHER_get_version() returns the protocol version for
+       cciipphheerr, currently "SSLv2", "SSLv3", or "TLSv1". If cciipphheerr
+       is NULL, "(NONE)" is returned.
+
+       SSL_CIPHER_description() returns a textual description of
+       the cipher used into the buffer bbuuff of length lleenn
+       provided. lleenn must be at least 128 bytes, otherwise a
+       pointer to the the string "Buffer too small" is returned.
+       If bbuuff is NULL, a buffer of 128 bytes is allocated using
+       OPENSSL_malloc(). If the allocation fails, a pointer to
+       the string "OPENSSL_malloc Error" is returned.
+
+NNOOTTEESS
+       The number of bits processed can be different from the
+       secret bits. An export cipher like e.g. EXP-RC4-MD5 has
+       only 40 secret bits. The algorithm does use the full 128
+       bits (which would be returned for aallgg_bbiittss), of which
+       however 88bits are fixed. The search space is hence only
+       40 bits.
+
+       The string returned by SSL_CIPHER_description() in case of
+       success consists of cleartext information separated by one
+       or more blanks in the following sequence:
+
+       <ciphername>
+           Textual representation of the cipher name.
+
+       <protocol version>
+           Protocol version: SSSSLLvv22, SSSSLLvv33. The TLSv1 ciphers are
+           flagged with SSLv3.
+
+       Kx=<key exchange>
+           Key exchange method: RRSSAA (for export ciphers as
+           RRSSAA((551122)) or RRSSAA((11002244))), DDHH (for export ciphers as
+           DDHH((551122)) or DDHH((11002244))), DDHH//RRSSAA, DDHH//DDSSSS, FFoorrtteezzzzaa.
+
+       Au=<authentication>
+           Authentication method: RRSSAA, DDSSSS, DDHH, NNoonnee. None is the
+           representation of anonymous ciphers.
+
+       Enc=<symmetric encryption method>
+           Encryption method with number of secret bits: DDEESS((4400)),
+           DDEESS((5566)), 33DDEESS((116688)), RRCC44((4400)), RRCC44((5566)), RRCC44((6644)),
+           RRCC44((112288)), RRCC22((4400)), RRCC22((5566)), RRCC22((112288)), IIDDEEAA((112288)),
+           FFoorrtteezzzzaa, NNoonnee.
+
+       Mac=<message authentication code>
+           Message digest: MMDD55, SSHHAA11.
+
+       <export flag>
+           If the cipher is flagged exportable with respect to
+           old US crypto regulations, the word "eexxppoorrtt" is
+           printed.
+
+EEXXAAMMPPLLEESS
+       Some examples for the output of SSL_CIPHER_description():
+
+        EDH-RSA-DES-CBC3-SHA    SSLv3 Kx=DH       Au=RSA  Enc=3DES(168) Mac=SHA1
+        EDH-DSS-DES-CBC3-SHA    SSLv3 Kx=DH       Au=DSS  Enc=3DES(168) Mac=SHA1
+        RC4-MD5                 SSLv3 Kx=RSA      Au=RSA  Enc=RC4(128)  Mac=MD5
+        EXP-RC4-MD5             SSLv3 Kx=RSA(512) Au=RSA  Enc=RC4(40)   Mac=MD5  export
+
+
+BBUUGGSS
+       If SSL_CIPHER_description() is called with cciipphheerr being
+       NULL, the library crashes.
+
+       If SSL_CIPHER_description() cannot handle a built-in
+       cipher, the according description of the cipher property
+       is uunnkknnoowwnn. This case should not occur.
+
+RREETTUURRNN VVAALLUUEESS
+       See DESCRIPTION
+
+SSEEEE AALLSSOO
+       ssl(3), SSL_get_current_cipher(3), SSL_get_ciphers(3),
+       ciphers(1)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+15/Feb/2001                   0.9.6c       SSL_CIPHER_get_name(3)

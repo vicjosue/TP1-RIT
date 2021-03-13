@@ -1,0 +1,85 @@
+Tcl_GetStdChannel(3)  Tcl Library Procedures Tcl_GetStdChannel(3)
+
+
+
+_________________________________________________________________
+
+NAME
+       Tcl_GetStdChannel,   Tcl_SetStdChannel  -  procedures  for
+       retrieving and replacing the standard channels
+
+SYNOPSIS
+       #include <tcl.h>
+
+       Tcl_Channel
+       Tcl_GetStdChannel(type)
+
+       Tcl_SetStdChannel(channel, type)
+
+
+ARGUMENTS
+       int           type      (in)      The identifier  for  the
+                                         standard    channel   to
+                                         retrieve   or    modify.
+                                         Must     be    one    of
+                                         TCL_STDIN,   TCL_STDOUT,
+                                         or TCL_STDERR.
+
+       Tcl_Channel   channel   (in)      The  channel  to  use as
+                                         the new  value  for  the
+                                         specified standard chan­
+                                         nel.
+_________________________________________________________________
+
+
+DESCRIPTION
+       Tcl defines three special channels that are used by  vari­
+       ous  I/O  related commands if no other channels are speci­
+       fied.  The standard input channel has a  channel  name  of
+       stdin  and  is used by read and gets.  The standard output
+       channel is named stdout and is used by puts.  The standard
+       error  channel  is  named stderr and is used for reporting
+       errors.  In addition, the standard channels are  inherited
+       by  any  child processes created using exec or open in the
+       absence of any other redirections.
+
+       The standard channels are actually aliases for other  nor­
+       mal channels.  The current channel associated with a stan­
+       dard channel can be retrieved by calling Tcl_GetStdChannel
+       with  one  of  TCL_STDIN, TCL_STDOUT, or TCL_STDERR as the
+       type.  The return value will be a valid channel, or  NULL.
+
+       A  new  channel can be set for the standard channel speci­
+       fied by type by calling Tcl_SetStdChannel with a new chan­
+       nel  or  NULL  in  the channel argument.  If the specified
+       channel is closed by a later call to Tcl_Close,  then  the
+       corresponding  standard  channel will automatically be set
+       to NULL.
+
+       If Tcl_GetStdChannel is called  before  Tcl_SetStdChannel,
+       Tcl  will  construct a new channel to wrap the appropriate
+       platform-specific standard file  handle.   If  Tcl_SetStd­
+       Channel  is  called  before  Tcl_GetStdChannel,  then  the
+       default channel will not be created.
+
+       If one of the standard channels is set to NULL, either  by
+       calling Tcl_SetStdChannel with a null channel argument, or
+       by calling Tcl_Close on the channel, then the next call to
+       Tcl_CreateChannel  will  automatically  set  the  standard
+       channel with the newly created channel.  If more than  one
+       standard  channel is NULL, then the standard channels will
+       be assigned starting  with  standard  input,  followed  by
+       standard output, with standard error being last.
+
+
+SEE ALSO
+       Tcl_Close(3), Tcl_CreateChannel(3)
+
+
+KEYWORDS
+       standard  channel,  standard input, standard output, stan­
+       dard error
+
+
+
+Tcl                            7.5           Tcl_GetStdChannel(3)

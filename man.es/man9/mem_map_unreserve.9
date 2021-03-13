@@ -1,0 +1,48 @@
+skel(9)                    VM Functions                   skel(9)
+
+
+
+NAME
+       mem_map_reserve, mem_map_unreserve - Manipulate flags of
+       virtual memory pages.
+
+SYNOPSIS
+       #include <linux/mm.h>
+       #include <linux/wrapper.h>
+
+       #define mem_map_reserve(page_nr)
+       #define mem_map_unreserve(page_nr)
+
+
+DESCRIPTION
+       These macros cause a page to become reserved/unreserved. A
+       reserved  page  is reserved from any further consideration
+       by the linux kernel, meaning it is not scanned  as  poten­
+       tially  pageable,  or  available  for page allocation. The
+       kernel treats reserved pages as memory-mapped hardware.
+
+       It makes sense for a driver to mark a page  reserved,  for
+       example,  if  the driver supports mmap(2) with dynamically
+       allocated pages that the target device can access via DMA.
+
+RETURN VALUE
+       None
+
+AVAILABILITY
+       Linux 2.0+
+
+SEE ALSO
+       MAP_NR(9), get_free_pages(9), mmap(2)
+
+AUTHOR
+       Stephen Williams <steve@icarus.com>
+
+BUGS
+       If  a page is marked reserved, a call to free_page(9) will
+       silenty ignore it. If the page was originally allocated by
+       get_free_page, you must remember to unmark the page before
+       releasing it to the system. Otherwise, the page is lost.
+
+
+
+Linux DDI                    $Date:$                      skel(9)

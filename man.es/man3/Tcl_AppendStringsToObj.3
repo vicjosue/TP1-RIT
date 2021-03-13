@@ -1,0 +1,306 @@
+Tcl_StringObj(3)      Tcl Library Procedures     Tcl_StringObj(3)
+
+
+
+_________________________________________________________________
+
+NAME
+       Tcl_NewStringObj,   Tcl_NewUnicodeObj,   Tcl_SetStringObj,
+       Tcl_SetUnicodeObj,  Tcl_GetStringFromObj,   Tcl_GetString,
+       Tcl_GetUnicode,     Tcl_GetUniChar,     Tcl_GetCharLength,
+       Tcl_GetRange,   Tcl_AppendToObj,   Tcl_AppendUnicodeToObj,
+       Tcl_AppendStringsToObj,          Tcl_AppendStringsToObjVA,
+       Tcl_AppendObjToObj,  Tcl_SetObjLength,   Tcl_ConcatObj   -
+       manipulate Tcl objects as strings
+
+SYNOPSIS
+       #include <tcl.h>
+
+       Tcl_Obj *
+       Tcl_NewStringObj(bytes, length)
+
+       Tcl_Obj *                                                  |
+       Tcl_NewUnicodeObj(unicode, numChars)                       |
+
+       void
+       Tcl_SetStringObj(objPtr, bytes, length)
+
+       void                                                       |
+       Tcl_SetUnicodeObj(objPtr, unicode, numChars)               |
+
+       char *
+       Tcl_GetStringFromObj(objPtr, lengthPtr)
+
+       char *
+       Tcl_GetString(objPtr)
+
+       Tcl_UniChar *                                              |
+       Tcl_GetUnicode(objPtr)                                     |
+
+       Tcl_UniChar                                                |
+       Tcl_GetUniChar(objPtr, index)                              |
+
+       int                                                        |
+       Tcl_GetCharLength(objPtr)                                  |
+
+       Tcl_Obj *                                                  |
+       Tcl_GetRange(objPtr, first, last)                          |
+
+       void
+       Tcl_AppendToObj(objPtr, bytes, length)
+
+       void                                                       |
+       Tcl_AppendUnicodeToObj(objPtr, unicode, numChars)          |
+
+       void
+       Tcl_AppendObjToObj(objPtr, appendObjPtr)
+
+       void
+       Tcl_AppendStringsToObj(objPtr, string, string, ... (char *) NULL)
+
+       void
+       Tcl_AppendStringsToObjVA(objPtr, argList)
+
+       void
+       Tcl_SetObjLength(objPtr, newLength)
+
+       Tcl_Obj *
+       Tcl_ConcatObj(objc, objv)
+
+ARGUMENTS
+       char         *bytes          (in)      Points to the first
+                                              byte of an array of
+                                              bytes  used  to set
+                                              or  append   to   a
+                                              string      object.
+                                              This byte array may
+                                              contain    embedded
+                                              null  bytes  unless
+                                              length is negative.
+
+       int          length          (in)      The number of bytes
+                                              to  copy from bytes
+                                              when  initializing,
+                                              setting, or append­
+                                              ing  to  a   string
+                                              object.   If  nega­
+                                              tive, all bytes  up
+                                              to  the  first null
+                                              are used.
+
+       Tcl_UniChar  *unicode        (in)      Points to the first
+                                              byte of an array of
+                                              Unicode  characters
+                                              used   to   set  or
+                                              append to a  string
+                                              object.   This byte
+                                              array  may  contain
+                                              embedded null char­
+                                              acters unless  num­
+                                              Chars  is negative. |
+
+       int          num­                                          |
+       Chars        (in)                          |               |
+                                              The  number of Uni­ |
+                                              code characters  to |
+                                              copy  from  unicode |
+                                              when  initializing, |
+                                              setting, or append­ |
+                                              ing  to  a   string |
+                                              object.   If  nega­ |
+                                              tive,  all  charac­ |
+                                              ters   up   to  the |
+                                              first null  charac­ |
+                                              ter are used.       |
+
+       int          index           (in)                          ||
+                                              The  index  of  the |
+                                              Unicode   character |
+                                              to return.          |
+
+       int          first           (in)                          ||
+                                              The  index  of  the |
+                                              first Unicode char­ |
+                                              acter  in  the Uni­ |
+                                              code  range  to  be |
+                                              returned  as  a new |
+                                              object.             |
+
+       int          last            (in)                          ||
+                                              The  index  of  the |
+                                              last Unicode  char­ |
+                                              acter     in    the |
+                                              Unicode range to be |
+                                              returned  as  a new |
+                                              object.
+
+       Tcl_Obj      *objPtr         (in/out)  Points to an object
+                                              to manipulate.
+
+       Tcl_Obj      *appendObjPtr   (in)      The    object    to
+                                              append to objPtr in
+                                              Tcl_AppendObjToObj.
+
+       int          *lengthPtr      (out)     If  non-NULL,   the
+                                              location      where
+                                              Tcl_GetStringFro­
+                                              mObj will store the
+                                              the  length  of  an
+                                              object's     string
+                                              representation.
+
+       char         *string         (in)      Null-terminated
+                                              string   value   to
+                                              append to objPtr.
+
+       va_list      argList         (in)      An  argument   list
+                                              which   must   have
+                                              been    initialised
+                                              using
+                                              TCL_VARARGS_START,
+                                              and  cleared  using
+                                              va_end.
+
+       int          newLength       (in)      New length for  the
+                                              string   value   of
+                                              objPtr, not includ­
+                                              ing  the final NULL
+                                              character.
+
+       int          objc            (in)      The number of  ele­
+                                              ments  to  concate­
+                                              nate.
+
+       Tcl_Obj      *objv[]         (in)      The    array     of
+                                              objects to concate­
+                                              nate.
+_________________________________________________________________
+
+
+DESCRIPTION
+       The procedures described in this manual  entry  allow  Tcl
+       objects  to be manipulated as string values.  They use the
+       internal representation of the object to store  additional
+       information  to  make  the string manipulations more effi­
+       cient.  In particular, they make a series of append opera­
+       tions  efficient by allocating extra storage space for the
+       string so that it doesn't  have  to  be  copied  for  each
+       append.   Also, indexing and length computations are opti­ |
+       mized because the Unicode string representation is  calcu­ |
+       lated and cached as needed.
+
+       Tcl_NewStringObj  and Tcl_SetStringObj create a new object |
+       or modify an existing object to hold a copy of the  string |
+       given   by   bytes   and  length.   Tcl_NewUnicodeObj  and |
+       Tcl_SetUnicodeObj create a new object or modify an  exist­ |
+       ing  object  to hold a copy of the Unicode string given by |
+       unicode and numChars.   Tcl_NewStringObj  and  Tcl_NewUni­ |
+       codeObj  return  a  pointer to a newly created object with |
+       reference count zero.  All four procedures set the  object |
+       to  hold a copy of the specified string.  Tcl_SetStringObj |
+       and Tcl_SetUnicodeObj free any old  string  representation |
+       as  well as any old internal representation of the object.
+
+       Tcl_GetStringFromObj and Tcl_GetString return an  object's
+       string representation.  This is given by the returned byte
+       pointer and (for Tcl_GetStringFromObj)  length,  which  is
+       stored  in  lengthPtr  if it is non-NULL.  If the object's
+       UTF string representation is invalid (its byte pointer  is
+       NULL),  the  string representation is regenerated from the
+       object's internal representation.  The storage  referenced
+       by  the  returned byte pointer is owned by the object man­
+       ager and should not be modified by the caller.  The proce­
+       dure  Tcl_GetString  is  used in the common case where the
+       caller does not need the length of the string  representa­
+       tion.
+
+       Tcl_GetUnicode  returns  an  object's  value  as a Unicode |
+       string.  Tcl_GetUniChar returns the index'th character  in |
+       the object's Unicode representation.                       |
+
+       Tcl_GetRange  returns  a newly created object comprised of |
+       the characters between first and last (inclusive)  in  the |
+       object's  Unicode representation.  If the object's Unicode |
+       representation is invalid, the Unicode  representation  is |
+       regenerated from the object's string representation.       |
+
+       Tcl_GetCharLength  returns  the  number  of characters (as |
+       opposed to bytes) in the string object.                    |
+
+       Tcl_AppendToObj appends the data given by bytes and length |
+       to  the  string  representation of the object specified by |
+       objPtr.  If the object has an invalid  string  representa­ |
+       tion,  then  an attempt is made to convert bytes is to the |
+       Unicode format.  If the conversion is successful, then the |
+       converted  form  of bytes is appended to the object's Uni­ |
+       code representation.  Otherwise, the object's Unicode rep­ |
+       resentation  is  invalidated and converted to the UTF for­ |
+       mat, and bytes is appended to the object's new string rep­ |
+       resentation.                                               |
+
+       Tcl_AppendUnicodeToObj appends the Unicode string given by |
+       unicode and numChars to the object  specified  by  objPtr. |
+       If  the object has an invalid Unicode representation, then |
+       unicode is converted to the UTF format and appended to the |
+       object's  string representation.  Appends are optimized to |
+       handle repeated appends relatively efficiently (it overal­ |
+       locates  the  string  or  Unicode  space to avoid repeated |
+       reallocations and copies of object's string value).        |
+
+       Tcl_AppendObjToObj is similar to Tcl_AppendToObj,  but  it |
+       appends  the string or Unicode value (whichever exists and |
+       is best suited to be appended to objPtr)  of  appendObjPtr |
+       to objPtr.
+
+       Tcl_AppendStringsToObj   is   similar  to  Tcl_AppendToObj
+       except that it can be passed more than one value to append
+       and each value must be a null-terminated string (i.e. none
+       of the values may contain internal null characters).   Any
+       number  of  string arguments may be provided, but the last
+       argument must be a NULL pointer to indicate the end of the
+       list.
+
+       Tcl_AppendStringsToObjVA   is   the  same  as  Tcl_Append­
+       StringsToObj except that  instead  of  taking  a  variable
+       number of arguments it takes an argument list.
+
+       The  Tcl_SetObjLength  procedure changes the length of the
+       string value of its objPtr  argument.   If  the  newLength
+       argument  is  greater  than  the  space  allocated for the
+       object's string, then the string space is reallocated  and
+       the  old  value  is  copied  to  the  new space; the bytes
+       between the old length of the string and  the  new  length
+       may  have  arbitrary values.  If the newLength argument is
+       less than the current length of the object's string,  with
+       objPtr->length  is reduced without reallocating the string
+       space; the original  allocated  size  for  the  string  is
+       recorded  in  the object, so that the string length can be
+       enlarged in a subsequent call to Tcl_SetObjLength  without
+       reallocating   storage.   In  all  cases  Tcl_SetObjLength
+       leaves a null character at objPtr->bytes[newLength].
+
+       The Tcl_ConcatObj function returns  a  new  string  object
+       whose  value  is  the space-separated concatenation of the
+       string representations of all of the objects in  the  objv
+       array. Tcl_ConcatObj eliminates leading and trailing white
+       space as it copies the string representations of the  objv
+       array  to the result. If an element of the objv array con­
+       sists of nothing but white  space,  then  that  object  is
+       ignored  entirely.  This  white-space removal was added to
+       make the output of  the  concat  command  cleaner-looking.
+       Tcl_ConcatObj  returns a pointer to a newly-created object
+       whose ref count is zero.
+
+
+SEE ALSO
+       Tcl_NewObj, Tcl_IncrRefCount, Tcl_DecrRefCount
+
+
+KEYWORDS
+       append,  internal  representation,  object,  object  type,
+       string object, string type, string representation, concat,
+       concatenate, unicode
+
+
+
+Tcl                            8.1               Tcl_StringObj(3)

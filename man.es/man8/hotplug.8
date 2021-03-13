@@ -1,0 +1,75 @@
+HOTPLUG(8)          Linux Programmer's Manual          HOTPLUG(8)
+
+
+
+NAME
+       hotplug - Linux hotplugging support scripts
+
+SYNOPSIS
+       hotplug [ help | --help | NAME ]
+
+       /etc/init.d/hotplug [start|stop|status|restart]
+
+DESCRIPTION
+       hotplug is a program which is used by the kernel to notify
+       user mode software when some  significant  (usually  hard­
+       ware-related) events take place.  An example is when a USB
+       or Cardbus device has just been plugged in.  This is  use­
+       ful  for  automatically  loading  and  setting up drivers,
+       packaged either as kernel modules or  as  user  mode  pro­
+       grams.
+
+       The   hotplug   program   path   name   is  registered  in
+       /proc/sys/kernel/hotplug, and  normally  holds  the  value
+       /sbin/hotplug.  Except for specialized configurations such
+       as  initrd(4)  configurations,  that  identifies  a  shell
+       script   which  delegates  to  specific  "policy  agents",
+       /etc/hotplug/NAME.agent.  The name of the agent  is  given
+       by  the  kernel  as the first command-line parameter.  The
+       name corresponds to  a  specific  kernel  subsystem  whose
+       events it processes (e.g. "usb", "pci", "net" etc.).
+
+       Information  about an event is usually passed to agents in
+       the form of environment variables.  Most agents  accept  a
+       "ACTION"  variable  that  describes the type of the event.
+       It can be, for example, "add" or "remove" to signify  that
+       some  device  has  just  been connected to or disconnected
+       from the system respectively.  In  such  requests,  agents
+       are also given variables describing at the device (and its
+       location) so that they can choose the appropriate  drivers
+       to set up.
+
+       hotplug  agents aren't necessarily called only by the ker­
+       nel though.  While the OS is initializing, the "cold-plug­
+       ging"  case,  the hotplug script in /etc/init.d/hotplug is
+       invoked to make sure that all device connected at boot are
+       properly  configured,  applying  the same rules as if they
+       were connected later.
+
+FILES
+       /proc/sys/kernel/hotplug   specifies hotplug program path
+       /sbin/hotplug              hotplug program (default path name)
+       /etc/hotplug/*             hotplug files
+       /etc/hotplug/NAME.agent    hotplug subsystem-specific agents
+       /etc/hotplug/NAME*         subsystem-specific files, for agents
+       /etc/hotplug/NAME/*        driver setup scripts, invoked by agents
+       /etc/init.d/hotplug        hotplug system service script
+
+
+SEE ALSO
+       initrd(4)
+
+       The http://linux-hotplug.sourceforge.net/ web site.
+
+AUTHORS
+       hotplug  is  developed  by   Linux   Hotplugging   Project
+       http://linux-hotplug.sourceforge.net/
+
+       This  manual page was originally written by Fumitoshi UKAI
+       <ukai@debian.or.jp>, for the Debian GNU/Linux system  (but
+       may be used by others), based on original Japanese version
+       of manpage.
+
+
+
+                          February 2001                HOTPLUG(8)

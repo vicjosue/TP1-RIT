@@ -1,0 +1,68 @@
+MKTEMP(1)               System General Commands Manual               MKTEMP(1)
+
+NAME
+     mktemp - make temporary file name (unique)
+
+SYNOPSIS
+     mktemp [-q] [-u] template
+
+DESCRIPTION
+     The mktemp utility takes the given file name template and overwrites a
+     portion of it to create a file name.  This file name is unique and suit­
+     able for use by the application.  The template may be any file name with
+     six `Xs' appended to it, for example /tmp/temp.XXXXXX.  The trailing `Xs'
+     are replaced with the current process number and/or a unique letter com­
+     bination.
+
+     If mktemp can successfully generate a unique file name, the file is cre­
+     ated with mode 0600 (unless the -u flag is given) and the filename is
+     printed to standard output.
+
+     mktemp is provided to allow shell scripts to safely use temporary files.
+     Traditionally, many shell scripts take the name of the program with the
+     PID as a suffix and use that as a temporary file name.  This kind of nam­
+     ing scheme is predictable and the race condition it creates is easy for
+     an attacker to win.  A safer, though still inferior approach is to make a
+     temporary directory using the same naming scheme.  While this does allow
+     one to guarantee that a temporary file will not be subverted, it still
+     allows a simple denial of service attack.  For these reasons it is sug­
+     gested that mktemp be used instead.
+
+OPTIONS
+     The available options are as follows:
+
+     -d      Make a directory instead of a file.
+
+     -q      Fail silently if an error occurs.  This is useful if a script
+             does not want error output to go to standard error.
+
+     -u      Operate in ``unsafe'' mode.  The temp file will be unlinked
+             before mktemp exits.  This is slightly better than mktemp(3) but
+             still introduces a race condition.  Use of this option is not
+             encouraged.
+
+RETURN VALUES
+     The mktemp utility exits with a value of 0 on success or 1 on failure.
+
+EXAMPLES
+     The following sh(1) fragment illustrates a simple use of mktemp where the
+     script should quit if it cannot get a safe temporary file.
+
+           TMPFILE=`mktemp /tmp/$0.XXXXXX` || exit 1
+           echo "program output" >> $TMPFILE
+
+     In this case, we want the script to catch the error itself.
+
+           TMPFILE=`mktemp -q /tmp/$0.XXXXXX`
+           if [ $? -ne 0 ]; then
+                   echo "$0: Can't create temp file, exiting..."
+                   exit 1
+           fi
+
+SEE ALSO
+     mkstemp(3), mktemp(3)
+
+HISTORY
+     The mktemp utility appeared in OpenBSD.
+
+BSD                            November 20, 1996                           BSD

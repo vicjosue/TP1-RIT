@@ -1,0 +1,76 @@
+headerSprintfExtension_s(3)           headerSprintfExtension_s(3)
+
+
+
+NAME
+       headerSprintfExtension_s -
+
+SYNOPSIS
+       #include <header.h>
+
+
+   Data Fields
+       enum headerSprintfExtenstionType type
+       const char * name
+       union {
+          void * generic
+          headerTagFormatFunction formatFunction
+          headerTagTagFunction tagFunction
+          headerSprintfExtension_s * more
+       } u
+
+
+FIELD DOCUMENTATION
+   headerTagFormatFunction
+       headerSprintfExtension_s::formatFunction
+       HEADER_EXT_TAG extension.
+
+       Definition at line 186 of file header.h.
+
+   void* headerSprintfExtension_s::generic
+       Private extension.
+
+       Definition at line 185 of file header.h.
+
+   struct headerSprintfExtension_s*
+       headerSprintfExtension_s::more
+       Chained table extension.
+
+       Definition at line 188 of file header.h.
+
+   const char* headerSprintfExtension_s::name
+       Name of extension.
+
+       Definition at line 183 of file header.h.
+
+       Referenced by findTag, formatValue, hdrSubscript, initrpm,
+       and rpmDisplayQueryTags.
+
+   headerTagTagFunction headerSprintfExtension_s::tagFunction
+       HEADER_EXT_FORMAT extension.
+
+       Definition at line 187 of file header.h.
+
+   enum headerSprintfExtenstionType
+       headerSprintfExtension_s::type
+       Type of extension.
+
+       Definition at line 182 of file header.h.
+
+       Referenced by allocateExtensionCache, findTag,
+       formatValue, freeExtensionCache, hdrSubscript, initrpm,
+       and rpmDisplayQueryTags.
+
+   union { ... }   headerSprintfExtension_s::u
+       Referenced by allocateExtensionCache, findTag,
+       formatValue, freeExtensionCache, hdrSubscript,
+       parseExpression, parseFormat, and rpmDisplayQueryTags.
+
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002headerSprintfExtension_s(3)

@@ -1,0 +1,77 @@
+curs_add_wch(3X)                                 curs_add_wch(3X)
+
+
+
+NAME
+       add_wch,   wadd_wch,  mvadd_wch,  mvwadd_wch,  echo_wchar,
+       wecho_wchar - add a complex character and rendition  to  a
+       curses window, then advance the cursor
+
+SYNOPSIS
+       #include <curses.h>
+
+       int add_wch( const cchar_t *wch );
+       int wadd_wch( WINDOW *win, const cchar_t *wch );
+       int mvadd_wch( int y, int x, const cchar_t *wch );
+       int  mvwadd_wch(  WINDOW *win, int y, int x, const cchar_t
+       *wch );
+       int echo_wchar( const cchar_t *wch );
+       int wecho_wchar( WINDOW *win, const cchar_t *wch );
+
+DESCRIPTION
+       The add_wch, wadd_wch, mvadd_wch, and mvwadd_wch functions
+       put the complex character wch into the given window at its
+       current position, which is then advanced.  These functions
+       perform  wrapping and special-character processing as fol­
+       lows:
+
+       -    If wch refers to a spacing character, then any previ­
+            ous  character  at  that  location is removed.  A new
+            character specified by wch is placed at that location
+            with  rendition  specified  by  wch.  The cursor then
+            advances to the next spacing character on the screen.
+
+       -    If  wch refers to a non-spacing character, all previ­
+            ous characters at that location are  preserved.   The
+            non-spacing  characters of wch are added to the spac­
+            ing complex character, and the rendition specified by
+            wch is ignored.
+
+       -    If  the  character  part  of  wch  is a tab, newline,
+            backspace or other control character, the  window  is
+            updated  and  the  cursor moves as if addch (3X) were
+            called.
+
+       The echo_wchar function is functionally  equivalent  to  a
+       call to add_wch followed by a call to refresh.  Similarly,
+       the wecho_wchar is functionally equivalent to  a  call  to
+       wadd_wch  followed  by  a call to wrefresh.  The knowledge
+       that only a single character is being output is taken into
+       consideration and, for non-control characters, a consider­
+       able performance gain might be seen by  using  the  *echo*
+       functions instead of their equivalents.
+
+RETURN VALUES
+       All routines return the integer ERR upon failure and OK on
+       success.
+
+NOTES
+       Note that add_wch, mvadd_wch, mvwadd_wch,  and  echo_wchar
+       may be macros.
+
+PORTABILITY
+       All  these functions are described in the XSI Curses stan­
+       dard, Issue 4.  The defaults specified  for  forms-drawing
+       characters apply in the POSIX locale.
+
+       XSI  documents  constants  beginning  with WACS_ which are
+       used for line-drawing.  Those  are  not  currently  imple­
+       mented in ncurses.
+
+SEE ALSO
+       curses(3X),  curs_attr_get(3X),  curs_clear(3X), curs_out­
+       opts(3X), curs_refresh(3X), putwc(3)
+
+
+
+                                                 curs_add_wch(3X)

@@ -1,0 +1,62 @@
+rpmdb/poptDB.c(3)                               rpmdb/poptDB.c(3)
+
+
+
+NAME
+       rpmdb/poptDB.c - Popt tables for database modes.
+
+SYNOPSIS
+       #include 'system.h'
+       #include <rpmcli.h>
+       #include 'debug.h'
+
+   Variables
+       rpmDatabaseArguments_s rpmDBArgs
+       int _noDirTokens
+       poptOption rpmDatabasePoptTable []
+
+DETAILED DESCRIPTION
+       Popt tables for database modes.
+
+
+
+       Definition in file poptDB.c.
+
+VARIABLE DOCUMENTATION
+   int _noDirTokens
+       Definition at line 15 of file poptDB.c.
+
+   struct poptOption rpmDatabasePoptTable[]
+       Initial value:
+
+        {
+        { 'initdb', ' ', POPT_ARG_VAL, &rpmDBArgs.init, 1,
+                'initialize database' , NULL},
+        { 'rebuilddb', ' ', POPT_ARG_VAL, &rpmDBArgs.rebuild, 1,
+                'rebuild database inverted lists from installed package headers' ,
+               NULL},
+        { 'verifydb', ' ', POPT_ARG_VAL|POPT_ARGFLAG_DOC_HIDDEN, &rpmDBArgs.verify, 1,
+                'verify database files' , NULL},
+        { 'nodirtokens', ' ', POPT_ARG_VAL|POPT_ARGFLAG_DOC_HIDDEN, &_noDirTokens, 1,
+                'generate headers compatible with (legacy) rpm[23] packaging' ,
+               NULL},
+        { 'dirtokens', ' ', POPT_ARG_VAL|POPT_ARGFLAG_DOC_HIDDEN, &_noDirTokens, 0,
+                'generate headers compatible with rpm4 packaging' , NULL},
+
+          POPT_TABLEEND
+       }
+
+       Definition at line 20 of file poptDB.c.
+
+   struct rpmDatabaseArguments_s rpmDBArgs
+       Definition at line 12 of file poptDB.c.
+
+       Referenced by main.
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002          rpmdb/poptDB.c(3)

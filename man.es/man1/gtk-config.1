@@ -1,0 +1,65 @@
+GTK+(1)                       1.2.10                      GTK+(1)
+
+
+
+NAME
+       gtk-config - script to get information about the installed
+       version of GTK+
+
+SYNOPSIS
+       gtk-config [--prefix[=DIR]] [--exec-prefix[=DIR]]  [--ver­
+       sion] [--libs] [--cflags]
+
+DESCRIPTION
+       gtk-config  is  a tool that is used to configure to deter­
+       mine the compiler and linker flags that should be used  to
+       compile  and  link programs that use GTK+. It is also used
+       internally to the .m4 macros for  GNU  autoconf  that  are
+       included with GTK+.
+
+OPTIONS
+       gtk-config accepts the following options:
+
+       --version
+               Print  the  currently installed version of GTK+ on
+               the standard output.
+
+       --libs  Print the linker flags that are necessary to  link
+               a GTK+ program.
+
+       --cflags
+               Print  the  compiler  flags  that are necessary to
+               compile a GTK+ program.
+
+       --prefix=PREFIX
+               If specified, use PREFIX instead of the  installa­
+               tion  prefix that GTK+ was built with when comput­
+               ing  the  output  for  the  --cflags  and   --libs
+               options.  This  option  is  also used for the exec
+               prefix if --exec-prefix was  not  specified.  This
+               option  must  be  specified  before  any --libs or
+               --cflags options.
+
+       --exec-prefix=PREFIX
+               If specified, use PREFIX instead of the  installa­
+               tion  exec  prefix  that  GTK+ was built with when
+               computing the output for the --cflags  and  --libs
+               options.  This option must be specified before any
+               --libs or --cflags options.
+
+SEE ALSO
+       gimp(1), gimptool(1)
+
+COPYRIGHT
+       Copyright ©  1998 Owen Taylor
+
+       Permission to use, copy, modify, and distribute this soft­
+       ware and its documentation for any purpose and without fee
+       is hereby  granted,  provided  that  the  above  copyright
+       notice  appear  in all copies and that both that copyright
+       notice and this permission  notice  appear  in  supporting
+       documentation.
+
+
+
+Version                  25 October 1998                  GTK+(1)

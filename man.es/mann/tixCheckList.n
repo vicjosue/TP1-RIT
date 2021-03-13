@@ -1,0 +1,172 @@
+tixCheckList(n)       Tix Built-In Commands       tixCheckList(n)
+
+
+
+_________________________________________________________________
+
+NAME
+       tixCheckList - Create and manipulate tixCheckList widgets
+
+SYNOPSIS
+       tixCheckList pathName ?options?
+
+SUPER-CLASS
+       The  TixCheckList  class is derived from the TixTree class
+       and inherits all the commands, options and  subwidgets  of
+       its super-class.
+
+STANDARD OPTIONS
+       TixCheckList  supports all the standard options of a frame
+       widget. See the options(n) manual entry for details on the
+       standard options.
+
+WIDGET-SPECIFIC OPTIONS
+       Command-Line Name:-browsecmd
+       Database Name:  browseCmd
+       Database Class: BrowseCmd
+
+              Specifies  a  command  to  call  whenever  the user
+              browses on an entry (usually by single-clicking  on
+              the  entry).  The  command is called with one argu­
+              ment, the pathname of the entry.
+
+       Command-Line Name:-command
+       Database Name:  command
+       Database Class: Command
+
+              Specifies a command to call whenever the user acti­
+              vates  an  entry (usually by double-clicking on the
+              entry). The command is called  with  one  argument,
+              the pathname of the entry.
+
+       Command-Line Name:-radio
+       Database Name:  radio
+       Database Class: Radio
+
+              A  Boolean  value.  If  set  to  true, the user can
+              select at most one item at a time; if set to false,
+              the user can select as many items as possible.
+
+SUBWIDGETS
+       Name:           hlist
+       Class:          TixHList
+
+              The  hierarchical  listbox that displays the Check­
+              List.
+
+       Name:           hsb
+       Class:          Scrollbar
+
+              The horizontal scrollbar subwidget.
+
+       Name:           vsb
+       Class:          Scrollbar
+
+              The vertical scrollbar subwidget.
+_________________________________________________________________
+
+DESCRIPTION
+       The tixCheckList command creates a new  window  (given  by
+       the  pathName argument) and makes it into a CheckList wid­
+       get.  Additional options, described above, may  be  speci­
+       fied on the command line or in the option database to con­
+       figure aspects of the CheckList widget such as its  cursor
+       and relief.
+
+       The  CheckList  widget  displays  a  list  of  items to be
+       selected by the user. CheckList acts similarly to  the  Tk
+       checkbutton  or  radiobutton widgets, except it is capable
+       of handling many more items than checkbuttons or radiobut­
+       tons.
+
+       The items are contained in the hlist subwidget.  Each item
+       may be in one of the following status: on (indicated by  a
+       check  bitmap),  off (indicated by a cross bitmap) default
+       (indicated by a gray box bitmap) or none,  in  which  case
+       the  item  will  not be accompanied by a bitmap. The items
+       whose  status  is  on,  off  or  default  are  called  the
+       selectable  items  and  can  be  checked or crossed by the
+       user. All selectable entries must be of  the  type  image­
+       text.
+
+       The  items  whose  status  is  none  cannot  be checked or
+       crossed by the user; usually  they  are  included  in  the
+       hlist  subwidget only for explanation purposes or as sepa­
+       rators.
+
+       Initially, all the items have a none status.  To  make  an
+       item  selectable,  you  can  call the setstatus command to
+       change its status (see below).
+
+       Notice that CheckList is a subclass of the TixTree  widget
+       and  thus  is  is  capable  of  displaying  a  hierachy of
+       selectable entries. When necessary, you can call the  set­
+       mode  method  (see  TixTree(n))  to define the hierachical
+       structure of the selectable entries.
+
+WIDGET COMMANDS
+       The tixCheckList command creates a new Tcl  command  whose
+       name  is the same as the path name of the CheckList's win­
+       dow.  This command may be used to  invoke  various  opera­
+       tions on the widget. It has the following general form:
+                     pathName option ?arg arg ...?
+       PathName  is the name of the command, which is the same as
+       the CheckList widget's path  name.  Option  and  the  args
+       determine the exact behavior of the command. The following
+       commands are possible for CheckList widgets:
+
+       pathName getselection ?status?
+              Returns a list of items whose status  matches  sta­
+              tus.  If status is not specified, the list of items
+              in the "on" status will be returned.
+
+       pathName getstatus entryPath
+              Returns the current status of entryPath.
+
+       pathName setstatus entryPath status
+              Sets the status of entryPath to be status. A bitmap
+              will  be  displayed next to the entry its status is
+              on, off or default.
+
+       pathName subwidget  name ?args?
+              When no options are given, this command returns the
+              pathname of the subwidget of the specified name.
+
+              When  options  are given, the widget command of the
+              specified  subwidget  will  be  called  with  these
+              options.
+
+EXAMPLE
+       This  example  creates  several  choices  for  the user to
+       select.
+
+              set c [tixCheckList .c]
+              $c subwidget hlist add choice1 -itemtype imagetext -text Choice1
+              $c subwidget hlist add choice2 -itemtype imagetext -text Choice2
+              $c subwidget hlist add choice3 -itemtype imagetext -text Choice3
+              $c setstatus choice1 on
+              $c setstatus choice2 off
+              $c setstatus choice3 off
+              pack $c
+
+BINDINGS
+       The basic mouse and keyboard  bindings  of  the  CheckList
+       widget are the same as the bindings of the TixTree widget.
+
+       In addition, the status of the entries  in  the  CheckList
+       are toggled under the following conditions:
+
+       [1]    When the user press the mouse button over an entry.
+
+       [2]    When the user press the <space> key over an  entry.
+
+       [3]    When the user press the <Return> key over an entry.
+
+KEYWORDS
+       Tix(n), tixHList(n), tixTree(n)
+
+
+
+
+
+Tix                            4.0                tixCheckList(n)

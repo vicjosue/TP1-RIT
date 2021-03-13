@@ -1,0 +1,288 @@
+SpecStruct(3)                                       SpecStruct(3)
+
+
+
+NAME
+       SpecStruct -
+
+SYNOPSIS
+       #include <rpmspec.h>
+
+
+   Data Fields
+       const char * specFile
+       const char * sourceRpmName
+       const char * buildRootURL
+       const char * buildSubdir
+       const char * rootURL
+       speclines sl
+       spectags st
+       OpenFileInfo * fileStack
+       char lbuf [4 *BUFSIZ]
+       char nextpeekc
+       char * nextline
+       char * line
+       int lineNum
+       ReadLevelEntry * readStack
+       Header buildRestrictions
+       SpecStruct ** BASpecs
+       const char ** BANames
+       int BACount
+       int recursing
+       int force
+       int anyarch
+       int gotBuildRootURL
+       char * passPhrase
+       int timeCheck
+       const char * cookie
+       Source * sources
+       int numSources
+       int noSource
+       Header sourceHeader
+       void * sourceCpioList
+       MacroContext macros
+       StringBuf prep
+       StringBuf build
+       StringBuf install
+       StringBuf clean
+       PackageStruct * packages
+
+DETAILED DESCRIPTION
+       The structure used to store values parsed from a spec
+       file.
+
+       Definition at line 91 of file rpmspec.h.
+
+FIELD DOCUMENTATION
+   int SpecStruct::anyarch
+       Definition at line 117 of file rpmspec.h.
+
+       Referenced by newSpec, parsePreamble, and parseSpec.
+
+   int SpecStruct::BACount
+       Definition at line 113 of file rpmspec.h.
+
+       Referenced by buildSpec, freeSpec, initSourceHeader,
+       newSpec, and parseSpec.
+
+   const char** SpecStruct::BANames
+       Definition at line 112 of file rpmspec.h.
+
+       Referenced by freeSpec, initSourceHeader, newSpec,
+       parsePreamble, and parseSpec.
+
+   struct SpecStruct** SpecStruct::BASpecs
+       Definition at line 111 of file rpmspec.h.
+
+       Referenced by buildSpec, freeSpec, newSpec, and parseSpec.
+
+   StringBuf SpecStruct::build
+       build scriptlet.
+
+       Definition at line 135 of file rpmspec.h.
+
+       Referenced by doScript, freeSpec, newSpec, and
+       parseBuildInstallClean.
+
+   Header SpecStruct::buildRestrictions
+       Definition at line 110 of file rpmspec.h.
+
+       Referenced by freeSpec, initSourceHeader, newSpec, and
+       parseRCPOT.
+
+   const char* SpecStruct::buildRootURL
+       Definition at line 94 of file rpmspec.h.
+
+       Referenced by freeSpec, newSpec, parsePreamble, and
+       parseSpec.
+
+   const char* SpecStruct::buildSubdir
+       Definition at line 95 of file rpmspec.h.
+
+       Referenced by doScript, freeSpec, and newSpec.
+
+   StringBuf SpecStruct::clean
+       clean scriptlet.
+
+       Definition at line 137 of file rpmspec.h.
+
+       Referenced by doScript, freeSpec, newSpec, and
+       parseBuildInstallClean.
+
+   const char* SpecStruct::cookie
+       Definition at line 123 of file rpmspec.h.
+
+       Referenced by freeSpec, newSpec, packageBinaries,
+       packageSources, parseSpec, and rewriteRPM.
+
+   struct OpenFileInfo* SpecStruct::fileStack
+       Definition at line 101 of file rpmspec.h.
+
+       Referenced by closeSpec, forceIncludeFile, freeSpec,
+       newSpec, parseSpec, and readLine.
+
+   int SpecStruct::force
+       Definition at line 116 of file rpmspec.h.
+
+       Referenced by newSpec, parsePrep, and parseSpec.
+
+   int SpecStruct::gotBuildRootURL
+       Definition at line 119 of file rpmspec.h.
+
+       Referenced by newSpec, parsePreamble, and parseSpec.
+
+   StringBuf SpecStruct::install
+       install scriptlet.
+
+       Definition at line 136 of file rpmspec.h.
+
+       Referenced by doScript, freeSpec, newSpec, and
+       parseBuildInstallClean.
+
+   char SpecStruct::lbuf[4*BUFSIZ]
+       Definition at line 102 of file rpmspec.h.
+
+       Referenced by copyNextLine, and newSpec.
+
+   char* SpecStruct::line
+       Definition at line 105 of file rpmspec.h.
+
+       Referenced by addSource, copyNextLine, newSpec,
+       parseBuildInstallClean, parseChangelog, parseDescription,
+       parseFiles, parsePreamble, parsePrep, parseRCPOT,
+       parseScript, and readLine.
+
+   int SpecStruct::lineNum
+       Definition at line 106 of file rpmspec.h.
+
+       Referenced by addSource, copyNextLine, newSpec,
+       parseBuildInstallClean, parseDescription, parseFiles,
+       parseNoSource, parsePreamble, parsePrep, parseRCPOT,
+       parseScript, readLine, and stashSt.
+
+   MacroContext SpecStruct::macros
+       Definition at line 132 of file rpmspec.h.
+
+       Referenced by addSource, copyNextLine, doScript, newSpec,
+       and parseSpec.
+
+   char* SpecStruct::nextline
+       Definition at line 104 of file rpmspec.h.
+
+       Referenced by copyNextLine, and newSpec.
+
+   char SpecStruct::nextpeekc
+       Definition at line 103 of file rpmspec.h.
+
+       Referenced by copyNextLine, and newSpec.
+
+   int SpecStruct::noSource
+       Definition at line 127 of file rpmspec.h.
+
+       Referenced by newSpec.
+
+   int SpecStruct::numSources
+       Definition at line 126 of file rpmspec.h.
+
+       Referenced by addSource, newSpec, and processSourceFiles.
+
+   struct PackageStruct* SpecStruct::packages
+       Package list.
+
+       Definition at line 139 of file rpmspec.h.
+
+       Referenced by freeSpec, initSourceHeader, lookupPackage,
+       newPackage, newSpec, packageBinaries, parseChangelog,
+       parsePreamble, parseSpec, printNewSpecfile,
+       processBinaryFiles, processSourceFiles, readRPM,
+       rewriteRPM, and rpmQueryVerify.
+
+   char* SpecStruct::passPhrase
+       Definition at line 121 of file rpmspec.h.
+
+       Referenced by freeSpec, newSpec, packageBinaries,
+       packageSources, parseSpec, and rewriteRPM.
+
+   StringBuf SpecStruct::prep
+       prep scriptlet.
+
+       Definition at line 134 of file rpmspec.h.
+
+       Referenced by doScript, freeSpec, newSpec, and parsePrep.
+
+   struct ReadLevelEntry* SpecStruct::readStack
+       Definition at line 108 of file rpmspec.h.
+
+       Referenced by copyNextLine, freeSpec, newSpec, and
+       readLine.
+
+   int SpecStruct::recursing
+       parse is recursive?
+
+       Definition at line 114 of file rpmspec.h.
+
+       Referenced by buildSpec, freeSpec, newSpec, parsePreamble,
+       and parseSpec.
+
+   const char* SpecStruct::rootURL
+       Definition at line 96 of file rpmspec.h.
+
+       Referenced by doScript, freeSpec, newSpec, and parseSpec.
+
+   speclines SpecStruct::sl
+       Definition at line 98 of file rpmspec.h.
+
+       Referenced by freeSpec, newSpec, printNewSpecfile, and
+       readLine.
+
+   void* SpecStruct::sourceCpioList
+       Definition at line 130 of file rpmspec.h.
+
+       Referenced by freeSpec, newSpec, packageSources, and
+       processSourceFiles.
+
+   Header SpecStruct::sourceHeader
+       Definition at line 129 of file rpmspec.h.
+
+       Referenced by buildForTarget, freeSpec, initSourceHeader,
+       newSpec, packageSources, and processSourceFiles.
+
+   const char* SpecStruct::sourceRpmName
+       Definition at line 93 of file rpmspec.h.
+
+       Referenced by freeSpec, newSpec, packageBinaries, and
+       packageSources.
+
+   struct Source* SpecStruct::sources
+       Definition at line 125 of file rpmspec.h.
+
+       Referenced by addSource, freeSpec, newSpec, and
+       processSourceFiles.
+
+   const char* SpecStruct::specFile
+       Name of the spec file.
+
+       Definition at line 92 of file rpmspec.h.
+
+       Referenced by buildSpec, freeSpec, newSpec, parseSpec, and
+       processSourceFiles.
+
+   spectags SpecStruct::st
+       Definition at line 99 of file rpmspec.h.
+
+       Referenced by freeSpec, newSpec, printNewSpecfile, and
+       stashSt.
+
+   int SpecStruct::timeCheck
+       Definition at line 122 of file rpmspec.h.
+
+       Referenced by newSpec, and parseSpec.
+
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002              SpecStruct(3)

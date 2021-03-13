@@ -1,0 +1,255 @@
+tixExFileSelectBox(n) Tix Built-In Commands tixExFileSelectBox(n)
+
+
+
+_________________________________________________________________
+
+NAME
+       tixExFileSelectBox  -  Create  and manipulate tixExFileSe­
+       lectBox widgets
+
+SYNOPSIS
+       tixExFileSelectBox pathName ?options?
+
+SUPER-CLASS
+       The TixExFileSelectBox class does not have a  super-class.
+
+STANDARD OPTIONS
+       TixExFileSelectBox  supports all the standard options of a
+       frame widget. See the options(n) manual entry for  details
+       on the standard options.
+
+WIDGET-SPECIFIC OPTIONS
+       Command-Line Name:-browsecmd
+       Database Name:  browseCmd
+       Database Class: BrowseCmd
+
+              Specifies  a  command  to  call  whenever  the user
+              browses on a filename in the file listbox  (usually
+              by single-clicking on the filename). The command is
+              called with one argument, the complete pathname  of
+              the file.
+
+       Command-Line Name:-command
+       Database Name:  command
+       Database Class: Command
+
+              Specifies  the  command  to be called when the user
+              chooses on a filename the file listbox (usually  by
+              double-clicking  on  the  filename). The command is
+              called with one argument, the complete pathname  of
+              the file.
+
+       Command-Line Name:-dialog
+       Database Name:  dialog
+       Database Class: Dialog
+
+              Specifies a dialog box which contains this ExFileS­
+              electBox widget. The dialog box must be a widget of
+              the  class TixShell or its descendant classes. This
+              is an internal option and should  not  be  used  by
+              application programmers.
+
+       Command-Line Name:-dircmd
+       Database Name:  dircmd
+       Database Class: DirCmd
+
+              Specifies  the TCL command to be called when a file
+              listing is needed for a  particular  directory.  If
+              this  option  is  not  specified,  by  default  the
+              ExFileSelectBox widget will  attempt  to  read  the
+              directory  as  a  Unix  directory. On special occa­
+              sions, the application programmer may want to  sup­
+              ply  a  special method for reading directories: for
+              example, when he needs to  list  remote  files.  In
+              this  case,  the  -dircmd  option  can be used. The
+              specified  command  accepts  three  arguments:  the
+              first  is  the  name of the directory to be listed;
+              the second is a list of file patterns, the third is
+              a  Boolean  value  indicating  whether hidden files
+              should be listed. This command returns  a  list  of
+              names  of  the  files of this directory which match
+              with the file patterns.
+
+       Name:           directory
+       Class:          Directory
+       Switch:         -directory
+       Alias:          -dir
+
+              Specifies the current  directory  whose  files  and
+              sub-directories  are displayed in the ExFileSelect­
+              Box.
+
+       Command-Line Name:-disablecallback
+       Database Name:  disableCallback
+       Database Class: DisableCallback
+
+              A boolean value indicating whether callbacks should
+              be  disabled.  When  set  to  true, the TCL command
+              specified by the -command option  is  not  executed
+              when  the  -value  of  the  ExFileSelectBox  widget
+              changes.
+
+       Command-Line Name:-filetypes
+       Database Name:  fileTypes
+       Database Class: FileTypes
+
+              Specifies the file types that can be selected  from
+              the  "List  Files of Type:" ComboBox subwidget. The
+              value of this option must be a TCL list; each  item
+              of  this  list  must  in turn be a list of two ele­
+              ments.  The first element is a list  of  file  pat­
+              terns. The second element is a string that describe
+              these file patterns. For example:
+                  tixExFileSelectBox .box -filetypes  {
+                      {{*}    {All files}}
+                      {{*.txt}{Text files}}
+                      {{*.c *.h}{C source files}}
+                  }
+
+       Command-Line Name:-showhidden
+       Database Name:  showHidden
+       Database Class: ShowHidden
+
+              Specifies  whether  hidden  directories  should  be
+              shown. By default, a directory name starting with a
+              period "." is considered as a hidden directory.
+
+       Command-Line Name:-pattern
+       Database Name:  pattern
+       Database Class: Pattern
+
+              Specifies whether the file pattern(s) to match with
+              the  files  in  the  current directory. One or more
+              file patterns can be given at the  same  time.  For
+              example,  {*.c  *.h} will match all files that have
+              either the ".h" or ".c" extensions.
+
+       Name:           value
+       Class:          Value
+       Switch:         -value
+       Alias:          -selection
+
+              Specifies  the  name  of  the  filename   currently
+              selected by the user.
+
+SUBWIDGETS
+       Name:           cancel
+       Class:          Button
+
+              The button widget with the "Cancel" label.
+
+       Name:           dir
+       Class:          TixComboBox
+
+              The  ComboBox  subwidget  under  the  "Directories"
+              heading.
+
+       Name:           dirlist
+       Class:          TixDirList
+
+              The DirList subwidget that shows  the  hierarchical
+              list of directories.
+
+       Name:           file
+       Class:          TixComboBox
+
+              The ComboBox subwidget under the "Files" heading.
+
+       Name:           filelist
+       Class:          TixScrolledListBox
+
+              The  ScrolledListBox  subwidget that shows the list
+              of filenames.
+
+       Name:           hidden
+       Class:          Checkbutton
+
+              The checkbutton widget with the "Show Hidden Files"
+              label.
+
+       Name:           ok
+       Class:          Button
+
+              The button widget with the "OK" label.
+
+       Name:           types
+       Class:          TixComboBox
+
+              The  ComboBox  subwidget  under  the "List Files of
+              Type" heading.
+_________________________________________________________________
+
+DESCRIPTION
+       The tixExFileSelectBox command creates a new window (given
+       by  the  pathName  argument) and makes it into a ExFileSe­
+       lectBox widget. Additional options, described  above,  may
+       be specified on the command line or in the option database
+       to configure aspects of the ExFileSelectBox  such  as  its
+       cursor and relief.
+
+       The ExFileSelectBox widget is usually embedded in a tixEx­
+       FileSelectDialog widget. It provides an convenient  method
+       for  the  user to select files. The style of the ExFileSe­
+       lectBox widget is very similar to the standard file dialog
+       in MS Windows 3.1.
+
+WIDGET COMMANDS
+       The  tixExFileSelectBox  command creates a new Tcl command
+       whose name is the same as the path name of  the  ExFileSe­
+       lectBox's window. This command may be used to invoke vari­
+       ous operations on the widget. It has the following general
+       form:
+                     pathName option ?arg arg ...?
+       PathName  is the name of the command, which is the same as
+       the ExFileSelectBox widget's path  name.  Option  and  the
+       args determine the exact behavior of the command. The fol­
+       lowing commands are possible for ExFileSelectBox widgets:
+
+       pathName cget option
+              Returns the  current  value  of  the  configuration
+              option  given by option. Option may have any of the
+              values accepted by the tixExFileSelectBox  command.
+
+       pathName configure ?option? ?value option value ...?
+              Query  or  modify  the configuration options of the
+              widget.  If no option is specified, returns a  list
+              describing  all  of the available options for path­
+              Name (see Tk_ConfigureInfo for information  on  the
+              format  of this list).  If option is specified with
+              no value, then the command returns a list  describ­
+              ing the one named option (this list will be identi­
+              cal to  the  corresponding  sublist  of  the  value
+              returned  if  no  option  is specified).  If one or
+              more option-value pairs  are  specified,  then  the
+              command modifies the given widget option(s) to have
+              the  given  value(s);  in  this  case  the  command
+              returns  an  empty  string.  Option may have any of
+              the values accepted by the tixExFileSelectBox  com­
+              mand.
+
+       pathName filter
+              Forces  the ExFileSelectBox widget to re-filter all
+              the filenames according to the -pattern option.
+
+       pathName invoke
+              Forces  the  ExFileSelectBox  widget   to   perform
+              actions as if the user has pressed the "OK" button.
+
+       pathName subwidget  name ?args?
+              When no options are given, this command returns the
+              pathname of the subwidget of the specified name.
+
+              When  options  are given, the widget command of the
+              specified  subwidget  will  be  called  with  these
+              options.
+
+KEYWORDS
+       Tix(n)
+
+
+
+
+
+
+Tix                            4.0          tixExFileSelectBox(n)

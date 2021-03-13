@@ -1,0 +1,50 @@
+TIFFReadEncodedStrip(3T)                 TIFFReadEncodedStrip(3T)
+
+
+
+NAME
+       TIFFReadEncodedStrip  -  read  and  decode a strip of data
+       from an open TIFF file
+
+SYNOPSIS
+       #include <tiffio.h>
+       tsize_t TIFFReadEncodedStrip(TIFF*  tif,  tstrip_t  strip,
+       tdata_t buf, tsize_t size)
+
+DESCRIPTION
+       Read  the  specified  strip  of  data and place up to size
+       bytes of decompressed information in the  (user  supplied)
+       data buffer.
+
+NOTES
+       The  value  of  strip is a ``raw strip number.''  That is,
+       the caller must take into account whether or not the  data
+       are  organized in separate planes (PlanarConfiguration=2).
+       To read a full strip of data the data buffer should  typi­
+       cally be at least as large as the number returned by TIFF­
+       StripSize(3T).
+
+       The library attempts to hide bit- and  byte-ordering  dif­
+       ferences  between the image and the native machine by con­
+       verting data to the native machine order.  Bit reversal is
+       done  if  the  FillOrder  tag  is  opposite  to the native
+       machine bit order.  16- and 32-bit samples  are  automati­
+       cally  byte-swapped  if  the  file was written with a byte
+       order opposite to the native machine byte order,
+
+RETURN VALUES
+       The actual number of bytes of data that were placed in buf
+       is  returned;  TIFFReadEncodedStrip returns -1 if an error
+       was encountered.
+
+DIAGNOSTICS
+       All error messages are directed to the TIFFError(3T)  rou­
+       tine.
+
+SEE ALSO
+       libtiff(3T), TIFFOpen(3T), TIFFReadRawStrip(3T), TIFFRead­
+       Scanline(3T)
+
+
+
+                         October 15, 1995TIFFReadEncodedStrip(3T)

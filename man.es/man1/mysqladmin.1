@@ -1,0 +1,170 @@
+MYSQLADMIN(1)                                       MYSQLADMIN(1)
+
+
+
+NAME
+        mysqladmin [OPTIONS] command command....  - A utility for
+       performing administrative operations
+
+OPTION SYNOPSIS
+       mysqladmin [-#|--debug= logfile] [-f|--force]  [-?|--help]
+       [--character-sets-dir=directory]           [-C|--compress]
+       [-h|--host=[#]] [-p[pwd]]  [--password=[pwd]]  [-P|--port=
+       pnum]   [-i|--sleep=  sec]  [-E|--vertical]  [-s|--silent]
+       [-S|--socket=   #]   [-r|--relative]   [-t|--timeout=   #]
+       [-u|--user=     uname]    [-v|--verbose]    [-V|--version]
+       [-w|--wait[=retries]]
+
+OPTION DESCRIPTION
+       You can get a list of the options your version of mysqlad­
+       min supports by executing mysqladmin --help
+
+OPTIONS
+       -#|--debug=logfile
+              Output debug log. Often this is 'd:t:o,filename`
+
+       -f|--force
+              Don't  ask  for confirmation on drop database; with
+              multiple commands, continue even if an error occurs
+
+       -?|--help
+               Display help and exit
+
+       --character-sets-dir=directory
+              Set the character set directory
+
+       -C|--compress
+              Use compression in server/client protocol
+
+       -h|--host=hostname
+              Connect to host
+
+       -p|--password[=pwd]
+              Password  to use when connecting to server If pass­
+              word is not given it's asked from the tty
+
+       -P|--port=pnum
+              Port number to use for connection
+
+       -i|--sleep=sec
+              Execute commands  again  and  again  with  a  sleep
+              between
+
+       -r|--relative
+              Show difference between current and previous values
+              when used with -i extended-status
+
+       -E|--vertical
+              Print output vertically. Is similar to  --relative,
+              but prints output vertically.
+
+       -s|--silent
+              Silently exit if one can't connect to server
+
+       -S|--socket=file
+              Socket file to use for connection
+
+       -t|--timeout=sec
+              Timeout for connection to the mysqld server
+
+       -u|--user=uname
+              User for login if not current user
+
+       -v|--verbose
+              Write more information
+
+       -V|--version
+              Output version information and exit
+
+       -w|--wait
+                Wait and retry if connection is down
+
+COMMAND SYNOPSIS
+       MySQLADMIN  [create  databasename  ]  [drop  databasename]
+       [extended-status]   [flush-hosts]   [flush-logs]   [flush-
+       tables]  [flush-privileges]  [  kill id,id,... ] [password
+       new-password ]  [ping]  [processlist]  [reload]  [refresh]
+       [shutdown] [slave-start] [slave-stop] [status] [variables]
+       [version]
+
+
+COMMANDS
+       Where command is a one or more of: (Commands may be short­
+       ened)
+
+       create databasename
+              Create a new database
+
+       drop databasename
+              Delete a database and all its tables
+
+       extended-status
+              Gives an extended status message from the server
+
+       flush-hosts
+              Flush all cached hosts
+
+       flush-logs
+              Flush all logs
+
+       flush-status
+              Clear status variables
+
+       flush-tables
+              Flush all tables
+
+       flush-threads
+              Flush the thread cache
+
+       flush-privileges
+              Reload grant tables (same as reload)
+
+       kill id,id,...
+              Kill mysql threads
+
+       password new-password
+              Change old password to new-password
+
+       ping   Check if mysqld is alive
+
+       processlist
+              Show list of active threads in server
+
+       reload Reload grant tables
+
+       refresh
+              Flush all tables and close and open logfiles
+
+       shutdown
+              Take server down
+
+       status Gives a short status message from the server
+
+       variables
+              Prints variables available
+
+       version
+              Get version info from server
+
+SEE ALSO
+       isamchk (1), isamlog (1), mysqlaccess (1), mysqladmin (1),
+       mysqlbug (1), mysqld (1), mysqldump  (1),  mysqlshow  (1),
+       msql2mysql  (1), perror (1), replace (1), safe_mysqld (1),
+       which1 (1), zap (1),
+
+AUTHOR
+       Ver 1.0, distribution 3.23.29a  Michael  (Monty)  Widenius
+       (monty@tcx.se),  TCX  Datakonsult  AB (http://www.tcx.se).
+       This software comes with no warranty.  Manual page  by  L.
+       (Kill-9)  Pedersen  (kill-9@kill-9.dk),  Mercurmedia  Data
+       Model Architect / system  developer  (http://www.mercurme­
+       dia.com)
+
+
+
+
+
+
+
+
+                         18 December 2000           MYSQLADMIN(1)

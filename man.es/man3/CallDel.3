@@ -1,0 +1,68 @@
+Tcl_CallWhenDeleted(3)Tcl Library ProceduresTcl_CallWhenDeleted(3)
+
+
+
+_________________________________________________________________
+
+NAME
+       Tcl_CallWhenDeleted, Tcl_DontCallWhenDeleted - Arrange for
+       callback when interpreter is deleted
+
+SYNOPSIS
+       #include <tcl.h>
+
+       Tcl_CallWhenDeleted(interp, proc, clientData)
+
+       Tcl_DontCallWhenDeleted(interp, proc, clientData)
+
+ARGUMENTS
+       Tcl_Interp             *interp      (in)      Interpreter
+                                                     with   which
+                                                     to   associ­
+                                                     ated   call­
+                                                     back.
+
+       Tcl_InterpDeleteProc   *proc        (in)      Procedure to
+                                                     call    when
+                                                     interp    is
+                                                     deleted.
+
+       ClientData             clientData   (in)      Arbitrary
+                                                     one-word
+                                                     value     to
+                                                     pass      to
+                                                     proc.
+_________________________________________________________________
+
+
+DESCRIPTION
+       Tcl_CallWhenDeleted  arranges  for  proc  to  be called by
+       Tcl_DeleteInterp if/when interp is deleted at some  future
+       time.  Proc will be invoked just before the interpreter is
+       deleted, but the interpreter will still be  valid  at  the
+       time  of  the call.  Proc should have arguments and result
+       that match the type Tcl_InterpDeleteProc:
+              typedef void Tcl_InterpDeleteProc(
+                ClientData clientData,
+                Tcl_Interp *interp);
+       The clientData and interp parameters  are  copies  of  the
+       clientData  and  interp  arguments  given to Tcl_CallWhen­
+       Deleted.  Typically, clientData points to an  application-
+       specific  data structure that proc uses to perform cleanup
+       when an interpreter is about to go away.   Proc  does  not
+       return a value.
+
+       Tcl_DontCallWhenDeleted   cancels   a   previous  call  to
+       Tcl_CallWhenDeleted with the same arguments, so that  proc
+       won't  be  called  after  all  when interp is deleted.  If
+       there is no deletion callback that matches  interp,  proc,
+       and  clientData  then  the call to Tcl_DontCallWhenDeleted
+       has no effect.
+
+
+KEYWORDS
+       callback, delete, interpreter
+
+
+
+Tcl                            7.0         Tcl_CallWhenDeleted(3)

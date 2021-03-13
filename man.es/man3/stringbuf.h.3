@@ -1,0 +1,90 @@
+lib/stringbuf.h(3)                             lib/stringbuf.h(3)
+
+
+
+NAME
+       lib/stringbuf.h -
+
+SYNOPSIS
+   Defines
+       #define appendStringBuf(sb, s)   appendStringBufAux(sb, s,
+           0)
+       #define appendLineStringBuf(sb, s)
+           appendStringBufAux(sb, s, 1)
+
+   Typedefs
+       typedef StringBufRec * StringBuf
+
+   Functions
+       StringBuf newStringBuf (void)
+       StringBuf freeStringBuf (StringBuf sb)
+       void truncStringBuf (StringBuf sb)
+       char * getStringBuf (StringBuf sb)
+       void stripTrailingBlanksStringBuf (StringBuf sb)
+       void appendStringBufAux (StringBuf sb, const char *s, int
+           nl)
+
+DETAILED DESCRIPTION
+       Definition in file stringbuf.h.
+
+DEFINE DOCUMENTATION
+   #define appendLineStringBuf(sb, s)   appendStringBufAux(sb, s,
+       1)
+       Definition at line 48 of file stringbuf.h.
+
+       Referenced by addFileToTag, doPatchMacro, doSetupMacro,
+       generateDepends, parseDescription, parseForSimple,
+       parsePrep, and processSourceFiles.
+
+   #define appendStringBuf(sb, s)   appendStringBufAux(sb, s, 0)
+       Definition at line 44 of file stringbuf.h.
+
+       Referenced by addFileToTagAux, doSetupMacro,
+       generateDepends, getOutputFrom, parseBuildInstallClean,
+       parseChangelog, parseFiles, parseForSimple, parsePrep,
+       parseScript, processPackageFiles, and
+       rpmReadPackageManifest.
+
+TYPEDEF DOCUMENTATION
+   typedef struct StringBufRec* StringBuf
+       Definition at line 10 of file stringbuf.h.
+
+FUNCTION DOCUMENTATION
+   void appendStringBufAux (StringBuf sb, const char * s, int nl)
+       Definition at line 83 of file stringbuf.c.
+
+   StringBuf freeStringBuf (StringBuf sb)
+       Definition at line 50 of file stringbuf.c.
+
+       Referenced by addFileToArrayTag, addFileToTag,
+       addFileToTagAux, doSetupMacro, freePackage, freeSpec,
+       generateDepends, parseChangelog, parseDescription,
+       parsePrep, parseScript, processSourceFiles, and
+       rpmReadPackageManifest.
+
+   char* getStringBuf (StringBuf sb)
+       Definition at line 78 of file stringbuf.c.
+
+       Referenced by addChangelog, addFileToArrayTag,
+       addFileToTag, doScript, generateDepends, parsePrep,
+       parseScript, processPackageFiles, processSourceFiles, and
+       rpmReadPackageManifest.
+
+   StringBuf newStringBuf (void)
+       Definition at line 38 of file stringbuf.c.
+
+   void stripTrailingBlanksStringBuf (StringBuf sb)
+       Definition at line 66 of file stringbuf.c.
+
+       Referenced by parseDescription, and parseScript.
+
+   void truncStringBuf (StringBuf sb)
+       Definition at line 59 of file stringbuf.c.
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002         lib/stringbuf.h(3)

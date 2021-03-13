@@ -1,0 +1,59 @@
+lib/manifest.h(3)                               lib/manifest.h(3)
+
+
+
+NAME
+       lib/manifest.h - Routines to expand a manifest containing
+       glob expressions into an argv list.
+
+SYNOPSIS
+   Functions
+       char * rpmPermsString (int mode)
+           Return ls(1)-like formatted mode string.
+       int rpmReadPackageManifest (FD_t fd, int *argcPtr, const
+           char ***argvPtr)
+           Read manifest, glob items, and append to existing
+           args.
+
+DETAILED DESCRIPTION
+       Routines to expand a manifest containing glob expressions
+       into an argv list.
+
+
+
+       Definition in file manifest.h.
+
+FUNCTION DOCUMENTATION
+   char* rpmPermsString (int mode)
+       Return ls(1)-like formatted mode string.
+
+       Parameters:
+
+       mode   file mode
+
+       Returns:
+           (malloc'd) formatted mode string
+
+       Definition at line 16 of file manifest.c.
+
+       Referenced by permsFormat, and printFileInfo.
+
+   int rpmReadPackageManifest (FD_t fd, int * argcPtr, const char
+       *** argvPtr)
+       Read manifest, glob items, and append to existing args.
+
+       Todo:
+            Infinite loops through manifest files exist, operator
+           error for now.
+
+       Definition at line 60 of file manifest.c.
+
+       Referenced by rpmInstall, and rpmQueryVerify.
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002          lib/manifest.h(3)

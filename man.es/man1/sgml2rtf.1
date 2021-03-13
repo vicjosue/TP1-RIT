@@ -1,0 +1,50 @@
+SGML2RTF(1)                                           SGML2RTF(1)
+
+
+
+NAME
+       sgml2rtf - create RTF output from a SGML source file
+
+SYNOPSIS
+       sgml2rtf [generic_option...] [--twosplit] file[.sgml]
+
+DESCRIPTION
+       sgml2rtf converts a SGML source file to RTF, the Rich Text
+       Tormat used by the Microsoft Windows help system.   Output
+       will  appear in the top level file file.rtf and file-n.rtf
+       for each section, where file  is  the  name  of  the  SGML
+       source  file.   The RTF output is tailored for compilation
+       by the Windows Help Compiler (hc31.exe).
+
+       The attribute/value pair "output=rtf" is  set  for  condi­
+       tionals.
+
+OPTIONS
+       sgml2rtf  accepts  all  the  generic  options described in
+       sgmltools(1),and:
+
+       --twosplit, -2
+              Splits files both at n. sections and  n.m.  subsec­
+              tions
+
+       file   The   SGML   source  file,  named  either  file  or
+              file.sgml
+
+FILES
+       Many files and executables  in  $LINUXDOCLIB  and  $LINUX­
+       DOCBIN are used.
+
+BUGS
+       None known.
+
+AUTHOR
+       Steve   Tynor   <tynor@atlanta.twr.com>,   Cees  de  Groot
+       <cg@pobox.com>.
+
+SEE ALSO
+       sgmltools(1), sgml2html(1),  sgml2info(1),  sgml2latex(1),
+       sgml2lyx(1), sgml2txt(1), sgmlcheck(1).
+
+
+
+                           10 Nov 1997                SGML2RTF(1)

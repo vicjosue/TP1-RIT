@@ -1,0 +1,94 @@
+tixNBFrame(n)         Tix Built-In Commands         tixNBFrame(n)
+
+
+
+_________________________________________________________________
+
+NAME
+       tixNBFrame - Create and manipulate Tix NoteBook Frame wid­
+       gets
+
+SYNOPSIS
+       tixNBFrame pathName ?options?
+
+STANDARD OPTIONS
+       -background     -borderWidth   -cursor         -disabledForeground
+       -foreground     -font                          -height-highlightColor
+       -highlightThickness            -relief         -takeFocus
+       -width
+
+       See the options manual entry for details on  the  standard
+       options.
+
+WIDGET-SPECIFIC OPTIONS
+       Command-Line Name:-backpagecolor
+       Database Name:  backPageColor
+       Database Class: BackPageColor
+
+              Specifies  the color for the extra space on the row
+              of tabs which is not covered by any page tabs.
+
+       Command-Line Name:-focuscolor
+       Database Name:  focusColor
+       Database Class: FocusColor
+
+              Specifies the color for the focus highlight.
+
+       Command-Line Name:-inactivebackground
+       Database Name:  inactiveBackground
+       Database Class: InactiveBackground
+
+              Specifies the color  for  the  inactive  tabs  (the
+              active tab always have the same background color as
+              the notebook).
+
+       Command-Line Name:-tabpadx
+       Database Name:  tabPadX
+       Database Class: Pad
+
+              The horizontal padding around the  text  labels  on
+              the page tabs.
+
+       Command-Line Name:-tabpady
+       Database Name:  tabPadY
+       Database Class: Pad
+
+              The  vertical padding around the text labels on the
+              page tabs.
+_________________________________________________________________
+
+DESCRIPTION
+       The NBFrame widget is used privately inside  the  TixNote­
+       Book(n)  widget  to display the page tabs. The application
+       programmer should never create a NBFrame widget  directly.
+       The  sole  purpose  of  this maual page is to describe the
+       options that can be used to configure  the  appearance  of
+       the TixNoteBook widget.
+
+       The  name  of the NBFrame subwidget inside the TixNoteBook
+       widget is called nbframe. It can  be  accessed  using  the
+       subwidget   command  of  the  TixNoteBook  widget  or  the
+       -options switch. See below for an example.
+
+
+EXAMPLE
+              set nb [tixNoteBook .nb -options {
+                  nbframe.BackPageColor gray60
+              }]
+              $nb subwidget nbframe config -font fixed
+
+              $nb add page1 -label "Page1"
+              set page [$nb subwidget page1]
+              button $page.b1
+              pack $page.b1
+
+              pack $nb -expand yes -fill both
+
+KEYWORDS
+       Tix(n), tixNoteBook(n)
+
+
+
+
+
+Tix                            4.0                  tixNBFrame(n)

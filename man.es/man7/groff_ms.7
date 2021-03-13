@@ -1,0 +1,150 @@
+GROFF_MS(7)                                           GROFF_MS(7)
+
+
+
+NAME
+       groff_ms - groff ms macros
+
+SYNOPSIS
+       groff -ms [ options...  ] [ files...  ]
+       groff -m ms [ options...  ] [ files...  ]
+
+DESCRIPTION
+       This  manual  page  describes  the  GNU  version of the ms
+       macros, which is part of  the  groff  document  formatting
+       system.  The groff ms macros are intended to be compatible
+       with the documented behaviour  of  the  4.3  BSD  Unix  ms
+       macros subject to the following limitations:
+
+       ·      the  internals  of  groff ms are not similar to the
+              internals of Unix ms and so documents  that  depend
+              upon implementation details of Unix ms may well not
+              work with groff ms;
+
+       ·      there is no support for typewriter-like devices;
+
+       ·      Berkeley localisms, in particular  the  TM  and  CT
+              macros, are not implemented;
+
+       ·      groff ms does not provide cut marks;
+
+       ·      multiple  line spacing is not allowed (use a larger
+              vertical spacing instead);
+
+       ·      groff ms does not work in  compatibility  mode  (eg
+              with the -C option);
+
+       ·      the  error-handling policy of groff ms is to detect
+              and report errors, rather than silently  to  ignore
+              them.
+
+       The groff ms macros make use of many features of GNU troff
+       and therefore cannot be used with any other troff.
+
+       Bell Labs localisms are not implemented in either the  BSD
+       ms macros or in the groff ms macros.
+
+       Some  Unix ms documentation says that the CW and GW number
+       registers can be used to control the column width and gut­
+       ter width respectively.  This is not the case.  These num­
+       ber registers are not used in groff ms.
+
+       Macros that cause a reset set  the  indent.   Macros  that
+       change  the  indent  do  not  increment  or  decrement the
+       indent, but rather set  it  absolutely.   This  can  cause
+       problems  for  documents  that define additional macros of
+       their own.  The solution is to use not the in request  but
+       instead the RS and RE macros.
+
+       The number register GS is set to 1 by the groff ms macros,
+       but is not used by the Unix ms  macros.   It  is  intended
+       that  documents  that  need  to determine whether they are
+       being formatted with Unix ms or groff ms make use of  this
+       number register.
+
+       Footnotes  are implemented so that they can safely be used
+       within  keeps  and   displays.    Automatically   numbered
+       footnotes  within  floating keeps are not recommended.  It
+       is safe to have another \** between a \** and  the  corre­
+       sponding  .FS;  it  is  required  only that each .FS occur
+       after the corresponding \** and that  the  occurrences  of
+       .FS are in the same order as the corresponding occurrences
+       of \**.
+
+       The strings \*{ and \*} can be used to  begin  and  end  a
+       superscript.
+
+       Some  Unix  V10 ms features are implemented.  The B, I and
+       BI macros can have an optional third argument  which  will
+       be  printed in the current font before the first argument.
+       There is a macro CW like B that  changes  to  a  constant-
+       width font.
+
+       The  following strings can be redefined to adapt the groff
+       ms macros to languages other than English:
+
+       String      Default Value
+       REFERENCES  References
+       ABSTRACT    ABSTRACT
+       TOC         Table of Contents
+       MONTH1      January
+       MONTH2      February
+       MONTH3      March
+       MONTH4      April
+       MONTH5      May
+       MONTH6      June
+       MONTH7      July
+       MONTH8      August
+       MONTH9      September
+       MONTH10     October
+       MONTH11     November
+       MONTH12     December
+
+       The font family is reset from the string FAM; at  initial­
+       ization  if this string is undefined it is set to the cur­
+       rent font family.  The point size, vertical  spacing,  and
+       inter-paragraph  spacing  for footnotes are taken from the
+       number registers FPS,  FVS,  and  FPD;  at  initialization
+       these  are  set to \n(PS-2, \n[FPS]+2, and \n(PD/2 respec­
+       tively; however,  if  any  of  these  registers  has  been
+       defined  before  initialization,  it will not be set.  The
+       hyphenation flags (as set by the .hy request) are set from
+       the  HY register; if this has not been defined at initial­
+       ization, it will be set to 14.
+
+       Right-aligned displays are available with .DS R and .RD.
+
+       The following conventions are used for  names  of  macros,
+       strings and number registers.  External names available to
+       documents that use the groff ms macros contain only upper­
+       case  letters  and  digits.   Internally  the  macros  are
+       divided into modules.  Names used only within  one  module
+       are  of the form module*name.  Names used outside the mod­
+       ule in which they are defined are of the form module@name.
+       Names  associated with a particular environment are of the
+       form environment:name; these are used only within the  par
+       module,  and  name  does  not  have a module prefix.  Con­
+       structed names used to implement arrays are  of  the  form
+       array!index.  Thus the groff ms macros reserve the follow­
+       ing names:
+
+       ·      names containing *;
+
+       ·      names containing @;
+
+       ·      names containing :;
+
+       ·      names containing only uppercase letters and digits.
+
+FILES
+       /usr/share/groff/1.17.2/tmac/ms.tmac  (a  wrapper file for
+       s.tmac)
+       /usr/share/groff/1.17.2/tmac/s.tmac
+
+SEE ALSO
+       groff(1), troff(1), tbl(1), pic(1), eqn(1)
+       ms(7)
+
+
+
+Groff Version 1.17.2       27 June 2001               GROFF_MS(7)

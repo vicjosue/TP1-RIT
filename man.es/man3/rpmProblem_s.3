@@ -1,0 +1,67 @@
+rpmProblem_s(3)                                   rpmProblem_s(3)
+
+
+
+NAME
+       rpmProblem_s -
+
+SYNOPSIS
+       #include <rpmlib.h>
+
+
+   Data Fields
+       const char * pkgNEVR
+       const char * altNEVR
+       const void * key
+       Header h
+       rpmProblemType type
+       int ignoreProblem
+       const char * str1
+       unsigned long ulong1
+
+FIELD DOCUMENTATION
+   const char* rpmProblem_s::altNEVR
+       Definition at line 929 of file rpmlib.h.
+
+       Referenced by rpmProblemString.
+
+   Header rpmProblem_s::h
+       Definition at line 931 of file rpmlib.h.
+
+   int rpmProblem_s::ignoreProblem
+       Definition at line 933 of file rpmlib.h.
+
+       Referenced by rpmProblemSetPrint.
+
+   const void* rpmProblem_s::key
+       Definition at line 930 of file rpmlib.h.
+
+   const char* rpmProblem_s::pkgNEVR
+       Definition at line 928 of file rpmlib.h.
+
+       Referenced by rpmProblemString.
+
+   const char* rpmProblem_s::str1
+       Definition at line 934 of file rpmlib.h.
+
+       Referenced by rpmProblemString, and rpmtransRun.
+
+   rpmProblemType rpmProblem_s::type
+       Definition at line 932 of file rpmlib.h.
+
+       Referenced by rpmProblemString, and rpmtransRun.
+
+   unsigned long rpmProblem_s::ulong1
+       Definition at line 935 of file rpmlib.h.
+
+       Referenced by rpmdepFreeConflicts, rpmProblemString, and
+       rpmtransRun.
+
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002            rpmProblem_s(3)

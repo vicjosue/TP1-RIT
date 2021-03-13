@@ -1,0 +1,135 @@
+LOCALEDEF(1)                                         LOCALEDEF(1)
+
+
+
+NAME
+       localedef - compile locale definition files
+
+SYNOPSIS
+       localedef   [-f   charmapfile]  [-i  inputfile]  [--force]
+       [--verbose] [--posix] [--quiet] outputpath
+       localedef --version
+       localedef --help
+
+DESCRIPTION
+       The localedef program  reads  the  indicated  charmap  and
+       input  files,  compiles  them  to  a  form  usable  by the
+       locale(7) functions in the C library, and places  the  six
+       output files in the outputpath directory.
+
+       If  no charmapfile is given, POSIX is used by default.  If
+       no inputfile is given, or if it is given as  -,  localedef
+       reads from standard input.
+
+OPTIONS
+       Most options can have either short or long forms.  If mul­
+       tiple short options are used, they can be combined in  one
+       word  (e.g.   -cv).   If  an option takes an argument, the
+       argument can be given separately as the next word,  or  it
+       can be written as option=argument.
+
+       -f charmapfile, --charmap=charmapfile
+              Specify  the file that defines the symbolic charac­
+              ter names that are used by the input file.  If  the
+              file  is  in  the  default  directory for character
+              maps, it is not necessary to specify the full path­
+              name.    This   default  directory  is  printed  by
+              localedef --help.
+
+       -i inputfile, --inputfile=inputfile
+              Specify the locale definition file to compile.   If
+              inputfile is not absolute, localedef will also look
+              in the directory specified by the environment vari­
+              able  I18NPATH  and  in  the  default directory for
+              locale definition files.  This default directory is
+              printed by localedef --help.
+
+       -c, --force
+              Write the output files even if warnings were gener­
+              ated about the input file.
+
+       -v, --verbose
+              Generate extra warnings about errors that are  nor­
+              mally ignored.
+
+       --quiet
+              Suppress all notifications and warnings, and report
+              only fatal errors.
+
+       --posix
+              Be strictly POSIX conformant.   Implies  --verbose.
+              This  option  currently has no other effect.  Posix
+              conformance is assumed if the environment  variable
+              POSIXLY_CORRECT is set.
+
+       -u codeset, --code-set-name=codeset
+              This option is accepted but ignored.
+
+       -h, --help
+              Print  a  usage  summary and exit.  Also prints the
+              default paths used by localedef.
+
+       -V, --version
+              Print the version number, license,  and  disclaimer
+              of warranty for localedef.
+
+ENVIRONMENT
+       POSIXLY_CORRECT
+              The  --posix  flag  is  assumed if this environment
+              variable is set.
+
+       I18NPATH
+              The default directory for locale definition  files.
+
+FILES
+       /usr/share/i18n/charmaps
+              Usual default charmap path.
+
+       /usr/share/locale
+              Usual  default  output  path.   See the output from
+              localedef --help for the paths used  in  your  ver­
+              sion.
+
+       outputpath/LC_COLLATE
+              One  of  the  output files.  It describes the rules
+              for comparing strings in the locale's alphabet.
+
+       outputpath/LC_CTYPE
+              One of the output files.  It  contains  information
+              about  character cases and case conversions for the
+              locale.
+
+       outputpath/LC_MONETARY
+              One of the output files.  It describes the way mon­
+              etary values should be formatted in the locale.
+
+       outputpath/LC_MESSAGES/SYS_LC_MESSAGES
+              One  of  the output files.  It contains information
+              about the language messages should be  printed  in,
+              and  what  an  affirmative or negative answer looks
+              like.
+
+       outputpath/LC_NUMERIC
+              One of the output files.  It  describes  the  rules
+              for formatting numbers in the locale.
+
+       outputpath/LC_TIME
+              One  of  the  output files.  It describes the rules
+              for formatting times and dates in the locale.
+
+SEE ALSO
+       locale(5), locale(7), locale(1)
+
+AUTHOR
+       The program was written by Ulrich Drepper.
+
+       This   manpage   was   written   by    Richard    Braakman
+       <dark@xs4all.nl> on behalf of the Debian GNU/Linux Project
+       and anyone else who wants it.  The  manpage  is  not  sup­
+       ported by the GNU libc maintainers and may be out of date.
+
+STANDARDS
+       This program conforms to the POSIX standard P1003.2
+
+
+

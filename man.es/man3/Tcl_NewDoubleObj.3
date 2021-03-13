@@ -1,0 +1,94 @@
+Tcl_DoubleObj(3)      Tcl Library Procedures     Tcl_DoubleObj(3)
+
+
+
+_________________________________________________________________
+
+NAME
+       Tcl_NewDoubleObj, Tcl_SetDoubleObj, Tcl_GetDoubleFromObj -
+       manipulate Tcl objects as floating-point values
+
+SYNOPSIS
+       #include <tcl.h>
+
+       Tcl_Obj *
+       Tcl_NewDoubleObj(doubleValue)
+
+       Tcl_SetDoubleObj(objPtr, doubleValue)
+
+       int
+       Tcl_GetDoubleFromObj(interp, objPtr, doublePtr)
+
+ARGUMENTS
+       double       doubleValue   (in)      A    double-precision
+                                            floating  point value
+                                            used to initialize or
+                                            set  a double object.
+
+       Tcl_Obj      *objPtr       (in/out)  For Tcl_SetDoubleObj,
+                                            this  points  to  the
+                                            object  to  be   con­
+                                            verted    to   double
+                                            type.   For  Tcl_Get­
+                                            DoubleFromObj,   this
+                                            refers to the  object
+                                            from  which  to get a
+                                            double   value;    if
+                                            objPtr    does    not
+                                            already  point  to  a
+                                            double   object,   an
+                                            attempt will be  made
+                                            to convert it to one.
+
+       Tcl_Interp   *interp       (in/out)  If  an  error  occurs
+                                            during conversion, an
+                                            error message is left
+                                            in  the interpreter's
+                                            result object  unless
+                                            interp is NULL.
+
+       double       *doublePtr    (out)     Points  to  place  to
+                                            store   the    double
+                                            value  obtained  from
+                                            objPtr.
+_________________________________________________________________
+
+
+DESCRIPTION
+       These procedures are used to create, modify, and read dou­
+       ble   Tcl  objects  from  C  code.   Tcl_NewDoubleObj  and
+       Tcl_SetDoubleObj will create a new object of  double  type
+       or modify an existing object to have double type.  Both of
+       these procedures set the object to have the  double-preci­
+       sion  floating  point value given by doubleValue; Tcl_New­
+       DoubleObj returns a pointer to a newly created object with
+       reference  count  zero.   Both procedures set the object's
+       type to be double and  assign  the  double  value  to  the
+       object's   internal   representation  doubleValue  member.
+       Tcl_SetDoubleObj invalidates any old string representation
+       and,  if  the object is not already a double object, frees
+       any old internal representation.
+
+       Tcl_GetDoubleFromObj attempts to  return  a  double  value
+       from  the Tcl object objPtr.  If the object is not already
+       a double object, it will attempt to convert it to one.  If
+       an  error  occurs  during conversion, it returns TCL_ERROR
+       and leaves an error message in  the  interpreter's  result
+       object  unless  interp  is  NULL.   Otherwise,  it returns
+       TCL_OK and stores the double value in the address given by
+       doublePtr.   If the object is not already a double object,
+       the conversion will free any old internal  representation.
+
+
+SEE ALSO
+       Tcl_NewObj, Tcl_DecrRefCount, Tcl_IncrRefCount, Tcl_GetOb­
+       jResult
+
+
+KEYWORDS
+       double, double object, double type,  internal  representa­
+       tion, object, object type, string representation
+
+
+
+Tcl                            8.0               Tcl_DoubleObj(3)

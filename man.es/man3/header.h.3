@@ -1,0 +1,370 @@
+lib/header.h(3)                                   lib/header.h(3)
+
+
+
+NAME
+       lib/header.h - An rpm header carries all information about
+       a package.
+
+SYNOPSIS
+       #include <stdio.h>
+       #include <rpmio.h>
+       #include <hdrinline.h>
+
+   Data Structures
+       struct HE_s
+       struct headerSprintfExtension_s
+       struct headerTagTableEntry_s
+       union hRET_s
+       struct HV_s
+
+   Defines
+       #define RPM_MIN_TYPE   0
+       #define RPM_MAX_TYPE   9
+       #define HEADER_IMAGE   61
+           Header private tags.
+       #define HEADER_SIGNATURES   62
+       #define HEADER_IMMUTABLE   63
+       #define HEADER_REGIONS   64
+       #define HEADER_I18NTABLE   100
+       #define HEADER_SIGBASE   256
+       #define HEADER_TAGBASE   1000
+
+   Typedefs
+       typedef int int_32
+       typedef short int int_16
+       typedef char int_8
+       typedef unsigned int uint_32
+       typedef unsigned short uint_16
+       typedef const char * errmsg_t
+       typedef int_32 * hTAG_t
+       typedef int_32 * hTYP_t
+       typedef const void * hPTR_t
+       typedef int_32 * hCNT_t
+       typedef headerToken * Header
+       typedef headerIteratorS * HeaderIterator
+       typedef headerTagTableEntry_s * headerTagTableEntry
+       typedef char *(* headerTagFormatFunction )(int_32 type,
+           const void *data, char *formatPrefix, int padding, int
+           element)
+       typedef int(* headerTagTagFunction )(Header h, hTYP_t
+           type, hPTR_t *data, hCNT_t count, int *freeData)
+       typedef headerSprintfExtension_s * headerSprintfExtension
+       typedef enum rpmTagType_e rpmTagType
+       typedef enum rpmSubTagType_e rpmSubTagType
+       typedef hRET_s * hRET_t
+       typedef HE_s * HE_t
+       typedef Header(* HDRnew )(void)
+       typedef Header(* HDRfree )(Header h)
+       typedef Header(* HDRlink )(Header h)
+       typedef void(* HDRsort )(Header h)
+       typedef void(* HDRunsort )(Header h)
+       typedef unsigned int(* HDRsizeof )(Header h, enum hMagic
+           magicp)
+       typedef void *(* HDRunload )(Header h)
+       typedef Header(* HDRreload )(Header h, int tag)
+       typedef Header(* HDRcopy )(Header h)
+       typedef Header(* HDRload )(void *uh)
+       typedef Header(* HDRcopyload )(const void *uh)
+       typedef Header(* HDRhdrread )(FD_t fd, enum hMagic magicp)
+       typedef int(* HDRhdrwrite )(FD_t fd, Header h, enum hMagic
+           magicp)
+       typedef int(* HDRisentry )(Header h, int_32 tag)
+       typedef void *(* HDRfreetag )(Header h, const void *data,
+           rpmTagType type)
+       typedef int(* HDRget )(Header h, int_32 tag, hTYP_t type,
+           void **p, hCNT_t c)
+       typedef int(* HDRgetmin )(Header h, int_32 tag, hTYP_t
+           type, hPTR_t *p, hCNT_t c)
+       typedef int(* HDRadd )(Header h, int_32 tag, int_32 type,
+           const void *p, int_32 c)
+       typedef int(* HDRappend )(Header h, int_32 tag, int_32
+           type, const void *p, int_32 c)
+       typedef int(* HDRaddorappend )(Header h, int_32 tag,
+           int_32 type, const void *p, int_32 c)
+       typedef int(* HDRaddi18n )(Header h, int_32 tag, const
+           char *string, const char *lang)
+       typedef int(* HDRmodify )(Header h, int_32 tag, int_32
+           type, const void *p, int_32 c)
+       typedef int(* HDRremove )(Header h, int_32 tag)
+       typedef char *(* HDRhdrsprintf )(Header h, const char
+           *fmt, const struct headerTagTableEntry_s *tags, const
+           struct headerSprintfExtension_s *extensions, errmsg_t
+           *errmsg)
+       typedef void(* HDRcopytags )(Header headerFrom, Header
+           headerTo, hTAG_t tagstocopy)
+       typedef HeaderIterator(* HDRfreeiter )(HeaderIterator hi)
+       typedef HeaderIterator(* HDRinititer )(Header h)
+       typedef int(* HDRnextiter )(HeaderIterator hi, hTAG_t tag,
+           hTYP_t type, hPTR_t *p, hCNT_t c)
+       typedef HV_s * HV_t
+
+   Enumerations
+       enum headerSprintfExtenstionType { HEADER_EXT_LAST =  0,
+           HEADER_EXT_FORMAT, HEADER_EXT_MORE, HEADER_EXT_TAG }
+       enum hMagic { HEADER_MAGIC_NO =  0, HEADER_MAGIC_YES =  1
+           }
+       enum rpmTagType_e { RPM_NULL_TYPE =   0, RPM_CHAR_TYPE =
+           1, RPM_INT8_TYPE =   2, RPM_INT16_TYPE =   3,
+           RPM_INT32_TYPE =   4, RPM_STRING_TYPE =   6,
+           RPM_BIN_TYPE =   7, RPM_STRING_ARRAY_TYPE =   8,
+           RPM_I18NSTRING_TYPE }
+       enum rpmSubTagType_e { RPM_REGION_TYPE =  -10,
+           RPM_BIN_ARRAY_TYPE =  -11, RPM_XREF_TYPE =  -12 }
+
+   Functions
+       void * headerFreeData (const void *data, rpmTagType type)
+
+   Variables
+       const struct headerSprintfExtension_s headerDefaultFormats
+           []
+
+DETAILED DESCRIPTION
+       An rpm header carries all information about a package.
+
+        A header is a collection of data elements called tags.
+       Each tag has a data type, and includes 1 or more values.
+
+       Historical Issues
+            Here's a brief description of
+           features/incompatibilities that have been added to
+           headers and tags.
+
+
+       version 1
+
+       Support for version 1 headers was removed in rpm-4.0.
+
+
+       version 2
+
+
+              Todo:
+                  Document version2 headers.
+
+
+       version 3 (added in rpm-3.0)
+
+       Added RPM_I18NSTRING_TYPE as an associative array
+       reference for i18n locale dependent single element tags
+       (i.e Group).
+
+       Added an 8 byte magic string to headers in packages on-
+       disk. The magic string was not added to headers in the
+       database.
+
+
+       version 4 (added in rpm-4.0)
+
+       Represent file names as a (dirname/basename/dirindex)
+       triple rather than as an absolute path name. Legacy
+       package headers are converted when the header is read.
+       Legacy database headers are converted when the database is
+       rebuilt.
+
+       Simplify dependencies by eliminating the implict check on
+       package name/version/release in favor of an explict check
+       on package provides. Legacy package headers are converted
+       when the header is read. Legacy database headers are
+       converted when the database is rebuilt.
+
+       (rpm-4.0.2) The original package header (and all original
+       metadata) is preserved in what's called an 'immutable
+       header region'. The original header can be retrieved as an
+       RPM_BIN_TYPE, just like any other tag, and the original
+       header reconstituted using headerLoad().
+
+       (rpm-4.0.2) The signature tags are added (and renumbered
+       to avoid tag value collisions) to the package header
+       during package installation.
+
+       (rpm-4.0.3) A SHA1 digest of the original header is
+       appended (i.e. detached digest) to the immutable header
+       region to verify changes to the original header.
+
+       (rpm-4.0.3) Private methods (e.g. headerLoad(),
+       headerUnload(), etc.) to permit header data to be
+       manipulated opaquely through vectors.
+
+       (rpm-4.0.3) Sanity checks on header data to limit tags to
+       65K, bytes to 16Mb, and total metadata size to 32Mb added.
+
+       Development Issues
+            Here's a brief description of future
+           features/incompatibilities that will be added to
+           headers.
+
+
+       Private header methods.
+
+       Private methods for the transaction element file info
+       TFI_t may be used as proof-of-concept, binary XML may be
+       implemented as a header format representation soon
+       thereafter.
+
+
+       DSA signature for header metadata.
+
+       The manner in which rpm packages are signed is going to
+       change. The SHA1 digest in the header will be signed,
+       equivalent to a DSA digital signature on the original
+       header metadata. As the original header will contain
+       'trusted' (i.e. because the header is signed with DSA)
+       file MD5 digests, there will be little or no reason to
+       sign the payload, but that may happen as well. Note that
+       cpio headers in the payload are not used to install
+       package metadata, only the name field in the cpio header
+       is used to associate an archive file member with the
+       corresponding entry for the file in header metadata.
+
+
+       Definition in file header.h.
+
+DEFINE DOCUMENTATION
+   #define HEADER_I18NTABLE   100
+       Definition at line 253 of file header.h.
+
+       Referenced by getTagString, getTagVal, hdrKeyList,
+       headerAddI18NString, headerFindI18NString, headerGetLangs,
+       headerLoad, initSourceHeader, regionSwab, and
+       rpmProblemSetPrint.
+
+   #define HEADER_IMAGE   61
+       Header private tags.
+
+       Note:
+           General use tags should start at 1000 (RPM's tag space
+           starts there).
+
+       Definition at line 249 of file header.h.
+
+       Referenced by headerCopy, and headerLoad.
+
+   #define HEADER_IMMUTABLE   63
+       Definition at line 251 of file header.h.
+
+       Referenced by headerReload, regionSwab, and
+       rpmProblemSetPrint.
+
+   #define HEADER_REGIONS   64
+       Definition at line 252 of file header.h.
+
+       Referenced by rpmProblemSetPrint.
+
+   #define HEADER_SIGBASE   256
+       Definition at line 254 of file header.h.
+
+       Referenced by headerMergeLegacySigs, headerRegenSigHeader,
+       and rpmReadPackageInfo.
+
+   #define HEADER_SIGNATURES   62
+       Definition at line 250 of file header.h.
+
+       Referenced by headerReload, and rpmProblemSetPrint.
+
+   #define HEADER_TAGBASE   1000
+       Definition at line 255 of file header.h.
+
+       Referenced by headerMergeLegacySigs, and
+       headerRegenSigHeader.
+
+   #define RPM_MAX_TYPE   9
+   #define RPM_MIN_TYPE   0
+TYPEDEF DOCUMENTATION
+   typedef int_32* hCNT_t
+       Definition at line 117 of file header.h.
+
+       Referenced by copyEntry, getExtension, headerFree,
+       headerGetEntry, headerGetEntryMinMemory,
+       headerNextIterator, headerSizeof, and intGetEntry.
+
+   typedef struct HE_s *  HE_t
+   typedef const void* hPTR_t
+       Definition at line 116 of file header.h.
+
+       Referenced by copyEntry, dataLength, dateFormat,
+       dayFormat, formatValue, getExtension, grabData,
+       headerAddEntry, headerAddOrAppendEntry, headerAppendEntry,
+       headerCopy, headerCopyTags, headerFree, headerGetEntry,
+       headerGetEntryMinMemory, headerGetRawEntry,
+       headerModifyEntry, headerNextIterator, headerSizeof,
+       hexFormat, intGetEntry, octalFormat, realDateFormat, and
+       shescapeFormat.
+
+   typedef union hRET_s *  hRET_t
+   typedef int_32* hTYP_t
+       Definition at line 115 of file header.h.
+
+       Referenced by copyEntry, getExtension, headerFree,
+       headerGetEntry, headerGetEntryMinMemory,
+       headerNextIterator, and headerSizeof.
+
+   typedef short int int_16
+       Definition at line 100 of file header.h.
+
+       Referenced by countLinks, doHeaderUnload,
+       findPackagesWithRelocatedFiles, headerDump, mireSkip, and
+       regionSwab.
+
+   typedef int int_32
+       Definition at line 99 of file header.h.
+
+       Referenced by addChangelogEntry, addLostFiles,
+       addOrAppendListEntry, alAddPackage, checkPackageDeps,
+       compressFilelist, convertAMD, convertExistingAMD,
+       copyData, copyEntry, countLinks, dataLength, dateFormat,
+       dayFormat, depflagsFormat, descriptionTag, doHeaderUnload,
+       fflagsFormat, filenamesTag, findEntry,
+       findPackagesWithRelocatedFiles, findUpgradePackages,
+       formatValue, fpLookupHeader, fsnamesTag, fssizesTag,
+       getBuildTime, grabData, groupTag, headerAddEntry,
+       headerAddI18NString, headerAddOrAppendEntry,
+       headerAppendEntry, headerCopy, headerCopyLoad,
+       headerCopyTags, headerCopyWithConvert, headerDump,
+       headerFree, headerGetEntry, headerGetEntryMinMemory,
+       headerGetRawEntry, headerInject, headerIsEntry,
+       headerLoad, headerMatchesDepFlags, headerMergeLegacySigs,
+       headerModifyEntry, headerRead, headerRegenSigHeader,
+       headerRemoveEntry, headerSizeof, hexFormat, i18nTag,
+       identifyDepend, IDTXglob, IDTXload, initSourceHeader,
+       instprefixTag, intGetEntry, makeGPGSignature,
+       makePGPSignature, mireSkip, octalFormat, parsePreamble,
+       permsFormat, providePackageNVR, rangeMatchesDepFlags,
+       readPackageHeaders, realDateFormat, regionSwab,
+       removeMovedFilesAlreadyHandled, rhnLoad, rhnUnload,
+       rpmAddSignature, rpmCheckSig, rpmdbAdd, rpmdbFindByFile,
+       rpmdbFindFpList, rpmdbGetIteratorCount, rpmdbRemove,
+       rpmdepCheck, rpmGetFilesystemUsage, rpmGetRpmlibProvides,
+       rpmHeaderGetEntry, rpmlibNeedsFeature,
+       rpmLookupSignatureType, rpmMergeHeaders,
+       rpmPackageGetEntry, rpmReadSignature, rpmReSign,
+       rpmtransAddPackage, rpmVerifySignature, shescapeFormat,
+       showQueryPackage, summaryTag, triggercondsTag,
+       triggertypeFormat, triggertypeTag, verifySizeSignature,
+       and writeRPM.
+
+   typedef char int_8
+       Definition at line 101 of file header.h.
+
+       Referenced by formatValue, headerDump, and mireSkip.
+
+   typedef unsigned short uint_16
+       Definition at line 104 of file header.h.
+
+       Referenced by formatValue, genCpioListAndHeader, and
+       showQueryPackage.
+
+   typedef unsigned int uint_32
+       Definition at line 103 of file header.h.
+
+       Referenced by alAddPackage, checkPackageDeps, fssizesTag,
+       genCpioListAndHeader, rpmdbGetIteratorCount,
+       rpmGetFilesystemUsage, and rpmtransAddPackage.
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002            lib/header.h(3)

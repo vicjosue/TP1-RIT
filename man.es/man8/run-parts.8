@@ -1,0 +1,69 @@
+RUN-PARTS(8)                                         RUN-PARTS(8)
+
+
+
+NAME
+       run-parts - run scripts or programs in a directory
+
+SYNOPSIS
+       run-parts  [--test] [--verbose] [--report] [--umask=umask]
+       [--arg=argument] [--help] [--version] directory
+
+DESCRIPTION
+       run-parts runs a number of scripts or programs found in  a
+       single  directory  directory.   Filenames  should  consist
+       entirely of upper and lower case letters,  digits,  under­
+       scores,  and  hyphens.   Subdirectories  of  directory and
+       files with other names will be silently ignored.
+
+       Scripts must follow the #!/bin/interpretername  convention
+       in  order  to be executed.  They will not automatically be
+       executed by /bin/sh.
+
+       The files found will be run in the lexical sort  order  of
+       the filenames.
+
+   OPTIONS
+       --test print  the names of the scripts which would be run,
+              but don't actually run them.
+
+       --verbose
+              print the name of each script to stderr before run­
+              ning.
+
+       --report
+              similiar  to --verbose, but only prints the name of
+              scripts which produce output.  The script's name is
+              printed to whichever of stdout or stderr the script
+              first produces output on.
+
+       --umask=umask
+              Sets the umask to umask before running the scripts.
+              umask should be specified in octal.  By default the
+              umask is set to 022.
+
+       --arg=argument
+              Pass argument to the scripts.  Use --arg  once  for
+              each argument you want passed.
+
+       --     Specifies that this is the end of the options.  Any
+              filename after -- will be not be interpreted as  an
+              option even if it starts with a hyphen.
+
+       --help Display usage information and exit.
+
+       --version
+              Display version and copyright and exit.
+
+
+COPYRIGHT
+       Copyright  (C)  1994 Ian Jackson.  Copyright (C) 1996 Jeff
+       Noxon.  Copyright (C) 1996,1997,1998 Guy Maor
+
+       run-parts is free software; see  the  GNU  General  Public
+       Licence  version 2 or later for copying conditions.  There
+       is no warranty.
+
+
+
+Debian Linux               5 June 1996               RUN-PARTS(8)

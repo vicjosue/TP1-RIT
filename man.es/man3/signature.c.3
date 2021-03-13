@@ -1,0 +1,204 @@
+lib/signature.c(3)                             lib/signature.c(3)
+
+
+
+NAME
+       lib/signature.c -
+
+SYNOPSIS
+       #include 'system.h'
+       #include <rpmlib.h>
+       #include <rpmmacro.h>
+       #include 'md5.h'
+       #include 'misc.h'
+       #include 'rpmlead.h'
+       #include 'signature.h'
+       #include 'debug.h'
+
+   Defines
+       #define X(_x)   (unsigned)((_x) & 0xff)
+
+   Typedefs
+       typedef unsigned char byte
+       typedef int(* md5func )(const char *fn, byte *digest)
+
+   Functions
+       int rpmLookupSignatureType (int action)
+       const char * rpmDetectPGPVersion (pgpVersion *pgpVer)
+       rpmRC checkSize (FD_t fd, int siglen, int pad, int
+           datalen)
+           Check package size.
+       rpmRC rpmReadSignature (FD_t fd, Header *headerp, sigType
+           sig_type)
+       int rpmWriteSignature (FD_t fd, Header h)
+       Header rpmNewSignature (void)
+       Header rpmFreeSignature (Header h)
+       int makePGPSignature (const char *file, void **sig, int_32
+           *size, const char *passPhrase)
+       int makeGPGSignature (const char *file, void **sig, int_32
+           *size, const char *passPhrase)
+       int rpmAddSignature (Header h, const char *file, int_32
+           sigTag, const char *passPhrase)
+       rpmVerifySignatureReturn verifySizeSignature (const char
+           *datafile, int_32 size, char *result)
+       rpmVerifySignatureReturn verifyMD5Signature (const char
+           *datafile, const byte *sig, char *result, md5func fn)
+       rpmVerifySignatureReturn verifyPGPSignature (const char
+           *datafile, const void *sig, int count, char *result)
+       rpmVerifySignatureReturn verifyGPGSignature (const char
+           *datafile, const void *sig, int count, char *result)
+       int checkPassPhrase (const char *passPhrase, const int
+           sigTag)
+       char * rpmGetPassPhrase (const char *prompt, const int
+           sigTag)
+       rpmVerifySignatureReturn rpmVerifySignature (const char
+           *file, int_32 sigTag, const void *sig, int count, char
+           *result)
+
+DETAILED DESCRIPTION
+       Definition in file signature.c.
+
+DEFINE DOCUMENTATION
+   #define X(_x)   (unsigned)((_x) & 0xff)
+       Definition at line 477 of file signature.c.
+
+       Referenced by verifyMD5Signature.
+
+TYPEDEF DOCUMENTATION
+   typedef unsigned char byte
+       Definition at line 32 of file signature.c.
+
+       Referenced by rpmAddSignature, rpmReadSignature,
+       rpmWriteSignature, verifyGPGSignature, verifyMD5Signature,
+       and verifyPGPSignature.
+
+   typedef int(* md5func)(const char * fn, byte * digest)
+       Definition at line 34 of file signature.c.
+
+       Referenced by verifyMD5Signature.
+
+FUNCTION DOCUMENTATION
+   int checkPassPhrase (const char * passPhrase, const int
+       sigTag) [static]
+       Definition at line 724 of file signature.c.
+
+       References _, dosetenv, PGP_2, PGP_5, PGP_NOTDETECTED,
+       PGP_UNKNOWN, pgpVersion, rpmDetectPGPVersion, and
+       rpmExpand.
+
+       Referenced by rpmGetPassPhrase.
+
+   rpmRC checkSize (FD_t fd, int siglen, int pad, int datalen)
+       [inline, static]
+       Check package size.
+
+       Todo:
+           rpmio: use fdSize rather than fstat(2) to get file
+           size.
+
+       Parameters:
+
+       fd     package file handle
+
+       siglen signature header size
+
+       pad    signature padding
+
+       datalen
+              length of header+payload
+
+       Returns:
+           rpmRC return code
+
+       Definition at line 116 of file signature.c.
+
+       References _, Fileno, rpmRC, RPMRC_BADSIZE, RPMRC_FAIL,
+       and RPMRC_OK.
+
+       Referenced by rpmReadSignature.
+
+   int makeGPGSignature (const char * file, void ** sig, int_32 *
+       size, const char * passPhrase) [static]
+       Definition at line 343 of file signature.c.
+
+       References _, _free, alloca, dosetenv, Fclose, Ferror,
+       Fopen, int_32, rpmExpand, stpcpy, timedRead, and xmalloc.
+
+       Referenced by rpmAddSignature.
+
+   int makePGPSignature (const char * file, void ** sig, int_32 *
+       size, const char * passPhrase) [static]
+       Definition at line 245 of file signature.c.
+
+       References _, _free, alloca, dosetenv, Fclose, Ferror,
+       Fopen, int_32, PGP_2, PGP_5, PGP_NOTDETECTED, PGP_UNKNOWN,
+       pgpVersion, rpmDetectPGPVersion, rpmExpand, stpcpy,
+       timedRead, and xmalloc.
+
+       Referenced by rpmAddSignature.
+
+   Header rpmFreeSignature (Header h)
+       Definition at line 240 of file signature.c.
+
+       References headerFree.
+
+       Referenced by readPackageHeaders, rpmReadPackageHeader,
+       rpmReSign, and writeRPM.
+
+   rpmVerifySignatureReturn rpmVerifySignature (const char *
+       file, int_32 sigTag, const void * sig, int count, char *
+       result)
+       Definition at line 860 of file signature.c.
+
+       References int_32, verifyGPGSignature, verifyMD5Signature,
+       verifyPGPSignature, and verifySizeSignature.
+
+       Referenced by rpmCheckSig.
+
+   rpmVerifySignatureReturn verifyGPGSignature (const char *
+       datafile, const void * sig, int count, char * result)
+       [static]
+       Definition at line 645 of file signature.c.
+
+       References _, _free, byte, dosetenv, Fclose, Ferror,
+       Fopen, Fwrite, makeTempFile, rpmExpand, rpmGetPath, and
+       xstrncasecmp.
+
+       Referenced by rpmVerifySignature.
+
+   rpmVerifySignatureReturn verifyMD5Signature (const char *
+       datafile, const byte * sig, char * result, md5func fn)
+       [static]
+       Definition at line 480 of file signature.c.
+
+       References byte, md5func, and X.
+
+       Referenced by rpmVerifySignature.
+
+   rpmVerifySignatureReturn verifyPGPSignature (const char *
+       datafile, const void * sig, int count, char * result)
+       [static]
+       Definition at line 516 of file signature.c.
+
+       References _, _free, byte, dosetenv, errno, Fclose,
+       Ferror, Fopen, Fwrite, makeTempFile, PGP_2, PGP_5,
+       PGP_NOTDETECTED, PGP_UNKNOWN, pgpVersion,
+       rpmDetectPGPVersion, rpmExpand, and rpmGetPath.
+
+       Referenced by rpmVerifySignature.
+
+   rpmVerifySignatureReturn verifySizeSignature (const char *
+       datafile, int_32 size, char * result) [static]
+       Definition at line 460 of file signature.c.
+
+       References int_32.
+
+       Referenced by rpmVerifySignature.
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002         lib/signature.c(3)

@@ -1,0 +1,247 @@
+Threads(3)            Tcl Library Procedures           Threads(3)
+
+
+
+_________________________________________________________________
+
+NAME
+       Tcl_ConditionNotify,  Tcl_ConditionWait,  Tcl_ConditionFi­
+       nalize, Tcl_GetThreadData, Tcl_MutexLock, Tcl_MutexUnlock,
+       Tcl_MutexFinalize,  Tcl_CreateThread - Tcl thread support.
+
+SYNOPSIS
+       #include <tcl.h>
+
+       void
+       Tcl_ConditionNotify(condPtr)
+
+       void
+       Tcl_ConditionWait(condPtr, mutexPtr, timePtr)
+
+       void
+       Tcl_ConditionFinalize(condPtr)
+
+       Void *
+       Tcl_GetThreadData(keyPtr, size)
+
+       void
+       Tcl_MutexLock(mutexPtr)
+
+       void
+       Tcl_MutexUnlock(mutexPtr)
+
+       void
+       Tcl_MutexFinalize(mutexPtr)
+
+       int
+       Tcl_CreateThread(idPtr, threadProc, clientData, stackSize, flags)
+
+ARGUMENTS
+       Tcl_Condition       *condPtr  (in)      A condition  vari­
+                                               able,  which  must
+                                               be associated with
+                                               a mutex lock.
+
+       Tcl_Condition       *mutexPtr (in)      A mutex lock.
+
+       Tcl_Time            *timePtr  (in)      A  time  limit  on
+                                               the      condition
+                                               wait.    NULL   to
+                                               wait      forever.
+                                               Note     that    a
+                                               polling value of 0
+                                               seconds    doesn't
+                                               make much sense.
+
+       Tcl_ThreadDataKey   *keyPtr   (in)      This identifies  a
+                                               block   of  thread
+                                               local     storage.
+                                               The  key should be
+                                               static  and   pro­
+                                               cess-wide,     yet
+                                               each  thread  will
+                                               end up associating
+                                               a different  block
+                                               of   storage  with
+                                               this key.
+
+       int                 *size     (in)      The  size  of  the
+                                               thread local stor­
+                                               age  block.   This
+                                               amount  of data is
+                                               allocated and ini­
+                                               tialized  to  zero
+                                               the   first   time
+                                               each  thread calls
+                                               Tcl_GetThreadData.
+
+       Tcl_ThreadId        *idPtr    (out)     The  refered stor­
+                                               age  will  contain
+                                               the   id   of  the
+                                               newly      created
+                                               thread as returned
+                                               by  the  operating
+                                               system.
+
+       Tcl_ThreadId        id        (in)      Id  of  the thread
+                                               waited upon.
+
+       Tcl_ThreadCreateProc          threadProc(in)
+                                               This     procedure
+                                               will  act  as  the
+                                               main()   of    the
+                                               newly      created
+                                               thread. The speci­
+                                               fied    clientData
+                                               will be  its  sole
+                                               argument.
+
+       ClientData          clientData(in)      Arbitrary informa­
+                                               tion.  Passed   as
+                                               sole  argument  to
+                                               the threadProc.
+
+       int                 stackSize (in)      The  size  of  the
+                                               stack given to the
+                                               new thread.
+
+       int                 flags     (in)      Bitmask containing
+                                               flags allowing the
+                                               caller  to  modify
+                                               behaviour  of  the
+                                               new thread.
+
+       int                 *result   (out)     The refered  stor­
+                                               age   is  used  to
+                                               place   the   exit
+                                               code of the thread
+                                               waited  upon  into
+                                               it.
+_________________________________________________________________
+
+INTRODUCTION
+       Beginning  with  the  8.1  release, the Tcl core is thread
+       safe, which allows you  to  incorporate  Tcl  into  multi­
+       threaded  applications  without  customizing the Tcl core.
+       To enable Tcl multithreading support, you must include the
+       --enable-threads  option  to  configure when you configure
+       and compile your Tcl core.
+
+       An important contstraint of the Tcl threads implementation
+       is that only the thread that created a Tcl interpreter can
+       use that interpreter.  In other  words,  multiple  threads
+       can not access the same Tcl interpreter.  (However, as was
+       the case in previous releases, a single thread can  safely
+       create and use multiple interpreters.)
+
+       Tcl  does  provide  Tcl_CreateThread for creating threads. |
+       The caller can determine the size of the  stack  given  to |
+       the  new  thread and modify the behaviour through the sup­ |
+       plied flags. The value  TCL_THREAD_STACK_DEFAULT  for  the |
+       stackSize  indicates that the default size as specified by |
+       the operating system is to be used for the new thread.  As |
+       for   the   flags,   currently   are   only   the   values |
+       TCL_THREAD_NOFLAGS and  TCL_THREAD_JOINABLE  defined.  The |
+       first  of  them invokes the default behaviour with no spe­ |
+       cialities. Using the second value marks the new thread  as |
+       joinable.  This means that another thread can wait for the |
+       such marked thread to exit and join it.                    |
+
+       Restrictions: On some  unix  systems  the  pthread-library |
+       does  not  contain the functionality to specify the stack­ |
+       size of a thread. The specified value for the stacksize is |
+       ignored  on these systems. Both Windows and Macintosh cur­ |
+       rently do not support joinable threads. This flag value is |
+       therefore ignored on these platforms.
+
+       Tcl does provide Tcl_ExitThread and Tcl_FinalizeThread for
+       terminating threads and invoking optional per-thread  exit
+       handlers.   See  the Tcl_Exit page for more information on
+       these procedures.
+
+       Tcl provides Tcl_ThreadQueueEvent and Tcl_ThreadAlert  for
+       handling  event  queueing  in  multithreaded applications.
+       See the Notifier manual page for more information on these
+       procedures.
+
+       In  this release, the Tcl language itself provides no sup­
+       port for  creating  multithreaded  scripts  (for  example,
+       scripts  that  could spawn a Tcl interpreter in a separate
+       thread).  If you need to add this feature  at  this  time,
+       see  the  tclThreadTest.c file in the Tcl source distribu­
+       tion for an experimental implementation of a Tcl  "Thread"
+       package  implementing  thread creation and management com­
+       mands at the script level.
+
+
+DESCRIPTION
+       A mutex is a lock that is used to  serialize  all  threads
+       through  a  piece  of  code  by  calling Tcl_MutexLock and
+       Tcl_MutexUnlock.  If one thread holds a mutex,  any  other
+       thread calling Tcl_MutexLock will block until Tcl_MutexUn­
+       lock is called.  A mutex can be destroyed after its use by |
+       calling  Tcl_MutexFinalize.  The result of locking a mutex |
+       twice from the same thread is undefined.   On  some  plat­ |
+       forms  it  will  result in a deadlock.  The Tcl_MutexLock,
+       Tcl_MutexUnlock  and  Tcl_MutexFinalize   procedures   are
+       defined  as  empty  macros  if  not compiling with threads
+       enabled.
+
+       A condition variable is used as a signaling  mechanism:  a
+       thread can lock a mutex and then wait on a condition vari­
+       able with Tcl_ConditionWait.  This atomically releases the
+       mutex  lock  and  blocks  the waiting thread until another
+       thread calls Tcl_ConditionNotify.  The caller of  Tcl_Con­
+       ditionNotify should have the associated mutex held by pre­
+       viously calling Tcl_MutexLock, but this is  not  enforced.
+       Notifying  the  condition  variable  unblocks  all threads
+       waiting on the condition variable, but they do not proceed
+       until  the  mutex  is  released with Tcl_MutexUnlock.  The
+       implementation of  Tcl_ConditionWait  automatically  locks
+       the mutex before returning.
+
+       The  caller  of  Tcl_ConditionWait  should be prepared for
+       spurious notifications by calling Tcl_ConditionWait within
+       a while loop that tests some invariant.
+
+       A  condition  variable  can  be destroyed after its use by |
+       calling Tcl_ConditionFinalize.                             |
+
+       The Tcl_ConditionNotify, Tcl_ConditionWait and  Tcl_Condi­ |
+       tionFinalize procedures are defined as empty macros if not |
+       compiling with threads enabled.
+
+       The Tcl_GetThreadData call returns a pointer to a block of
+       thread-private data.  Its argument is a key that is shared
+       by all threads and a size for the block of  storage.   The
+       storage  is automatically allocated and initialized to all
+       zeros the first time each thread asks for it.  The storage
+       is automatically deallocated by Tcl_FinalizeThread.
+
+INITIALIZATION
+       All  of  these synchronization objects are self initializ­
+       ing.  They are implemented as opaque pointers that  should
+       be  NULL  upon first use.  The mutexes and condition vari­
+       ables are either cleaned up by process exit  handlers  (if |
+       living  that  long) or explicitly by calls to Tcl_MutexFi­ |
+       nalize or Tcl_ConditionFinalize.  Thread local storage  is
+       reclaimed during Tcl_FinalizeThread.
+
+CREATING THREADS
+       The  API  to create threads is not finalized at this time.
+       There are private facilities to create threads  that  con­
+       tain  a  new  Tcl  interpreter,  and to send scripts among
+       threads.  Dive into tclThreadTest.c  and  tclThread.c  for
+       examples.
+
+SEE ALSO
+       Tcl_GetCurrentThread,                Tcl_ThreadQueueEvent,
+       Tcl_ThreadAlert,    Tcl_ExitThread,    Tcl_FinalizeThread,
+       Tcl_CreateThreadExitHandler, Tcl_DeleteThreadExitHandler
+
+KEYWORDS
+       thread, mutex, condition variable, thread local storage
+
+
+
+Tcl                            8.1                     Threads(3)

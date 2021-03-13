@@ -1,0 +1,124 @@
+curs_window(3X)                                   curs_window(3X)
+
+
+
+NAME
+       newwin,  delwin,  mvwin, subwin, derwin, mvderwin, dupwin,
+       wsyncup, syncok, wcursyncup,  wsyncdown  -  create  curses
+       windows
+
+SYNOPSIS
+       #include <curses.h>
+
+       WINDOW *newwin(int nlines, int ncols, int begin_y,
+             int begin_x);
+       int delwin(WINDOW *win);
+       int mvwin(WINDOW *win, int y, int x);
+       WINDOW *subwin(WINDOW *orig, int nlines, int ncols,
+             int begin_y, int begin_x);
+       WINDOW *derwin(WINDOW *orig, int nlines, int ncols,
+             int begin_y, int begin_x);
+       int mvderwin(WINDOW *win, int par_y, int par_x);
+       WINDOW *dupwin(WINDOW *win);
+       void wsyncup(WINDOW *win);
+       int syncok(WINDOW *win, bool bf);
+       void wcursyncup(WINDOW *win);
+       void wsyncdown(WINDOW *win);
+
+DESCRIPTION
+       Calling newwin creates and returns a pointer to a new win­
+       dow with the given number of lines and columns.  The upper
+       left-hand  corner of the window is at line begin_y, column
+       begin_x.  If either nlines or ncols is zero, they  default
+       to  LINES - begin_y and COLS - begin_x.  A new full-screen
+       window is created by calling newwin(0,0,0,0).
+
+       Calling delwin deletes the named window, freeing all  mem­
+       ory  associated  with  it  (it does not actually erase the
+       window's screen image).  Subwindows must be deleted before
+       the main window can be deleted.
+
+       Calling mvwin moves the window so that the upper left-hand
+       corner is at position (x, y).  If the move would cause the
+       window to be off the screen, it is an error and the window
+       is not moved.  Moving subwindows is allowed, but should be
+       avoided.
+
+       Calling subwin creates and returns a pointer to a new win­
+       dow with the given number of lines, nlines,  and  columns,
+       ncols.   The  window  is at position (begin_y, begin_x) on
+       the screen.  (This position is relative to the screen, and
+       not to the window orig.)  The window is made in the middle
+       of the window orig, so that changes  made  to  one  window
+       will  affect  both  windows.   The subwindow shares memory
+       with the window orig.  When using this routine, it is nec­
+       essary  to call touchwin or touchline on orig before call­
+       ing wrefresh on the subwindow.
+
+       Calling derwin is the same as calling subwin, except  that
+       begin_y and begin_x are relative to the origin of the win­
+       dow orig rather than the screen.  There is  no  difference
+       between the subwindows and the derived windows.
+
+       Calling  mvderwin  moves  a  derived window (or subwindow)
+       inside its parent window.  The screen-relative  parameters
+       of  the  window  are not changed.  This routine is used to
+       display different parts of the parent window at  the  same
+       physical position on the screen.
+
+       Calling  dupwin  creates  an exact duplicate of the window
+       win.
+
+       Calling wsyncup touches all locations in ancestors of  win
+       that  are changed in win.  If syncok is called with second
+       argument TRUE then wsyncup is called  automatically  when­
+       ever there is a change in the window.
+
+       The  wsyncdown  routine  touches each location in win that
+       has been touched in any of  its  ancestor  windows.   This
+       routine  is  called by wrefresh, so it should almost never
+       be necessary to call it manually.
+
+       The routine wcursyncup updates the current cursor position
+       of  all the ancestors of the window to reflect the current
+       cursor position of the window.
+
+RETURN VALUE
+       Routines that return an integer  return  the  integer  ERR
+       upon failure and OK (SVr4 only specifies "an integer value
+       other than ERR") upon successful completion.
+
+       delwin returns the integer ERR upon failure  and  OK  upon
+       successful completion.
+
+       Routines that return pointers return NULL on error.
+
+NOTES
+       If  many small changes are made to the window, the wsyncup
+       option could degrade performance.
+
+       Note that syncok may be a macro.
+
+BUGS
+       The subwindow functions (subwin, derwin,  mvderwin,  wsyn­
+       cup,  wsyncdown,  wcursyncup,  syncok)  are  flaky, incom­
+       pletely implemented, and not well tested.
+
+       The System V curses documentation is  very  unclear  about
+       what wsyncup and wsyncdown actually do.  It seems to imply
+       that they are only supposed to touch exactly  those  lines
+       that are affected by ancestor changes.  The language here,
+       and the behavior of the  curses  implementation,  is  pat­
+       terned  on the XPG4 curses standard.  The weaker XPG4 spec
+       may result in slower updates.
+
+PORTABILITY
+       The XSI Curses standard, Issue  4  describes  these  func­
+       tions.
+
+SEE ALSO
+       curses(3X), curs_refresh(3X), curs_touch(3X)
+
+
+
+                                                  curs_window(3X)

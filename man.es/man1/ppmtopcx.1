@@ -1,0 +1,44 @@
+ppmtopcx(1)                                           ppmtopcx(1)
+
+
+
+NAME
+       ppmtopcx - convert a portable pixmap into a PCX file
+
+SYNOPSIS
+       ppmtopcx [-24bit] [-packed] [ppmfile]
+
+DESCRIPTION
+       Reads  a portable pixmap as input.  Produces a PCX file as
+       output.  The type of the PCX file depends on the number of
+       colors in the pixmap:
+
+       16 colors or less:
+              1 bit/pixel, 1-4 planes.
+
+       256 colors or less:
+              8  bits/pixel,  1 plane, colormap at the end of the
+              file.
+
+       More than 256 colors:
+              24bit truecolor file (8 bits/pixel, 3 planes).
+
+OPTIONS
+       -24bit Produce a 24bit truecolor file, even if the  pixmap
+              has 256 colors or less.
+
+       -packed
+              Use  "packed pixel" format for files with 16 colors
+              or less: 1, 2, or 4 bits/pixel, 1 plane.
+
+SEE ALSO
+       pcxtoppm(1), ppm(5)
+
+AUTHORS
+       Copyright (C)  1994  by  Ingo  Wilken  (Ingo.Wilken@infor­
+       matik.uni-oldenburg.de)
+       Based on previous work by Michael Davidson.
+
+
+
+                         12 December 1994             ppmtopcx(1)

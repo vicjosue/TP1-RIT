@@ -1,0 +1,88 @@
+tixMwm(n)             Tix Built-In Commands             tixMwm(n)
+
+
+
+_________________________________________________________________
+
+NAME
+       tixMwm - Communicate with the Motif(tm) window manager.
+
+SYNOPSIS
+       tixMwm option pathName ?args?
+
+COMMAND OPTIONS
+       tixMwm decoration pathName ?option? ?value ...?
+              When no options are given, this command returns the
+              values of  all  the  decorations  options  for  the
+              toplevel window with the pathName.
+
+              When  only  one  option is given without specifying
+              the value, the current  value  of  that  option  is
+              returned.
+
+              When  more than one "option value" pairs are passed
+              to this  command,  the  specified  values  will  be
+              assigned to the corresponding options. As a result,
+              the appearance of the Motif decorations around  the
+              toplevel window will be changed.
+
+              Possible  options  are:  -border, -menu, -maximize,
+              -minimize, -resizeh and -title. The value must be a
+              Boolean  value. The values returned by this command
+              are undefined when the window  is  not  managed  by
+              mwm.
+
+       tixMwm ismwmrunning pathName
+              This  returns  true if mwm is running on the screen
+              where the specified window is located, false other­
+              wise.
+
+       tixMwm protocol pathName
+              When  no additional options are given, this command
+              returns all protocols associated with this toplevel
+              window.
+
+       tixMwm protocol pathName activate protocol_name
+              Activate the mwm protocol message in mwm's menu.
+
+       tixMwm protocol pathName add protocol_name menu_message
+              Add  a  new  mwm protocol message for this toplevel
+              window. The message is  identified  by  the  string
+              name  specified  in protocol_name. A menu item will
+              be added into mwm's menu as specified by  menu_mes­
+              sage. Once a new mwm protocol message is added to a
+              toplevel, it can be catched by the TK  wm  protocol
+              command. Here is an example:
+              tixMwm protocol . add MY_PRINT_HELLO \
+                  {"Print Hello"  _H Ctrl<Key>H}
+              wm protocol . MY_PRINT_HELLO {puts Hello}
+
+       tixMwm protocol pathName deactivate protocol_name
+              Deactivate  the mwm protocol message in mwm's menu.
+
+       tixMwm protocol pathName delete protocol_name
+              Delete the mwm protocol message  from  mwm's  menu.
+              Please  note  that the window manager protocol han­
+              dler associated  with  this  protocol  (by  the  wm
+              protocol command) is not deleted automatically. You
+              have to  delete  the  protocol  handle  explicitly.
+              E.g.:
+              tixMwm protocol . delete MY_PRINT_HELLO
+              wm protocol . MY_PRINT_HELLO {}
+
+
+BUGS
+       On  some  versions  of Mwm, the -border will not disappear
+       unless -resizeh is turned off. Also, the -title  will  not
+       disappear unless all of -title, -menu, -maximize and -min­
+       imize are turned off.
+
+
+KEYWORDS
+       Tix(n)
+
+
+
+
+
+Tix                            4.0                      tixMwm(n)

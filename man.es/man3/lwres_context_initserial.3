@@ -1,0 +1,111 @@
+LWRES_CONTEXT(3)                                 LWRES_CONTEXT(3)
+
+
+
+NAME
+       lwres_context_create,   lwres_context_destroy,  lwres_con­
+       text_nextserial,   lwres_context_initserial,    lwres_con­
+       text_freemem,      lwres_context_allocmem,      lwres_con­
+       text_sendrecv - lightweight resolver context management
+
+SYNOPSIS
+       #include <lwres/lwres.h>
+
+       lwres_result_t lwres_context_create(lwres_context_t **con­
+       textp, void *arg, lwres_malloc_t malloc_function,
+       lwres_free_t free_function);
+
+       lwres_result_t lwres_context_destroy(lwres_context_t
+       **contextp);
+
+       void lwres_context_initserial(lwres_context_t *ctx,
+       lwres_uint32_t serial);
+
+       lwres_uint32_t lwres_context_nextserial(lwres_context_t
+       *ctx);
+
+       void lwres_context_freemem(lwres_context_t *ctx, void
+       *mem, size_t len);
+
+       void lwres_context_allocmem(lwres_context_t *ctx, size_t
+       len);
+
+       void * lwres_context_sendrecv(lwres_context_t *ctx, void
+       *sendbase, int sendlen, void *recvbase, int recvlen, int
+       *recvd_len);
+
+DESCRIPTION
+       lwres_context_create() creates a lwres_context_t structure
+       for use in lightweight resolver operations.   It  holds  a
+       socket  and  other  data  needed  for communicating with a
+       resolver daemon.   The  new  lwres_context_t  is  returned
+       throught contextp, a pointer to a lwres_context_t pointer.
+       This lwres_context_t pointer must initially be  NULL,  and
+       is modified to point to the newly created lwres_context_t.
+
+       When the lightweight resolver  needs  to  perform  dynamic
+       memory  allocation,  it will call malloc_function to allo­
+       cate memory and free_function to free it. If  malloc_func­
+       tion and free_function are NULL, memory is allocated using
+       .Xr malloc 3 and free(3).  It is not permitted to  have  a
+       NULL  malloc_function and a non-NULL free_function or vice
+       versa.  arg is passed as the first parameter to the memory
+       allocation  functions.   If malloc_function and free_func­
+       tion are NULL, arg is unused and should be passed as NULL.
+
+       Once  memory  for  the structure has been allocated, it is
+       initialized  using  lwres_conf_init(3)  and  returned  via
+       *contextp.
+
+       lwres_context_destroy()  destroys a lwres_context_t, clos­
+       ing its socket.  contextp is a pointer to a pointer to the
+       context  that is to be destroyed.  The pointer will be set
+       to NULL when the context has been destroyed.
+
+       The context holds a serial number that is used to identify
+       resolver  request packets and associate responses with the
+       corresponding requests.  This serial number is  controlled
+       using lwres_context_initserial() and lwres_context_nextse­
+       rial().  lwres_context_initserial() sets the serial number
+       for  context  *ctx  to serial.  lwres_context_nextserial()
+       increments the serial  number  and  returns  the  previous
+       value.
+
+       Memory for a lightweight resolver context is allocated and
+       freed  using   lwres_context_allocmem()   and   lwres_con­
+       text_freemem().    These  use  whatever  allocations  were
+       defined when  the  context  was  created  with  lwres_con­
+       text_create().    lwres_context_allocmem()  allocates  len
+       bytes of memory and if successful returns a pointer to the
+       allocated   storage.   lwres_context_freemem()  frees  len
+       bytes of space starting at location mem.
+
+       lwres_context_sendrecv() performs I/O for the context ctx.
+       Data  are  read and written from the context's socket.  It
+       writes data  from  sendbase  --  typically  a  lightweight
+       resolver  query  packet  -- and waits for a reply which is
+       copied to the receive buffer at recvbase.  The  number  of
+       bytes that were written to this receive buffer is returned
+       in *recvd_len.
+
+RETURN VALUES
+       lwres_context_create() returns LWRES_R_NOMEMORY if  memory
+       for  the  struct  lwres_context  could  not  be allocated,
+       LWRES_R_SUCCESS otherwise.
+
+       Successful  calls  to  the  memory  allocator   lwres_con­
+       text_allocmem() return a pointer to the start of the allo­
+       cated space.  It returns NULL if memory could not be allo­
+       cated.
+
+       LWRES_R_SUCCESS  is returned when lwres_context_sendrecv()
+       completes successfully.  LWRES_R_IOERROR is returned if an
+       I/O  error  occurs  and  LWRES_R_TIMEOUT  is  returned  if
+       lwres_context_sendrecv() times out waiting for a response.
+
+SEE ALSO
+       lwres_conf_init(3), malloc(3), free(3).
+
+
+
+BIND9                      Jun 30, 2000          LWRES_CONTEXT(3)

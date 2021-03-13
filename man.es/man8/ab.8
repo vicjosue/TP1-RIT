@@ -1,0 +1,201 @@
+ab(1)                                                       ab(1)
+
+
+
+NAME
+       ab - Apache HTTP server benchmarking tool
+
+SYNOPSIS
+       ab [ -k ] [ -e ] [ -q ] [ -S ] [ -i ] [ -s ] [ -n requests
+       ] [ -t timelimit ] [ -c concurrency ] [ -p POST file  ]  [
+       -A Authenticate username:password ] [ -X proxy [ :port ] ]
+       [ -P Proxy Authenticate username:password ]  [  -H  Custom
+       header ] [ -C Cookie name=value ] [ -T content-type ] [ -v
+       verbosity ] ] [ -w output HTML ] ] [ -g output GNUPLOT ] ]
+       [  -e output CSV ] ] [ -x <table> attributes ] ] [ -y <tr>
+       attributes ] ] [ -z <td>  attributes  ]  [http[s]://]host­
+       name[:port]/path
+
+       ab [ -V ] [ -h ]
+
+
+DESCRIPTION
+       ab  is  a  tool  for  benchmarking the performance of your
+       Apache HyperText Transfer Protocol (HTTP) server.  It does
+       this  by giving you an indication of how many requests per
+       second your Apache installation can serve.
+
+
+OPTIONS
+       -k          Enable the HTTP KeepAlive  feature;  that  is,
+                   perform multiple requests within one HTTP ses­
+                   sion. Default is no KeepAlive.
+
+       -d          Do not display the "percentage  served  within
+                   XX [ms] table". (legacy support).
+
+       -S          Do  not display the median and standard devia­
+                   tion values,  nor  display  the  warning/error
+                   messages  when the average and median are more
+                   than one or two times the  standard  deviation
+                   apart.  And default to the min/avg/max values.
+                   (legacy support).
+
+       -s          When compiled in (bb -h will show you) use the
+                   SSL  protected https rather than the http pro­
+                   tocol. This feature is experimental  and  very
+                   rudimentary.  You  propably do not want to use
+                   it.
+
+       -k          Enable the HTTP KeepAlive  feature;  that  is,
+                   perform multiple requests within one HTTP ses­
+                   sion. Default is no KeepAlive.  -i Use an HTTP
+                   'HEAD'  instead  of  the GET method. Cannot be
+                   mixed with POST.
+
+       -n requests The number of  requests  to  perform  for  the
+                   benchmarking  session.  The default is to per­
+                   form just one single request, which  will  not
+                   give representative benchmarking results.
+
+       -t timelimit
+                   The  number  of seconds to spend benchmarking.
+                   Using this option automatically set the number
+                   of  requests  for  the benchmarking session to
+                   50000.  Use this to benchmark the server for a
+                   fixed period of time.  By default, there is no
+                   timelimit.
+
+       -c concurrency
+                   The number of simultaneous  requests  to  per­
+                   form.  The  default  is  to  perform  one HTTP
+                   request at at time, that is, no concurrency.
+
+
+       -p POST file
+                   A file containing data that the  program  will
+                   send  to  the  Apache  server in any HTTP POST
+                   requests.
+
+
+       -A Authorization username:password
+                   Supply Basic Authentication credentials to the
+                   server.  The  username  and password are sepa­
+                   rated by a single ':', and sent  as  uuencoded
+                   data.    The  string  is  sent  regardless  of
+                   whether the server needs it; that is, has sent
+                   a 401 Authentication needed.
+
+
+       -X proxy[:port]
+                   Route  all  requests  through  the  proxy  (at
+                   optional port).
+
+
+       -P Proxy-Authorization username:password
+                   Supply Basic Authentication credentials  to  a
+                   proxy  en-route. The username and password are
+                   separated by a single ':', and sent  as  uuen­
+                   coded  data.  The string is sent regardless of
+                   whether the proxy needs it; that is, has  sent
+                   a 407 Proxy authentication needed.
+
+
+       -C Cookie name=value
+                   Add a 'Cookie:' line to the request. The argu­
+                   ment is typically a  'name=value'  pair.  This
+                   option may be repeated.
+
+
+       -p Header string
+                   Append extra headers to the request. The argu­
+                   ment is typically  in  the  form  of  a  valid
+                   header  line,  usually a colon separated field
+                   value  pair,  for  example,  'Accept-Encoding:
+                   zip/zop;8bit'.
+
+
+       -T content-type
+                   The  content-type header to use for POST data.
+
+
+       -g gnuplot file
+                   Write all measured values out as  a  'gnuplot'
+                   or  TSV  (Tab separate values) file. This file
+                   can easily be imported into packages like Gnu­
+                   plot,  IDL,  Mathematica, Igor or even Excell.
+                   The labels are on the first line of the  file.
+
+
+       -q          When processing more than 150 requsts; ab out­
+                   puts a progress count on stderr every  10%  or
+                   100  requests or so. The -q flag qill suppress
+                   these messages.
+
+
+       -e CSV file Write a Comma separated value (CSV) file which
+                   contains for each percentage (from 1% to 100%)
+                   the time (in milli seconds) it took  to  serve
+                   that  percentage of the requests. This is usu­
+                   ally more usefull than the 'gnuplot' file;  as
+                   the results are already
+
+
+       -v          Sets  the  verbosity level.  Level 4 and above
+                   prints information on  headers,  level  3  and
+                   above prints response codes (for example, 404,
+                   200), and level 2 and  above  prints  warnings
+                   and informational messages.
+
+
+       -w          Print out results in HTML tables.  The default
+                   table is two columns wide, with a white  back­
+                   ground.
+
+       -x attributes
+                   The  string  to use as attributes for <table>.
+                   Attributes are inserted <table here >
+
+       -y attributes
+                   The string to use as attributes for <tr>.
+
+       -z attributes
+                   The string to use as attributes for <td>.
+
+       -V          Display the version number and exit.
+
+       -h          Display usage information.
+
+BUGS
+       There are various statically  declared  buffers  of  fixed
+       length.  Combined  with inefficient parsing of the command
+       line arguments, the response headers from the server,  and
+       other external inputs, these buffers might overflow.
+
+       Ab  does  not  implement  HTTP/1.x fully; instead, it only
+       accepts some 'expected' forms of responses.
+
+       The rather heavy use of strstr(3) by the program may  skew
+       performance   results,   since  it  uses  significant  CPU
+       resources.  Make sure that performance limits are not  hit
+       by ab before your server's limit is reached.
+
+       The HTML output is not as complete as the text output.
+
+       Up  to version 1.3d ab has propably reported values way to
+       low for most measurements; as a single timeout  (which  is
+       usually  in the order of seconds) will shift several thou­
+       sands of milli-second responses by a considerable  factor.
+       This  was  further componded by a serious interger overrun
+       which would for realistic run's (i.e. those longer than  a
+       few minutes) produce believable but totally bogus results.
+       Thanks to Sander Temme <sctemme@covalent.net> for  solving
+       this riddle.
+
+
+SEE ALSO
+       httpd(8)
+
+
+
+                           October 1999                     ab(1)

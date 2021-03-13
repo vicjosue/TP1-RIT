@@ -1,0 +1,59 @@
+FSCONF(8)                                               FSCONF(8)
+
+
+
+NAME
+       fsconf - Manage file systems and swaps
+
+SYNOPSIS
+       fsconf
+       fsconf options
+
+DESCRIPTION
+       fsconf  is  Linuxconf  file  systems management component.
+       Without argument, it presents its main menu.
+
+       ,SH OPTIONS
+
+
+       --check
+              perform a  permission  check  on  various  critical
+              files.
+
+
+       --setuquota user
+              sets  the  per user disk quota. It updates the file
+              /etc/quota.conf and then installs  the  changes  in
+              selected  device.  It  expects  the  following sub-
+              options:  --device,  --softk,   --hardk,   --softf,
+              --hardf.
+
+              --device   expects   a   device  name  or  a  lable
+              (LABEL=xx) as found in /etc/fstab.
+
+              The other options expects a numeric argument or the
+              value default.
+
+
+       --setgquota group
+              works like the --setuquota.
+
+
+       --updatequota
+              installs the quota settings in the various devices.
+              It is generally used after some user accounts  have
+              been created without Linuxconf. The commands solves
+              the quota inheritance for every  users  and  groups
+              and update the in-kernel quota settings.
+
+
+SEE ALSO
+       linuxconf(8)
+
+
+
+
+
+
+
+          Linuxconf file system administration componentFSCONF(8)

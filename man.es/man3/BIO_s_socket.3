@@ -1,0 +1,73 @@
+BIO_s_socket(3)              OpenSSL              BIO_s_socket(3)
+
+
+
+NNAAMMEE
+       BIO_s_socket, BIO_new_socket - socket BIO
+
+SSYYNNOOPPSSIISS
+        #include <openssl/bio.h>
+
+        BIO_METHOD *   BIO_s_socket(void);
+
+        #define BIO_set_fd(b,fd,c)     BIO_int_ctrl(b,BIO_C_SET_FD,c,fd)
+        #define BIO_get_fd(b,c)        BIO_ctrl(b,BIO_C_GET_FD,0,(char *)c)
+
+        BIO *BIO_new_socket(int sock, int close_flag);
+
+
+DDEESSCCRRIIPPTTIIOONN
+       BIO_s_socket() returns the socket BIO method. This is a
+       wrapper round the platform's socket routines.
+
+       BIO_read() and BIO_write() read or write the underlying
+       socket.  BIO_puts() is supported but BIO_gets() is not.
+
+       If the close flag is set then the socket is shut down and
+       closed when the BIO is freed.
+
+       BIO_set_fd() sets the socket of BIO bb to ffdd and the close
+       flag to cc.
+
+       BIO_get_fd() places the socket in cc if it is not NULL, it
+       also returns the socket . If cc is not NULL it should be of
+       type (int *).
+
+       BIO_new_socket() returns a socket BIO using ssoocckk and
+       cclloossee_ffllaagg.
+
+NNOOTTEESS
+       Socket BIOs also support any relevant functionality of
+       file descriptor BIOs.
+
+       The reason for having separate file descriptor and socket
+       BIOs is that on some platforms sockets are not file
+       descriptors and use distinct I/O routines, Windows is one
+       such platform. Any code mixing the two will not work on
+       all platforms.
+
+RREETTUURRNN VVAALLUUEESS
+       BIO_s_socket() returns the socket BIO method.
+
+       BIO_set_fd() always returns 1.
+
+       BIO_get_fd() returns the socket or -1 if the BIO has not
+       been initialized.
+
+       BIO_new_socket() returns the newly allocated BIO or NULL
+       is an error occurred.
+
+SSEEEE AALLSSOO
+       TBA
+
+
+
+
+
+
+
+
+
+
+
+16/Sep/2000                   0.9.6c              BIO_s_socket(3)

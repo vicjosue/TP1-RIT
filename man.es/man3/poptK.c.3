@@ -1,0 +1,98 @@
+lib/poptK.c(3)                                     lib/poptK.c(3)
+
+
+
+NAME
+       lib/poptK.c - Popt tables for signature modes.
+
+SYNOPSIS
+       #include 'system.h'
+       #include <rpmcli.h>
+       #include 'debug.h'
+
+   Defines
+       #define POPT_ADDSIGN   1005
+       #define POPT_RESIGN   1006
+
+   Functions
+       void signArgCallback (poptContext con, enum
+           poptCallbackReason reason, const struct poptOption
+           *opt, const char *arg, const void *data)
+
+   Variables
+       rpmSignArguments_s rpmKArgs
+       poptOption rpmSignPoptTable []
+
+DETAILED DESCRIPTION
+       Popt tables for signature modes.
+
+
+
+       Definition in file poptK.c.
+
+DEFINE DOCUMENTATION
+   #define POPT_ADDSIGN   1005
+       Definition at line 15 of file poptK.c.
+
+       Referenced by signArgCallback.
+
+   #define POPT_RESIGN   1006
+       Definition at line 16 of file poptK.c.
+
+       Referenced by signArgCallback.
+
+FUNCTION DOCUMENTATION
+   void signArgCallback (poptContext con, enum poptCallbackReason
+       reason, const struct poptOption * opt, const char * arg,
+       const void * data) [static]
+       Definition at line 20 of file poptK.c.
+
+       References POPT_ADDSIGN, POPT_RESIGN, and rpmKArgs.
+
+VARIABLE DOCUMENTATION
+   struct rpmSignArguments_s rpmKArgs
+       Initial value:
+
+
+               { RESIGN_NONE, CHECKSIG_ALL, 0, NULL }
+
+       Definition at line 12 of file poptK.c.
+
+       Referenced by main, and signArgCallback.
+
+   struct poptOption rpmSignPoptTable[]
+       Initial value:
+
+        {
+        { NULL, ' ', POPT_ARG_CALLBACK | POPT_CBFLAG_INC_DATA,
+               signArgCallback, 0, NULL, NULL },
+        { 'addsign', ' ', 0, 0,  1005 ,
+                'add a signature to a package' , NULL },
+        { 'resign', ' ', 0, 0,  1006 ,
+                'sign a package (discard current signature)' , NULL },
+        { 'sign', ' ', POPT_ARGFLAG_DOC_HIDDEN, &rpmKArgs.sign, 0,
+                'generate signature' , NULL },
+        { 'checksig', 'K', 0, 0, 'K',
+                'verify package signature' , NULL },
+        { 'nogpg', ' ', POPT_BIT_CLR,
+               &rpmKArgs.checksigFlags, CHECKSIG_GPG,
+                'skip any GPG signatures' , NULL },
+        { 'nopgp', ' ', POPT_BIT_CLR|POPT_ARGFLAG_DOC_HIDDEN,
+               &rpmKArgs.checksigFlags, CHECKSIG_PGP,
+                'skip any PGP signatures' , NULL },
+        { 'nomd5', ' ', POPT_BIT_CLR,
+               &rpmKArgs.checksigFlags, CHECKSIG_MD5,
+                'do not verify file md5 checksums' , NULL },
+
+          POPT_TABLEEND
+       }
+
+       Definition at line 48 of file poptK.c.
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002             lib/poptK.c(3)

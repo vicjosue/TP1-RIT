@@ -1,0 +1,472 @@
+lib/formats.c(3)                                 lib/formats.c(3)
+
+
+
+NAME
+       lib/formats.c -
+
+SYNOPSIS
+       #include 'system.h'
+       #include <rpmlib.h>
+       #include <rpmmacro.h>
+       #include 'manifest.h'
+       #include 'misc.h'
+       #include 'debug.h'
+
+   Functions
+       char * triggertypeFormat (int_32 type, const void *data,
+           char *formatPrefix, int padding, int element)
+       char * permsFormat (int_32 type, const void *data, char
+           *formatPrefix, int padding, int element)
+       char * fflagsFormat (int_32 type, const void *data, char
+           *formatPrefix, int padding, int element)
+       char * depflagsFormat (int_32 type, const void *data, char
+           *formatPrefix, int padding, int element)
+       int fsnamesTag (Header h, int_32 *type, void **data,
+           int_32 *count, int *freeData)
+       int instprefixTag (Header h, rpmTagType *type, const void
+           **data, int_32 *count, int *freeData)
+       int fssizesTag (Header h, rpmTagType *type, const void
+           **data, int_32 *count, int *freeData)
+       int triggercondsTag (Header h, rpmTagType *type, const
+           void **data, int_32 *count, int *freeData)
+       int triggertypeTag (Header h, rpmTagType *type, const void
+           **data, int_32 *count, int *freeData)
+       int filenamesTag (Header h, rpmTagType *type, const void
+           **data, int_32 *count, int *freeData)
+       int i18nTag (Header h, int_32 tag, rpmTagType *type, const
+           void **data, int_32 *count, int *freeData)
+       int summaryTag (Header h, rpmTagType *type, const void
+           **data, int_32 *count, int *freeData)
+       int descriptionTag (Header h, rpmTagType *type, const void
+           **data, int_32 *count, int *freeData)
+       int groupTag (Header h, rpmTagType *type, const void
+           **data, int_32 *count, int *freeData)
+
+   Variables
+       int _nl_msg_cat_cntr
+       const char * language = 'LANGUAGE'
+       const char * _macro_i18ndomains
+       const struct headerSprintfExtension_s rpmHeaderFormats []
+           Table of query format extensions.
+
+DETAILED DESCRIPTION
+       Definition in file formats.c.
+
+FUNCTION DOCUMENTATION
+   char* depflagsFormat (int_32 type, const void * data, char *
+       formatPrefix, int padding, int element) [static]
+       Parameters:
+
+       type   tag type
+
+       data   tag value
+
+       formatPrefix
+
+       padding
+
+       element
+              (unused)
+
+       Returns:
+           formatted string
+
+       Definition at line 119 of file formats.c.
+
+       References _, int_32, RPM_INT32_TYPE, RPMSENSE_EQUAL,
+       RPMSENSE_GREATER, RPMSENSE_LESS, xmalloc, and xstrdup.
+
+       Referenced by triggercondsTag.
+
+   int descriptionTag (Header h, rpmTagType * type, const void **
+       data, int_32 * count, int * freeData) [static]
+       Parameters:
+
+       h      header
+
+       Return values:
+
+       type   address of tag type
+
+       data   address of tag value pointer
+
+       count  address of no. of data items
+
+       freedata
+              address of data-was-malloc'ed indicator
+
+       Returns:
+           0 on success
+
+       Definition at line 525 of file formats.c.
+
+       References i18nTag, int_32, RPMTAG_DESCRIPTION, and
+       rpmTagType.
+
+   char* fflagsFormat (int_32 type, const void * data, char *
+       formatPrefix, int padding, int element) [static]
+       Parameters:
+
+       type   tag type
+
+       data   tag value
+
+       formatPrefix
+
+       padding
+
+       element
+              (unused)
+
+       Returns:
+           formatted string
+
+       Definition at line 76 of file formats.c.
+
+       References _, int_32, RPM_INT32_TYPE, RPMFILE_CONFIG,
+       RPMFILE_DOC, RPMFILE_GHOST, RPMFILE_MISSINGOK,
+       RPMFILE_NOREPLACE, RPMFILE_SPECFILE, xmalloc, and xstrdup.
+
+   int filenamesTag (Header h, rpmTagType * type, const void **
+       data, int_32 * count, int * freeData) [static]
+       Parameters:
+
+       h      header
+
+       Return values:
+
+       type   address of tag type
+
+       data   address of tag value pointer
+
+       count  address of no. of data items
+
+       freedata
+              address of data-was-malloc'ed indicator
+
+       Returns:
+           0 on success
+
+       Definition at line 391 of file formats.c.
+
+       References int_32, RPM_STRING_ARRAY_TYPE,
+       rpmBuildFileList, and rpmTagType.
+
+   int fsnamesTag (Header h, int_32 * type, void ** data, int_32
+       * count, int * freeData) [static]
+       Parameters:
+
+       h      header
+
+       Return values:
+
+       type   address of tag type
+
+       data   address of tag value pointer
+
+       count  address of no. of data items
+
+       freedata
+              address of data-was-malloc'ed indicator
+
+       Returns:
+           0 on success
+
+       Definition at line 157 of file formats.c.
+
+       References int_32, RPM_STRING_ARRAY_TYPE, and
+       rpmGetFilesystemList.
+
+   int fssizesTag (Header h, rpmTagType * type, const void **
+       data, int_32 * count, int * freeData) [static]
+       Parameters:
+
+       h      header
+
+       Return values:
+
+       type   address of tag type
+
+       data   address of tag value pointer
+
+       count  address of no. of data items
+
+       freedata
+              address of data-was-malloc'ed indicator
+
+       Returns:
+           0 on success
+
+       Definition at line 217 of file formats.c.
+
+       References _free, HGE_t, int_32, RPM_INT32_TYPE,
+       rpmBuildFileList, rpmGetFilesystemList,
+       rpmGetFilesystemUsage, RPMTAG_FILESIZES, rpmTagType,
+       uint_32, and xcalloc.
+
+   int groupTag (Header h, rpmTagType * type, const void ** data,
+       int_32 * count, int * freeData) [static]
+       Parameters:
+
+       h      header
+
+       Return values:
+
+       type   address of tag type
+
+       data   address of tag value pointer
+
+       count  address of no. of data items
+
+       freedata
+              address of data-was-malloc'ed indicator
+
+       Returns:
+           0 on success
+
+       Definition at line 541 of file formats.c.
+
+       References i18nTag, int_32, RPMTAG_GROUP, and rpmTagType.
+
+   int i18nTag (Header h, int_32 tag, rpmTagType * type, const
+       void ** data, int_32 * count, int * freeData) [static]
+       Parameters:
+
+       h      header
+
+       tag    tag
+
+       Return values:
+
+       type   address of tag type
+
+       data   address of tag value pointer
+
+       count  address of no. of data items
+
+       freedata
+              address of data-was-malloc'ed indicator
+
+       Returns:
+           0 on success
+
+       Definition at line 425 of file formats.c.
+
+       References _free, _macro_i18ndomains, _nl_msg_cat_cntr,
+       alloca, dgettext, getenv, headerNVR, HGE_t, int_32,
+       language, RPM_STRING_TYPE, rpmExpand, rpmTagType, setenv,
+       tagName, unsetenv, and xstrdup.
+
+       Referenced by descriptionTag, groupTag, and summaryTag.
+
+   int instprefixTag (Header h, rpmTagType * type, const void **
+       data, int_32 * count, int * freeData) [static]
+       Parameters:
+
+       h      header
+
+       Return values:
+
+       type   address of tag type
+
+       data   address of tag value pointer
+
+       count  address of no. of data items
+
+       freedata
+              address of data-was-malloc'ed indicator
+
+       Returns:
+           0 on success
+
+       Definition at line 184 of file formats.c.
+
+       References HFD_t, HGE_t, int_32, RPM_STRING_TYPE,
+       RPMTAG_INSTALLPREFIX, RPMTAG_INSTPREFIXES, rpmTagType, and
+       xstrdup.
+
+   char* permsFormat (int_32 type, const void * data, char *
+       formatPrefix, int padding, int element) [static]
+       Parameters:
+
+       type   tag type
+
+       data   tag value
+
+       formatPrefix
+
+       padding
+
+       element
+              (unused)
+
+       Returns:
+           formatted string
+
+       Definition at line 46 of file formats.c.
+
+       References _, _free, int_32, RPM_INT32_TYPE,
+       rpmPermsString, xmalloc, and xstrdup.
+
+   int summaryTag (Header h, rpmTagType * type, const void **
+       data, int_32 * count, int * freeData) [static]
+       Parameters:
+
+       h      header
+
+       Return values:
+
+       type   address of tag type
+
+       data   address of tag value pointer
+
+       count  address of no. of data items
+
+       freedata
+              address of data-was-malloc'ed indicator
+
+       Returns:
+           0 on success
+
+       Definition at line 509 of file formats.c.
+
+       References i18nTag, int_32, RPMTAG_SUMMARY, and
+       rpmTagType.
+
+   int triggercondsTag (Header h, rpmTagType * type, const void
+       ** data, int_32 * count, int * freeData) [static]
+       Parameters:
+
+       h      header
+
+       Return values:
+
+       type   address of tag type
+
+       data   address of tag value pointer
+
+       count  address of no. of data items
+
+       freedata
+              address of data-was-malloc'ed indicator
+
+       Returns:
+           0 on success
+
+       Definition at line 268 of file formats.c.
+
+       References _free, depflagsFormat, HFD_t, HGE_t, int_32,
+       RPM_INT32_TYPE, RPM_STRING_ARRAY_TYPE, RPMSENSE_SENSEMASK,
+       RPMTAG_TRIGGERFLAGS, RPMTAG_TRIGGERINDEX,
+       RPMTAG_TRIGGERNAME, RPMTAG_TRIGGERSCRIPTS,
+       RPMTAG_TRIGGERVERSION, rpmTagType, xmalloc, xrealloc, and
+       xstrdup.
+
+   char* triggertypeFormat (int_32 type, const void * data, char
+       * formatPrefix, int padding, int element) [static]
+       Parameters:
+
+       type   tag type
+
+       data   tag value
+
+       formatPrefix
+              (unused)
+
+       padding
+              (unused)
+
+       element
+              (unused)
+
+       Returns:
+           formatted string
+
+       Definition at line 20 of file formats.c.
+
+       References _, int_32, RPM_INT32_TYPE, RPMSENSE_TRIGGERIN,
+       and xstrdup.
+
+   int triggertypeTag (Header h, rpmTagType * type, const void **
+       data, int_32 * count, int * freeData) [static]
+       Parameters:
+
+       h      header
+
+       Return values:
+
+       type   address of tag type
+
+       data   address of tag value pointer
+
+       count  address of no. of data items
+
+       freedata
+              address of data-was-malloc'ed indicator
+
+       Returns:
+           0 on success
+
+       Definition at line 339 of file formats.c.
+
+       References HFD_t, HGE_t, int_32, RPM_STRING_ARRAY_TYPE,
+       RPMSENSE_TRIGGERIN, RPMSENSE_TRIGGERUN,
+       RPMTAG_TRIGGERFLAGS, RPMTAG_TRIGGERINDEX,
+       RPMTAG_TRIGGERSCRIPTS, rpmTagType, xmalloc, and xstrdup.
+
+VARIABLE DOCUMENTATION
+   const char* _macro_i18ndomains [static]
+       Initial value:
+
+
+                       '%{?_i18ndomains:%{_i18ndomains}}'
+
+       Definition at line 413 of file formats.c.
+
+       Referenced by i18nTag.
+
+   int _nl_msg_cat_cntr
+       Definition at line 409 of file formats.c.
+
+       Referenced by i18nTag.
+
+   const char* language = 'LANGUAGE' [static]
+       Definition at line 411 of file formats.c.
+
+       Referenced by i18nTag.
+
+   const struct headerSprintfExtension_s rpmHeaderFormats[]
+       Initial value:
+
+        {
+           { HEADER_EXT_TAG, 'RPMTAG_GROUP', { groupTag } },
+           { HEADER_EXT_TAG, 'RPMTAG_DESCRIPTION', { descriptionTag } },
+           { HEADER_EXT_TAG, 'RPMTAG_SUMMARY', { summaryTag } },
+           { HEADER_EXT_TAG, 'RPMTAG_FILENAMES', { filenamesTag } },
+           { HEADER_EXT_TAG, 'RPMTAG_FSSIZES', { fssizesTag } },
+           { HEADER_EXT_TAG, 'RPMTAG_FSNAMES', { fsnamesTag } },
+           { HEADER_EXT_TAG, 'RPMTAG_INSTALLPREFIX', { instprefixTag } },
+           { HEADER_EXT_TAG, 'RPMTAG_TRIGGERCONDS', { triggercondsTag } },
+           { HEADER_EXT_TAG, 'RPMTAG_TRIGGERTYPE', { triggertypeTag } },
+           { HEADER_EXT_FORMAT, 'depflags', { depflagsFormat } },
+           { HEADER_EXT_FORMAT, 'fflags', { fflagsFormat } },
+           { HEADER_EXT_FORMAT, 'perms', { permsFormat } },
+           { HEADER_EXT_FORMAT, 'permissions', { permsFormat } },
+           { HEADER_EXT_FORMAT, 'triggertype', { triggertypeFormat } },
+           { HEADER_EXT_MORE, NULL, { (void *) headerDefaultFormats } }
+       }
+       Table of query format extensions.
+
+       Note:
+           Chains to headerDefaultFormats[].
+
+       Definition at line 549 of file formats.c.
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002           lib/formats.c(3)

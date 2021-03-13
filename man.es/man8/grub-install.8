@@ -1,0 +1,50 @@
+GRUB-INSTALL(8)                FSF                GRUB-INSTALL(8)
+
+
+
+NAME
+       grub-install - install GRUB on your drive
+
+SYNOPSIS
+       grub-install [OPTION] install_device
+
+DESCRIPTION
+       Install GRUB on your drive.
+
+       -h, --help
+              print this message and exit
+
+       -v, --version
+              print the version information and exit
+
+       --root-directory=DIR
+              install GRUB images under the directory DIR instead
+              of the root directory
+
+       --grub-shell=FILE
+              use FILE as the grub shell
+
+       --force-lba
+              force GRUB to use LBA mode even for a buggy BIOS
+
+       --recheck
+              probe a device map even if it already exists
+
+       INSTALL_DEVICE can be a  GRUB  device  name  or  a  system
+       device filename.
+
+REPORTING BUGS
+       Report bugs to <bug-grub@gnu.org>.
+
+SEE ALSO
+       The full documentation for grub-install is maintained as a
+       Texinfo manual.  If the info and grub-install programs are
+       properly installed at your site, the command
+
+              info grub-install
+
+       should give you access to the complete manual.
+
+
+
+grub-install (GNU GRUB 0.91)January 2002           GRUB-INSTALL(8)

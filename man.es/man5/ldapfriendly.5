@@ -1,0 +1,37 @@
+LDAPFRIENDLY(5)                                   LDAPFRIENDLY(5)
+
+
+
+NAME
+       ldapfriendly - data file for LDAP friendly routines
+
+SYNOPSIS
+       /usr/share/openldap/ldapfriendly
+
+DESCRIPTION
+       The  file /usr/share/openldap/ldapfriendly contains simple
+       mapping information used by the ldap_friendly_name(3) rou­
+       tine.   Blank  lines and lines that have a first character
+       of `#' are treated as comments and ignored.  The  informa­
+       tion  consists of lines that contain an "unfriendly" name,
+       a tab, and a "friendly" name.
+
+       Other friendly mapping files can be created  and  used  by
+       ldap_friendly_name(3).   Just  use the same format as that
+       described  above  and  include  the  file  name   in   the
+       ldap_friendly_name() call.
+
+FILES
+       /usr/share/openldap/ldapfriendly
+
+SEE ALSO
+       ldap(3), ldap_friendly_name(3)
+
+ACKNOWLEDGEMENTS
+       OpenLDAP  is developed and maintained by The OpenLDAP Pro­
+       ject (http://www.openldap.org/).  OpenLDAP is derived from
+       University of Michigan LDAP 3.3 Release.
+
+
+
+OpenLDAP 2.0.21-Release   20 August 2000          LDAPFRIENDLY(5)

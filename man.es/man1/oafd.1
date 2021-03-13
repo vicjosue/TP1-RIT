@@ -1,0 +1,46 @@
+oafd(1)                 The GNOME Project                 oafd(1)
+
+
+
+NAME
+       oafd - the GNOME Object Activation Daemon.
+
+
+SYNOPSIS
+       oafd [options]
+
+
+DESCRIPTION
+       The  oafd  daemon provides a simple naming-service wrapper
+       for GNOME applicatinos that are using  CORBA,  Orbit,  OAF
+       and/or Bonobo.
+
+
+       oafd  is  normally  started  automatically  when the gnome
+       desktop is started.
+
+
+OPTIONS
+       --ac-activate
+              Serve as an ActivationContext  (default  is  as  an
+              ObjectDirectory only)
+
+
+       --ior-output-fd=FD
+              File descriptor to write IOR to
+
+
+       --od-domain=DOMAIN
+              Domain of ObjectDirectory
+
+
+       --od-source-dir=DIRECTORY
+              Directory to read .oafinfo files from
+
+
+AUTHOR
+       The Gnome Project
+
+
+
+GNOME                      12 Oct 2001                    oafd(1)

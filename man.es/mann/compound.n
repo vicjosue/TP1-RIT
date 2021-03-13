@@ -1,0 +1,275 @@
+compound(n)           Tix Built-In Commands           compound(n)
+
+
+
+_________________________________________________________________
+
+NAME
+       compound - multi-line compound image type.
+
+SYNOPSIS
+       image create compound ?name? ?options?
+_________________________________________________________________
+
+DESCRIPTION
+       Compound  image  types  can  be used to create images that
+       consists of multiple horizontal lines; each line  is  com­
+       posed  of  a  series  of  items (texts, bitmaps, images or
+       spaces) arranged from left to right. Compound  images  are
+       mainly  used  to  embed complex drawings into widgets that
+       support the -image option. As shown in the EXAMPLE section
+       below,  a  compound  image can be used to display a bitmap
+       and a text string simutaneously in a TK button(n)  widget.
+
+CREATING COMPOUND IMAGES
+       Like  all  images,  compound  images are created using the
+       image create command. Compound images support the  follow­
+       ing options:
+
+       -background color
+              Specifies  the  background  color  of  the compound
+              image. This color is also used as the default back­
+              ground  color  for the bitmap items in the compound
+              image.
+
+       -borderwidth pixels
+              Specifies a non-negative value indicating the width
+              of  the 3-D border drawn around the compound image.
+
+       -font font
+              Specifies the default font for the  text  items  in
+              the compound image.
+
+       -foreground color
+              Specifies  the  default  foreground  color  for the
+              bitmap and text items in the compound image.
+
+       -padx value
+              Specifies a non-negative value indicating how  much
+              extra  space  to  request for the compound image in
+              the X-direction. The value  may  have  any  of  the
+              forms acceptable to Tk_GetPixels(3).
+
+       -pady value
+              Specifies  a non-negative value indicating how much
+              extra space to request for the  compound  image  in
+              the Y-direction.
+
+       -relief value
+              Specifies the 3-D effect desired for the background
+              of  the  compound  image.  Acceptable  values   are
+              raised, sunken, flat, ridge, and groove.
+
+       -showbackground value
+              Specifies whether the background and the 3D borders
+              should be drawn.  Must be a valid boolean value. By
+              default   the  background  is  not  drawn  and  the
+              compound image appears to have a transparent  back­
+              ground.
+
+       -window pathName
+              Specifies the window in which the compound image is
+              displayed. One compound image can be  displayed  in
+              only one window. When that window is destroyed, the
+              compound image is automatically destroyed as  well.
+              This  option  must  be  specified  when calling the
+              image create compound command and cannot be changed
+              by the configure image command.
+
+IMAGE COMMAND
+       When  a  compound  image is created, Tk also creates a new
+       command whose name is the same as the image. This  command
+       may  be used to invoke various operations on the image. It
+       has the following general form:
+                     imageName option ?arg arg ...?
+       Option and the args determine the exact  behavior  of  the
+       command.  The following commands are possible for compound
+       images:
+
+       imageName add line ?option value ...?
+              Creates a new line at the bottom  of  the  compound
+              image. Lines support the following options:
+
+              -anchor value
+                     Specifies  how  the  line  should be aligned
+                     along the horizontal axis.  When the  values
+                     are  w, sw or nw, the line is aligned to the
+                     left. When the values are c,  s  or  n,  the
+                     line  is  aligned  to  the middle.  When the
+                     values are e, se or ne, the line is  aligned
+                     to the right.
+
+              -padx value
+                     Specifies  a  non-negative  value indicating
+                     how much extra space  to  request  for  this
+                     line in the X-direction.
+
+       imageName add item-type ?option value ...?
+              Creates a new item of the type item-type at the end
+              of the last line of the compound image.  All  types
+              of items support these following common options:
+
+              -anchor value
+                     Specifies  how  the  item  should be aligned
+                     along the vertical axis. When the values are
+                     n,  nw or ne, the item is aligned to the top
+                     of the line. When the values are c, w or  e,
+                     the  item  is  aligned  to the middle of the
+                     line.  When the values are s, se or sw,  the
+                     item is aligned to the bottom of the line.
+
+              -padx value
+                     Specifies  a  non-negative  value indicating
+                     how much extra space  to  request  for  this
+                     item in the X-direction.
+
+              -pady value
+                     Specifies  a  non-negative  value indicating
+                     how much extra space  to  request  for  this
+                     item in the Y-direction.
+
+              item-type can be any of the following:
+
+       imageName add bitmap ?option value ...?
+              Creates a new bitmap item of at the end of the last
+              line of  the  compound  image.  Additional  options
+              accepted by the bitmap type are:
+
+              -background color
+                     Specifies the background color of the bitmap
+                     item.
+
+              -bitmap name
+                     Specifies a bitmap to display in this  item,
+                     in  any  of  the forms acceptable to Tk_Get­
+                     Bitmap(3).
+
+              -foreground color
+                     Specifies the foreground color of the bitmap
+                     item.
+
+       imageName add image ?option value ...?
+              Creates  a new image item of at the end of the last
+              line of  the  compound  image.  Additional  options
+              accepted by the image type are:
+
+              -image name
+                     Specifies  an image to display in this item.
+                     name must have been created with  the  image
+                     create command.
+
+       imageName add space ?option value ...?
+              Creates  a new space item of at the end of the last
+              line of the compound image. Space items do not dis­
+              play anything. They just acts as space holders that
+              add additional spaces between items inside  a  com­
+              pound  image.  Additional  options  accepted by the
+              image type are:
+
+              -width value
+                     Specifies the width of this space. The value
+                     may  have  any  of  the  forms acceptable to
+                     Tk_GetPixels(3).
+
+              -height value
+                     Specifies the  height  of  this  space.  The
+                     value  may  have any of the forms acceptable
+                     to Tk_GetPixels(3).
+
+       imageName add text ?option value ...?
+              Creates a new text item of at the end of  the  last
+              line  of  the  compound  image.  Additional options
+              accepted by the text type are:
+
+              -background color
+                     Specifies the background color of  the  text
+                     item.
+
+              -font name
+                     Specifies  the font to be used for this text
+                     item.
+
+              -foreground color
+                     Specifies the foreground color of  the  text
+                     item.
+
+              -justify value
+                     When  there  are multiple lines of text dis­
+                     played  in  a   text   item,   this   option
+                     determines  how  the lines line up with each
+                     other. value must be one of left, center, or
+                     right.   Left  means  that  the  lines' left
+                     edges all line up,  center  means  that  the
+                     lines'  centers are aligned, and right means
+                     that the lines' right edges line up.
+
+              -text string
+                     Specifies a text string to display  in  this
+                     text item.
+
+              -underline value
+                     Specifies  the  integer index of a character
+                     to underline in the text item. 0 corresponds
+                     to the first character of the text displayed
+                     in the text item, 1 to the  next  character,
+                     and so on.
+
+              -wraplength value
+                     This   option  specifies  the  maximum  line
+                     length of the  label  string  on  this  text
+                     item. If the line length of the label string
+                     exceeds this length, it is wrapped onto  the
+                     next  line,  so  that no line is longer than
+                     the specified length. The value may be spec­
+                     ified  in  any  of  the  standard  forms for
+                     screen distances. If this value is less than
+                     or  equal  to  0  then  no wrapping is done:
+                     lines will break only at newline  characters
+                     in the text.
+
+       imageName cget option
+              Returns  the  current  value  of  the configuration
+              option given by option. Option may have any of  the
+              values  accepted  by the image create compound com­
+              mand.
+
+       imageName configure ?option? ?value option value ...?
+              Query or modify the configuration options  for  the
+              image.  If  no  option is specified, returns a list
+              describing all of the available options for  image­
+              Name  (see  Tk_ConfigureInfo for information on the
+              format of this list).  If option is specified  with
+              no  value, then the command returns a list describ­
+              ing the one named option (this list will be identi­
+              cal  to  the  corresponding  sublist  of  the value
+              returned if no option is  specified).   If  one  or
+              more  option-value  pairs  are  specified, then the
+              command modifies the given option(s)  to  have  the
+              given value(s); in this case the command returns an
+              empty string. Option may have  any  of  the  values
+              accepted  by  the  image  create  compound command,
+              except the -window option
+
+EXAMPLE
+       The following example creates  a  compound  image  with  a
+       bitmap  and  a text string and places this image into a Tk
+       bitton(n) widget. Notice that the image  must  be  created
+       after the creation of the window that it resides in.
+
+              set btn [button .b]
+              set img [image create compound -window $btn]
+              $img add line
+              $img add bitmap -bitmap warning
+              $img add space -width 8
+              $img add text -text "Warning" -underline 0
+              $btn config -image $img
+              pack $btn
+
+KEYWORDS
+       image(n), Tix(n)
+
+
+
+
+
+Tix                            4.0                    compound(n)

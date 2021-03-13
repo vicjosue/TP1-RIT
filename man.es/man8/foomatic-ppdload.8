@@ -1,0 +1,50 @@
+FOOMATIC-PPDLOAD(8)                           FOOMATIC-PPDLOAD(8)
+
+
+
+NAME
+       foomatic-ppdload - <put a short description here>
+
+SYNOPSIS
+       foomatic-ppdload [filename.ppd printer-id]...
+
+
+DESCRIPTION
+       foomatic-ppdload  takes a ppd filename and a printer ID as
+       arguments.  It parses a PPD file and  writes  option  data
+       into the foomatic database for use with the foomatic "ppd"
+       driver and that printer.
+
+       Right now, it will handle Boolean and PickOne options that
+       go  in  the  Prolog,  DocumentSetup,  or  PageSetup spots.
+       Also, PPD interoption constraints (not to be confused with
+       foomatic option to printer and driver mapping constraints)
+       are not supported by foomatic.  And of course, the  inter­
+       esting  color  and  font  information  from the PPD has no
+       place in the  current  foomatic  schema.   All  this  will
+       change over time.
+
+
+
+
+EXIT STATUS
+       foomatic-ppdload returns ...
+
+
+AUTHOR
+       Manfred  Wassmann  <manolo@NCC-1701.B.Shuttle.de>  for the
+       foomatic project using output from the associated  binary.
+
+
+BUGS
+       There  are  several  limitations,  but it's an interesting
+       experiment.
+
+       Please  send  bug  reports  to  foomatic-devel@linuxprint­
+       ing.org.
+
+
+
+
+
+Foomatic Project            2001-05-07        FOOMATIC-PPDLOAD(8)

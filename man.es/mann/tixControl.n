@@ -1,0 +1,320 @@
+tixControl(n)         Tix Built-In Commands         tixControl(n)
+
+
+
+_________________________________________________________________
+
+NAME
+       tixControl - Create and manipulate tixControl widgets
+
+SYNOPSIS
+       tixControl pathName ?options?
+
+SUPER-CLASS
+       The  TixControl  class  is derived from the TixLabelWidget
+       class and inherits all the commands, options  and  subwid­
+       gets of its super-class.
+
+STANDARD OPTIONS
+       The  Control widget supports all the standard options of a
+       frame widget. See the options(n) manual entry for  details
+       on the standard options.
+
+WIDGET-SPECIFIC OPTIONS
+       Command-Line Name:-allowempty
+       Database Name:  allowEmpty
+       Database Class: AllowEmpty
+
+              Specifies  whether  the Control widget should allow
+              the empty string as a valid input.
+
+       Command-Line Name:-autorepeat
+       Database Name:  autorepeat
+       Database Class: AutoRepeat
+
+              Specifies whether the Control  widget  should  have
+              autorepeat  behavior.   If  set  to  be "true", the
+              value of the Control widget will  be  automatically
+              incremented or decremented when the user holds down
+              the mouse button over the arrow buttons. Only  val­
+              ues "true" and "false" will be recognized.
+
+       Command-Line Name:-command
+       Database Name:  command
+       Database Class: Command
+
+              Specifies  the command to be called when the -value
+              option of the Control widget is changed.  The  com­
+              mand  will  be called with one arguments -- the new
+              value of the Control widget.
+
+       Command-Line Name:-decrcmd
+       Database Name:  decrCmd
+       Database Class: DecrCmd
+
+              Specifies a TCL command to be called when  the  the
+              user  presses the down-arrow button subwidget. This
+              command is called with one parameter -- the current
+              -value  of  this Control widget. This command is to
+              decrement this value by one step, according to  its
+              own  definition  of  "decrement",  and  return  the
+              decremented value, which  will  be  stored  in  the
+              -value of this Control widget.
+
+       Command-Line Name:-disablecallback
+       Database Name:  disableCallback
+       Database Class: DisableCallback
+
+              A boolean value indicating whether callbacks should
+              be disabled. When set  to  true,  the  TCL  command
+              specified  by  the  -command option is not executed
+              when the -value of the Control widget changes.
+
+       Command-Line Name:-disableforeground
+       Database Name:  disableForeground
+       Database Class: DisableForeground
+
+              The foreground color to use for of the  entry  sub­
+              widget when the Control widget is disabled.
+
+       Command-Line Name:-incrcmd
+       Database Name:  incrCmd
+       Database Class: IncrCmd
+
+              Specifies  a  TCL command to be called when the the
+              user presses the up-arrow  button  subwidget.  This
+              command is called with one parameter -- the current
+              -value of this Control widget. This command  is  to
+              increment  this value by one step, according to its
+              own  definition  of  "increment",  and  return  the
+              incremented  value,  which  will  be  stored in the
+              -value of this Control widget.
+
+       Command-Line Name:-initwait
+       Database Name:  initwait
+       Database Class: Initwait
+
+              Specifies how long the Control widget  should  wait
+              initially  before it starts to automatically incre­
+              ment or decrement its value in the autorepeat mode.
+              In milliseconds.
+
+       Command-Line Name:-integer
+       Database Name:  integer
+       Database Class: Integer
+
+              A  Boolean  value  specifying  whether only integer
+              numbers are accepted.
+
+       Command-Line Name:-label
+       Database Name:  label
+       Database Class: Label
+
+              Specifies the string to display  as  the  label  of
+              this Control widget.
+
+       Command-Line Name:-labelside
+       Database Name:  labelSide
+       Database Class: LabelSide
+
+              Specifies where the label should be displayed rela­
+              tive to the entry  subwidget.  Valid  options  are:
+              top, left, right, bottom, none or acrosstop.
+
+       Name:           max
+       Class:          Max
+       Switch:         -max
+       Alias:          -ulimit
+
+              Specifies  the upper limit of the value of the Con­
+              trol widget. When set to empty string, the  Control
+              widget has no upper limit.
+
+       Name:           min
+       Class:          Min
+       Switch:         -min
+       Alias:          -llimit
+
+              Specifies  the lower limit of the value of the Con­
+              trol widget.When set to empty string,  the  Control
+              widget has no lower limit.
+
+       Command-Line Name:-repeatrate
+       Database Name:  repeatRate
+       Database Class: RepeatRate
+
+              Specifies how often the value of the Control widget
+              should be incremented or decremented when it is  in
+              the autorepeat mode. In milliseconds.
+
+       Command-Line Name:-selectmode
+       Database Name:  selectMode
+       Database Class: SelectMode
+
+              Specifies  how  the  Control widget should react to
+              <KeyPress> events. When  set  to  "immediate",  any
+              user  keyboard  inputs  will immediately change the
+              -value option. When set to "normal", the user  key­
+              board  inputs  will  be copied to the -value option
+              only if the <Return> key is pressed or the keyboard
+              focus  is changed. The use of the immediate mode is
+              discouraged. For effective use of the Control  wid­
+              get,  one  should use the normal mode together with
+              the update widget command (see below).
+
+       Command-Line Name:-state
+       Database Name:  state
+       Database Class: State
+
+              Specifies the whether the Control widget is  normal
+              or  disabled.   Only  the values "normal" and "dis­
+              abled" are recognized.
+
+       Command-Line Name:-step
+       Database Name:  step
+       Database Class: Step
+
+              Specifies by how much the value of the Control wid­
+              get  should  be  incremented or decrmented when the
+              user press the arrow buttons.
+
+       Command-Line Name:-validatecmd
+       Database Name:  validateCmd
+       Database Class: ValidateCmd
+
+              Specifies a TCL  command  to  be  called  when  the
+              -value  of  the  Control widget is about to change.
+              This command is called with one  parameter  --  the
+              new  -value entered by the user. This command is to
+              validate this new value by  returning  a  value  it
+              deems valid.
+
+       Command-Line Name:-value
+       Database Name:  value
+       Database Class: Value
+
+              Specifies the value of the Control widget.
+
+       Command-Line Name:-variable
+       Database Name:  variable
+       Database Class: Variable
+
+              Specifies the global variable in which the value of
+              the Control widget should be stored. The  value  of
+              the  Control  widget  will be automatically updated
+              when this variable is changed.
+
+SUBWIDGETS
+       Name:           decr
+       Class:          Button
+
+              The down arrow button.
+
+       Name:           entry
+       Class:          Entry
+
+              The entry that shows the value of this Control wid­
+              get.
+
+       Name:           incr
+       Class:          Button
+
+              The up arrow button.
+
+       Name:           label
+       Class:          Label
+
+              The label subwidget.
+_________________________________________________________________
+
+DESCRIPTION
+       The  tixControl command creates a new window (given by the
+       pathName argument) and makes it  into  a  Control  widget.
+       Additional  options,  described above, may be specified on
+       the command line or in the option  database  to  configure
+       aspects  of  the  Control  widget  such  as its cursor and
+       relief.
+
+       The Control widget is also known as  the  SpinBox  widget.
+       It  is  generally  used  to  control a value. The user can
+       adjust the value by pressing the two arrow buttons  or  by
+       entering  the value directly into the entry. The new value
+       will be checked against the user-defined upper  and  lower
+       limits.
+
+WIDGET COMMANDS
+       The  tixControl  command  creates  a new Tcl command whose
+       name is the same as the path name of the Control  widget's
+       window.  This command may be used to invoke various opera­
+       tions on the widget. It has the following general form:
+                     pathName option ?arg arg ...?
+       PathName is the name of the command, which is the same  as
+       the  Control  widget's  path  name.   Option  and the args
+       determine the exact behavior of the command.  The  follow­
+       ing commands are possible for Control widgets:
+
+       pathName cget option
+              Returns  the  current  value  of  the configuration
+              option given by option. Option may have any of  the
+              values accepted by the tixControl command.
+
+       pathName configure ?option? ?value option value ...?
+              Query  or  modify  the configuration options of the
+              widget.  If no option is specified, returns a  list
+              describing   all   of  the  available  options  for
+              pathName (see Tk_ConfigureInfo for  information  on
+              the  format  of this list).  If option is specified
+              with no value, then  the  command  returns  a  list
+              describing  the one named option (this list will be
+              identical to the corresponding sublist of the value
+              returned  if  no  option  is specified).  If one or
+              more option-value pairs  are  specified,  then  the
+              command modifies the given widget option(s) to have
+              the  given  value(s);  in  this  case  the  command
+              returns  an  empty  string.  Option may have any of
+              the values accepted by the tixControl command.
+
+       pathName decr
+              Decrements the value of the Control widget  by  the
+              step specified by the -step option.
+
+       pathName incr
+              Increments  the  value of the Control widget by the
+              step specified by the -step option.
+
+       pathName invoke
+              Causes the command specified by the -command option
+              to be invoked.
+
+       pathName update
+              If  the  user has modified the entry using keyboard
+              inputs, the update command will update  the  -value
+              of  this  Control widget. When the Control widget's
+              -selectmode option is set to "normal",  one  should
+              call the update command on this widget before exam­
+              ining its -value option. This command has no effect
+              in if the -selectmode option is set to "immediate".
+
+       pathName subwidget  name ?args?
+              When no options are given, this command returns the
+              pathname of the subwidget of the specified name.
+
+              When  options  are given, the widget command of the
+              specified  subwidget  will  be  called  with  these
+              options.
+
+BINDINGS
+       When  the user presses the up/down arrow buttons (or press
+       the <Up> and <Down> arrow keys on the keyboard), the value
+       of  the  tixControl  widget  is  adjusted according to the
+       -validatecmd, -incrcmd, -decrcmd,  -step,  -max  and  -min
+       options.
+
+KEYWORDS
+       Tix(n)
+
+
+
+
+
+Tix                            4.0                  tixControl(n)

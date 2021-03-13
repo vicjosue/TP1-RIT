@@ -1,0 +1,87 @@
+CHAGE(1)                                                 CHAGE(1)
+
+
+
+NAME
+       chage - change user password expiry information
+
+SYNOPSIS
+       chage [-m mindays] [-M maxdays] [-d lastday] [-I inactive]
+             [-E expiredate] [-W warndays] user
+
+       chage -l user
+
+DESCRIPTION
+       chage changes the number of days between password  changes
+       and  the  date of the last password change.  This informa­
+       tion is used by the system to determine when a  user  must
+       change  her  password.  The chage command is restricted to
+       the root user, except for the -l option, which may be used
+       by  an unprivileged user to determine when her password or
+       account is due to expire.
+
+       With the -m option, the value of mindays  is  the  minimum
+       number  of days between password changes.  A value of zero
+       for this field indicates that  the  user  may  change  her
+       password at any time.
+
+       With  the  -M  option, the value of maxdays is the maximum
+       number of days during which a  password  is  valid.   When
+       maxdays  plus  lastday  is  less than the current day, the
+       user will be required to change her password before  being
+       able  to  use  her account.  This occurance can be planned
+       for in advance by use of the -W option, which provides the
+       user with advance warning.
+
+       With  the -d option, the value of lastday is the number of
+       days since January 1st, 1970 when the  password  was  last
+       changed.   The  date  may  also be expressed in the format
+       YYYY-MM-DD (or the  format  more  commonly  used  in  your
+       area).
+
+       The  -E  option  is used to set a date on which the user's
+       account will no  longer  be  accessible.   The  expiredate
+       option  is  the  number  of  days since January 1, 1970 on
+       which the accounted is  locked.   The  date  may  also  be
+       expressed  in  the  format  YYYY-MM-DD (or the format more
+       commonly used in your area).   A  user  whose  account  is
+       locked  must contact the system administrator before being
+       able to use the system again.
+
+       The -I option is used to set the number of days  of  inac­
+       tivity  after a password has expired before the account is
+       locked.  A user whose account is locked must  contact  the
+       system  administrator  before being able to use the system
+       again.  The inactive option is the number of days of inac­
+       tivity. A value of 0 disables this feature.
+
+       The -W option is used to set the number of days of warning
+       before a password change is required.  The warndays option
+       is  the number of days prior to the password expiring that
+       a user will be warned her password is about to expire.
+
+       All of the above values are stored exactly  as  days  when
+       the shadow password file is used, but are converted to and
+       from weeks  when  the  standard  password  file  is  used.
+       Because of this conversion, rounding errors may result.
+
+       If  none of the options are selected, chage operates in an
+       interactive fashion, prompting the user with  the  current
+       values  for  all  of  the  fields.  Enter the new value to
+       change the field, or leave the line blank to use the  cur­
+       rent value.  The current value is displayed between a pair
+       of [ ] marks.
+
+FILES
+       /etc/passwd - user account information
+       /etc/shadow - shadow user account information
+
+SEE ALSO
+       passwd(5), shadow(5)
+
+AUTHOR
+       Julianne Frances Haugh (jfh@austin.ibm.com)
+
+
+
+                                                         CHAGE(1)

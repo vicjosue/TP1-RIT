@@ -1,0 +1,51 @@
+curs_addstr(3X)                                   curs_addstr(3X)
+
+
+
+NAME
+       addstr,  addnstr,  waddstr, waddnstr, mvaddstr, mvaddnstr,
+       mvwaddstr, mvwaddnstr - add a string of  characters  to  a
+       curses window and advance cursor
+
+SYNOPSIS
+       #include <curses.h>
+
+       int addstr(const char *str);
+       int addnstr(const char *str, int n);
+       int waddstr(WINDOW *win, const char *str);
+       int waddnstr(WINDOW *win, const char *str, int n);
+       int mvaddstr(int y, int x, const char *str);
+       int mvaddnstr(int y, int x, const char *str, int n);
+       int mvwaddstr(WINDOW *win, int y, int x, const char *str);
+       int mvwaddnstr(WINDOW *win, int y, int x, const char *str,
+       int n);
+
+DESCRIPTION
+       These  routines  write  the characters of the (null-termi­
+       nated) character string str on the given  window.   It  is
+       similar  to  calling waddch once for each character in the
+       string.  The four routines with n  as  the  last  argument
+       write  at  most n characters.  If n is -1, then the entire
+       string will be added.
+
+RETURN VALUE
+       All routines return the integer ERR upon failure and OK on
+       success  (the  SVr4 manuals specify only "an integer value
+       other than ERR") upon successful completion.
+
+NOTES
+       Note  that  all  of  these  routines  except  waddstr  and
+       waddnstr may be macros.
+
+PORTABILITY
+       All  these  entry  points  are described in the XSI Curses
+       standard, Issue 4.  The XSI errors EILSEQ  and  EOVERFLOW,
+       associated  with  extended-level  conformance, are not yet
+       detected.
+
+SEE ALSO
+       curses(3X), curs_addch(3X).
+
+
+
+                                                  curs_addstr(3X)

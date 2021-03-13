@@ -1,0 +1,50 @@
+KSYMS(8)               Linux Module Support              KSYMS(8)
+
+
+
+NAME
+       ksyms - display exported kernel symbols.
+
+SYNOPSIS
+       ksyms [-ahm]
+
+DESCRIPTION
+       Ksyms  shows  information  about  exported kernel symbols.
+       The format is address, name, and defining module.
+
+   OPTIONS
+       -a, --all
+              Display all symbols.  By default, symbols from  the
+              kernel proper are suppressed.
+
+       -h, --noheader
+              Suppress the column header.
+
+       -H, --help
+              Display a summary of options and exit.
+
+       -m, --info
+              Display module information.  Includes each module's
+              kernel load address and size in the listing.
+
+       -V, --version
+              Display the version of ksyms.
+
+SEE ALSO
+       insmod(8), modprobe(8), depmod(8), rmmod(8), lsmod(8).
+
+BUGS
+       ksyms  [  -V  |  --version  ]  should  exit   immediately.
+       Instead,  it prints the version information and behaves as
+       if no options were given.
+
+HISTORY
+       The ksyms command was  first  conceived  by  Bjorn  Ekwall
+       <bj0rn@blox.se>
+       The  '-m' option was inspired by David Hinds <dhinds@alle­
+       gro.stanford.edu>
+       Updated for 2.1.17 by Richard Henderson <rth@tamu.edu>
+
+
+
+Linux                    January 31, 2002                KSYMS(8)

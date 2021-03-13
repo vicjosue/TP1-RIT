@@ -1,0 +1,164 @@
+lib/misc.h(3)                                       lib/misc.h(3)
+
+
+
+NAME
+       lib/misc.h -
+
+SYNOPSIS
+       #include <unistd.h>
+       #include <sys/types.h>
+       #include 'header.h'
+       #include 'ugid.h'
+
+   Functions
+       char ** splitString (const char *str, int length, char
+           sep)
+       void freeSplitString (char **list)
+       char * stripTrailingChar (char *s, char c)
+           Remove occurences of trailing character from string.
+       int rpmfileexists (const char *urlfn)
+       int dosetenv (const char *name, const char *value, int
+           overwrite)
+       int doputenv (const char *str)
+       int makeTempFile (const char *prefix, const char **fnptr,
+           FD_t *fdptr)
+           Return file handle for a temporaray file.
+       char * currentDirectory (void)
+           Return (malloc'd) current working directory.
+       void compressFilelist (Header h)
+       void expandFilelist (Header h)
+       void buildOrigFileList (Header h, const char
+           ***fileListPtr, int *fileCountPtr)
+       int myGlobPatternP (const char *patternURL)
+       int rpmGlob (const char *patterns, int *argcPtr, const
+           char ***argvPtr)
+       void providePackageNVR (Header h)
+
+DETAILED DESCRIPTION
+       Definition in file misc.h.
+
+FUNCTION DOCUMENTATION
+   void buildOrigFileList (Header h, const char *** fileListPtr,
+       int * fileCountPtr)
+       Definition at line 455 of file misc.c.
+
+   void compressFilelist (Header h)
+       Definition at line 289 of file misc.c.
+
+       Referenced by doGetRecord, genCpioListAndHeader,
+       hdrCompressFilelist, hdrLoad, mungeFilelist,
+       readPackageHeaders, and rpmReadHeaders.
+
+   char* currentDirectory (void)
+       Return (malloc'd) current working directory.
+
+       Returns:
+           current working directory (malloc'ed)
+
+       Definition at line 265 of file misc.c.
+
+   int doputenv (const char * str)
+       Definition at line 97 of file misc.c.
+
+   int dosetenv (const char * name, const char * value, int
+       overwrite)
+       Definition at line 107 of file misc.c.
+
+       Referenced by checkPassPhrase, makeGPGSignature,
+       makePGPSignature, verifyGPGSignature, and
+       verifyPGPSignature.
+
+   void expandFilelist (Header h)
+       Definition at line 426 of file misc.c.
+
+       Referenced by dbiUpdateRecord, genCpioListAndHeader,
+       hdrExpandFilelist, and rpmdbAdd.
+
+   void freeSplitString (char ** list)
+       Definition at line 60 of file misc.c.
+
+       Referenced by parsePrep, processPackageFiles, and
+       processSourceFiles.
+
+   int makeTempFile (const char * prefix, const char ** fnptr,
+       FD_t * fdptr)
+       Return file handle for a temporaray file.
+
+       A unique temporaray file path will be generated using
+       rpmGenPath(prefix, '%{_tmppath}/', 'rpm-tmp.XXXXX') where
+       'XXXXXX' is filled in using rand(3). The file is opened,
+       and the link count and (dev,ino) location are verified
+       after opening. The file name and the open file handle are
+       returned.
+
+       Parameters:
+
+       prefix leading part of temp file path
+
+       Return values:
+
+       fnptr  temp file name (or NULL)
+
+       fdptr  temp file handle
+
+       Returns:
+           0 on success
+
+       Definition at line 167 of file misc.c.
+
+       Referenced by doScript, manageFile, verifyGPGSignature,
+       verifyPGPSignature, and writeRPM.
+
+   int myGlobPatternP (const char * patternURL)
+       Definition at line 466 of file misc.c.
+
+       Referenced by processBinaryFile, and rpmGlob.
+
+   void providePackageNVR (Header h)
+       Definition at line 694 of file misc.c.
+
+       Referenced by doGetRecord, hdrLoad, packageBinaries,
+       readPackageHeaders, rpmReadHeaders, and writeRPM.
+
+   int rpmfileexists (const char * urlfn)
+       Definition at line 68 of file misc.c.
+
+       Referenced by rpmdbMoveDatabase, and rpmdbRemoveDatabase.
+
+   int rpmGlob (const char * patterns, int * argcPtr, const char
+       *** argvPtr)
+       Definition at line 498 of file misc.c.
+
+       Referenced by IDTXglob, processBinaryFile, rpmInstall,
+       rpmQueryVerify, and rpmReadPackageManifest.
+
+   char** splitString (const char * str, int length, char sep)
+       Definition at line 24 of file misc.c.
+
+       Referenced by parsePrep, processPackageFiles, and
+       processSourceFiles.
+
+   char* stripTrailingChar (char * s, char c) [inline, static]
+       Remove occurences of trailing character from string.
+
+       Parameters:
+
+       s      string
+
+       c      character to strip
+
+       Returns:
+           string
+
+       Definition at line 36 of file misc.h.
+
+       Referenced by readPackageHeaders.
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002              lib/misc.h(3)

@@ -1,0 +1,191 @@
+rpmdb/rpmhash.h(3)                             rpmdb/rpmhash.h(3)
+
+
+
+NAME
+       rpmdb/rpmhash.h - Hash table implemenation.
+
+SYNOPSIS
+   Typedefs
+       typedef hashTable_s * hashTable
+       typedef unsigned int(* hashFunctionType )(const void
+           *string)
+       typedef int(* hashEqualityType )(const void *key1, const
+           void *key2)
+
+   Functions
+       unsigned int hashFunctionString (const void *string)
+           Return hash value of a string.
+       int hashEqualityString (const void *key1, const void
+           *key2)
+           Compare two hash table entries for equality.
+       hashTable htCreate (int numBuckets, int keySize, int
+           freeData, hashFunctionType fn, hashEqualityType eq)
+           Create hash table.
+       void htFree (hashTable ht)
+           Destroy hash table.
+       void htAddEntry (hashTable ht, const void *key, const void
+           *data)
+           Add item to hash table.
+       int htGetEntry (hashTable ht, const void *key, const void
+           ***data, int *dataCount, const void **tableKey)
+           Retrieve item from hash table.
+       int htHasEntry (hashTable ht, const void *key)
+           Check for key in hash table.
+
+DETAILED DESCRIPTION
+       Hash table implemenation.
+
+
+
+       Definition in file rpmhash.h.
+
+TYPEDEF DOCUMENTATION
+   typedef int(* hashEqualityType)(const void * key1, const void
+       * key2)
+       Definition at line 24 of file rpmhash.h.
+
+       Referenced by hashEqualityString, and htCreate.
+
+   typedef unsigned int(* hashFunctionType)(const void * string)
+       Definition at line 19 of file rpmhash.h.
+
+       Referenced by hashEqualityString, and htCreate.
+
+   typedef struct hashTable_s* hashTable
+       Definition at line 11 of file rpmhash.h.
+
+FUNCTION DOCUMENTATION
+   int hashEqualityString (const void * key1, const void * key2)
+       Compare two hash table entries for equality.
+
+       Parameters:
+
+       key1   entry 1
+
+       key2   entry 2
+
+       Returns:
+           0 if entries are equal
+
+       Definition at line 55 of file rpmhash.c.
+
+       References hashEqualityType, and hashFunctionType.
+
+   unsigned int hashFunctionString (const void * string)
+       Return hash value of a string.
+
+       Parameters:
+
+       string string on which to calculate hash value
+
+       Returns:
+           hash value
+
+       Definition at line 62 of file rpmhash.c.
+
+   void htAddEntry (hashTable ht, const void * key, const void *
+       data)
+       Add item to hash table.
+
+       Parameters:
+
+       ht     pointer to hash table
+
+       key    pointer to key
+
+       data   pointer to data value
+
+       Definition at line 95 of file rpmhash.c.
+
+       Referenced by doLookup.
+
+   hashTable htCreate (int numBuckets, int keySize, int freeData,
+       hashFunctionType fn, hashEqualityType eq)
+       Create hash table.
+
+       If keySize > 0, the key is duplicated within the table
+       (which costs memory, but may be useful anyway.
+
+       Parameters:
+
+       numBuckets
+              number of hash buckets
+
+       keySize
+              size of key (0 if unknown)
+
+       freeData
+              should data be freed when table is destroyed?
+
+       fn     function to generate hash value for key
+
+       eq     function to compare hash keys for equality
+
+       Returns:
+           pointer to initialized hash table
+
+       Definition at line 79 of file rpmhash.c.
+
+       Referenced by fpCacheCreate.
+
+   void htFree (hashTable ht)
+       Destroy hash table.
+
+       Parameters:
+
+       ht     pointer to hash table
+
+       Definition at line 125 of file rpmhash.c.
+
+       Referenced by fpCacheFree.
+
+   int htGetEntry (hashTable ht, const void * key, const void ***
+       data, int * dataCount, const void ** tableKey)
+       Retrieve item from hash table.
+
+       Parameters:
+
+       ht     pointer to hash table
+
+       key    pointer to key value
+
+       Return values:
+
+       data   address to store data value from bucket
+
+       dataCount
+              address to store data value size from bucket
+
+       tableKey
+              address to store key value from bucket (may be
+              NULL)
+
+       Returns:
+           0 on success, 1 if the item is not found.
+
+       Definition at line 156 of file rpmhash.c.
+
+       Referenced by cacheContainsDirectory.
+
+   int htHasEntry (hashTable ht, const void * key)
+       Check for key in hash table.
+
+       Parameters:
+
+       ht     pointer to hash table
+
+       key    pointer to key value
+
+       Returns:
+           1 if the key is present, 0 otherwise
+
+       Definition at line 149 of file rpmhash.c.
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002         rpmdb/rpmhash.h(3)

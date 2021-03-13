@@ -1,0 +1,153 @@
+lib/md5sum.c(3)                                   lib/md5sum.c(3)
+
+
+
+NAME
+       lib/md5sum.c - Generate/check MD5 Message Digests.
+
+SYNOPSIS
+       #include 'system.h'
+       #include 'md5.h'
+       #include 'rpmio_internal.h'
+       #include 'debug.h'
+
+   Functions
+       int domd5 (const char *fn, unsigned char *digest, int
+           asAscii, int brokenEndian)
+           Calculate MD5 sum for file.
+       int mdbinfile (const char *fn, unsigned char *bindigest)
+           Return MD5 sum of file as binary data.
+       int mdbinfileBroken (const char *fn, unsigned char
+           *bindigest)
+           Return (broken!) MD5 sum of file as binary data.
+       int mdfile (const char *fn, unsigned char *digest)
+       int mdfileBroken (const char *fn, unsigned char *digest)
+           Return (broken!) MD5 sum of file as ASCII string.
+
+DETAILED DESCRIPTION
+       Generate/check MD5 Message Digests.
+
+        Compile and link with md5.c. If you don't have getopt()
+       in your library also include getopt.c. For MSDOS you can
+       also link with the wildcard initialization function
+       (wildargs.obj for Turbo C and setargv.obj for MSC) so that
+       you can use wildcards on the commandline.
+
+       Written March 1993 by Branko Lankester Modified June 1993
+       by Colin Plumb for altered md5.c. Modified October 1995 by
+       Erik Troan for RPM
+
+
+       Definition in file md5sum.c.
+
+FUNCTION DOCUMENTATION
+   int domd5 (const char * fn, unsigned char * digest, int
+       asAscii, int brokenEndian) [static]
+       Calculate MD5 sum for file.
+
+       Parameters:
+
+       fn     file name
+
+       Return values:
+
+       digest address of md5sum
+
+       Parameters:
+
+       asAscii
+              return md5sum as ascii string?
+
+       brokenEndian
+              calculate broken MD5 sum?
+
+       Returns:
+           0 on success, 1 on error
+
+       Definition at line 27 of file md5sum.c.
+
+       References Fclose, fdFiniMD5, fdInitMD5, Ferror, Fopen,
+       Fread, rpmMD5Final, rpmMD5Init, and rpmMD5Update.
+
+       Referenced by mdbinfile, mdbinfileBroken, mdfile, and
+       mdfileBroken.
+
+   int mdbinfile (const char * fn, unsigned char * bindigest)
+       Return MD5 sum of file as binary data.
+
+       Parameters:
+
+       fn     file name
+
+       Return values:
+
+       bindigest
+              MD5 digest
+
+       Returns:
+           0 on success, 1 on error
+
+       Definition at line 112 of file md5sum.c.
+
+       References domd5.
+
+       Referenced by rpmAddSignature.
+
+   int mdbinfileBroken (const char * fn, unsigned char *
+       bindigest)
+       Return (broken!) MD5 sum of file as binary data.
+
+       Deprecated:
+           Here for compatibility with old (broken) versions of
+           RPM.
+
+       Parameters:
+
+       fn     file name
+
+       Return values:
+
+       bindigest
+              MD5 digest
+
+       Returns:
+           0 on success, 1 on error
+
+       Definition at line 116 of file md5sum.c.
+
+       References domd5.
+
+   int mdfile (const char * fn, unsigned char * digest)
+       Definition at line 120 of file md5sum.c.
+
+       References domd5.
+
+   int mdfileBroken (const char * fn, unsigned char * digest)
+       Return (broken!) MD5 sum of file as ASCII string.
+
+       Deprecated:
+           Here for compatibility with old (broken) versions of
+           RPM.
+
+       Parameters:
+
+       fn     file name
+
+       Return values:
+
+       digest MD5 digest
+
+       Returns:
+           0 on success, 1 on error
+
+       Definition at line 124 of file md5sum.c.
+
+       References domd5.
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002            lib/md5sum.c(3)

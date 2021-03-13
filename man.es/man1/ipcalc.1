@@ -1,0 +1,75 @@
+IPCALC(1)                       RH                      IPCALC(1)
+
+
+
+NAME
+       ipcalc - perform simple manipulation of IP addresses
+
+SYNOPSIS
+       ipcalc [OPTION]... <IP address>[/prefix] [netmask]
+
+
+DESCRIPTION
+       ipcalc  provides  a simple way to calculate IP information
+       for a host.  The various options specify what  information
+       ipcalc  should  display  on standard out. Multiple options
+       may be specified.  An IP address to operate on must always
+       be specified.  Most operations also require a netmask or a
+       CIDR prefix as well.
+
+
+OPTIONS
+       -b, --broadcast
+              Display the broadcast address for the  given
+              IP address and netmask.
+
+
+       -h, --hostname
+              Display   the  hostname  for  the  given  IP
+              address.
+
+
+       -m, --netmask
+              Calculate  the  netmask  for  the  given  IP
+              address.  It  assumes that the IP address is
+              in a complete class A, B, or C network. Many
+              networks do not use the default netmasks, in
+              which case an inappropriate  value  will  be
+              returned.
+
+
+       -p, --prefix
+              Show   the  prefix  for  the  given  mask/IP
+              address.
+
+
+       -n, --network
+              Display the network address for the given IP
+              address and netmask.
+
+
+       -s, --silent
+              Don't ever display error messages.
+
+
+AUTHORS
+       Erik Troan <ewt@redhat.com>
+       Preston Brown <pbrown@redhat.com>
+
+REPORTING BUGS
+       Report    bugs    to    our   bugtracking   system:
+       http://bugzilla.redhat.com/bugzilla.
+
+COPYRIGHT
+       Copyright © 1997-2001 Red Hat, Inc.
+       This is free software; see the source  for  copying
+       conditions.   There  is  NO  warranty; not even for
+       MERCHANTABILITY or FITNESS FOR  A  PARTICULAR  PUR­
+       POSE.
+
+SEE ALSO
+       ipcalc(3)
+
+
+
+Red Hat, Inc.             April 30 2001                 IPCALC(1)

@@ -1,0 +1,69 @@
+SHADOW(5)                                               SHADOW(5)
+
+
+
+NAME
+       shadow - encrypted password file
+
+DESCRIPTION
+       shadow  contains  the  encrypted  password information for
+       user's accounts and optional the password  aging  informa­
+       tion.  Included is
+
+            Login name
+
+            Encrypted password
+
+            Days since Jan 1, 1970 that password was last changed
+
+            Days before password may be changed
+
+            Days after which password must be changed
+
+            Days before password is to expire that user is warned
+
+            Days after password expires that account is disabled
+
+            Days since Jan 1, 1970 that account is disabled
+
+            A reserved field
+
+       The  password field must be filled.  The encryped password
+       consists of 13 to 24  characters  from  the  64  character
+       alphabet  a thru z, A thru Z, 0 thru 9, . and /.  Refer to
+       crypt(3) for details on how this string is interpreted.
+
+       The date of the last password change is given as the  num­
+       ber  of  days  since Jan 1, 1970.  The password may not be
+       changed again until the proper number of days have passed,
+       and  must be changed after the maximum number of days.  If
+       the minimum number of days required is  greater  than  the
+       maximum  number  of  day allowed, this password may not be
+       changed by the user.
+
+       An account is considered to be inactive and is disabled if
+       the password is not changed within the specified number of
+       days after the password expires.  An account will also  be
+       disabled on the specified day regardless of other password
+       expiration information.
+
+       This information supercedes any password or  password  age
+       information present in /etc/passwd.
+
+       This  file  must not be readable by regular users if pass­
+       word security is to be maintained.
+
+FILES
+       /etc/passwd - user account information
+       /etc/shadow - encrypted user passwords
+
+SEE ALSO
+       chage(1),   login(1),   passwd(1),   su(1),    sulogin(8),
+       shadow(3), passwd(5), pwconv(8), pwunconv(8)
+
+AUTHOR
+       Julianne Frances Haugh (jfh@austin.ibm.com)
+
+
+
+                                                        SHADOW(5)

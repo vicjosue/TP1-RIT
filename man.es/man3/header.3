@@ -1,0 +1,1728 @@
+HEADER.(3)                                             HEADER.(3)
+
+
+
+NAME
+       HEADER. -
+
+   Files
+       file formats.c
+       file hdrinline.h
+       file hdrproto.h
+       file header.c
+       file header.h
+           An rpm header carries all information about a package.
+
+
+       file header_internal.c
+       file header_internal.h
+       file package.c
+       file rpmlib.h
+
+   Data Structures
+       struct headerToken
+
+   Typedefs
+       typedef const char * errmsg_t
+       typedef int_32 * hTAG_t
+       typedef headerToken * Header
+       typedef headerIteratorS * HeaderIterator
+       typedef headerTagTableEntry_s * headerTagTableEntry
+       typedef char *(* headerTagFormatFunction )(int_32 type,
+           const void *data, char *formatPrefix, int padding, int
+           element)
+       typedef int(* headerTagTagFunction )(Header h, hTYP_t
+           type, hPTR_t *data, hCNT_t count, int *freeData)
+       typedef headerSprintfExtension_s * headerSprintfExtension
+       typedef enum rpmTagType_e rpmTagType
+       typedef enum rpmSubTagType_e rpmSubTagType
+       typedef Header(* HDRnew )(void)
+       typedef Header(* HDRfree )(Header h)
+       typedef Header(* HDRlink )(Header h)
+       typedef void(* HDRsort )(Header h)
+       typedef void(* HDRunsort )(Header h)
+       typedef unsigned int(* HDRsizeof )(Header h, enum hMagic
+           magicp)
+       typedef void *(* HDRunload )(Header h)
+       typedef Header(* HDRreload )(Header h, int tag)
+       typedef Header(* HDRcopy )(Header h)
+       typedef Header(* HDRload )(void *uh)
+       typedef Header(* HDRcopyload )(const void *uh)
+       typedef Header(* HDRhdrread )(FD_t fd, enum hMagic magicp)
+       typedef int(* HDRhdrwrite )(FD_t fd, Header h, enum hMagic
+           magicp)
+       typedef int(* HDRisentry )(Header h, int_32 tag)
+       typedef void *(* HDRfreetag )(Header h, const void *data,
+           rpmTagType type)
+       typedef int(* HDRget )(Header h, int_32 tag, hTYP_t type,
+           void **p, hCNT_t c)
+       typedef int(* HDRgetmin )(Header h, int_32 tag, hTYP_t
+           type, hPTR_t *p, hCNT_t c)
+       typedef int(* HDRadd )(Header h, int_32 tag, int_32 type,
+           const void *p, int_32 c)
+       typedef int(* HDRappend )(Header h, int_32 tag, int_32
+           type, const void *p, int_32 c)
+       typedef int(* HDRaddorappend )(Header h, int_32 tag,
+           int_32 type, const void *p, int_32 c)
+       typedef int(* HDRaddi18n )(Header h, int_32 tag, const
+           char *string, const char *lang)
+       typedef int(* HDRmodify )(Header h, int_32 tag, int_32
+           type, const void *p, int_32 c)
+       typedef int(* HDRremove )(Header h, int_32 tag)
+       typedef char *(* HDRhdrsprintf )(Header h, const char
+           *fmt, const struct headerTagTableEntry_s *tags, const
+           struct headerSprintfExtension_s *extensions, errmsg_t
+           *errmsg)
+       typedef void(* HDRcopytags )(Header headerFrom, Header
+           headerTo, hTAG_t tagstocopy)
+       typedef HeaderIterator(* HDRfreeiter )(HeaderIterator hi)
+       typedef HeaderIterator(* HDRinititer )(Header h)
+       typedef int(* HDRnextiter )(HeaderIterator hi, hTAG_t tag,
+           hTYP_t type, hPTR_t *p, hCNT_t c)
+       typedef HV_s * HV_t
+       typedef entryInfo * entryInfo
+       typedef indexEntry * indexEntry
+       typedef sprintfTag * sprintfTag
+       typedef extensionCache * extensionCache
+       typedef sprintfToken * sprintfToken
+
+   Enumerations
+       enum headerSprintfExtenstionType { HEADER_EXT_LAST =  0,
+           HEADER_EXT_FORMAT, HEADER_EXT_MORE, HEADER_EXT_TAG }
+       enum hMagic { HEADER_MAGIC_NO =  0, HEADER_MAGIC_YES =  1
+           }
+       enum rpmTagType_e { RPM_NULL_TYPE =   0, RPM_CHAR_TYPE =
+           1, RPM_INT8_TYPE =   2, RPM_INT16_TYPE =   3,
+           RPM_INT32_TYPE =   4, RPM_STRING_TYPE =   6,
+           RPM_BIN_TYPE =   7, RPM_STRING_ARRAY_TYPE =   8,
+           RPM_I18NSTRING_TYPE }
+       enum rpmSubTagType_e { RPM_REGION_TYPE =  -10,
+           RPM_BIN_ARRAY_TYPE =  -11, RPM_XREF_TYPE =  -12 }
+
+   Functions
+       HV_t h2hv (Header h)
+       Header headerNew (void)
+       Header headerFree (Header h)
+       Header headerLink (Header h)
+       void headerSort (Header h)
+       void headerUnsort (Header h)
+       unsigned int headerSizeof (Header h, enum hMagic magicp)
+       void * headerUnload (Header h)
+       Header headerReload (Header h, int tag)
+       Header headerCopy (Header h)
+       Header headerLoad (void *uh)
+       Header headerCopyLoad (const void *uh)
+       Header headerRead (FD_t fd, enum hMagic magicp)
+       int headerWrite (FD_t fd, Header h, enum hMagic magicp)
+       int headerIsEntry (Header h, int_32 tag)
+       void * headerFreeTag (Header h, const void *data,
+           rpmTagType type)
+       int headerGetEntry (Header h, int_32 tag, hTYP_t type,
+           void **p, hCNT_t c)
+       int headerGetEntryMinMemory (Header h, int_32 tag, hTYP_t
+           type, hPTR_t *p, hCNT_t c)
+       int headerAddEntry (Header h, int_32 tag, int_32 type,
+           const void *p, int_32 c)
+       int headerAppendEntry (Header h, int_32 tag, int_32 type,
+           const void *p, int_32 c)
+       int headerAddOrAppendEntry (Header h, int_32 tag, int_32
+           type, const void *p, int_32 c)
+       int headerAddI18NString (Header h, int_32 tag, const char
+           *string, const char *lang)
+       int headerModifyEntry (Header h, int_32 tag, int_32 type,
+           const void *p, int_32 c)
+       int headerRemoveEntry (Header h, int_32 tag)
+       char * headerSprintf (Header h, const char *fmt, const
+           struct headerTagTableEntry_s *tags, const struct
+           headerSprintfExtension_s *extensions, errmsg_t
+           *errmsg)
+       void headerCopyTags (Header headerFrom, Header headerTo,
+           hTAG_t tagstocopy)
+       HeaderIterator headerFreeIterator (HeaderIterator hi)
+       HeaderIterator headerInitIterator (Header h)
+       int headerNextIterator (HeaderIterator hi, hTAG_t tag,
+           hTYP_t type, hPTR_t *p, hCNT_t c)
+       int regionSwab (indexEntry entry, int il, int dl,
+           entryInfo pe, char *dataStart, int regionid)
+       void * doHeaderUnload (Header h, int *lengthPtr)
+       int copyEntry (const indexEntry entry, hTYP_t type, hPTR_t
+           *p, hCNT_t c, int minMem)
+       void * headerFreeData (const void *data, rpmTagType type)
+       char ** headerGetLangs (Header h)
+       int headerGetRawEntry (Header h, int_32 tag, hTYP_t type,
+           hPTR_t *p, hCNT_t c)
+       int headerUsageCount (Header h)
+       void headerDump (Header h, FILE *f, int flags, const
+           struct headerTagTableEntry_s *tags)
+       int headerNVR (Header h, const char **np, const char **vp,
+           const char **rp)
+       void headerMergeLegacySigs (Header h, const Header sig)
+       Header headerRegenSigHeader (const Header h)
+
+   Variables
+       HV_s * hdrVec = &hdrVec1
+       unsigned char header_magic [8]
+       size_t headerMaxbytes = (32*1024*1024)
+       int typeSizes []
+       const struct headerSprintfExtension_s headerDefaultFormats
+           []
+
+TYPEDEF DOCUMENTATION
+   typedef struct entryInfo* entryInfo
+       Description of tag data.
+
+       Definition at line 25 of file header_internal.h.
+
+   typedef const char* errmsg_t
+       Definition at line 110 of file header.h.
+
+       Referenced by headerSizeof, headerSprintf,
+       parseExpression, and parseFormat.
+
+   typedef struct extensionCache* extensionCache
+       Definition at line 83 of file header_internal.h.
+
+   typedef int(* HDRadd)(Header h, int_32 tag, int_32 type, const
+       void * p, int_32 c)
+       Add tag to header. Duplicate tags are okay, but only
+       defined for iteration (with the exceptions noted below).
+       While you are allowed to add i18n string arrays through
+       this function, you probably don't mean to. See
+       headerAddI18NString() instead.
+
+       Parameters:
+
+       h      header
+
+       tag    tag
+
+       type   tag value data type
+
+       p      pointer to tag value(s)
+
+       c      number of values
+
+       Returns:
+           1 on success, 0 on failure
+
+       Definition at line 484 of file header.h.
+
+   typedef int(* HDRaddi18n)(Header h, int_32 tag, const char *
+       string, const char * lang)
+       Add locale specific tag to header. A NULL lang is
+       interpreted as the C locale. Here are the rules:
+
+
+        *      - If the tag isn't in the header, it's added with the passed string
+        *         as new value.
+        *      - If the tag occurs multiple times in entry, which tag is affected
+        *         by the operation is undefined.
+        *      - If the tag is in the header w/ this language, the entry is
+        *         *replaced* (like headerModifyEntry()).
+        *
+        This function is intended to just 'do the right thing'.
+       If you need more fine grained control use headerAddEntry()
+       and headerModifyEntry().
+
+       Parameters:
+
+       h      header
+
+       tag    tag
+
+       string tag value
+
+       lang   locale
+
+       Returns:
+           1 on success, 0 on failure
+
+       Definition at line 540 of file header.h.
+
+   typedef int(* HDRaddorappend)(Header h, int_32 tag, int_32
+       type, const void * p, int_32 c)
+       Add or append element to tag array in header.
+
+       Todo:
+           Arg 'p' should have const.
+
+       Parameters:
+
+       h      header
+
+       tag    tag
+
+       type   tag value data type
+
+       p      pointer to tag value(s)
+
+       c      number of values
+
+       Returns:
+           1 on success, 0 on failure
+
+       Definition at line 516 of file header.h.
+
+   typedef int(* HDRappend)(Header h, int_32 tag, int_32 type,
+       const void * p, int_32 c)
+       Append element to tag array in header. Appends item p to
+       entry w/ tag and type as passed. Won't work on
+       RPM_STRING_TYPE. Any pointers into header memory returned
+       from headerGetEntryMinMemory() for this entry are invalid
+       after this call has been made!
+
+       Parameters:
+
+       h      header
+
+       tag    tag
+
+       type   tag value data type
+
+       p      pointer to tag value(s)
+
+       c      number of values
+
+       Returns:
+           1 on success, 0 on failure
+
+       Definition at line 502 of file header.h.
+
+   typedef Header(* HDRcopy)(Header h)
+       Duplicate a header.
+
+       Parameters:
+
+       h      header
+
+       Returns:
+           new header instance
+
+       Definition at line 366 of file header.h.
+
+   typedef Header(* HDRcopyload)(const void * uh)
+       Make a copy and convert header to in-memory
+       representation.
+
+       Parameters:
+
+       uh     on-disk header blob (i.e. with offsets)
+
+       Returns:
+           header
+
+       Definition at line 384 of file header.h.
+
+   typedef void(* HDRcopytags)(Header headerFrom, Header
+       headerTo, hTAG_t tagstocopy)
+       Duplicate tag values from one header into another.
+
+       Parameters:
+
+       headerFrom
+              source header
+
+       headerTo
+              destination header
+
+       tagstocopy
+              array of tags that are copied
+
+       Definition at line 596 of file header.h.
+
+   typedef Header(* HDRfree)( Header h)
+       Dereference a header instance.
+
+       Parameters:
+
+       h      header
+
+       Returns:
+           NULL always
+
+       Definition at line 300 of file header.h.
+
+   typedef HeaderIterator(* HDRfreeiter)( HeaderIterator hi)
+       Destroy header tag iterator.
+
+       Parameters:
+
+       hi     header tag iterator
+
+       Returns:
+           NULL always
+
+       Definition at line 605 of file header.h.
+
+   typedef void*(* HDRfreetag)(Header h, const void * data,
+       rpmTagType type)
+       Free data allocated when retrieved from header.
+
+       Parameters:
+
+       h      header
+
+       data   address of data (or NULL)
+
+       type   type of data (or -1 to force free)
+
+       Returns:
+           NULL always
+
+       Definition at line 426 of file header.h.
+
+   typedef int(* HDRget)(Header h, int_32 tag, hTYP_t type, void
+       ** p, hCNT_t c)
+       Retrieve tag value. Will never return RPM_I18NSTRING_TYPE!
+       RPM_STRING_TYPE elements with RPM_I18NSTRING_TYPE
+       equivalent entries are translated (if HEADER_I18NTABLE
+       entry is present).
+
+       Parameters:
+
+       h      header
+
+       tag    tag
+
+       Return values:
+
+       type   address of tag value data type (or NULL)
+
+       p      address of pointer to tag value(s) (or NULL)
+
+       c      address of number of values (or NULL)
+
+       Returns:
+           1 on success, 0 on failure
+
+       Definition at line 444 of file header.h.
+
+   typedef int(* HDRgetmin)(Header h, int_32 tag, hTYP_t type,
+       hPTR_t * p, hCNT_t c)
+       Retrieve tag value using header internal array. Get an
+       entry using as little extra RAM as possible to return the
+       tag value. This is only an issue for
+       RPM_STRING_ARRAY_TYPE.
+
+       Parameters:
+
+       h      header
+
+       tag    tag
+
+       Return values:
+
+       type   address of tag value data type (or NULL)
+
+       p      address of pointer to tag value(s) (or NULL)
+
+       c      address of number of values (or NULL)
+
+       Returns:
+           1 on success, 0 on failure
+
+       Definition at line 463 of file header.h.
+
+   typedef Header(* HDRhdrread)(FD_t fd, enum hMagic magicp)
+       Read (and load) header from file handle.
+
+       Parameters:
+
+       fd     file handle
+
+       magicp read (and verify) 8 bytes of (magic, 0)?
+
+       Returns:
+           header (or NULL on error)
+
+       Definition at line 394 of file header.h.
+
+   typedef char*(* HDRhdrsprintf)(Header h, const char * fmt,
+       const struct headerTagTableEntry_s * tags, const struct
+       headerSprintfExtension_s * extensions, errmsg_t * errmsg)
+       Return formatted output string from header tags. The
+       returned string must be free()d.
+
+       Parameters:
+
+       h      header
+
+       fmt    format to use
+
+       tags   array of tag name/value pairs
+
+       extensions
+              chained table of formatting extensions.
+
+       Return values:
+
+       errmsg error message (if any)
+
+       Returns:
+           formatted output string (malloc'ed)
+
+       Definition at line 583 of file header.h.
+
+   typedef int(* HDRhdrwrite)(FD_t fd, Header h, enum hMagic
+       magicp)
+       Write (with unload) header to file handle.
+
+       Parameters:
+
+       fd     file handle
+
+       h      header
+
+       magicp prefix write with 8 bytes of (magic, 0)?
+
+       Returns:
+           0 on success, 1 on error
+
+       Definition at line 405 of file header.h.
+
+   typedef HeaderIterator(* HDRinititer)(Header h)
+       Create header tag iterator.
+
+       Parameters:
+
+       h      header
+
+       Returns:
+           header tag iterator
+
+       Definition at line 614 of file header.h.
+
+   typedef int(* HDRisentry)(Header h, int_32 tag)
+       Check if tag is in header.
+
+       Parameters:
+
+       h      header
+
+       tag    tag
+
+       Returns:
+           1 on success, 0 on failure
+
+       Definition at line 415 of file header.h.
+
+   typedef Header(* HDRlink)(Header h)
+       Reference a header instance.
+
+       Parameters:
+
+       h      header
+
+       Returns:
+           referenced header instance
+
+       Definition at line 309 of file header.h.
+
+   typedef Header(* HDRload)( void * uh)
+       Convert header to in-memory representation.
+
+       Parameters:
+
+       uh     on-disk header blob (i.e. with offsets)
+
+       Returns:
+           header
+
+       Definition at line 375 of file header.h.
+
+   typedef int(* HDRmodify)(Header h, int_32 tag, int_32 type,
+       const void * p, int_32 c)
+       Modify tag in header. If there are multiple entries with
+       this tag, the first one gets replaced.
+
+       Parameters:
+
+       h      header
+
+       tag    tag
+
+       type   tag value data type
+
+       p      pointer to tag value(s)
+
+       c      number of values
+
+       Returns:
+           1 on success, 0 on failure
+
+       Definition at line 555 of file header.h.
+
+   typedef Header(* HDRnew)(void)
+       Create new (empty) header instance.
+
+       Returns:
+           header
+
+       Definition at line 291 of file header.h.
+
+   typedef int(* HDRnextiter)(HeaderIterator hi, hTAG_t tag,
+       hTYP_t type, hPTR_t * p, hCNT_t c)
+       Return next tag from header.
+
+       Parameters:
+
+       hi     header tag iterator
+
+       Return values:
+
+       tag    address of tag
+
+       type   address of tag value data type
+
+       p      address of pointer to tag value(s)
+
+       c      address of number of values
+
+       Returns:
+           1 on success, 0 on failure
+
+       Definition at line 627 of file header.h.
+
+   typedef Header(* HDRreload)( Header h, int tag)
+       Convert header to on-disk representation, and then reload.
+       This is used to insure that all header data is in one
+       chunk.
+
+       Parameters:
+
+       h      header (with pointers)
+
+       tag    region tag
+
+       Returns:
+           on-disk header (with offsets)
+
+       Definition at line 357 of file header.h.
+
+   typedef int(* HDRremove)(Header h, int_32 tag)
+       Delete tag in header. Removes all entries of type tag from
+       the header, returns 1 if none were found.
+
+       Parameters:
+
+       h      header
+
+       tag    tag
+
+       Returns:
+           0 on success, 1 on failure (INCONSISTENT)
+
+       Definition at line 568 of file header.h.
+
+   typedef unsigned int(* HDRsizeof)( Header h, enum hMagic
+       magicp)
+       Return size of on-disk header representation in bytes.
+
+       Parameters:
+
+       h      header
+
+       magicp include size of 8 bytes for (magic, 0)?
+
+       Returns:
+           size of on-disk header
+
+       Definition at line 337 of file header.h.
+
+   typedef void(* HDRsort)(Header h)
+       Sort tags in header.
+
+       Todo:
+           Eliminate from API.
+
+       Parameters:
+
+       h      header
+
+       Definition at line 318 of file header.h.
+
+   typedef void*(* HDRunload)(Header h)
+       Convert header to on-disk representation.
+
+       Parameters:
+
+       h      header (with pointers)
+
+       Returns:
+           on-disk header blob (i.e. with offsets)
+
+       Definition at line 346 of file header.h.
+
+   typedef void(* HDRunsort)(Header h)
+       Restore tags in header to original ordering.
+
+       Todo:
+           Eliminate from API.
+
+       Parameters:
+
+       h      header
+
+       Definition at line 327 of file header.h.
+
+   typedef struct headerToken* Header
+       Definition at line 121 of file header.h.
+
+   typedef struct headerIteratorS* HeaderIterator
+       Definition at line 125 of file header.h.
+
+   typedef struct headerSprintfExtension_s*
+       headerSprintfExtension
+       Define header tag output formats.
+
+       Definition at line 180 of file header.h.
+
+   typedef char*(* headerTagFormatFunction)(int_32 type, const
+       void * data, char * formatPrefix, int padding, int
+       element)
+       HEADER_EXT_TAG format function prototype. This will only
+       ever be passed RPM_INT32_TYPE or RPM_STRING_TYPE to help
+       keep things simple.
+
+       Parameters:
+
+       type   tag type
+
+       data   tag value
+
+       formatPrefix
+
+       padding
+
+       element
+              Returns:
+                  formatted string
+
+       Definition at line 157 of file header.h.
+
+       Referenced by formatValue.
+
+   typedef struct headerTagTableEntry_s* headerTagTableEntry
+       Associate tag names with numeric values.
+
+       Definition at line 130 of file header.h.
+
+   typedef int(* headerTagTagFunction)(Header h, hTYP_t type,
+       hPTR_t * data, hCNT_t count, int * freeData)
+       HEADER_EXT_FORMAT format function prototype. This is
+       allowed to fail, which indicates the tag doesn't exist.
+
+       Parameters:
+
+       h      header
+
+       Return values:
+
+       type   address of tag type
+
+       data   address of tag value pointer
+
+       count  address of no. of data items
+
+       freedata
+              address of data-was-malloc'ed indicator
+
+       Returns:
+           0 on success
+
+       Definition at line 171 of file header.h.
+
+       Referenced by getExtension.
+
+   typedef int_32* hTAG_t
+       Definition at line 114 of file header.h.
+
+       Referenced by headerCopyTags, headerNextIterator,
+       headerSizeof, and intGetEntry.
+
+   typedef struct HV_s* HV_t
+       Header method vectors.
+
+       Definition at line 637 of file header.h.
+
+   typedef struct indexEntry* indexEntry
+       A single tag from a Header.
+
+       Definition at line 43 of file header_internal.h.
+
+   typedef enum rpmSubTagType_e  rpmSubTagType
+       New rpm data types under consideration/development. These
+       data types may (or may not) be added to rpm at some point.
+       In order to avoid incompatibility with legacy versions of
+       rpm, these data (sub-)types are introduced into the header
+       by overloading RPM_BIN_TYPE, with the binary value of the
+       tag a 16 byte image of what should/will be in the header
+       index, followed by per-tag private data.
+
+   typedef enum rpmTagType_e  rpmTagType
+       The basic types of data in tags from headers.
+
+       Referenced by addReqProv, alAddPackage, checkPackageDeps,
+       compressFilelist, descriptionTag, doBuildFileList,
+       filenamesTag, fpLookupHeader, fssizesTag, groupTag,
+       handlePreambleTag, headerFreeTag, i18nTag, IDTXglob,
+       IDTXload, instprefixTag, isMemberInEntry, mireSkip,
+       printDeps, providePackageNVR, rangeMatchesDepFlags,
+       rpmdbAdd, rpmdbFindByFile, rpmdbFindFpList, rpmdbRemove,
+       rpmdepCheck, rpmtransAddPackage, showQueryPackage,
+       summaryTag, timeCheck, triggercondsTag, and
+       triggertypeTag.
+
+   typedef struct sprintfTag* sprintfTag
+       Definition at line 69 of file header_internal.h.
+
+   typedef struct sprintfToken* sprintfToken
+       Definition at line 95 of file header_internal.h.
+
+ENUMERATION TYPE DOCUMENTATION
+   enum headerSprintfExtenstionType
+       Enumeration values:
+
+       HEADER_EXT_LAST
+              End of extension chain.
+
+       HEADER_EXT_FORMAT
+              headerTagFormatFunction extension
+
+       HEADER_EXT_MORE
+              Chain to next table.
+
+       HEADER_EXT_TAG
+              headerTagTagFunction extension
+
+       Definition at line 138 of file header.h.
+
+   enum hMagic
+       Include calculation for 8 bytes of (magic, 0)?
+
+       Enumeration values:
+
+       HEADER_MAGIC_NO
+
+       HEADER_MAGIC_YES
+
+
+       Definition at line 202 of file header.h.
+
+       Referenced by headerFree, headerRead, headerSizeof, and
+       headerWrite.
+
+   enum rpmSubTagType_e
+       New rpm data types under consideration/development. These
+       data types may (or may not) be added to rpm at some point.
+       In order to avoid incompatibility with legacy versions of
+       rpm, these data (sub-)types are introduced into the header
+       by overloading RPM_BIN_TYPE, with the binary value of the
+       tag a 16 byte image of what should/will be in the header
+       index, followed by per-tag private data.
+
+       Enumeration values:
+
+       RPM_REGION_TYPE
+
+       RPM_BIN_ARRAY_TYPE
+              Todo:
+                   Implement, kinda like RPM_STRING_ARRAY_TYPE
+                  for known (but variable) length binary data.
+
+       RPM_XREF_TYPE
+              Todo:
+                   Implement, intent is to to carry a
+                  (???,tagNum,valNum) cross reference to retrieve
+                  data from other tags.
+
+       Definition at line 234 of file header.h.
+
+   enum rpmTagType_e
+       The basic types of data in tags from headers.
+
+       Enumeration values:
+
+       RPM_NULL_TYPE
+
+       RPM_CHAR_TYPE
+
+       RPM_INT8_TYPE
+
+       RPM_INT16_TYPE
+
+       RPM_INT32_TYPE
+
+       RPM_STRING_TYPE
+
+       RPM_BIN_TYPE
+
+       RPM_STRING_ARRAY_TYPE
+
+       RPM_I18NSTRING_TYPE
+
+
+       Definition at line 210 of file header.h.
+
+FUNCTION DOCUMENTATION
+   int copyEntry (const indexEntry entry, hTYP_t type, hPTR_t *
+       p, hCNT_t c, int minMem) [static]
+       Retrieve data from header entry.
+
+       Todo:
+           Permit retrieval of regions other than
+           HEADER_IMUTABLE.
+
+       Parameters:
+
+       entry  header entry
+
+       Return values:
+
+       type   address of type (or NULL)
+
+       p      address of data (or NULL)
+
+       c      address of count (or NULL)
+
+       Parameters:
+
+       minMem string pointers refer to header memory?
+
+       Returns:
+           1 on success, otherwise error.
+
+       Definition at line 1083 of file header.c.
+
+       References ENTRY_IS_REGION, hCNT_t, hPTR_t, hTYP_t,
+       int_32, REGION_TAG_COUNT, regionSwab, RPM_BIN_TYPE,
+       RPM_I18NSTRING_TYPE, RPM_STRING_ARRAY_TYPE,
+       RPM_STRING_TYPE, and xmalloc.
+
+       Referenced by headerGetRawEntry, headerNextIterator, and
+       intGetEntry.
+
+   void* doHeaderUnload (Header h, int * lengthPtr) [static]
+       Definition at line 450 of file header.c.
+
+       References _free, entryInfo::count, indexEntry::data,
+       ENTRY_IS_REGION, hdrchkData, hdrchkTags,
+       HEADERFLAG_LEGACY, HEADERFLAG_SORTED, headerSort,
+       headerUnsort, indexEntry::info, int_16, int_32,
+       indexEntry::length, entryInfo::offset, indexEntry::rdlen,
+       regionSwab, RPM_INT16_TYPE, RPM_INT32_TYPE,
+       entryInfo::tag, entryInfo::type, typeSizes, and xmalloc.
+
+       Referenced by headerReload, headerUnload, and headerWrite.
+
+   HV_t h2hv (Header h) [inline, static]
+       Definition at line 20 of file hdrinline.h.
+
+       Referenced by headerAddEntry, headerAddI18NString,
+       headerAddOrAppendEntry, headerAppendEntry, headerCopy,
+       headerFree, headerFreeTag, headerGetEntry,
+       headerGetEntryMinMemory, headerIsEntry, headerLink,
+       headerModifyEntry, headerReload, headerRemoveEntry,
+       headerSizeof, headerSort, headerSprintf, headerUnload,
+       headerUnsort, and headerWrite.
+
+   int headerAddEntry (Header h, int_32 tag, int_32 type, const
+       void * p, int_32 c) [inline, static]
+       Add tag to header. Duplicate tags are okay, but only
+       defined for iteration (with the exceptions noted below).
+       While you are allowed to add i18n string arrays through
+       this function, you probably don't mean to. See
+       headerAddI18NString() instead.
+
+       Parameters:
+
+       h      header
+
+       tag    tag
+
+       type   tag value data type
+
+       p      pointer to tag value(s)
+
+       c      number of values
+
+       Returns:
+           1 on success, 0 on failure
+
+       Definition at line 293 of file hdrinline.h.
+
+       References h2hv, HV_s::hdradd, and int_32.
+
+   int headerAddI18NString (Header h, int_32 tag, const char *
+       string, const char * lang) [inline, static]
+       Add locale specific tag to header. A NULL lang is
+       interpreted as the C locale. Here are the rules:
+
+
+        *      - If the tag isn't in the header, it's added with the passed string
+        *         as new value.
+        *      - If the tag occurs multiple times in entry, which tag is affected
+        *         by the operation is undefined.
+        *      - If the tag is in the header w/ this language, the entry is
+        *         *replaced* (like headerModifyEntry()).
+        *
+        This function is intended to just 'do the right thing'.
+       If you need more fine grained control use headerAddEntry()
+       and headerModifyEntry().
+
+       Parameters:
+
+       h      header
+
+       tag    tag
+
+       string tag value
+
+       lang   locale
+
+       Returns:
+           1 on success, 0 on failure
+
+       Definition at line 360 of file hdrinline.h.
+
+       References h2hv, HV_s::hdraddi18n, and int_32.
+
+   int headerAddOrAppendEntry (Header h, int_32 tag, int_32 type,
+       const void * p, int_32 c) [inline, static]
+       Add or append element to tag array in header.
+
+       Todo:
+           Arg 'p' should have const.
+
+       Parameters:
+
+       h      header
+
+       tag    tag
+
+       type   tag value data type
+
+       p      pointer to tag value(s)
+
+       c      number of values
+
+       Returns:
+           1 on success, 0 on failure
+
+       Definition at line 332 of file hdrinline.h.
+
+       References h2hv, HV_s::hdraddorappend, and int_32.
+
+   int headerAppendEntry (Header h, int_32 tag, int_32 type,
+       const void * p, int_32 c) [inline, static]
+       Append element to tag array in header. Appends item p to
+       entry w/ tag and type as passed. Won't work on
+       RPM_STRING_TYPE. Any pointers into header memory returned
+       from headerGetEntryMinMemory() for this entry are invalid
+       after this call has been made!
+
+       Parameters:
+
+       h      header
+
+       tag    tag
+
+       type   tag value data type
+
+       p      pointer to tag value(s)
+
+       c      number of values
+
+       Returns:
+           1 on success, 0 on failure
+
+       Definition at line 314 of file hdrinline.h.
+
+       References h2hv, HV_s::hdrappend, and int_32.
+
+   Header headerCopy (Header h) [inline, static]
+       Duplicate a header.
+
+       Parameters:
+
+       h      header
+
+       Returns:
+           new header instance
+
+       Definition at line 141 of file hdrinline.h.
+
+       References h2hv, and HV_s::hdrcopy.
+
+   Header headerCopyLoad (const void * uh) [inline, static]
+       Make a copy and convert header to in-memory
+       representation.
+
+       Parameters:
+
+       uh     on-disk header blob (i.e. with offsets)
+
+       Returns:
+           header
+
+       Definition at line 165 of file hdrinline.h.
+
+       References HV_s::hdrcopyload.
+
+   void headerCopyTags (Header headerFrom, Header headerTo,
+       hTAG_t tagstocopy) [inline, static]
+       Duplicate tag values from one header into another.
+
+       Parameters:
+
+       headerFrom
+              source header
+
+       headerTo
+              destination header
+
+       tagstocopy
+              array of tags that are copied
+
+       Definition at line 429 of file hdrinline.h.
+
+       References HV_s::hdrcopytags, and hTAG_t.
+
+   void headerDump (Header h, FILE * f, int flags, const struct
+       headerTagTableEntry_s * tags)
+       Dump a header in human readable format (for debugging).
+
+       Parameters:
+
+       h      header
+
+       flags  0 or HEADER_DUMP_INLINE
+
+       tags   array of tag name/value pairs
+
+       Definition at line 30 of file header_internal.c.
+
+       References entryInfo::count, and int_32.
+
+       Referenced by main.
+
+   Header headerFree (Header h) [inline, static]
+       Dereference a header instance.
+
+       Parameters:
+
+       h      header
+
+       Returns:
+           NULL always
+
+       Definition at line 44 of file hdrinline.h.
+
+       References h2hv, and HV_s::hdrfree.
+
+   void* headerFreeData (const void * data, rpmTagType type)
+       [inline, static]
+       Free data allocated when retrieved from header.
+
+       Deprecated:
+           Use headerFreeTag() instead.
+
+       Todo:
+           Remove from API.
+
+       Parameters:
+
+       data   address of data (or NULL)
+
+       type   type of data (or -1 to force free)
+
+       Returns:
+           NULL always
+
+       Definition at line 682 of file header.h.
+
+       Referenced by formatValue, headerCopy, headerCopyTags,
+       initSourceHeader, rhnUnload, rpmCheckSig, rpmInstall,
+       rpmMergeHeaders, rpmReSign, and singleSprintf.
+
+   HeaderIterator headerFreeIterator (HeaderIterator hi) [inline,
+       static]
+       Destroy header tag iterator.
+
+       Parameters:
+
+       hi     header tag iterator
+
+       Returns:
+           NULL always
+
+       Definition at line 442 of file hdrinline.h.
+
+       References HV_s::hdrfreeiter.
+
+   void* headerFreeTag (Header h, const void * data, rpmTagType
+       type) [inline, static]
+       Free data allocated when retrieved from header.
+
+       Parameters:
+
+       h      header
+
+       data   address of data (or NULL)
+
+       type   type of data (or -1 to force free)
+
+       Returns:
+           NULL always
+
+       Definition at line 225 of file hdrinline.h.
+
+       References h2hv, HV_s::hdrfreetag, and rpmTagType.
+
+   int headerGetEntry (Header h, int_32 tag, hTYP_t type, void **
+       p, hCNT_t c) [inline, static]
+       Retrieve tag value. Will never return RPM_I18NSTRING_TYPE!
+       RPM_STRING_TYPE elements with RPM_I18NSTRING_TYPE
+       equivalent entries are translated (if HEADER_I18NTABLE
+       entry is present).
+
+       Parameters:
+
+       h      header
+
+       tag    tag
+
+       Return values:
+
+       type   address of tag value data type (or NULL)
+
+       p      address of pointer to tag value(s) (or NULL)
+
+       c      address of number of values (or NULL)
+
+       Returns:
+           1 on success, 0 on failure
+
+       Definition at line 246 of file hdrinline.h.
+
+       References h2hv, hCNT_t, HV_s::hdrget, hTYP_t, and int_32.
+
+   int headerGetEntryMinMemory (Header h, int_32 tag, hTYP_t
+       type, hPTR_t * p, hCNT_t c) [inline, static]
+       Retrieve tag value using header internal array. Get an
+       entry using as little extra RAM as possible to return the
+       tag value. This is only an issue for
+       RPM_STRING_ARRAY_TYPE.
+
+       Parameters:
+
+       h      header
+
+       tag    tag
+
+       Return values:
+
+       type   address of tag value data type (or NULL)
+
+       p      address of pointer to tag value(s) (or NULL)
+
+       c      address of number of values (or NULL)
+
+       Returns:
+           1 on success, 0 on failure
+
+       Definition at line 268 of file hdrinline.h.
+
+       References h2hv, hCNT_t, HV_s::hdrgetmin, hPTR_t, hTYP_t,
+       and int_32.
+
+   char** headerGetLangs (Header h)
+       Return array of locales found in header. The array is
+       terminated with a NULL sentinel.
+
+       Parameters:
+
+       h      header
+
+       Returns:
+           array of locales (or NULL on error)
+
+       Definition at line 11 of file header_internal.c.
+
+   int headerGetRawEntry (Header h, int_32 tag, hTYP_t type,
+       hPTR_t * p, hCNT_t c)
+       Retrieve tag value with type match. If *type is
+       RPM_NULL_TYPE any type will match, otherwise only *type
+       will match.
+
+       Parameters:
+
+       h      header
+
+       tag    tag
+
+       Return values:
+
+       type   address of tag value data type (or NULL)
+
+       p      address of pointer to tag value(s) (or NULL)
+
+       c      address of number of values (or NULL)
+
+       Returns:
+           1 on success, 0 on failure
+
+       Referenced by headerGetLangs.
+
+   HeaderIterator headerInitIterator (Header h) [inline, static]
+       Create header tag iterator.
+
+       Parameters:
+
+       h      header
+
+       Returns:
+           header tag iterator
+
+       Definition at line 454 of file hdrinline.h.
+
+       References HV_s::hdrinititer.
+
+   int headerIsEntry (Header h, int_32 tag) [inline, static]
+       Check if tag is in header.
+
+       Parameters:
+
+       h      header
+
+       tag    tag
+
+       Returns:
+           1 on success, 0 on failure
+
+       Definition at line 208 of file hdrinline.h.
+
+       References h2hv, HV_s::hdrisentry, and int_32.
+
+   Header headerLink (Header h) [inline, static]
+       Reference a header instance.
+
+       Parameters:
+
+       h      header
+
+       Returns:
+           referenced header instance
+
+       Definition at line 59 of file hdrinline.h.
+
+       References h2hv, and HV_s::hdrlink.
+
+   Header headerLoad (void * uh) [inline, static]
+       Convert header to in-memory representation.
+
+       Parameters:
+
+       uh     on-disk header blob (i.e. with offsets)
+
+       Returns:
+           header
+
+       Definition at line 153 of file hdrinline.h.
+
+       References HV_s::hdrload.
+
+   void headerMergeLegacySigs (Header h, const Header sig)
+       Translate and merge legacy signature tags into header.
+
+       Parameters:
+
+       h      header
+
+       sig    signature header
+
+       Definition at line 23 of file package.c.
+
+       References RPMRC_BADMAGIC, RPMRC_BADSIZE, RPMRC_FAIL,
+       RPMRC_OK, and RPMRC_SHORTREAD.
+
+       Referenced by rpmReadPackageHeader, rpmReadPackageInfo,
+       and writeRPM.
+
+   int headerModifyEntry (Header h, int_32 tag, int_32 type,
+       const void * p, int_32 c) [inline, static]
+       Modify tag in header. If there are multiple entries with
+       this tag, the first one gets replaced.
+
+       Parameters:
+
+       h      header
+
+       tag    tag
+
+       type   tag value data type
+
+       p      pointer to tag value(s)
+
+       c      number of values
+
+       Returns:
+           1 on success, 0 on failure
+
+       Definition at line 378 of file hdrinline.h.
+
+       References h2hv, HV_s::hdrmodify, and int_32.
+
+   Header headerNew (void) [inline, static]
+       Create new (empty) header instance.
+
+       Returns:
+           header
+
+       Definition at line 32 of file hdrinline.h.
+
+       References HV_s::hdrnew.
+
+       Referenced by headerCopy, headerCopyWithConvert,
+       initSourceHeader, newPackage, newSpec, rpmNewSignature,
+       and rpmReadSignature.
+
+   int headerNextIterator (HeaderIterator hi, hTAG_t tag, hTYP_t
+       type, hPTR_t * p, hCNT_t c) [inline, static]
+       Return next tag from header.
+
+       Parameters:
+
+       hi     header tag iterator
+
+       Return values:
+
+       tag    address of tag
+
+       type   address of tag value data type
+
+       p      address of pointer to tag value(s)
+
+       c      address of number of values
+
+       Returns:
+           1 on success, 0 on failure
+
+       Definition at line 470 of file hdrinline.h.
+
+       References hCNT_t, HV_s::hdrnextiter, hPTR_t, hTAG_t, and
+       hTYP_t.
+
+   int headerNVR (Header h, const char ** np, const char ** vp,
+       const char ** rp)
+       Return name, version, release strings from header.
+
+       Parameters:
+
+       h      header
+
+       Return values:
+
+       np     address of name pointer (or NULL)
+
+       vp     address of version pointer (or NULL)
+
+       rp     address of release pointer (or NULL)
+
+       Returns:
+           0 always
+
+       Definition at line 30 of file depends.c.
+
+       Referenced by alAddPackage, checkPackageDeps,
+       doSetupMacro, genSourceRpmName, headerMatchesDepFlags,
+       i18nTag, lookupPackage, packageBinaries, parseForSimple,
+       parsePreamble, parseSpec, printNewSpecfile,
+       processBinaryFiles, providePackageNVR, rpmdbAdd,
+       rpmdbNextIterator, rpmdbRebuild, rpmdbRemove, rpmdepCheck,
+       rpmInstall, rpmtransAddPackage, showQueryPackage, and
+       writeRPM.
+
+   Header headerRead (FD_t fd, enum hMagic magicp) [inline,
+       static]
+       Read (and load) header from file handle.
+
+       Parameters:
+
+       fd     file handle
+
+       magicp read (and verify) 8 bytes of (magic, 0)?
+
+       Returns:
+           header (or NULL on error)
+
+       Definition at line 178 of file hdrinline.h.
+
+       References HV_s::hdrread, and hMagic.
+
+   Header headerRegenSigHeader (const Header h)
+       Regenerate signature header.
+
+       Parameters:
+
+       h      header
+
+       Returns:
+           regenerated signature header
+
+       Definition at line 55 of file package.c.
+
+   Header headerReload (Header h, int tag) [inline, static]
+       Convert header to on-disk representation, and then reload.
+       This is used to insure that all header data is in one
+       chunk.
+
+       Parameters:
+
+       h      header (with pointers)
+
+       tag    region tag
+
+       Returns:
+           on-disk header (with offsets)
+
+       Definition at line 127 of file hdrinline.h.
+
+       References h2hv, and HV_s::hdrreload.
+
+   int headerRemoveEntry (Header h, int_32 tag) [inline, static]
+       Delete tag in header. Removes all entries of type tag from
+       the header, returns 1 if none were found.
+
+       Parameters:
+
+       h      header
+
+       tag    tag
+
+       Returns:
+           0 on success, 1 on failure (INCONSISTENT)
+
+       Definition at line 395 of file hdrinline.h.
+
+       References h2hv, HV_s::hdrremove, and int_32.
+
+   unsigned int headerSizeof (Header h, enum hMagic magicp)
+       [inline, static]
+       Return size of on-disk header representation in bytes.
+
+       Parameters:
+
+       h      header
+
+       magicp include size of 8 bytes for (magic, 0)?
+
+       Returns:
+           size of on-disk header
+
+       Definition at line 98 of file hdrinline.h.
+
+       References h2hv, HV_s::hdrsizeof, and hMagic.
+
+   void headerSort (Header h) [inline, static]
+       Sort tags in header.
+
+       Parameters:
+
+       h      header
+
+       Definition at line 71 of file hdrinline.h.
+
+       References h2hv, and HV_s::hdrsort.
+
+   char* headerSprintf (Header h, const char * fmt, const struct
+       headerTagTableEntry_s * tags, const struct
+       headerSprintfExtension_s * extensions, errmsg_t * errmsg)
+       [inline, static]
+       Return formatted output string from header tags. The
+       returned string must be free()d.
+
+       Parameters:
+
+       h      header
+
+       fmt    format to use
+
+       tags   array of tag name/value pairs
+
+       extensions
+              chained table of formatting extensions.
+
+       Return values:
+
+       errmsg error message (if any)
+
+       Returns:
+           formatted output string (malloc'ed)
+
+       Definition at line 413 of file hdrinline.h.
+
+       References errmsg_t, h2hv, and HV_s::hdrsprintf.
+
+   void* headerUnload (Header h) [inline, static]
+       Convert header to on-disk representation.
+
+       Parameters:
+
+       h      header (with pointers)
+
+       Returns:
+           on-disk header blob (i.e. with offsets)
+
+       Definition at line 113 of file hdrinline.h.
+
+       References h2hv, and HV_s::hdrunload.
+
+   void headerUnsort (Header h) [inline, static]
+       Restore tags in header to original ordering.
+
+       Parameters:
+
+       h      header
+
+       Definition at line 83 of file hdrinline.h.
+
+       References h2hv, and HV_s::hdrunsort.
+
+   int headerUsageCount (Header h) [inline, static]
+       Return header reference count.
+
+       Parameters:
+
+       h      header
+
+       Returns:
+           no. of references
+
+       Definition at line 164 of file header_internal.h.
+
+   int headerWrite (FD_t fd, Header h, enum hMagic magicp)
+       [inline, static]
+       Write (with unload) header to file handle.
+
+       Parameters:
+
+       fd     file handle
+
+       h      header
+
+       magicp prefix write with 8 bytes of (magic, 0)?
+
+       Returns:
+           0 on success, 1 on error
+
+       Definition at line 192 of file hdrinline.h.
+
+       References h2hv, HV_s::hdrwrite, and hMagic.
+
+   int regionSwab (indexEntry entry, int il, int dl, entryInfo
+       pe, char * dataStart, int regionid) [static]
+       Swap int_32 and int_16 arrays within header region.
+
+       This code is way more twisty than I would like.
+
+       A bug with RPM_I18NSTRING_TYPE in rpm-2.5.x (fixed in
+       August 1998) causes the offset and length of elements in a
+       header region to disagree regarding the total length of
+       the region data.
+
+       The 'fix' is to compute the size using both offset and
+       length and return the larger of the two numbers as the
+       size of the region. Kinda like computing left and right
+       Riemann sums of the data elements to determine the size of
+       a data structure, go figger :-).
+
+       There's one other twist if a header region tag is in the
+       set to be swabbed, as the data for a header region is
+       located after all other tag data.
+
+       Parameters:
+
+       entry  header entry
+
+       il     no. of entries
+
+       dl     start no. bytes of data
+
+       pe     header physical entry pointer (swapped)
+
+       dataStart
+              header data
+
+       regionid
+              region offset
+
+       Returns:
+           no. bytes of data in region, -1 on error
+
+       Definition at line 329 of file header.c.
+
+       References entryInfo::count, indexEntry::data, dataLength,
+       HEADER_I18NTABLE, HEADER_IMMUTABLE, indexEntry::info,
+       int_16, int_32, indexEntry::length, entryInfo::offset,
+       indexEntry::rdlen, REGION_TAG_COUNT, RPM_I18NSTRING_TYPE,
+       RPM_INT16_TYPE, RPM_INT32_TYPE, entryInfo::tag,
+       entryInfo::type, and typeSizes.
+
+       Referenced by copyEntry, doHeaderUnload, and headerLoad.
+
+VARIABLE DOCUMENTATION
+   HV_t hdrVec = &hdrVec1
+       Header methods for rpm headers.
+
+       Definition at line 2865 of file header.c.
+
+   unsigned char header_magic[8] [static]
+       Initial value:
+
+        {
+               0x8e, 0xad, 0xe8, 0x01, 0x00, 0x00, 0x00, 0x00
+       }
+
+       Definition at line 37 of file header.c.
+
+       Referenced by headerRead, and headerWrite.
+
+   const struct headerSprintfExtension_s headerDefaultFormats[]
+       Supported default header tag output formats.
+
+       Definition at line 196 of file header.h.
+
+   size_t headerMaxbytes = (32*1024*1024) [static]
+       Maximum no. of bytes permitted in a header.
+
+       Definition at line 44 of file header.c.
+
+       Referenced by headerCopyLoad, and headerRead.
+
+   int typeSizes[] [static]
+       Initial value:
+
+         {
+               0,
+               1,
+               1,
+               2,
+               4,
+               -1,
+               -1,
+               1,
+               -1,
+               -1
+       }
+       Alignment needs (and sizeof scalars types) for internal
+       rpm data types.
+
+       Definition at line 61 of file header.c.
+
+       Referenced by dataLength, doHeaderUnload, headerSizeof,
+       and regionSwab.
+
+
+
+rpm                        13 Mar 2002                 HEADER.(3)

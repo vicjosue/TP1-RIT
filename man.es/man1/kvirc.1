@@ -1,0 +1,136 @@
+KVIRC(1)                      1.0.0                      KVIRC(1)
+
+
+
+NAME
+       KVIrc - an Internet Relay Chat client.
+
+SYNOPSIS
+       kvirc  [-h]  [--help]  [-v]  [--version] [-c <configfile>]
+       [server [port]]
+
+
+DESCRIPTION
+       KVIrc is a Visual Internet Relay Chat client based on  the
+       Qt library.
+
+       It  is  intended to be an "user friendly" interface to the
+       IRC protocol (see RFC1459) and its extensions.
+
+
+OPTIONS
+       KVIrc accepts the following options:
+
+       -h, --help
+               Display a list of all commandline options.
+
+       -v, --version
+               Output the version info.
+
+       -c <configfile>
+               Use <configfile> as configuration file instead  of
+               ~/.kvircrc .
+
+       [server]
+               Connect to this server upon startup.
+
+       [port]  Use  this  port  to  connect  to the server.  This
+               option requires also a server name.
+
+
+
+       ENVIRONMENT
+
+
+       LANG    Language  setting.   If  not  set   (or   set   to
+               'EN','POSIX'  or  'C')  KVIrc will use the default
+               language (english).
+
+
+
+       FILES   $PREFIX/share/kvirc/config/*.conf Default configu­
+              ration files.  These are loaded the first time that
+              KVIrc runs to provide a set of default options.
+
+              $PREFIX/share/kvirc/help/*   Directory   containing
+              help files.
+
+              $PREFIX/share/kvirc/locale/*.mo Localization string
+              archives.
+
+              $PREFIX/share/kvirc/pics/* Images  used  internally
+              by KVIrc.
+
+              $HOME/.kvircrc  This  is  the first file that KVIrc
+              looks for.  If the -c commandline option is  speci­
+              fied  ,  the file passed as the option parameter is
+              used instead of this one.  If the file is  found  ,
+              KVIrc  reads the first non-empty line and treats it
+              as the path to the KVIrc Local directory.   If  the
+              file  can not be found or the KVIrc Local directory
+              is not existing , KVIrc enters the setup  mode  and
+              allows selecting a new KVIrc Local directory.
+
+              KVIrc Local directory/config/*.conf User configura­
+              tion files.
+
+              KVIrc Local directory/help/ Directory used to store
+              search results.
+
+              KVIrc  Local  directory/incoming/ Default directory
+              for DCC incoming transfers.
+
+              KVIrc Local directory/log Directory  used  for  the
+              logs
+
+              KVIrc  Local  directory/pics  Local  directory  for
+              images.  By placing images in  this  directory  you
+              can     "override"     the     ones     in    $PRE­
+              FIX/share/kvirc/pics/* . This is a  way  to  use  a
+              personal set of images.
+
+              KVIrc  Local  directory/scripts  Directory  used to
+              save/load KVIrc scripts
+
+
+SEE ALSO
+       X(1) talk(1)
+
+COPYRIGHT
+       Copyright ©  1999-2000 Szymon Stefanek
+
+       Permission to use, copy, modify, and distribute this soft­
+       ware and its documentation for any purpose and without fee
+       is hereby  granted,  provided  that  the  above  copyright
+       notice  appear  in all copies and that both that copyright
+       notice and this permission  notice  appear  in  supporting
+       documentation.
+
+
+SUGGESTIONS AND BUG REPORTS
+       Any  bugs found should be reported to the following e-mail
+       address: <kvirc@tin.it>
+
+
+OFFICIAL WWW SITE
+       http://www.kvirc.org
+
+
+AUTHORS
+       Szymon 'Pragma' Stefanek <stefanek@tin.it>
+
+       With   patches,   fixes,   extensions,   and   more   from
+       [Anodine]@efnet,     Till   'BuTi@ircnet'   Busch,   Fritz
+       'KNFritz@ircnet' Elfert, RAD Kade 1
+
+       With bug-hunting,  hard-thinking,  eyes-consuming,  nights
+       spent on IRC, great suggestions and more from lots of peo­
+       ple all over the net, including but not  limited  to  Paul
+       'infected@ircnet'  Boehm, Olle 'Crocodile@ircnet' Hällnäs,
+       Diablo@ircnet,   Andrew   'Drosha@ircnet'   Frolov,   Mal­
+       boroLi@ircnet, munehiro@ircnet
+
+
+
+
+Version                    03 Oct 1999                   KVIRC(1)

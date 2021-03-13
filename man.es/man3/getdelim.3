@@ -1,0 +1,88 @@
+GETLINE(3)          Linux Programmer's Manual          GETLINE(3)
+
+
+
+NAME
+       getline, getdelim - delimited string input
+
+SYNOPSIS
+       #define _GNU_SOURCE
+       #include <stdio.h>
+
+       ssize_t getline(char **lineptr, size_t *n, FILE *stream);
+       ssize_t getdelim(char **lineptr, size_t *n, int delim, FILE *stream);
+
+DESCRIPTION
+       getline() reads an entire line, storing the address of the
+       buffer containing the text into *lineptr.  The  buffer  is
+       null-terminated  and  includes the newline character, if a
+       newline delimiter was found.
+
+       If *lineptr is NULL, the getline() routine will allocate a
+       buffer for containing the line, which must be freed by the
+       user program.  Alternatively,  before  calling  getline(),
+       *lineptr  can  contain  a  pointer to a malloc()-allocated
+       buffer *n bytes in size. If the buffer is not large enough
+       to  hold the line read in, getline() resizes the buffer to
+       fit with realloc(), updating *lineptr and *n as necessary.
+       In either case, on a successful call, *lineptr and *n will
+       be updated to reflect the buffer address and size  respec­
+       tively.
+
+       getdelim()  works  like getline(), except a line delimiter
+       other than newline can be specified as the delimiter argu­
+       ment.  As  with  getline(),  a  delimiter character is not
+       added if one was not present in the input  before  end  of
+       file was reached.
+
+
+RETURN VALUE
+       On  success, getline() and getdelim() return the number of
+       characters read, including the  delimiter  character,  but
+       not  including  the terminating null character. This value
+       can be used to handle embedded null characters in the line
+       read.
+
+       Both  functions  return  -1   on  failure  to  read a line
+       (including end of file condition).
+
+
+ERRORS
+       EINVAL Bad parameters (n or lineptr is NULL, or stream  is
+              not valid).
+
+
+EXAMPLE
+       #define _GNU_SOURCE
+       #include <stdio.h>
+       #include <stdlib.h>
+
+       int main(void)
+       {
+            FILE * fp;
+            char * line = NULL;
+            size_t len = 0;
+            ssize_t read;
+            fp = fopen("/etc/motd", "r");
+            if (fp == NULL)
+                 exit(EXIT_FAILURE);
+            while ((read = getline(&line, &len, fp)) != -1) {
+                 printf("Retrieved line of length %zu :\n", read);
+                 printf("%s", line);
+            }
+            if (line)
+                 free(line);
+            return EXIT_SUCCESS;
+       }
+
+CONFORMING TO
+       Both  getline()  and  getdelim() are GNU extensions.  They
+       are available since libc 4.6.27.
+
+
+SEE ALSO
+       read(2), fopen(3), fread(3), gets(3), fgets(3), scanf(3)
+
+
+
+GNU                         2001-10-07                 GETLINE(3)

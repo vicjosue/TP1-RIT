@@ -1,0 +1,131 @@
+Tcl_StaticPackage(3)  Tcl Library Procedures Tcl_StaticPackage(3)
+
+
+
+_________________________________________________________________
+
+NAME
+       Tcl_StaticPackage  -  make  a  statically  linked  package
+       available via the load command
+
+SYNOPSIS
+       #include <tcl.h>
+
+       Tcl_StaticPackage(interp, pkgName, initProc, safeInitProc)
+
+ARGUMENTS
+       Tcl_Interp            *interp         (in)      If     not
+                                                       NULL,
+                                                       points  to
+                                                       an  inter­
+                                                       preter
+                                                       into which
+                                                       the  pack­
+                                                       age    has
+                                                       already
+                                                       been
+                                                       loaded
+                                                       (i.e., the
+                                                       caller has
+                                                       already
+                                                       invoked
+                                                       the appro­
+                                                       priate
+                                                       initial­
+                                                       ization
+                                                       proce­
+                                                       dure).
+                                                       NULL means
+                                                       the  pack­
+                                                       age hasn't
+                                                       yet   been
+                                                       incorpo­
+                                                       rated into
+                                                       any inter­
+                                                       preter.
+
+       char                  *pkgName        (in)      Name    of
+                                                       the  pack­
+                                                       age;
+                                                       should  be
+                                                       properly
+                                                       capital­
+                                                       ized
+                                                       (first
+                                                       letter
+                                                       upper-
+                                                       case,  all
+                                                       others
+                                                       lower-
+                                                       case).
+
+       Tcl_PackageInitProc   *initProc       (in)      Procedure
+                                                       to  invoke
+                                                       to  incor­
+                                                       porate
+                                                       this
+                                                       package
+                                                       into     a
+                                                       trusted
+                                                       inter­
+                                                       preter.
+
+       Tcl_PackageInitProc   *safeInitProc   (in)      Procedure
+                                                       to call to
+                                                       incorpo­
+                                                       rate  this
+                                                       package
+                                                       into     a
+                                                       safe
+                                                       inter­
+                                                       preter
+                                                       (one  that
+                                                       will  exe­
+                                                       cute
+                                                       untrusted
+                                                       scripts).
+                                                       NULL means
+                                                       the  pack­
+                                                       age  can't
+                                                       be used in
+                                                       safe
+                                                       inter­
+                                                       preters.
+_________________________________________________________________
+
+
+DESCRIPTION
+       This procedure may be invoked to announce that  a  package
+       has  been  linked  statically  with a Tcl application and,
+       optionally, that it has already been loaded into an inter­
+       preter.   Once  Tcl_StaticPackage  has  been invoked for a
+       package, it may be loaded into interpreters using the load
+       command.   Tcl_StaticPackage  is  normally invoked only by
+       the Tcl_AppInit procedure  for  the  application,  not  by
+       packages  for themselves (Tcl_StaticPackage should only be
+       invoked for statically loaded packages, and  code  in  the
+       package itself should not need to know whether the package
+       is dynamically or statically loaded).
+
+       When the load command is used later to  load  the  package
+       into an interpreter, one of initProc and safeInitProc will
+       be invoked, depending on whether the target interpreter is
+       safe  or  not.   initProc and safeInitProc must both match
+       the following prototype:
+              typedef int Tcl_PackageInitProc(Tcl_Interp *interp);
+       The interp argument identifies the  interpreter  in  which
+       the package is to be loaded.  The initialization procedure
+       must return TCL_OK or TCL_ERROR to indicate whether or not
+       it  completed  successfully;  in  the event of an error it
+       should set the interpreter's result to point to  an  error
+       message.  The result or error from the initialization pro­
+       cedure will be returned as the result of the load  command
+       that caused the initialization procedure to be invoked.
+
+
+KEYWORDS
+       initialization procedure, package, static linking
+
+
+
+Tcl                            7.5           Tcl_StaticPackage(3)

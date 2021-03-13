@@ -1,0 +1,428 @@
+rpmio/rpmmacro.h(3)                           rpmio/rpmmacro.h(3)
+
+
+
+NAME
+       rpmio/rpmmacro.h -
+
+SYNOPSIS
+   Data Structures
+       struct MacroContext_s
+       struct MacroEntry_s
+
+   Defines
+       #define RMIL_DEFAULT   -15
+           Markers for sources of macros added throughout rpm.
+       #define RMIL_MACROFILES   -13
+       #define RMIL_RPMRC   -11
+       #define RMIL_CMDLINE   -7
+       #define RMIL_TARBALL   -5
+       #define RMIL_SPEC   -3
+       #define RMIL_OLDSPEC   -1
+       #define RMIL_GLOBAL   0
+
+   Typedefs
+       typedef MacroEntry_s * MacroEntry
+       typedef MacroContext_s * MacroContext
+       typedef enum rpmCompressedMagic_e rpmCompressedMagic
+
+   Enumerations
+       enum rpmCompressedMagic_e { COMPRESSED_NOT =  0,
+           COMPRESSED_OTHER =  1, COMPRESSED_BZIP2 =  2,
+           COMPRESSED_ZIP =  3 }
+
+   Functions
+       void rpmDumpMacroTable (MacroContext mc, FILE *fp)
+           Print macros to file stream.
+       int expandMacros (void *spec, MacroContext mc, char *sbuf,
+           size_t sbuflen)
+           Expand macro into buffer.
+       void addMacro (MacroContext mc, const char *n, const char
+           *o, const char *b, int level)
+           Add macro to context.
+       void delMacro (MacroContext mc, const char *n)
+           Delete macro from context.
+       int rpmDefineMacro (MacroContext mc, const char *macro,
+           int level)
+           Define macro in context.
+       void rpmLoadMacros (MacroContext mc, int level)
+           Load macros from context into global context.
+       void rpmInitMacros (MacroContext mc, const char
+           *macrofiles)
+           Initialize macro context from set of macrofile(s).
+       void rpmFreeMacros (MacroContext mc)
+           Destroy macro context.
+       int isCompressed (const char *file, rpmCompressedMagic
+           *compressed)
+           Return type of compression used in file.
+       char * rpmExpand (const char *arg,...)
+           Return (malloc'ed) concatenated macro expansion(s).
+       char * rpmCleanPath (char *path)
+           Canonicalize file path.
+       const char * rpmGetPath (const char *path,...)
+           Return (malloc'ed) expanded, canonicalized, file path.
+       const char * rpmGenPath (const char *root, const char
+           *mdir, const char *file)
+           Merge 3 args into path, any or all of which may be a
+           url.
+       int rpmExpandNumeric (const char *arg)
+           Return macro expansion as a numeric value.
+
+DETAILED DESCRIPTION
+       Definition in file rpmmacro.h.
+
+DEFINE DOCUMENTATION
+   #define RMIL_CMDLINE   -7
+       Definition at line 32 of file rpmmacro.h.
+
+       Referenced by main, and rpmInitMacros.
+
+   #define RMIL_DEFAULT   -15
+       Markers for sources of macros added throughout rpm.
+
+       Definition at line 28 of file rpmmacro.h.
+
+       Referenced by doAddMacro, main, setDefaults,
+       setPathDefault, and setVarDefault.
+
+   #define RMIL_GLOBAL   0
+       Definition at line 36 of file rpmmacro.h.
+
+       Referenced by expandMacro.
+
+   #define RMIL_MACROFILES   -13
+       Definition at line 29 of file rpmmacro.h.
+
+       Referenced by rpmInitMacros.
+
+   #define RMIL_OLDSPEC   -1
+       Definition at line 35 of file rpmmacro.h.
+
+       Referenced by handlePreambleTag.
+
+   #define RMIL_RPMRC   -11
+       Definition at line 30 of file rpmmacro.h.
+
+       Referenced by doReadRC, parseSpec, and
+       rpmRebuildTargetVars.
+
+   #define RMIL_SPEC   -3
+       Definition at line 34 of file rpmmacro.h.
+
+       Referenced by addSource, doScript, doSetupMacro,
+       handlePreambleTag, and parseSpec.
+
+   #define RMIL_TARBALL   -5
+       Definition at line 33 of file rpmmacro.h.
+
+       Referenced by buildForTarget.
+
+TYPEDEF DOCUMENTATION
+   typedef struct MacroContext_s *  MacroContext
+       The structure used to store the set of macros in a
+       context.
+
+   typedef struct MacroEntry_s *  MacroEntry
+       The structure used to store a macro.
+
+   typedef enum rpmCompressedMagic_e  rpmCompressedMagic
+       Referenced by buildForTarget, doFoo, doPatch, doUntar, and
+       isCompressed.
+
+ENUMERATION TYPE DOCUMENTATION
+   enum rpmCompressedMagic_e
+       Enumeration values:
+
+       COMPRESSED_NOT
+              not compressed
+
+       COMPRESSED_OTHER
+              gzip can handle
+
+       COMPRESSED_BZIP2
+              bzip2 can handle
+
+       COMPRESSED_ZIP
+              unzip can handle
+
+       Definition at line 122 of file rpmmacro.h.
+
+FUNCTION DOCUMENTATION
+   void addMacro (MacroContext mc, const char * n, const char *
+       o, const char * b, int level)
+       Add macro to context.
+
+       Deprecated:
+           Use rpmDefineMacro().
+
+       Parameters:
+
+       mc     macro context (NULL uses global context).
+
+       n      macro name
+
+       o      macro paramaters
+
+       b      macro body
+
+       level  macro recursion level (0 is entry API)
+
+       Definition at line 1420 of file macro.c.
+
+       Referenced by addSource, buildForTarget, doAddMacro,
+       doDefine, doReadRC, doScript, doSetupMacro, expandMacro,
+       grabArgs, handlePreambleTag, main, parseSpec,
+       rpmLoadMacros, rpmRebuildTargetVars, setDefaults,
+       setPathDefault, and setVarDefault.
+
+   void delMacro (MacroContext mc, const char * n)
+       Delete macro from context.
+
+       Parameters:
+
+       mc     macro context (NULL uses global context).
+
+       n      macro name
+
+       Definition at line 1446 of file macro.c.
+
+       Referenced by doDelMacro, doScript, doUndefine,
+       handlePreambleTag, parseSpec, and rpmRebuildTargetVars.
+
+   int expandMacros (void * spec, MacroContext mc, char * sbuf,
+       size_t sbuflen)
+       Expand macro into buffer.
+
+       Deprecated:
+           Use rpmExpand().
+
+       Todo:
+           Eliminate from API.
+
+       Parameters:
+
+       spec   cookie (unused)
+
+       mc     macro context (NULL uses global context).
+
+       Return values:
+
+       sbuf   input macro to expand, output expansion
+
+       Parameters:
+
+       sbuflen
+              size of buffer
+
+       Returns:
+           0 on success
+
+       Definition at line 1381 of file macro.c.
+
+       Referenced by addFileToTagAux, copyNextLine,
+       processPackageFiles, rpmExpand, and rpmGetPath.
+
+   int isCompressed (const char * file, rpmCompressedMagic *
+       compressed)
+       Return type of compression used in file.
+
+       Parameters:
+
+       file   name of file
+
+       Return values:
+
+       compressed
+              address of compression type
+
+       Returns:
+           0 on success, 1 on I/O error
+
+       Definition at line 1588 of file macro.c.
+
+       Referenced by buildForTarget, doFoo, doPatch, and doUntar.
+
+   char* rpmCleanPath (char * path)
+       Canonicalize file path.
+
+       Parameters:
+
+       path   path to canonicalize (in-place)
+
+       Returns:
+           canonicalized path (malloc'ed)
+
+       Definition at line 1688 of file macro.c.
+
+       Referenced by doLookup, openDatabase, rpmdbMoveDatabase,
+       rpmdbRemoveDatabase, rpmGetPath, and rpmQueryVerify.
+
+   int rpmDefineMacro (MacroContext mc, const char * macro, int
+       level)
+       Define macro in context.
+
+       Parameters:
+
+       mc     macro context (NULL uses global context).
+
+       n      macro name, options, body
+
+       level  macro recursion level (0 is entry API)
+
+       Returns:
+           Todo:
+                Document.
+
+       Definition at line 1461 of file macro.c.
+
+       Referenced by main, rpmdbRebuild, and rpmInitMacros.
+
+   void rpmDumpMacroTable (MacroContext mc, FILE * fp)
+       Print macros to file stream.
+
+       Parameters:
+
+       mc     macro context (NULL uses global context).
+
+       fp     file stream (NULL uses stderr).
+
+       Definition at line 180 of file macro.c.
+
+       Referenced by expandMacro, and rpmShowRC.
+
+   char* rpmExpand (const char * arg, ...)
+       Return (malloc'ed) concatenated macro expansion(s).
+
+       Parameters:
+
+       arg    macro(s) to expand (NULL terminates list)
+
+       Returns:
+           macro expansion (malloc'ed)
+
+       Definition at line 1639 of file macro.c.
+
+       Referenced by checkForValidArchitectures, checkPassPhrase,
+       cpio_doio, db3New, dbiTagsInit, doPrimary, doScript,
+       doSetupMacro, fillOutMainPackage, generateDepends,
+       i18nTag, main, makeGPGSignature, makePGPSignature,
+       newRpmdb, packageBinaries, parseForRegexLang,
+       parseForRegexMultiLib, parseSpec, rdToken, readLine,
+       rpmdbSetIteratorRE, rpmExpandNumeric, rpmGetPassPhrase,
+       rpmLookupSignatureType, rpmReadConfigFiles, rpmRollback,
+       urlFind, verifyGPGSignature, verifyPGPSignature, and
+       writeRPM.
+
+   int rpmExpandNumeric (const char * arg)
+       Return macro expansion as a numeric value.
+
+       Boolean values ('Y' or 'y' returns 1, 'N' or 'n' returns
+       0) are permitted as well. An undefined macro returns 0.
+
+       Parameters:
+
+       arg    macro to expand
+
+       Returns:
+           numeric value
+
+       Definition at line 1661 of file macro.c.
+
+       Referenced by dbiOpen, genCpioListAndHeader, main,
+       newRpmdb, openDatabase, parseRCPOT, parseSpec,
+       processPackageFiles, rpmdbInit, rpmdbOpen, rpmdbRebuild,
+       rpmdbVerify, and rpmLeadVersion.
+
+   void rpmFreeMacros (MacroContext mc)
+       Destroy macro context.
+
+       Parameters:
+
+       mc     macro context (NULL uses global context).
+
+       Definition at line 1561 of file macro.c.
+
+       Referenced by build, and main.
+
+   const char* rpmGenPath (const char * root, const char * mdir,
+       const char * file)
+       Merge 3 args into path, any or all of which may be a url.
+
+       The leading part of the first URL encountered is used for
+       the result, other URL's are discarded, permitting a
+       primitive form of inheiritance.
+
+       Parameters:
+
+       root   root URL (often path to chroot, or NULL)
+
+       mdir   directory URL (often a directory, or NULL)
+
+       file   file URL (often a file, or NULL)
+
+       Returns:
+           expanded, merged, canonicalized path (malloc'ed)
+
+       Definition at line 1800 of file macro.c.
+
+       Referenced by buildForTarget, db1close, db1open, db3close,
+       db3open, db_init, doScript, doSetupMacro,
+       handlePreambleTag, makeTempFile, processBinaryFile,
+       processPackageFiles, and rpmInstall.
+
+   const char* rpmGetPath (const char * path, ...)
+       Return (malloc'ed) expanded, canonicalized, file path.
+
+       Parameters:
+
+       path   macro(s) to expand (NULL terminates list)
+
+       Returns:
+           canonicalized path (malloc'ed)
+
+       Definition at line 1771 of file macro.c.
+
+       Referenced by addFileToTagAux, addSource, buildForTarget,
+       checkSpec, db3close, db3open, doPatch, doReadRC,
+       doRmSource, doUntar, newRpmdb, packageBinaries,
+       packageSources, parseFiles, parseForSimple, parseSpec,
+       processPackageFiles, processSourceFiles, readIcon,
+       rpmdbRebuild, rpmDetectPGPVersion, rpmErase, rpmGenPath,
+       rpmGetFilesystemUsage, rpmInstall, setPathDefault,
+       verifyGPGSignature, and verifyPGPSignature.
+
+   void rpmInitMacros (MacroContext mc, const char * macrofiles)
+       Initialize macro context from set of macrofile(s).
+
+       Parameters:
+
+       mc     macro context (NULL uses global context).
+
+       macrofiles
+              colon separated list of macro files (NULL does
+              nothing)
+
+       Definition at line 1496 of file macro.c.
+
+       Referenced by rpmReadRC.
+
+   void rpmLoadMacros (MacroContext mc, int level)
+       Load macros from context into global context.
+
+       Parameters:
+
+       mc     macro context (NULL does nothing).
+
+       level  macro recursion level (0 is entry API)
+
+       Definition at line 1475 of file macro.c.
+
+       Referenced by rpmInitMacros.
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002        rpmio/rpmmacro.h(3)

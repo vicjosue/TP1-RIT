@@ -1,0 +1,204 @@
+SIGNATURE.(3)                                       SIGNATURE.(3)
+
+
+
+NAME
+       SIGNATURE. -
+
+   Files
+       file base64.c
+       file digest.c
+       file md5.c
+           This code implements the MD5 message-digest algorithm.
+
+
+       file md5sum.c
+           Generate/check MD5 Message Digests.
+
+
+       file rpmlib.h
+       file signature.c
+       file signature.h
+           Generate and verify signatures.
+
+
+
+   Typedefs
+       typedef enum sigType_e sigType
+       typedef enum pgpVersion_e pgpVersion
+
+   Enumerations
+       enum sigType_e { RPMSIGTYPE_NONE =  0,
+           RPMSIGTYPE_PGP262_1024 =  1, RPMSIGTYPE_BAD =  2,
+           RPMSIGTYPE_MD5 =  3, RPMSIGTYPE_MD5_PGP =  4,
+           RPMSIGTYPE_HEADERSIG =  5, RPMSIGTYPE_DISABLE =  6 }
+       enum pgpVersion_e { PGP_NOTDETECTED =  -1, PGP_UNKNOWN =
+           0, PGP_2 =  2, PGP_5 =  5 }
+
+   Functions
+       Header rpmNewSignature (void)
+       rpmRC rpmReadSignature (FD_t fd, Header *headerp, sigType
+           sig_type)
+       int rpmWriteSignature (FD_t fd, Header h)
+       int rpmAddSignature (Header h, const char *file, int_32
+           sigTag, const char *passPhrase)
+       int rpmLookupSignatureType (int action)
+       char * rpmGetPassPhrase (const char *prompt, const int
+           sigTag)
+       const char * rpmDetectPGPVersion (pgpVersion *pgpVer)
+
+TYPEDEF DOCUMENTATION
+   typedef enum pgpVersion_e  pgpVersion
+       Identify PGP versions.
+
+       Note:
+           Greater than 0 is a valid PGP version.
+
+       Referenced by checkPassPhrase, makePGPSignature,
+       rpmDetectPGPVersion, and verifyPGPSignature.
+
+   typedef enum sigType_e  sigType
+       Signature types stored in rpm lead.
+
+       Referenced by rpmLookupSignatureType, and
+       rpmReadSignature.
+
+ENUMERATION TYPE DOCUMENTATION
+   enum pgpVersion_e
+       Identify PGP versions.
+
+       Note:
+           Greater than 0 is a valid PGP version.
+
+       Enumeration values:
+
+       PGP_NOTDETECTED
+
+       PGP_UNKNOWN
+
+       PGP_2
+
+       PGP_5
+
+       Definition at line 30 of file signature.h.
+
+   enum sigType_e
+       Signature types stored in rpm lead.
+
+       Enumeration values:
+
+       RPMSIGTYPE_NONE
+              unused, legacy.
+
+       RPMSIGTYPE_PGP262_1024
+              unused, legacy.
+
+       RPMSIGTYPE_BAD
+              Unknown signature type.
+
+       RPMSIGTYPE_MD5
+              unused, legacy.
+
+       RPMSIGTYPE_MD5_PGP
+              unused, legacy.
+
+       RPMSIGTYPE_HEADERSIG
+              Header style signature
+
+       RPMSIGTYPE_DISABLE
+              Disable verification (debugging only)
+
+       Definition at line 14 of file signature.h.
+
+FUNCTION DOCUMENTATION
+   int rpmAddSignature (Header h, const char * file, int_32
+       sigTag, const char * passPhrase)
+       Generate a signature of data in file, insert in header.
+
+       Definition at line 420 of file signature.c.
+
+       Referenced by rpmLookupSignatureType, rpmReSign, and
+       writeRPM.
+
+   const char* rpmDetectPGPVersion (pgpVersion * pgpVer)
+       Return path to pgp executable of given type, or NULL when
+       not found.
+
+       Definition at line 73 of file signature.c.
+
+       Referenced by checkPassPhrase, main, makePGPSignature, and
+       verifyPGPSignature.
+
+   char* rpmGetPassPhrase (const char * prompt, const int sigTag)
+       Read a pass phrase from the user.
+
+       Definition at line 813 of file signature.c.
+
+       Referenced by main.
+
+   int rpmLookupSignatureType (int action)
+       Return type of signature in effect for building.
+
+       Definition at line 36 of file signature.c.
+
+       References int_32, rpmAddSignature, rpmNewSignature,
+       rpmRC, rpmReadSignature, rpmWriteSignature, and sigType.
+
+       Referenced by main, rpmReSign, and writeRPM.
+
+   Header rpmNewSignature (void)
+       Return new, empty (signature) header instance.
+
+       Returns:
+           signature header
+
+       Definition at line 234 of file signature.c.
+
+   rpmRC rpmReadSignature (FD_t fd, Header * headerp, sigType
+       sig_type)
+       Read (and verify header+archive size) signature header. If
+       an old-style signature is found, we emulate a new style
+       one.
+
+       Parameters:
+
+       fd     file handle
+
+       Return values:
+
+       headerp
+              address of (signature) header (or NULL)
+
+       Parameters:
+
+       sig_type
+              type of signature header to read (from lead)
+
+       Returns:
+           rpmRC return code
+
+       Definition at line 144 of file signature.c.
+
+       Referenced by main, readPackageHeaders, rpmCheckSig,
+       rpmLookupSignatureType, and rpmReSign.
+
+   int rpmWriteSignature (FD_t fd, Header h)
+       Write signature header.
+
+       Parameters:
+
+       fd     file handle
+
+       h      (signature) header
+
+       Returns:
+           0 on success, 1 on error
+
+       Definition at line 214 of file signature.c.
+
+       Referenced by main, rpmLookupSignatureType, rpmReSign, and
+       writeRPM.
+
+
+
+rpm                        13 Mar 2002              SIGNATURE.(3)

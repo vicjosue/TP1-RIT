@@ -1,0 +1,40 @@
+pkgSet(3)                                               pkgSet(3)
+
+
+
+NAME
+       pkgSet -
+
+SYNOPSIS
+       #include <upgrade.h>
+
+
+   Data Fields
+       packageInfo ** packages
+       int numPackages
+
+FIELD DOCUMENTATION
+   int pkgSet::numPackages
+       Definition at line 17 of file upgrade.h.
+
+       Referenced by addLostFiles, findPackagesWithObsoletes,
+       findPackagesWithRelocatedFiles, findUpgradePackages,
+       findUpgradeSet, pkgSort, removeMovedFilesAlreadyHandled,
+       and unmarkPackagesAlreadyInstalled.
+
+   struct packageInfo** pkgSet::packages
+       Definition at line 16 of file upgrade.h.
+
+       Referenced by addLostFiles, findPackagesWithObsoletes,
+       findPackagesWithRelocatedFiles, findUpgradePackages,
+       findUpgradeSet, pkgSort, removeMovedFilesAlreadyHandled,
+       and unmarkPackagesAlreadyInstalled.
+
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002                  pkgSet(3)

@@ -1,0 +1,136 @@
+FTW(3)              Linux Programmer's Manual              FTW(3)
+
+
+
+NAME
+       ftw, nftw - file tree walk
+
+SYNOPSIS
+       #include <ftw.h>
+
+       int ftw(const char *dir, int (*fn)(const char *file, const
+       struct stat *sb, int flag), int depth);
+
+       int nftw(const char  *dir,  int  (*fn)(const  char  *file,
+       const  struct  stat  *sb,  int  flag,  struct FTW *s), int
+       depth, int flags);
+
+DESCRIPTION
+       ftw() walks through the directory tree starting  from  the
+       indicated  directory  dir.   For  each  found entry in the
+       tree, it calls fn() with the full pathname of the entry, a
+       pointer  to the stat(2) structure for the entry and an int
+       flag, which value will be one of the following:
+
+       FTW_F  Item is a normal file
+
+       FTW_D  Item is a directory
+
+       FTW_DNR
+              Item is a directory which can't be read
+
+       FTW_SL Item is a symbolic link
+
+       FTW_NS The stat failed on the item which is not a symbolic
+              link
+
+       If  the  item  is  a symbolic link and stat failed, XPG4v2
+       states that it is undefined whether FTW_NS  or  FTW_SL  is
+       used.
+
+       ftw() recursively calls itself for traversing found direc­
+       tories, handling a directory before its files or subdirec­
+       tories.   To  avoid using up all a program's file descrip­
+       tors, the depth specifies the number of simultaneous  open
+       directories.   When  the  depth  is  exceeded,  ftw() will
+       become slower because directories have to  be  closed  and
+       reopened.  ftw() uses at most one file descriptor for each
+       level in the file hierarchy.
+
+       To stop the tree walk, fn() returns a non-zero value; this
+       value  will  become the return value of ftw().  Otherwise,
+       ftw() will continue until  it  has  traversed  the  entire
+       tree,  in which case it will return zero, or until it hits
+       an error other than EACCES (such as a malloc(3)  failure),
+       in which case it will return -1.
+
+       Because  ftw() uses dynamic data structures, the only safe
+       way to exit out of a tree walk is  to  return  a  non-zero
+       value.   To  handle interrupts, for example, mark that the
+       interrupt occurred and return a non-zero value--don't  use
+       longjmp(3) unless the program is going to terminate.
+
+       The  function  nftw()  does  precisely  the same as ftw(),
+       except that it has  one  additional  argument  flags  (and
+       calls the supplied function with one more argument).  This
+       flags argument is an OR of zero or more of  the  following
+       flags:
+
+       FTW_CHDIR
+              If  set, do a chdir() to each directory before han­
+              dling its contents.
+
+       FTW_DEPTH
+              If set, do a depth-first search, that is, call  the
+              function  for  the directory itself only after han­
+              dling the contents of the directory and its  subdi­
+              rectories.
+
+       FTW_MOUNT
+              If set, stay within the same file system.
+
+       FTW_PHYS
+              If  set,  do  not  follow symbolic links.  (This is
+              what you want.)  If not  set,  symbolic  links  are
+              followed, but no file is reported twice.
+
+       If  FTW_PHYS  is  not  set, but FTW_DEPTH is set, then the
+       function fn() is never called for a directory  that  would
+       be a descendant of itself.
+
+       The function fn() is called with four arguments: the path­
+       name of the reported entry, a pointer to a struct stat for
+       this  entry, an integer describing its type, and a pointer
+       to a struct FTW. The type will be one  of  the  following:
+       FTW_F,  FTW_D,  FTW_DNR,  FTW_SL,  FTW_NS (with meaning as
+       above; FTW_SL occurs only with FTW_PHYS set) or
+
+       FTW_DP Item is a directory and all  its  descendants  have
+              been   handled  already.  (This  occurs  only  with
+              FTW_DEPTH set.)
+
+       FTW_SLN
+              Item is a symbolic link pointing to  a  nonexisting
+              file.  (This occurs only with FTW_PHYS unset.)
+
+       The  struct  FTW pointed at by the fourth argument to fn()
+       has at least the fields base, the  offset  of  the  item's
+       filename  in the pathname given as first argument of fn(),
+       and level, the depth of the item relative to the  starting
+       point (which has depth 0).
+
+NOTES
+       The  function nftw() and the use of FTW_SL with ftw() were
+       introduced in XPG4v2.
+
+       On some systems ftw() will never use FTW_SL, on other sys­
+       tems  FTW_SL  occurs  only  for symbolic links that do not
+       point to an existing file,  and  again  on  other  systems
+       ftw()  will  use  FTW_SL  for each symbolic link. For pre­
+       dictable control, use nftw().
+
+       Under Linux, libc4 and libc5  and  glibc  2.0.6  will  use
+       FTW_F  for all objects (files, symbolic links, fifos, etc)
+       that can be stat'ed but are not a directory.  The function
+       nftw() is available since glibc 2.1.
+
+CONFORMING TO
+       AES, SVID2, SVID3, XPG2, XPG3, XPG4, XPG4v2.
+
+SEE ALSO
+       stat(2)
+
+
+
+
+Linux                       1999-06-25                     FTW(3)

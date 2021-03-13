@@ -1,0 +1,73 @@
+SKB_INSERT(9)          Networking Functions         SKB_INSERT(9)
+
+
+
+NAME
+       __skb_insert, skb_insert, skb_append - insert an sk_buff
+       into a list
+
+SYNOPSIS
+       #include <linux/skbuff.h>
+
+       void __skb_insert(struct sk_buff *newsk, struct sk_buff
+              *prev, struct sk_buff *next, struct sk_buff_head
+              *list)
+
+       void skb_insert(struct sk_buff *old, struct sk_buff
+       *newsk)
+
+       void skb_append(struct sk_buff *old, struct sk_buff
+       *newsk)
+
+DESCRIPTION
+       skb_insert and skb_append are  essentially  wrapper  func­
+       tions  for  __skb_insert (see NOTES, below.)  __skb_insert
+       inserts newsk into list, and resets the  appropriate  next
+       and  prev pointers.  prev and next are used to frame newsk
+       in list.  After setting the  next  and  prev  pointers  in
+       newsk,  __skb_insert sets the prev pointer in next and the
+       next pointer in prev, sets the list pointer in newsk,  and
+       increments the qlen counter in list.
+
+       skb_insert  and  skb_append should be used to add sk_buffs
+       to a list rather than performing this  task  manually;  in
+       addition  to  performing  this task in a standardized way,
+       these functions also provide for interrupt diasabling  and
+       prevent  list  mangling.   Both of these functions use the
+       list pointer in old  to  determine  to  which  list  newsk
+       should be attached.
+
+       The skb_insert function adds newsk to the list before old.
+
+       The skb_append function adds newsk to the list after  old.
+
+RETURN VALUE
+       None.
+
+NOTES
+       It  is  important  to note the difference between not only
+       skb_insert,  skb_append  and  __skb_insert,  but  all  the
+       __skb_  functions  and  their  skb_  counterparts.  Essen­
+       tially, the __skb_ functions are  non-atomic,  and  should
+       only  be used with interrupts disabled.  As a convenience,
+       the skb_ functions are provided, which  perform  interrupt
+       disable / enable wrapper functionality in addition to per­
+       forming their specific tasks.
+
+AVAILABILITY
+       Linux 1.0+
+
+SEE ALSO
+       intro(9), skb_queue_head(9), skb_queue_tail(9)
+
+       /usr/src/linux/net/ax25/af_ax25.c
+       /usr/src/linux/net/core/skbuff.c
+       /usr/src/linux/net/ipv4/tcp_input.c
+       /usr/src/linux/net/netrom/nr_in.c
+
+AUTHOR
+       Cyrus Durgin <cider@speakeasy.org>
+
+
+
+Linux DDI               November 24, 1997           SKB_INSERT(9)

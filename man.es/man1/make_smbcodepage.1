@@ -1,0 +1,137 @@
+MAKE_SMBCODEPAGE(1)                           MAKE_SMBCODEPAGE(1)
+
+
+
+NAME
+       make_smbcodepage - construct a codepage file for Samba
+
+SYNOPSIS
+       make_smbcodepage c|d codepage inputfile outputfile
+
+DESCRIPTION
+       This tool is part of the  Sambasuite.
+
+       make_smbcodepage  compiles  or  de-compiles codepage files
+       for use with the internationalization  features  of  Samba
+       2.2
+
+OPTIONS
+       c|d    This  tells make_smbcodepage if it is compiling (c)
+              a text format code page file to binary, or (d)  de-
+              compiling a binary codepage file to text.
+
+       codepage
+              This  is  the codepage we are processing (a number,
+              e.g. 850).
+
+       inputfile
+              This is the input file to process. In  the  c  case
+              this  will  be a text codepage definition file such
+              as the ones found  in  the  Samba  source/codepages
+              directory.  In  the  d case this will be the binary
+              format codepage definition file normally  found  in
+              the  lib/codepages  directory  in the Samba install
+              directory path.
+
+       outputfile
+              This is the output file to produce.
+
+SAMBA CODEPAGE FILES
+       A text Samba codepage definition  file  is  a  description
+       that  tells  Samba how to map from upper to lower case for
+       characters greater than ascii 127  in  the  specified  DOS
+       code  page.   Note that for certain DOS codepages (437 for
+       example) mapping from lower to upper case may be  non-sym­
+       metrical. For example, in code page 437 lower case a acute
+       maps to a plain upper case A  when  going  from  lower  to
+       upper  case,  but  plain  upper case A maps to plain lower
+       case a when lower casing a character.
+
+       A binary Samba codepage definition file is a binary repre­
+       sentation  of the same information, including a value that
+       specifies what codepage this file is describing.
+
+       As Samba does not yet use UNICODE (current for Samba  ver­
+       sion  2.2) you must specify the client code page that your
+       DOS and Windows clients are using if you wish to have case
+       insensitivity done correctly for your particular language.
+       The default codepage Samba uses is 850 (Western European).
+       Text  codepage definition sample files are provided in the
+       Samba distribution for codepages 437 (USA),  737  (Greek),
+       850  (Western  European)  852  (MS-DOS Latin 2), 861 (Ice­
+       landic), 866 (Cyrillic), 932 (Kanji SJIS), 936 (Simplified
+       Chinese),  949  (Hangul)  and  950  (Traditional Chinese).
+       Users are encouraged to  write  text  codepage  definition
+       files  for  their  own  code  pages  and  donate  them  to
+       samba@samba.org.  All  codepage   files   in   the   Samba
+       source/codepages directory are compiled and installed when
+       a 'make install' command is issued there.
+
+       The client codepage used by the smbd server is  configured
+       using the client code page parameter in the smb.conf file.
+
+FILES
+       codepage_def.<codepage>
+
+       These are the input (text) codepage files provided in  the
+       Samba source/codepages directory.
+
+       A text codepage definition file consists of multiple lines
+       containing four fields. These fields are:
+
+       · lower: which is the (hex) lower case character mapped on
+         this line.
+
+       · upper:  which is the (hex) upper case character that the
+         lower case character will map to.
+
+       · map upper to lower which is a boolean value (put  either
+         True  or  False  here) which tells Samba if it is to map
+         the given upper case character to the given  lower  case
+         character when lower casing a filename.
+
+       · map  lower to upper which is a boolean value (put either
+         True or False here) which tells Samba if it  is  to  map
+         the  given  lower case character to the given upper case
+         character when upper casing a filename.
+
+       codepage.<codepage> - These are the output (binary)  code­
+       page  files  produced  and placed in the Samba destination
+       lib/codepage directory.
+
+
+INSTALLATION
+       The location of the server and its support files is a mat­
+       ter  for  individual  system administrators. The following
+       are thus suggestions only.
+
+       It is recommended that  the  make_smbcodepage  program  be
+       installed  under  the  /usr/local/samba  hierarchy,  in  a
+       directory readable by all, writeable  only  by  root.  The
+       program  itself  should  be executable by all. The program
+       should NOT be setuid or setgid!
+
+VERSION
+       This man page is correct for  version  2.2  of  the  Samba
+       suite.
+
+SEE ALSO
+       smbd(8), smb.conf(5)
+
+AUTHOR
+       The  original  Samba  software  and related utilities were
+       created by Andrew Tridgell. Samba is now developed by  the
+       Samba  Team  as  an Open Source project similar to the way
+       the Linux kernel is developed.
+
+       The original Samba man pages were written  by  Karl  Auer.
+       The  man  page  sources  were  converted  to  YODL  format
+       (another excellent piece of Open Source  software,  avail­
+       able           at          ftp://ftp.icce.rug.nl/pub/unix/
+       <URL:ftp://ftp.icce.rug.nl/pub/unix/>) and updated for the
+       Samba  2.0  release  by  Jeremy Allison. The conversion to
+       DocBook for Samba 2.2 was done by Gerald Carter
+
+
+
+                         06 December 2001     MAKE_SMBCODEPAGE(1)

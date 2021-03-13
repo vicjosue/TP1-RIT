@@ -1,0 +1,74 @@
+RPMCLI.(3)                                             RPMCLI.(3)
+
+
+
+NAME
+       RPMCLI. -
+
+   Files
+       file manifest.c
+       file poptBT.c
+           Popt tables for build modes.
+
+
+       file poptDB.c
+           Popt tables for database modes.
+
+
+       file poptI.c
+           Popt tables for install modes.
+
+
+       file poptK.c
+           Popt tables for signature modes.
+
+
+       file poptQV.c
+           Popt tables for query/verify modes.
+
+
+       file query.c
+           Display tag values from package metadata.
+
+
+       file rpmchecksig.c
+           Verify the signature of a package.
+
+
+       file rpmcli.h
+       file rpminstall.c
+       file rpmlib.h
+       file verify.c
+           Verify installed payload files from package metadata.
+
+
+
+   RPMTS
+       void rpmShowRpmlibProvides (FILE *fp)
+
+   Functions
+       int checkSpec (Header h)
+
+FUNCTION DOCUMENTATION
+   int checkSpec (Header h) [static]
+       Definition at line 19 of file build.c.
+
+       References _, _free, EXIT_FAILURE, headerIsEntry,
+       printDepProblems, rpmdbClose, rpmdbOpen, rpmdepCheck,
+       rpmdepFreeConflicts, rpmGetPath, RPMTAG_REQUIREFLAGS,
+       rpmtransAddPackage, rpmtransCreateSet, and rpmtransFree.
+
+       Referenced by buildForTarget.
+
+   void rpmShowRpmlibProvides (FILE * fp)
+       Display current rpmlib feature provides.
+
+       Parameters:
+
+       fp     output file handle
+
+       Definition at line 40 of file rpmlibprov.c.
+
+
+
+rpm                        13 Mar 2002                 RPMCLI.(3)

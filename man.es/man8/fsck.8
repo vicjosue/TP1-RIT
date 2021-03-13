@@ -1,0 +1,240 @@
+FSCK(8)                                                   FSCK(8)
+
+
+
+NAME
+       fsck - check and repair a Linux file system
+
+SYNOPSIS
+       fsck  [  -sACVRTNP  ] [ -t fstype ] filesys [ ... ] [--] [
+       fsck-options ]
+
+DESCRIPTION
+       fsck is used to check and optionally repair a one or  more
+       Linux  file  systems.   filesys can be a device name (e.g.
+       /dev/hdc1, /dev/sdb2),  a  mount  point  (e.g.   /,  /usr,
+       /home),   or   an  ext2  label  or  UUID  specifier  (e.g.
+       UUID=8868abf6-88c5-4a83-98b8-bfc24057f7bd or  LABEL=root).
+       The  fsck program will try to run filesystems on different
+       physical disk drives in parallel to  reduce  total  amount
+       time to check all of the filesystems.
+
+       The exit code returned by fsck is the sum of the following
+       conditions:
+            0    - No errors
+            1    - File system errors corrected
+            2    - System should be rebooted
+            4    - File system errors left uncorrected
+            8    - Operational error
+            16   - Usage or syntax error
+            128  - Shared library error
+       The exit code returned when all file systems  are  checked
+       using  the  -A option is the bit-wise OR of the exit codes
+       for each file system that is checked.
+
+       In actuality, fsck is simply a front-end for  the  various
+       file  system checkers (fsck.fstype) available under Linux.
+       The file system-specific checker is searched for in  /sbin
+       first, then in /etc/fs and /etc, and finally in the direc­
+       tories listed in the PATH  environment  variable.   Please
+       see the file system-specific checker manual pages for fur­
+       ther details.
+
+OPTIONS
+       -s     Serialize fsck operations.  This is a good idea  if
+              you  checking multiple filesystems and the checkers
+              are in an interactive mode.  (Note: e2fsck(8)  runs
+              in   an  interactive  mode  by  default.   To  make
+              e2fsck(8) run in a non-interactive mode,  you  must
+              either specify the -p or -a option, if you wish for
+              errors to be corrected  automatically,  or  the  -n
+              option if you do not.)
+
+       -t fslist
+              Specifies the type(s) of file system to be checked.
+              When the -A flag  is  specified,  only  filesystems
+              that  match fslist are checked.  The fslist parame­
+              ter is a comma-separated list  of  filesystems  and
+              options specifiers.  All of the filesystems in this
+              comma-separated list may be prefixed by a  negation
+              operator  'no'  or  '!',  which  requests that only
+              those filesystems not  listed  in  fslist  will  be
+              checked.   If  all of the filesystems in fslist are
+              not prefixed by  a  negation  operator,  then  only
+              those filesystems listed in fslist will be checked.
+
+              Options specifiers may be  included  in  the  comma
+              separated   fslist.   They  must  have  the  format
+              opts=fs-option, and may be prefixed by  a  negation
+              operator.  If an options specifier is present, then
+              only filesystems whose /etc/fstab entry do  (or  do
+              not,  if  the  options  specifier was prefixed by a
+              negation  operator)  contain  fs-option  in   their
+              options  field  of  the  /etc/fstab  file  will  be
+              checked.
+
+              For compatibility with Mandrake distributions whose
+              boot  scripts depend upon an unauthorized UI change
+              to the fsck program, if a filesystem type  of  loop
+              is  found  in fslist, it is treated as if opts=loop
+              were specified as an argument to the -t option.
+
+              Normally, the filesystem type is deduced by search­
+              ing  for  filesys  in the /etc/fstab file and using
+              the corresponding entry.  If the type  can  not  be
+              deduced,  and  there  is  only  a single filesystem
+              given as an argument to the -t  option,  fsck  will
+              use the specified filesystem type.  If this type is
+              not available, then the default  file  system  type
+              (currently ext2) is used.
+
+       -A     Walk  through  the /etc/fstab file and try to check
+              all file systems in one run.  This option is  typi­
+              cally  used  from  the /etc/rc system initalization
+              file, instead of multiple commands for  checking  a
+              single file system.
+
+              The  root  filesystem  will be checked first unless
+              the -P option  is  specified  (see  below).   After
+              that,  filesystems  will  be  checked  in the order
+              specified by the fs_passno (the sixth) field in the
+              /etc/fstab  file.   Filesystems  with  a  fs_passno
+              value of 0 are skipped and are not checked at  all.
+              Filesystems  with a fs_passno value of greater than
+              zero will be checked  in  order,  with  filesystems
+              with  filesystems  with the lowest fs_passno number
+              being  checked  first.   If  there   are   multiple
+              filesystems  with  the  same pass number, fsck will
+              attempt to check them in parallel, although it will
+              avoid  running  multiple  filesystem  checks on the
+              same physical disk.
+
+              Hence, a very common  configuration  in  /etc/fstab
+              files  is  to  set  the  root  filesystem to have a
+              fs_passno value of 1 and to set all filesystems  to
+              have  a fs_passno value of 2.  This will allow fsck
+              to automatically run filesystem checkers in  paral­
+              lel  if it is advantageous to do so.  System admin­
+              istrators might choose not to use  this  configura­
+              tion  if  they  need  to  avoid multiple filesystem
+              checks running in parallel for some reason ---  for
+              example,  if  the  machine  in question is short on
+              memory so that excessive paging is a concern.
+
+       -C     Display completion/progress bars for those filesys­
+              tems  checkers (currently only for ext2) which sup­
+              port them.   Fsck will manage the filesystem check­
+              ers  so  that  only  one  of  them  will  display a
+              progress bar at a time.
+
+       -N     Don't execute, just show what would be done.
+
+       -P     When the -A flag is set, check the root  filesystem
+              in  parallel  with  the other filesystems.  This is
+              not the safest thing in the world to do,  since  if
+              the  root  filesystem  is  in doubt things like the
+              e2fsck(8)  executable  might  be  corrupted!   This
+              option  is  mainly provided for those sysadmins who
+              don't want to repartition the root filesystem to be
+              small  and compact (which is really the right solu­
+              tion).
+
+       -R     When checking all file systems with  the  -A  flag,
+              skip  the  root  file  system (in case it's already
+              mounted read-write).
+
+       -T     Don't show the title on startup.
+
+       -V     Produce verbose output, including all file  system-
+              specific commands that are executed.
+
+       fsck-options
+              Options  which which are not understood by fsck are
+              passed to the filesystem-specific  checker.   These
+              arguments  must  not take arguments, as there is no
+              way for fsck to be able  to  properly  guess  which
+              arguments take options and which don't.
+
+              Options  and  arguments  which  follow  the  -- are
+              treated  as  file  system-specific  options  to  be
+              passed to the file system-specific checker.
+
+              Please note that fsck is not designed to pass arbi­
+              trarily complicated options to  filesystem-specific
+              checkers.   If  you're doing something complicated,
+              please just execute the filesystem-specific checker
+              directly.   If  you pass fsck some horribly compli­
+              cated option and arguments, and it doesn't do  what
+              you  expect,  don't  bother  reporting it as a bug.
+              You're almost certainly doing  something  that  you
+              shouldn't be doing with fsck.
+
+       Currently,  standardized  file system-specific options are
+       somewhat in flux.  Although not guaranteed, the  following
+       options are supported by most file system checkers:
+
+       -a     Automatically  repair  the  file system without any
+              questions (use this  option  with  caution).   Note
+              that  e2fsck(8)  supports -a for backwards compati­
+              bility only.  This option is mapped to e2fsck's  -p
+              option  which  is safe to use, unlike the -a option
+              that most file system checkers support.
+
+       -r     Interactively repair the filesystem (ask  for  con­
+              firmations).   Note:  It is generally a bad idea to
+              use this option if multiple fsck's are being run in
+              parallel.   Also note that this is e2fsck's default
+              behavior; it supports  this  option  for  backwards
+              compatibility reasons only.
+
+AUTHOR
+       Theodore Ts'o (tytso@mit.edu)
+
+FILES
+       /etc/fstab.
+
+ENVIRONMENT VARIABLES
+       The  fsck  program's behavior is affected by the following
+       environment variables:
+
+       FSCK_FORCE_ALL_PARALLEL
+              If this environment  variable  is  set,  fsck  will
+              attempt  to run all of the specified filesystems in
+              parallel, regardless  of  whether  the  filesystems
+              appear  to  be on the same device.  (This is useful
+              for RAID systems or high-end storage  systems  such
+              as those sold by companies such as IBM or EMC.)
+
+       FSCK_MAX_INST
+              This  environment  variable  will limit the maximum
+              number of file system checkers that can be  running
+              at one time.  This allows configurations which have
+              a large number of disks to avoid fsck starting  too
+              many  file  system  checkers  at  once, which might
+              overload CPU and memory resources available on  the
+              system.   If  this value is zero, then an unlimited
+              number of processes can be spawned.  This  is  cur­
+              rently the default, but future versions of fsck may
+              attempt to automatically determine  how  many  file
+              system   checks  can  be  run  based  on  gathering
+              accounting data from the operating system.
+
+       PATH   The PATH environment variable is used to find  file
+              system  checkers.   A set of system directories are
+              searched  first:   /sbin,   /sbin/fs.d,   /sbin/fs,
+              /etc/fs,  and  /etc.   Then  the set of directories
+              found in the PATH environment are searched.
+
+       FSTAB_FILE
+              This environment variable allows the system  admin­
+              istrator  to  override the standard location of the
+              /etc/fstab file.  It is also use for developers who
+              are testing fsck.
+
+SEE ALSO
+       fstab(5),    mkfs(8),   fsck.minix(8),   fsck.ext2(8)   or
+       e2fsck(8), fsck.xiafs(8).
+
+
+
+E2fsprogs version 1.26    February 2002                   FSCK(8)

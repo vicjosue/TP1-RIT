@@ -1,0 +1,270 @@
+Tk_FindPhoto(3)       Tk Library Procedures       Tk_FindPhoto(3)
+
+
+
+_________________________________________________________________
+
+NAME
+       Tk_FindPhoto,   Tk_PhotoPutBlock,  Tk_PhotoPutZoomedBlock,
+       Tk_PhotoGetImage, Tk_PhotoBlank, Tk_PhotoExpand, Tk_Photo­
+       GetSize,  Tk_PhotoSetSize  -  manipulate  the  image  data
+       stored in a photo image.
+
+SYNOPSIS
+       #include <tk.h>
+       #include <tkPhoto.h>
+
+       Tk_PhotoHandle
+       Tk_FindPhoto(interp, imageName)                            |
+
+       void
+       Tk_PhotoPutBlock(handle, blockPtr, x, y, width, height)
+
+       void
+       Tk_PhotoPutZoomedBlock(handle, blockPtr, x, y, width, height,zoomX, zoomY, subsampleX, subsampleY)
+
+       int
+       Tk_PhotoGetImage(handle, blockPtr)
+
+       void
+       Tk_PhotoBlank(handle)
+
+       void
+       Tk_PhotoExpand(handle, width, height)
+
+       void
+       Tk_PhotoGetSize(handle, widthPtr, heightPtr)
+
+       void
+       Tk_PhotoSetSize(handle, width, height)
+
+ARGUMENTS
+       Tcl_Interp           *interp       (in)      Interpreter   |
+                                                    in      which |
+                                                    image     was |
+                                                    created.
+
+       char                 *imageName    (in)      Name  of  the
+                                                    photo  image.
+
+       Tk_PhotoHandle       handle        (in)      Opaque handle
+                                                    identifying
+                                                    the     photo
+                                                    image  to  be
+                                                    affected.
+
+       Tk_PhotoImageBlock   *blockPtr     (in)      Specifies the
+                                                    address   and
+                                                    storage  lay­
+                                                    out of  image
+                                                    data.
+
+       int                  x             (in)      Specifies the
+                                                    X  coordinate
+                                                    where     the
+                                                    top-left cor­
+                                                    ner   of  the
+                                                    block  is  to
+                                                    be     placed
+                                                    within    the
+                                                    image.
+
+       int                  y             (in)      Specifies the
+                                                    Y  coordinate
+                                                    where     the
+                                                    top-left cor­
+                                                    ner   of  the
+                                                    block  is  to
+                                                    be     placed
+                                                    within    the
+                                                    image.
+
+       int                  width         (in)      Specifies the
+                                                    width of  the
+                                                    image area to
+                                                    be   affected
+                                                    (for  Tk_Pho­
+                                                    toPutBlock)
+                                                    or        the
+                                                    desired image
+                                                    width    (for
+                                                    Tk_PhotoEx­
+                                                    pand      and
+                                                    Tk_PhotoSet­
+                                                    Size).
+
+       int                  height        (in)      Specifies the
+                                                    height of the
+                                                    image area to
+                                                    be   affected
+                                                    (for  Tk_Pho­
+                                                    toPutBlock)
+                                                    or        the
+                                                    desired image
+                                                    height   (for
+                                                    Tk_PhotoEx­
+                                                    pand      and
+                                                    Tk_PhotoSet­
+                                                    Size).
+
+       int                  *widthPtr     (out)     Pointer    to
+                                                    location   in
+                                                    which      to
+                                                    store     the
+                                                    image  width.
+
+       int                  *heightPtr    (out)     Pointer    to
+                                                    location   in
+                                                    which      to
+                                                    store     the
+                                                    image height.
+
+       int                  subsampleX    (in)      Specifies the
+                                                    subsampling
+                                                    factor in the
+                                                    X   direction
+                                                    for     input
+                                                    image data.
+
+       int                  subsampleY    (in)      Specifies the
+                                                    subsampling
+                                                    factor in the
+                                                    Y   direction
+                                                    for     input
+                                                    image data.
+
+       int                  zoomX         (in)      Specifies the
+                                                    zoom   factor
+                                                    to be applied
+                                                    in   the    X
+                                                    direction  to
+                                                    pixels  being
+                                                    written    to
+                                                    the     photo
+                                                    image.
+
+       int                  zoomY         (in)      Specifies the
+                                                    zoom   factor
+                                                    to be applied
+                                                    in   the    Y
+                                                    direction  to
+                                                    pixels  being
+                                                    written    to
+                                                    the     photo
+                                                    image.
+_________________________________________________________________
+
+
+DESCRIPTION
+       Tk_FindPhoto  returns  an  opaque  handle  that is used to
+       identify a particular photo image to the other procedures.
+       The  parameter is the name of the image, that is, the name
+       specified to the image create photo command,  or  assigned
+       by that command if no name was specified.
+
+       Tk_PhotoPutBlock is used to supply blocks of image data to
+       be displayed.  The call affects an area of  the  image  of
+       size  width  x  height pixels, with its top-left corner at
+       coordinates (x,y).  All of width, height, x, and y must be
+       non-negative.   If part of this area lies outside the cur­
+       rent bounds of the image, the image will  be  expanded  to
+       include  the  area,  unless  the  user  has  specified  an
+       explicit image size with the -width and/or -height  widget
+       configuration  options  (see  photo(n));  in that case the
+       area is silently clipped to the image boundaries.
+
+       The block parameter is a pointer to  a  Tk_PhotoImageBlock
+       structure, defined as follows:
+              typedef struct {
+                unsigned char *pixelPtr;
+                int width;
+                int height;
+                int pitch;
+                int pixelSize;
+                int offset[4];
+              } Tk_PhotoImageBlock;
+       The pixelPtr field points to the first pixel, that is, the
+       top-left pixel in the block.  The width and height  fields
+       specify the dimensions of the block of pixels.  The pixel­
+       Size field specifies the address  difference  between  two
+       horizontally  adjacent pixels.  Often it is 3 or 4, but it
+       can have any value.  The pitch field specifies the address
+       difference  between  two  vertically adjacent pixels.  The
+       offset array contains the offsets from the  address  of  a
+       pixel  to  the  addresses of the bytes containing the red,
+       green, blue and alpha  (transparency)  components.   These
+       are  normally  0,  1,  2 and 3, but can have other values,
+       e.g., for images that are stored as  separate  red,  green
+       and blue planes.
+
+       The  value  given  for  the width and height parameters to
+       Tk_PhotoPutBlock do not have to correspond to  the  values
+       specified in block.  If they are smaller, Tk_PhotoPutBlock
+       extracts a sub-block from the  image  data  supplied.   If
+       they are larger, the data given are replicated (in a tiled
+       fashion) to fill the specified area.  These rules  operate
+       independently in the horizontal and vertical directions.
+
+       Tk_PhotoPutZoomedBlock  works like Tk_PhotoPutBlock except
+       that the image can be reduced  or  enlarged  for  display.
+       The subsampleX and subsampleY parameters allow the size of
+       the image to  be  reduced  by  subsampling.   Tk_PhotoPut­
+       ZoomedBlock  will  use  only  pixels  from the input image
+       whose X coordinates are multiples of subsampleX, and whose
+       Y  coordinates  are multiples of subsampleY.  For example,
+       an image of 512x512 pixels can be reduced  to  256x256  by
+       setting subsampleX and subsampleY to 2.
+
+       The  zoomX  and  zoomY  parameters  allow  the image to be
+       enlarged by pixel replication.  Each pixel of the  (possi­
+       bly  subsampled)  input  image  will be written to a block
+       zoomX pixels wide and zoomY pixels high of  the  displayed
+       image.   Subsampling  and zooming can be used together for
+       special effects.
+
+       Tk_PhotoGetImage can be used to retrieve image data from a
+       photo  image.   Tk_PhotoGetImage  fills  in  the structure
+       pointed to by the  blockPtr  parameter  with  values  that
+       describe the address and layout of the image data that the
+       photo image has stored internally.  The values  are  valid
+       until  the  image  is  destroyed  or  its size is changed.
+       Tk_PhotoGetImage returns 1 for compatibility with the cor­
+       responding procedure in the old photo widget.
+
+       Tk_PhotoBlank  blanks  the entire area of the photo image.
+       Blank areas of a photo image are transparent.
+
+       Tk_PhotoExpand  requests  that  the  widget's   image   be
+       expanded  to  be  at  least width x height pixels in size.
+       The width and/or height are  unchanged  if  the  user  has
+       specified  an  explicit  image  width  or  height with the
+       -width and/or -height configuration options, respectively.
+       If the image data are being supplied in many small blocks,
+       it is more efficient to use Tk_PhotoExpand or Tk_PhotoSet­
+       Size  at  the  beginning rather than allowing the image to
+       expand in many small increments as image blocks  are  sup­
+       plied.
+
+       Tk_PhotoSetSize specifies the size of the image, as if the
+       user had specified the given width and  height  values  to
+       the  -width and -height configuration options.  A value of
+       zero for width or height does not change the image's width
+       or height, but allows the width or height to be changed by
+       subsequent calls to  Tk_PhotoPutBlock,  Tk_PhotoPutZoomed­
+       Block or Tk_PhotoExpand.
+
+       Tk_PhotoGetSize  returns  the  dimensions  of the image in
+       *widthPtr and *heightPtr.
+
+
+CREDITS
+       The code for the photo image type was  developed  by  Paul
+       Mackerras, based on his earlier photo widget code.
+
+
+KEYWORDS
+       photo, image
+
+
+
+Tk                             8.0                Tk_FindPhoto(3)

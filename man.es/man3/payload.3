@@ -1,0 +1,200 @@
+PAYLOAD.(3)                                           PAYLOAD.(3)
+
+
+
+NAME
+       PAYLOAD. -
+
+   Files
+       file cpio.c
+           Handle cpio payloads within rpm packages.
+
+
+       file cpio.h
+           Structures used to handle cpio payloads within rpm
+           packages.
+
+
+       file fsm.c
+           File state machine to handle a payload from a package.
+
+
+       file fsm.h
+           File state machine to handle a payload within an rpm
+           package.
+
+
+       file psm.c
+           Package state machine to handle a package from a
+           transaction set.
+
+
+       file psm.h
+           Package state machine to handle a package from a
+           transaction set.
+
+
+       file rpmlib.h
+
+   Data Structures
+       struct cpioCrcPhysicalHeader
+
+   RPMTS
+       typedef fsmIterator_s * FSMI_t
+       typedef fsm_s * FSM_t
+
+   Defines
+       #define CPIOERR_CHECK_ERRNO   0x00008000
+
+   Typedefs
+       typedef enum cpioMapFlags_e cpioMapFlags
+
+   Enumerations
+       enum cpioErrorReturns { CPIOERR_BAD_MAGIC =
+           (2             ), CPIOERR_BAD_HEADER =
+           (3               ), CPIOERR_OPEN_FAILED =  (4    |
+           0x00008000 ), CPIOERR_CHMOD_FAILED =  (5    |
+           0x00008000 ), CPIOERR_CHOWN_FAILED =  (6    |
+           0x00008000 ), CPIOERR_WRITE_FAILED =  (7    |
+           0x00008000 ), CPIOERR_UTIME_FAILED =  (8    |
+           0x00008000 ), CPIOERR_UNLINK_FAILED =  (9    |
+           0x00008000 ), CPIOERR_RENAME_FAILED =  (10   |
+           0x00008000 ), CPIOERR_SYMLINK_FAILED =  (11   |
+           0x00008000 ), CPIOERR_STAT_FAILED =  (12   |
+           0x00008000 ), CPIOERR_LSTAT_FAILED =  (13   |
+           0x00008000 ), CPIOERR_MKDIR_FAILED =  (14   |
+           0x00008000 ), CPIOERR_RMDIR_FAILED =  (15   |
+           0x00008000 ), CPIOERR_MKNOD_FAILED =  (16   |
+           0x00008000 ), CPIOERR_MKFIFO_FAILED =  (17   |
+           0x00008000 ), CPIOERR_LINK_FAILED =  (18   |
+           0x00008000 ), CPIOERR_READLINK_FAILED =  (19   |
+           0x00008000 ), CPIOERR_READ_FAILED =  (20   |
+           0x00008000 ), CPIOERR_COPY_FAILED =  (21   |
+           0x00008000 ), CPIOERR_HDR_SIZE =  (22             ),
+           CPIOERR_HDR_TRAILER =  (23            ),
+           CPIOERR_UNKNOWN_FILETYPE =  (24            ),
+           CPIOERR_MISSING_HARDLINK =  (25            ),
+           CPIOERR_MD5SUM_MISMATCH =  (26             ),
+           CPIOERR_INTERNAL =  (27               ),
+           CPIOERR_UNMAPPED_FILE =  (28               ) }
+       enum cpioMapFlags_e { CPIO_MAP_PATH =  (1 << 0),
+           CPIO_MAP_MODE =  (1 << 1), CPIO_MAP_UID =  (1 << 2),
+           CPIO_MAP_GID =  (1 << 3), CPIO_FOLLOW_SYMLINKS =  (1
+           << 4), CPIO_MAP_ABSOLUTE =  (1 << 5), CPIO_MAP_ADDDOT
+           =  (1 << 6), CPIO_ALL_HARDLINKS =  (1 << 7),
+           CPIO_MAP_TYPE =  (1 << 8), CPIO_MULTILIB =  (1 << 31)
+           }
+
+DEFINE DOCUMENTATION
+   #define CPIOERR_CHECK_ERRNO   0x00008000
+       Note:
+           CPIO_CHECK_ERRNO bit is set only if errno is valid.
+
+       Definition at line 23 of file cpio.h.
+
+TYPEDEF DOCUMENTATION
+   typedef enum cpioMapFlags_e  cpioMapFlags
+   typedef struct fsm_s* FSM_t
+       File state machine data.
+
+       Definition at line 1178 of file rpmlib.h.
+
+   typedef struct fsmIterator_s* FSMI_t
+       Iterator across package file info, forward on install,
+       backward on erase.
+
+       Definition at line 1173 of file rpmlib.h.
+
+ENUMERATION TYPE DOCUMENTATION
+   enum cpioErrorReturns
+       Enumeration values:
+
+       CPIOERR_BAD_MAGIC
+
+       CPIOERR_BAD_HEADER
+
+       CPIOERR_OPEN_FAILED
+
+       CPIOERR_CHMOD_FAILED
+
+       CPIOERR_CHOWN_FAILED
+
+       CPIOERR_WRITE_FAILED
+
+       CPIOERR_UTIME_FAILED
+
+       CPIOERR_UNLINK_FAILED
+
+       CPIOERR_RENAME_FAILED
+
+       CPIOERR_SYMLINK_FAILED
+
+       CPIOERR_STAT_FAILED
+
+       CPIOERR_LSTAT_FAILED
+
+       CPIOERR_MKDIR_FAILED
+
+       CPIOERR_RMDIR_FAILED
+
+       CPIOERR_MKNOD_FAILED
+
+       CPIOERR_MKFIFO_FAILED
+
+       CPIOERR_LINK_FAILED
+
+       CPIOERR_READLINK_FAILED
+
+       CPIOERR_READ_FAILED
+
+       CPIOERR_COPY_FAILED
+
+       CPIOERR_HDR_SIZE
+
+       CPIOERR_HDR_TRAILER
+
+       CPIOERR_UNKNOWN_FILETYPE
+
+       CPIOERR_MISSING_HARDLINK
+
+       CPIOERR_MD5SUM_MISMATCH
+
+       CPIOERR_INTERNAL
+
+       CPIOERR_UNMAPPED_FILE
+
+
+       Definition at line 27 of file cpio.h.
+
+   enum cpioMapFlags_e
+       Enumeration values:
+
+       CPIO_MAP_PATH
+
+       CPIO_MAP_MODE
+
+       CPIO_MAP_UID
+
+       CPIO_MAP_GID
+
+       CPIO_FOLLOW_SYMLINKS
+              only for building.
+
+       CPIO_MAP_ABSOLUTE
+
+       CPIO_MAP_ADDDOT
+
+       CPIO_ALL_HARDLINKS
+              fail if hardlinks are missing.
+
+       CPIO_MAP_TYPE
+              only for building.
+
+       CPIO_MULTILIB
+              internal, only for building.
+
+       Definition at line 60 of file cpio.h.
+
+
+
+rpm                        13 Mar 2002                PAYLOAD.(3)

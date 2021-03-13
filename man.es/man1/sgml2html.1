@@ -1,0 +1,58 @@
+SGML2HTML(1)                                         SGML2HTML(1)
+
+
+
+NAME
+       sgml2html - create HTML output from a SGML source file
+
+SYNOPSIS
+       sgml2html  [generic-option...]  [--split  0|1|2  ] [--dos­
+       names] [--imagebuttons] file[.sgml]
+
+DESCRIPTION
+       sgml2html converts a SGML  source  file  to  HTML  output.
+       Output  will  appear  in  the top level file file.html and
+       file-n.html for each section, where file is  the  name  of
+       the SGML source file and n is the section name.
+
+       The  attribute/value  pair "output=html" is set for condi­
+       tionals.
+
+OPTIONS
+       sgml2html accepts all the  generic  options  described  in
+       sgmltools(1), and the following specific options:
+
+       --split, -s
+              What  level  to  split source documents.  0 = don't
+              split, 1 = split by major sections, 2  =  split  by
+              subsections.
+
+       --dosnames, -h
+              Use ".htm" rather than ".html" as the extension of
+
+       --imagebuttons, -I
+              Use  the  "next",  "previous", and "contents" arrow
+              image icons included in $LINUXDOCLIB as  navigation
+              buttons.
+
+       file   The   SGML   source  file,  named  either  file  or
+              file.sgml.
+
+FILES
+       Many files and executables  in  $LINUXDOCLIB  and  $LINUX­
+       DOCBIN are used.
+
+BUGS
+       None known.
+
+AUTHOR
+       Greg  Hankins  <greg.hankins@cc.gatech.edu>, Cees de Groot
+       <cg@pobox.com>
+
+SEE ALSO
+       sgmltools(1),  sgml2info(1),  sgml2latex(1),  sgml2lyx(1),
+       sgml2rtf(1), sgml2txt(1), sgmlcheck(1).
+
+
+
+                           10 Nov 1997               SGML2HTML(1)

@@ -1,0 +1,66 @@
+updfstab(8)               Red Hat Linux               updfstab(8)
+
+
+
+NAME
+       updfstab - update /etc/fstab to reflect removable devices
+
+SYNOPSIS
+       updfstab [-nt] [--usage]
+
+DESCRIPTION
+       updfstab  is  designed  to keep /etc/fstab consistent with
+       the devices plugged into your system. It looks for devices
+       such as cdroms, zip and jaz drives, ls120 drives, and dig­
+       ital cameras on the SCSI and IDE buses. USB  devices  look
+       like SCSI devices to user space, so those are supported as
+       well, but are only added if they are currently attached to
+       the  system  (having a scsi device assigned to them is not
+       sufficient).
+
+       Devices which updfstab adds to /etc/fstab are marked  with
+       the  kudzu  mount  option  to  distinguish them from other
+       devices.  updfstab will not remove devices from /etc/fstab
+       unless  they  are  marked  with the kudzu mount option. It
+       also  ignores  devices  that   are   already   listed   in
+       /etc/fstab, or which have multiple partitions on the media
+       currently inserted.
+
+
+OPTIONS
+       -n,--normalize
+
+              Normally, kudzu tries to touch /etc/fstab as little
+              as  possible.  When  this  option is given, it will
+              instead move all of  the  devices  with  the  kudzu
+              mount  option to the end of the file, and will list
+              the devices in the same order  the  internal  probe
+              returns.
+
+
+       -t,--test
+
+              When  this  option  is  specified, updstab does not
+              update the /etc/fstab file.  Instead,  it  displays
+              the  fstab entries it would use to standard out. If
+              no changes need to be made, it outputs  the  string
+              (nothing  to  do)  rather  then  a  full filesystem
+              table.
+
+
+FILES
+       /etc/fstab
+
+BUGS
+       The table of devices to probe for is built into  the  exe­
+       cutable; a configuration file should be used instead.
+
+SEE ALSO
+       kudzu(1)
+
+AUTHORS
+       Erik Troan <ewt@redhat.com>
+
+
+
+Red Hat, Inc.              01 May 2001                updfstab(8)

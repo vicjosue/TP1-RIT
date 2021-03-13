@@ -1,0 +1,948 @@
+ZSHCONTRIB(1)                                       ZSHCONTRIB(1)
+
+
+
+NAME
+       zshcontrib - user contributions to zsh
+
+DESCRIPTION
+       The  Zsh  source  distribution  includes a number of items
+       contributed by the user community.  These are  not  inher­
+       ently  a  part of the shell, and some may not be available
+       in every zsh installation.  The most significant of  these
+       are  documented  here.   For  documentation  on other con­
+       tributed items such as shell functions, look for  comments
+       in the function source files.
+
+
+
+UTILITIES
+   Accessing On-Line Help
+       The key sequence ESC h is normally bound by ZLE to execute
+       the run-help widget (see  zshzle(1)).   This  invokes  the
+       run-help  command  with  the command word from the current
+       input line as its argument.  By default,  run-help  is  an
+       alias  for  the  man command, so this often fails when the
+       command word is a shell builtin or  a  user-defined  func­
+       tion.   By  redefining the run-help alias, one can improve
+       the on-line help provided by the shell.
+
+       The helpfiles utility, found in the Util directory of  the
+       distribution,  is  a Perl program that can be used to pro­
+       cess the zsh manual to produce a separate  help  file  for
+       each  shell  builtin  and for many other shell features as
+       well.  The autoloadable run-help function, found in  Func­
+       tions/Misc, searches for these helpfiles and performs sev­
+       eral other tests to produce the most complete help  possi­
+       ble for the command.
+
+       There  may  already  be  a directory of help files on your
+       system; look in /usr/share/zsh or /usr/local/share/zsh and
+       subdirectories below those, or ask your system administra­
+       tor.
+
+       To create your own help files with  helpfiles,  choose  or
+       create a directory where the individual command help files
+       will reside.  For example, you  might  choose  ~/zsh_help.
+       If  you  unpacked the zsh distribution in your home direc­
+       tory, you would use the commands:
+
+              mkdir ~/zsh_help
+              cd ~/zsh_help
+              man zshall | colcrt - | \
+              perl ~/zsh-4.0.4/Util/helpfiles
+
+       Next, to use the run-help function, you need to add  lines
+       something  like the following to your .zshrc or equivalent
+       startup file:
+
+              unalias run-help
+              autoload run-help
+              HELPDIR=~/zsh_help
+
+       The HELPDIR parameter tells run-help where to look for the
+       help files.  If your system already has a help file direc­
+       tory installed, set HELPDIR to the path of that  directory
+       instead.
+
+       Note  that  in  order for `autoload run-help' to work, the
+       run-help file must be in one of the directories  named  in
+       your  fpath  array (see zshparam(1)).  This should already
+       be the case if you have a standard zsh installation; if it
+       is  not,  copy  Functions/Misc/run-help  to an appropriate
+       directory.
+
+
+   Recompiling Functions
+       If you frequently edit your zsh functions, or periodically
+       update  your zsh installation to track the latest develop­
+       ments, you may find that function  digests  compiled  with
+       the  zcompile  builtin  are  frequently  out  of date with
+       respect to the function source files.  This is not usually
+       a  problem,  because  zsh always looks for the newest file
+       when loading a function, but it  may  cause  slower  shell
+       startup  and  function loading.  Also, if a digest file is
+       explicitly used as an element of fpath,  zsh  won't  check
+       whether any of its source files has changed.
+
+       The  zrecompile  autoloadable  function,  found  in  Func­
+       tions/Misc, can be used to keep  function  digests  up  to
+       date.
+
+       zrecompile [ -qt ] [ name ... ]
+       zrecompile [ -qt ] -p args [ -- args ... ]
+              This  tries  to  find *.zwc files and automatically
+              re-compile them if at least  one  of  the  original
+              files  is newer than the compiled file.  This works
+              only if the names stored in the compiled files  are
+              full  paths  or  are relative to the directory that
+              contains the .zwc file.
+
+              In the first form, each name is the name of a  com­
+              piled  file  or  a directory containing *.zwc files
+              that should be checked.  If no arguments are given,
+              the  directories and *.zwc files in fpath are used.
+
+              When -t is given, no compilation is performed,  but
+              a  return status of zero (true) is set if there are
+              files that need  to  be  re-compiled  and  non-zero
+              (false) otherwise.  The -q option quiets the chatty
+              output that describes what zrecompile is doing.
+
+              Without the -t option, the return status is zero if
+              all  files that needed re-compilation could be com­
+              piled and non-zero if compilation for at least  one
+              of the files failed.
+
+              If the -p option is given, the args are interpreted
+              as one or more sets of arguments for zcompile, sep­
+              arated by `--'.  For example:
+
+                     zrecompile -p \
+                                -R ~/.zshrc -- \
+                                -M ~/.zcompdump -- \
+                                ~/zsh/comp.zwc ~/zsh/Completion/*/_*
+
+              This  compiles  ~/.zshrc  into ~/.zshrc.zwc if that
+              doesn't exist or if it is older than ~/.zshrc.  The
+              compiled file will be marked for reading instead of
+              mapping. The same  is  done  for  ~/.zcompdump  and
+              ~/.zcompdump.zwc,  but this compiled file is marked
+              for mapping. The  last  line  re-creates  the  file
+              ~/zsh/comp.zwc  if  any  of  the files matching the
+              given pattern is newer than it.
+
+              Without the -p option, zrecompile does  not  create
+              function  digests  that  do  not already exist, nor
+              does it add new functions to the digest.
+
+       The following shell loop is an example  of  a  method  for
+       creating function digests for all functions in your fpath,
+       assuming that you have write permission  to  the  directo­
+       ries:
+
+              for ((i=1; i <= $#fpath; ++i)); do
+                dir=$fpath[i]
+                zwc=${dir:t}.zwc
+                if [[ $dir == (.|..) || $dir == (.|..)/* ]]; then
+                  continue
+                fi
+                files=($dir/*(N-.))
+                if [[ -w $dir:h && -n $files ]]; then
+                  files=(${${(M)files%/*/*}#/})
+                  if ( cd $dir:h &&
+                       zrecompile -p -U -z $zwc $files ); then
+                    fpath[i]=$fpath[i].zwc
+                  fi
+                fi
+              done
+
+       The -U and -z options are appropriate for functions in the
+       default zsh installation fpath; you may need to  use  dif­
+       ferent options for your personal function directories.
+
+       Once the digests have been created and your fpath modified
+       to refer to them, you can keep them up to date by  running
+       zrecompile with no arguments.
+
+
+   Keyboard Definition
+       The  large  number  of possible combinations of keyboards,
+       workstations, terminals,  emulators,  and  window  systems
+       makes  it impossible for zsh to have built-in key bindings
+       for every situation.  The zkbd  utility,  found  in  Func­
+       tions/Misc,  can  help you quickly create key bindings for
+       your configuration.
+
+       Run zkbd either as an autoloaded function, or as  a  shell
+       script:
+
+              zsh -f ~/zsh-4.0.4/Functions/Misc/zkbd
+
+       When  you run zkbd, it first asks you to enter your termi­
+       nal type; if the default it offers is correct, just  press
+       return.   It  then asks you to press a number of different
+       keys to determine characteristics  of  your  keyboard  and
+       terminal;  zkbd  warns you if it finds anything out of the
+       ordinary, such as a Delete key that sends neither  ^H  nor
+       ^?.
+
+       The  keystrokes  read by zkbd are recorded as a definition
+       for an associative array named key, written to a  file  in
+       the  subdirectory .zkbd within either your HOME or ZDOTDIR
+       directory.  The name of the  file  is  composed  from  the
+       TERM, VENDOR and OSTYPE parameters, joined by hyphens.
+
+       You may read this file into your .zshrc or another startup
+       file with the "source" or "." commands, then reference the
+       key parameter in bindkey commands, like this:
+
+              source ${ZDOTDIR:-$HOME}/.zkbd/$TERM-$VENDOR-$OSTYPE
+              [[ -n ${key[Left]} ]] && bindkey "${key[Left]}" backward-char
+              [[ -n ${key[Right]} ]] && bindkey "${key[Right]}" forward-char
+              # etc.
+
+       Note  that  in order for `autoload zkbd' to work, the zkdb
+       file must be in one of the directories named in your fpath
+       array  (see zshparam(1)).  This should already be the case
+       if you have a standard zsh installation;  if  it  is  not,
+       copy Functions/Misc/zkbd to an appropriate directory.
+
+
+   Dumping Shell State
+       Occasionally you may encounter what appears to be a bug in
+       the shell, particularly if you are using a beta version of
+       zsh or a development release.  Usually it is sufficient to
+       send a description of the problem to one of the zsh  mail­
+       ing  lists  (see  zsh(1)),  but  sometimes  one of the zsh
+       developers will need to recreate your environment in order
+       to track the problem down.
+
+       The  script named reporter, found in the Util directory of
+       the distribution, is provided for this  purpose.   (It  is
+       also  possible  to  autoload reporter, but reporter is not
+       installed in fpath by default.)   This  script  outputs  a
+       detailed  dump  of the shell state, in the form of another
+       script that can be read with `zsh  -f'  to  recreate  that
+       state.
+
+       To  use reporter, read the script into your shell with the
+       `.'  command and redirect the output into a file:
+
+              . ~/zsh-4.0.4/Util/reporter > zsh.report
+
+       You should check the zsh.report  file  for  any  sensitive
+       information  such  as  passwords  and  delete them by hand
+       before sending the script to the developers.  Also, as the
+       output can be voluminous, it's best to wait for the devel­
+       opers to ask for this information before sending it.
+
+       You can also use reporter to dump only  a  subset  of  the
+       shell  state.   This  is  sometimes  useful  for  creating
+       startup files for the first time.  Most of the output from
+       reporter  is  far  more detailed than usually is necessary
+       for a startup file, but the aliases, options, and  zstyles
+       states  may  be  useful  because they include only changes
+       from the defaults.  The bindings state may  be  useful  if
+       you have created any of your own keymaps, because reporter
+       arranges to dump the keymap creation commands as  well  as
+       the bindings for every keymap.
+
+       As  is usual with automated tools, if you create a startup
+       file with reporter, you should edit the results to  remove
+       unnecessary  commands.   Note that if you're using the new
+       completion system, you should not dump the functions state
+       to  your  startup  files  with  reporter; use the compdump
+       function instead (see zshcompsys(1)).
+
+       reporter [ state ... ]
+              Print to standard output the  indicated  subset  of
+              the  current  shell state.  The state arguments may
+              be one or more of:
+
+              all    Output everything listed below.
+              aliases
+                     Output alias definitions.
+              bindings
+                     Output ZLE key maps and bindings.
+              completion
+                     Output old-style compctl commands.  New com­
+                     pletion is covered by functions and zstyles.
+              functions
+                     Output autoloads and function definitions.
+              limits Output limit commands.
+              options
+                     Output setopt commands.
+              styles Same as zstyles.
+              variables
+                     Output  shell  parameter  assignments,  plus
+                     export  commands  for  any environment vari­
+                     ables.
+              zstyles
+                     Output zstyle commands.
+
+              If the state is omitted, all is assumed.
+
+       With the exception of `all', every state can  be  abbrevi­
+       ated  by  any  prefix, even a single letter; thus a is the
+       same as aliases, z is the same as zstyles, etc.
+
+
+PROMPT THEMES
+   Installation
+       You should make sure all  the  functions  from  the  Func­
+       tions/Prompts  directory  of  the  source distribution are
+       available; they all begin with the string `prompt_' except
+       for  the  special function`promptinit'.  You also need the
+       `colors' function from Functions/Misc.  All of these func­
+       tions  may  already have been installed on your system; if
+       not, you will need to find them and copy them.  The direc­
+       tory  should  appear  as  one of the elements of the fpath
+       array (this should  already  be  the  case  if  they  were
+       installed), and at least the function promptinit should be
+       autoloaded; it will autoload the rest.  Finally,  to  ini­
+       tialize  the use of the system you need to call the promp­
+       tinit function.  The following code in  your  .zshrc  will
+       arrange  for  this; assume the functions are stored in the
+       directory ~/myfns:
+
+              fpath=(~/myfns $fpath)
+              autoload -U promptinit
+              promptinit
+
+
+   Theme Selection
+       Use the prompt command to  select  your  preferred  theme.
+       This  command  may  be  added to your .zshrc following the
+       call to promptinit in order to  start  zsh  with  a  theme
+       already selected.
+
+       prompt [ -c | -l ]
+       prompt [ -p | -h ] [ theme ... ]
+       prompt [ -s ] theme [ arg ... ]
+              Set  or  examine the prompt theme.  With no options
+              and a theme argument, the theme with that  name  is
+              set as the current theme.  The available themes are
+              determined at run time; use the -l option to see  a
+              list.  The special theme `random' selects at random
+              one of the available themes and sets your prompt to
+              that.
+
+              In  some  cases the theme may be modified by one or
+              more arguments, which should  be  given  after  the
+              theme  name.   See  the  help  for  each  theme for
+              descriptions of these arguments.
+
+              Options are:
+
+              -c     Show the currently selected  theme  and  its
+                     parameters, if any.
+              -l     List all available prompt themes.
+              -p     Preview  the  theme  named  by theme, or all
+                     themes if no theme is given.
+              -h     Show help for the theme named by  theme,  or
+                     for  the  prompt  function  if  no  theme is
+                     given.
+              -s     Set theme as  the  current  theme  and  save
+                     state.
+
+       prompt_theme_setup
+              Each  available theme has a setup function which is
+              called by  the  prompt  function  to  install  that
+              theme.  This function may define other functions as
+              necessary to maintain the prompt,  including  func­
+              tions  used  to  preview the prompt or provide help
+              for its  use.   You  should  not  normally  call  a
+              theme's setup function directly.
+
+
+ZLE FUNCTIONS
+   Widgets
+       These  functions  all  implement  user-defined ZLE widgets
+       (see zshzle(1)) which can be bound to keystrokes in inter­
+       active  shells.   To  use them, your .zshrc should contain
+       lines of the form
+
+              autoload function
+              zle -N function
+
+       followed by an appropriate bindkey  command  to  associate
+       the  function with a key sequence.  Suggested bindings are
+       described below.
+
+       cycle-completion-positions
+              After inserting an unambiguous string into the com­
+              mand line, the new function based completion system
+              may know about multiple places in this string where
+              characters  are missing or differ from at least one
+              of the possible matches.  It will  then  place  the
+              cursor  on the position it considers to be the most
+              interesting one, i.e. the one where one can  disam­
+              biguate between as many matches as possible with as
+              little typing as possible.
+
+              This widget allows the cursor to be easily moved to
+              the  other  interesting  spots.   It can be invoked
+              repeatedly to cycle between all positions  reported
+              by the completion system.
+
+       edit-command-line
+              Edit  the command line using your visual editor, as
+              in ksh.
+
+                     bindkey -M vicmd v edit-command-line
+
+       history-search-end
+              This    function     implements     the     widgets
+              history-beginning-search-backward-end    and   his­
+              tory-beginning-search-forward-end.  These  commands
+              work  by  first  calling  the corresponding builtin
+              widget (see `History  Control'  in  zshzle(1))  and
+              then moving the cursor to the end of the line.  The
+              original cursor position is remembered and restored
+              before calling the builtin widget a second time, so
+              that the same search is repeated  to  look  farther
+              through the history.
+
+              Although  you  autoload only one function, the com­
+              mands to use it are slightly different  because  it
+              implements two widgets.
+
+                     zle -N history-beginning-search-backward-end \
+                            history-search-end
+                     zle -N history-beginning-search-forward-end \
+                            history-search-end
+                     bindkey '\e^P' history-beginning-search-backward-end
+                     bindkey '\e^N' history-beginning-search-forward-end
+
+       incarg Typing the keystrokes for this widget with the cur­
+              sor placed on or to the left of an  integer  causes
+              that  integer  to  be  incremented  by one.  With a
+              numeric prefix argument, the number is  incremented
+              by  the  amount of the argument (decremented if the
+              prefix argument is negative).  The shell  parameter
+              incarg  may  be set to change the default increment
+              something other than one.
+
+                     bindkey '^X+' incarg
+
+       incremental-complete-word
+              This  allows  incremental  completion  of  a  word.
+              After  starting  this command, a list of completion
+              choices can be  shown  after  every  character  you
+              type,  which you can delete with ^H or DEL.  Press­
+              ing  return  accepts  the  completion  so  far  and
+              returns you to normal editing (that is, the command
+              line is not immediately executed).  You can hit TAB
+              to  do  normal  completion, ^G to abort back to the
+              state when you started, and ^D to list the matches.
+
+              This works only with the new function based comple­
+              tion system.
+
+                     bindkey '^Xi' incremental-complete-word
+
+       insert-files
+              This function allows you type a file  pattern,  and
+              see  the  results  of  the  expansion at each step.
+              When you hit return, all  expansions  are  inserted
+              into the command line.
+
+                     bindkey '^Xf' insert-files
+
+       predict-on
+              This  set of functions implements predictive typing
+              using history  search.   After  predict-on,  typing
+              characters  causes  the  editor to look backward in
+              the history for the first line beginning with  what
+              you  have typed so far.  After predict-off, editing
+              returns to normal for the line found.  In fact, you
+              often  don't  even need to use predict-off, because
+              if the line doesn't match something in the history,
+              adding a key performs standard completion, and then
+              inserts itself if no completions were found.   How­
+              ever,  editing in the middle of a line is liable to
+              confuse prediction; see the toggle style below.
+
+              With the function based completion system (which is
+              needed for this), you should be able to type TAB at
+              almost any point to advance the cursor to the  next
+              ``interesting'' character position (usually the end
+              of the current word, but sometimes somewhere in the
+              middle  of the word).  And of course as soon as the
+              entire line is what you want, you can  accept  with
+              return,  without  needing to move the cursor to the
+              end first.
+
+              The first time predict-on is used, it creates  sev­
+              eral additional widget functions:
+
+              delete-backward-and-predict
+                     Replaces  the  backward-delete-char  widget.
+                     You do not need to bind this yourself.
+              insert-and-predict
+                     Implements predictive  typing  by  replacing
+                     the  self-insert widget.  You do not need to
+                     bind this yourself.
+              predict-off
+                     Turns off predictive typing.
+
+              Although you autoload only the predict-on function,
+              it  is  necessary  to  create a keybinding for pre­
+              dict-off as well.
+
+                     zle -N predict-on
+                     zle -N predict-off
+                     bindkey '^X^Z' predict-on
+                     bindkey '^Z' predict-off
+
+       smart-insert-last-word
+              This function may replace the insert-last-word wid­
+              get, like so:
+
+                     zle -N insert-last-word smart-insert-last-word
+
+              With    a   numeric   prefix,   it   behaves   like
+              insert-last-word, except that words in comments are
+              ignored when INTERACTIVE_COMMENTS is set.
+
+              Otherwise,  the rightmost ``interesting'' word from
+              the previous command is found  and  inserted.   The
+              default  definition  of ``interesting'' is that the
+              word contains at least  one  alphabetic  character,
+              slash,  or backslash.  This definition may be over­
+              ridden by use of the match style.  The context used
+              to look up the style is the widget name, so usually
+              the context is :insert-last-word.  However, you can
+              bind this function to different widgets to use dif­
+              ferent patterns:
+
+                     zle -N insert-last-assignment smart-insert-last-word
+                     zstyle :insert-last-assignment match '[[:alpha:]][][[:alnum:]]#=*'
+                     bindkey '\e=' insert-last-assignment
+
+
+   Styles
+       The behavior of several of the above widgets can  be  con­
+       trolled  by  the use of the zstyle mechanism.  In particu­
+       lar, widgets that interact with the completion system pass
+       along their context to any completions that they invoke.
+
+       break-keys
+              This style is used by the incremental-complete-word
+              widget. Its value should be a pattern, and all keys
+              matching this pattern will cause the widget to stop
+              incremental completion without the key  having  any
+              further  effect.  Like  all styles used directly by
+              incremental-complete-word, this style is looked  up
+              using the context `:incremental'.
+
+       completer
+              The  incremental-complete-word  and insert-and-pre­
+              dict widgets set up their  top-level  context  name
+              before  calling  completion.   This  allows  one to
+              define different sets of  completer  functions  for
+              normal completion and for these widgets.  For exam­
+              ple, to use completion, approximation  and  correc­
+              tion  for normal completion, completion and correc­
+              tion for incremental completion and only completion
+              for prediction one could use:
+
+                     zstyle ':completion:*' completer \
+                             _complete _correct _approximate
+                     zstyle ':completion:incremental:*' completer \
+                             _complete _correct
+                     zstyle ':completion:predict:*' completer \
+                             _complete
+
+              It  is  a good idea to restrict the completers used
+              in prediction, because they  may  be  automatically
+              invoked  as  you  type.   The  _list and _menu com­
+              pleters should never be used with prediction.   The
+              _approximate,  _correct,  _expand,  and _match com­
+              pleters may be used, but be  aware  that  they  may
+              change  characters  anywhere in the word behind the
+              cursor, so you need to  watch  carefully  that  the
+              result is what you intended.
+
+       cursor The  insert-and-predict  widget uses this style, in
+              the context `:predict', to decide  where  to  place
+              the cursor after completion has been tried.  Values
+              are:
+
+              complete
+                     The cursor is left where it was when comple­
+                     tion  finished,  but  only  if it is after a
+                     character equal to the one just inserted  by
+                     the user.  If it is after another character,
+                     this value is the same as `key'.
+
+              key    The cursor is left after the nth  occurrence
+                     of  the  character just inserted, where n is
+                     the number of times that character  appeared
+                     in the word before completion was attempted.
+                     In short, this has the effect of leaving the
+                     cursor  after  the character just typed even
+                     if the completion code  found  out  that  no
+                     other characters need to be inserted at that
+                     position.
+
+              Any other  value  for  this  style  unconditionally
+              leaves the cursor at the position where the comple­
+              tion code left it.
+
+       list   When using  the  incremental-complete-word  widget,
+              this  style says if the matches should be listed on
+              every key press (if they fit on the  screen).   Use
+              the context prefix `:completion:incremental'.
+
+              The  insert-and-predict  widget  uses this style to
+              decide if the completion should be  shown  even  if
+              there  is  only  one  possible completion.  This is
+              done if the value  of  this  style  is  the  string
+              always.   In  this  case  the context is `:predict'
+              (not `:completion:predict').
+
+       match  This style is  used  by  smart-insert-last-word  to
+              provide a pattern (using full EXTENDED_GLOB syntax)
+              that matches an interesting word.  The  context  is
+              the     name     of    the    widget    to    which
+              smart-insert-last-word is bound (see  above).   The
+              default   behavior   of  smart-insert-last-word  is
+              equivalent to:
+
+                     zstyle :insert-last-word match '*[[:alpha:]/\\]*'
+
+              However, you might want to include words that  con­
+              tain spaces:
+
+                     zstyle :insert-last-word match '*[[:alpha:][:space:]/\\]*'
+
+              Or  include numbers as long as the word is at least
+              two characters long:
+
+                     zstyle :insert-last-word match '*([[:digit:]]?|[[:alpha:]/\\])*'
+
+              The above example causes redirections like "2>"  to
+              be included.
+
+       prompt The   incremental-complete-word  widget  shows  the
+              value of this  style  in  the  status  line  during
+              incremental  completion.  The string value may con­
+              tain any of the following substrings in the  manner
+              of the PS1 and other prompt parameters:
+
+              %c     Replaced  by the name of the completer func­
+                     tion that generated the matches (without the
+                     leading underscore).
+
+              %l     When  the  list  style  is  set, replaced by
+                     `...' if the list of matches is too long  to
+                     fit  on  the screen and with an empty string
+                     otherwise.  If the list style is `false'  or
+                     not set, `%l' is always removed.
+
+              %n     Replaced by the number of matches generated.
+
+              %s     Replaced by `-no match-', `-no prefix-',  or
+                     an  empty  string  if there is no completion
+                     matching  the  word  on  the  line,  if  the
+                     matches have no common prefix different from
+                     the word on the line, or if there is such  a
+                     common prefix, respectively.
+
+              %u     Replaced  by  the  unambiguous  part  of all
+                     matches, if there is any, and if it is  dif­
+                     ferent from the word on the line.
+
+              Like  `break-keys',  this  uses  the `:incremental'
+              context.
+
+       stop-keys
+              This style is used by the incremental-complete-word
+              widget.   Its value is treated similarly to the one
+              for the break-keys style (and uses  the  same  con­
+              text:  `:incremental').   However, in this case all
+              keys matching the pattern given as its  value  will
+              stop  incremental  completion and will then execute
+              their usual function.
+
+       toggle This boolean style is used by  predict-on  and  its
+              related  widgets in the context `:predict'.  If set
+              to one of the standard  `true'  values,  predictive
+              typing  is  automatically toggled off in situations
+              where it is unlikely to be  useful,  such  as  when
+              editing  a  multi-line  buffer or after moving into
+              the middle of a line and then deleting a character.
+              The  default is to leave prediction turned on until
+              an explicit call to predict-off.
+
+       verbose
+              This boolean style is used by  predict-on  and  its
+              related  widgets in the context `:predict'.  If set
+              to one of the standard `true' values, these widgets
+              display a message below the prompt when the predic­
+              tive state is toggled.  This is most useful in com­
+              bination  with  the toggle style.  The default does
+              not display these messages.
+
+
+OTHER FUNCTIONS
+       There are a large number of helpful functions in the Func­
+       tions/Misc  directory  of  the zsh distribution.  Most are
+       very simple and do not require documentation here,  but  a
+       few are worthy of special mention.
+
+
+   Descriptions
+       colors This   function   initializes  several  associative
+              arrays to map color names to (and  from)  the  ANSI
+              standard  eight-color  terminal  codes.   These are
+              used by the prompt theme system (see  above).   You
+              seldom should need to run colors more than once.
+
+              The  eight base colors are: black, red, green, yel­
+              low, blue, magenta, cyan, and white.  Each of these
+              has  codes for foreground and background.  In addi­
+              tion there are eight  intensity  attributes:  bold,
+              faint,  standout,  underline,  blink,  reverse, and
+              conceal.  Finally, there  are  six  codes  used  to
+              negate  attributes:  none  (reset all attributes to
+              the defaults), normal  (neither  bold  nor  faint),
+              no-standout,     no-underline,     no-blink,    and
+              no-reverse.
+
+              Some terminals do not support all  combinations  of
+              colors and intensities.
+
+              The associative arrays are:
+
+              color
+              colour Map  all  the  color  names to their integer
+                     codes, and integer codes to the color names.
+                     The  eight  base names map to the foreground
+                     color  codes,  as  do  names  prefixed  with
+                     `fg-',  such  as  `fg-red'.   Names prefixed
+                     with `bg-', such as `bg-blue', refer to  the
+                     background  codes.  The reverse mapping from
+                     code to color yields  base  name  for  fore­
+                     ground  codes  and  the  bg-  form for back­
+                     grounds.
+
+                     Although it is a misnomer to call them `col­
+                     ors',  these arrays also map the other four­
+                     teen attributes  from  names  to  codes  and
+                     codes to names.
+
+              fg
+              fg_bold
+              fg_no_bold
+                     Map the eight basic color names to ANSI ter­
+                     minal escape sequences that set  the  corre­
+                     sponding foreground text properties.  The fg
+                     sequences change the color without  changing
+                     the eight intensity attributes.
+
+              bg
+              bg_bold
+              bg_no_bold
+                     Map the eight basic color names to ANSI ter­
+                     minal escape sequences that set  the  corre­
+                     sponding   background  properties.   The  bg
+                     sequences change the color without  changing
+                     the eight intensity attributes.
+
+              In  addition, the scalar parameters reset_color and
+              bold_color are set to  the  ANSI  terminal  escapes
+              that  turn  off  all  attributes  and  turn on bold
+              intensity, respectively.
+
+       fned name
+              Same as zed -f.  This function does not  appear  in
+              the zsh distribution, but can be created by linking
+              zed to the name fned  in  some  directory  in  your
+              fpath.
+
+       is-at-least needed [ present ]
+              Perform  a  greater-than-or-equal-to  comparison of
+              two strings having the format of a zsh version num­
+              ber;  that  is,  a  string of numbers and text with
+              segments separated by dots or dashes.  If the  pre­
+              sent  string is not provided, $ZSH_VERSION is used.
+              Segments  are  paired  left-to-right  in  the   two
+              strings  with leading non-number parts ignored.  If
+              one string has fewer segments than the  other,  the
+              missing segments are considered zero.
+
+              This  is useful in startup files to set options and
+              other state that are not available in all  versions
+              of zsh.
+
+                     is-at-least 3.1.6-15 && setopt NO_GLOBAL_RCS
+                     is-at-least 3.1.0 && setopt HIST_REDUCE_BLANKS
+                     is-at-least 2.6-17 || print "You can't use is-at-least here."
+
+       nslookup [ arg ... ]
+              This  wrapper  function  for  the  nslookup command
+              requires the zsh/zpty module  (see  zshmodules(1)).
+              It  behaves  exactly  like  the  standard  nslookup
+              except  that  it  provides   customizable   prompts
+              (including  a  right-side prompt) and completion of
+              nslookup commands, host names, etc. (if you use the
+              function-based   completion   system).   Completion
+              styles may be set with the context prefix `:comple­
+              tion:nslookup'.
+
+              See  also  the  pager,  prompt  and  rprompt styles
+              below.
+
+       run-help
+              See `Accessing On-Line Help' above.
+
+       zed [ -f ] name
+              This function uses the ZLE editor to edit a file or
+              function.   It  rebinds  the return key to insert a
+              line break, and adds bindings  for  `^X^W'  in  the
+              emacs keymap and `ZZ' in the vicmd keymap to accept
+              (and therefore write, in the case of  a  file)  the
+              edited file or function.  Keybindings are otherwise
+              the standard ones;  completion  is  available,  and
+              styles may be set with the context prefix `:comple­
+              tion:zed'.
+
+              Only one name argument  is  recognized  (additional
+              arguments are ignored).  If the -f option is given,
+              the name is taken to be that of a function; if  the
+              function  is  marked  for autoloading, zed searches
+              for it in the fpath and loads it.  Note that  func­
+              tions  edited  this way are installed into the cur­
+              rent shell, but not written back  to  the  autoload
+              file.
+
+              Without  -f,  name  is the path name of the file to
+              edit, which need not exist; it is created on write,
+              if necessary.
+
+       zcp [ -finqQvw ] srcpat dest
+       zln [ -finqQsvw ] srcpat dest
+              Same  as  zmv  -C  and zmv -L, respectively.  These
+              functions do not appear in  the  zsh  distribution,
+              but  can be created by linking zmv to the names zcp
+              and zln in some directory in your fpath.
+
+       zkbd   See `Keyboard Definition' above.
+
+       zmv [ -finqQsvw ] [ -C | -L | -M | -p program ] [ -o  opt­
+       string ] srcpat dest
+              Move (usually, rename) files matching  the  pattern
+              srcpat  to  corresponding files having names of the
+              form given by dest, where srcpat contains parenthe­
+              ses  surrounding patterns which will be replaced in
+              turn by $1, $2, ... in dest.  For example,
+
+                     zmv '(*).lis' '$1.txt'
+
+              renames `foo.lis' to `foo.txt',  `my.old.stuff.lis'
+              to `my.old.stuff.txt', and so on.
+
+              The  pattern  is always treated as an EXTENDED_GLOB
+              pattern.  Any file whose name is not changed by the
+              substitution  is simply ignored.  Any error (a sub­
+              stitution resulted in an empty string, two  substi­
+              tutions  gave  the same result, the destination was
+              an existing regular file  and  -f  was  not  given)
+              causes  the  entire function to abort without doing
+              anything.
+
+              Options:
+
+              -f     Force overwriting of destination files.  Not
+                     currently  passed  down to the mv/cp/ln com­
+                     mand due to vagaries of implementations (but
+                     you can use -o-f to do that).
+              -i     Interactive:  show  each line to be executed
+                     and ask the user whether to execute it.  `Y'
+                     or  `y'  will execute it, anything else will
+                     skip it.  Note that you just  need  to  type
+                     one character.
+              -n     No  execution:  print what would happen, but
+                     don't do it.
+              -q     Turn bare glob qualifiers off:  now  assumed
+                     by default, so this has no effect.
+              -Q     Force  bare  glob qualifiers on.  Don't turn
+                     this on unless you are actually  using  glob
+                     qualifiers in a pattern.
+              -s     Symbolic, passed down to ln; only works with
+                     -L.
+              -v     Verbose: print each command  as  it's  being
+                     executed.
+              -w     Pick  out  wildcard parts of the pattern, as
+                     described above, and implicitly  add  paren­
+                     theses for referring to them.
+              -C
+              -L
+              -M     Force cp, ln or mv, respectively, regardless
+                     of the name of the function.
+              -p program
+                     Call program instead of cp, ln or mv.  What­
+                     ever  it does, it should at least understand
+                     the form `program -- oldname newname'  where
+                     oldname  and newname are filenames generated
+                     by zmv.
+              -o optstring
+                     The optstring is split into words and passed
+                     down  verbatim  to  the cp, ln or mv command
+                     called to perform the work.  It should prob­
+                     ably begin with a `-'.
+
+              For more complete examples and other implementation
+              details, see the zmv source file,  usually  located
+              in  one  of the directories named in your fpath, or
+              in Functions/Misc/zmv in the zsh distribution.
+
+       zrecompile
+              See `Recompiling Functions' above.
+
+       zstyle+ context style value [ + subcontext style value ...
+       ]
+              This makes defining styles a bit simpler by using a
+              single  `+'  as  a special token that allows you to
+              append a context name to the previously  used  con­
+              text name.  Like this:
+
+                     zstyle+ ':foo:bar' style1 value1 \
+                           + ':baz'     style2 value2 \
+                           + ':frob'    style3 value3
+
+              This defines `style1' with `value1' for the context
+              :foo:bar as usual, but  it  also  defines  `style2'
+              with  `value2'  for  the  context  :foo:bar:baz and
+              `style3' with `value3' for :foo:bar:frob.  Any sub­
+              context may be the empty string to re-use the first
+              context unchanged.
+
+
+   Styles
+       insert-tab
+              The zed function sets this style in context  `:com­
+              pletion:zed:*'  to  turn off completion when TAB is
+              typed at the beginning of a line.  You may override
+              this by setting your own value for this context and
+              style.
+
+       pager  The nslookup function looks up this  style  in  the
+              context  `:nslookup'  to determine the program used
+              to display output that does not  fit  on  a  single
+              screen.
+
+       prompt
+       rprompt
+              The  nslookup  function  looks up this style in the
+              context `:nslookup'  to  set  the  prompt  and  the
+              right-side  prompt, respectively.  The usual expan­
+              sions for the PS1 and RPS1 parameters may  be  used
+              (see zshmisc(1)).
+
+
+
+zsh 4.0.4                October 26, 2001           ZSHCONTRIB(1)

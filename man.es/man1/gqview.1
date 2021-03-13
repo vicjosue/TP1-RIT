@@ -1,0 +1,284 @@
+gqview(1)                                               gqview(1)
+
+
+
+NAME
+       GQview - GTK based multiformat image viewer
+
+SYNOPSIS
+       gqview [options] [path]
+
+
+DESCRIPTION
+       GQview  is an interactive GTK based image viewer that sup­
+       ports multiple image formats, zooming, panning, thumbnails
+       and sorting images into collections.
+
+
+OPTIONS
+       +t,+tools
+              Force the toolbox to be shown.
+
+       -t,-tools
+              Force the toolbox to be hidden.
+
+       -f,--fullscreen
+              Start in full screen mode.
+
+       -s,--slideshow
+              Start in slideshow mode.
+
+       -l,--list
+              Open collection window for command line files.
+
+       --debug
+              Turn on debugging output.
+
+       -v,--version
+              Print version.
+
+       -h,--help
+              Print command line options.
+
+
+USAGE
+       Key naming is similar to that of emacs(1): C-key indicates
+       that control should be held, and key should be pressed; S-
+       key  indicates that shift should be held and key should be
+       pressed; these two can be combined, also, into C-S-key.
+
+       left-mouse-click
+              (on image) next image
+
+       middle-mouse-click
+              (on image) previous image
+
+       right-mouse
+              context menu
+
+       middle-mouse-drag
+              drag and drop operations
+
+       mouse-wheel
+              (on image) Changes to the next or  previous  image,
+              or  if  option is enabled, scrolls the image verti­
+              cally.
+
+       mouse-wheel+Shift-key
+              (on image) Inverts the mouse wheel behavior between
+              scrolling image or changing image.
+
+       mouse-wheel+Control-key
+              (on image) Zooms the image in and out.
+
+   GENERAL KEYS
+       PageDown
+              next image
+
+       PageUp previous image
+
+       Home   first image in list
+
+       End    last image in list
+
+       Tab    tab completion in path entry window
+
+       Escape cancel completion in path entry window or stop gen­
+              erating thumbnails
+
+   IMAGE KEYS
+       Keys that are valid when the image part of the  window  is
+       focused.
+
+       Arrows pan image
+
+       Shift+Arrows
+              pan image faster
+
+       Space  next image
+
+       Backspace,B
+              previous image
+
+   FILE RELATED KEYS
+       C      new empty collection
+
+       O      open collection
+
+       D      open the Find Duplicates window
+
+       C-N    new directory
+
+       C-C    copy file
+
+       C-M    move file
+
+       C-R    rename file
+
+       C-D,Delete
+              delete file
+
+       C-Q,Q  quit
+
+   EDIT MENU RELATED KEYS
+       C-1..8 run external editor
+
+       C-A    select all files
+
+       C-S-A  unselect all files
+
+       C-O    go to the Configuration window
+
+       C-T    maintain thumbnails
+
+       C-W    set current image as wallpaper
+
+       ]      rotate image clockwise
+
+       [      rotate image counterclockwise
+
+       S-R    rotate image 180 degrees
+
+       S-M    mirror image (horizontal)
+
+       S-F    flip image (verticle)
+
+   VIEW MENU RELATED KEYS
+       +,=    zoom in
+
+       -      zoom out
+
+       Z,KeyPad-/
+              zoom to original size
+
+       X,KeyPad-*
+              zoom to fit window
+
+       1,2,3,4
+              zoom in to X scale factor
+
+       T      toggle thumbnail display
+
+       R      refresh file list
+
+       F      toggle floating of file selection area
+
+       H      toggle hiding of file selection area
+
+       V      toggle full-screen mode
+
+       S      toggle slide-show mode
+
+       P      toggle pause of slideshow
+
+   COLLECTION WINDOW KEYS
+       Arrows move selection
+
+       Shift+Arrows
+              select multiple images
+
+       Control+Arrows
+              move selector without changing selection
+
+       Space  select the image under the selector
+
+       Control+Space
+              toggle selection of the image under the selector
+
+       Home   move selector to the top image
+
+       End    move selector to bottom image
+              Adding Shift or Control to Home and End has a simi­
+              lar effect as adding them to the arrows.
+
+       C-A    select all images
+
+       C-S-A  unselect all images
+
+       Delete remove image form collection (does not  delete  the
+              file)
+
+       C-L    add images to collection form main file list
+
+       N      sort collection by name
+
+       D      sort collection by date
+
+       B      sort collection by file size
+
+       P      sort collection by pathname
+
+       I      sort collection by name numerically (*)
+
+       Enter  view image under selector in the main image window
+
+       V      view image under selector in new window
+
+       C-1..8 open selected image(s) in external editor
+
+       S      save collection
+
+       C-S    save collection as
+
+       A      append current collection to existing collection
+
+       C-C    copy selected files
+
+       C-M    move selected files
+
+       C-R    rename selected files
+
+       C-D    delete selected files
+
+       C-W    close window
+
+   DUPLICATES WINDOW KEYS
+       C-A    select all images
+
+       C-S-A  unselect all images
+
+       C-L    add images from main window file list
+
+       C      add selected images to new collection
+
+       Delete remove selected images from list
+
+       C-Delete
+              clear window
+
+       Enter  view image with focus in main window
+
+       V      view image with focus in new window
+
+       C-1..8 open selected image(s) in editor
+
+       C-C    copy selected files
+
+       C-M    move selected files
+
+       C-R    rename selected files
+
+       C-D    delete selected files
+
+       C-W    close window
+
+
+
+LICENSE
+       Copyright  (C)  1999,  2000, 2001 by John Ellis.  Use this
+       software at your own risk!  This software  released  under
+       the  GNU  General  Public License. Please read the COPYING
+       file for more information.
+
+BUGS
+       Please    send    bug    reports    and    feedback     to
+       gqview@users.sourceforge.net or the author, below.
+
+AUTHOR
+       John Ellis <johne@bellatlantic.net>
+       Manpage     originally    prepared    by    Nick    Rusnov
+       <nick@grawk.net>
+
+
+
+                              GQview                    gqview(1)

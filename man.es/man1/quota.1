@@ -1,0 +1,73 @@
+QUOTA(1)                                                 QUOTA(1)
+
+
+
+NAME
+       quota - display disk usage and limits
+
+SYNOPSIS
+       quota [ -F format-name ] [ -guvs | q ]
+       quota [ -F format-name ] [ -uvs | q ] user
+       quota [ -F format-name ] [ -gvs | q ] group
+
+DESCRIPTION
+       Quota  displays  users' disk usage and limits.  By default
+       only the user quotas are printed.
+
+       Quota reports the quotas of all the filesystems listed  in
+       /etc/mtab.  For filesystems that are NFS-mounted a call to
+       the rpc.rquotad on the server machine is performed to  get
+       the information.
+
+OPTIONS
+       -F format-name
+              Show  quota for specified format (ie. don't perform
+              format autodetection).  Possible format names  are:
+              vfsold  (version 1 quota), vfsv0 (version 2 quota),
+              rpc (quota over NFS), xfs (quota on XFS filesystem)
+
+       -g     Print  group quotas for the group of which the user
+              is a member.  The optional
+
+       -u     flag is equivalent to the default.
+
+       -v     will display quotas on filesystems where no storage
+              is allocated.
+
+       -s     flag  will  make  quota(1)  try to choose units for
+              showing limits, used space and used inodes.
+
+       -q     Print a more terse message, containing only  infor­
+              mation on filesystems where usage is over quota.
+
+       Specifying  both  -g  and -u displays both the user quotas
+       and the group quotas (for the user).
+
+       Only the super-user may use the -u flag and  the  optional
+       user  argument  to  view  the limits of other users.  Non-
+       super-users can use the the -g  flag  and  optional  group
+       argument  to  view only the limits of groups of which they
+       are members.
+
+       The -q flag takes precedence over the -v flag.
+
+DIAGNOSTICS
+       If quota  exits  with  a  non-zero  status,  one  or  more
+       filesystems are over quota.
+
+FILES
+       aquota.user or aquota.group
+                           quota  file  at  the  filesystem  root
+                           (version 2 quota, non-XFS filesystems)
+       quota.user or quota.group
+                           quota  file  at  the  filesystem  root
+                           (version 1 quota, non-XFS filesystems)
+       /etc/mtab           default filesystems
+
+SEE ALSO
+       quotactl(2),  fstab(5),  edquota(8),  quotacheck(8),  quo­
+       taon(8), repquota(8)
+
+
+
+                                                         QUOTA(1)

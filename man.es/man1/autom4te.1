@@ -1,0 +1,126 @@
+AUTOM4TE(1)                    FSF                    AUTOM4TE(1)
+
+
+
+NAME
+       autom4te - Generate files and scripts thanks to M4
+
+SYNOPSIS
+       autom4te [OPTION] ... [FILES]
+
+DESCRIPTION
+       Run  GNU M4 on the FILES, avoiding useless runs.  If trac­
+       ing, the output consists of  the  traces  only,  otherwise
+       output the expansion of the FILES.  The first of the FILES
+       may be an M4 frozen file, but then  must  end  in  `.m4f'.
+       Some  files  may be optional, i.e., will only be processed
+       if found in the include path, but then must end in `.m4?';
+       the question mark is not part of the actual file name.
+
+   Operation modes:
+       -h, --help
+              print this help, then exit
+
+       -V, --version
+              print version number, then exit
+
+       -v, --verbose
+              verbosely report processing
+
+       -d, --debug
+              don't remove temporary files
+
+       -o, --output=FILE
+              save output in FILE (defaults to `-', stdout)
+
+       --normalize
+              smash successive empty lines
+
+       -f, --force
+              don't rely on cached values
+
+       -W, --warnings=CATEGORY
+              report the warnings falling in CATEGORY
+
+       -s, --language=LANG
+              specify the set of M4 macros to use
+
+       -m, --mode=OCTAL
+              change the non trace output file mode (0666)
+
+       -M, --melt
+              don't use M4 frozen files
+
+   Languages include:
+       `Autoconf'
+              create Autoconf configure scripts
+
+       `Autotest'
+              create Autotest test suites
+
+       `M4sh' create M4sh shell scripts
+
+       `M4sugar'
+              create M4sugar output
+
+   Warning categories include:
+       `cross'
+              cross compilation issues
+
+       `obsolete'
+              obsolete constructs
+
+       `syntax'
+              dubious syntactic constructs
+
+       `all'  all the warnings
+
+       `no-CATEGORY'
+              turn off the warnings on CATEGORY
+
+       `none' turn off all the warnings
+
+       `error'
+              warnings are error
+
+       The environment variable `WARNINGS' is honored.
+
+   Library directories:
+       -I, --include=DIR
+              look for FILES in DIR.  Several invocations accumu­
+              late
+
+   Tracing:
+       -t, --trace=MACRO
+              report the MACRO invocations
+
+       -p, --preselect=MACRO
+              prepare to trace MACRO in a future run
+
+AUTHOR
+       Written by Akim Demaille.
+
+       Copyright 2001 Free Software  Foundation,  Inc.   This  is
+       free  software;  see  the  source  for copying conditions.
+       There is NO warranty; not even for MERCHANTABILITY or FIT­
+       NESS FOR A PARTICULAR PURPOSE.
+
+REPORTING BUGS
+       Report bugs to <bug-autoconf@gnu.org>.
+
+SEE ALSO
+       autoconf(1),  automake(1),  autoreconf(1),  autoupdate(1),
+       autoheader(1),    autoscan(1),    config.guess(1),    con­
+       fig.sub(1), ifnames(1), libtool(1).
+
+       The  full  documentation  for  autom4te is maintained as a
+       Texinfo manual.  If the info  and  autom4te  programs  are
+       properly installed at your site, the command
+
+              info autom4te
+
+       should give you access to the complete manual.
+
+
+
+GNU Autoconf 2.52d         August 2001                AUTOM4TE(1)

@@ -1,0 +1,276 @@
+RPMRC.(3)                                               RPMRC.(3)
+
+
+
+NAME
+       RPMRC. -
+
+   Files
+       file macro.c
+       file rpmlib.h
+
+   RPMRC
+       enum rpm_machtable_e { RPM_MACHTABLE_INSTARCH =  0,
+           RPM_MACHTABLE_INSTOS =  1, RPM_MACHTABLE_BUILDARCH =
+           2, RPM_MACHTABLE_BUILDOS =  3 }
+       const char * rpmGetVar (int var)
+       void rpmSetVar (int var, const char *val)
+       int rpmReadConfigFiles (const char *file, const char
+           *target)
+       int rpmReadRC (const char *rcfiles)
+       void rpmGetArchInfo (const char **name, int *num)
+       void rpmGetOsInfo (const char **name, int *num)
+       int rpmMachineScore (int type, const char *name)
+       int rpmShowRC (FILE *fp)
+       void rpmSetTables (int archTable, int osTable)
+       void rpmSetMachine (const char *arch, const char *os)
+       void rpmGetMachine (const char **arch, const char **os)
+       void rpmFreeRpmrc (void)
+       const char * macrofiles
+
+ENUMERATION TYPE DOCUMENTATION
+   enum rpm_machtable_e
+       Build and install arch/os table identifiers.
+
+       Todo:
+            Eliminate from API.
+
+       Enumeration values:
+
+       RPM_MACHTABLE_INSTARCH
+              Install platform architecture.
+
+       RPM_MACHTABLE_INSTOS
+              Install platform operating system.
+
+       RPM_MACHTABLE_BUILDARCH
+              Build platform architecture.
+
+       RPM_MACHTABLE_BUILDOS
+              Build platform operating system.
+
+       Definition at line 521 of file rpmlib.h.
+
+FUNCTION DOCUMENTATION
+   void rpmFreeRpmrc (void)
+       Destroy rpmrc arch/os compatibility tables.
+
+       Todo:
+            Eliminate from API.
+
+       Definition at line 1546 of file rpmrc.c.
+
+       Referenced by main.
+
+   void rpmGetArchInfo (const char ** name, int * num)
+       Return current arch name and/or number.
+
+       Todo:
+           Generalize to extract arch component from
+           target_platform macro.
+
+       Return values:
+
+       name   address of arch name (or NULL)
+
+       num    address of arch number (or NULL)
+
+       Definition at line 1442 of file rpmrc.c.
+
+   void rpmGetMachine (const char ** arch, const char ** os)
+       Return current arch/os names.
+
+       Deprecated:
+           Use rpmExpand on _target_* macros.
+
+       Todo:
+           Eliminate from API.
+
+       Return values:
+
+       arch   address of arch name (or NULL)
+
+       os     address of os name (or NULL)
+
+       Definition at line 1348 of file rpmrc.c.
+
+       References RPMTRANS_FLAG_COMMIT, RPMTRANS_FLAG_NOPRE,
+       RPMTRANS_FLAG_NOTRIGGERPREIN, RPMTRANS_FLAG_REVERSE, and
+       RPMTRANS_FLAG_UNDO.
+
+   void rpmGetOsInfo (const char ** name, int * num)
+       Return current os name and/or number.
+
+       Todo:
+           Generalize to extract os component from
+           target_platform macro.
+
+       Return values:
+
+       name   address of os name (or NULL)
+
+       num    address of os number (or NULL)
+
+       Definition at line 1447 of file rpmrc.c.
+
+       References RPMPROB_FILTER_DISKNODES,
+       RPMPROB_FILTER_DISKSPACE, RPMPROB_FILTER_FORCERELOCATE,
+       RPMPROB_FILTER_OLDPACKAGE, RPMPROB_FILTER_REPLACENEWFILES,
+       and RPMPROB_FILTER_REPLACEOLDFILES.
+
+   const char* rpmGetVar (int var)
+       Return value of an rpmrc variable.
+
+       Deprecated:
+           Use rpmExpand() with appropriate macro expression.
+
+       Todo:
+            Eliminate from API.
+
+       Definition at line 1260 of file rpmrc.c.
+
+   int rpmMachineScore (int type, const char * name)
+       Return arch/os score of a name. An arch/os score measures
+       the 'nearness' of a name to the currently running (or
+       defined) platform arch/os. For example, the score of arch
+       'i586' on an i686 platform is (usually) 2. The arch/os
+       score is used to select one of several otherwise identical
+       packages using the arch/os tags from the header as hints
+       of the intended platform for the package.
+
+       Todo:
+           Rewrite to use RE's against config.guess target
+           platform output.
+
+       Parameters:
+
+       type   any of the RPM_MACHTABLE_* constants
+
+       name   name
+
+       Returns:
+           arch score (0 is no match, lower is preferred)
+
+       Definition at line 1342 of file rpmrc.c.
+
+       References RPMTRANS_FLAG_DIRSTASH,
+       RPMTRANS_FLAG_PKGCOMMIT, RPMTRANS_FLAG_PKGUNDO, and
+       RPMTRANS_FLAG_REPACKAGE.
+
+   int rpmReadConfigFiles (const char * file, const char *
+       target)
+       Read macro configuration file(s) for a target.
+
+       Parameters:
+
+       file   colon separated files to read (NULL uses default)
+
+       target target platform (NULL uses default)
+
+       Returns:
+           0 on success, -1 on error
+
+       Definition at line 425 of file rpmrc.c.
+
+       References RPMSENSE_FIND_PROVIDES, RPMSENSE_FIND_REQUIRES,
+       RPMSENSE_MULTILIB, RPMSENSE_PREREQ, RPMSENSE_RPMLIB,
+       RPMSENSE_SCRIPT_BUILD, RPMSENSE_SCRIPT_CLEAN,
+       RPMSENSE_SCRIPT_INSTALL, RPMSENSE_SCRIPT_POSTUN,
+       RPMSENSE_SCRIPT_PREP, RPMSENSE_SCRIPT_PREUN,
+       RPMSENSE_SCRIPT_VERIFY, RPMSENSE_TRIGGERIN,
+       RPMSENSE_TRIGGERPOSTUN, RPMSENSE_TRIGGERPREIN, and
+       RPMSENSE_TRIGGERUN.
+
+   int rpmReadRC (const char * rcfiles)
+       Read rpmrc (and macro) configuration file(s).
+
+       Parameters:
+
+       rcfiles
+              colon separated files to read (NULL uses default)
+
+       Returns:
+           0 on succes
+
+       Definition at line 548 of file rpmrc.c.
+
+   void rpmSetMachine (const char * arch, const char * os)
+       Set current arch/os names. NULL as argument is set to the
+       default value (munged uname()) pushed through a
+       translation table (if appropriate).
+
+       Deprecated:
+           Use addMacro to set _target_* macros.
+
+       Todo:
+           Eliminate from API.
+
+       Parameters:
+
+       arch   arch name (or NULL)
+
+       os     os name (or NULL)
+
+       Definition at line 1357 of file rpmrc.c.
+
+       References RPMTRANS_FLAG_APPLYONLY,
+       RPMTRANS_FLAG_CHAINSAW, RPMTRANS_FLAG_NOPAYLOAD,
+       RPMTRANS_FLAG_NOPOST, RPMTRANS_FLAG_NOPOSTUN,
+       RPMTRANS_FLAG_NOPREUN, RPMTRANS_FLAG_NOTRIGGERIN,
+       RPMTRANS_FLAG_NOTRIGGERPOSTUN, and
+       RPMTRANS_FLAG_NOTRIGGERUN.
+
+   void rpmSetTables (int archTable, int osTable)
+       Deprecated:
+           Use addMacro to set _target_* macros.
+
+       Todo:
+           Eliminate from API. #
+
+       Note:
+           Only used by build code.
+
+       Parameters:
+
+       archTable
+
+       osTable
+
+       Definition at line 1325 of file rpmrc.c.
+
+   void rpmSetVar (int var, const char * val)
+       Set value of an rpmrc variable.
+
+       Deprecated:
+           Use rpmDefineMacro() to change appropriate macro
+           instead.
+
+       Todo:
+            Eliminate from API.
+
+       Definition at line 1281 of file rpmrc.c.
+
+   int rpmShowRC (FILE * fp)
+       Display current rpmrc (and macro) configuration.
+
+       Parameters:
+
+       fp     output file handle
+
+       Returns:
+           0 always
+
+       Definition at line 1611 of file rpmrc.c.
+
+VARIABLE DOCUMENTATION
+   const char* macrofiles
+       List of macro files to read when configuring rpm. This is
+       a colon separated list of files. URI's are permitted as
+       well, identified by the token '://', so file paths must
+       not begin with '//'.
+
+       Definition at line 514 of file rpmlib.h.
+
+
+
+rpm                        13 Mar 2002                  RPMRC.(3)

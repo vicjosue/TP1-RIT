@@ -1,0 +1,311 @@
+popt/popt.c(3)                                     popt/popt.c(3)
+
+
+
+NAME
+       popt/popt.c -
+
+SYNOPSIS
+       #include 'system.h'
+       #include <math.h>
+       #include 'findme.h'
+       #include 'poptint.h'
+
+   Defines
+       #define _ABS(a)   ((((a) - 0.0) < DBL_EPSILON) ? -(a) :
+           (a))
+
+   Functions
+       char * strerror (int errno)
+       void poptSetExecPath (poptContext con, const char *path,
+           int allowAbsolute)
+       void invokeCallbacksPRE (poptContext con, const struct
+           poptOption *opt)
+       void invokeCallbacksPOST (poptContext con, const struct
+           poptOption *opt)
+       void invokeCallbacksOPTION (poptContext con, const struct
+           poptOption *opt, const struct poptOption *myOpt, const
+           void *myData, int shorty)
+       poptContext poptGetContext (const char *name, int argc,
+           const char **argv, const struct poptOption *options,
+           int flags)
+       void cleanOSE (struct optionStackEntry *os)
+       void poptResetContext (poptContext con)
+       int handleExec (poptContext con, const char *longName,
+           char shortName)
+       int handleAlias (poptContext con, const char *longName,
+           char shortName, const char *nextCharArg)
+       int execCommand (poptContext con)
+       const struct poptOption * findOption (const struct
+           poptOption *opt, const char *longName, char shortName,
+           poptCallbackType *callback, const void **callbackData,
+           int singleDash)
+       const char * findNextArg (poptContext con, unsigned argx,
+           int delete_arg)
+       const char * expandNextArg (poptContext con, const char
+           *s)
+       void poptStripArg (poptContext con, int which)
+       int poptSaveLong (const struct poptOption *opt, long
+           aLong)
+       int poptSaveInt (const struct poptOption *opt, long aLong)
+       int poptGetNextOpt (poptContext con)
+       const char * poptGetOptArg (poptContext con)
+       const char * poptGetArg (poptContext con)
+       const char * poptPeekArg (poptContext con)
+       const char ** poptGetArgs (poptContext con)
+       poptContext poptFreeContext (poptContext con)
+       int poptAddAlias (poptContext con, struct poptAlias
+           newAlias, int flags)
+       int poptAddItem (poptContext con, poptItem newItem, int
+           flags)
+       const char * poptBadOption (poptContext con, int flags)
+       const char *const poptStrerror (const int error)
+       int poptStuffArgs (poptContext con, const char **argv)
+       const char * poptGetInvocationName (poptContext con)
+       int poptStrippedArgv (poptContext con, int argc, char
+           **argv)
+
+DETAILED DESCRIPTION
+       Definition in file popt.c.
+
+DEFINE DOCUMENTATION
+   #define _ABS(a)   ((((a) - 0.0) < DBL_EPSILON) ? -(a) : (a))
+FUNCTION DOCUMENTATION
+   void cleanOSE (struct optionStackEntry * os) [static]
+       Definition at line 187 of file popt.c.
+
+       References _free, and PBM_FREE.
+
+       Referenced by poptGetNextOpt, and poptResetContext.
+
+   int execCommand (poptContext con) [static]
+       Definition at line 341 of file popt.c.
+
+       References alloca, EXIT_FAILURE, findProgramPath, and
+       poptStrerror.
+
+       Referenced by poptGetNextOpt.
+
+   const char* expandNextArg (poptContext con, const char * s)
+       [static]
+       Definition at line 529 of file popt.c.
+
+       References findNextArg.
+
+       Referenced by poptGetNextOpt.
+
+   const char* findNextArg (poptContext con, unsigned argx, int
+       delete_arg) [static]
+       Definition at line 496 of file popt.c.
+
+       References optionStackEntry::argb, optionStackEntry::argc,
+       optionStackEntry::argv, optionStackEntry::next, PBM_ALLOC,
+       PBM_ISSET, and PBM_SET.
+
+       Referenced by expandNextArg.
+
+   const struct poptOption* findOption (const struct poptOption *
+       opt, const char * longName, char shortName,
+       poptCallbackType * callback, const void ** callbackData,
+       int singleDash) [static]
+       Definition at line 430 of file popt.c.
+
+       References callback, findOption, POPT_ARG_CALLBACK,
+       POPT_ARG_INCLUDE_TABLE, POPT_ARG_MASK, and
+       POPT_ARGFLAG_ONEDASH.
+
+       Referenced by findOption, and poptGetNextOpt.
+
+   int handleAlias (poptContext con, const char * longName, char
+       shortName, const char * nextCharArg) [static]
+       Definition at line 289 of file popt.c.
+
+       References POPT_OPTION_DEPTH, and poptDupArgv.
+
+       Referenced by poptGetNextOpt.
+
+   int handleExec (poptContext con, const char * longName, char
+       shortName) [static]
+       Definition at line 230 of file popt.c.
+
+       Referenced by poptGetNextOpt.
+
+   void invokeCallbacksOPTION (poptContext con, const struct
+       poptOption * opt, const struct poptOption * myOpt, const
+       void * myData, int shorty) [static]
+       Definition at line 98 of file popt.c.
+
+       References POPT_ARG_CALLBACK, POPT_ARG_INCLUDE_TABLE, and
+       POPT_ARG_MASK.
+
+       Referenced by poptGetNextOpt.
+
+   void invokeCallbacksPOST (poptContext con, const struct
+       poptOption * opt) [static]
+       Definition at line 76 of file popt.c.
+
+       References POPT_ARG_CALLBACK, POPT_ARG_INCLUDE_TABLE, and
+       POPT_ARG_MASK.
+
+       Referenced by poptGetNextOpt.
+
+   void invokeCallbacksPRE (poptContext con, const struct
+       poptOption * opt) [static]
+       Definition at line 54 of file popt.c.
+
+       References POPT_ARG_CALLBACK, POPT_ARG_INCLUDE_TABLE, and
+       POPT_ARG_MASK.
+
+       Referenced by poptGetContext.
+
+   int poptAddAlias (poptContext con, struct poptAlias newAlias,
+       int flags)
+       Definition at line 1028 of file popt.c.
+
+       References alloca, and poptAddItem.
+
+   int poptAddItem (poptContext con, poptItem newItem, int flags)
+       Definition at line 1045 of file popt.c.
+
+       References xstrdup.
+
+       Referenced by configLine, and poptAddAlias.
+
+   const char* poptBadOption (poptContext con, int flags)
+       Definition at line 1088 of file popt.c.
+
+       References optionStackEntry::argv, and
+       optionStackEntry::next.
+
+       Referenced by doSetupMacro, main, parseDescription,
+       parseFiles, and parseScript.
+
+   poptContext poptFreeContext (poptContext con)
+       Definition at line 984 of file popt.c.
+
+       References _free, PBM_FREE, and poptResetContext.
+
+       Referenced by doSetupMacro, main, parseDescription,
+       parseFiles, and parseScript.
+
+   const char* poptGetArg (poptContext con)
+       Definition at line 954 of file popt.c.
+
+       Referenced by main, parseDescription, parseFiles, and
+       parseScript.
+
+   const char** poptGetArgs (poptContext con)
+       Definition at line 970 of file popt.c.
+
+       Referenced by main.
+
+   poptContext poptGetContext (const char * name, int argc, const
+       char ** argv, const struct poptOption * options, int
+       flags)
+       Definition at line 142 of file popt.c.
+
+       References getenv, and invokeCallbacksPRE.
+
+       Referenced by doSetupMacro, main, parseDescription,
+       parseFiles, and parseScript.
+
+   const char* poptGetInvocationName (poptContext con)
+       Definition at line 1151 of file popt.c.
+
+   int poptGetNextOpt (poptContext con)
+       Definition at line 644 of file popt.c.
+
+       References _free, alloca, cleanOSE, errno, execCommand,
+       EXIT_FAILURE, expandNextArg, findOption, handleAlias,
+       handleExec, invokeCallbacksOPTION, invokeCallbacksPOST,
+       PBM_ISSET, POPT_, POPT_ARG_DOUBLE, POPT_ARG_FLOAT,
+       POPT_ARG_INT, POPT_ARG_LONG, POPT_ARG_MASK, POPT_ARG_NONE,
+       POPT_ARG_STRING, POPT_ARG_VAL, POPT_ARGFLAG_ONEDASH,
+       poptSaveInt, poptSaveLong, poptStripArg, and xstrdup.
+
+       Referenced by doSetupMacro, main, parseDescription,
+       parseFiles, and parseScript.
+
+   const char* poptGetOptArg (poptContext con)
+       Definition at line 944 of file popt.c.
+
+       Referenced by doSetupMacro, and main.
+
+   const char* poptPeekArg (poptContext con)
+       Definition at line 962 of file popt.c.
+
+       Referenced by main, parseDescription, parseFiles, and
+       parseScript.
+
+   void poptResetContext (poptContext con)
+       Definition at line 197 of file popt.c.
+
+       References _free, cleanOSE, and PBM_FREE.
+
+       Referenced by main, and poptFreeContext.
+
+   int poptSaveInt (const struct poptOption * opt, long aLong)
+       [static]
+       Definition at line 615 of file popt.c.
+
+       Referenced by poptGetNextOpt.
+
+   int poptSaveLong (const struct poptOption * opt, long aLong)
+       [static]
+       Definition at line 587 of file popt.c.
+
+       Referenced by poptGetNextOpt.
+
+   void poptSetExecPath (poptContext con, const char * path, int
+       allowAbsolute)
+       Definition at line 47 of file popt.c.
+
+       References _free, and xstrdup.
+
+       Referenced by main.
+
+   const char* const poptStrerror (const int error)
+       Definition at line 1100 of file popt.c.
+
+       References errno, POPT_, and strerror.
+
+       Referenced by doSetupMacro, execCommand, main,
+       parseDescription, parseFiles, and parseScript.
+
+   void poptStripArg (poptContext con, int which) [static]
+       Definition at line 576 of file popt.c.
+
+       References PBM_ALLOC, and PBM_SET.
+
+       Referenced by poptGetNextOpt.
+
+   int poptStrippedArgv (poptContext con, int argc, char ** argv)
+       Definition at line 1156 of file popt.c.
+
+       References PBM_ISSET.
+
+   int poptStuffArgs (poptContext con, const char ** argv)
+       Definition at line 1128 of file popt.c.
+
+       References POPT_OPTION_DEPTH, and poptDupArgv.
+
+       Referenced by main.
+
+   char* strerror (int errno) [static]
+       Definition at line 22 of file popt.c.
+
+       References errno, and POPT_.
+
+       Referenced by checkOwners, dbiOpen, doScript,
+       getFilesystemList, getOutputFrom, packageBinaries,
+       poptStrerror, processSourceFiles, rpmdbRebuild,
+       rpmGetFilesystemUsage, rpmProblemString, and
+       rpmQueryVerify.
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002             popt/popt.c(3)

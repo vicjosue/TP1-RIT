@@ -1,0 +1,263 @@
+rpmdb/db3.c(3)                                     rpmdb/db3.c(3)
+
+
+
+NAME
+       rpmdb/db3.c -
+
+SYNOPSIS
+       #include 'system.h'
+       #include <db3/db.h>
+       #include <rpmlib.h>
+       #include <rpmmacro.h>
+       #include <rpmurl.h>
+       #include 'rpmdb.h'
+       #include 'debug.h'
+
+   Data Structures
+       struct dbiBStats_s
+       struct dbiHStats_s
+
+   Functions
+       int cvtdberr (dbiIndex dbi, char *msg, int error, int
+           printit)
+       int db_fini (dbiIndex dbi, char *dbhome, char *dbfile,
+           char *dbsubfile)
+       int db3_fsync_disable (int fd)
+       int db_init (dbiIndex dbi, char *dbhome, char *dbfile,
+           char *dbsubfile, DB_ENV **dbenvp)
+       int db3sync (dbiIndex dbi, unsigned int flags)
+       int db3c_del (dbiIndex dbi, DBC *dbcursor, u_int32_t
+           flags)
+       int db3c_dup (dbiIndex dbi, DBC *dbcursor, DBC **dbcp,
+           u_int32_t flags)
+       int db3c_get (dbiIndex dbi, DBC *dbcursor, DBT *key, DBT
+           *data, u_int32_t flags)
+       int db3c_put (dbiIndex dbi, DBC *dbcursor, DBT *key, DBT
+           *data, u_int32_t flags)
+       int db3c_close (dbiIndex dbi, DBC *dbcursor)
+       int db3c_open (dbiIndex dbi, DBC **dbcp, int dbiflags)
+       int db3cclose (dbiIndex dbi, DBC *dbcursor, unsigned int
+           flags)
+       int db3copen (dbiIndex dbi, DBC **dbcp, unsigned int
+           flags)
+       int db3cput (dbiIndex dbi, DBC *dbcursor, void *keyp,
+           size_t keylen, void *datap, size_t datalen, unsigned
+           int flags)
+       int db3cdel (dbiIndex dbi, DBC *dbcursor, void *keyp,
+           size_t keylen, unsigned int flags)
+       int db3cget (dbiIndex dbi, DBC *dbcursor, void **keyp,
+           size_t *keylen, void **datap, size_t *datalen,
+           unsigned int flags)
+       int db3ccount (dbiIndex dbi, DBC *dbcursor, unsigned int
+           *countp, unsigned int flags)
+       int db3byteswapped (dbiIndex dbi)
+       int db3stat (dbiIndex dbi, unsigned int flags)
+       int db3close (dbiIndex dbi, unsigned int flags)
+       int db3open (rpmdb rpmdb, int rpmtag, dbiIndex *dbip)
+
+   Variables
+       int _debug = 1
+       _dbiVec db3vec
+
+DETAILED DESCRIPTION
+       Definition in file db3.c.
+
+FUNCTION DOCUMENTATION
+   int cvtdberr (dbiIndex dbi, char * msg, int error, int
+       printit) [static]
+       Definition at line 75 of file db3.c.
+
+       References _.
+
+       Referenced by db1cdel, db1cget, db1close, db1cput,
+       db1sync, db3c_close, db3c_del, db3c_dup, db3c_get,
+       db3c_open, db3c_put, db3ccount, db3cdel, db3cget,
+       db3close, db3cput, db3open, db3stat, db3sync, db_fini, and
+       db_init.
+
+   int db3_fsync_disable (int fd) [static]
+       Definition at line 136 of file db3.c.
+
+       Referenced by db_init.
+
+   int db3byteswapped (dbiIndex dbi) [static]
+       Definition at line 566 of file db3.c.
+
+       References DB.
+
+   int db3c_close (dbiIndex dbi, DBC * dbcursor) [inline, static]
+       Definition at line 348 of file db3.c.
+
+       References _debug, cvtdberr, and DBC.
+
+       Referenced by db3cclose.
+
+   int db3c_del (dbiIndex dbi, DBC * dbcursor, u_int32_t flags)
+       [static]
+       Definition at line 291 of file db3.c.
+
+       References _debug, cvtdberr, and DBC.
+
+       Referenced by db3cdel.
+
+   int db3c_dup (dbiIndex dbi, DBC * dbcursor, DBC ** dbcp,
+       u_int32_t flags) [static]
+       Definition at line 301 of file db3.c.
+
+       References _debug, cvtdberr, and DBC.
+
+   int db3c_get (dbiIndex dbi, DBC * dbcursor, DBT * key, DBT *
+       data, u_int32_t flags) [static]
+       Definition at line 313 of file db3.c.
+
+       References _debug, cvtdberr, and DBC.
+
+       Referenced by db3cdel, and db3cget.
+
+   int db3c_open (dbiIndex dbi, DBC ** dbcp, int dbiflags)
+       [inline, static]
+       Definition at line 360 of file db3.c.
+
+       References _debug, cvtdberr, DB, DBC, and DBI_WRITECURSOR.
+
+       Referenced by db3copen.
+
+   int db3c_put (dbiIndex dbi, DBC * dbcursor, DBT * key, DBT *
+       data, u_int32_t flags) [static]
+       Definition at line 336 of file db3.c.
+
+       References _debug, cvtdberr, and DBC.
+
+       Referenced by db3cput.
+
+   int db3cclose (dbiIndex dbi, DBC * dbcursor, unsigned int
+       flags) [static]
+       Definition at line 383 of file db3.c.
+
+       References db3c_close, DBC, and DBI_ITERATOR.
+
+       Referenced by db3close.
+
+   int db3ccount (dbiIndex dbi, DBC * dbcursor, unsigned int *
+       countp, unsigned int flags) [static]
+       Definition at line 549 of file db3.c.
+
+       References _debug, cvtdberr, and DBC.
+
+   int db3cdel (dbiIndex dbi, DBC * dbcursor, void * keyp, size_t
+       keylen, unsigned int flags) [static]
+       Definition at line 464 of file db3.c.
+
+       References _debug, cvtdberr, DB, db3c_del, db3c_get, and
+       DBC.
+
+   int db3cget (dbiIndex dbi, DBC * dbcursor, void ** keyp,
+       size_t * keylen, void ** datap, size_t * datalen, unsigned
+       int flags) [static]
+       Definition at line 498 of file db3.c.
+
+       References _debug, cvtdberr, DB, db3c_get, and DBC.
+
+   int db3close (dbiIndex dbi, unsigned int flags) [static]
+       Definition at line 609 of file db3.c.
+
+       References _, _debug, _free, cvtdberr, DB, db3cclose,
+       db3Free, rpmdb_s::db_chrootDone, DB_ENV,
+       rpmdb_s::db_errcall, rpmdb_s::db_errfile,
+       rpmdb_s::db_errpfx, db_fini, rpmdb_s::db_home,
+       rpmdb_s::db_root, rpmGenPath, rpmGetPath, tagName, and
+       urlPath.
+
+       Referenced by db3open.
+
+   int db3copen (dbiIndex dbi, DBC ** dbcp, unsigned int flags)
+       [static]
+       Definition at line 406 of file db3.c.
+
+       References db3c_open, DBC, and DBI_ITERATOR.
+
+   int db3cput (dbiIndex dbi, DBC * dbcursor, void * keyp, size_t
+       keylen, void * datap, size_t datalen, unsigned int flags)
+       [static]
+       Definition at line 433 of file db3.c.
+
+       References _debug, cvtdberr, DB, db3c_put, and DBC.
+
+   int db3open (rpmdb rpmdb, int rpmtag, dbiIndex * dbip)
+       [static]
+       Definition at line 740 of file db3.c.
+
+       References _, _debug, _free, alloca, cvtdberr, DB,
+       db3close, db3New, DB_ENV, db_init, DB_VERSION_MAJOR, DBC,
+       _dbiIndex::dbi_api, _dbiIndex::dbi_bt_compare_fcn,
+       _dbiIndex::dbi_bt_dup_compare_fcn,
+       _dbiIndex::dbi_bt_flags, _dbiIndex::dbi_bt_minkey,
+       _dbiIndex::dbi_bt_prefix_fcn, _dbiIndex::dbi_cachesize,
+       _dbiIndex::dbi_cflags, _dbiIndex::dbi_db,
+       _dbiIndex::dbi_dbenv, _dbiIndex::dbi_dbinfo,
+       _dbiIndex::dbi_eflags, _dbiIndex::dbi_file,
+       _dbiIndex::dbi_get_rmw_cursor,
+       _dbiIndex::dbi_h_dup_compare_fcn,
+       _dbiIndex::dbi_h_ffactor, _dbiIndex::dbi_h_flags,
+       _dbiIndex::dbi_h_hash_fcn, _dbiIndex::dbi_h_nelem,
+       _dbiIndex::dbi_home, _dbiIndex::dbi_lockdbfd,
+       _dbiIndex::dbi_lorder, _dbiIndex::dbi_mode,
+       _dbiIndex::dbi_oeflags, _dbiIndex::dbi_oflags,
+       _dbiIndex::dbi_pagesize, _dbiIndex::dbi_perms,
+       _dbiIndex::dbi_q_extentsize, _dbiIndex::dbi_re_delim,
+       _dbiIndex::dbi_re_len, _dbiIndex::dbi_re_pad,
+       _dbiIndex::dbi_re_source, _dbiIndex::dbi_rmw,
+       _dbiIndex::dbi_root, _dbiIndex::dbi_rpmtag,
+       _dbiIndex::dbi_subfile, _dbiIndex::dbi_temporary,
+       _dbiIndex::dbi_type, _dbiIndex::dbi_use_dbenv,
+       _dbiIndex::dbi_vec, _dbiIndex::dbi_verbose,
+       _dbiIndex::dbi_verify_on_close, F_OK, rpmGenPath,
+       rpmGetPath, stpcpy, tagName, urlPath, and W_OK.
+
+   int db3stat (dbiIndex dbi, unsigned int flags) [static]
+       Definition at line 585 of file db3.c.
+
+       References _debug, _free, cvtdberr, and DB.
+
+   int db3sync (dbiIndex dbi, unsigned int flags) [static]
+       Definition at line 276 of file db3.c.
+
+       References _debug, cvtdberr, and DB.
+
+   int db_fini (dbiIndex dbi, char * dbhome, char * dbfile, char
+       * dbsubfile) [static]
+       Definition at line 94 of file db3.c.
+
+       References _, _debug, cvtdberr, DB_ENV, and
+       rpmdb_s::db_remove_env.
+
+       Referenced by db3close.
+
+   int db_init (dbiIndex dbi, char * dbhome, char * dbfile, char
+       * dbsubfile, DB_ENV ** dbenvp) [static]
+       Definition at line 142 of file db3.c.
+
+       References _, _debug, _free, cvtdberr, db3_fsync_disable,
+       rpmdb_s::db_chrootDone, DB_ENV, rpmdb_s::db_errcall,
+       rpmdb_s::db_errfile, rpmdb_s::db_errpfx, rpmdb_s::db_root,
+       prDbiOpenFlags, and rpmGenPath.
+
+       Referenced by db3open.
+
+VARIABLE DOCUMENTATION
+   int _debug = 1 [static]
+       Definition at line 5 of file db3.c.
+
+       Referenced by db3c_close, db3c_del, db3c_dup, db3c_get,
+       db3c_open, db3c_put, db3ccount, db3cdel, db3cget,
+       db3close, db3cput, db3open, db3stat, db3sync, db_fini, and
+       db_init.
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002             rpmdb/db3.c(3)

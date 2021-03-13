@@ -1,0 +1,33 @@
+FCLOSE(3)           Linux Programmer's Manual           FCLOSE(3)
+
+
+
+NAME
+       fcloseall - close all open streams
+
+SYNOPSIS
+       #define _GNU_SOURCE
+
+       #include <stdio.h>
+
+       int fcloseall(void);
+
+DESCRIPTION
+       The  fcloseall  function dissociates all open streams from
+       its underlying file or set  of  functions.   Any  buffered
+       output  data is written first, using fflush(3).  Note that
+       the standard streams (stdin, stdout and stderr)  are  also
+       closed.
+
+RETURN VALUE
+       This function always returns 0.
+
+SEE ALSO
+       fclose(3), close(2), fflush(3), fopen(3), setbuf(3)
+
+CONFORMING TO
+       The fcloseall function is a GNU extension.
+
+
+
+GNU                         1998-04-10                  FCLOSE(3)

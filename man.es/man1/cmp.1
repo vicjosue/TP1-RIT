@@ -1,0 +1,84 @@
+CMP(1)                                                     CMP(1)
+
+
+
+NAME
+       cmp (GNU diffutils) - compare two files or byte ranges
+
+SYNOPSIS
+       cmp  [-clsv]  [-i NUM] [--help] [--print-chars] [--ignore-
+       initial=NUM] [--verbose] [--quiet] [--silent]  [--version]
+       -I FILE1 [FILE2 [RANGE1 [RANGE2]]]
+
+DESCRIPTION
+       The  cmp utility compares two files of any type and writes
+       the results to the standard output.  By  default,  cmp  is
+       silent if the files are the same; if they differ, the byte
+       and line number at which the first difference occurred  is
+       reported.
+
+       In the output, bytes and lines are numbered beginning with
+       one; however, range inputs are zero-based; see  below  for
+       details.  A filename of - represents standard input.
+
+       The following options are available:
+       -c, --print-chars
+              Output  the  differing  bytes as characters, rather
+              than as octal  numbers.   Non-printable  characters
+              will be shown in  form.
+       -i NUM, --ignore-initial=NUM
+              Ignore NUM initial characters from each file.  This
+              is a synonym for specifying  NUM  NUM  as  the  two
+              RANGE arguments.
+       -l, --verbose
+              Print  the  byte number (decimal) and the differing
+              byte values (octal) for each difference.
+       -s, --quiet, --silent
+              Print nothing for differing files; return exit sta­
+              tus only.
+       -v, --version
+              Print the diffutils version number.
+
+BYTE RANGES
+       The  two  optional  arguments  RANGE1 and RANGE2 represent
+       byte ranges to compare within the files.  Each  range  can
+       be expressed in several ways:
+       M+N    Skip  M  bytes  at the beginning of the input, then
+              compare a maximum of N bytes.
+       M-N, M,N
+              Skip M bytes at the beginning  of  the  input,  and
+              read  between  bytes  M and N, which are both zero-
+              based.
+
+       In either case, both M and N are optional and  default  to
+       beginning  and  end  of  file, respectively.  In addition,
+       they can be expressed in decimal, octal (0NNN) or hexadec­
+       imal (0xNNN) form.
+
+NOTES
+       The  zero-based  range  numbers may seem inconsistent with
+       cmp output, which is one-based; this is for  compatibility
+       with  some  versions  of  cmp  which  allow "skip N bytes"
+       parameters after the filenames; in this context, the N  is
+       zero-based.
+
+DIAGNOSTICS
+       The cmp utility exits with one of the following values:
+       0      The files or byte ranges are identical.
+       1      The  files  or  byte  ranges  are  different;  this
+              includes the case where one file or range is  iden­
+              tical  to the first part of the other.  In the lat­
+              ter case, if -s has not been specified, cmp  writes
+              to  standard  output  that  EOF  was reached in the
+              shorter file.
+       >1     An error occurred.
+
+SEE ALSO
+       diff(1), diff3(1)
+
+STANDARDS
+       The cmp utility is expected to be POSIX  1003.2-compliant.
+
+
+
+GNU Project             1998 September 23                  CMP(1)

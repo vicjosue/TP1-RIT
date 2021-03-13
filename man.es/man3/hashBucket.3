@@ -1,0 +1,52 @@
+hashBucket(3)                                       hashBucket(3)
+
+
+
+NAME
+       hashBucket -
+
+SYNOPSIS
+   Data Fields
+       voidptr key
+       voidptr * data
+       int dataCount
+       hashBucket * next
+
+FIELD DOCUMENTATION
+   voidptr* hashBucket::data
+       pointer to hashed data
+
+       Definition at line 16 of file rpmhash.c.
+
+       Referenced by htAddEntry, htFree, and htGetEntry.
+
+   int hashBucket::dataCount
+       length of data (0 if unknown)
+
+       Definition at line 17 of file rpmhash.c.
+
+       Referenced by htAddEntry, and htGetEntry.
+
+   voidptr hashBucket::key
+       hash key
+
+       Definition at line 15 of file rpmhash.c.
+
+       Referenced by findEntry, htAddEntry, htFree, and
+       htGetEntry.
+
+   struct hashBucket* hashBucket::next
+       pointer to next item in bucket
+
+       Definition at line 18 of file rpmhash.c.
+
+       Referenced by findEntry, htAddEntry, and htFree.
+
+
+AUTHOR
+       Generated automatically by Doxygen for rpm from the source
+       code.
+
+
+
+rpm                        13 Mar 2002              hashBucket(3)
