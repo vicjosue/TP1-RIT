@@ -10,14 +10,12 @@ def coleccion():
 
     for (dirpath, dirs, files) in walk(root):
 
-        for Files in files:
+        for file in files:
             totalFiles += 1
-            with open(Files, "r") as file:
-                print("hola")
+            with open(dirpath+file, "r") as file:
                 for line in file: 
                     for word in line.split(): 
                         cont_words = cont_words + 1
-                        print(word)
     print(str(cont_words))
     print("Nombre: " + str(nombre))
     print("Ruta completa del archivo: " + str(root))
