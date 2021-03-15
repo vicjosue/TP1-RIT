@@ -1,6 +1,7 @@
 from os import walk
 import math
 import re
+import unicodedata
 
 def indexColection():
 
@@ -19,24 +20,29 @@ def indexColection():
     for (dirpath, dirs, files) in walk(root):
         relative_path='.'+ dirpath.split(root)[-1] + '\\'
         for file in files:
-            with open(dirpath+'\\'+file, "rt", encoding='utf8') as file:
-
+            with open(dirpath+'\\'+file, "r") as file:
                 documents[cont_files]= {'path': relative_path,'name':file.name.split("\\")[-1], 'pairs': {}}
+                print(documents[cont_files])
                 cont_words = 0
                 cont_description_words=0
                 description=""
                 for line in file:
-                    for word in line.split():
+                    line = line.split()
+                    for word in line:
+                        if(check_point(word)): # '.hola' or 'hola.'
+                            continue
                         word=splitpoints(word) # hello.two
                         for w in word[1:]:
                             line.append(w)
                         word=word[0]
 
                         word = double_line(word)
+                        if word[0] == "":
+                            continue
                         if(type(word)==list):
                             line.append(word[1])
                             word=word[0]
-
+ 
                         word = normalize(word) # lower, accent
                         if(word[-1]=="-"):
                             is_word_splitted=True
@@ -47,8 +53,6 @@ def indexColection():
                             word=splitted_word+word
                             is_word_splitted=False
 
-                        if(check_point(word)): # '.hola' or 'hola.'
-                            continue
 
                         if(word in stopwords):
                             continue #don't do anything, they are not valuable
@@ -105,7 +109,8 @@ def normalize(text):
     #Resultado: String normalizado de acuerdo a los criterios.
 
     text_lower = text.lower()
-    text_unaccent = remove_accent(text_lower)
+    text_unaccent = unicodedata.normalize('NFKD', text_lower)
+    #print(text_unaccent + "hola")
     return text_unaccent  
 
 def remove_accent(text):
@@ -157,6 +162,8 @@ def double_line(word):
     #Funcion: Maneja el caso "--".
     #Parametros: Palabra o string
     #Resultado: Lista con terminos
+    if len(word) <= 1:
+        return word
     if word[0] == "-" and word[1] == "-":
         return [word[2:],"@" + word[2:]]
     return word
@@ -169,15 +176,13 @@ def splitpoints(word):
 
     x = re.search("[a-zA-Z]", word)
     word_splited = []
-    result = []
+    result = [word]
     if "." in word:
         if x:
             word_splited = word.split(".")
         for i in word_splited:
             if i.isnumeric()==False:
                 result.append(i)
-    else:
-        result.append(word)
     return result
 
 #####################################
