@@ -27,9 +27,7 @@ def indexColection():
                 description=""
                 for line in file:
                     for word in line.split():
-                        print(word)
                         word=splitpoints(word) # hello.two
-                        print(word)
                         for w in word[1:]:
                             line.append(w)
                         word=word[0]
@@ -95,8 +93,6 @@ def updateVocabulary(vocabulary,word):
 
 def calculate_idfi(vocabulary,N):
     for word in vocabulary.keys():
-        print(vocabulary[word]['n_i'])
-        print(N)
         if(vocabulary[word]['n_i']>=N/2):
             vocabulary[word]['idfi']=0
         else:
