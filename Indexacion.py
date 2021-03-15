@@ -11,18 +11,50 @@ def indexColection():
     documents = {}
     vocabulary = {}
     stopwords = read_stopwords()
+
+    is_word_splitted=False
+    splitted_word=""
+    
     
     for (dirpath, dirs, files) in walk(root):
         relative_path='.'+ dirpath.split(root)[-1] + '\\'
-        print(relative_path)
         for file in files:
             with open(dirpath+'\\'+file, "rt", encoding='utf8') as file:
+
                 documents[cont_files]= {'path': relative_path,'name':file.name.split("\\")[-1], 'pairs': {}}
                 cont_words = 0
                 cont_description_words=0
                 description=""
                 for line in file:
                     for word in line.split():
+                        print(word)
+                        word=splitpoints(word) # hello.two
+                        print(word)
+                        for w in word[1:]:
+                            line.append(w)
+                        word=word[0]
+
+                        word = double_line(word)
+                        if(type(word)==list):
+                            line.append(word[1])
+                            word=word[0]
+
+                        word = normalize(word) # lower, accent
+                        if(word[-1]=="-"):
+                            is_word_splitted=True
+                            splitted_word=word[:-1]
+                            continue
+
+                        if(is_word_splitted):
+                            word=splitted_word+word
+                            is_word_splitted=False
+
+                        if(check_point(word)): # '.hola' or 'hola.'
+                            continue
+
+                        if(word in stopwords):
+                            continue #don't do anything, they are not valuable
+
                         if word=="DESCRIPTION" and cont_description_words<=200:
                             if(word=="OPTIONS"):
                                 cont_description_words=201
@@ -32,7 +64,6 @@ def indexColection():
 
                         if(word not in documents[cont_files]['pairs']):
                             documents[cont_files]['pairs'][word] = 1
-
                             updateVocabulary(vocabulary,word)
 
                         else:
@@ -121,13 +152,13 @@ def check_point(word):
     #Parametros: Palabra o string
     #Resultado: Booleano
     if word[0] == "." or word[-1] == ".":
-        return False
+        return True
     if ".." in word:
-        return False
-    return True
+        return True
+    return False
         
 def double_line(word):
-    #Funcion: Maneja elm caso "--".
+    #Funcion: Maneja el caso "--".
     #Parametros: Palabra o string
     #Resultado: Lista con terminos
     if word[0] == "-" and word[1] == "-":
@@ -136,7 +167,7 @@ def double_line(word):
 
 
 def splitpoints(word):
-    #Funcion: Divide las palabras con puntos y eliminha los que son solo numeros.
+    #Funcion: Divide las palabras con puntos y elimina los que son solo numeros.
     #Parametros: Palabra o string
     #Resultado: Lista con terminos.
 
@@ -146,10 +177,11 @@ def splitpoints(word):
     if "." in word:
         if x:
             word_splited = word.split(".")
-    for i in word_splited:
-        if i.isnumeric()==False:
-            result.append(i)
-    result.append(word)
+        for i in word_splited:
+            if i.isnumeric()==False:
+                result.append(i)
+    else:
+        result.append(word)
     return result
 
 #####################################
