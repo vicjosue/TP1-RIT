@@ -132,6 +132,7 @@ def double_line(word):
     #Resultado: Lista con terminos
     if word[0] == "-" and word[1] == "-":
         return [word[2:],"@" + word[2:]]
+    return word
 
 
 def splitpoints(word):
@@ -140,6 +141,7 @@ def splitpoints(word):
     #Resultado: Lista con terminos.
 
     x = re.search("[a-zA-Z]", word)
+    word_splited = []
     result = []
     if "." in word:
         if x:
