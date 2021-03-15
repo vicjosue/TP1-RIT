@@ -21,8 +21,8 @@ def indexColection():
         relative_path='.'+ dirpath.split(root)[-1] + '\\'
         for file in files:
             with open(dirpath+'\\'+file, "r") as file:
+                
                 documents[cont_files]= {'path': relative_path,'name':file.name.split("\\")[-1], 'pairs': {}}
-                print(documents[cont_files])
                 cont_words = 0
                 cont_description_words=0
                 description=""
@@ -109,8 +109,8 @@ def normalize(text):
     #Resultado: String normalizado de acuerdo a los criterios.
 
     text_lower = text.lower()
-    text_unaccent = unicodedata.normalize('NFKD', text_lower)
     #print(text_unaccent + "hola")
+    text_unaccent = ''.join((c for c in unicodedata.normalize('NFD', text_lower) if unicodedata.category(c) != 'Mn'))
     return text_unaccent  
 
 def remove_accent(text):
