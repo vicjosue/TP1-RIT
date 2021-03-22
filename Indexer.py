@@ -8,18 +8,36 @@ from ranking_functions import BM25
 from utils import normalize,read_stopwords,check_point,double_line,splitpoints
 
 class Indexer(object):
-    def __init__(self,stopwords,path,model="BM25"):
+    """
+    A search engine that indexes a collection to make querys 
+    and show information of the files.
+    """
+    def __init__(self,stopwords,collection_path,model="BM25"):
+        """
+        Parameters
+        ----------
+        stopwords: Str
+            The path of a file that contains the words that will not be usable
+            like prepositions.
+        collection_path: Str
+            Path of the collection that will be indexed.
+        model: Str
+            Ranking function for the collection
+        """
         self.archive={
             'model':model,
             'documents': {},
             'vocabulary' : {},
-            'path':path, # path
+            'path':collection_path,
             'average_length':0,
-            'name' : path.split("/")[-1],
+            'name' : collection_path.split("/")[-1],
             'stopwords': read_stopwords(stopwords)
         }
 
     def index_colection(self):
+        """
+        Indexes the collection with the define parameters
+        """
         cont_files = 0
     
         is_word_splitted=False
@@ -93,28 +111,65 @@ class Indexer(object):
         self.archive['average_length']=sum_length / len(self.archive['documents'])
     
     def update_vocabulary(self,word):
+        """
+        Parameters
+        ----------
+        word: Str
+            If a word is new in a document then sums 1 or add a new one to the global counter
+            of words, this is required by the ranking functions
+        """
         if(word in self.archive['vocabulary']):
             self.archive['vocabulary'][word]['n_i']= self.archive['vocabulary'][word]['n_i'] +1
         else:
             self.archive['vocabulary'][word]= {'n_i':1}
     
     def calculate_idfi(self):
-        for word in self.archive['vocabulary'].keys():
-            if(self.archive['vocabulary'][word]['n_i']>=len(self.archive['documents'])/2):
-                self.archive['vocabulary'][word]['idfi']=0
-            else:
-                self.archive['vocabulary'][word]['idfi'] = math.log(
-                    (len(self.archive['documents'])-self.archive['vocabulary'][word]['n_i']-0.5)/
-                    (self.archive['vocabulary'][word]['n_i']-0.5),2)
+        """
+        Once added all documents and words we asign their weighs by how much
+        unsual is a word
+        """
+        if(self.archive['model']=="BM25"):
+            for word in self.archive['vocabulary'].keys():
+                if(self.archive['vocabulary'][word]['n_i']>=len(self.archive['documents'])/2):
+                    self.archive['vocabulary'][word]['idfi']=0
+                else:
+                    self.archive['vocabulary'][word]['idfi'] = math.log(
+                        (len(self.archive['documents'])-self.archive['vocabulary'][word]['n_i']-0.5)/
+                        (self.archive['vocabulary'][word]['n_i']-0.5),2)
     
-    def process_query(self,query,num_Docs,result):
+    def process_query(self,query,num_docs,result_name):
+        """
+        With a query calcute and make a scale of the best results based on the indexed collection
+        
+        Parameters
+        ----------
+        query: Str
+            Phrase or word to look for in the indexed documents
+        num_docs: int
+            Number of results given in the scale
+        result_name: Str
+            Name of the txt and html that contains the scale
+        """
         if(self.archive['model']=="BM25"):
             query_dic = self.calculate_query_idfi(query)
             scale = BM25.calculate(self.archive,query_dic)
-            scale = list(scale)[:num_Docs] # example: [(0,0.7),(1,0.5)]
+            scale = list(scale)[:num_docs] # example: [(0,0.7),(1,0.5)] -> doc 0: 0.7 coincidence
         return scale
 
     def calculate_query_idfi(self,query):
+        """
+        The bm25 requires to calculate the idf of each word of the query
+
+        Parameters:
+        -----------
+        query: Str
+            Phrase or word to look for in the indexed documents
+
+        Returns
+        --------
+        query_dic: Dict
+            Dictionary with the format -> {word:{"n_i":#,"idfi":#},word2:{...}}
+        """
         
         query_dic = {q: {
             "n_i":query.count(q),

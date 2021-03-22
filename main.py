@@ -5,6 +5,9 @@ import argparse
 from Indexer import Indexer
 
 def cli():
+    """
+    Handling arguments with argparse
+    """
     parser = argparse.ArgumentParser(description='Process queries given a collection',prog='Indexer', usage='%(prog)s [options]')
     optional = parser._action_groups.pop()
     required = parser.add_argument_group('required arguments')
@@ -16,6 +19,9 @@ def cli():
     return parser.parse_args()
 
 def main():
+    """
+    User terminal interface
+    """
     parsed_args = cli()
     indexer = Indexer(parsed_args.sw[0],parsed_args.c[0])
     indexer.index_colection()
@@ -32,11 +38,10 @@ def main():
                 print("Debe ser un numero!")
                 continue
             print("Nombres de los dos archivos de respuesta (html y txt, no incluir la extension)")
-            result=input(">")
+            result_name=input(">")
             print("Que es lo que desea consultar?")
             query=input(">")
-            result = indexer.process_query(query,num_Docs,result)
-            print(result)
+            result_name = indexer.process_query(query,num_Docs,result_name)
 
         if(user_selection.lower()=="s" or user_selection=="salir"):
             break
