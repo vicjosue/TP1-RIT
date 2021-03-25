@@ -5,7 +5,7 @@ from os import walk
 import math
 
 from ranking_functions import BM25
-from utils import normalize,read_stopwords,check_point,double_line,splitpoints
+from utils import normalize, read_stopwords, check_point, double_line, splitpoints, delete_characters
 
 class Indexer(object):
     """
@@ -83,6 +83,8 @@ class Indexer(object):
                             if(word in self.archive['stopwords']):
                                 continue #don't do anything, they are not valuable
 
+                            word = delete_characters(word)
+
                             if word=="DESCRIPTION" and cont_description_words<=200:
                                 if(word=="OPTIONS"):
                                     cont_description_words=201
@@ -145,15 +147,13 @@ class Indexer(object):
         ----------
         query: Str
             Phrase or word to look for in the indexed documents
-        num_docs: int
-            Number of results given in the scale
         result_name: Str
             Name of the txt and html that contains the scale
         """
         if(self.archive['model']=="BM25"):
             query_dic = self.calculate_query_idfi(query)
             scale = BM25.calculate(self.archive,query_dic)
-            scale = list(scale)[:num_docs] # example: [(0,0.7),(1,0.5)] -> doc 0: 0.7 coincidence
+            scale = list(scale) # example: [(0,0.7),(1,0.5)] -> doc 0: 0.7 coincidence
         return scale
 
     def calculate_query_idfi(self,query):

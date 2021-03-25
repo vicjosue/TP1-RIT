@@ -85,12 +85,13 @@ def splitpoints(word):
                 result.append(i)
     return result
 
-def check_characters(text):
-    #Funcion: Checkea si los caracteres pertenecen a los caracteres [a-z0-9ñ_.]
-    #Parametros: Texto a analizar.
-    #Resultado: Booleano.
-    pattern = re.compile("[A-Za-z0-9ñ_.]+")
-    if pattern.fullmatch(text) is not None:
-        return True
-    else:
-        return False
+def delete_characters(word):
+    #Funcion: Revisa letra por letra de una palabra para solo dejar pasar los caracteres de palabras
+    #Parametros: Palabra.
+    #Resultado: Palabra procesada.
+    final_word = ""
+    for letter in word:
+        pattern = re.compile("[a-z0-9ñ_.]")
+        if pattern.match(letter) is not None:
+            final_word+=letter
+    return final_word
