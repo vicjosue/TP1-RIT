@@ -4,6 +4,7 @@
 import argparse
 import pickle
 from Indexer import Indexer
+from tabulate import tabulate
 
 def cli():
     """
@@ -28,6 +29,9 @@ def main():
     indexer.index_colection()
 
     menu=["\nMENU\n\n[c] consultar","[l] leer","[g] guardar","[s] salir"]
+
+    list_scales = []
+
     while(True):
         for m in menu:
             print(m)
@@ -38,18 +42,22 @@ def main():
             if(type(num_docs)!=int):
                 print("Debe ser un numero!")
                 continue
+
+
             print("Nombres de los dos archivos de respuesta (html y txt, no incluir la extension)")
             result_name=input(">")
             print("Ruta en que desea guardar el resultado")
-            path=int(input(">"))
+            path=input(">")
             print("Que es lo que desea consultar?")
             query=input(">")
             scale = indexer.process_query(query,num_docs,result_name)
             print(scale[:num_docs]) # [(id_archivo,valor_similitud),(...),...]
-            ### def gudardar(result,result_name+".txt",path):
-            #       if similutud==0:
-            #           return
-            ## todo: GUARDAR EN ARCHIVO "result_name"
+ 
+            for i in scale[:num_docs]:
+                if i[1] != 0: 
+                    list_scales.append(i)
+            with open(path +"/"+ result_name + '.txt', 'w') as f:
+                f.write(tabulate([("ID","Similitud")] + list_scales))
 
         if(user_selection.lower()=="g" or user_selection=="guardar"):
             name=input("name of file>")
