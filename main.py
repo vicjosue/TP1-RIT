@@ -28,9 +28,8 @@ def main():
     indexer = Indexer(parsed_args.sw[0],parsed_args.c[0])
     indexer.index_colection()
 
-    menu=["\nMENU\n\n[c] consultar","[l] leer","[g] guardar","[s] salir"]
-
-    list_scales = []
+    menu=["\nMENU\n\n[c] consultar","[a] inspeccionar archivo",
+            "[i] inspeccionar indice/termino","[l] leer","[g] guardar","[s] salir"]
 
     while(True):
         for m in menu:
@@ -43,21 +42,34 @@ def main():
                 print("Debe ser un numero!")
                 continue
 
-
             print("Nombres de los dos archivos de respuesta (html y txt, no incluir la extension)")
             result_name=input(">")
             print("Ruta en que desea guardar el resultado")
             path=input(">")
             print("Que es lo que desea consultar?")
             query=input(">")
-            scale = indexer.process_query(query,num_docs,result_name)
+            scale = indexer.process_query(query,result_name)
             print(scale[:num_docs]) # [(id_archivo,valor_similitud),(...),...]
- 
+
+            list_scales = []
             for i in scale[:num_docs]:
                 if i[1] != 0: 
                     list_scales.append(i)
             with open(path +"/"+ result_name + '.txt', 'w') as f:
                 f.write(tabulate([("ID","Similitud")] + list_scales))
+        
+        if(user_selection.lower()=="a" or user_selection=="inspeccionar archivo"):
+            print("Cual es el id del archivo que desea consultar?")
+            file_id=int(input(">"))
+            if(type(file_id)!=int):
+                print("Debe ser un numero!")
+                continue
+            indexer.show_file_data(file_id)
+
+        if(user_selection.lower()=="i" or user_selection=="inspeccionar indice/termino"):
+            print("Escriba el nombre del termino que desea inspeccionar")
+            term=int(input(">"))
+            indexer.show_term(term)
 
         if(user_selection.lower()=="g" or user_selection=="guardar"):
             name=input("name of file>")

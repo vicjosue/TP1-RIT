@@ -33,6 +33,30 @@ class Indexer(object):
             'name' : collection_path.split("/")[-1],
             'stopwords': read_stopwords(stopwords)
         }
+    
+    def show_file_data(self,file_id):
+        """
+        Show all corresponding data from a selected file
+
+        Parameters
+        ----------
+        file_id: int
+            Selected id of the file to show
+        """
+        print(self.archive['documents'][file_id])
+    
+    def show_term(self,term):
+        """
+        Show the data from 5 termns above, the termn and 5 under alphabetically
+
+        Parameters
+        ----------
+        file_id: int
+            Selected term to show
+        """
+        sorted_dict = sorted(self.archive['vocabulary']) #dict_sort is a list
+        index = sorted_dict.index(term)
+        print(sorted_dict[index-5:index+6])
 
     def index_colection(self):
         """
@@ -139,7 +163,7 @@ class Indexer(object):
                         (len(self.archive['documents'])-self.archive['vocabulary'][word]['n_i']-0.5)/
                         (self.archive['vocabulary'][word]['n_i']-0.5),2)
     
-    def process_query(self,query,num_docs,result_name):
+    def process_query(self,query,result_name):
         """
         With a query calcute and make a scale of the best results based on the indexed collection
         
@@ -148,12 +172,28 @@ class Indexer(object):
         query: Str
             Phrase or word to look for in the indexed documents
         result_name: Str
-            Name of the txt and html that contains the scale
+            Name of the html that contains the scale
         """
         if(self.archive['model']=="BM25"):
             query_dic = self.calculate_query_idfi(query)
             scale = BM25.calculate(self.archive,query_dic)
-            scale = list(scale) # example: [(0,0.7),(1,0.5)] -> doc 0: 0.7 coincidence
+            scale = list(scale) # example: [(0,0.7),(1,0.5)] -> doc 0 : 0.7 coincidence
+
+        print("Número de documentos que serán incluidos en el html")
+        while True:
+            num_docs=int(input(">"))
+            if(type(num_docs)!=int):
+                print("Debe ser un numero!")
+            else:
+                break
+
+        #### TODO:GUARDAR EN HTML ####
+        for similarity in scale:
+            #POSISICON escalafón: scale tiene las tuplas ordenadas de mejor posicion a menor
+            #Similitud consulta : similarity[1]
+            path= self.archive['documents'][s[0]]['path']    #Ruta 
+            first_words = self.archive['documents'][s[0]]['DESCRIPTION']    #PRIMEROS 200 caracteres
+
         return scale
 
     def calculate_query_idfi(self,query):
