@@ -3,6 +3,7 @@
 
 from os import walk
 import math
+import webbrowser
 
 from ranking_functions import BM25
 from utils import normalize, read_stopwords, check_point, double_line, splitpoints, delete_characters
@@ -73,7 +74,7 @@ class Indexer(object):
                 with open(dirpath+'\\'+file, "r") as file:
                     
                     self.archive['documents'][cont_files]= {'path': relative_path,'name':file.name.split("\\")[-1], 'pairs': {}}
-                    cont_words = 0
+                    cont_words = 201
                     cont_description_words=0
                     description=""
                     for line in file:
@@ -109,11 +110,13 @@ class Indexer(object):
 
                             word = delete_characters(word)
 
-                            if word=="DESCRIPTION" and cont_description_words<=200:
-                                if(word=="OPTIONS"):
-                                    cont_description_words=201
-                                else:
-                                    description+=word+" "
+                            if word=="DESCRIPTION":
+                                cont_description_words=0
+                            if cont_description_words<=200:
+                                    if(word=="OPTIONS"):
+                                        cont_description_words=201
+                                    else:
+                                        description+=word+" "
                             cont_words = cont_words + 1
     
                             if(word not in self.archive['documents'][cont_files]['pairs']):
@@ -122,9 +125,9 @@ class Indexer(object):
     
                             else:
                                 self.archive['documents'][cont_files]['pairs'][word] = self.archive['documents'][cont_files]['pairs'][word]+1
-    
+                    
                     self.archive['documents'][cont_files]['length'] = cont_words
-                    self.archive['documents'][cont_files][description]=description
+                    self.archive['documents'][cont_files]['description']=description
                     self.archive['documents'][cont_files]['terms'] = len(self.archive['documents'][cont_files]['pairs'])
                     cont_files += 1
     
@@ -163,7 +166,7 @@ class Indexer(object):
                         (len(self.archive['documents'])-self.archive['vocabulary'][word]['n_i']-0.5)/
                         (self.archive['vocabulary'][word]['n_i']-0.5),2)
     
-    def process_query(self,query,result_name):
+    def process_query(self,query,result_name,filename):
         """
         With a query calcute and make a scale of the best results based on the indexed collection
         
@@ -188,11 +191,34 @@ class Indexer(object):
                 break
 
         #### TODO:GUARDAR EN HTML ####
+
+        message = ""
+        cont_num_docs = 1
         for similarity in scale:
             #POSISICON escalafón: scale tiene las tuplas ordenadas de mejor posicion a menor
             #Similitud consulta : similarity[1]
-            path= self.archive['documents'][s[0]]['path']    #Ruta 
-            first_words = self.archive['documents'][s[0]]['DESCRIPTION']    #PRIMEROS 200 caracteres
+            if (cont_num_docs > num_docs):
+                break
+            path= self.archive['documents'][similarity[0]]['path']    #Ruta 
+            first_words = self.archive['documents'][similarity[0]]['description']    #PRIMEROS 200 caracteres
+
+            message = message + """
+                    <ul>
+                        <li><B>Posición:</B> """+str(similarity[0])+"""</li>
+                        <li><B>Similitud:</B> """+str(similarity[1])+"""</li>
+                        <li><B>Ruta:</B> """+str(path)+"""</li>
+                        <li><B>DESCRIPCIÓN:</B> """+str(first_words)+"""</li>
+                    </ul>
+                    <br></br>
+                    """
+            cont_num_docs = cont_num_docs + 1
+        message = "<h1>Escalafon</h1>" + message
+        
+        with open(str(path) +"/"+ str(filename) + '.html','w') as f:
+            f.write(message)
+            f.close()
+       
+        webbrowser.open_new_tab(str(filename) + '.html')
 
         return scale
 

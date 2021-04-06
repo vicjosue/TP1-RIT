@@ -48,7 +48,7 @@ def main():
             path=input(">")
             print("Que es lo que desea consultar?")
             query=input(">")
-            scale = indexer.process_query(query,result_name)
+            scale = indexer.process_query(query,result_name,result_name)
             print(scale[:num_docs]) # [(id_archivo,valor_similitud),(...),...]
 
             list_scales = []
