@@ -15,8 +15,6 @@ def cli():
     required = parser.add_argument_group('required arguments')
     required.add_argument('-sw', metavar='Stopwords', nargs=1,
                         help='stopwords file', required=True)
-    required.add_argument('-c', metavar='Colection', nargs=1,
-                        help='Colection file', required=True) 
     parser._action_groups.append(optional) #https://stackoverflow.com/questions/24180527/argparse-required-arguments-listed-under-optional-arguments/24181138
     return parser.parse_args()
 
@@ -25,10 +23,9 @@ def main():
     User terminal interface
     """
     parsed_args = cli()
-    indexer = Indexer(parsed_args.sw[0],parsed_args.c[0])
-    indexer.index_colection()
+    
 
-    menu=["\nMENU\n\n[c] consultar","[a] inspeccionar archivo",
+    menu=["\nMENU\n\n[c] consultar","[a] inspeccionar archivo","[o] indexar coleccion",
             "[i] inspeccionar indice/termino","[l] leer","[g] guardar","[s] salir"]
 
     while(True):
@@ -48,7 +45,7 @@ def main():
             path=input(">")
             print("Que es lo que desea consultar?")
             query=input(">")
-            scale = indexer.process_query(query,result_name,result_name)
+            scale = indexer.process_query(query,result_name,result_name,path)
             print(scale[:num_docs]) # [(id_archivo,valor_similitud),(...),...]
 
             list_scales = []
@@ -68,8 +65,14 @@ def main():
 
         if(user_selection.lower()=="i" or user_selection=="inspeccionar indice/termino"):
             print("Escriba el nombre del termino que desea inspeccionar")
-            term=int(input(">"))
+            term=input(">")
             indexer.show_term(term)
+
+        if(user_selection.lower()=="o" or user_selection=="indexar coleccion"):
+            print("Escriba la ruta a indexar")
+            path=input(">")
+            indexer = Indexer(parsed_args.sw[0],path)
+            indexer.index_colection()
 
         if(user_selection.lower()=="g" or user_selection=="guardar"):
             name=input("name of file>")
@@ -83,5 +86,6 @@ def main():
 
         if(user_selection.lower()=="s" or user_selection=="salir"):
             break
+
 if __name__ == '__main__':
     main()

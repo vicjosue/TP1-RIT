@@ -4,6 +4,7 @@
 from os import walk
 import math
 import webbrowser
+from tabulate import tabulate
 
 from ranking_functions import BM25
 from utils import normalize, read_stopwords, check_point, double_line, splitpoints, delete_characters
@@ -44,7 +45,16 @@ class Indexer(object):
         file_id: int
             Selected id of the file to show
         """
-        print(self.archive['documents'][file_id])
+
+        print("Ruta: " + self.archive['documents'][file_id]['path']) 
+        print("Nombre: " + self.archive['documents'][file_id]['name']) 
+        print("Largo: " + str(self.archive['documents'][file_id]['length'])) 
+        print("Descripcion: " + self.archive['documents'][file_id]['description']) 
+        print("terminos: " + str(self.archive['documents'][file_id]['terms']))
+        headers=["Palabra","n_i"]
+        print()
+        print(tabulate([(k,)+tuple(str(v)) for k,v in self.archive['documents'][file_id]['pairs'].items()],headers=headers))
+        
     
     def show_term(self,term):
         """
@@ -57,7 +67,10 @@ class Indexer(object):
         """
         sorted_dict = sorted(self.archive['vocabulary']) #dict_sort is a list
         index = sorted_dict.index(term)
-        print(sorted_dict[index-5:index+6])
+        print("n_i: "+ str(self.archive['vocabulary'][term]['n_i']))
+        print("idf_i: "+ str(self.archive['vocabulary'][term]['idfi']))
+        print("5 anteriores: "+ str(sorted_dict[index-5:index]))
+        print("5 posteriores: "+str(sorted_dict[index+1:index+6]) )
 
     def index_colection(self):
         """
@@ -70,16 +83,27 @@ class Indexer(object):
         
         for (dirpath, dirs, files) in walk(self.archive['name']):
             relative_path='.'+ dirpath.split(self.archive['name'])[-1] + '\\'
+            print("actual folder: "+dirpath)
             for file in files:
                 with open(dirpath+'\\'+file, "r") as file:
                     
                     self.archive['documents'][cont_files]= {'path': relative_path,'name':file.name.split("\\")[-1], 'pairs': {}}
-                    cont_words = 201
-                    cont_description_words=0
+                    cont_words = 0
+                    cont_description_words=201
                     description=""
                     for line in file:
                         line = line.split()
                         for word in line:
+                            if cont_description_words<=200:
+                                if(word=="OPTIONS"):
+                                    cont_description_words=201
+                                else:
+                                    cont_description_words+=1
+                                    description+=word+" "
+
+                            if word=="DESCRIPTION" or word=="DESCRIPCI�N":
+                                cont_description_words=0
+
                             if(check_point(word)): # '.hola' or 'hola.'
                                 continue
                             word=splitpoints(word) # hello.two
@@ -110,13 +134,6 @@ class Indexer(object):
 
                             word = delete_characters(word)
 
-                            if word=="DESCRIPTION":
-                                cont_description_words=0
-                            if cont_description_words<=200:
-                                    if(word=="OPTIONS"):
-                                        cont_description_words=201
-                                    else:
-                                        description+=word+" "
                             cont_words = cont_words + 1
     
                             if(word not in self.archive['documents'][cont_files]['pairs']):
@@ -166,7 +183,7 @@ class Indexer(object):
                         (len(self.archive['documents'])-self.archive['vocabulary'][word]['n_i']-0.5)/
                         (self.archive['vocabulary'][word]['n_i']-0.5),2)
     
-    def process_query(self,query,result_name,filename):
+    def process_query(self,query,result_name,filename,result_path):
         """
         With a query calcute and make a scale of the best results based on the indexed collection
         
@@ -190,7 +207,6 @@ class Indexer(object):
             else:
                 break
 
-        #### TODO:GUARDAR EN HTML ####
 
         message = ""
         cont_num_docs = 1
@@ -214,7 +230,7 @@ class Indexer(object):
             cont_num_docs = cont_num_docs + 1
         message = "<h1>Escalafon</h1>" + message
         
-        with open(str(path) +"/"+ str(filename) + '.html','w') as f:
+        with open(str(result_path) +"/"+ str(filename) + '.html','w') as f:
             f.write(message)
             f.close()
        
