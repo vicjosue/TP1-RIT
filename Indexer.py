@@ -57,6 +57,7 @@ class Indexer(object):
         
     
     def show_term(self,term):
+        
         """
         Show the data from 5 termns above, the termn and 5 under alphabetically
 
@@ -66,11 +67,16 @@ class Indexer(object):
             Selected term to show
         """
         sorted_dict = sorted(self.archive['vocabulary']) #dict_sort is a list
-        index = sorted_dict.index(term)
-        print("n_i: "+ str(self.archive['vocabulary'][term]['n_i']))
-        print("idf_i: "+ str(self.archive['vocabulary'][term]['idfi']))
-        print("5 anteriores: "+ str(sorted_dict[index-5:index]))
-        print("5 posteriores: "+str(sorted_dict[index+1:index+6]) )
+        term=process_line(term,self.archive['stopwords'])[0]
+        print(term)
+        try:
+            index = sorted_dict.index(term)
+            print("n_i: "+ str(self.archive['vocabulary'][term]['n_i']))
+            print("idf_i: "+ str(self.archive['vocabulary'][term]['idfi']))
+            print("5 anteriores: "+ str(sorted_dict[index-5:index]))
+            print("5 posteriores: "+str(sorted_dict[index+1:index+6]))
+        except:
+            print("term not found")
 
     def index_colection(self):
         """
