@@ -1,4 +1,5 @@
-# Authors: Victor Camacho Artavia <joscamachoartavia@gmail.com>
+# Authors: Victor Camacho Artavia <joscamachoartavia@gmail.com>,
+#         Jimmy Mok Zhgen <jimmymokz14@gmail.com>
 
 class BM25(object):
     """

@@ -1,7 +1,84 @@
-# Author: Jimmy Mok Zhgen <jimmymokz14@gmail.com>
+# Author: Victor Camacho Artavia <joscamachoartavia@gmail.com>,
+#         Jimmy Mok Zhgen <jimmymokz14@gmail.com>
 
 import re
 import unicodedata
+
+def process_line(line,stopwords):
+    """
+    Deletes stopwords, lower the letters, detele backspaces and non usable words.
+
+    Parameters
+    ----------
+    line: str
+        String to be processed and converted to words.
+    stopwords: list
+        List with all stopwords to be handled.
+
+    
+    Returns
+    -------
+    processed_words: list
+        List of processed words.
+    """
+    processed_words=[]
+    words=line.split()
+    is_word_splitted=False
+    splitted_word=""
+
+    for word in words:
+        if(word=="OPTIONS"):
+            processed_words.append(word)
+        if word=="DESCRIPTION" or word=="DESCRIPCI�N": # spanish or english
+            processed_words.append(word)
+        if(check_point(word)): # '.hola' or 'hola.'
+            continue
+
+        word=splitpoints(word) # hello.two
+        for w in word[1:]:
+            words.append(w)
+        word=word[0]
+        word = double_line(word)
+
+        if word[0] == "":
+            continue
+        if(type(word)==list):
+            words.append(word[1])
+            word=word[0]
+
+        word = normalize(word) # lower, accent
+        if(word[-1]=="-"):
+            is_word_splitted=True
+            splitted_word=word[:-1]
+            continue
+
+        if(is_word_splitted):
+            word=splitted_word+word
+            is_word_splitted=False
+
+        if(word in stopwords):
+            continue #don't do anything, they are not valuable
+        word = delete_backspace(word)
+        word = delete_characters(word)
+
+        processed_words.append(word)
+    return processed_words
+
+def delete_backspace(line): #https://stackoverflow.com/a/34364138/14494755
+    """
+    Delete backspaces on a line
+
+    Parameters
+    ----------
+    line: str
+        line to delete backspaces
+    
+    Returns
+    -------
+    processed_words: list
+        List of proccesed words.
+    """
+    return re.sub('\b+', '', line)
 
 def normalize(text):
     #Funcion: este metodo sirve para normalizar el texto que se recibe.

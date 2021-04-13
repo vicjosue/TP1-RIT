@@ -7,7 +7,7 @@ import webbrowser
 from tabulate import tabulate
 
 from ranking_functions import BM25
-from utils import normalize, read_stopwords, check_point, double_line, splitpoints, delete_characters
+from utils import normalize, read_stopwords, check_point, double_line, splitpoints, delete_characters,process_line 
 
 class Indexer(object):
     """
@@ -77,9 +77,6 @@ class Indexer(object):
         Indexes the collection with the define parameters
         """
         cont_files = 0
-    
-        is_word_splitted=False
-        splitted_word=""
         
         for (dirpath, dirs, files) in walk(self.archive['name']):
             relative_path='.'+ dirpath.split(self.archive['name'])[-1] + '\\'
@@ -92,8 +89,10 @@ class Indexer(object):
                     cont_description_words=201
                     description=""
                     for line in file:
-                        line = line.split()
-                        for word in line:
+                        words = process_line(line, self.archive['stopwords'])
+                        for word in words:
+                            if("\b" in word):
+                                print("uwu")
                             if cont_description_words<=200:
                                 if(word=="OPTIONS"):
                                     cont_description_words=201
@@ -103,36 +102,6 @@ class Indexer(object):
 
                             if word=="DESCRIPTION" or word=="DESCRIPCI�N":
                                 cont_description_words=0
-
-                            if(check_point(word)): # '.hola' or 'hola.'
-                                continue
-                            word=splitpoints(word) # hello.two
-                            for w in word[1:]:
-                                line.append(w)
-                            word=word[0]
-    
-                            word = double_line(word)
-                            if word[0] == "":
-                                continue
-                            if(type(word)==list):
-                                line.append(word[1])
-                                word=word[0]
-     
-                            word = normalize(word) # lower, accent
-                            if(word[-1]=="-"):
-                                is_word_splitted=True
-                                splitted_word=word[:-1]
-                                continue
-    
-                            if(is_word_splitted):
-                                word=splitted_word+word
-                                is_word_splitted=False
-    
-    
-                            if(word in self.archive['stopwords']):
-                                continue #don't do anything, they are not valuable
-
-                            word = delete_characters(word)
 
                             cont_words = cont_words + 1
     
@@ -207,7 +176,6 @@ class Indexer(object):
             else:
                 break
 
-
         message = ""
         cont_num_docs = 1
         for similarity in scale:
@@ -258,5 +226,5 @@ class Indexer(object):
             "idfi": 0.0 if(self.archive['vocabulary'].get(q) and self.archive['vocabulary'][q]['n_i']>=len(self.archive['documents'])/2)
                       else math.log((len(self.archive['documents'])- query.count(q) +0.5) /
                             (query.count(q)+0.5),2)
-            } for q in set(query.split(" "))}
+            } for q in set(process_line(query,self.archive['stopwords']))}
         return query_dic
