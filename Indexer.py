@@ -189,7 +189,7 @@ class Indexer(object):
                 break
             path= self.archive['documents'][similarity[0]]['path']    #Ruta 
             first_words = self.archive['documents'][similarity[0]]['description']    #PRIMEROS 200 caracteres
-            name = self.archive['documents'][similarity[0]]['name']) 
+            name = self.archive['documents'][similarity[0]]['name']
 
             message = message + """
                     <ul>
