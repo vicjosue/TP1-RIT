@@ -4,6 +4,45 @@
 import re
 import unicodedata
 
+def process_term(word):
+    """
+    Lower the letters, detele backspaces and accent marks.
+
+    Parameters
+    ----------
+    term: str
+        term to be processed
+
+    
+    Returns
+    -------
+    term: str
+        term with all the changes
+    """
+
+    if(check_point(word)): # '.hola' or 'hola.'
+        print("Word not valid")
+        return word
+
+    word=splitpoints(word) # hello.two
+    for w in word[1:]:
+        print("Word not valid, split in two words? taking first...")
+        words.append(w)
+    word=word[0]
+
+    if word == "":
+        print("Word not valid")
+        return word
+        
+    if(type(word)==list):
+        words.append(word[1])
+        word=word[0]
+
+    word = normalize(word) # lower, accent
+
+    word = delete_backspace(word)
+    return word
+
 def process_line(line,stopwords):
     """
     Deletes stopwords, lower the letters, detele backspaces and non usable words.
@@ -27,26 +66,22 @@ def process_line(line,stopwords):
     splitted_word=""
 
     for word in words:
+        word = delete_backspace(word)
+        
         if(word=="OPTIONS"):
             processed_words.append(word)
-        if word=="DESCRIPTION" or word=="DESCRIPCI�N": # spanish or english
+            continue
+        word = remove_accent(word)
+
+        if("DESCRIPCION"==word or "DESCRIPTION"==word):  # spanish or english
             processed_words.append(word)
+            continue
+        
+        word=word.lower()
+        
         if(check_point(word)): # '.hola' or 'hola.'
             continue
 
-        word=splitpoints(word) # hello.two
-        for w in word[1:]:
-            words.append(w)
-        word=word[0]
-        word = double_line(word)
-
-        if word[0] == "":
-            continue
-        if(type(word)==list):
-            words.append(word[1])
-            word=word[0]
-
-        word = normalize(word) # lower, accent
         if(word[-1]=="-"):
             is_word_splitted=True
             splitted_word=word[:-1]
@@ -56,11 +91,27 @@ def process_line(line,stopwords):
             word=splitted_word+word
             is_word_splitted=False
 
+        word = double_line(word)
+        if word == "":
+            continue
+        if(type(word)==list):
+            words.append(word[1])
+            word=word[0]
+        
+
+        word=splitpoints(word) # hello.two
+        for w in word[1:]:
+            words.append(w)
+        word=word[0]
+
+
         if(word in stopwords):
             continue #don't do anything, they are not valuable
-        word = delete_backspace(word)
+        
         word = delete_characters(word)
-
+        if word == "":
+            continue
+        
         processed_words.append(word)
     return processed_words
 
@@ -78,40 +129,21 @@ def delete_backspace(line): #https://stackoverflow.com/a/34364138/14494755
     processed_words: list
         List of proccesed words.
     """
-    return re.sub('\b+', '', line)
-
-def normalize(text):
-    #Funcion: este metodo sirve para normalizar el texto que se recibe.
-    #Parametros: String.
-    #Resultado: String normalizado de acuerdo a los criterios.
-
-    text_lower = text.lower()
-    #print(text_unaccent + "hola")
-    text_unaccent = ''.join((c for c in unicodedata.normalize('NFD', text_lower) if unicodedata.category(c) != 'Mn'))
-    return text_unaccent  
+    while True:
+        # if you find a character followed by a backspace, remove both
+        t = re.sub('.\b', '', line, count=1)
+        if len(line) == len(t):
+            # now remove any backspaces from beginning of string
+            return re.sub('\b+', '', t)
+        line = t
 
 def remove_accent(text):
     #Funcion: este metodo sirve para remover tildes y dieresis.
     #Parametros: String.
     #Resultado: String sin acentos.
 
-    replacements = (
-        ["á", "a"],
-        ["é", "e"],
-        ["í", "i"],
-        ["ó", "o"],
-        ["ú", "u"],
-        ["ä", "a"],
-        ["ë", "e"],
-        ["ï", "i"],
-        ["ö", "o"],
-        ["ü", "u"]
-    )
-    for accent_letter, letter in replacements:
-        
-        text = text.replace(accent_letter,letter)
-
-    return text
+    text_unaccent = ''.join((c for c in unicodedata.normalize('NFD', text) if unicodedata.category(c) != 'Mn'))
+    return text_unaccent
 
 def read_stopwords(file_name):
     #Funcion: este metodo carga y enlista los stopwords.
@@ -168,7 +200,7 @@ def delete_characters(word):
     #Resultado: Palabra procesada.
     final_word = ""
     for letter in word:
-        pattern = re.compile("[a-z0-9ñ_.]")
+        pattern = re.compile("[a-z0-9ñ_.@]")
         if pattern.match(letter) is not None:
             final_word+=letter
     return final_word

@@ -7,7 +7,7 @@ import webbrowser
 from tabulate import tabulate
 
 from ranking_functions import BM25
-from utils import normalize, read_stopwords, check_point, double_line, splitpoints, delete_characters,process_line 
+from utils import  read_stopwords, check_point, double_line, splitpoints, delete_characters, process_line, process_term
 
 class Indexer(object):
     """
@@ -45,15 +45,14 @@ class Indexer(object):
         file_id: int
             Selected id of the file to show
         """
-
+        headers=["Palabra","n_i"]
+        print(tabulate([(k,)+tuple(str(v)) for k,v in self.archive['documents'][file_id]['pairs'].items()],headers=headers))
+        print()
         print("Ruta: " + self.archive['documents'][file_id]['path']) 
         print("Nombre: " + self.archive['documents'][file_id]['name']) 
         print("Largo: " + str(self.archive['documents'][file_id]['length'])) 
         print("Descripcion: " + self.archive['documents'][file_id]['description']) 
         print("terminos: " + str(self.archive['documents'][file_id]['terms']))
-        headers=["Palabra","n_i"]
-        print()
-        print(tabulate([(k,)+tuple(str(v)) for k,v in self.archive['documents'][file_id]['pairs'].items()],headers=headers))
         
     
     def show_term(self,term):
@@ -67,7 +66,7 @@ class Indexer(object):
             Selected term to show
         """
         sorted_dict = sorted(self.archive['vocabulary']) #dict_sort is a list
-        term=process_line(term,self.archive['stopwords'])[0]
+        term=process_term(term)
         print(term)
         try:
             index = sorted_dict.index(term)
@@ -92,22 +91,21 @@ class Indexer(object):
                     
                     self.archive['documents'][cont_files]= {'path': relative_path,'name':file.name.split("\\")[-1], 'pairs': {}}
                     cont_words = 0
-                    cont_description_words=201
+                    cont_description_words=202
                     description=""
                     for line in file:
                         words = process_line(line, self.archive['stopwords'])
                         for word in words:
-                            if("\b" in word):
-                                print("uwu")
-                            if cont_description_words<=200:
+                            if cont_description_words<200:
                                 if(word=="OPTIONS"):
-                                    cont_description_words=201
+                                    cont_description_words=203
                                 else:
                                     cont_description_words+=1
                                     description+=word+" "
 
-                            if word=="DESCRIPTION" or word=="DESCRIPCI�N":
-                                cont_description_words=0
+                            if("DESCRIPCION"==word or "DESCRIPTION"==word):
+                                if(cont_description_words==202): # if it is 203 the file already has a description
+                                    cont_description_words=0
 
                             cont_words = cont_words + 1
     
@@ -191,9 +189,11 @@ class Indexer(object):
                 break
             path= self.archive['documents'][similarity[0]]['path']    #Ruta 
             first_words = self.archive['documents'][similarity[0]]['description']    #PRIMEROS 200 caracteres
+            name = self.archive['documents'][similarity[0]]['name']) 
 
             message = message + """
                     <ul>
+                        <li><B>Nombre:</B> """+str(name)+"""</li>
                         <li><B>Posición:</B> """+str(similarity[0])+"""</li>
                         <li><B>Similitud:</B> """+str(similarity[1])+"""</li>
                         <li><B>Ruta:</B> """+str(path)+"""</li>
