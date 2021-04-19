@@ -38,7 +38,8 @@ def process_term(word):
         words.append(word[1])
         word=word[0]
 
-    word = normalize(word) # lower, accent
+    word = remove_accent(word)
+    word=word.lower()
 
     word = delete_backspace(word)
     return word
